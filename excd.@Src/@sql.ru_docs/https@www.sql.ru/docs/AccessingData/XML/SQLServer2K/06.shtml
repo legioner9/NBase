@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<TITLE>Доступ к XML и реляционным данным
+</TITLE>
+<META CONTENT="text/html; charset=windows-1251" http-equiv=Content-Type>
+<META NAME="Description" CONTENT="1. Введение">
+<META NAME="Keywords" CONTENT="SQL, Microsoft, Server">
+<META HTTP-EQUIV="Set-Cookie" CONTENT="cookie=set; path=/">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER="0" WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top  bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>FOR XML на стороне клиента
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="07.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+
+
+</TD>
+</TR>
+</TABLE>
+<TABLE border="0" cellpadding="2" cellspacing="2" >
+<TR>
+<TD>
+<div align=justify>
+<p>
+Провайдер SQLXMLOLEDB является типичным сервисным провайдером, как уже упоминавшиеся ранее 
+MSDataShape и MSPersist, в том плане, что он получает данные от другого провайдера, а не непосредственно 
+из источника. SQLXMLOLEDB позволяет преобразовывать recordset в XML непосредственно на клиенте. 
+Таким образом, провайдер SQLOLEDB, стоящий между SQLXMLOLEDB и SQL Server, получает от сервера не 
+XML-поток, а обычный recordset и передает его SQLXMLOLEDB, который уже занимается превращением 
+реляционной информации в XML. Скрипт 5 демонстрирует FOR XML на стороне клиента.</p>
+<p><tt><div align=left><font>
+<font color=blue>public static void</font> Execute_FORXMLQuery_OnClient()<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.CommandText = "SELECT c.ContactName, COUNT(o.OrderDate) as 'Кол-во заказов' FROM Customers c INNER JOIN Orders o ON c.CustomerID = o.CustomerID WHERE o.OrderDate between ? and ? GROUP BY c.ContactName FOR XML NESTED";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.CreateParameter().Value = "19970101";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.CreateParameter().Value = "19971231 23:59:59";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>cmd.ClientSideXml = <font color=blue>true</b></font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.OutputEncoding = "UTF-8"; cmd.RootTag = "Корень";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Stream str = cmd.ExecuteStream();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StreamReader sr = <font color=blue>new</font> StreamReader(str);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FileInfo f = <font color=blue>new</font> FileInfo("..\\Results\\FORXMLQueryResults.xml");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StreamWriter sw = <font color=blue>new</font> StreamWriter(f.FullName, <font color=blue>false</font>, System.Text.Encoding.UTF8);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sw.WriteLine("&lt;!--Этот XML сделан на стороне клиента--&gt;");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str.Position = 0; sw.Write(sr.ReadToEnd());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sr.Close(); sw.Close();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br>
+}</p></tt><div align=justify></font><center>	
+<font color=blue><b>Скрипт 5</font></p></b></center>
+<p>
+При помощи SQL Profiler можно оттрассировать и сравнить запросы, которые в действительности обрабатываются 
+сервером при выполнении Скриптов 4 и 5.</p>
+<p>
+Скрипт 4: </p>
+<p><tt><div align=left><font>
+exec sp_executesql N'SELECT ''<Root>'' SELECT c.ContactName, c.ContactTitle, o.OrderDate FROM Customers c 
+INNER JOIN Orders o ON c.CustomerID = o.CustomerID WHERE c.ContactName = @P1 AND year(o.OrderDate) = 
+@P2 <b><u>FOR XML AUTO</u></b> SELECT ''</Root>''', N'@P1 nvarchar(30),@P2 int', N'Maria Larsson', 1997</p></tt><div align=justify></font>
+<p>
+Скрипт 5:</p>
+<p><tt><div align=left><font>
+exec sp_executesql N'SELECT c.ContactName, COUNT(o.OrderDate) as ''Кол-во заказов'' FROM Customers c 
+INNER JOIN Orders o ON c.CustomerID = o.CustomerID WHERE o.OrderDate between @P1 and @P2 <b><u>GROUP BY</u></b> 
+c.ContactName ', N'@P1 nvarchar(8),@P2 nvarchar(17)', N'19970101', N'19971231 23:59:59'</p></tt><div align=justify></font>
+<p>
+В Скрипте 5 я слегка изменил текст запроса, чтобы показать использование GROUP BY (этот предикат не 
+разрешается в серверных FOR XML-запросах). Запрос считает количество заказов, сделанных каждым клиентом 
+за определенный период времени. Обратите внимание на отсутствие предиката FOR XML во втором случае. 
+Это значит, что преобразование recordset'a в XML действительно происходит в данном случае на клиенте.<br>
+Несмотря на бОльшие издержки на стороне клиента такая схема работы является более универсальной и 
+позволяет получать клиенту XML от тех источников данных, которые его не поддерживают и не будут. 
+Для этого будет достаточно в строке соединения:</p>
+<p><tt><div align=left><font>
+"Provider= SQLXMLOLEDB;DataProvider=SQLOLEDB, …"</p></tt><div align=justify></font>
+<p>
+поставить вместо SQL Server соответствующего OLE DB-провайдера. К сожалению, для этого придется 
+подождать следующего, 4-го, веб-релиза. Пока SQLXMLOLEDB умеет работать только с SQL Server 2000.<br>
+При клиентском XML-форматировании не поддерживается возврат в качестве результата одной команды 
+нескольких recordset'ов, зато допускается предикат GROUP BY с агрегатными функциями. Режим FOR XML 
+NESTED клиентского форматирования примерно соответствует FOR XML AUTO серверного, за исключением 
+того, что вместо псевдонимов в имена элементов ставятся настоящие названия таблиц. О других различиях 
+можно прочитать в документации на SQLXML 3.0.
+</DIV>
+<TD>
+<TR>
+</TABLE>
+<TABLE BORDER=0 WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>FOR XML на стороне клиента
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="07.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+</TD>
+</TR>
+</TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>

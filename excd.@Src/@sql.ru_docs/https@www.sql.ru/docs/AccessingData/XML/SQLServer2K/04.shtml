@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<TITLE>Доступ к XML и реляционным данным
+</TITLE>
+<META CONTENT="text/html; charset=windows-1251" http-equiv=Content-Type>
+<META NAME="Description" CONTENT="1. Введение">
+<META NAME="Keywords" CONTENT="SQL, Microsoft, Server">
+<META HTTP-EQUIV="Set-Cookie" CONTENT="cookie=set; path=/">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER="0" WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top  bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>XML на стороне сервера. FOR XML
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="05.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+
+
+</TD>
+</TR>
+</TABLE>
+<TABLE border="0" cellpadding="2" cellspacing="2" >
+<TR>
+<TD>
+<div align=justify>
+<p>
+Следующая ступень эволюции - ADO 2.6 и SQL Server 2000. В SQL Server 2000 в синтаксис Т-SQL был 
+добавлен предикат FOR XML для оператора SELECT, что позволило получать XML-текст как результаты 
+запроса на стороне сервера. Рассмотрим запрос SELECT c.ContactName, c.ContactTitle, o.OrderDate FROM 
+Customers c INNER JOIN Orders o ON c.CustomerID = o.CustomerID FOR XML AUTO. Вначале SQL Server 
+традиционным способом выполняет ту часть запроса, которая находится до FOR XML. Затем к полученному 
+множеству записей сервер применяет преобразование в XML. Если выполнить этот запрос из Query Analyzer, 
+то видно, что содержимое XML-документа разбито по записям длиной 2033 символа Unicode одноколоночного 
+recordset'а. Вообще говоря, это не есть ни recordset, ни XML. Его нельзя использовать как результат подзапросов, 
+хранимых функций и всего остального, что предполагает дальнейшую обработку на SQL Server. Это нечто 
+предназначено только для передачи клиенту, где из него уже происходит сборка полноценного документа. 
+Таким образом, несмотря на то, что в отличие от Скриптов 1 и 2, в Скрипте 3 XML фактически получается на 
+сервере, все XPath-, updategrams- и прочие запросы выполняются на клиенте, поскольку встроенный тип XML 
+в настоящее время в SQL Server отсутствует.</p>
+<p><tt><div align=left><font>
+<font color=blue>static void</font> Execute_FORXMLQuery_ADODB()<br>
+{<br>
+&nbsp;&nbsp;&nbsp;...<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ADODB.StreamClass</b> str = <font color=blue>new</font> ADODB.StreamClass();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>str.Open</b>(System.Type.Missing, ADODB.ConnectModeEnum.adModeUnknown, ADODB.StreamOpenOptionsEnum.adOpenStreamUnspecified, "", "");<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADODB.CommandClass cmd = <font color=blue>new</font> ADODB.CommandClass();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.ActiveConnection = cnn;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.CommandText = "SELECT '&lt;Root&gt;' " +<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"SELECT c.ContactName, c.ContactTitle, o.OrderDate FROM Customers c " +<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"INNER JOIN Orders o ON c.CustomerID = o.CustomerID " +<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"WHERE c.ContactName = ? AND year(o.OrderDate) = ? FOR XML AUTO " +<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"SELECT '&lt;/Root&gt;'";
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.Parameters.Append(cmd.CreateParameter("@Name", ADODB.DataTypeEnum.adVarWChar, ADODB.ParameterDirectionEnum.adParamInput, 30, <font color=blue>null</font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.Parameters.Append(cmd.CreateParameter("@Year", ADODB.DataTypeEnum.adInteger, ADODB.ParameterDirectionEnum.adParamInput, 4, <font color=blue>null</font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.Dialect = "{C8B522D7-5CF3-11CE-ADE5-00AA0044773D}";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>cmd.Properties["Output Stream"]</b>.Value = str;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.Properties["Output Encoding"].Value = "UTF-8";<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=blue>object</font> RecsAffected = <font color=blue>null</font>, Params = <font color=blue>new object</font>[] {"Maria Larsson", 1997};<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.Execute(<font color=blue>out</font> RecsAffected, <font color=blue>ref</font> Params, (<font color=blue>int</font>)ADODB.ExecuteOptionEnum.<b>adExecuteStream</b>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MSXML2.DOMDocument40Class xmlDoc = <font color=blue>new</font> MSXML2.DOMDocument40Class();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlDoc.load(str);<br>
+}</p></tt><div align=justify></font><center>						
+<font color=blue><b>Скрипт 3</font></p></b></center>
+<p>
+Скрипт 3 выполняет тот же запрос, что и в предыдущих примерах, за исключением того, что я его слегка 
+разнообразил передачей параметров: он показывает список всех заказов, сделанных определенным клиентом 
+за определенный год. Результат заключается в скобки &lt;Root&gt; … &lt;/Root&gt; для получения well-formed документа. 
+Вместо этого можно использовать cmd.Properties["xml root"].Value = "Root". XML возвращается на клиента в 
+объекте ADODB.Stream. Его можно сохранить сразу в файл - str.SaveToFile(f.FullName, 
+ADODB.SaveOptionsEnum.adSaveCreateOverWrite); , а можно передать как поток в документ типа 
+MSXML2.DOMDocument40Class. В любом случае понятно, что над результатами запроса можно вести 
+дальнейшую работу средствами DOM. Аналогично Скрипту 2 для работы с XML-документами здесь 
+используется библиотека СОМ, а не .NET, поскольку ADODB.Stream нельзя преобразовать к System.IO.Stream, 
+чтобы загрузить в System.Xml.XmlDocument. Передавать же, сохраняя в промежуточный файл, как делалось в 
+Скрипте 1, можно, но неизящно. Свойство Dialect класса ADODB.Command говорит провайдеру, какой тип 
+команды используется. Возможные значения приведены в Табл.1</p>
+<p><center>
+<table border="1" cellpadding="2" cellspacing="2">
+<tr><td ALIGN=center><b>Тип команды</b></td><td ALIGN=center><b>Значение в ADO</b></td><td ALIGN=center><b>Константа в OLE DB</b></td></tr>
+<tr><td>Запрос Transact-SQL</td><td>{C8B522D7-5CF3-11CE-ADE5-00AA0044773D}</td><td>DBGUID_SQL </td></tr>
+<tr><td>Запрос XPath</td><td>{EC2A4293-E898-11D2-B1B7-00C04F680C56}</td><td>DBGUID_XPATH </td></tr>
+<tr><td>Запрос в XML-шаблоне</td><td>{5D531CB2-E6Ed-11D2-B252-00C04F681B71}</td><td>DBGUID_MSSQLXML </td></tr>
+<tr><td>Поведение провайдера по умолчанию</td><td>{C8B521FB-5CF3-11CE-ADE5-00AA0044773D}</td><td>DBGUID_DEFAULT </td></tr>
+</table></p>
+<p>
+<font color=blue><b>Табл.1</font></p></b></center>
+<p>
+Объекты типа Stream появились в ADO 2.5 для поддержки некоторых типов нереляционной информации. Вспомним, 
+что первоначальная спецификация OLE DB в 1996 г. описывала универсальный доступ в рамках прямоугольных 
+recordset'ов для обеспечения совместимости с ранними API, имевшими дело с реляционными данными 
+(ODBC, DB-Library, DAO). Однако несмотря на развитость аппарата реляционной алгебры далеко не все 
+источники удавалось свести к этому классу. Да и потом, иерархические базы данных все-таки предшествовали 
+реляционным, поскольку эта модель, видимо, более естественно отвечает образу мышления. Время шло, 
+диссонанс между объектно-ориентированной средой разработки и реляционной архитектурой хранения 
+(плоские таблицы, связанные отношениями) проявлялся все более отчетливо. В ADO 1.5 была сделана попытка 
+сгладить эту проблему с помощью провайдера MSDataShape. Спецификация OLE DB 1.5 предусматривала 
+новый тип полей - Chapter column. Предполагалось, что индивидуальные уровни иерархии можно представить 
+в виде отдельных rowset'ов, и chapter указывает для родительской записи множество ее детей в дочернем rowset'e. 
+Однако все это было хорошо в однородных иерархиях, когда дочерняя запись имеет тот же набор полей, что и 
+родительская. Например, очевидный негомогенный источник - файловая система - сюда уже не вписывается. 
+Чтобы уложить древовидную структуру в прямоугольную с минимальными переделками и потерями 
+производительности (скажем, не заводя для каждой записи число полей, соответствующее полному набору 
+всех возможных атрибутов узла в дереве, большая часть из которых будет, очевидно, пустовать) в ADO 2.5 
+были введены классы Record и Stream. Набор полей (атрибутов) записи (файла) может разниться не только с 
+родительской записью (папкой), но и меняться от записи к записи (например, в зависимости от типа файла). 
+Наименьший общий знаменатель полей, присущих всем записям, формировал колонки привычного Recordset. 
+Класс Stream соответствовал содержанию файла. Таким образом, появилась возможность получения результата 
+запроса в виде потoка, чем мы и воспользовались в Скрипте 3. XML естественным образом решает проблему 
+представления древовидных иерархий. Как и RDS, MSDataShape в настоящее время поддерживается по 
+соображениям совместимости, но развиваться в дальнейшем не будет.<br>
+Для предиката FOR XML существует три возможных опции: AUTO, RAW и EXPLICIT. Действие первой мы 
+уже видели. Она дает SQL Server указание сформировать простое вложенное дерево, где иерархия (вложенность) 
+определяется порядком связывания таблиц в запросе. Каждой таблице из FROM, хотя бы одно поле которой 
+попадает в вывод, ставится в соответствие элемент, имя которого равно имени / псевдониму таблицы. Поля 
+таблиц отвечают атрибутам элементов. Отсюда следует, что все поля в запросе должны быть поименованы. 
+Недопустимо, например, SELECT 1 FOR XML… Опция RAW формирует плоский неиерархический документ 
+независимо от отношений между таблицами в запросе. Он подобен тому, что мы видели на рис.1. Каждая 
+запись результата соответствует элементу с именем row. Опция EXPLICIT наиболее гибкая из трех и позволяет 
+получить XML произвольной структуры, однако recordset, по которому он строится, должен следовать 
+определенным правилам расположения записей и именования полей, чтобы однозначно задать желаемую 
+структуру дерева. Я не буду сейчас подробно расписывать эти правила, т.к. несмотря на гибкость, способ этот 
+достаточно громоздок и на практике применяется редко. В основном он используется самим SQL Server'ом для 
+преобразования реляционной структуры к аннотированной схеме (см.п.9). Подробно узнать про опцию 
+EXPLICIT можно в документации на SQL Server (см. XML and Internet Support -> Using EXPLICIT Mode).<br>
+Поддерживаются параметризованные запросы с FOR XML и процедуры, возвращающие SELECT … FOR XML. 
+Передача параметров осуществляется стандартно при помощи коллекции Parameters объекта ADODB.Command. 
+Поля типа text / ntext возвращаются в виде текста, поля типа image - в виде их XPath-пути. FOR XML …, Binary 
+Base64 возвращает их в кодировке Base64 и для опции RAW это единственный возможный способ вывести 
+значения BLOB-типов. FOR XML AUTO, ELEMENTS отображает поля не на атрибуты, а на подэлементы. 
+SELECT TOP 0 ... FOR XML AUTO, XMLData дает схему XML-результата в формате XDR. Начиная с 
+SQLXML 2.0 включена поддержка XSD-схем и утилита для конвертации XDR в XSD (cvtschema.ехе).</p>
+</DIV>
+<TD>
+<TR>
+</TABLE>
+<TABLE BORDER=0 WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>XML на стороне сервера. FOR XML
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="05.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+</TD>
+</TR>
+</TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>

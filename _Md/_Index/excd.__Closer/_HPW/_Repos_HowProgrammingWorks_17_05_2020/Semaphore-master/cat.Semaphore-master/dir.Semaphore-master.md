@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Semaphore-master\cat.Semaphore-master\dir.Semaphore-master.md">Semaphore-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Semaphore-master\README.md">README.md</a>
+        - *## Binary Semaphore, Counting Semaphore

@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\stereotypedlg\standardelementstereotypes_2\cat.standardelementstereotypes_2\dir.standardelementstereotypes_2.md">standardelementstereotypes_2</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\stereotypedlg\standardelementstereotypes_2\standardelementstereotypes_2.md">standardelementstereotypes_2.md</a>
+        - *### [Standard Stereotypes](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/standardelementstereotypes_2.html) Стандартные стереотипы

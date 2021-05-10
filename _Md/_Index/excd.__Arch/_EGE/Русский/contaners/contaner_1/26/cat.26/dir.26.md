@@ -1,0 +1,8 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Arch\_EGE\Русский\contaners\contaner_1\26\cat.26\dir.26.md">26</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Arch\_EGE\Русский\contaners\contaner_1\26\100ka.md">100ka.md</a>
+        - *# Средства художественной выразительности
+        - *## Тропы
+        - *## Лексические средства
+        - *## Стилистические фигуры (с неодним словом)
+        - *## Синтаксические средства
+        - *## Формы речи

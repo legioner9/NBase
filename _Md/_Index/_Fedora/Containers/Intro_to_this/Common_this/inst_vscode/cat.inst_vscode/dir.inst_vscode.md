@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Fedora\Containers\Intro_to_this\Common_this\inst_vscode\cat.inst_vscode\dir.inst_vscode.md">inst_vscode</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Fedora\Containers\Intro_to_this\Common_this\inst_vscode\visualstudio.com.md">visualstudio.com.md</a>
+        - *## [Visual Studio Code on Linux](https://code.visualstudio.com/docs/setup/linux)

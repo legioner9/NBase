@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umldiagrams\behavioraldiagrams\usecasediagram\cat.usecasediagram\dir.usecasediagram.md">usecasediagram</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umldiagrams\behavioraldiagrams\usecasediagram\usecasediagram.md">usecasediagram.md</a>
+        - *#### [Use Case Diagram](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/usecasediagram.html)

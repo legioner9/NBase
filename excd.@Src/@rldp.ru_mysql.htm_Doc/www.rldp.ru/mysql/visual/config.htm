@@ -1,0 +1,627 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r" />
+  <title>Глава 7. Инструмент конфигурации приложения MySQL</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="visual-studio-application-config"></a>
+Глава 7. Инструмент конфигурации приложения MySQL</h1>
+<a class="indexterm" name="idm46260353329376"></a>
+<a class="indexterm" name="idm46260353327984"></a>
+<p>Инструмент конфигурации приложения MySQL (MySQL Application Configuration
+tool, ранее MySQL Website Configuration) позволяет вам формировать опции
+для следующих категорий с MySQL как провайдер БД: структура,
+членство (advanced или simple), роли, профили, состояние сеанса, карта
+сайта и веб-персонализация. С MySQL for Visual Studio
+можно формировать многократные страницы поставщика в последовательности,
+инструмент изменяет конфигурационные файлы соответственно.</p>
+
+<p>Редактирование конфигурационных файлов вручную может быть проблематичным.
+Инструмент конфигурации приложения упрощает задачу, предоставляя
+соответствующие возможности для каждого проекта в графическом виде.
+Инструмент добавляет, изменяет или удаляет записи из файла
+<code class="filename">App.config</code>, который относится к параметрам
+настройки только не-web проектов, и файла
+<code class="filename">Web.config</code> для ваших веб-проектов.</p>
+
+<p>Инструмент конфигурации приложения MySQL появляется как маленький символ
+на панели инструментов Solution Explorer в Visual Studio, как показано на
+следующей картинке. Символ видим только, когда проект работает (в связи с
+MySQL), и установлен Connector/NET. Нажатие на символ запускает инструмент и
+показывает возможности для настройки Entity Framework.</p>
+
+<a name="visual-studio-website-config-tool"></a>
+<p><b>Рис. 7.1. MySQL Application Configuration Tool</b></p>
+<img src="images/m4vs-app-config-icon.png" width="603" height="320"
+alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Остаток этой главы описывает каждый пункт, который можно формировать с
+использованием инструмента MySQL Application Configuration tool.</p>
+
+<h2><a name="visual-studio-app-config-ef"></a>7.1. Entity Framework</h2>
+<p>MySQL Application Configuration tool загружает последнюю структуру и
+MySQL Connector/NET из NuGet, чтобы сохранять версии синхронизированными.
+После того, как конфигурация применяется, инструмент добавляет следующие
+ссылки на ваш проект:</p>
+
+<ul><li class="listitem"><p>EntityFramework</p></li>
+<li class="listitem"><p>EntityFramework.SqlServer</p></li>
+<li class="listitem"><p>MySql.Data</p></li>
+<li class="listitem"><p>MySql.Data.EntityFramework</p></li></ul>
+
+<p>В отличие от других веб-поставщиков, поддержанных этим инструментом,
+варианты структуры могут быть применены к не сетевым или к веб-приложениям.
+Контекст вашего проекта определяет, какой конфигурационный файл инструмент
+обновляет. Следующие разделы описывают детали для урегулирования вариантов с
+не сетевым и веб-проектами.</p>
+
+<p>MySQL for Visual Studio не понимает Entity Framework Core.
+Для текущего профиля поддержки посмотрите
+<a href="install.htm#visual-studio-install-requirements">
+минемальные требования</a>.</p>
+
+<h3><a name="visual-studio-app-config-ef-nonweb"></a>
+Опции для невеб-приложений</h3>
+<p>MySQL Application Configuration tool синхронизирует последнюю версию MySQL
+Connector/NET и Entity Framework 6, затем добавляет необходимые ссылки на ваш
+файл <code class="filename">App.config</code>. Когда начато в контексте
+невеб-приложения, инструмент перечисляет структуру как единственный пункт, и
+MySQL для Visual Studio 1.2.9 (или выше) является необходимым.
+Для примера того, когда вы могли бы использовать инструмент, посмотрите
+<a href="../../../https@dev.mysql.com/doc/connector-net/en/connector-net-tutorials-entity-framework-winform-data-source.html"
+target="_top">Tutorial: Using an Entity Framework Entity as a
+Windows Forms Data Source</a>.</p>
+
+<p>Чтобы включить инструмент, выберите
+<span class="guilabel">Use MySQL with Entity Framework</span>,
+гарантируйте, что выбрана опция
+<span class="guilabel">Entity Framework 6.x</span> и нажмите
+<span class="guibutton">Finish</span>.</p>
+
+<a name="visual-studio-app-config-tool-entity-framework"></a>
+<p><b>Рис. 7.2. MySQL Application Configuration Tool для Entity
+Framework (не-web)</b></p>
+<img src="images/m4vs-app-config-ef-nonweb.png" width="692" height="376"
+alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="visual-studio-app-config-ef-web"></a>Опции для веб-приложений
+</h3>
+<p>В контексте веб-приложения структура это первая страница опций,
+которые можно включить. После включения опции будет вызван диалог, который
+проведет через несколько дополнительных веб-страниц (см.
+<a href="#visual-studio-app-config-web-providers">раздел 7.2</a>).
+Можно позволить одну только структуру и пропустить других web-провайдеров
+или выборочно позволить других поставщиков в той же самой сессии.</p>
+
+<p>В MySQL for Visual Studio 1.2.9 (или выше) Entity Framework 6
+является единственной версией, чтобы выбрать. Предыдущие версии MySQL для
+Visual Studio разрешают вам формировать свое приложение и использовать
+Entity Framework 5 или 6. До версии 1.2.9 этот инструмент называли
+MySQL Website Configuration. Заметьте, что текущая версия MySQL Connector/NET
+больше не поддерживает Entity Framework 5.</p>
+
+<p>Чтобы включать опции структуры, выберите <span class="guilabel">Use MySQL
+with Entity Framework</span>, гарантируйте, что выбрана версия
+<span class="guilabel">Entity Framework</span> и нажмите
+<span class="guibutton">Next</span>, чтобы продвинуться к вариантам
+провайдера членства. Чтобы пропустить варианты структуры, снимите галочку
+<span class="guilabel">Use MySQL with Entity Framework</span>.</p>
+
+<a name="visual-studio-website-config-tool-entity-framework"></a>
+<p><b>Рис. 7.3. MySQL Application Configuration Tool для
+Entity Framework (web)</b></p>
+<img src="images/m4vs-app-config-ef-web.png" width="692" height="376"
+alt="Content is described in the surrounding text."><br>
+
+<p>Для получения информации о вариантах членства, ролей, профилей,
+состоянии сеанса, карты сайта и веб-странице персонализации, см.
+<a href="#visual-studio-app-config-web-providers">раздел 7.2</a>.
+</p>
+
+<h2><a name="visual-studio-app-config-web-providers"></a>7.2.
+Web-провайдеры</h2>
+<p>MySQL Application Configuration tool основывает MySQL как поставщика БД
+для одного или более веб-провайдеров, внося изменения в ваш файл
+<code class="filename">Web.config</code>. Можно выбрать только один из двух
+вариантов членства: membership или simple membership.
+Все другие веб-провайдеры можно позволить независимо или вместе.
+Записи конфигурации для каждого веб-провайдера, управляемого инструментом
+MySQL Application Configuration tool, включены в разделах ниже.</p>
+
+<ul><li class="listitem"><p><a href="#app-config-membership">
+Провайдер Membership</a></p></li>
+<li class="listitem"><p><a href="#app-config-simple-provider">
+Провайдер Simple Membership</a></p></li>
+<li class="listitem"><p><a href="#app-config-roles">
+Провайдер ролей</a></p></li>
+
+<li class="listitem"><p><a href="#app-config-proviles">
+Провайдер профилей</a></p></li>
+<li class="listitem"><p><a href="#app-config-sessions">
+Провайдер состояния сеанса</a></p></li>
+
+<li class="listitem"><p><a href="#app-config-sitemap">
+Провайдер карты сайта</a></p></li>
+<li class="listitem"><p><a href="#app-config-web-personalization">
+Провайдер Веб-персонализации</a></p></li></ul>
+
+<p>Страницы веб-провайдера разделяют несколько общих элементов как
+показывает страница провайдера членства.</p>
+<a name="visual-studio-website-config-tool-membership"></a>
+<p><b>Рис. 7.4. MySQL Application Configuration Tool - членство</b></p>
+<img src="images/m4vs-app-config-membership.png" width="684" height="374"
+alt="Content is described in the surrounding text."><br>
+
+<p><b>Опция включения провайдера. </b>
+Web-провайдеры включаются, когда вы выбираете опцию на странице.
+Когда опция выбрана, страница выполняет проверку требования, определенную для
+провайдера. Например, если вы включаете какой-либо провайдер,
+конфигурационный файл для приложения должен включать строку подключения.
+Если строка подключения отсутствует, инструмент возвращает предупреждение,
+когда вы пытаетесь двинуться к следующему провайдеру. Чтобы пропустить (или
+отключить) отдельный веб-провайдер, отключите опцию.</p>
+
+<p><b>Имя. </b>Каждый включенный веб-провайдер требует определения имени
+приложения. Если вы его не предоставляете, то значение по умолчанию создает
+имя приложения для вас. Значение связано со свойством
+<code class="literal">applicationName</code> в файле
+<code class="filename">Web.config</code>.</p>
+
+<p><b>Строка подключения. </b>Файл <code class="filename">Web.config</code>
+хранит одну строку подключения для всех веб-провайдеров MySQL.
+Каждая страница веб-провайдера включает область для строки подключения,
+однако только последняя строка сохранена. Например, если вы устанавливаете
+ее в первом веб-провайдере и также устанавливаете ее в третьем
+веб-провайдере, строка подключения сохранена с третьей страницы.
+Можно ввести строку подключения непосредственно в обеспеченное текстовое окно
+или нажать <span class="guibutton">Edit</span>, чтобы использовать
+визуальный редактор, чтобы помочь вам выбрать различные варианты
+строки подключения (см.
+<a href="#visual-studio-app-config-connection-editor">раздел 7.3
+</a>).</p>
+
+<p><b>Autogenerate Schema. </b>
+Выберите опцию <span class="guilabel">Autogenerate Schema</span>, чтобы
+гарантировать, что необходимые схемы создаются автоматически для
+веб-провайдера. Эти схемы используются, чтобы хранить веб-информацию
+провайдера MySQL. База данных, используемая для хранения,
+определена в строке подключения.</p>
+
+<p><b>Запись исключения в журнал событий. </b>
+Выберите опцию <span class="guilabel">Write exceptions to event log</span>,
+чтобы гарантировать, что исключения, произведенные приложением,
+записаны в журнал событий Windows.</p>
+
+<h3><a name="app-config-membership"></a>Провайдер членства</h3>
+<p>В дополнение к стандартному провайдеру членства есть также простой
+провайдер членства. Можно выбрать только одного из них.
+Чтобы использовать провайдер членства, выберите
+<span class="guilabel">Use MySQL to manage my membership records</span>,
+чтобы включить страницу. Можно теперь ввести имя приложения, для которого вы
+создаете конфигурацию. Можно также войти в описание для приложения.
+Опции <span class="guilabel">Autogenerate Schema</span> и
+<span class="guilabel">Write exceptions to event log</span>
+могут быть выбраны для этого веб-провайдера.</p>
+<p>После подготовки провайдера членства новая секция добавляется к
+веб-конфигурационному файлу.</p>
+
+<pre class="programlisting">
+&lt;membership defaultProvider="MySQLMembershipProvider"&gt;
+&lt;providers&gt;
+&lt;remove name="MySQLMembershipProvider" /&gt;
+
+&lt;add name="MySQLMembershipProvider" type="MySql.Web.Security.MySQLMembershipProvider,
+MySql.Web, Version=8.0.18.0, Culture=neutral, PublicKeyToken=c2222fc22222c44d"
+applicationName="/" description="MySQL default application" connectionStringName="LocalMySqlServer"
+writeExceptionsToEventLog="False" autogenerateschema="False" enableExpireCallback="False"
+enablePasswordRetrieval="False" enablePasswordReset="True" requiresQuestionAndAnswer="True"
+requiresUniqueEmail="False" passwordFormat="Clear" maxInvalidPasswordAttempts="5"
+minRequiredPasswordLength="7" minRequiredNonalphanumericCharacters="1" passwordAttemptWindow="10"
+passwordStrengthRegularExpression="" /&gt;
+&lt;/providers&gt;
+&lt;/membership&gt;
+</pre>
+
+<p>С одним из формируемых провайдеров членства нажмите
+<span class="guibutton">Next</span>, чтобы продвинуться на
+страницу провайдера ролей.</p>
+
+<h3><a name="app-config-simple-provider"></a>Простой провайдер членства</h3>
+<p>Опции простого провайдера членства подобны опциям провайдера членства, но
+с меньшим количеством свойств в конфигурационном файле. Чтобы включить,
+отметьте <span class="guilabel">Use MySQL to manage my
+simple membership records</span>.</p>
+
+<p>Простого провайдера членства не поддерживает MySQL Connector/NET 8.0.</p>
+<p>Простой провайдер членства работает с задачами членства в веб-сайте с
+ASP.NET. Этот провайдер более простая версия провайдера членства ASP.NET, он
+может также работать с OAuth Authentication. См.
+<a href="../../../https@dev.mysql.com/doc/connector-net/en/connector-net-simple-membership-tutorial.html#connector-net-simple-membership-tutorial-oauth"
+target="_top">Adding OAuth Authentication to a Project</a>.</p>
+
+<p>Необходимые параметры конфигурации для простого провайдера членства:
+название строки подключения и строка подключения, которая содержит
+действительную базу данных с местным или удаленным экземпляром
+сервера MySQL, пользовательскую таблицу, чтобы сохранить данные
+аутентификации и имена столбцов для <code class="literal">User ID</code> и
+<code class="literal">User Name</code>.</p>
+
+<p>Выберите опцию <span class="guilabel">Auto Create Tables</span>, чтобы
+составить необходимые таблицы, добавляя первого пользователя к таблице.
+После подготовки провайдера членства новая секция добавляется к
+веб-конфигурационному файлу.</p>
+
+<pre class="programlisting">
+&lt;membership defaultProvider="MySQLSimpleMembershipProvider"&gt;
+&lt;providers&gt;
+&lt;clear /&gt;
+&lt;remove name="MySQLSimpleMembershipProvider" /&gt;
+
+&lt;add name="MySQLSimpleMembershipProvider"
+type="MySql.Web.Security.MySQLSimpleMembershipProvider, MySql.Web, Version=6.10.8.0, Culture=neutral,
+PublicKeyToken=c2222fc22222c44d"
+applicationName="/" description="MySQL default application"
+connectionStringName="LocalMySqlServer"
+writeExceptionsToEventLog="False"
+autogenerateschema="False"
+enableExpireCallback="False"
+userTableName="Users"
+userIdColum="UserId" userNameColum="UserName" autoGenerateTables="True" /&gt;
+&lt;/providers&gt;
+&lt;/membership&gt;
+</pre>
+<p>После подготовки одного из провайдеров членства нажмите
+<span class="guibutton">Next</span>, чтобы формировать
+страницу провайдера ролей.</p>
+
+<h3><a name="app-config-roles"></a>Провайдер ролей</h3>
+<p>Нажмите <span class="guilabel">Use MySQL to manage my roles</span>, чтобы
+включить эту страницу провайдера. Страница включает следующие опции: строка
+подключения, имя приложения и описание провайдера.
+Опции <span class="guilabel">Autogenerate Schema</span> и
+<span class="guilabel">Write exceptions to event log</span>
+могут быть отобраны для этого провайдера.</p>
+
+<p>После подготовки провайдера ролей новая секция добавляется к
+веб-конфигурационному файлу.</p>
+<pre class="programlisting">
+&lt;roleManager defaultProvider="MySQLRoleProvider"&gt;
+&lt;providers&gt;
+&lt;remove name="MySQLRoleProvider" /&gt;
+
+&lt;add name="MySQLRoleProvider" type="MySql.Web.Security.MySQLRoleProvider, MySql.Web, Version=8.0.18.0, Culture=neutral,
+PublicKeyToken=c2222fc22222c44d"
+applicationName="/" description="" connectionStringName="LocalMySqlServer"
+writeExceptionsToEventLog="False" autogenerateschema="False" enableExpireCallback="False" /&gt;
+&lt;/providers&gt;
+&lt;/roleManager&gt;
+</pre>
+<p>Нажмите <span class="guibutton">Next</span>, чтобы формировать
+страницу провайдера профилей.</p>
+
+<h3><a name="app-config-proviles"></a>Провайдер профилей</h3>
+<p>Для включения этой страницы нажмите
+<span class="guilabel">Use MySQL to manage my profiles</span>.
+Страница включает следующие опции: строка подключения, имя приложения и
+описание провайдера. Опции <span class="guilabel">Autogenerate
+Schema</span>, <span class="guilabel">Write exceptions to event
+log</span> и <span class="guilabel">Callback for session end event</span>
+могут быть выбраны для этого провайдера.</p>
+<p>После подготовки провайдера профилей новая секция добавляется к
+веб-конфигурационному файлу.</p>
+
+<pre class="programlisting">
+&lt;profile defaultProvider="MySQLProfileProvider"&gt;
+&lt;providers&gt;
+&lt;remove name="MySQLProfileProvider" /&gt;
+
+&lt;add name="MySQLProfileProvider" type="MySql.Web.Profile.MySQLProfileProvider, MySql.Web, Version=8.0.18.0,
+Culture=neutral, PublicKeyToken=c2222fc22222c44d"
+applicationName="/" description="" connectionStringName="LocalMySqlServer"
+writeExceptionsToEventLog="False" autogenerateschema="False" enableExpireCallback="False" /&gt;
+&lt;/providers&gt;
+&lt;/profile&gt;
+</pre>
+<p>Нажмите <span class="guibutton">Next</span>, чтобы формировать страницу
+провайдера состояния сеанса.</p>
+
+<h3><a name="app-config-sessions"></a>Провайдер состояния сеанса</h3>
+<p>Для включения страницы провайдера выберите
+<span class="guilabel">Use MySQL to manage my ASP.Net session state</span>.
+Страница включает следующие опции: строка подключения, имя приложения и
+описание провайдера. Опции <span class="guilabel">Autogenerate Schema</span>
+и <span class="guilabel">Write exceptions to event log</span>
+могут быть выбраны для этого провайдера.</p>
+<p>После подготовки провайдера сессии новая секция добавляется к
+веб-конфигурационному файлу.</p>
+
+<pre class="programlisting">
+&lt;sessionState mode="Custom" cookieless="true" regenerateExpiredSessionId="true" customProvider="MySqlSessionStateProvider"&gt;
+&lt;providers&gt;
+&lt;add name="MySqlSessionStateProvider" type="MySql.Web.SessionState.MySqlSessionStateStore, MySql.Web,
+Version=8.0.18.0, Culture=neutral, PublicKeyToken=c2222fc22222c44d"
+applicationName="/" description="" connectionStringName="LocalMySqlServer"
+writeExceptionsToEventLog="False" autogenerateschema="False" enableExpireCallback="False" /&gt;
+&lt;/providers&gt;
+&lt;/sessionState&gt;
+</pre>
+<p>Нажмите <span class="guibutton">Next</span>, чтобы формировать
+страницу провайдера карты сайта.</p>
+
+<h3><a name="app-config-sitemap"></a>Провайдер карты сайта</h3>
+<p>Провайдер карты сайта строит карту сайта из базы данных MySQL и строит
+полное дерево объектов <code class="literal">SitemapNode</code>.
+Это также предоставляет методы так, чтобы произведенные узлы могли быть
+прочитаны из карты сайта. Нажмите <span class="guilabel">Use MySQL to
+manage my ASP.NET site map</span> для включения страницы провайдера.</p>
+
+<p>Необходимые параметры конфигурации: название приложения
+и строка подключения, которая содержит действительную базу данных с местным
+или удаленным экземпляром сервера MySQL. Опции
+<span class="guilabel">Autogenerate Schema</span> и
+<span class="guilabel">Write exceptions to event log</span>
+могут быть выбраны для этого провайдера.</p>
+
+<p>После подготовки провайдера карты сайта новая секция добавляется к
+веб-конфигурационному файлу.</p>
+<pre class="programlisting">
+&lt;siteMap defaultProvider="MySqlSiteMapProvider"&gt;
+&lt;providers&gt;
+&lt;remove name="MySqlSiteMapProvider" /&gt;
+&lt;add name="MySqlSiteMapProvider" type="MySql.Web.SiteMap.MySqlSiteMapProvider, MySql.Web, Version=8.0.18.0,
+Culture=neutral, PublicKeyToken=c2222fc22222c44d"
+applicationName="/" description="" connectionStringName="LocalMySqlServer" writeExceptionsToEventLog="False"
+autogenerateschema="False" enableExpireCallback="False" /&gt;
+&lt;/providers&gt;
+&lt;/siteMap&gt;
+</pre>
+<p>Нажмите <span class="guibutton">Next</span>, чтобы перейти к странице
+конфигурации веб-персонализации.</p>
+
+<h3><a name="app-config-web-personalization"></a>
+Веб-персонализации провайдер</h3>
+<p>Веб-провайдер персонализации используется, когда приложение веб-сайта
+должно хранить постоянную информацию для содержания и расположения
+веб-страниц, которые произведены сервисом веб-персонализации.
+Этот провайдер должен использоваться наряду с членством, ролями и профилями.
+Нажмите <span class="guilabel">Use MySQL to manage my ASP.NET personalization
+provider</span> для включения страницы провайдера.</p>
+
+<p>Необходимые параметры конфигурации: название приложения и
+строка подключения, которая содержит действительную базу данных с местным или
+удаленным экземпляром сервера MySQL. Опции
+<span class="guilabel">Autogenerate Schema</span> и
+<span class="guilabel">Write exceptions to event log</span>
+могут быть выбраны для этого веб-провайдера.</p>
+
+<p>После подготовки провайдера веб-персонализации новая секция добавляется к
+веб-конфигурационному файлу.</p>
+<pre class="programlisting">
+&lt;webParts&gt;
+&lt;personalization defaultProvider="MySQLPersonalizationProvider"&gt;
+&lt;providers&gt;
+&lt;remove name="MySQLPersonalizationProvider" /&gt;
+
+&lt;add name="MySQLPersonalizationProvider" type="MySql.Web.Personalization.MySqlPersonalizationProvider,
+MySql.Web, Version=8.0.18.0, Culture=neutral, PublicKeyToken=c2222fc22222c44d"
+applicationName="/" description="" connectionStringName="LocalMySqlServer" writeExceptionsToEventLog="False"
+autogenerateschema="False" enableExpireCallback="False" /&gt;
+&lt;/providers&gt;
+&lt;/personalization&gt;
+&lt;/webParts&gt;
+</pre>
+
+<p>Когда вы выбрали опции веб-персонализации, нажмите
+<span class="guibutton">Finish</span>, чтобы записать изменения для всей сети
+в файл <code class="filename">Web.config</code> и закрыть мастер.</p>
+
+<h2><a name="visual-studio-app-config-connection-editor"></a>
+7.3. Использование редактора последовательности подключения MySQL</h2>
+<p>MySQL Connection String Editor перечисляет и описывает все поддержанные
+опции строки подключения для версии MySQL Connector/NET, которую вы
+установили. Чтобы открыть редактор с любой страницы веб-провайдера,
+нажмите кнопку <span class="guibutton">Edit</span>.</p>
+
+<p>По умолчанию редактор перечисляет варианты строки подключения по
+категориям. Альтернативно, можно сортировать список в алфавитном порядке,
+используя кнопки сортировки. Главный список состоит из вариантов слева и
+значений справа от области разделения. Чтобы добавить текстовое значение,
+такое как имя базы данных, выбирают опцию в списке (в этом примере
+<code class="literal">Database</code>), затем вводят имя базы данных
+(<code class="literal">sakila</code>) после курсора.
+Некоторые варианты строки подключения предопределили значения
+и показывают стрелку вниз, когда выбраны.</p>
+
+<p>Когда вы выбираете опцию строки подключения, краткое описание показывают в
+информационной строке ниже списка. После того, как вы добавите значение
+выбора и затем выберете другую опцию, редактор прилагает новую пару
+опция/значение к существующей строке подключения. Нажмите
+<span class="guibutton">OK</span>, чтобы возвратиться к странице
+веб-провайдера, которая теперь включает измененную строку подключения.</p>
+
+<a name="visual-studio-website-config-tool-string-editor"></a>
+<p><b>Рис. 7.5. MySQL Application Configuration
+Tool - редактор строки соединения</b></p>
+<img src="images/connector-net-website-config-tool-string-editor.png"
+width="395" height="553" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Определенные строки подключения автоматически загружаются
+и доступны в редакторе, были ли они созданы вручную в
+<code class="filename">web.config</code> для каждого приложения или ранее,
+используя этот инструмент.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

@@ -1,0 +1,4 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\1.HTML.dir\1.3.1_.3._HTML-атрибуты.dir\cat.1.3.1_.3._HTML-атрибуты.dir\dir.1.3.1_.3._HTML-атрибуты.dir.md">1.3.1_.3._HTML-атрибуты.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\1.HTML.dir\1.3.1_.3._HTML-атрибуты.dir\1.3.1_.3._HTML-атрибуты.md">1.3.1_.3._HTML-атрибуты.md</a>
+        - *## [1.3. HTML-атрибуты](https://html5book.ru/html-attributes/)
+        - *### Глобальные атрибуты

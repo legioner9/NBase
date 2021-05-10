@@ -1,0 +1,1201 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 5. Связи в MySQL Workbench</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="wb-mysql-connections"></a>Глава 5. Связи в MySQL Workbench</h1>
+<p>В этой главе описывается, как создать и управлять подключениями MySQL.
+<h2><a name="wb-mysql-connections-new"></a>
+5.1. Создание нового (простого) подключения MySQL</h2>
+<p>Чтобы добавить связь, щелкните <code class="literal">[+]</code>
+справа от названия <span class="guilabel">MySQL Connections</span>
+на <a href="home.htm">домашнем</a> экране. Это открывает форму
+<span class="guilabel">Setup New Connection</span>.</p>
+
+<a name="wb-mysql-connections-setup-new-connection"></a>
+<p><b>Рис. 5.1. Форма Setup New Connection</b></p>
+<img src="images/wb-mysql-connections-setup-new-connection.png" width="800"
+height="500" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Кнопка <span class="guibutton">Configure Server Management</span>
+открывает дополнительного мастера конфигурации для ввода команд оболочки
+на хосте. Например, команды, чтобы запустить/остановить MySQL или
+отредактировать конфигурационный файл.
+Для получения дополнительной информации посмотрите
+<a href="#wb-mysql-connections-server-management-wizard">раздел
+5.3.7</a>.</p>
+
+<p>Заполните детали связи и произвольно нажмите
+<span class="guibutton">Configure Server Management</span>, чтобы выполнить
+мастер Server Management. Нажмите <span class="guibutton">OK</span>,
+чтобы сохранить связь.</p>
+
+<p>Когда связь открывается, MySQL Workbench автоматически устанавливает набор
+символов клиента в <code class="literal">utf8</code>.
+Вручную изменяя набор символов клиента, например, через
+<code class="literal">SET NAMES <em class="replaceable"><code>...</code></em>
+</code>, можно привести MySQL Workbench к неправильному отображению
+символов. Для получения дополнительной информации о наборах символов клиента
+посмотрите <a href="../../../dev.mysql.com/doc/refman/8.0/en/charset-connection.html">
+Connection Character Sets and Collations</a>.</p>
+
+<p>Новые подключения MySQL добавляются к домашнему экрану как плитка, и
+<a href="dev.htm#wb-sql-editor-navigator">раздел 8.2.1</a>
+описывает несколько особенностей MySQL Workbench, чтобы контролировать и
+формировать каждого соединение. Единственный экземпляр MySQL Workbench
+может открыть одно или много подключений в отдельных вкладках.</p>
+
+<p>Для более подробного обзора этого процесса посмотрите
+<a href="#wb-getting-started-tutorial-create-connection">раздел
+5.2</a>.
+
+<h2><a name="wb-getting-started-tutorial-create-connection"></a>5.2.
+Создание нового подключения MySQL</h2>
+<p>Эта обучающая программа добавляет новую связь, которая может быть
+начальной или дополнительной связью. Экземпляр сервера MySQL должен быть
+установлен, запущен и доступен для MySQL Workbench прежде, чем вы начнете.
+</p>
+
+<p>Чтобы создать новую связь, выполните эти шаги:</p>
+<ol type="1"><li><p>Запустите MySQL Workbench, чтобы открыть домашний экран.
+Существующие связи показывают, когда вы щелкаете по представлению
+<span class="guilabel">MySQL Connections</span> из врезки.
+Никакие связи не существуют для новых пользователей.</p>
+
+<a name="wb-getting-started-tutorial-home"></a>
+<p><b>Рис. 5.2. Home Screen</b></p>
+<img src="images/wb-getting-started-tutorial-home.png" width="766"
+height="468" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li><p>С домашнего экрана MySQL Workbench, показанного на предыдущем
+рисунке, щелкните <span class="guilabel">[+]</span> около метки
+<span class="guilabel">MySQL Connections</span>, чтобы открыть мастер
+<span class="guilabel">Setup New Connection</span>.</li>
+
+<li>Определите <span class="guilabel">Connection Name</span>, например,
+<code class="literal">MyFirstConnection</code>.</p>
+<a name="wb-getting-started-tutorial-setup-new-connection-initial"></a>
+<p><b>Рис. 5.3. Setup New Connection: MyFirstConnection</b></p>
+<img src="images/wb-getting-started-tutorial-setup-new-connection.png"
+width="800" height="500" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Значения параметров связи по умолчанию заданы для типичной локальной
+установки, поэтому проверьте их и войдите в соответствующие значения.
+Если вы не уверены, нажмите кнопку
+<span class="guibutton">Test Connection</span>, чтобы проверить параметры
+связи. Не нажимайте до этого <span class="guibutton">OK</span>.</p>
+
+<p>Затем произвольно нажмите <span class="guibutton">Configure Server
+Management...</span>, которая открывает мастер
+<span class="guilabel">Configure Local Management</span>:</li>
+
+<li>Прочитайте введение <span class="guilabel">Configure Local Management
+</span> и нажмите <span class="guibutton">Next</span>, чтобы начать
+определять новые параметры связи.</p>
+
+<a name="wb-getting-started-tutorial-clm-introduction"></a>
+<p><b>Рис. 5.4. Configure Local Management</b></p>
+<img src="images/wb-getting-started-tutorial-clm-introduction.png"
+width="800" height="600" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li><p>Связь будет теперь проверена. Необходимо видеть, что связь была
+успешна. В противном случае нажмите <span class="guibutton">Back</span>
+и проверьте, что вы ввели информацию правильно. Следующие данные показывают
+соединение с базой данных, которое проверилось успешно.</p>
+
+<a name="wb-getting-started-tutorial-test-db-connection"></a>
+<p><b>Рис. 5.5. Испытательное соединение с базой данных</b></p>
+<img src="images/wb-getting-started-tutorial-test-db-connection.png"
+width="800" height="600" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Нажмите <span class="guibutton">Show Logs</span>, чтобы посмотреть
+дополнительные детали о проверенной связи, затем
+<span class="guibutton">Next</span>.</li>
+
+<li>Произвольно, можно формировать метод для удаленного управления, если
+указан Remote Host. Определение этих вариантов позволяет MySQL Workbench
+определить местоположение конфигурационных файлов и правильные
+команды запуска и остановки, чтобы использовать для связи.</p>
+
+<p>Управление по логину SSH и удаленное управление Windows доступны.
+Тип установки MySQL и операционная система задаются для варианта логина SSH.
+</p>
+<p>Этот шаг создает местное подключение MySQL, таким образом, можно
+пропустить опции <span class="guilabel">Management and OS</span> и
+<span class="guilabel">SSH Configuration</span>, которые используются для
+формирования удаленного подключения MySQL.</li>
+
+<li>В Microsoft Windows выберите соответствующий сервис
+MySQL для подключения.</p>
+<a name="wb-getting-started-tutorial-windows-management"></a>
+<p><b>Рис. 5.6. Управление в Windows</b></p>
+<img src="images/wb-getting-started-tutorial-windows-management.png"
+width="800" height="600" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li><p>Мастер теперь проверит возможность получить доступ к командам запуска
+и остановки, затем проверит доступ к конфигурационному файлу сервера MySQL.
+</p>
+<a name="wb-getting-started-tutorial-test-settings"></a>
+<p><b>Рис. 5.7. Испытательные параметры настройки</b></p>
+<img src="images/wb-getting-started-tutorial-test-settings.png" width="800"
+height="600" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li><p>У вас теперь есть возможность просмотреть параметры конфигурации.
+Показанная информация варьируется немного в зависимости от платформы, метода
+связи и типа установки.</p>
+
+<p>При запросе Review Settings выберите <code class="literal">I'd like to
+review the settings again</code>, чтобы просмотреть параметры настройки, как
+показано в следующем примере. Выбор
+<span class="guibutton">Continue</span> закрывает диалог
+Configure Server Management.</p>
+
+<a name="wb-getting-started-tutorial-admin-review-settings"></a>
+<p><b>Рис. 5.8. Review Settings</b></p>
+<img src="images/wb-getting-started-tutorial-review-settings.png" width="800"
+height="600" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Проверьте <span class="guilabel">Change Parameters</span>, если вы хотите
+проверить или отредактировать информацию в конфигурационном файле MySQL.
+Для этого примера выберите опцию и нажмите
+<span class="guibutton">Next</span>.</li>
+
+<li>Рассмотрите информацию в конфигурационном файле MySQL, показанную в
+следующем примере. Нажмите <span class="guilabel">Check Path</span> и
+<span class="guibutton">Check Name</span>, чтобы выполнить описанные
+проверки или произвольно изменить путь конфигурационного файла.</p>
+
+<a name="wb-getting-started-tutorial-mysql-config-file"></a>
+<p><b>Рис. 5.9. Файл конфигурации MySQL</b></p>
+<img src="images/wb-getting-started-tutorial-mysql-config-file.png"
+width="800" height="600" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li><p>Произвольно, введите свои собственные команды для старта, остановки и
+проверки подключения MySQL. Чтобы применить значения по умолчанию, оставьте
+эти дополнительные значения пустыми.</p>
+
+<a name="wb-getting-started-tutorial-specify-commands"></a>
+<p><b>Рис. 5.10. Указание команд</b></p>
+<img src="images/wb-getting-started-tutorial-specify-commands.png"
+width="800" height="600" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Нажмите <span class="guibutton">Finish</span>, чтобы закрыть диалог
+Configure Server Management, который возвращает к оригинальному шагу
+Setup New Connection.</li>
+
+<li>После рассмотрения информации
+<span class="guilabel">Setup New Connection</span> нажмите
+<span class="guibutton">Test Connection</span> снова, чтобы удостовериться,
+что это все еще функционирует, затем <span class="guibutton">OK</span>, чтобы
+создать новое подключение MySQL.</p>
+
+<a name="wb-getting-started-tutorial-setup-new-connection-final"></a>
+<p><b>Рис. 5.11. Setup New Connection</b></p>
+<img src="images/wb-getting-started-tutorial-setup-new-connection-final.png"
+width="800" height="500" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Ваше новое соединение <span class="guilabel">MyFirstConnection</span>
+теперь перечисляется на домашнем экране.</li>
+<li>С домашнего экрана щелкните по новому подключению MySQL, чтобы открыть
+редактор SQL для этой связи. Редактор SQL это страница по умолчанию.
+Нажмите <span class="guilabel">Server Status</span> в области Navigator,
+чтобы показать текущий статус связанного сервера MySQL.</p>
+
+<a name="wb-getting-started-tutorial-server-status"></a>
+<p><b>Рис. 5.12. Статус сервера</b></p>
+<img src="images/wb-getting-started-tutorial-server-status.png" width="752"
+height="405" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li><p>Проверьте другие опции области Navigator, которые касаются вашего
+нового подключения MySQL. Проверьте его статус, регистрации MySQL и
+его исполнительную статистику в <span class="guilabel">Dashboard</span>.</p>
+
+<p>Обратите внимание на вкладки <span class="guilabel">Administration</span>
+и <span class="guilabel">Schemas</span> в области Navigator.
+Представление <span class="guilabel">Schemas</span> показывает схемы, которые
+связаны с вашим новым подключением MySQL. Альтернативно, можно слить
+содержание вкладок нажатием на
+<span class="inlinemediaobject"><img src="images/wb-icon-navigator-merge.png"
+align="middle" width="18" height="18"></span> или включив опцию
+<span class="guilabel">Show Management Tools and Schema Tree in a single tab
+</span> в редакторе SQL.</p></li></ol>
+
+<h2><a name="wb-manage-server-connections"></a>5.3.
+Управление связями сервера</h2>
+<p>Диалог <span class="guilabel">Manage Server Connections</span>
+это другой способ управлять подключениями MySQL.
+Этот диалог вызван нажатием на символ <span class="inlinemediaobject">
+<img src="images/wb-tool-button.png" align="middle" width="16" height="16">
+</span> на домашнем экране или выбором <span class="guimenu">Database</span>
+и <span class="guimenuitem">Manage Connections</span>
+из главного меню. Это может также быть призвано из любого из мастеров,
+требующих доступа к живой базе данных.</p>
+
+<p>После того, как менеджер по подключениям MySQL запущен,
+вам дают вкладку <span class="guilabel">Connection</span> диалога
+Manage Server Connections.</p>
+
+<a name="wb-manage-server-connections-connection"></a>
+<p><b>Рис. 5.13. Manage Server Connections: вкладка Connection</b></p>
+<img src="images/wb-manage-server-connections-connection.png" width="765"
+height="510" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="idm140523194410976"></a>
+Элементы менеджера по подключениям MySQL</h3>
+<ul><li><p><span class="guilabel">Connection Name:</span> Имя этой связи.
+Эта связь может тогда быть выбрана из списка в других мастерах.</li>
+
+<li><span class="guilabel">Connection Method:</span>
+Метод соединения с RDBMS.</p>
+<p>После того, как вы выберете метод связи, поля, доступные во вкладках
+<span class="guilabel">Parameters</span>, <span class="guilabel">SSL</span> и
+<span class="guilabel">Advanced</span> изменяются соответственно.
+Для получения дополнительной информации об этих вариантах и параметрах,
+посмотрите определенный раздел для каждого пункта.</li>
+
+<li>Кнопка <span class="guibutton">New</span>: Открывается отдельный диалог
+<span class="guilabel">Manage Server Connections</span>, чтобы создать новую
+связь. Этот диалог обеспечивает две вкладки в дополнение к вкладке
+<span class="guilabel">Connection</span>:
+<a href="#wb-mysql-connections-remote-management">
+<span class="guilabel">Remote Management</span></a> и
+<a href="#wb-mysql-connections-system-profile">
+<span class="guilabel">System Profile</span></a>.</li>
+
+<li>Кнопки <span class="guibutton">Delete</span>,
+<span class="guibutton">Duplicate</span>,
+<span class="guibutton">Move Up</span> и
+<span class="guibutton">Move Down</span>:
+Операции с существующими связями.</li>
+
+<li>Кнопка <span class="guibutton">Test Connection</span>:
+Проверяет выбранное подключение MySQL и сообщает о статусе связи.
+Это также сообщает, позволен ли SSL.</p>
+
+<p>Для тестирования удаленных связей вы могли бы также использовать
+<code class="literal">ping</code>, чтобы проверить имя хоста, или
+<code class="literal">telnet</code>, чтобы проверить еще и порт.
+Если они терпят неудачу, то также проверяйте параметры настройки брандмауэра
+на каждом хосте, а также запущен ли сервер MySQL.</p></li></ul>
+
+<h3><a name="idm140523194392944"></a>Замечания по MySQL Connection Manager
+</h3>
+<p>Поскольку TLSv1.2 требует OpenSSL, поддержка этого протокола доступна для
+MySQL Workbench Commercial Editions, но не для Community Edition (который
+собран, используя yaSSL и поддерживает только TLSv1.1).</p>
+
+<p><span class="bold"><strong>Одновременные связи клиента</strong></span>:
+Открытие подключения MySQL с домашнего экрана MySQL Workbench
+открывает новую вкладку связи в MySQL Workbench для той связи. Каждая из этих
+вкладок требует, чтобы два подключения mysql выполнили основные задачи, такие
+как открытие схемы и выполнение SQL. Кроме того, задачи управления, вроде
+<span class="guilabel">Server Status</span>, требуют двух дополнительных
+подключений MySQL. По существу это означает, что каждая вкладка в MySQL
+Workbench требует четырех доступных связей с MySQL.
+Для получения дополнительной информации об ошибке "Too many connection" см.
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/too-many-connections.html"
+target="_top">Too many connections</a>.</p>
+
+<p>Это требование связи удваивается с каждой вкладкой связи, открытой в
+MySQL Workbench, даже если две вкладки указывают на тот же самый сервер
+MySQL. Редактор SQL разделяют свои связи, так что можно иметь много
+редакторов SQL и вкладок результатов SQL, не затрагивая
+количество необходимых связей.
+
+<h3><a name="wb-mysql-connections-methods-standard"></a>
+5.3.1. Стандартный метод связи TCP/IP</h3>
+<p>Этот метод связи позволяет MySQL Workbench соединиться с
+MySQL Server через TCP/IP.</p>
+
+<p>Параметр конфигурации сервера MySQL
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/server-options.html#option_mysqld_skip-networking"
+target="_top"><code class="option">--skip-networking</code></a>
+затрагивает метод связи TCP/IP. Если он отключен, используйте именованные
+каналы или общую память (в Windows) или файлы сокета Unix (в Unix).
+
+<h4><a name="idm140523194383968"></a>Вкладка Parameters</h4>
+<p>Параметры для стандартных связей TCP/IP:
+<ul><li><span class="guilabel">Hostname:</span>
+имя хоста или IP-адрес сервера MySQL.</p>
+
+<p>Имя хоста &quot;localhost&quot; может значить "127.0.0.1" или "::1" на
+вашем хосте, отметьте это, проверяя разрешения. Например, если у пользователя
+веб-приложения есть доступ только к "127.0.0.1", и определенная связь
+использует &quot;localhost&quot;, который раскрывается в "::1",
+эта связь может испытать недостаток в полномочиях вышеупомянутого
+веб-приложения. Выполните Ping "localhost" на каждом хосте, чтобы знать,
+какой адрес применяется.</li>
+
+<li><span class="guilabel">Port:</span> Порт TCP/IP, на котором слушает
+сервер MySQL (по умолчанию 3306).</li>
+<li><span class="guilabel">Username:</span> Имя пользователя, чтобы
+использовать для связи.</li>
+
+<li><span class="guilabel">Password:</span> Пароль для учетной записи
+пользователя. Если вы не введете пароля здесь, вы будете должны ввести его,
+когда MySQL Workbench попытается установить связь. MySQL Workbench может
+сохранить пароль в хранилище (см.
+<a href="#wb-mysql-connections-vault">раздел 5.3.8</a>).</li>
+
+<li><span class="guilabel">Default Schema:</span> Когда связь с сервером
+устанавливается, это схема, которая будет использоваться по умолчанию.
+Это становится схемой по умолчанию для использования в других
+частях MySQL Workbench.</p></li></ul>
+
+<h4><a name="idm140523201715808"></a>Вкладка SSL</h4>
+<p>Параметры для SSL:
+<ul><li><span class="guilabel">Use SSL:</span> Этот список предоставляет
+возможности, связанные с предоставлением возможности шифрования SSL.
+Выберите <span class="guilabel">No</span>, чтобы отключить SSL,
+<span class="guilabel">If available</span>,
+если библиотека клиента поддерживает его, или
+<span class="guilabel">Require</span>, чтобы потребовать, чтобы поддержка
+SSL была обязательно. По умолчанию <span class="guilabel">
+If available</span>.</li>
+
+<li><span class="guilabel">SSL Key File:</span> Путь к файлу ключей для SSL.
+</li>
+<li><span class="guilabel">SSL CERT File:</span> Путь к файлу сертификата.
+</li>
+<li><span class="guilabel">SSL CA File:</span> Путь к файлу Certification
+Authority для SSL.</li>
+
+<li><span class="guilabel">SSL Cipher:</span> Необязательный список
+допустимых шифров, чтобы использовать для шифрования SSL.</li>
+<li>Кнопка <span class="guibutton">SSL Wizard</span>: Произведет сертификаты
+SSL для сервера и для клиента MySQL. Требует доступа к двоичным модулям
+OpenSSL в системной переменной PATH. См.
+<a href="#wb-mysql-connections-ssl-wizard">раздел 5.3.4</a>.</li>
+
+<li>Кнопка <span class="guibutton">Files</span>: Открывает файловый браузер,
+который указывает на произведенные файлы SSL. См.
+<a href="#wb-mysql-connections-ssl-wizard">раздел 5.3.4</a>.
+</p></li></ul>
+
+<h4><a name="idm140523194348720"></a>Вкладка Advanced</h4>
+<p>Вкладка <span class="guilabel">Advanced</span> включает:
+<ul><li><span class="guilabel">Use compression protocol</span>:
+Связь между приложением и сервером MySQL будет сжата, что может увеличить
+скорости передачи. Это соответствует старту клиента командной строки MySQL с
+опцией <code class="option">--compress</code>. По умолчанию выключено.</li>
+
+<li><span class="guilabel">Use ANSI quotes to quote identifiers</span>:
+Пытается использовать <span class="quote">"</span>
+как символ кавычки идентификатора (как символ кавычки
+<span class="quote">`</span>), но не как символ кавычки строки.
+Можно все еще использовать <span class="quote">`</span>, чтобы указать
+идентификаторы этим способом. С этой опцией вы не можете использовать двойные
+кавычки, чтобы указать литеральные строки, потому что они интерпретируются
+как идентификатор. Если эта опция включена, она перекрывает настройку
+сервера. Выключена по умолчанию.</li>
+
+<li><span class="guilabel">Enable Cleartext Authentication Plugin</span>:
+Пересылать пароль пользователя в открытом тексте. Требуется для некоторых
+методов аутентификации. Опция выключена по умолчанию.</li>
+
+<li><span class="guilabel">Use the old authentication protocol</span>:
+Этот выбор отключает опцию <code class="literal">secure_auth</code> в
+Connector/C++. Опция выключена по умолчанию.
+Включение означает, что можно соединиться с MySQL Server
+пользователям MySQL, которые используют старый плагин идентификации
+<code class="literal">mysql_old_password</code>, который не рекомендуется.
+<code class="literal">mysql_old_password</code> был удален в MySQL Server
+5.7.</p>
+
+<p>Этот выбор был удален в Workbench 6.3.6 и не функционировал в Workbench
+6.3.5. См. <a href="#wb-mysql-connections-secure-auth">раздел
+5.3.9</a>.</p>
+
+<p>MySQL Server 5.7 не поддерживает старый протокол аутентификации, потому
+что secure_auth не может быть отключен. Использование старого
+<code class="literal">mysql_old_password</code> не рекомендовано,
+начиная с MySQL 4.1.</li></ul>
+
+<p>Это также включает эти опции:</p>
+<p><span class="guilabel">Timeout:</span> Сколько времени ждать перед
+обрывом связи. Тайм-аут соединения 60 секунд по умолчанию.</p>
+
+<p><span class="guilabel">SQL_MODE:</span> Перекрывает
+<code class="literal">SQL_MODE</code> сервера.</p>
+<p><span class="guilabel">Others:</span> Другие опции для Connector/C++ как
+пары опция=значение, по одной на строку.
+
+<h3><a name="wb-mysql-connections-methods-socket"></a>
+5.3.2. Метод связи Socket/Pipe</h3>
+<p>Этот метод связи позволяет MySQL Workbench соединиться с сервером MySQL,
+используя файл сокета (в Unix) или именованный канал (в Windows).
+
+<h4><a name="idm140523194327760"></a>Вкладка Parameters</h4>
+<p>В дополнение ко многим параметрам, которые аналогичны стандартным связям
+TCP/IP, этот метод связи включает уникальное поле, чтобы формировать путь
+сокета или имя канала. Если поле оставлено пустым используются сокет или имя
+канала по умолчанию. В Unix название имя сокета по умолчанию
+<code class="filename">/tmp/mysql.sock</code>.
+В Microsoft Windows имя канала по умолчанию
+<code class="literal">MySQL</code>.</p>
+
+<a name="wb-mysql-connections-methods-socket-parameters"></a>
+<p><b>Рис. 5.14. Manage Server Connections: паараметры Socket/Pipe</b></p>
+<img src="images/wb-manage-db-connections-socket-parameters.png"
+width="800" height="533" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h4><a name="idm140523194318256"></a>Вкладка SSL</h4>
+<p>Возможности SSL для этого метода связи совпадают с вариантами, описанными
+в <a href="#wb-mysql-connections-methods-standard">разделе 5.3.1
+</a>.
+
+<h4><a name="idm140523194316640"></a>Вкладка Advanced</h4>
+<p>Расширенные настройки для этого метода связи совпадают с вариантами,
+описанными в <a href="#wb-mysql-connections-methods-standard">
+разделе 5.3.1</a>, кроме опций
+<span class="guilabel">Use compression protocol</span> и
+<span class="guilabel">Timeout</span>, они не применяются.
+
+<h3><a name="wb-mysql-connections-methods-ssh"></a>
+5.3.3. Стандартный TCP/IP по SSH</h3>
+<p>Этот метод связи позволяет MySQL Workbench соединиться с MySQL Server,
+используя TCP/IP по SSH.</p>
+
+<p>Поскольку TLSv1.2 требует OpenSSL, поддержка этого протокола доступна для
+MySQL Workbench Commercial Editions, но не для Community Edition
+(который собран, используя yaSSL и поддерживает только TLSv1.1).
+
+<h4><a name="idm140523194311200"></a>Вкладка Parameters</h4>
+<p>В дополнение ко многим параметрам, которые аналогичны стандартным связям
+TCP/IP, этот метод связи показывает много специализированных параметров:
+
+<ul><li><span class="guilabel">SSH Hostname:</span> название сервера SSH.
+Дополнительный номер порта может также быть обеспечен. Например,
+<code class="literal">localhost:22</code>.</li>
+
+<li><span class="guilabel">SSH Username:</span> имя пользователя SSH,
+чтобы установить связь.</li>
+<li><span class="guilabel">SSH Password:</span> пароль SSH.
+Рекомендуется, чтобы файл ключей SSH также использовался.</li>
+<li><span class="guilabel">SSH Key File:</span> путь к файлу ключей SSH.
+</li></ul>
+
+<p>Если удаленный хост отсутствует в списке системы известных хостов,
+требуется, чтобы вы подтвердили отпечаток хоста прежде, чем сохранить его.
+Если ваш сохраненный отпечаток отличается от текущего отпечатка, то ошибка
+произведена, и надо разобраться с несоответствием за пределами
+MySQL Workbench прежде, чем создать связь. До MySQL Workbench 6.1.6
+отпечаток хоста SSH не был сохранен в MySQL Workbench.</p>
+
+<p>В Linux и macOS отпечатки хоста SSH сохранены в
+<code class="filename">~/.ssh/known_hosts</code>. В Microsoft Windows
+они сохранены в файле, созданном MySQL Workbench под папкой данных приложения
+пользователя (<code class="literal">%appdata%</code>), обычно это
+<code class="filename">C:\Users\<em class="replaceable"><code>[username]\
+</code></em>AppData\Roaming\MySQL\Workbench\known_hosts</code>.</p>
+
+<a name="wb-manage-db-connections-ssh-parameters"></a>
+<p><b>Рис. 5.15. Manage Server Connections - Стандартные параметры
+TCP/IP по SSH</b></p>
+<img src="images/wb-manage-db-connections-ssh-parameters.png" width="800"
+height="533" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h4><a name="idm140523194292016"></a>Вкладка SSL</h4>
+<p>Возможности SSL для этого метода связи совпадают с вариантами, описанными
+в <a href="#wb-mysql-connections-methods-standard">разделе 5.3.1
+</a>.
+
+<h4><a name="idm140523194290400"></a>Вкладка Advanced</h4>
+<p>Расширенные настройки для этого метода связи совпадают с описанными в
+<a href="#wb-mysql-connections-methods-standard">разделе 5.3.1
+</a>, кроме неприменимой опции <span class="guilabel">Timeout</span>.
+
+<h3><a name="wb-mysql-connections-ssl-wizard"></a>
+5.3.4. Мастер SSL (сертификаты)</h3>
+<p>Этот мастер помогает создать сертификаты SSL для клиентов и серверов
+MySQL. Связи в MySQL Workbench обновляются с этими сертификатами. Мастер
+требует OpenSSL, чтобы создать сертификаты, поэтому исполняемые модули
+OpenSSL должны быть в пути, указанном системной переменной PATH.</p>
+
+<p>Запустите мастера SSL с вкладки <span class="guilabel">SSL</span>
+связи с сервером MySQL. Нажмите <span class="guibutton">SSL Wizard</span>,
+чтобы запустить мастер.</p>
+
+<a name="wb-ssl-wizard-start"></a><p><b>Рис. 5.16. SSL Wizard: запуск</b></p>
+<img src="images/wb-ssl-wizard-start.png" width="600" height="400"
+alt="Content is described in the surrounding text."><br class="figure-break">
+<p>Прочитайте информативный текст на экране приветствия, нажмите
+<span class="guibutton">Next</span>.</p>
+
+<a name="wb-ssl-wizard-welcome"></a><p><b>Рис. 5.17. SSL Wizard: Welcome</b>
+</p><img src="images/wb-ssl-wizard-welcome.png" width="600" height="450"
+alt="Content is described in the surrounding text."><br class="figure-break">
+<p>Проверьте варианты, которые применяются. Следующие данные показывают
+пример доступных параметров.
+
+<ul><li><span class="guilabel">Use default parameters</span>:
+Включите это, чтобы пропустить вход в дополнительные признаки, такие как
+Country, State, Organization и т.д. По умолчанию эти поля пусты.</li>
+
+<li><span class="guilabel">Generate new certificates and self-signed
+keys</span>: Включите это, чтобы произвести новые файлы, иначе существующие
+файлы используются. Вы могли бы отключить это, если вы уже произвели
+сертификаты SSL, но забыли, где файлы расположены или как настроить их.</li>
+
+<li><span class="guilabel">Update the connection</span>:
+Обновляет определенное подключение (в Workbench)
+с произведенной информацией сертификата.</p></li></ul>
+
+<a name="wb-ssl-wizard-options"></a><p><b>Рис. 5.18. SSL Wizard: Options</b>
+</p><img src="images/wb-ssl-wizard-options.png" width="600" height="450"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>Страница результатов описывает произведенные файлы и обеспечивает
+требования, чтобы закончить операцию. Например, необходимо вручную
+отредактировать конфигурационный файл MySQL
+(<code class="filename">my.ini</code> или
+<code class="filename">my.cnf</code>) и определить настройки SSL.</p>
+
+<p>Следующие данные показывают экран Results в качестве примера.
+Закройте его после того, как вы скопировали файлы и изменили ваш
+конфигурационный файл MySQL, чтобы позволить связи SSL.
+Мастер не выполняет эти действия для вас.</p>
+
+<a name="wb-ssl-wizard-results"></a><p><b>Рис. 5.19. SSL Wizard: Results</b>
+</p><img src="images/wb-ssl-wizard-results.png" width="600" height="450"
+alt="Content is described in the surrounding text."><br class="figure-break">
+<p>Здесь показан процесс в качестве примера использования произведенных
+файлов SSL, чтобы настроить связь SSL. Приспособьте свои пути, поскольку
+они будут отличаться.</p>
+
+<ol type="1"><li><p>Создайте каталог, чтобы хранить файлы сертификата.
+В нашем простом примере мы установили MySQL Workbench на том же самом хосте,
+где MySQL Server, и создали каталог "<code class="filename">C:\certs</code>".
+</li>
+
+<li>Скопируйте и вставьте результаты к новому (временному) файлу, но
+смените &lt;directory&gt; на созданный путь (в нашем случае
+(<code class="filename">C:\certs</code>):
+<pre>
+[client]
+ssl-ca=C:\certs\ca-cert.pem
+ssl-cert=C:\certs\client-cert.pem
+ssl-key=C:\certs\client-key.pem
+
+[mysqld]
+ssl-ca=C:\certs\ca-cert.pem
+ssl-cert=C:\certs\\server-cert.pem
+ssl-key=C:\certs\\server-key.pem
+</pre>
+
+<p>MySQL понимает "\s" как пробел, таким образом, мы добавили дополнительную
+наклонную черту влево, чтобы избежать этого. Именно поэтому вы видите
+"\\server-key.pem" в вышеупомянутом примере, потому что MySQL Server
+интерпретировал бы "\server-key.pem" как " erver-key.pem".</li>
+
+<li>Откройте файл настройки MySQL Server. В этом примере его местоположение
+"<code class="filename">C:\ProgramData\MySQL\MySQL Server 5.7\my.ini</code>".
+</p>
+
+<p>Местоположение вашего конфигурационного файла зависит от того, как MySQL
+Server установлен. Редактор связи определяет и показывает местоположение на
+странице <span class="guilabel">Options File</span> в MySQL Workbench.</li>
+
+<li>Добавьте информацию о сертификате клиента в секцию
+<code class="literal">[client]</code>:
+<pre>
+[client]
+ssl-ca=C:\certs\ca-cert.pem
+ssl-cert=C:\certs\client-cert.pem
+ssl-key=C:\certs\client-key.pem
+</pre>
+
+<p>Добавьте информацию о сертификате сервера в секцию
+<code class="literal">[mysqld]</code>:</p>
+<pre>
+[mysqld]
+ssl-ca=C:\certs\ca-cert.pem
+ssl-cert=C:\certs\\server-cert.pem
+ssl-key=C:\certs\\server-key.pem
+</pre></li>
+
+<li><p>Обновите пути к сертификатам клиента SSL в поле вашего подключения
+MySQL, на вкладке SSL. Есть три пути это сделать.</li>
+<li>Перезапустите MySQL Server. В журнале необходимо увидеть что-то вроде
+"Warning CA certificate <code class="filename">C:\certs\ca-cert.pem</code>
+is self signed."</li>
+<li>В редакторе подключения MySQL нажмите <span class="guibutton">Test
+Connection</span>, чтобы подтвердить вашу связь SSL.</p></li></ol>
+
+<p>Кроме того, установите <span class="guilabel">Use SSL</span> в
+"Required". Или, если вы испытываете проблемы, установите опцию в
+"If available", отлаживая проблему.
+
+<h3><a name="wb-mysql-connections-remote-management"></a>5.3.5.
+Удаленное управление</h3>
+<p>Вкладка <span class="guilabel">Remote Management</span>
+доступна, соединяясь с MySQL удаленно. Чтобы получить доступ к этой вкладке,
+выберите удаленную связь из панели <span class="guilabel">MySQL Connections
+</span> и нажмите <span class="guibutton">New</span>,
+чтобы создать новую связь.</p>
+
+<a name="wb-manage-server-connections-remote-management"></a>
+<p><b>Рис. 5.20. Manage Server Connections: Вкладка Remote Management</b></p>
+<img src="images/wb-manage-server-connections-remote-management.png"
+width="800" height="533" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="wb-mysql-connections-system-profile"></a>5.3.6.
+Системный профиль</h3>
+<p>Вкладка <span class="guilabel">System Profile</span>
+позволяет вам определить специфичную для хоста информацию.
+Это достигается, прежде всего, посредством выбора
+<span class="guilabel">System Type</span>, наряду с соответствующим
+<span class="guilabel">Installation Type</span>. Эти параметры настройки
+профиля содержат стандартную информацию, которая используется в управлении
+хостом сервера MySQL.</p>
+
+<p>Вот некоторые доступные типы установки:
+<ul><li>FreeBSD, MySQL package или Custom.</li>
+<li>Linux, включая дистрибутивы Fedora, Oracle, RHEL,
+SLES, Ubuntu, Generic, Custom.</li>
+<li>macOS, MySQL package или Custom.</li>
+<li>OpenSolaris, MySQL package или Custom.</li>
+<li>Windows с различными методами установки,
+версиями MySQL и архитектурами.</li></ul>
+
+<p>Выберите соответствующие <span class="guilabel">System Type</span> и
+<span class="guilabel">Installation Type</span>, чтобы установить параметры
+по умолчанию, которые включают команды, используемые, чтобы запустить и
+остановить MySQL, команды, чтобы проверить статус сервера, местоположение
+конфигурационного файла <code class="filename">my.ini</code> или
+<code class="filename">my.cnf</code> и в Windows имени службы Windows.
+Как следующие данные показывают, эти значения по умолчанию настраиваемы.</p>
+
+<a name="wb-manage-server-connections-system-profile"></a>
+<p><b>Рис. 5.21. Manage Server Connections: вкладка System Profile</b></p>
+<img src="images/wb-manage-server-connections-system-profile.png" width="800"
+height="533" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="wb-mysql-connections-server-management-wizard"></a>
+5.3.7. Мастер Configure Server Management</h3>
+<p>Нажатие на символ [+] домашнего экрана запускает мастер
+<span class="guilabel">Setup New Connection</span>.
+Он обеспечивает форму подключения MySQL, чтобы создать новое подключение
+mysql и включает опцию <span class="guibutton">Configure Server Management
+</span> как постепенный подход к созданию новой связи сервера MySQL.</p>
+
+<p>Этот выбор может также быть выполнен позже (на удаленных связях) с
+домашнего экрана, щелкнув по правому верхнему углу удаленной связи MySQL.</p>
+<a name="wb-mysql-connections-configure-remote-management-hover"></a>
+<p><b>Рис. 5.22. Настройка Remote Management</b></p><img src="images/8.png"
+width="744" height="457" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Выполнение этого требуется, чтобы выполнять задачи, требующие
+shell-доступа к хосту. Например, начиная/останавливая MySQL
+и редактируя конфигурационный файл.</p>
+
+<p>Для обучающей программы, которая демонстрирует общие шаги, посмотрите
+<a href="#wb-getting-started-tutorial-create-connection">раздел
+5.2</a>.</p>
+<p>Шаги, представленные в мастере:</p>
+<ol type="1"><li><p>
+<span class="bold"><strong>Test DB Connection</strong></span></p>
+<p>На этой странице MySQL Workbench проверяет ваше соединение с базой данных
+и показывает результаты. Если ошибка происходит, нажмите
+<span class="guibutton">Show Logs</span>, чтобы
+рассмотреть связанные журналы.</li>
+
+<li><span class="bold"><strong>Management and OS</strong></span></p>
+<p>Используется, чтобы определить при удаленном управлении
+тип и операционную систему, которая доступна, когда хост-машина определяется
+как удаленный хост.</p>
+<p>Опция управления логином SSH включает записи конфигурации для
+типа установки MySQL и операционной системы.</li>
+
+<li><span class="bold"><strong>Настройка SSH</strong></span></p>
+<p>Если вы определили Remote Host на странице Specify Host Machine,
+будет выдана страница Host SSH Connection, которая позволяет вам использовать
+SSH для связи с сервером. Это средство позволяет вам создать безопасное
+соединение, чтобы удаленно управлять и формировать сервер.
+Необходимо ввести имя хоста и имя пользователя, который будет использоваться,
+чтобы загрузиться в сервер для действий конфигурации и администрации. Если вы
+не введете ключ SSH для использования с сервером, то пароль спросят, когда
+связь будет установлена MySQL Workbench.</p>
+
+<p>Эта связь должна позволить удаленное администрирование и конфигурацию
+MySQL Server. Это не то же самое, поскольку связь раньше соединялась с
+сервером для общей манипуляции базы данных.</p>
+
+<p>Необходимо использовать тип подключения SSH, управляя удаленным сервером,
+если вы хотите запустить или остановить сервер или отредактировать его
+конфигурационный файл. Другие административные функции не требуют связи SSH.
+</li>
+
+<li><span class="bold"><strong>Windows Management</strong></span></p>
+<p>Если применен сервер Windows, настройка параметров конфигурации Windows
+обязательна. Управление Windows требует учетной записи пользователя с
+требуемыми полномочиями для запроса состояния системы и доступа к контрольным
+службам. И доступ для чтения-записи к конфигурационному файлу необходим,
+чтобы позволить редактировать файла.</li>
+
+<li><span class="bold"><strong>Test Settings</strong></span></p>
+<p>Мастер теперь делает попытку связи с вашим сервером и сообщает о
+результатах. Если ошибка происходит, нажмите <span class="guibutton">Show
+Logs</span>, чтобы рассмотреть связанные регистрационные журналы.</p>
+
+<p>MySQL Workbench должен знать, где расположен конфигурационный файл
+MySQL Server, чтобы быть в состоянии показать конфигурационную информацию.
+Мастер в состоянии определить наиболее вероятное местоположение
+конфигурационного файла, на основе выбора, сделанного на странице Operating
+System мастера. Однако возможно проверить, что эта информация правильна, щелкая
+кнопки <span class="guibutton">Check path</span> и
+<span class="guibutton">Check section</span>.
+Мастер тогда сообщает, можно ли к конфигурационному файлу и секции
+конфигурации сервера на самом деле получить доступ.
+Также возможно вручную войти в местоположение конфигурационного файла и
+секцию, имеющую отношение к данным о MySQL Server, эти вручную введенные
+значения должны быть проверены, используя обеспеченные кнопки.
+Нажмите кнопку <span class="guibutton">Next</span>, чтобы продолжить.</li>
+
+<li><span class="bold"><strong>Review Settings</strong></span></p>
+<p>Измененные параметры настройки могут быть рассмотрены, что также включает
+значения по умолчанию. Проверьте флажок Change Parameters, если часть файла
+конфигурации MySQL будет отредактирована, и затем нажмите
+<span class="guibutton">Next</span>.</li>
+
+<li><span class="bold"><strong>MySQL Config File</strong></span></p>
+<p>Позволяет конфигурацию версии сервера MySQL. Это также позволяет
+редактирование и проверку пути конфигурационного файла и проверку секции
+экземпляра сервера. Нажмите <span class="guibutton">Next</span>.</li>
+
+<li><span class="bold"><strong>Specify Commands</strong></span></p>
+<p>Произвольно установите команды, требуемые, чтобы запустить, остановить и
+проверить статус работающего экземпляра сервера MySQL. Команды могут быть
+настроены при необходимости, но умолчания подходят в большинстве случаев.
+Умолчания зависят от выбранных вариантов на странице
+<span class="guilabel">Operating System</span> мастера. Нажмите
+<span class="guibutton">Next</span>.</li>
+
+<li><span class="bold"><strong>Complete Setup</strong></span></p>
+<p>Назовите сервер MySQL на заключительном шаге. Это имя используется всюду в
+MySQL Workbench в качестве ссылки на это подключение MySQL.
+После определения подходящего имени нажмите
+<span class="guibutton">Finish</span>.</p></li></ol>
+
+<h3><a name="wb-mysql-connections-vault"></a>5.3.8.
+Хранилище для паролей</h3>
+<p>Хранилище обеспечивает удобное и безопасное хранение для паролей для
+доступа к серверам MySQL. При помощи хранилища вы не должны входить в
+систему каждый раз, когда MySQL Workbench пытается соединиться с сервером.
+</p>
+
+<p>Имя хоста используется для хранения информации о пароле.
+Например, местная связь могла бы использовать "localhost", "127.0.0.1" или
+"::1", но они сохранены отдельно в хранилище пароля, даже если они все ведут
+к тому же самому месту.</p>
+
+<p>Хранилище осуществляется по-другому на каждой платформе:<ul><li>
+<span class="bold"><strong>Windows</strong></span>: хранилище это
+зашифрованный файл в каталоге MySQL Workbench
+<code class="filename">data</code>. Это то, где расположен
+<code class="filename">connections.xml</code>. Файл зашифрован, используя
+Windows API, который выполняет шифрование на основе нынешнего пользователя,
+поэтому только нынешний пользователь может расшифровать его.
+В результате невозможно расшифровать файл на любом другом компьютере.
+Возможно удалить файл, в этом случае все сохраненные пароли потеряны.
+Тогда необходимо повторно ввести пароли.</li>
+
+<li><span class="bold"><strong>macOS</strong></span>: хранилище
+осуществляется, используя Secure Keychain. Содержание keychain также видимо
+из утилиты <code class="filename">Keychain Access.app</code>.</li>
+
+<li><span class="bold"><strong>Linux</strong></span>:
+хранилище работает, храня пароли, используя библиотеку
+<code class="literal">libsecret</code>, которая общается с Secret Service.
+Для систем с рабочей средой GNOME, таких как Ubuntu, Secret Service это
+<code class="literal">gnome-keyring-daemon</code>. Системы с настольной
+средой KDE, например Kubuntu, используют реализацию
+<code class="literal">ksecretservice</code>.</p></li></ul>
+
+<h3><a name="wb-mysql-connections-secure-auth"></a>
+5.3.9. Обновление старых паролей протокола аутентификации</h3>
+<p>MySQL 4.1 расширил хэши пароля с 16 до 41 байта. Однако модернизация MySQL
+автоматически не обновляет старые пароли, таким образом, текущие пароли
+продолжают храниться в устаревшем формате. Это вызвано тем, что MySQL не
+хранит пароли как простой текст, так что регенерация хэшей пароля
+требует вмешательства пользователя.</p>
+
+<p>Связанная опция <a href="../../../dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_secure_auth"
+target="_top"><code class="literal">secure_auth</code></a>
+включена по умолчанию с MySQL 5.6. Это всегда включено с MySQL 5.7 означая,
+что это <span class="emphasis"><em>не</em></span> может быть отключено.
+Будущий выпуск MySQL удалит эту опцию. С этим выбором пользователь с паролем,
+определенным в старом формате, не будет в состоянии соединиться с MySQL.</p>
+
+<p>Устаревший формат пароля не функционирует с MySQL 5.7.
+Все пароли, использующие старый формат должны быть обновлены.
+Для получения информации о переходе от старого формата пароля, используя
+командную строку MySQL вместо MySQL Workbench см.
+<a href="../../../dev.mysql.com/doc/refman/5.7/en/account-upgrades.html"
+target="_top">Migrating Away from Pre-4.1 Password Hashing and the
+mysql_old_password Plugin</a>.</p>
+
+<p>Метод, которым MySQL хранит пароль, определяется плагином идентификации.
+Старый метод использует плагин идентификации
+<code class="literal">mysql_old_password</code>,
+текущий метод по умолчанию
+<code class="literal">mysql_native_password</code>. С MySQL 5.6 опция
+<code class="literal">sha256_password</code> также доступна, хотя она требует
+SSL или зашифрованной связи. Когда Workbench модернизирует пароли, он
+меняет <code class="literal">mysql_old_password</code> на
+<code class="literal">mysql_native_password</code>.
+Для получения дополнительной информации о плагинах идентификации см.
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/pluggable-authentication.html"
+target="_top">Pluggable Authentication</a>.
+
+<h4><a name="idm140523194131168"></a>Опции, зависящие от вашей
+опции secure_auth</h4>
+<p>У модернизации пароля действительно есть ограничения. Вот два сценария:
+<ul><li>Если опция MySQL Server
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_secure_auth"
+target="_top"><code class="literal">secure_auth</code></a> выключена,
+тогда можно авторизоваться, используя пользователя со старым паролем,
+и обновить собственный пароль пользователя MySQL. Однако это не выбор с
+MySQL Workbench 6.3.5, потому что совместимость со старым форматом пароля
+была удалена. Поэтому способность пользователя модернизировать собственный
+формат пароля должна быть сделана, используя командную строку MySQL, как
+описано в <a href="../../../dev.mysql.com/doc/refman/5.7/en/account-upgrades.html"
+target="_top">Migrating Away from Pre-4.1 Password Hashing and the
+mysql_old_password Plugin</a>.</p>
+
+<p>Если использование командной строки MySQL не является приемлемым, вы могли
+использовать более старую версию MySQL Workbench (6.3.4 и ранее), которая
+позволяет вам включить опцию
+<a href="#wb-mysql-connections-methods-standard">
+Use the old authentication protocol</a> на вкладке
+<span class="guilabel">Advanced</span>. Более старые версии Workbench
+доступны на <a href="../../../https@downloads.mysql.com/archives/workbench/default.htm"
+target="_top">https://downloads.mysql.com/archives/workbench/</a>.</p>
+
+<p>Как указано ранее,
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_secure_auth"
+target="_top"><code class="literal">secure_auth</code></a> включена по
+умолчанию с MySQL 5.6 и всегда включена в MySQL 5.7.</li>
+
+<li>Если <a href="../../../dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_secure_auth"
+target="_top"><code class="literal">secure_auth</code></a> включена,
+вы не можете авторизоваться, если пароль вашего пользователя сохранен в
+старом формате. Попытки вызовут ошибку, подобную
+"<span class="emphasis"><em>ERROR 2049 (HY000): Connection using old
+(pre-4.1.1) authentication protocol refused (client option
+'secure_auth' enabled)</em></span>". Чтобы модернизировать пароль, можно
+отключить <code class="literal">secure_auth</code> (не рекомендуется), тогда
+обновляют, как описано выше, или войти как другой привилегированный
+пользователь, такой как root, чтобы изменить пароль для иного пользователя.
+</p></li></ul>
+
+<h4><a name="idm140523194118640"></a>Применение Workbench, чтобы
+модернизировать ваш пароль</h4>
+<p>Держа вышеупомянутое в памяти, есть два метода, чтобы обновить
+пароли, используя Workbench.</p>
+
+<p>Откройте вкладку <a href="admin.htm#wb-mysql-connections-navigator-management-users-and-privileges">
+Users and Privileges</a> из Workbench's Management. Выберите пользователя,
+которого вы хотите обновить, в секции <span class="guilabel">User Accounts
+</span>. Используя старый формат пароля, вы будете видеть текст, который
+начинается с "This account is using the pre-mysql-4.1.1
+password hashing type." в правом нижнем углу экрана, а также большую кнопку
+<span class="guibutton">Upgrade</span> справа. Отсюда вы можете:
+
+<ul><li>Возможность для всех версий MySQL:</p>
+<p>Вручную введите новый или текущий пароль и нажмите
+<span class="guibutton">Upgrade</span>. Это модернизирует пароль до более
+нового формата пароля, и пользователь MySQL может теперь авторизоваться,
+используя новый пароль, который вы определили.</li>
+
+<li>Возможность для MySQL 5.6 и позже:</p>
+<p>Вместо того, чтобы редактировать область пароля, оставьте его в покое и
+немедленно нажмите <span class="guibutton">Upgrade</span>. Отсюда можно
+произвести случайный пароль и пометить его как истекший при нажатии
+<span class="guibutton">Reset To Expired</span>. Используйте этот временный
+случайный пароль для входа пользователя, и MySQL запросит новый пароль, когда
+пользователь сначала авторизуется.</li></ul>
+
+<a name="wb-manage-server-connections-old-password-upgrade-55"></a>
+<p><b>Рис. 5.23. Модернизация старого пароля: ввод нового пароля</b></p>
+<img src="images/wb-old-password-upgrade-55.png" width="800" height="462"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<a name="wb-manage-server-connections-old-password-upgrade-56"></a>
+<p><b>Рис. 5.24. Модернизация старого пароля: сброс к случайному паролю с
+истекшим сроком годности</b></p>
+<img src="images/wb-old-password-upgrade-56.png" width="800" height="518"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>Сбрасывая к случайному паролю, необходимо сохранить пароль и дать его
+пользователю. Вы найдете случайный пароль в новом всплывающем окне, которое
+подобно следующему рисунку.</p>
+
+<a name="wb-manage-server-connections-old-password-upgrade-56-popup"></a>
+<p><b>Рис. 5.25. Модернизация старого пароля: всплывающее окно пароля</b></p>
+<img src="images/wb-old-password-upgrade-56-popup.png" width="366"
+height="145" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>После завершения модернизации появится новый
+<span class="guilabel">Authentication Type</span> для связи.
+В примере, показанном на следующем рисунке, значение меняется с
+<span class="bold"><strong>Standard (old)</strong></span> на
+<span class="bold"><strong>Standard</strong></span>.
+Другими словами, тип аутентификации изменен с
+<code class="literal">mysql_old_password</code> на
+<code class="literal">mysql_native_password</code>.</p>
+
+<a name="wb-manage-server-connections-old-password-upgrade-55-after"></a>
+<p><b>Рис. 5.26. Модернизированный пароль: от Standard (old) к Standard</b>
+</p><img src="images/wb-old-password-upgrade-55-after.png" width="800"
+height="426" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h2><a name="wb-mysql-connections-navigator-management-client-connections">
+</a>5.4. Связи клиента</h2>
+<p>Браузер связи клиента перечисляет активные и спящие связи клиента MySQL и
+добавляет способность убить запросы и связи, и посмотреть дополнительные
+детали связи. Следующие данные показывают пример информации о связи клиента
+для местного хоста.</p>
+
+<p>Просмотр деталей связи требует MySQL 5.6 или выше.
+Только основная информация о связи доступна для предыдущих версий MySQL,
+например, хост связи, база данных и статус.</p>
+
+<a name="wb-mysql-connections-navigator-client-connections"></a>
+<p><b>Рис. 5.27. Обзор связи клиента</b></p>
+<img src="images/wb-navigator-client-connections.png" width="756"
+height="464" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="idm140523194067152"></a>Связи клиента и блокировка метаданных
+</h3>
+<p>Окно <span class="guilabel">Client Connections</span> включает
+<span class="guibutton">Show Details</span> для связей с MySQL 5.6 и выше.
+Эти детали разделены на три вкладки:
+
+<ul><li><span class="guilabel">Details</span>: детали связи, такие как
+Process ID, Type, User, Host, Instrumented и дополнительная информация.</p>
+<a name="wb-navigator-client-connections-details-figure"></a>
+<p><b>Рис. 5.28. Детали связей клиента</b></p>
+<img src="images/wb-navigator-client-connections-details.png" width="800"
+height="700" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li><p><span class="guilabel">Locks</span>: MySQL использует захват
+метаданных, чтобы управлять доступом к объектам, таким как таблицы и
+триггеры. Иногда запрос мог бы быть заблокирован, будучи управляемым другой
+связью от другого пользователя. Особенность <span class="guilabel">Locks
+</span> использует эти блокировки метаданных MySQL (MDL), чтобы показать
+блокированные связи, которые заблокированы или ждут, а также информацию о
+блокировках, которых они ждут, и что они держат.</p>
+
+<a name="wb-navigator-client-connections-metadata-lock"></a>
+<p><b>Рис. 5.29. Браузер блокировок метаданных</b></p>
+<img src="images/wb-metadata-lock-browser.png" width="800" height="610"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>Информация о блоокировке метаданных предоставляется в исполнительной
+схеме с сервера MySQL 5.7.3.</li>
+<li><span class="guilabel">Attributes</span>: это признаки связи, такие как
+OS, Client Name, Client Version и Platform.</p>
+
+<a name="wb-navigator-client-connections-attributes-figure"></a>
+<p><b>Рис. 5.30. Признаки связи клиента</b></p>
+<img src="images/wb-navigator-client-connections-attributes.png" width="800"
+height="490" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\__\w10_bach\cat.w10_bach\dir.w10_bach.md">w10_bach</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\__\w10_bach\WSL.md">WSL.md</a>
+        - *# [УСТАНОВКА WSL 2 В WINDOWS 10](https://losst.ru/ustanovka-bash-v-windows-10)
+        - *##  АКТИВАЦИЯ WSL И ВИРТУАЛИЗАЦИИ
+        - *##  АКТИВАЦИЯ WSL 2
+        - *## [Установите Linux из Магазина Microsoft в Windows 10.](https://g-ek.com/ustanovite-linux-iz-magazina-microsoft-v-windows-10)

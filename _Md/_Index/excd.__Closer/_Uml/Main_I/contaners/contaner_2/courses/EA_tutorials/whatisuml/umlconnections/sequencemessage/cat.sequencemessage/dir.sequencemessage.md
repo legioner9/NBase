@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\sequencemessage\cat.sequencemessage\dir.sequencemessage.md">sequencemessage</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\sequencemessage\sequencemessage.md">sequencemessage.md</a>
+        - *##### [Message (Sequence Diagram)](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/sequencemessage.html)

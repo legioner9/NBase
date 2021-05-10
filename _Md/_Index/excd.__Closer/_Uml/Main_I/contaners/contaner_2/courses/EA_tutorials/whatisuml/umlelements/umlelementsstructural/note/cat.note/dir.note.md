@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlelements\umlelementsstructural\note\cat.note\dir.note.md">note</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlelements\umlelementsstructural\note\note.md">note.md</a>
+        - *#### <a href="https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/element_note.html" target="_blank">Note</a> Заметка

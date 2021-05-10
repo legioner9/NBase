@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Iterator-master\cat.Iterator-master\dir.Iterator-master.md">Iterator-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Iterator-master\README.md">README.md</a>
+        - *## Iterator and Iterable protocols

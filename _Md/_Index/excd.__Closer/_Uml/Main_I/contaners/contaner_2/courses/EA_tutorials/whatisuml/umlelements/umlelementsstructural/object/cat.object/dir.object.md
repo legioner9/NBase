@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlelements\umlelementsstructural\object\cat.object\dir.object.md">object</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlelements\umlelementsstructural\object\object.md">object.md</a>
+        - *#### <a href="https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/object.html" target="_blank">Object</a> объект

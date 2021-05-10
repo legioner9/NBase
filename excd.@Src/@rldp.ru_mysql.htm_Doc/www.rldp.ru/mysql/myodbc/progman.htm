@@ -1,0 +1,632 @@
+<HTML>
+<HEAD>
+  <TITLE>Программирование на unixODBC</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1>9 Программирование на unixODBC</H1>
+<P>Цель этого учебника состоит в том, чтобы научить программиста на языке C
+обращению с ODBC. В качестве примера будет рассматриваться простая программа,
+которая соединяется с базой данных через ODBC и читает некоторые данные.
+Программа, показанная в качестве примера, была первоначально написана под
+WinNT и позже перенесена без каких-либо корректировок в Linux и
+<EM>unixODBC</EM>. Вот она, настоящая совместимость!
+
+<H2>Требования</H2>
+<P>Я предполагаю, что у Вас есть:
+<UL><LI>Система с установленным unixODBC и с по крайней мере одним работающим
+и настроенным источником данных
+<LI>Включаемые файлы, установленный в каталоге <CODE>/usr/include/odbc</CODE>
+<LI>Компилятор для языка С</UL>
+
+<H2>Компиляция</H2>
+<P>Если установлен gcc, введите:
+<PRE>
+<CODE>
+gcc odbc.c -o odbc -lodbc
+</CODE>
+</PRE>
+В результате будет создан исполняемый модуль с именем odbc.
+
+<H2>База данных</H2>
+<P>Еще потребуется тестовая база данных для проведения над ней опытов. Также
+нужен источник данных, через который будет осуществляться работа с базой.
+Наша база данных будет иметь единственную таблицу:
+<TABLE><TR><TH colspan=2 class="head">tkeyuser</TH></TR>
+<TR><TD>iduser</TD><TD>sequence</TD></TR>
+<TR><TD>dtname</TD><TD>char(40)</TD></TR>
+<TR><TD>dtmaxSize</TD><TD>Integer</TD></TR></TABLE>
+
+<P>Наш источник данных будет называться web, а доступ предоставляется
+пользователю christa без пароля.
+
+<h1>Связь с источником данных</h1>
+<P>Первая вещь, в которой Вы будете заинтересованы, это переменная типа
+<CODE>SQLHENV</CODE>. Это дескриптор (указатель) на внутреннюю структуру
+ODBC, которая хранит всю информацию относительно ODBC-среды. Без дескриптора
+этого вида Вы не сможете почти ничего сделать. Чтобы получить этот
+дескриптор, Вы вызываете функцию <CODE>SQLAllocHandle(SQL_HANDLE_ENV,
+SQL_NULL_HANDLE, &amp;V_OD_Env)</CODE>. Здесь <CODE>V_OD_Erg</CODE> является
+переменной типа <CODE>SQLHENV</CODE>, которая как раз и хранит
+распределенный дескриптор среды.</P>
+
+<P>Если Вы распределили дескриптор, Вы должны определить, которую версию ODBC
+надлежит использовать. Следовательно, Вы должны вызвать
+<CODE>SQLSetEnvAttr(V_OD_Env, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0)
+</CODE>. Константа <CODE>SQL_ATTR_ODBC_VERSION</CODE> определяет то, какая
+версия ODBC будет использована, а <CODE>SQL_OV_ODBC3</CODE> говорит, что
+программа будет нуждаться В ODBC 3.0.</P>
+
+<P>Теперь Вы должны создать дескриптор для соединения с базой данных, который
+имеет тип <CODE>SQLHDBC</CODE>. Вы еще раз вызываете
+<CODE>SQLAllocHandle</CODE>, но на этот раз с <CODE>SQL_HANDLE_DBC</CODE> и
+дескриптором среды, возвращенным первым обращением к
+<CODE>SQLAllocHandle</CODE>.</P>
+
+<P>Затем Вы можете выбирать, надо ли изменить атрибуты соединения, главным
+образом блокировку по времени для любого заданного действия на соединении. Вы
+можете сделать это, вызывая функцию <CODE>SQLSetConnectAttr</CODE> с
+дескриптором соединения, атрибутом, указателем на переменную и длиной строки,
+если она нужна.</P>
+
+<P>После всего этого, Вы способны соединиться с базой данных через вызов
+<CODE>SQLConnect</CODE>, который нуждается в имени источника данных, имени
+пользователя и пароле в качестве параметров. Для каждого параметра Вы должны
+определить, длину строки или только параметр <COde>SQL_NTS</CODE>, который
+говорит, что это строка, длина которой должна быть определена
+<CODE>SQLConnect</CODE>.</P>
+
+<P>Пожалуйста, обратите внимание, что все функции, упомянутые в этом разделе,
+возвращают <CODE>SQL_SUCCESS</CODE> или <CODE>SQL_SUCCESS_WITH_INFO</CODE>,
+если все прошло гладко, <CODE>SQL_ERROR</CODE> или
+<CODE>SQL_INVALID_HANDLE</CODE> в случае ошибки. Я расскажу о том, как
+получить диагностические сообщения немного позже.
+
+<P>Теперь рассмотрим код примера:
+<PRE>
+<CODE class="list">
+<A NAME="list"></A>
+/*
+  odbc.c
+  testing unixODBC
+*/
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;odbc/sql.h&gt;
+#include &lt;odbc/sqlext.h&gt;
+#include &lt;odbc/sqltypes.h&gt;
+
+SQLHENV V_OD_Env;  // Handle ODBC environment
+long    V_OD_erg;  // result of functions
+SQLHDBC V_OD_hdbc; // Handle connection
+
+char        V_OD_stat[10];                  // Status SQL
+SQLINTEGER  V_OD_err,V_OD_rowanz,V_OD_id;
+SQLSMALLINT V_OD_mlen;
+char        V_OD_msg[200],V_OD_buffer[200];
+
+int main(int argc,char *argv[])
+{
+  // 1. allocate Environment handle and register version
+  V_OD_erg=SQLAllocHandle(SQL_HANDLE_ENV,SQL_NULL_HANDLE,&V_OD_Env);
+  if ((V_OD_erg != SQL_SUCCESS) && (V_OD_erg != SQL_SUCCESS_WITH_INFO))
+  {
+     printf("Error AllocHandle\n");
+     exit(0);
+  }
+  V_OD_erg=SQLSetEnvAttr(V_OD_Env, SQL_ATTR_ODBC_VERSION,
+                         (void*)SQL_OV_ODBC3, 0);
+  if ((V_OD_erg != SQL_SUCCESS) && (V_OD_erg != SQL_SUCCESS_WITH_INFO))
+  {
+     printf("Error SetEnv\n");
+     SQLFreeHandle(SQL_HANDLE_ENV, V_OD_Env);
+     exit(0);
+  }
+  // 2. allocate connection handle, set timeout
+  V_OD_erg = SQLAllocHandle(SQL_HANDLE_DBC, V_OD_Env, &V_OD_hdbc);
+  if ((V_OD_erg != SQL_SUCCESS) && (V_OD_erg != SQL_SUCCESS_WITH_INFO))
+  {
+     printf("Error AllocHDB %d\n",V_OD_erg);
+     SQLFreeHandle(SQL_HANDLE_ENV, V_OD_Env);
+     exit(0);
+  }
+  SQLSetConnectAttr(V_OD_hdbc, SQL_LOGIN_TIMEOUT, (SQLPOINTER *)5, 0);
+  // 3. Connect to the datasource "web"
+  V_OD_erg = SQLConnect(V_OD_hdbc, (SQLCHAR*) "web", SQL_NTS,
+                        (SQLCHAR*) "christa", SQL_NTS,
+                        (SQLCHAR*) "", SQL_NTS);
+  if ((V_OD_erg != SQL_SUCCESS) && (V_OD_erg != SQL_SUCCESS_WITH_INFO))
+  {
+     printf("Error SQLConnect %d\n",V_OD_erg);
+     SQLGetDiagRec(SQL_HANDLE_DBC, V_OD_hdbc,1, V_OD_stat, &V_OD_err,
+                   V_OD_msg,100,&V_OD_mlen);
+     printf("%s (%d)\n",V_OD_msg,V_OD_err);
+     SQLFreeHandle(SQL_HANDLE_DBC, V_OD_hdbc);
+     SQLFreeHandle(SQL_HANDLE_ENV, V_OD_Env);
+     exit(0);
+  }
+  printf("Connected !\n");
+  /* Продолжение чуть ниже... */
+</CODE>
+</PRE>
+
+<H1>Использование источников данных</H1>
+<P>Простой запрос может быть выполнен прямо сейчас. Но что делать, если Ваша
+программа выполняется на системе, где Вы не можете определить, как настроены
+имена источников данных?</P>
+
+<P>Тут Вы должны использовать <CODE>SQLDataSources()</CODE>. После
+распределения дескриптора среды, Вы можете использовать его, чтобы выяснить
+все относительно DSN и описания для источника данных.</P>
+
+<P>Поскольку ODBC знает системные и пользовательские источники данных, Вы
+должны дать указание, который тип Вы ищете. Вы можете определять любое
+из следующих значений:
+<TABLE><TR><TD valign="top"><CODE>SQL_FETCH_FIRST</CODE></TD>
+<TD>Устанавливает <CODE>SQLDataSources()</CODE> в первый из всех доступных
+источников данных (системный или пользовательский).</TD></TR>
+
+<TR><TD valign="top"><CODE>SQL_FETCH_FIRST_USER</CODE></TD>
+<TD>Устанавливает <CODE>SQLDataSources()</CODE> в первый из всех доступных
+источников данных (только пользовательский).</TD></TR>
+
+<TR><TD valign="top"><CODE>SQL_FETCH_FIRST_SYSTEM</CODE></TD>
+<TD>Устанавливает <CODE>SQLDataSources()</CODE> в первый из всех доступных
+источников данных (только системный).</TD></TR>
+
+<TR><TD valign="top"><CODE>SQL_FETCH_FIRST_NEXT</CODE></TD>
+<TD>Выбирает следующий источник данных. В зависимости от
+<CODE>SQL_FETCH_FIRST_USER</CODE>, <CODE>SQL_FETCH_FIRST_SYSTEM</CODE> или
+<CODE>SQL_FETCH_FIRST</CODE>, это может быть пользовательский, системный или
+любой источник данных.</TD></TR></TABLE>
+
+<P>Рассмотрим маленькую функцию, которая возвратит все доступные имена
+источников данных. Вы можете вставлять этот код в программу, которую Вы
+сформировали прежде, и вызывать его где-нибудь после того, как
+получили дескриптор среды:
+<CODE class="list">
+<PRE>
+void OD_ListDSN(void)
+{
+  char       l_dsn[100],l_desc[100];
+  short int  l_len1,l_len2,l_next;
+
+  l_next=SQL_FETCH_FIRST;
+  while(SQLDataSources(V_OD_Env,l_next,l_dsn, sizeof(l_dsn),
+        &l_len1, l_desc, sizeof(l_desc), &l_len2) == SQL_SUCCESS)
+  {
+    printf("Server=(%s) Beschreibung=(%s)\n",l_dsn,l_desc);
+    l_next=SQL_FETCH_NEXT;
+  }
+}
+</PRE>
+</CODE>
+
+<H1>Выполнение запросов</H1>
+<P>Если Вы хотите выполнить запрос, Вы должны будете определить дескриптор
+(<CODE>SQL_HANDLE_STMT</CODE>) для SQL-оператора. Чтобы получить его, Вы
+должны распределить память с помощью функции <CODE>SQLAllocHandle</CODE>.</P>
+
+<P>Затем Вы должны подготовить запрос для выполнения. Как я писал ранее, я
+предполагаю использование таблицы <CODE>tkeyuser</CODE>, которая
+содержит следующие данные:
+<TABLE COLS=3 cellspacing="1" border="0" cellpadding=2>
+<TR><TH class="head">iduser</TH><TH class="head">dtname</TH>
+<TH class="head">dtmaxSize</TH></TR>
+
+<TR><TD>1</TD><TD>Christa</TD><TD>10000</TD></TR>
+<TR><TD>2</TD><TD>Nicole</TD><TD>9000</TD></TR></TABLE>
+
+<P>В этом примере мы хотим выполнить запрос, который возвращает все строки
+для полей <CODE>iduser</CODE> и <CODE>dtname</CODE> в этой таблице,
+упорядоченные соответственно полю <code>iduser</CODE>. Так что команда SQL
+будет примерно такой:
+<PRE>
+<CODE>
+SELECT iduser,dtname FROM tkeydata ORDER BY iduser
+</CODE>
+</PRE></P>
+
+<P>Если Вы выполняете эту команду, Вы получите две строки, каждая с двумя
+столбцами данных. Эти данные должны быть сохранены где-нибудь так, чтобы Ваша
+программа могла фактически использовать их, так что Вы должны определить
+переменную для каждого из столбцов. Так что Вы должны связать столбец с
+некоторой переменной в Вашей программе. Связывание с переменной автоматически
+сохраняет данные из столбца в этой переменной, когда Вы получаете строку
+результатов из соединения. Важно, что Ваши переменные соответствуют типу
+столбца в таблице внутри базы данных.</P>
+
+<P>Так что надо привязать первый столбец к переменной типа
+<CODE>SQLINTEGER</CODE>, а второй к переменной типа <CODE>char</CODE>. Это
+делается вызовом функции <CODE>SQLBindCol</CODE>. Следовательно, добавляем в
+программу следующие переменные:
+<PRE>
+<CODE class="list">
+SQLHSTMT     V_OD_hstmt;        // Handle for a statement
+SQLINTEGER   V_OD_err,V_OD_id;
+char         V_OD_buffer[200];
+</CODE>
+</PRE></P>
+
+<P>Теперь Вы можете связывать переменные:
+<CODE class="list"><PRE>
+SQLBindCol(V_OD_hstmt,1,SQL_C_CHAR, &V_OD_buffer,200,&V_OD_err);
+SQLBindCol(V_OD_hstmt,2,SQL_C_ULONG,&V_OD_id,sizeof(V_OD_id),&V_OD_err);
+</PRE></CODE></P>
+
+<P>Вы должны проверить код возврата из обращения к функции. Теперь Вы можете
+выполнять запрос, вызывая функцию <CODE>SQLExecDirect</CODE>:
+<CODE class="list">
+<PRE>
+V_OD_erg=SQLExecDirect(V_OD_hstmt, "SELECT dtname,iduser
+                       FROM tkeyuser order by iduser",SQL_NTS);
+if ((V_OD_erg != SQL_SUCCESS) && (V_OD_erg != SQL_SUCCESS_WITH_INFO))
+{
+   printf("Error Select %d\n",V_OD_erg);
+   SQLGetDiagRec(SQL_HANDLE_DBC, V_OD_hdbc,1, V_OD_stat, &V_OD_err,
+                 V_OD_msg,100,&V_OD_mlen);
+   printf("%s (%d)\n",V_OD_msg,V_OD_err);
+   SQLFreeHandle(SQL_HANDLE_STMT,V_OD_hstmt);
+   SQLDisconnect(V_OD_hdbc);
+   SQLFreeHandle(SQL_HANDLE_DBC,V_OD_hdbc);
+   SQLFreeHandle(SQL_HANDLE_ENV, V_OD_Env);
+   exit(0);
+}
+</PRE></CODE></P>
+
+<H1>Получение данных из набора результатов</H1>
+<P>Если выполнение инструкции прошло нормально, Вы можете выбрать столбец
+данных. Может быть Вы сочтете нужным узнать, сколько столбцов находится в
+наборе результатов (если Вы используете <CODE>SELECT * FROM tkeyuser</CODE> в
+программе-примере, Вы не знаете этого). Обращение к функции
+<CODE>SQLNumResultCols</CODE> решает проблему. Эта функция берет операторный
+дескриптор и указатель на целую переменную, которая будет хранить число
+столбцов после обращения. Вы можете добавить это к Вашей программе:
+<CODE>
+<PRE>
+// At the beginning add:
+SQLSMALLINT    V_OD_colanz;   // Num of columns
+
+// At the end add:
+V_OD_erg=SQLNumResultCols(V_OD_hstmt,&V_OD_colanz);
+if ((V_OD_erg != SQL_SUCCESS) && (V_OD_erg != SQL_SUCCESS_WITH_INFO))
+{
+   printf("Fehler im ResultCols %d\n",V_OD_erg);
+   SQLFreeHandle(SQL_HANDLE_STMT,V_OD_hstmt);
+   SQLFreeHandle(SQL_HANDLE_DBC,V_OD_hdbc);
+   SQLFreeHandle(SQL_HANDLE_ENV, V_OD_Env);
+   exit(0);
+}
+printf("Number of Columns %d\n",V_OD_colanz);
+</PRE></CODE></P>
+
+<P>Следующая вещь, которую Вы должны знать: сколько строк было возвращено
+запросом. Обращение к функции <CODE>SQLRowCount</CODE> должно подавить
+Вашу жажду знаний.</P>
+
+<P>Последнее действие должно собственно выбрать данные из набора результатов.
+Вы должны вызвать <CODE>SQLFetch</CODE> с операторным дескриптором (который
+был распределен, и <CODE>SQLBind</CODE> вызван для каждого отдельного
+столбца). <CODE>SQLFetch</CODE> возвращает <CODE>SQL_NO_DATA</CODE>, если
+не имеется больше данных в наборе результатов.</P>
+
+<P>Имеется полный исходный текст. Это только пример Вашей работы с ODBC,
+программа-пример не оптимизирована.
+<CODE class="list">
+<PRE>
+/*
+  odbc.c
+  testing unixODBC
+*/
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;odbc/sql.h&gt;
+#include &lt;odbc/sqlext.h&gt;
+#include &lt;odbc/sqltypes.h&gt;
+
+SQLHENV        V_OD_Env;         // Handle ODBC environment
+long           V_OD_erg;         // result of functions
+SQLHDBC        V_OD_hdbc;        // Handle connection
+char           V_OD_stat[10];    // Status SQL
+SQLINTEGER     V_OD_err,V_OD_rowanz,V_OD_id;
+SQLSMALLINT    V_OD_mlen,V_OD_colanz;
+char           V_OD_msg[200],V_OD_buffer[200];
+
+int main(int argc,char *argv[])
+{
+  // 1. allocate Environment handle and register version
+  V_OD_erg=SQLAllocHandle(SQL_HANDLE_ENV,SQL_NULL_HANDLE,&V_OD_Env);
+  if ((V_OD_erg != SQL_SUCCESS) && (V_OD_erg != SQL_SUCCESS_WITH_INFO))
+  {
+     printf("Error AllocHandle\n");
+     exit(0);
+  }
+  V_OD_erg=SQLSetEnvAttr(V_OD_Env, SQL_ATTR_ODBC_VERSION,
+                         (void*)SQL_OV_ODBC3, 0);
+  if ((V_OD_erg != SQL_SUCCESS) && (V_OD_erg != SQL_SUCCESS_WITH_INFO))
+  {
+     printf("Error SetEnv\n");
+     SQLFreeHandle(SQL_HANDLE_ENV, V_OD_Env);
+     exit(0);
+  }
+  // 2. allocate connection handle, set timeout
+  V_OD_erg = SQLAllocHandle(SQL_HANDLE_DBC, V_OD_Env, &V_OD_hdbc);
+  if ((V_OD_erg != SQL_SUCCESS) && (V_OD_erg != SQL_SUCCESS_WITH_INFO))
+  {
+     printf("Error AllocHDB %d\n",V_OD_erg);
+     SQLFreeHandle(SQL_HANDLE_ENV, V_OD_Env);
+     exit(0);
+  }
+  SQLSetConnectAttr(V_OD_hdbc, SQL_LOGIN_TIMEOUT, (SQLPOINTER *)5, 0);
+  // 3. Connect to the datasource "web"
+  V_OD_erg = SQLConnect(V_OD_hdbc, (SQLCHAR*) "web", SQL_NTS,
+                        (SQLCHAR*) "christa", SQL_NTS,
+                        (SQLCHAR*) "", SQL_NTS);
+  if ((V_OD_erg != SQL_SUCCESS) && (V_OD_erg != SQL_SUCCESS_WITH_INFO))
+  {
+     printf("Error SQLConnect %d\n",V_OD_erg);
+     SQLGetDiagRec(SQL_HANDLE_DBC, V_OD_hdbc,1, V_OD_stat, &V_OD_err,
+                   V_OD_msg,100,&V_OD_mlen);
+     printf("%s (%d)\n",V_OD_msg,V_OD_err);
+     SQLFreeHandle(SQL_HANDLE_ENV, V_OD_Env);
+     exit(0);
+  }
+  printf("Connected !\n");
+  V_OD_erg=SQLAllocHandle(SQL_HANDLE_STMT, V_OD_hdbc, &V_OD_hstmt);
+  if ((V_OD_erg != SQL_SUCCESS) && (V_OD_erg != SQL_SUCCESS_WITH_INFO))
+  {
+     printf("Fehler im AllocStatement %d\n",V_OD_erg);
+     SQLGetDiagRec(SQL_HANDLE_DBC, V_OD_hdbc,1, V_OD_stat,
+                   &V_OD_err,V_OD_msg,100,&V_OD_mlen);
+     printf("%s (%d)\n",V_OD_msg,V_OD_err);
+     SQLDisconnect(V_OD_hdbc);
+     SQLFreeHandle(SQL_HANDLE_DBC,V_OD_hdbc);
+     SQLFreeHandle(SQL_HANDLE_ENV, V_OD_Env);
+     exit(0);
+  }
+  SQLBindCol(V_OD_hstmt,1,SQL_C_CHAR, &V_OD_buffer,150,&V_OD_err);
+  SQLBindCol(V_OD_hstmt,2,SQL_C_ULONG,&V_OD_id,150,&V_OD_err);
+  V_OD_erg=SQLExecDirect(V_OD_hstmt,"SELECT dtname,iduser
+                         FROM tkeyuser order by iduser",SQL_NTS);
+  if ((V_OD_erg != SQL_SUCCESS) && (V_OD_erg != SQL_SUCCESS_WITH_INFO))
+  {
+     printf("Error in Select %d\n",V_OD_erg);
+     SQLGetDiagRec(SQL_HANDLE_DBC, V_OD_hdbc,1, V_OD_stat,&V_OD_err,
+                   V_OD_msg,100,&V_OD_mlen);
+     printf("%s (%d)\n",V_OD_msg,V_OD_err);
+     SQLFreeHandle(SQL_HANDLE_STMT,V_OD_hstmt);
+     SQLDisconnect(V_OD_hdbc);
+     SQLFreeHandle(SQL_HANDLE_DBC,V_OD_hdbc);
+     SQLFreeHandle(SQL_HANDLE_ENV, V_OD_Env);
+     exit(0);
+  }
+  V_OD_erg=SQLNumResultCols(V_OD_hstmt,&V_OD_colanz);
+  if ((V_OD_erg != SQL_SUCCESS) && (V_OD_erg != SQL_SUCCESS_WITH_INFO))
+  {
+     SQLFreeHandle(SQL_HANDLE_STMT,V_OD_hstmt);
+     SQLDisconnect(V_OD_hdbc);
+     SQLFreeHandle(SQL_HANDLE_DBC,V_OD_hdbc);
+     SQLFreeHandle(SQL_HANDLE_ENV, V_OD_Env);
+     exit(0);
+  }
+  printf("Number of Columns %d\n",V_OD_colanz);
+  V_OD_erg=SQLRowCount(V_OD_hstmt,&V_OD_rowanz);
+  if ((V_OD_erg != SQL_SUCCESS) && (V_OD_erg != SQL_SUCCESS_WITH_INFO))
+  {
+     printf("Number ofRowCount %d\n",V_OD_erg);
+     SQLFreeHandle(SQL_HANDLE_STMT,V_OD_hstmt);
+     SQLDisconnect(V_OD_hdbc);
+     SQLFreeHandle(SQL_HANDLE_DBC,V_OD_hdbc);
+     SQLFreeHandle(SQL_HANDLE_ENV, V_OD_Env);
+     exit(0);
+  }
+  printf("Number of Rows %d\n",V_OD_rowanz);
+  V_OD_erg=SQLFetch(V_OD_hstmt);
+  while(V_OD_erg != SQL_NO_DATA)
+  {
+    printf("Result: %d %s\n",V_OD_id,V_OD_buffer);
+    V_OD_erg=SQLFetch(V_OD_hstmt);
+  };
+  SQLFreeHandle(SQL_HANDLE_STMT,V_OD_hstmt);
+  SQLDisconnect(V_OD_hdbc);
+  SQLFreeHandle(SQL_HANDLE_DBC,V_OD_hdbc);
+  SQLFreeHandle(SQL_HANDLE_ENV, V_OD_Env);
+  return(0);
+}
+</PRE></CODE></P>
+
+<h1>Закрытие соединения</h1>
+<P>Прежде, чем Ваша программа завершит работу, Вы должны освободить все
+ресурсы, которые распределили. Функция <CODE>SQLFreeHandle</CODE> должна
+использоваться, чтобы освободить каждый распределенный дескриптор. Она
+ожидает параметр, который заявляет тип дескриптора, который будет освобожден,
+и непосредственно дескриптор. Так, если Вы хотите освободить дескриптор
+среды, Вы должны вызвать (в нашем примере программы):
+<PRE>
+SQLFreeHandle(SQL_HANDLE_ENV, V_OD_Env);
+</PRE>
+
+<P>Прежде, чем Вы освобождаете любой дескриптор, удостоверьтесь, что он
+впредь не понадобится. Наиболее распространенная ошибка: освобождение
+дескриптора соединения ДО того, как соединение закрыто.</P>
+
+<P>Если Вы хотите закрыть соединение, Вы нуждаетесь в функции
+<CODE>SQLDisconnect</A></CODE>. Она закрывает соединение, связанное с
+дескриптором соединения, передаваемым как параметр вызова
+<CODE>SQLDisconnect</CODE>. В нашей программе мы должны вызвать:
+<PRE>
+SQLDisconnect(V_OD_hdbc);
+</PRE>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

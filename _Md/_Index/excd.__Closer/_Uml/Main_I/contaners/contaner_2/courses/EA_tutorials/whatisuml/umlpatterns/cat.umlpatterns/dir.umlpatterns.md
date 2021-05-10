@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlpatterns\cat.umlpatterns\dir.umlpatterns.md">umlpatterns</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlpatterns\umlpatterns.md">umlpatterns.md</a>
+        - *## [Шаблоны проектирования](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/umlpatterns.html)

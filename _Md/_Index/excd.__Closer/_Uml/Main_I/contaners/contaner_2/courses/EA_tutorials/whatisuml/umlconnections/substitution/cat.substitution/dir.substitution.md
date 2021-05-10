@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\substitution\cat.substitution\dir.substitution.md">substitution</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\substitution\substitution.md">substitution.md</a>
+        - *##### [Substitution](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/substitution.html) подмена

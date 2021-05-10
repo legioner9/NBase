@@ -1,0 +1,1110 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 5. Сборка приложений Connector/C++</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-cpp-apps"></a>
+Глава 5. Сборка приложений Connector/C++</h1>
+<p>Эта глава дает представление о сборке приложений Connector/C++:</p>
+
+<ul><li><p>Общие соображения для сборки. Посмотрите
+<a href="#connector-cpp-apps-general-considerations">раздел 5.1</a>.
+</p></li>
+
+<li><p>Информация о сборке приложений C++, которая относится к определенным
+платформам, таким как Windows, macOS и Solaris. См.
+<a href="#connector-cpp-apps-platform-considerations">раздел 5.2</a>.
+</p></li></ul>
+<p>Для обсуждения интерфейсов программирования, доступных Connector/C++,
+см. <a href="intro.htm">Chapter 1</a>.</p>
+
+<h2><a name="connector-cpp-apps-general-considerations"></a>
+5.1. Общие соображения</h2>
+<p>Эта секция обсуждает общие соображения, чтобы иметь в виду, собирая
+приложения C++. Для получения информации, которая относится к конкретным
+платформам, посмотрите секцию, которая относится к вашей платформе, в
+<a href="#connector-cpp-apps-platform-considerations">разделе 5.2
+</a>.</p>
+
+<p>Команды, показанные здесь, даны из командной строки (например,
+как вызванные из <code class="filename">Makefile</code>).
+Команды относятся к любой платформе, которая понимает
+<span class="command"><strong>make</strong></span>
+и такие инструменты командной строки, как
+<span class="command"><strong>g++</strong></span>,
+<span class="command"><strong>cc</strong></span> или
+<span class="command"><strong>clang</strong></span>,
+но, возможно, нуждаются в поправке на вашу среду сборки.</p>
+
+<h3><a name="connector-cpp-apps-tools"></a>
+Инструменты и параметры конфигурации</h3>
+<p>Важно, чтобы инструменты, которые вы используете, чтобы собрать
+приложение Connector/C++, были совместимы с инструментами, используемыми,
+чтобы собрать сам Connector/C++. Идеально, соберите свои приложения теми же
+самыми инструментами, которые использовались, чтобы построить Connector/C++.
+</p>
+
+<p>Чтобы избежать проблем, гарантируйте, что эти факторы одинаковы
+для ваших приложений и самого Connector/C++:</p>
+<ul><li><p>Версия компилятора.</p></li>
+<li><p>Библиотека времени выполнения.</p></li>
+<li><p>Параметры конфигурации компоновщика времени выполнения.</p></li></ul>
+
+<p>Чтобы избежать потенциальных катастроф, конфигурация сборки Connector/C++
+должна соответствовать конфигурации сборки приложения.
+Например, не используйте сборку конечных версий Connector/C++
+с отладочной сборкой клиентского приложения.</p>
+
+<p>Чтобы использовать отличную версию компилятора, конфигурацию выпуска или
+библиотеку времени выполнения, сначала соберите Connector/C++
+из исходного текста, используя ваши желаемые параметры настройки (см.
+<a href="source.htm">главу 4</a>), затем создайте свои приложения, используя
+те же самые параметры настройки.</p>
+
+<p>Двоичные дистрибутивы Connector/C++ включают файл
+<code class="filename">INFO_BIN</code>, который описывает окружающую среду и
+параметры конфигурации. Если вы установили из дистрибутива и есть
+связанные с платформой проблемы, это может помочь проверить параметры
+настройки, которые использовались, чтобы построить пакет на этой платформе.
+Также есть файл <code class="filename">INFO_SRC</code>, который предоставляет
+информацию о версии продукта и исходном хранилище, из которого был произведен
+дистрибутив. До Connector/C++ 8.0.14 был файл
+<code class="filename">BUILDINFO.txt</code> вместо
+<code class="filename">INFO_BIN</code> и
+<code class="filename">INFO_SRC</code>.</p>
+
+<h3><a name="connector-cpp-apps-cpp11"></a>Поддержка C++ 11</h3>
+<p>X DevAPI использует языковые особенности C++ 11.
+Чтобы собрать приложения Connector/C++, которые используют X DevAPI,
+включите поддержку C++ 11 в компиляторе, используя опцию
+<code class="option">-std=c++11</code>. Этот выбор не нужен для приложений,
+которые используют X DevAPI для C (который является просто C API)
+или старый JDBC API (основанный на простом C++),
+если код приложения не использует C++ 11.</p>
+
+<h3><a name="connector-cpp-apps-header-files"></a>
+Заголовочные файлы Connector/C++</h3>
+<p>API приложения определяет, которые использовать заголовочные файлы
+Connector/C++. Следующее включает советы при предположении, что путь
+включаемых файлов <code class="literal">$MYSQL_CPPCONN_DIR/include</code>,
+где <code class="literal">$MYSQL_CPPCONN_DIR</code> это каталог установки
+Connector/C++. Включите в вызов компилятора опцию
+<code class="option">-I $MYSQL_CPPCONN_DIR/include</code>,
+чтобы гарантировать это.</p>
+
+<ul><li><p>Для приложений, которые используют X DevAPI:</p>
+<pre class="programlisting">
+#include &lt;mysqlx/xdevapi.h&gt;
+</pre></li>
+
+<li><p>Для приложений, которые используют X DevAPI for C:</p>
+<pre class="programlisting">
+#include &lt;mysqlx/xapi.h&gt;
+</pre></li>
+
+<li><p>Для приложений, которые используют JDBC API, заголовочные файлы
+зависят от версии:</p>
+<ul><li><p>С Connector/C++ 8.0.16 директива
+<code class="literal">#include</code> достаточна:</p>
+<pre class="programlisting">
+#include &lt;mysql/jdbc.h&gt;
+</pre></li>
+
+<li><p>До Connector/C++ 8.0.16 надо было использовать набор директив
+<code class="literal">#include</code>:</p>
+<pre class="programlisting">
+#include &lt;jdbc/mysql_driver.h&gt;
+#include &lt;jdbc/mysql_connection.h&gt;
+#include &lt;jdbc/cppconn/*.h&gt;
+</pre>
+
+<p>Нотация <code class="literal">&lt;jdbc/cppconn/*.h&gt;</code> значит,
+что необходимо включать все заголовочные файлы из каталога
+<code class="filename">jdbc/cppconn</code>, которые необходимы вашему
+приложению. Конкретные файлы звисят от приложения.</p></li>
+
+<li><p>Устаревший код, который использует Connector/C++ 1.1, имеет
+<code class="literal">#include</code> в такой форме:</p>
+<pre class="programlisting">
+#include &lt;mysql_driver.h&gt;
+#include &lt;mysql_connection.h&gt;
+#include &lt;cppconn/*.h&gt;
+</pre>
+
+<p>Чтобы построить такой код с Connector/C++ 8.0 не изменяя его, надо
+добавить <code class="literal">$MYSQL_CPPCONN_DIR/include/jdbc</code>
+к пути включаемых файлов.</p></li></ul></li></ul>
+
+<p>Чтобы собрать код, который вы намереваетесь связать статически с
+Connector/C++, определите макрос, который регулирует декларации API в
+заголовочных файлах для использования со статической библиотекой.
+Для получения дополнительной информации посмотрите
+<a href="#connector-cpp-apps-static-library">здесь</a>.</p>
+
+<h3><a name="connector-cpp-apps-boost"></a>Заголовочные файлы Boost</h3>
+<p>Заголовочные файлы Boost необходимы при этих обстоятельствах:</p>
+<ul><li><p>Чтобы собрать приложения Connector/C++, которые используют
+legacy JDBC API.</p></li>
+
+<li><p>До Connector/C++ 8.0.16 на Unix для приложений, которые используют
+X DevAPI или X DevAPI for C, если вы собираете с использованием
+<span class="command"><strong>gcc</strong></span> и версия библиотеки C++ в
+вашей системе не реализует конвертер UTF8
+(<code class="literal">codecvt_utf8</code>).</p></li></ul>
+
+<p>Если заголовочные файлы Boost необходимы, Boost 1.59.0
+или более новый должен быть установлен, и местоположение заголовков должно
+быть добавлено к пути include. Чтобы получить Boost и его инструкции по
+установке, посетите <a href="../../../https@www.boost.org/default.htm" target="_top">the
+official Boost site</a>.</p>
+
+<h3><a name="connector-cpp-apps-link-libraries"></a>Библиотеки</h3>
+<p>Сборка Connector/C++ с применением OpenSSL делает библиотеку
+зависящей от динамических библиотек OpenSSL. В этом случае:</p>
+
+<ul><li><p>Компонуя приложение динамически с Connector/C++,
+эта зависимость релевантна только во время выполнения.</p></li>
+<li><p>Компонуя приложение статически с Connector/C++, компонуйте
+с библиотеками OpenSSL также. На Linux это означает добавление
+<code class="option">-lssl -lcrypto</code> явно к командам сборки.
+В Windows это обработано автоматически.</p></li></ul>
+<p>В Windows компнуйте с динамической версией
+библиотеки времени выполнения C++.</p>
+
+<h3><a name="connector-cpp-apps-runtime-libraries"></a>
+Библиотеки времени выполнения</h3>
+<p>X DevAPI for C нужно <code class="literal">libstdc++</code>
+во время выполнения. В зависимости от вашей платформы или инструментов
+сборки, разные библиотеки могут применяться. Например, библиотека
+<code class="literal">libc++</code> в macOS, см.
+<a href="#connector-cpp-apps-macos-notes">раздел 5.2.2</a>.</p>
+
+<p>Если приложение создается, используя динамически подключаемые библиотеки,
+те библиотеки должны присутствовать не только на сборочном хосте, но и на
+целевых хостах, где идет выполнение приложения. Динамический компоновщик
+должен правильно формироваться, чтобы найти те библиотеки и их зависимости во
+время выполнения, а также найти библиотеки Connector/C++
+и их зависимости во время выполнения.</p>
+
+<p>Библиотеки Connector/C++, построенные Oracle, зависят от библиотек
+OpenSSL. Последний должен быть установлен на системе, чтобы управлять кодом,
+который связывается с библиотеками Connector/C++.
+Другой выбор состоит в том, чтобы поместить библиотеки OpenSSL в то же самое
+местоположение, где Connector/C++, в этом случае, динамический компоновщик
+должен найти их рядом с библиотекой, см. также разделы
+<a href="#connector-cpp-apps-windows-notes">5.2.1</a> и
+<a href="#connector-cpp-apps-macos-notes">5.2.2</a>.</p>
+
+<h3><a name="connector-cpp-apps-dynamic-library"></a>
+Использование динамической библиотеки Connector/C++</h3>
+<p>Название динамической библиотеки Connector/C++
+зависит от платформы. Эти библиотеки осуществляют X DevAPI и X DevAPI для C,
+где <em class="replaceable"><code>A</code></em> в имени библиотеки
+представляет версию ABI:</p>
+
+<ul><li><p><code class="filename">libmysqlcppconn8.so.
+<em class="replaceable"><code>A</code></em></code> (Unix).</p></li>
+<li><p><code class="filename">libmysqlcppconn8.<em class="replaceable">
+<code>A</code></em>.dylib</code> (macOS).</p></li>
+<li><p><code class="filename">mysqlcppconn8-<em class="replaceable"><code>
+A</code></em>-vs<em class="replaceable"><code>NN</code></em>.dll</code>
+с библиотекой импорта <code class="filename">vs<em class="replaceable">
+<code>NN</code></em>/mysqlcppconn8.lib</code> (Windows).</p></li></ul>
+
+<p>Для legacy JDBC API динамические библиотеки называют следующим образом,
+где <em class="replaceable"><code>B</code></em> в имени библиотеки
+представляет версию ABI:</p>
+
+<ul><li><p><code class="filename">libmysqlcppconn.so.<em class="replaceable">
+<code>B</code></em></code> (Unix).</p></li>
+<li><p><code class="filename">libmysqlcppconn.<em class="replaceable">
+<code>B</code></em>.dylib</code> (macOS).</p></li>
+<li><p><code class="filename">mysqlcppconn-<em class="replaceable"><code>B
+</code></em>-vs<em class="replaceable"><code>NN</code></em>.dll</code>
+с библиотекой импорта <code class="filename">vs<em class="replaceable">
+<code>NN</code></em>/mysqlcppconn-static.lib</code> (Windows).</p></li></ul>
+
+<p>В Windows значение <code class="literal">vs<em class="replaceable"><code>
+NN</code></em></code> в названии библиотеки зависит от версии набора
+инструментальных средств MSVC, используемой, чтобы построить библиотеки.
+Библиотеки Connector/C++ от Oracle применяют
+<code class="literal">vs14</code>, и они совместимы с MSVC и 2015 2017.
+Это соглашение позволяет пользоваться библиотеками, построенными различными
+версиями MSVC на той же самой системе. См. также
+<a href="#connector-cpp-apps-windows-notes">раздел 5.2.1</a>.</p>
+
+<p>Чтобы построить код, который использует X DevAPI или X DevAPI для C,
+надо добавить <code class="option">-lmysqlcppconn8</code> к опциям
+компоновщика. Чтобы построить код legacy JDBC API, добавьте
+<code class="option">-lmysqlcppconn</code>.</p>
+
+<p>Необходимо также указать, пользоваться ли 64-битными или 32-битными
+библиотеками, определяя соответствующий каталог библиотеки. Используйте
+опцию компоновщика <code class="option">-L</code>, чтобы определить
+<code class="literal">$MYSQL_CONCPP_DIR/lib64</code> (64-bit) или
+<code class="literal">$MYSQL_CONCPP_DIR/lib</code> (32-bit), где
+<code class="literal">$MYSQL_CPPCONN_DIR</code> это каталог установки
+Connector/C++. В FreeBSD <code class="filename">/lib64</code> не
+используется. Название библиотеки всегда заканчивается
+<code class="filename">/lib</code>.</p>
+
+<p>Чтобы собрать приложение Connector/C++, которое использует X DevAPI,
+есть исходные тексты в <code class="filename">app.cc</code>, они
+компонуются динамически с библиотекой,
+<code class="filename">Makefile</code> мог бы быть похожим на это:</p>
+
+<pre class="programlisting">
+MYSQL_CONCPP_DIR = <em class="replaceable"><code>Connector/C++ installation location</code></em>
+CPPFLAGS = -I $(MYSQL_CONCPP_DIR)/include -L $(MYSQL_CONCPP_DIR)/lib64
+LDLIBS = -lmysqlcppconn8
+CXXFLAGS = -std=c++11
+app : app.cc
+</pre>
+
+<p>С этим <code class="filename">Makefile</code> команда
+<span class="command"><strong>make app</strong></span> производит
+следующий вызов компилятора:</p>
+
+<pre class="programlisting">
+g++ -std=c++11 -I .../include -L .../lib64 app.cc -lmysqlcppconn8 -o app
+</pre>
+
+<p>Чтобы собрать простое приложение C, которое использует X DevAPI для C,
+из исходных текстов в <code class="filename">app.c</code> и скомпоновать
+динамически с библиотекой, <code class="filename">Makefile</code> такой:</p>
+
+<pre class="programlisting">
+MYSQL_CONCPP_DIR = <em class="replaceable"><code>Connector/C++ installation location</code></em>
+CPPFLAGS = -I $(MYSQL_CONCPP_DIR)/include -L $(MYSQL_CONCPP_DIR)/lib64
+LDLIBS = -lmysqlcppconn8
+app : app.c
+</pre>
+
+<p>С таким <code class="filename">Makefile</code> команда
+<span class="command"><strong>make app</strong></span> производит
+следующий вызов компилятора:</p>
+
+<pre class="programlisting">
+cc -I .../include -L .../lib64 app.c -lmysqlcppconn8 -o app
+</pre>
+
+<p>Получающийся код даже при том, что это собрано как plain C,
+зависит от C++ runtime (как правило, <code class="literal">libstdc++</code>,
+хотя это может отличаться в зависимости от платформы или инструментов сборки,
+см. <a href="#connector-cpp-apps-runtime-libraries">здесь</a>).</p>
+
+<p>Чтобы собрать простое приложение C++, которое использует legacy JDBC API
+из исходного текста <code class="filename">app.c</code> и скомпоновать его
+автоматически, <code class="filename">Makefile</code>
+мог бы быть похожим на это:</p>
+
+<pre class="programlisting">
+MYSQL_CONCPP_DIR = <em class="replaceable"><code>Connector/C++ installation location</code></em>
+CPPFLAGS = -I $(MYSQL_CONCPP_DIR)/include -L $(MYSQL_CONCPP_DIR)/lib64
+LDLIBS = -lmysqlcppconn
+app : app.c
+</pre>
+
+<p>Выбор библиотеки в этом случае
+<code class="option">-lmysqlcppcon</code>, а не
+<code class="option">-lmysqlcppcon8</code>,
+что касается X DevAPI или X DevAPI для C.</p>
+
+<p>С этим <code class="filename">Makefile</code> команда
+<span class="command"><strong>make app</strong></span> производит
+следующий вызов компилятора:</p>
+
+<pre class="programlisting">
+cc -I .../include -L .../lib64 app.c -lmysqlcppconn -o app
+</pre>
+
+<p>Запуская приложение, которое использует Connector/C++,
+динамическая библиотека, библиотека и ее зависимости во время выполнения
+должны быть найдены динамическим компоновщиком. Посмотрите
+<a href="#connector-cpp-apps-runtime-libraries">здесь</a>.</p>
+
+<h3><a name="connector-cpp-apps-static-library"></a>
+Используя статическую библиотеку Connector/C++</h3>
+<p>Возможно связать ваше приложение со статической библиотекой Connector/C++.
+Этот путь дает независимость во время выполнения от соединителя, и
+получающийся модуль может работать на системах, где
+не устанавливается Connector/C++.</p>
+
+<p>Компонуя статически, получающийся код все еще зависит от всех зависимостей
+во время выполнения библиотеки Connector/C++. Например, если Connector/C++
+собран, используя OpenSSL, у кода есть зависимость во время выполнения от
+библиотек OpenSSL. Посмотрите
+<a href="#connector-cpp-apps-runtime-libraries">здесь</a>.</p>
+
+<p>Статическое название библиотеки зависит от платформы.
+Эти библиотеки осуществляют X DevAPI и X DevAPI для C:</p>
+<ul><li><p><code class="filename">libmysqlcppconn8-static.a</code>
+(Unix, macOS).</p></li>
+<li><p><code class="filename">vs<em class="replaceable"><code>NN</code>
+</em>/mysqlcppconn8-static.lib</code> (Windows).</p></li></ul>
+
+<p>Для legacy JDBC API статические библиотеки называют следующим образом:</p>
+<ul><li><p><code class="filename">libmysqlcppconn-static.a</code>
+(Unix, macOS).</p></li>
+<li><p><code class="filename">vs<em class="replaceable">
+<code>NN</code></em>/mysqlcppconn-static.lib</code> (Windows).</p></li></ul>
+
+<p>В Windows значение <code class="literal">vs<em class="replaceable"><code>
+NN</code></em></code> в названии библиотеки зависит от версии набора
+инструментальных средств MSVC, используемой, чтобы построить библиотеки.
+Библиотеки от Oracle обозначены <code class="literal">vs14</code>,
+они совместимы с 2017 и 2015 MSVC.) Это соглашение позволяет пользоваться
+библиотеками, построенными с различными версиями MSVC на той же самой
+системе. См. также <a href="#connector-cpp-apps-windows-notes">раздел
+5.2.1</a>.</p>
+
+<p>Чтобы собрать код, который вы намереваетесь связать статически, с
+Connector/C++, определите макрос, который регулирует декларации API в
+заголовочных файлах для использования со статической библиотекой. Один способ
+определить макрос, это передать опцию <code class="option">-D</code>
+в команде вызова компилятора:</p>
+
+<ul><li><p>Для приложений, которые используют X DevAPI, X DevAPI для C или
+(с Connector/C++ 8.0.16) legacy JDBC API, определить макрос
+<code class="literal">STATIC_CONCPP</code>. Все, что имеет значение, это то,
+что вы его определяете вообще, значение не имеет значения. Например:
+<code class="option">-DSTATIC_CONCPP</code>.</p></li>
+
+<li><p>До Connector/C++ 8.0.16 для приложений, которые используют
+legacyс JDBC API, определите макрос
+<code class="literal">CPPCONN_PUBLIC_FUNC</code> как пустую строку.
+Чтобы гарантировать это, определите макрос как
+<code class="literal">CPPCONN_PUBLIC_FUNC=</code>, но не как
+<code class="literal">CPPCONN_PUBLIC_FUNC</code>, например:
+<code class="option">-DCPPCONN_PUBLIC_FUNC=</code>.</p></li></ul>
+
+<p>Чтобы собрать приложение Connector/C++, которое использует X DevAPI, из
+исходного текста в <code class="filename">app.cc</code> и статически
+скомпоновать с библиотекой, <code class="filename">Makefile</code> такой:</p>
+
+<pre class="programlisting">
+MYSQL_CONCPP_DIR = <em class="replaceable"><code>Connector/C++ installation location</code></em>
+CPPFLAGS = -DSTATIC_CONCPP -I $(MYSQL_CONCPP_DIR)/include
+LDLIBS = $(MYSQL_CONCPP_DIR)/lib64/libmysqlcppconn8-static.a -lssl -lcrypto -lpthread
+CXXFLAGS = -std=c++11
+app : app.cc
+</pre>
+
+<p>С этим <code class="filename">Makefile</code> команда
+<span class="command"><strong>make app</strong></span> производит:</p>
+<pre class="programlisting">
+g++ -std=c++11 -DSTATIC_CONCPP -I .../include app.cc
+    .../lib64/libmysqlcppconn8-static.a -lssl -lcrypto -lpthread -o app
+</pre>
+
+<p>Чтобы избежать отчет компоновщика unresolved symbols, строка компиляции
+должна включать библиотеки OpenSSL и <code class="literal">pthread</code>, от
+которой зависит код Connector/C++.</p>
+
+<p>Библиотеки OpenSSL не необходимы, если Connector/C++ строится без них, но
+дистрибутивы Connector/C++ от Oracle действительно зависят от OpenSSL.</p>
+<p>Точный список библиотек, требуемых библиотекой Connector/C++,
+зависит от платформы. Например, на Solaris нужны
+<code class="literal">socket</code>, <code class="literal">rt</code> и
+<code class="literal">nsl</code>.</p>
+
+<p>Чтобы собрать простое приложение C, которое использует X DevAPI для C,
+из исходного текста в <code class="filename">app.c</code>
+и скомпоновать его статически с библиотекой,
+<code class="filename">Makefile</code> такой:</p>
+
+<pre class="programlisting">
+MYSQL_CONCPP_DIR = <em class="replaceable"><code>Connector/C++ installation location</code></em>
+CPPFLAGS = -DSTATIC_CONCPP -I $(MYSQL_CONCPP_DIR)/include
+LDLIBS = $(MYSQL_CONCPP_DIR)/lib64/libmysqlcppconn8-static.a -lssl -lcrypto -lpthread
+app : app.c
+</pre>
+
+<p>С этим <code class="filename">Makefile</code> команда
+<span class="command"><strong>make app</strong></span> выдаст:</p>
+<pre class="programlisting">
+cc -DSTATIC_CONCPP -I .../include app.c
+   .../lib64/libmysqlcppconn8-static.a -lssl -lcrypto -lpthread -o app
+</pre>
+
+<p>Чтобы собрать простое приложение C, которое использует legacy JDBC API,
+из исходного текста в <code class="filename">app.c</code>
+и скомпоновать его статически с библиотекой,
+<code class="filename">Makefile</code> такой:</p>
+
+<pre class="programlisting">
+MYSQL_CONCPP_DIR = <em class="replaceable"><code>Connector/C++ installation location</code></em>
+CPPFLAGS = -DCPPCONN_PUBLIC_FUNC= -I $(MYSQL_CONCPP_DIR)/include
+LDLIBS = $(MYSQL_CONCPP_DIR)/lib64/libmysqlcppconn-static.a -lssl -lcrypto -lpthread
+app : app.c
+</pre>
+
+<p>Выбор библиотеки в этом случае
+<code class="option">libmysqlcppcon-static.a</code>, вместо
+<code class="option">libmysqlcppcon8-static.a</code>, как для
+X DevAPI или X DevAPI for C.</p>
+
+<p>С этим <code class="filename">Makefile</code> команда
+<span class="command"><strong>make app</strong></span> выдаст:</p>
+<pre class="programlisting">
+cc -std=c++11 --DCPPCONN_PUBLIC_FUNC= -I .../include app.c
+   .../lib64/libmysqlcppconn-static.a -lssl -lcrypto -lpthread -o app
+</pre>
+
+<p>Строя код простого C, важно заботиться о зависимости соединителя от
+времени выполнения C++, которое вводится библиотекой соединителя даже при
+том, что код, который использует его, является plain C:</p>
+
+<ul><li><p>Один подход должен гарантировать, что компоновщик C++
+используется, чтобы построить окончательный код. Этот подход проявлен в
+этом <code class="filename">Makefile</code>:</p>
+
+<pre class="programlisting">
+MYSQL_CONCPP_DIR = <em class="replaceable"><code>Connector/C++ installation location</code></em>
+CPPFLAGS = -DSTATIC_CONCPP -I $(MYSQL_CONCPP_DIR)/include
+LDLIBS = $(MYSQL_CONCPP_DIR)/lib64/libmysqlcppconn8-static.a -lssl -lcrypto -lpthread
+LINK.o = $(LINK.cc) # use C++ linker
+app : app.o
+</pre>
+
+<p>С этим <code class="filename">Makefile</code>
+у процесса сборки есть два шага: сначала соберите исходный код приложения в
+<code class="filename">app.c</code> с использованием компилятора C, чтобы
+произвести <code class="filename">app.o</code>, затем скомпонуйте
+заключительный исполняемый файл (<code class="filename">app</code>) с
+использованием компоновщика C++, который заботится о зависимости от времени
+выполнения C++. Команды выглядят примерно так:</p>
+
+<pre class="programlisting">
+cc -DSTATIC_CONCPP -I .../include -c -o app.o app.c
+g++ -DSTATIC_CONCPP -I .../include app.o
+    .../libmysqlcppconn8-static.a -lssl -lcrypto -lpthread -o app
+</pre></li>
+
+<li><p>Другой подход должен использовать компилятор и компоновщик C, но
+добавить библиотеку времени выполнения C++
+<code class="literal">libstdc++</code> как явный выбор компоновщика.
+Этот подход проявлен в этом <code class="filename">Makefile</code>:</p>
+
+<pre class="programlisting">
+MYSQL_CONCPP_DIR = <em class="replaceable"><code>Connector/C++ installation location</code></em>
+CPPFLAGS = -DSTATIC_CONCPP -I $(MYSQL_CONCPP_DIR)/include
+LDLIBS = $(MYSQL_CONCPP_DIR)/lib64/libmysqlcppconn8-static.a -lssl -lcrypto -lpthread -lstdc++
+app : app.c
+</pre>
+
+<p>С этим <code class="filename">Makefile</code> компилятор
+вызван следующим образом:</p>
+<pre class="programlisting">
+cc -DSTATIC_CONCPP -I .../include app.c
+   .../libmysqlcppconn8-static.a -lssl -lcrypto -lpthread -lstdc++ -o app
+</pre></li></ul>
+
+<p>Даже если приложение, которое использует Connector/C++, написано на C,
+заключительный исполняемый файл зависит от времени выполнения C++, которое
+должно быть установлено на целевом компьютере.</p>
+
+<h2><a name="connector-cpp-apps-platform-considerations"></a>
+5.2. Сборка приложений Connector/C++: определенные для платформы соображения
+</h2>
+<p>Эта секция обсуждает определенные для платформы соображения, чтобы иметь в
+виду, строя Connector/C++. Для общих соображений, которые применяются на
+независимой от платформы основе, посмотрите
+<a href="#connector-cpp-apps-general-considerations">раздел 5.1</a>.
+</p>
+
+<h3><a name="connector-cpp-apps-windows-notes"></a>5.2.1. Для Windows</h3>
+<a class="indexterm" name="idm45670547212224"></a>
+<a class="indexterm" name="idm45670547211216"></a>
+<p>Эта секция описывает определенные для Windows
+аспекты сборки Connector/C++.</p>
+
+<p>Разработчики, использующие Microsoft Windows, должны удовлетворить эти
+условия, чтобы построить приложение Connector/C++:</p>
+<ul><li><p>Требуется приемлемая версия Microsoft Visual Studio.</p></li>
+
+<li><p>Ваши приложения должны использовать ту же самую конфигурацию
+компоновщика, как Connector/C++. Например, используйте один из
+<code class="literal">/MD</code>, <code class="literal">/MDd</code>,
+<code class="literal">/MT</code> или <code class="literal">/MTd</code>.
+</p></li>
+
+<li><p>У целевых хостов должна быть приемлемая версия
+<a href="../../../https@www.microsoft.com/en-us/download/default.aspx"
+target="_top">Visual C++ Redistributable for Visual Studio</a>.</p></li></ul>
+
+<p>Для получения информации о версиях Visual Studio и VC++ Restributable см.
+<a href="intro.htm#connector-cpp-prerequisites">здесь</a>.</p>
+<p>В Windows приложения могут быть созданы по-разному (также известно
+как конфигурации сборки), которые определяют тип библиотеки времени
+выполнения, которой пользуется заключительный исполняемый файл:</p>
+
+<ul><li><p>Приложение может быть создано в 32-битном или 64-битном режиме.
+</p></li>
+<li><p>Приложение может быть создано в режиме отладки или выпуска.</p></li>
+
+<li><p>Можно выбрать между статическим временем выполнения
+(<code class="literal">/MT</code>) или динамическим
+(<code class="literal">/MD</code>). Различные версии компилятора MSVC также
+используют различные версии времени выполнения.</p></li></ul>
+
+<p>Двоичные дистрибутивы Connector/C++ 8.0 доступны как 64-битные и 32-битные
+пакеты, которые хранят библиотеки в каталогах, названных
+<code class="filename">lib64</code> и <code class="filename">lib</code>,
+соответственно. Имена пакета и определенные имена файлов библиотеки и имена
+каталогов также включают
+<code class="literal">vs<em class="replaceable"><code>NN</code></em></code>.
+Значение <code class="literal">vs<em class="replaceable"><code>NN</code></em>
+</code> в этих именах зависит от версии набора инструментальных средств MSVC,
+используемой, чтобы построить библиотеки. Это соглашение позволяет
+пользоваться библиотеками, построенными с различными версиями MSVC на той
+же самой системе.</p>
+
+<p><code class="literal">vs<em class="replaceable"><code>NN</code></em>
+</code> представляет основную версию набора инструментальных средств MSVC,
+используемого, чтобы построить библиотеки. В настоящее время это
+<code class="literal">vs14</code>, который является набором инструментальных
+средств, используемым с MSVC от 2015 до 2019.</p>
+
+<p>Важно гарантировать, чтобы версия компилятора и режим сборки
+соответствовали параметрам, используемым, чтобы построить библиотеку
+соединителя, чтобы гарантировать, что соединитель и приложение пользовались
+той же самой библиотекой времени выполнения.</p>
+
+<p>Двоичные дистрибутивы Connector/C++ 8.0 построены в режиме выпуска,
+используя динамическое время выполнения (<code class="literal">/MD</code>).
+Библиотеки совместимы с 2019 и 2017 MSVC, код, который пользуется этими
+библиотеками, может быть построен с любым 2019 или 2017 MSVC в режиме
+<code class="literal">/MD</code>. Чтобы построить кодекс в ином режиме,
+сначала постройте Connector/C++ из исходного кода в нужном режиме (см.
+<a href="source.htm#connector-cpp-installation-source-cpp">раздел 4.3</a>),
+затем создайте свои приложения, используя тот же самый режим.</p>
+
+<p>Компонуя динамически, возможно построить ваш код в режиме отладки, даже
+если библиотеки соединителя строятся в режиме выпуска. Однако в этом случае
+невозможно войти в код соединителя во время сеанса отладки. Чтобы быть в
+состоянии сделать это или построить в режиме отладки, компонуя статически с
+соединителем, необходимо сначала построить Connector/C++ в режиме отладки.</p>
+
+<h4><a name="connector-cpp-apps-windows-linking"></a>
+Компоновка приложений с Connector/C++</h4>
+<p>Connector/C++ доступен как динамическая или статическая библиотека, чтобы
+использовать с вашим приложением.</p>
+
+<p>У динамического названия библиотеки соединителя есть расширение
+<code class="filename">.dll</code>, она используется с библиотекой импорта, у
+которой есть расширение <code class="filename">.lib</code> в подкаталоге
+<code class="filename">vs<em class="replaceable"><code>NN</code></em></code>.
+Таким образом динамическая библиотека соединителя
+<code class="filename">mysqlcppconn8-2-vs14.dll</code>
+используется с библиотекой импорта
+<code class="filename">vs14/mysqlcppconn8.lib</code>.
+<code class="literal">2</code> в имени динамической библиотеки это
+главный номер версии ABI. Это помогает, пользуясь библиотеками совместимости
+со старым ABI вместе с новыми библиотеками, имеющими различный ABI.
+У библиотек, установленных на вашей системе, может быть различная версия ABI
+в их именах файлов. Соответствующую статическую библиотеку называют
+<code class="filename">vs14/mysqlcppconn8-static.lib</code>.</p>
+
+<p>Динамическая библиотека legacy JDBC connector с именем
+<code class="filename">mysqlcppconn-7-vs14.dll</code> используется с
+библиотекой импорта <code class="filename">vs14/mysqlcppconn.lib</code>.
+Соответствующую статическую библиотеку называют
+<code class="filename">vs14/mysqlcppconn-static.lib</code>.</p>
+
+<p>Следующие таблицы указывают файлы динамической и библиотеки импорта, чтобы
+использовать для динамического подключения, и файлы статической библиотеки,
+чтобы использовать для статического подключения.
+<em class="replaceable"><code>LIB</code></em> обозначает инсталляционное имя
+пути к библиотеке Connector/C++. Название последнего компонента пути
+<code class="filename">lib64</code> (64-bit) или
+<code class="filename">lib</code> (32-bit).</p>
+
+<a name="idm45670547172496"></a>
+<p><b>Таблица 5.1. Библиотеки Connector/C++ дианмическая и импорта</b></p>
+<table><thead><tr>
+<th scope="col">Тип соединителя</th>
+<th scope="col">Динамическое имя файла библиотеки</th>
+<th scope="col">Имя файла библиотеки импорта</th></tr></thead>
+<tbody><tr>
+<td scope="row">X DevAPI, X DevAPI for C</td>
+<td><code class="filename"><em class="replaceable"><code>LIB</code>
+</em>/mysqlcppconn8-2-vs14.dll</code></td>
+<td><code class="filename"><em class="replaceable"><code>LIB</code>
+</em>/vs14/mysqlcppconn8.lib</code></td></tr>
+<tr><td scope="row">JDBC</td>
+<td><code class="filename"><em class="replaceable"><code>LIB</code>
+</em>/mysqlcppconn-7-vs14.dll</code></td>
+<td><code class="filename"><em class="replaceable"><code>LIB</code>
+</em>/vs14/mysqlcppconn.lib</code></td>
+</tr></tbody></table><br class="table-break">
+
+<a name="idm45670547155792"></a>
+<p><b>Таблица 5.2. Статические библиотеки Connector/C++</b></p>
+<table><thead><tr>
+<th scope="col">Тип соединителя</th>
+<th scope="col">Статическое имя файла библиотеки</th></tr></thead>
+<tbody><tr>
+<td scope="row">X DevAPI, X DevAPI for C</td>
+<td><code class="filename"><em class="replaceable"><code>LIB</code></em>
+/vs14/mysqlcppconn8-static.lib</code></td></tr>
+<tr><td scope="row">JDBC</td>
+<td><code class="filename"><em class="replaceable"><code>LIB</code>
+</em>/vs14/mysqlcppconn-static.lib</code></td>
+</tr></tbody></table><br class="table-break">
+
+<p>При сборке кода, который пользуется библиотеками Connector/C++,
+использование эти рекомендации для настройки конфигурации проекта:</p>
+<ul><li><p>Как дополнительный включаемый каталог укажите
+<code class="literal">$MYSQL_CPPCONN_DIR/include</code>.</p></li>
+
+<li><p>Как дополнительный включаемый каталог укажите
+<code class="literal">$MYSQL_CONCPP_DIR/lib64</code> (для 64-bit) или
+<code class="literal">$MYSQL_CONCPP_DIR/lib</code> (для 32-bit).</p></li>
+
+<li><p>Чтобы использовать динамический файл библиотеки
+(<code class="filename">.dll</code>), компонуйте приложение с
+библиотекой импорта <code class="filename">.lib</code>: добавьте к опциям
+компоновки <code class="filename">vs14/mysqlcppconn8.lib</code> или
+<code class="filename">vs14/mysqlcppconn.lib</code> для старого кода.
+Во время выполнения у приложения должен быть доступ к библиотеке
+<code class="filename">.dll</code>.</p></li>
+
+<li><p>Чтобы использовать статический файл библиотеки
+(<code class="filename">.lib</code>), компонуйте приложение с библиотекой:
+добавьте <code class="filename">vs14/mysqlcppconn8-static.lib</code> или
+<code class="filename">vs14/mysqlcppconn-static.lib</code> для старого кода.
+</p></li></ul>
+
+<p>Компонуя статически, компоновщик должен найти библиотеки
+(расширение <code class="filename">.lib</code>) для необходимых библиотек
+OpenSSL. Если соединитель был установлен из двоичного пакета, обеспеченного
+Oracle, они присутствуют в подкаталоге <code class="filename">vs14</code>
+в соответствии с главным каталогом библиотеки
+(<code class="literal">$MYSQL_CONCPP_DIR/lib64</code> или
+<code class="literal">$MYSQL_CONCPP_DIR/lib</code>), соответствующие
+библиотеки OpenSSL <code class="filename">.dll</code>
+присутствуют в главном каталоге библиотеки, рядом с
+<code class="filename">.dll</code>.</p>
+
+<p>Приложение Windows, которое использует динамическую библиотеку
+соединителя, должно быть в состоянии определить ее местонахождение во время
+выполнения, а также зависимости, такие как OpenSSL. Распространенный способ
+устроить это состоит в том, чтобы поместить необходимые DLL в то же самое
+место, где исполняемый файл.</p>
+
+<h4><a name="connector-cpp-application-build-visual-studio"></a>
+Сборка приложений Connector/C++ в Microsoft Visual Studio</h4>
+<p>Начальные шаги для того, чтобы создать приложение являются теми же самыми,
+пользуетесь ли вы динамической или статической библиотекой.
+Некоторые дополнительные шаги варьируются, в зависимости от того, пользуетесь
+ли вы динамической или статической библиотекой.</p>
+
+<h5><a name="connector-cpp-application-build-visual-studio-initial"></a>
+Начало сборки приложения</h5>
+<p>Эти шаги одинаковы, пользуетесь ли вы динамической
+или статической библиотекой:</p>
+
+<ol type="1"><li><p>Начните новый проект Visual C++ в Visual Studio.</p></li>
+<li><p>В выпадающем списке для конфигурации сборки на панели инструментов
+измените конфигурацию от опции по умолчанию
+<span class="guilabel">Debug</span> на
+<span class="guilabel">Release</span>.</p>
+
+<p><a name="connector-cpp-application-config-match"></a>
+Конфигурация сборки Connector/C++ и приложения должны соответствовать.
+<p>Поскольку прикладная конфигурация сборки должна соответствовать
+конфигурации сборки Connector/C++, который это использует,
+<span class="guilabel">Release</span> требуется, используя построенный Oracle
+Connector/C++, который строится в конфигурации выпуска. Компонуя динамически
+возможно построить ваш код в режиме отладки, даже если библиотеки соединителя
+строятся в режиме выпуска. Однако в этом случае невозможно войти в код
+соединителя во время сеанса отладки. Чтобы быть в состоянии сделать это или
+построить в режиме отладки, связываясь статически с соединителем, необходимо
+построить Connector/C++ из исходного текста, используя режим
+<span class="guilabel">Debug</span>.</p></li>
+
+<li><p>Из главного меню выбирают <span class="guimenu">Project</span>,
+<span class="guimenu">Properties</span>. К этому можно также получить доступ,
+используя горячую клавишу <span class="guibutton">ALT</span> +
+<span class="guibutton">F7</span>.</p></li>
+
+<li><p>В <span class="guilabel">Configuration Properties</span>
+откройте структурный вид.</p></li>
+<li><p>Выберите <span class="guimenu">C/C++</span>,
+<span class="guilabel">General</span>.</p></li>
+
+<li><p>В <span class="guilabel">Additional Include Directories</span>:</p>
+<ul><li><p>Добавьте каталог <code class="filename">include/</code>
+Connector/C++. Этот каталог должен быть расположен в рамках
+инсталляционного каталога Connector/C++.</p></li>
+
+<li><p>Если нужен Boost, чтобы создавать приложение, также добавьте корневой
+каталог библиотеки Boost. См.
+<a href="#connector-cpp-apps-general-considerations">раздел 5.1</a>.
+</p></li></ul></li>
+
+<li><p>В структурном виде откройте <span class="guilabel">Linker</span>,
+<span class="guilabel">General</span>,
+<span class="guilabel">Additional Library Directories</span>.</p></li>
+
+<li><p>В текстовом поле <span class="guilabel">Additional Library Directories
+</span> добавьте каталог библиотеки Connector/C++. Он должен быть расположен
+в рамках инсталляционного каталога Connector/C++. Имя каталога заканчивается
+на <code class="filename">lib64</code> (64-bit) или
+<code class="filename">lib</code> (32-bit).</p></li></ol>
+<p>Остающиеся шаги зависят от того, создаете ли вы приложение, чтобы
+использовать динамическую или статическую библиотеку Connector/C++.</p>
+
+<h5><a name="connector-cpp-application-build-visual-studio-dynamic"></a>
+Сборка с с динамической библиотекой</h5>
+<p>Чтобы создать приложение, чтобы использовать динамическую библиотеку
+Connector/C++, выполните эти шаги:</p>
+
+<ol type="1"><li><p>Откройте <span class="guilabel">Linker</span>,
+<span class="guilabel">Input</span> в диалоге
+<span class="guilabel">Property Pages</span>.</p></li>
+
+<li><p>Добавьте соответствующее название библиотеки импорта в текстовое поле
+<span class="guilabel">Additional Dependencies</span>. Например, надо
+использовать <code class="filename">vs14/mysqlcppconn8.lib</code> или
+<code class="filename">vs14/mysqlcppconn.lib</code> для старых приложений,
+посмотрите <a href="#connector-cpp-apps-windows-linking">здесь</a>.
+</p></li>
+
+<li><p>Выберите C++ Runtime Library для компоновки. В диалоге
+<span class="guilabel">Property Pages</span> откройте
+<span class="guimenu">C++</span>,
+<span class="guilabel">Code Generation</span>
+в структурном виде, затем выберите подходящий вариант для
+<span class="guilabel">Runtime Library</span>.</p>
+
+<p>Компонуйте с динамической версией библиотеки времени выполнения C++,
+выбрав <code class="literal">/MD</code>. Кроме того, у целевых хостов с
+клиентским приложением, должен быть установленный пакет
+<a href="../../../https@www.microsoft.com/en-us/download/default.aspx"
+target="_top">Visual C++ Redistributable for Visual Studio</a>.
+Для получения информации о версиях VC++ Restributable посмотрите
+<a href="intro.htm#connector-cpp-prerequisites">здесь</a>.</p>
+
+<p><span class="emphasis"><em>Не</em></span> используйте опции
+<code class="literal">/MTd</code> или <code class="literal">/MDd</code>,
+если вы используете построенный Oracle Connector/C++. Для объяснения
+посмотрите <a href="#connector-cpp-application-config-match">
+это обсуждение</a>.</p></li>
+
+<li><p>Скопируйте соответствующую динамическую библиотеку к тому же самому
+каталогу, где находится исполняемый файл программы (см.
+<a href="#connector-cpp-apps-windows-linking">здесь</a>).
+Альтернативно, расширьте переменную окружения
+<code class="literal">PATH</code>, используя <code class="literal">SET
+PATH=%PATH%;C:\<em class="replaceable"><code>path</code></em>\
+<em class="replaceable"><code>to</code></em>\<em class="replaceable">
+<code>cpp</code></em></code>, или скопируйте динамическую библиотеку к
+инсталляционному каталогу Windows, обычно это
+<code class="filename">C:\windows</code>.</p>
+
+<p>Динамическая библиотека должна быть в том же самом каталоге, где
+исполняемый файл, или где-нибудь в пути системы, чтобы приложение могло
+получить доступ к динамической библиотеке Connector/C++ во время выполнения.
+</p></li></ol>
+
+<h5><a name="connector-cpp-application-build-visual-studio-static"></a>
+Компоновка со статической библиотекой</h5>
+<p>Чтобы создать приложение, чтобы использовать статическую библиотеку
+Connector/C++, выполните эти шаги:</p>
+
+<ol type="1"><li><p>Откройте <span class="guilabel">Linker</span>,
+<span class="guilabel">Input</span> в диалоге
+<span class="guilabel">Property Pages</span>.</p></li>
+
+<li><p>Добавьте соответствующее статическое название библиотеки в текстовое
+поле <span class="guilabel">Additional Dependencies</span>. Например,
+<code class="filename">vs14/mysqlcppconn8-static.lib</code> или
+<code class="filename">vs14/mysqlcppconn-static.lib</code> для старых
+приложений, см. <a href="#connector-cpp-apps-windows-linking">здесь
+</a>.</p></li>
+
+<li><p>Чтобы собрать код, который связан статически с библиотекой
+соединителя, определите макрос, который регулирует декларации API в
+заголовочных файлах для использования со статической библиотекой.
+По умолчанию макрос определяется, чтобы объявить, что функции совместимы с
+приложением, которое вызывает DLL.</p>
+
+<p>В <span class="guilabel">Project</span>,
+<span class="guilabel">Properties</span> откройте структурный вид и под
+<span class="guilabel">C++</span>,
+<span class="guilabel">Preprocessor</span>
+введите соответствующий макрос в текстовое поле
+<span class="guimenu">Preprocessor Definitions</span>:</p>
+
+<ul><li><p>Для приложений, которые используют X DevAPI, X DevAPI для C или
+(с Connector/C++ 8.0.16) legacy JDBC API, определите макрос
+<code class="literal">STATIC_CONCPP</code>. Все, что имеет значение, это то,
+что вы определяете его вообще, значение не имеет значения. Например:
+<code class="option">-DSTATIC_CONCPP</code>.</p></li>
+
+<li><p>До Connector/C++ 8.0.16 для приложений, которые используют
+legacy JDBC API, определяют макрос
+<code class="literal">CPPCONN_PUBLIC_FUNC</code> как пустую строку.
+Чтобы гарантировать это, определите макрос как
+<code class="literal">CPPCONN_PUBLIC_FUNC=</code>, но не как
+<code class="literal">CPPCONN_PUBLIC_FUNC</code>.</p></li></ul></li>
+
+<li><p>Выберите для компоновки C++ Runtime Library. В диалоге
+<span class="guilabel">Property Pages</span> откройте
+<span class="guimenu">C++</span>, <span class="guilabel">Code
+Generation</span> в структурном виде, затем выберите подходящий вариант для
+<span class="guilabel">Runtime Library</span>.</p>
+
+<p>Скомпонуйте с динамической версией библиотеки времени выполнения C++,
+выбрав опцию <code class="literal">/MD</code>. Кроме того, у целевых хостов
+должен быть установлен пакет
+<a href="../../../https@www.microsoft.com/en-us/download/default.aspx"
+target="_top">Visual C++ Redistributable for Visual Studio</a>.
+Для получения информации о версиях, см.
+<a href="intro.htm#connector-cpp-prerequisites">здесь</a>.</p>
+
+<p><span class="emphasis"><em>Не</em></span> используйте опцию
+<code class="literal">/MTd</code> или <code class="literal">/MDd</code>,
+если вы используете построенный Oracle Connector/C++. Для объяснения
+посмотрите <a href="#connector-cpp-application-config-match">
+это обсуждение</a>.</p></li></ol>
+
+<h3><a name="connector-cpp-apps-macos-notes"></a>5.2.2. Для macOS</h3>
+<p>Эта секция описывает macOS-определенные аспекты сборки Connector/C++.</p>
+<p>Двоичный дистрибутив Connector/C++ для macOS собран, используя родной для
+macOS компилятор <span class="command"><strong>clang</strong></span>.
+По этой причине приложение, которое использует Connector/C++, должно быть
+создано с тем же самым компилятором
+<span class="command"><strong>clang</strong></span>.</p>
+
+<p>Компилятор <span class="command"><strong>clang</strong></span>
+может использовать две различных реализации библиотеки времени выполнения
+C++: native <code class="literal">libc++</code> или GNU
+<code class="literal">libstdc++</code>. Важно, чтобы приложение использовало
+ту же самую реализацию, как и Connector/C++ то есть, native
+<code class="literal">libc++</code>. Чтобы гарантировать это, опция
+<code class="option">-stdlib=libc++</code> должна быть передана компилятору.
+</p>
+
+<p>Чтобы построить приложение Connector/C++, которое использует X DevAPI,
+из исходного файла <code class="filename">app.cc</code> и скомпоновать его
+динамически с библиотекой соединителя, <code class="filename">Makefile</code>
+для построения в macOS мог бы быть похожим на это:</p>
+
+<pre class="programlisting">
+MYSQL_CONCPP_DIR = <em class="replaceable"><code>Connector/C++ installation location</code></em>
+CPPFLAGS = -I $(MYSQL_CONCPP_DIR)/include -L $(MYSQL_CONCPP_DIR)/lib64
+LDLIBS = -lmysqlcppconn8
+CXX = clang++ -stdlib=libc++
+CXXFLAGS = -std=c++11
+app : app.cc
+</pre>
+
+<p>Двоичные пакеты для macOS включают библиотеки OpenSSL, которые требуются
+кодом, связанным с соединителем. Эти библиотеки устанавливаются в том же
+самом месте, где библиотеки соединителя и должны быть найдены
+там динамическим компоновщиком.</p>
+
+<h3><a name="connector-cpp-apps-solaris-notes"></a>5.2.3. Для Solaris</h3>
+<p>Эта секция описывает определенные для Solaris
+аспекты сборки Connector/C++.</p>
+
+<p>С Connector/C++ 8.0.13 возможно построить приложения Connector/C++
+в Solaris. Это требует компилятор SunPro 5.15 или выше (из Developer Studio
+12.6). Более ранние версии и сборка с GCC не поддерживаются.</p>
+
+<p>Чтобы использовать пакет Connector/C++ от Oracle, код приложения должен
+быть построен с SunPro 5.15 или выше со следующими опциями:
+<code class="literal">-m64 -std=c++11</code>. Библиотеки C++ runtime
+и библиотека atomics должны быть по умолчанию
+(<code class="literal">-library=stdcpp, -xatomics=studio</code>).</p>
+
+<p>Библиотека соединителя и любой код, который использует его, зависят от
+библиотек времени выполнения GCC из Oracle Developer Studio 12.6, которая
+должна быть установлена, прежде чем вы запустите приложение. Посмотрите
+<a href="../../../https@www.oracle.com/technetwork/server-storage/developerstudio/downloads/index.html"
+target="_top">download options</a> для Oracle Developer Studio.
+Инсталляционный пакет позволяет вам установить только библиотеки времени
+выполнения вместо полной Oracle Developer Studio, см.
+<a href="../../../https@docs.oracle.com/cd/E77782_01/html/E77785/gozsu.html"
+target="_top">Installing Only the Runtime Libraries on Oracle Solaris 11
+</a>.</p>
+<p>У целевых хостов должны быть установлены библиотеки времени выполнения из
+Developer Studio 12.6.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

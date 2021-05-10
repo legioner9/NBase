@@ -1,0 +1,748 @@
+<HTML>
+<HEAD>
+  <TITLE>Поддержка MySQL ODBC</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H2><A NAME="ODBC">13 Поддержка MySQL ODBC</A></H2>
+<P>MySQL предоставляет поддержку интерфейса ODBC с помощью пакета
+<STRONG>MyODBC</STRONG>. Эта глава научит Вас, как установить и использовать
+<STRONG>MyODBC</STRONG>. Здесь Вы также найдете список общих программ,
+которые, как известно, работают с <STRONG>MyODBC</STRONG>.</P>
+
+<H3><A NAME="Installing_MyODBC">13.1 Как ставить MyODBC</A></H3>
+<P><STRONG>MyODBC</STRONG> представляет собой 32-bit ODBC (2.50) level 0
+(с возможностями level 1 и level 2) драйвер для соединения ODBC-приложений с
+СУБД MySQL. <STRONG>MyODBC</STRONG> работает под Windows95, Windows98, NT и
+на некоторых Unix-системах.</P>
+
+<P><STRONG>MyODBC</STRONG> публично доступен, и Вы можете спокойно скачать
+его новейшую версию с
+<a HREF="../../../www.mysql.com/downloads/api-myodbc.html">
+http://www.mysql.com/downloads/api-myodbc.html</a>.</P>
+
+<P>Если Вы имеете проблему с <STRONG>MyODBC</STRONG>, и Ваша программа также
+работает с OLEDB, Вы должны попробовать драйвер для OLEDB, который Вы можете
+найти в разделе Contrib.
+
+<P>Обычно Вы должны установить <STRONG>MyODBC</STRONG> только на системах с
+Windows. Под Unix <STRONG>MyODBC</STRONG> Вам понадобится только, если Вы
+имеете программу подобную ColdFusion, которая выполняется на Unix-машине и
+использует ODBC, чтобы соединиться с базами данных.</P>
+
+<P>Если Вы хотите устанавливать <STRONG>MyODBC</STRONG> под Unix, Вы будете
+также нуждаться в диспетчере <STRONG>ODBC</STRONG>. <STRONG>MyODBC</STRONG>,
+как известно,  работает с большинством Unix ODBC-диспетчеров. Вы можете найти
+список <STRONG>ODBC</STRONG>-секции ссылок на страничке MySQL. Подробности в
+разделе "<A HREF="glava01.htm#Useful_Links">1.2.3 Хорошие ссылки по MySQL
+</A>".</P>
+
+<P>Чтобы установить <STRONG>MyODBC</STRONG> в Windows, Вы должны загрузить
+соответствующий файл <STRONG>MyODBC</STRONG> .zip (для Windows9x или
+NT/Win2000), распаковывать его с помощью <CODE>WINZIP</CODE> или другой
+подобной программы и выполнить файл <CODE>SETUP.EXE</CODE>.</P>
+
+<P>В Windows NT Вы можете получать следующую ошибку при попытке установить
+<STRONG>MyODBC</STRONG>:</P>
+<PRE>
+An error occurred while copying C:\WINDOWS\SYSTEM\MFC30.DLL. Restart
+Windows and try installing again (before running any applications
+which use ODBC)
+</PRE>
+
+<P>Проблема в этом случае состоит в том, что некоторая другая программа
+использует ODBC, а также из-за того, как неудобно устроена Windows, Вы не
+можете в этом случае установить новые ODBC-драйверы программой установки
+Microsoft ODBC setup. В большинстве случаев Вы можете продолжать установку,
+нажав кнопку <CODE>Ignore</CODE>, чтобы копировать остальную часть файлов
+MyODBC. Если это не работает, решение состоит в том, чтобы перезагрузить Ваш
+компьютер в safe mode (выберите это, нажимая F8 перед запуском Windows после
+перезагрузки), установить <STRONG>MyODBC</STRONG> и перезагрузиться назад в
+нормальный режим работы.</P>
+
+<UL><LI>Чтобы сделать соединение с Unix-системой из Windows, приложением ODBC
+(которое не поддерживает напрямую MySQL), Вы должно сначала установить
+<STRONG>MyODBC</STRONG> на машине Windows.
+
+<LI>Пользователь и Windows-машина должны иметь привилегии доступа к серверу
+MySQL на Unix-машине. Это должно быть установлено с помощью команды
+<CODE>GRANT</CODE>. Подробности в разделе "<A HREF="glava10.htm#GRANT">10.1
+Синтаксис <CODE>GRANT</CODE> и <CODE>REVOKE</CODE></A>".
+
+<LI>Вы должны создать запись ODBC DSN следующим образом:
+<UL><LI>Откройте Control Panel на Windows-системе.
+<LI>Дважды щелкните по пиктограмме ODBC Data Sources 32 bits.
+<LI>Нажмите метку User DSN.
+<LI>Нажмите кнопку Add.
+<LI>Выберите MySQL на экране Create New Data Source и нажмите кнопку Finish.
+<LI>Показывается экран конфигурации значений по умолчанию драйвера MySQL.
+Подробности в разделе "<A HREF="#ODBC_administrator">13.2 Как
+заполнять поля в программе администрирования ODBC</A>".</UL>
+
+<LI>Теперь запустите Ваше приложение, и выберите ODBC-драйвер DSN, который Вы
+определили в администраторе ODBC.</UL>
+
+<P>Обратите внимание, что имеются другие опции конфигурации на экране
+MySQL (trace, don't prompt on connect, etc), которые Вы можете опробовать,
+если сталкиваетесь с проблемами.</P>
+
+<H3><A NAME="ODBC_administrator">13.2 Как заполнять поля в
+программе администрирования ODBC</A></H3>
+<P>Имеются три возможности для определения имени сервера в Windows95:</P>
+
+<UL><LI>Использовать IP-адрес сервера.
+<LI>Добавить в файл <TT>\windows\lmhosts</TT> следующую информацию:
+<PRE>
+ip hostname
+</PRE>
+
+Например:
+<PRE>
+194.216.84.21 my_hostname
+</PRE>
+
+<LI>Настроить PC для использования DNS.</UL>
+
+<P>Пример того, как заполнить поля в <CODE>ODBC setup</CODE>:
+<PRE>
+Windows DSN name:   test
+Description:        This is my test database
+MySql Database:     test
+Server:             194.216.84.21
+User:               monty
+Password:           my_password
+Port:
+</PRE>
+
+<P>Значение для поля <CODE>Windows DSN name</CODE>: любое имя, которое
+является уникальным в Вашей Windows ODBC-установке.</P>
+
+<P>Вы не должны определить значения для полей <CODE>Server</CODE>,
+<CODE>User</CODE>, <CODE>Password</CODE> или <CODE>Port</CODE> на экране
+установки ODBC. Однако, если Вы это сделаете, значения будут использоваться
+как значения по умолчанию позже, когда Вы попытаетесь сделать соединение.
+Тогда их можно поменять.</P>
+
+<P>Если номер порта явно не задан, используется заданный по умолчанию порт
+(3306).</P>
+
+<P>Если Вы определяете опцию <CODE>Read options from C:\my.cnf</CODE>, группы
+<CODE>client</CODE> и <CODE>odbc</CODE> будут читаться из файла
+<TT>C:\my.cnf</TT>.</P>
+
+<H3><A NAME="MyODBC_connect_parameters">13.3 Параметры соединения для MyODBC
+</A></H3>
+<P>Можно определять следующие параметры для <STRONG>MyODBC</STRONG> в разделе
+<CODE>[Servername]</CODE> файла <CODE>ODBC.INI</CODE> или через аргумент
+<CODE>InConnectionString</CODE> в вызове <CODE>SQLDriverConnect()</CODE>.</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Параметр</STRONG></TD><TD><STRONG>Значение по умолчанию
+</STRONG></TD><TD><STRONG>Комментарий</STRONG></TD></TR>
+<TR><TD>user</TD><TD>ODBC (в Windows)</TD><TD>username используемый, чтобы
+соединиться с MySQL.</TD></TR>
+<TR><TD>server</TD><TD>localhost</TD><TD>Имя хоста сервера MySQL.</TD></TR>
+<TR><TD>database</TD><TD></TD><TD>Заданная по умолчанию база данных</TD></TR>
+<TR><TD>option</TD><TD>0</TD><TD>Целое число, которым Вы можете определять,
+как <STRONG>MyODBC</STRONG> должен работать. Подробности ниже.</TD></TR>
+<TR><TD>port</TD><TD>3306</TD><TD>Порт TCP/IP, чтобы использовать, если
+<CODE>server</CODE> не <CODE>localhost</CODE>.</TD></TR>
+<TR><TD>stmt</TD><TD></TD><TD>Команда, которая будет выполнена при
+установлении соединения с <CODE>MySQL</CODE>.</TD></TR>
+<TR><TD>password</TD><TD></TD><TD>Пароль для комбинации параметров
+<CODE>server</CODE> и <CODE>user</CODE>.</TD></TR>
+<TR><TD>socket</TD><TD></TD><TD>Сокет или именованный канал Windows.</TD>
+</TR></TABLE>
+
+<P>Параметр option используется, чтобы сообщить <STRONG>MyODBC</STRONG>, что
+клиент не на 100% ODBC-совместим. В Windows обычно устанавливаются опции на
+экране соединения, но можно также устанавливать это в параметре option.
+Следующие опции перечислены в том же самом порядке, в каком они появляются на
+экране соединения <STRONG>MyODBC</STRONG>:</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Bit</STRONG></TD><TD><STRONG>Назначение</STRONG></TD></TR>
+<TR><TD>1</TD><TD>Клиент не может обрабатывать возвращаемую
+<STRONG>MyODBC</STRONG> реальную ширину столбца.</TD></TR>
+<TR><TD>2</TD><TD>Клиент не может обрабатывать возвращаемое MySQL истинное
+значение числа обрабатываемых строк. Если этот флажок установлен MySQL
+возвращает найденные строки. Нужно иметь MySQL 3.21.14 или более новый, чтобы
+получить такую поддержку.</TD></TR>
+<TR><TD>4</TD><TD>Создает файл регистрации отладки c:\myodbc.log. Это
+аналогично указанию <CODE>MYSQL_DEBUG=d:t:O,c::\myodbc.log</CODE> в
+<TT>AUTOEXEC.BAT</TT>.</TD></TR>
+<TR><TD>8</TD><TD>Не устанавливать ограничение пакета для результатов и
+параметров.</TD></TR>
+<TR><TD>16</TD><TD>Не запрашивать ничего, даже если драйвер хотел бы что-то
+запросить.</TD></TR>
+<TR><TD>32</TD><TD>Моделировать драйвер ODBC 1.0 в некотором контексте.</TD>
+</TR>
+<TR><TD>64</TD><TD>Игнорировать использование имени базы данных в
+'database.table.column'.</TD></TR>
+<TR><TD>128</TD><TD>Принудительно использовать курсоры менеджера ODBC.</TD>
+</TR>
+<TR><TD>256</TD><TD>Отключить использование расширенной выборки.</TD></TR>
+<TR><TD>512</TD><TD>Приводить поля CHAR к полной длине столбца.</TD></TR>
+<TR><TD>1024</TD><TD>SQLDescribeCol() возвратит полное имя столбца.</TD></TR>
+<TR><TD>2048</TD><TD>Использовать сжатый протокол сервера/клиента.</TD></TR>
+<TR><TD>4096</TD><TD>Сообщает, чтобы сервер игнорировал пробел после имени
+функции и перед <CODE>'('</CODE> (необходимо для работы с PowerBuilder). Эта
+опция сделает все имена функций ключевыми словами!</TD></TR>
+<TR><TD>8192</TD><TD>Соединяться с именованными конвейерами с сервером
+<CODE>mysqld</CODE> под NT.</TD></TR>
+<TR><TD>16384</TD><TD>Изменить столбцы LONGLONG на INT (некоторые приложения
+не могут обрабатывать LONGLONG).</TD></TR>
+<TR><TD>32768</TD><TD>Вернуть 'user' как Table_qualifier и Table_owner из
+вызова SQLTables (экспериментально).</TD></TR>
+<TR><TD>65536</TD><TD>Читать параметры из групп <CODE>client</CODE> и
+<CODE>odbc</CODE> файла настроек <TT>my.cnf</TT>.</TD></TR>
+<TR><TD>131072</TD><TD>Добавляет некоторые дополнительные проверки
+безопасности (обычно не надо, но...).</TD></TR></TABLE>
+
+<P>Если Вы хотите иметь много опций, Вы должны сложить вышеупомянутые флажки.
+Например, установка option в 12 (4+8) дает Вам отладку без ограничений пакета.
+</P>
+
+<P>По умолчанию <TT>MYODBC.DLL</TT> компилируется для оптимальной
+эффективности. Если Вы хотите отладить <STRONG>MyODBC</STRONG> (например,
+чтобы включить трассировку), Вы должны взамен использовать
+<CODE>MYODBCD.DLL</CODE>. Чтобы установить этот файл, скопируйте
+<TT>MYODBCD.DLL</TT> взамен установленной библиотеки <CODE>MYODBC.DLL</CODE>.
+</P>
+
+<H3><A NAME="ODBC_Problems">13.4 Как сообщать о проблемах с MyODBC</A></H3>
+<P><STRONG>MyODBC</STRONG> был проверен с Access, Admndemo.exe, C++-Builder,
+Borland Builder 4, Centura Team Developer (прежде это был пакет Gupta
+SQL/Windows), ColdFusion (на Solaris и NT с svc pack 5), Crystal Reports,
+DataJunction, Delphi, ERwin, Excel, iHTML, FileMaker Pro, FoxPro, Notes
+4.5/4.6, SBSS, Perl DBD-ODBC, Paradox, Powerbuilder, Powerdesigner 32 bit,
+VC++ и Visual Basic.</P>
+
+<P>Если Вы знаете о любых других приложениях, которые работают с
+<STRONG>MyODBC</STRONG>, пожалуйста, напишите об этом на
+<a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a>!</P>
+
+<P>С некоторыми программами Вы можете получать ошибку подобно:
+<CODE>Another user has modifies the record that you have modified</CODE>.
+В большинстве случаев это может быть решено следующим образом:</P>
+
+<UL><LI>Добавьте первичный ключ для таблицы, если он еще не имеется.
+<LI>Добавьте столбец timestamp, если его еще нет.
+<LI>Используйте только поля double float. Некоторые программы могут терпеть
+неудачу, когда они сравнивают single float.</UL>
+
+<H3><A NAME="MyODBC_clients">13.5 Программы, работающие с MyODBC</A></H3>
+<P>Большинство программ должны работать с <STRONG>MyODBC</STRONG>, но для
+каждой из тех, что перечислены ниже, это было проверено.</P>
+
+<DL COMPACT>
+<DT><STRONG>Программа</STRONG>
+<DD><STRONG>Комментарий</STRONG>
+
+<A NAME="IDX1504"></A><DT>Access
+<DD>Чтобы работать с Access:
+<UL><LI>Если Вы используете Access 2000, Вы должны получить и установить
+самый новый (version 2.6 или выше) компонент Microsoft MDAC (<CODE>Microsoft
+Data Access Components</CODE>) с адреса
+<a HREF="../../../www.microsoft.com/data">http://www.microsoft.com/data</a>.
+Это устранит следующую ошибку в Access: когда Вы экспортируете данные в
+MySQL, таблица и названия столбцов не определены. Другой способ обхода этой
+ошибки в том, чтобы обновить MyODBC до Version 2.50.33 и MySQL до Version
+3.23.x, они вместе обеспечивают обход для этой проблемы!
+
+Вы должны также получить и применить Microsoft Jet 4.0 Service Pack 5 (SP5),
+который можно найти на
+<a HREF="../../../support.microsoft.com/support/kb/articles/Q 239/1/14.ASP">
+http://support.microsoft.com/support/kb/articles/Q 239/1/14.ASP</a>. Это
+устранит некоторые случаи, где столбцы отмечены как
+<CODE>#deleted#</CODE> в пакете Access.
+
+Обратите внимание, что, если Вы используете MySQL Version 3.22, Вы должны
+применить заплату MDAC и использовать MyODBC 2.50.32 или 2.50.34.
+
+<LI>Установите поле опции MyODBC ``Return matching rows'' при
+соединении с сервером MySQL.
+
+<LI>Вы должны иметь первичный ключ в таблице. Если его там нет, новые или
+модифицируемые строки могут быть показаны как <CODE>#Deleted#</CODE>.
+
+<LI>Вы должны иметь timestamp во всех таблицах, которые Вы хотите
+модифицировать. Для максимальной мобильности рекомендуются
+<CODE>TIMESTAMP(14)</CODE> или простой <CODE>TIMESTAMP</CODE> вместо других
+вариантов на тему <CODE>TIMESTAMP(X)</CODE>.
+
+<LI>Используйте поля типа double float. Access терпит неудачу при сравнении с
+single float. Симптомы: новые или модифицируемые строки могут помечаться как
+<CODE>#Deleted#</CODE>, или Вы не можете находить строки модификаций.
+
+<LI>Если Вы все еще получаете ошибку <CODE>Another user has changed your
+data</CODE> после добавления столбца <CODE>TIMESTAMP</CODE>, следующий прием
+может помочь Вам:
+
+Не используйте просмотр листа данных <CODE>table</CODE>. Создайте взамен
+форму с полями, которые Вы хотите обрабатывать, и используйте эту форму для
+просмотра в формате <CODE>form</CODE>. Вы должны установить реквизит
+<CODE>DefaultValue</CODE> для столбца <CODE>TIMESTAMP</CODE> в значение
+<CODE>NOW()</CODE>. Неплохо скрыть столбец <CODE>TIMESTAMP</CODE>, чтобы не
+запутывать Ваших пользователей.
+
+<LI>Access под NT покажет <CODE>BLOB</CODE>-столбцы как <CODE>OLE
+OBJECTS</CODE>. Если Вы хотите взамен иметь столбцы <CODE>MEMO</CODE>, Вы
+должны изменить столбец на <CODE>TEXT</CODE> через <CODE>ALTER TABLE</CODE>.
+
+<LI>Access не может всегда правильно обрабатывать столбцы <CODE>DATE</CODE>.
+Если Вы имеете проблему с этим, измените столбцы на <CODE>DATETIME</CODE>.
+
+<LI>В некоторых случаях Access может генерировать запрещенные запросы SQL,
+которые MySQL не может понимать. Вы можете исправить это выбором
+<CODE>"Query|SQLSpecific|Pass-Through"</CODE> из меню Access.
+
+<LI>Если Вы имеете в Access столбец, определенный как BYTE, Access попробует
+экспортировать его как <CODE>TINYINT</CODE> вместо <CODE>TINYINT
+UNSIGNED</CODE>. Это задаст Вам проблем, если Вы имеете значения &#62; 127!
+
+<LI>Если Вы используете Access 7.0, Вы должны использовать флажок
+<CODE>Return matching rows</CODE>.
+
+<LI>Если Вы используете Access 2.0, Вы должны использовать флажки
+<CODE>Return matching rows</CODE> и <CODE>Simulate ODBC 1.0</CODE>.</UL>
+
+<A NAME="IDX1505"></A><DT>ADO
+<DD>Когда Вы программируете с API ADO и <STRONG>MyODBC</STRONG>, Вы должны
+принять во внимание некоторые заданные по умолчанию реквизиты, которые не
+обеспечиваются сервером MySQL. Например, использование реквизита
+<CODE>CursorLocation Property</CODE> как <CODE>adUseServer</CODE> возвратит
+для <CODE>RecordCount Property</CODE> результат -1. Сомневаюсь, что это
+входит в Ваши планы... Чтобы иметь правильное значение, Вы должны установить
+реквизит <CODE>adUseClient</CODE> так, как показано в коде на VB ниже:
+
+<PRE>
+Dim myconn As New ADODB.Connection
+Dim myrs As New Recordset
+Dim mySQL As String
+Dim myrows As Long
+
+myconn.Open "DSN=MyODBCsample"
+mySQL = "SELECT * from user"
+myrs.Source = mySQL
+Set myrs.ActiveConnection = myconn
+myrs.CursorLocation = adUseClient
+myrs.Open
+myrows = myrs.RecordCount
+
+myrs.Close
+myconn.Close
+</PRE>
+
+Другой вариант: использовать <CODE>SELECT COUNT(*)</CODE> для подобного
+запроса, чтобы получить правильное число строк.
+
+<DT>Active server pages (ASP)
+<DD>Вы должны использовать опцию <CODE>Return matching rows</CODE>.
+
+<DT>BDE applications
+<DD>Вы должны установить опции <CODE>Don't optimize column widths</CODE> и
+<CODE>Return matching rows</CODE>.
+
+<A NAME="IDX1506"></A><DT>Borland Builder 4
+<DD>Когда Вы начинаете запрос, Вы можете использовать реквизит
+<CODE>Active</CODE> или метод <CODE>Open</CODE>. Обратите внимание, что
+<CODE>Active</CODE> при запуске автоматически выдает запрос <CODE>SELECT *
+FROM ...</CODE>, который не может быть хорошим, если Ваши таблицы большие!
+
+<DT>ColdFusion (под Unix)
+<DD>Следующая информация поступила из документации на ColdFusion:
+
+Используйте следующую информацию, чтобы конфигурировать сервер ColdFusion для
+Linux, чтобы использовать драйвер unixODBC с <STRONG>MyODBC</STRONG> для
+источников данных MySQL. <STRONG>MyODBC</STRONG> Version 2.50.26 работает с
+MySQL Version 3.22.27 и Linux ColdFusion. Любая более новая версия должна
+также работать. Вы можете скачать <STRONG>MyODBC</STRONG> с
+<a HREF="../../../www.mysql.com/downloads/api-myodbc.html">
+http://www.mysql.com/downloads/api-myodbc.html</a>
+
+<A NAME="IDX1507"></A>ColdFusion Version 4.5.1 позволяет Вам через ColdFusion
+Administrator добавить источник данных MySQL. Однако, драйвер не включен в
+поставку ColdFusion Version 4.5.1. Прежде, чем драйвер MySQL появится в
+списке ODBC datasources, Вы должны сформировать и скопировать драйвер
+<STRONG>MyODBC</STRONG> в <TT>/opt/coldfusion/lib/libmyodbc.so</TT>.
+
+Каталог Contrib хранит программу mydsn-xxx.zip, которая позволяет Вам
+формировать и удалять файл записи DSN для MyODBC драйвера в Coldfusion.
+
+<A NAME="IDX1508"></A><DT>DataJunction
+<DD>Вы должны изменить таблицу для вывода <CODE>VARCHAR</CODE> вместо
+<CODE>ENUM</CODE>, поскольку пакет экспортирует последнее способом, который
+вызывает разрушение MySQL.
+
+<A NAME="IDX1509"></A><DT>Excel
+<DD>Работает. Некоторые советы:
+
+<UL><LI>Если Вы имеете проблемы с датами, попробуйте выбирать их как строки,
+используя функцию <CODE>CONCAT()</CODE>. Например:
+<PRE>
+select CONCAT(rise_time), CONCAT(set_time) from sunrise_sunset;
+</PRE>
+
+Значения, найденные как строки, этим способом должны быть правильно
+распознаны как значения времени Excel97.
+
+Цель <CODE>CONCAT()</CODE> в этом примере состоит в том, чтобы ввести в
+заблуждение ODBC, чтобы тот принял столбец за строковый. Без
+<CODE>CONCAT()</CODE> ODBC знает, что столбец имеет тип времени, а Excel
+этого не понимает.
+
+Обратите внимание, что это ошибка в Excel. Она происходит потому, что он
+автоматически преобразовывает строку во время. Это хорошо, если источником
+был текстовый файл, но просто глупо, когда источником является
+ODBC-соединение, которое сообщает точные типы для каждого столбца.</UL>
+
+<A NAME="IDX1510"></A><DT>Word
+<DD>Чтобы получать данные из MySQL в документах Word/Excel, Вы должны
+использовать драйвер <CODE>MyODBC</CODE> и Add-in Microsoft Query help.
+Например, создайте базу данных с таблицей, содержащей 2 столбца текста:
+
+<UL><LI>Вставьте строки, используя клиента <CODE>mysql</CODE>.
+<LI>Создайте DSN-файл, используя драйвер MyODBC, например, my для db выше.
+<LI>Откройте приложение Word.
+<LI>Создайте пустой новый документ.
+<LI>На полосе инструментов Database, нажмите кнопку insert database.
+<LI>Нажмите кнопку Get Data.
+<LI>На правой стороне экрана Get Data нажмите кнопку Ms Query.
+<LI>В Ms Query создайте New Data Source, используя DSN-файл my.
+<LI>Выберите новый запрос.
+<LI>Выберите столбцы, которые Вы хотите.
+<LI>Сделайте фильтр, если Вы хотите его использовать.
+<LI>Сделайте Sort, если Вы хотите его использовать.
+<LI>Выберите Return Data в Microsoft Word.
+<LI>Нажмите кнопку Finish.
+<LI>Нажмите Insert data и выберите записи.
+<LI>Нажмите OK, и Вы увидите строки в Вашем документе Word.</UL>
+
+<A NAME="IDX1511"></A><DT>odbcadmin
+<DD>Тестовая программа для ODBC.
+
+<A NAME="IDX1512"></A><DT>Delphi
+<DD>Вы должны использовать BDE Version 3.2 или более новую. Установите поле
+опции `Don't optimize column width' при соединении с MySQL. Также имеется
+некоторый потенциально полезный код на Delphi, который устанавливает ODBC и
+BDE записи для <STRONG>MyODBC</STRONG> (BDE-запись требуется BDE Alias
+Editor, который свободно выкачивается с Delphi Super Page. (Спасибо за него
+Bryan Brunton <a HREF="mailto:bryan@flesherfab.com">
+bryan@flesherfab.com</a>):
+<PRE>
+fReg:= TRegistry.Create;
+  fReg.OpenKey('\Software\ODBC\ODBC.INI\DocumentsFab', True);
+  fReg.WriteString('Database', 'Documents');
+  fReg.WriteString('Description', ' ');
+  fReg.WriteString('Driver', 'C:\WINNT\System32\myodbc.dll');
+  fReg.WriteString('Flag', '1');
+  fReg.WriteString('Password', '');
+  fReg.WriteString('Port', ' ');
+  fReg.WriteString('Server', 'xmark');
+  fReg.WriteString('User', 'winuser');
+  fReg.OpenKey('\Software\ODBC\ODBC.INI\ODBC Data Sources', True);
+  fReg.WriteString('DocumentsFab', 'MySQL');
+  fReg.CloseKey;
+  fReg.Free;
+  Memo1.Lines.Add('DATABASE NAME=');
+  Memo1.Lines.Add('USER NAME=');
+  Memo1.Lines.Add('ODBC DSN=DocumentsFab');
+  Memo1.Lines.Add('OPEN MODE=READ/WRITE');
+  Memo1.Lines.Add('BATCH COUNT=200');
+  Memo1.Lines.Add('LANGDRIVER=');
+  Memo1.Lines.Add('MAX ROWS=-1');
+  Memo1.Lines.Add('SCHEMA CACHE DIR=');
+  Memo1.Lines.Add('SCHEMA CACHE SIZE=8');
+  Memo1.Lines.Add('SCHEMA CACHE TIME=-1');
+  Memo1.Lines.Add('SQLPASSTHRU MODE=SHARED AUTOCOMMIT');
+  Memo1.Lines.Add('SQLQRYMODE=');
+  Memo1.Lines.Add('ENABLE SCHEMA CACHE=FALSE');
+  Memo1.Lines.Add('ENABLE BCD=FALSE');
+  Memo1.Lines.Add('ROWSET SIZE=20');
+  Memo1.Lines.Add('BLOBS TO CACHE=64');
+  Memo1.Lines.Add('BLOB SIZE=32');
+  AliasEditor.Add('DocumentsFab','MySQL',Memo1.Lines);
+</PRE>
+
+<A NAME="IDX1513"></A><DT>C++ Builder
+<DD>Проверялось с BDE Version 3.0. Единственая известная проблема состоит в
+том, что, когда изменяется схема таблицы, поля запроса не модифицируются.
+BDE, кажется, не распознает первичные ключи, только первичный индекс, хотя
+это не было проблемой.
+
+<DT>Vision
+<DD>Вы должны установить флажок опций <CODE>Return matching rows</CODE>.
+
+<A NAME="IDX1514"></A><DT>Visual Basic
+<DD>Чтобы модифицировать таблицу, Вы должны определить первичный ключ для
+таблицы. Visual Basic с ADO не может обрабатывать большие числа типа integer.
+Это означает, что некоторые запросы, подобно <CODE>SHOW PROCESSLIST</CODE>,
+не будут работать правильно. Устраняется это указанием опции
+<CODE>OPTION=16834</CODE> в строке соединения ODBC или опции <CODE>Change
+BIGINT columns to INT</CODE> на экране соединения MyODBC. Вы можете также
+устанавливать <CODE>Return matching rows</CODE>.
+
+<DT>VisualInterDev
+<DD>Если Вы получаете ошибку <CODE>[Microsoft][ODBC Driver Manager] Driver
+does not support this parameter</CODE>, причина может быть в том, что Вы
+имеете <CODE>BIGINT</CODE> в Вашем результате. Попробуйте устанавливать опцию
+<CODE>Change BIGINT columns to INT</CODE> на экране соединения MyODBC.
+
+<DT>Visual Objects
+<DD>Вы должны использовать флажок опции <CODE>Don't optimize column widths
+</CODE>.</DL>
+
+<H3><A NAME="ODBC_and_last_insert_id">13.6 Как получать значение столбцов с
+<CODE>AUTO_INCREMENT</CODE> в ODBC</A></H3>
+<P>Общая проблема: как получить значение автоматически сгенерированный ID из
+<CODE>INSERT</CODE>. С ODBC Вы можете делать что-нибудь вроде этого
+(считается, что <CODE>auto</CODE> является полем с
+<CODE>AUTO_INCREMENT</CODE>):</P>
+<PRE>
+INSERT INTO foo (auto,text) VALUES(NULL,'text');
+SELECT LAST_INSERT_ID();
+</PRE>
+
+<P>Или, если Вы только собираетесь вставлять ID в другую таблицу, Вы
+можете сделать так:</P>
+<PRE>
+INSERT INTO foo (auto,text) VALUES(NULL,'text');
+INSERT INTO foo2 (id,text) VALUES(LAST_INSERT_ID(),'text');
+</PRE>
+
+<P>Для пользы некоторых ODBC-приложений (по крайней мере Delphi и Access),
+следующий запрос может использоваться, чтобы найти недавно вставленную строку:
+<PRE>
+SELECT * FROM tbl_name WHERE auto IS NULL;
+</PRE>
+
+<H3><A NAME="MyODBC_bug_report">13.7 Сообщение о проблемах с MyODBC</A></H3>
+<P>Если Вы сталкиваетесь с трудностями с <STRONG>MyODBC</STRONG>, Вы должны
+сделать файл протокола менеджера ODBC (файл регистрации, который Вы получаете
+при запросе файлов регистрации из ODBCADMIN) и протокол из
+<STRONG>MyODBC</STRONG>.</P>
+
+<P>Чтобы получить протокол из <STRONG>MyODBC</STRONG>, Вы должны сделать:</P>
+
+<OL><LI>Гарантируйте, что Вы используете <CODE>myodbcd.dll</CODE>, а не
+<CODE>myodbc.dll</CODE>. Самый простой способ делать это состоит в том, чтобы
+получить <CODE>myodbcd.dll</CODE> из дистрибутива MyODBC и скопировать на
+место <CODE>myodbc.dll</CODE>, которая, вероятно, находится в Вашем каталоге
+<CODE>C:\windows\system32</CODE> или <CODE>C:\winnt\system32</CODE>.
+
+Обратите внимание, что Вы, вероятно, захотите восстановить старый файл
+myodbc.dll, когда закончите тестирование, поскольку он куда быстрее
+<CODE>myodbcd.dll</CODE>.
+
+<LI>Отметьте флажок опции `Trace MyODBC' на экране соединения/настройки
+<STRONG>MyODBC</STRONG>. Протокол будет записан в файл
+<TT>C:\myodbc.log</TT>.
+
+Если опция трассировки не появилась при обращении к вышеупомянутому
+экрану, это означает, что Вы не используете драйвер <CODE>myodbcd.dll</CODE>.
+
+<LI>Запустите приложение и попробуйте смоделировать сбой.</OL>
+
+<P>Проверьте <CODE>MyODBC trace file</CODE>, чтобы выяснить, что именно могло
+пойти не так. Вы должны быть способны выяснить выданные запросы, ища после
+строки <CODE>&#62;mysql_real_query</CODE> в файле <TT>myodbc.log</TT>.</P>
+
+<P>Вы должны также попробовать дублировать запросы в <CODE>mysql</CODE>
+monitor или <CODE>admndemo</CODE>, чтобы выяснить, ошибка это
+MyODBC или MySQL.</P>
+
+<P>Если Вы выясняете, что что-то пошло неправильно, пожалуйста, пошлите
+только релевантные строки (максимум 36 строк) на адрес
+<a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a>.
+Пожалуйста, никогда не посылайте целый файл протокола ODBC или MyODBC!</P>
+
+<P>Если Вы неспособны выяснить, что неправильно, последняя опция должна
+сделать архив (tar или zip), который содержит файл трассировки MyODBC, файл
+протокола ODBC и файл README, который объясняет проблему. Вы можете посылать
+это на <a HREF="../../../ftp@support.mysql.com/pub/mysql/secret">
+ftp://support.mysql.com/pub/mysql/secret</a>. Только в MySQL AB имеют доступ
+к файлам, которые Вы загружаете, и там будут очень аккуратны с данными!</P>
+
+<P>Если Вы можете создать программу, которая также показывает эту проблему,
+пожалуйста, загрузите ее туда же.</P>
+
+<P>Если программа работает с некоторым другим SQL сервером, Вы должны сделать
+файл протокола ODBC с описанием действий, когда Вы делаете точно ту же самую
+вещь на другом SQL-сервере.</P>
+
+<P>Не забудьте, что подробная информация, которую Вы можете обеспечить
+авторам, повышает вероятность того, что они смогут решить проблему!</P>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

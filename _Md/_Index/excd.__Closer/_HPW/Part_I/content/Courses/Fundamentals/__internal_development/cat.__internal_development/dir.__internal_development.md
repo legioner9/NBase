@@ -1,0 +1,14 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\Part_I\content\Courses\Fundamentals\__internal_development\cat.__internal_development\dir.__internal_development.md">__internal_development</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\Part_I\content\Courses\Fundamentals\__internal_development\__classify_function.md">__classify_function.md</a>
+        - *# properies of function
+        - *## ReTypeCast propery
+        - *# modifyingObject Function 
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\Part_I\content\Courses\Fundamentals\__internal_development\__duty_function.md">__duty_function.md</a>
+        - *# debug functions
+        - *# color console
+        - *# 'use ndb'
+        - *# inner log
+        - *# NaN
+        - *# type cast
+        - *# ternary assignment
+        - *# predicate IN

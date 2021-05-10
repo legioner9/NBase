@@ -1,0 +1,787 @@
+<HTML>
+<HEAD>
+  <TITLE>Руководство по MyODBC 3.51.03</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1><A NAME="MyODBC_Add_Info">6 Дополнительная информация по MyODBC</A></H1>
+<H1><A NAME="MyODBC_Data_Types">6.1 Типы данных в MyODBC</A></H1>
+<P>Следующая таблица иллюстрирует, как драйвер отображает типы данных сервера
+к заданным по умолчанию SQL и C-типам данных:</P>
+
+<TABLE><TR><TD><STRONG>Тип на сервере</STRONG></TD><TD><STRONG>SQL-тип
+</STRONG></TD><TD><STRONG>C-тип</STRONG></TD></TR>
+<TR><TD>tinyint</TD><TD>SQL_TINYINT</TD><TD>SQL_C_STINYINT</TD></TR>
+<TR><TD>tinyint unsigned</TD><TD>SQL_TINYINT</TD><TD> SQL_C_UTINYINT</TD>
+</TR>
+<TR><TD>bigint</TD><TD>SQL_BIGINT</TD><TD>SQL_C_SBIGINT</TD></TR>
+<TR><TD>bigint unsigned</TD><TD>SQL_BIGINT</TD><TD>SQL_C_UBIGINT</TD></TR>
+<TR><TD>long varbinary</TD><TD>SQL_LONGVARBINARY</TD><TD>SQL_C_BINARY</TD>
+</TR>
+<TR><TD>blob</TD><TD>SQL_VARBINARY</TD><TD>SQL_C_BINARY</TD></TR>
+<TR><TD>longblob</TD><TD>SQL_VARBINARY</TD><TD>SQL_C_BINARY</TD></TR>
+<TR><TD>tinyblob</TD><TD>SQL_BINARY</TD><TD>SQL_C_BINARY</TD></TR>
+<TR><TD>mediumblob</TD><TD>SQL_LONGVARBINARY</TD><TD>SQL_C_BINARY</TD></TR>
+<TR><TD>long varchar</TD><TD>SQL_LONGVARCHAR</TD><TD>SQL_C_CHAR</TD></TR>
+<TR><TD>text</TD><TD>SQL_LONGVARCHAR</TD><TD>SQL_C_CHAR</TD></TR>
+<TR><TD>mediumtext</TD><TD>SQL_LONGVARCHAR</TD><TD>SQL_C_CHAR</TD></TR>
+<TR><TD>char</TD><TD>SQL_CHAR</TD><TD>SQL_C_CHAR</TD></TR>
+<TR><TD>numeric</TD><TD>SQL_NUMERIC</TD><TD>SQL_C_CHAR</TD></TR>
+<TR><TD>decimal</TD><TD>SQL_DECIMAL</TD><TD>SQL_C_CHAR</TD></TR>
+<TR><TD>integer</TD><TD>SQL_INTEGER</TD><TD>SQL_C_SLONG</TD></TR>
+<TR><TD>integer unsigned</TD><TD>SQL_INTEGER</TD><TD>SQL_C_ULONG</TD></TR>
+<TR><TD>int</TD><TD>SQL_INTEGER</TD><TD>SQL_C_SLONG</TD></TR>
+<TR><TD>int unsigned</TD><TD>SQL_INTEGER</TD><TD>SQL_C_ULONG</TD></TR>
+<TR><TD>mediumint</TD><TD>SQL_INTEGER</TD><TD>SQL_C_SLONG</TD></TR>
+<TR><TD>mediumint unsigned</TD><TD>SQL_INTEGER</TD><TD>SQL_C_ULONG</TD></TR>
+<TR><TD>smallint</TD><TD>SQL_SMALLINT</TD><TD>SQL_C_SSHORT</TD></TR>
+<TR><TD>smallint unsigned</TD><TD>SQL_SMALLINT</TD><TD>SQL_C_USHORT</TD></TR>
+<TR><TD>real</TD><TD>SQL_FLOAT</TD><TD>SQL_C_DOUBLE</TD></TR>
+<TR><TD>double</TD><TD>SQL_FLOAT</TD><TD>SQL_C_DOUBLE</TD></TR>
+<TR><TD>float</TD><TD>SQL_REAL</TD><TD>SQL_C_FLOAT</TD></TR>
+<TR><TD>double prec</TD><TD>SQL_DOUBLE</TD><TD> SQL_C_DOUBLE</TD></TR>
+<TR><TD>date</TD><TD>SQL_DATE</TD><TD>SQL_C_DATE</TD></TR>
+<TR><TD>time</TD><TD>SQL_TIME</TD><TD>SQL_C_TIME</TD></TR>
+<TR><TD>year</TD><TD>SQL_SMALLINT</TD><TD>SQL_C_SHORT</TD></TR>
+<TR><TD>datetime</TD><TD>SQL_TIMESTAMP</TD><TD>SQL_C_TIMESTAMP</TD></TR>
+<TR><TD>timestamp</TD><TD>SQL_TIMESTAMP</TD><TD>SQL_C_TIMESTAMP</TD></TR>
+<TR><TD>text</TD><TD>SQL_VARCHAR</TD><TD>SQL_C_CHAR</TD></TR>
+<TR><TD>varchar</TD><TD>SQL_VARCHAR</TD><TD>SQL_C_CHAR</TD></TR>
+<TR><TD>enum</TD><TD>SQL_VARCHAR</TD><TD>SQL_C_CHAR</TD></TR>
+<TR><TD>set</TD><TD>SQL_VARCHAR</TD><TD>SQL_C_CHAR</TD></TR></TABLE>
+
+<H1><A NAME="MyODBC_Error_Codes">6.2 Коды ошибок MyODBC</A></H1>
+<P>Следующая таблица вносит в список коды ошибок, возвращаемые драйвером
+кроме ошибок сервера.</P>
+
+<TABLE><TR><TD><STRONG>Код ошибки</STRONG></TD><TD><STRONG>SQLSTATE 2<
+/STRONG></TD><TD><STRONG>SQLSTATE 3</STRONG></TD><TD><STRONG>Сообщение
+</STRONG></TD></TR>
+<TR><TD>500</TD><TD>01000</TD><TD>01000</TD><TD>Общее предупреждение.</TD>
+</TR>
+<TR><TD>501</TD><TD>01004</TD><TD>01004</TD><TD>Данные для строки подрезаны
+справа.</TD></TR>
+<TR><TD>502</TD><TD>01S02</TD><TD>01S02</TD><TD>Измененное значение Option.
+</TD></TR>
+<TR><TD>503</TD><TD>01S03</TD><TD>01S03</TD><TD>Никакие строки не изменены.
+</TD></TR>
+<TR><TD>504</TD><TD>01S04</TD><TD>01S04</TD><TD>Больше, чем одна
+модифицируемая/удаляемая строка.</TD></TR>
+<TR><TD>505</TD><TD>01S06</TD><TD>01S06</TD><TD>Пытаетесь выбирать данные
+прежде, чем набор результатов возвратил первый набор строк.</TD></TR>
+<TR><TD>506</TD><TD>07001</TD><TD>07002</TD><TD>SQLBindParameter не
+используемый для всех параметров.</TD></TR>
+<TR><TD>507</TD><TD>07005</TD><TD>07005</TD><TD>Подготовленная инструкция не
+специфична для курсора.</TD></TR>
+<TR><TD>508</TD><TD>07009</TD><TD>07009</TD><TD>Недопустимый дескрипторный
+индекс.</TD></TR>
+<TR><TD>509</TD><TD>08002</TD><TD>08002</TD><TD>Имя подключения занято.</TD>
+</TR>
+<TR><TD>510</TD><TD>08003</TD><TD>08003</TD><TD>Подключение не существует.
+</TD></TR>
+<TR><TD>511</TD><TD>24000</TD><TD>24000</TD><TD>Недопустимое состояние
+курсора.</TD></TR>
+<TR><TD>512</TD><TD>25000</TD><TD>25000</TD><TD>Недопустимое состояние
+транзакции.</TD></TR>
+<TR><TD>513</TD><TD>25S01</TD><TD>25S01</TD><TD>Неизвестное состояние
+транзакции.</TD></TR>
+<TR><TD>514</TD><TD>34000</TD><TD>34000</TD><TD>Недопустимое имя курсора.
+</TD></TR>
+<TR><TD>515</TD><TD>S1000</TD><TD>HY000</TD><TD>Общая ошибка драйвера.</TD>
+</TR>
+<TR><TD>516</TD><TD>S1001</TD><TD>HY001</TD><TD>Ошибка распределения памяти.
+</TD></TR>
+<TR><TD>517</TD><TD>S1002</TD><TD>HY002</TD><TD>Недопустимый номер столбца.
+</TD></TR>
+<TR><TD>518</TD><TD>S1003</TD><TD>HY003</TD><TD>Недопустимый тип буфера
+прикладных программ.</TD></TR>
+<TR><TD>519</TD><TD>S1004</TD><TD>HY004</TD><TD>Недопустимый SQL-тип данных.
+</TD></TR>
+<TR><TD>520</TD><TD>S1009</TD><TD>HY009</TD><TD>Недопустимое использование
+null.</TD></TR>
+<TR><TD>521</TD><TD>S1010</TD><TD>HY010</TD><TD>Функциональная ошибка
+последовательности.</TD></TR>
+<TR><TD>522</TD><TD>S1011</TD><TD>HY011</TD><TD>Атрибут не может быть
+установлен в настоящий момент.</TD></TR>
+<TR><TD>523</TD><TD>S1012</TD><TD>HY012</TD><TD>Недопустимый код операции
+транзакции.</TD></TR>
+<TR><TD>524</TD><TD>S1013</TD><TD>HY013</TD><TD>Ошибка управления памятью.
+</TD></TR>
+<TR><TD>525</TD><TD>S1015</TD><TD>HY015</TD><TD>Никакое имя курсора
+недоступно.</TD></TR>
+<TR><TD>526</TD><TD>S1024</TD><TD>HY024</TD><TD>Недопустимое значение
+атрибута.</TD></TR>
+<TR><TD>527</TD><TD>S1090</TD><TD>HY090</TD><TD>Недопустимая длина строки
+или буфера.</TD></TR>
+<TR><TD>528</TD><TD>S1091</TD><TD>HY091</TD><TD>Недопустимый дескрипторный
+идентификатор поля.</TD></TR>
+<TR><TD>529</TD><TD>S1092</TD><TD>HY092</TD><TD>Недопустимый идентификатор
+атрибута или опции.</TD></TR>
+<TR><TD>530</TD><TD>S1093</TD><TD>HY093</TD><TD>Недопустимый номер параметра.
+</TD></TR>
+<TR><TD>531</TD><TD>S1095</TD><TD>HY095</TD><TD>Функциональный тип вне
+диапазона.</TD></TR>
+<TR><TD>532</TD><TD>S1106</TD><TD>HY106</TD><TD>Тип выборки вне диапазона.
+</TD></TR>
+<TR><TD>533</TD><TD>S1117</TD><TD>HY117</TD><TD>Значение строки вне
+диапазона.</TD></TR>
+<TR><TD>534</TD><TD>S1109</TD><TD>HY109</TD><TD>Недопустимая позиция курсора.
+</TD></TR>
+<TR><TD>535</TD><TD>S1C00</TD><TD>HYC00</TD><TD>Факультативное свойство не
+выполнено.</TD></TR>
+<TR><TD>0</TD><TD>21S01</TD><TD>21S01</TD><TD>Число столбцов не соответствует
+значению.</TD></TR>
+<TR><TD>0</TD><TD>23000</TD><TD>23000</TD><TD>Нарушение ограничения
+целостности.</TD></TR>
+<TR><TD>0</TD><TD>42000</TD><TD>42000</TD><TD>Ошибка синтаксиса или нарушение
+прав доступа в системе.</TD></TR>
+<TR><TD>0</TD><TD>42S02</TD><TD>42S02</TD><TD>Основная таблица или
+представление не найдено.</TD></TR>
+<TR><TD>0</TD><TD>42S12</TD><TD>42S12</TD><TD>Индекс не найден.</TD></TR>
+<TR><TD>0</TD><TD>42S21</TD><TD>42S21</TD><TD>Столбец уже существует.</TD>
+</TR>
+<TR><TD>0</TD><TD>42S22</TD><TD>42S22</TD><TD>Столбец не найден.</TD></TR>
+<TR><TD>0</TD><TD>08S01</TD><TD>08S01</TD><TD>Сбой связи.</TD></TR></TABLE>
+
+<H1><A NAME="MyODBC_With_VB">6.3 MyODBC с VB: ADO, DAO и RDO</A></H1>
+<P>Эта глава содержит простые примеры использования MySQL ODBC 3.51 с
+ADO, DAO и RDO.</P>
+
+<H2><A NAME="ADO_-_rs.addNew">6.3.1 ADO: rs.addNew, rs.delete и rs.update</A>
+</H2>
+<P>Следующий пример для <STRONG>ADO</STRONG> <CODE>(ActiveX Data Objects)
+</CODE> создает таблицу my_ado и показывает использование rs.addNew,
+rs.delete и rs.update.
+<PRE>
+Private Sub myodbc_ado_Click()
+  Dim conn As ADODB.Connection
+  Dim rs As ADODB.Recordset
+  Dim fld As ADODB.Field
+  Dim sql As String
+
+  'connect to MySQL server using MySQL ODBC 3.51 Driver
+  Set conn = New ADODB.Connection
+  conn.ConnectionString = "DRIVER={MySQL ODBC 3.51 Driver};"_
+                        &#38; "SERVER=localhost;"_
+                        &#38; " DATABASE=test;"_
+                        &#38; "UID=venu;PWD=venu; OPTION=35"
+  conn.Open
+  'create table
+  conn.Execute "DROP TABLE IF EXISTS my_ado"
+  conn.Execute "CREATE TABLE my_ado(id int not null primary key,
+                name varchar(20)," _
+                &#38; "txt text, dt date, tm time, ts timestamp)"
+  'direct insert
+  conn.Execute "INSERT INTO my_ado(id,name,txt) values(1,100,'venu')"
+  conn.Execute "INSERT INTO my_ado(id,name,txt) values(2,200,'MySQL')"
+  conn.Execute "INSERT INTO my_ado(id,name,txt) values(3,300,'Delete')"
+  Set rs = New ADODB.Recordset
+  rs.CursorLocation = adUseServer
+  'fetch the initial table ..
+  rs.Open "SELECT * FROM my_ado", conn
+    Debug.Print rs.RecordCount
+    rs.MoveFirst
+    Debug.Print String(50, "-") &#38; "Initial my_ado Result Set "
+                       &#38; String(50, "-")
+    For Each fld In rs.Fields
+      Debug.Print fld.Name,
+      Next
+      Debug.Print
+      Do Until rs.EOF
+      For Each fld In rs.Fields
+      Debug.Print fld.Value,
+      Next
+      rs.MoveNext
+      Debug.Print
+    Loop
+  rs.Close
+  'rs insert
+  rs.Open "select * from my_ado", conn, adOpenDynamic, adLockOptimistic
+  rs.AddNew
+  rs!Name = "Monty"
+  rs!txt = "Insert row"
+  rs.Update
+  rs.Close
+  'rs update
+  rs.Open "SELECT * FROM my_ado"
+  rs!Name = "update"
+  rs!txt = "updated-row"
+  rs.Update
+  rs.Close
+  'rs update second time..
+  rs.Open "SELECT * FROM my_ado"
+  rs!Name = "update"
+  rs!txt = "updated-second-time"
+  rs.Update
+  rs.Close
+  'rs delete
+  rs.Open "SELECT * FROM my_ado"
+  rs.MoveNext
+  rs.MoveNext
+  rs.Delete
+  rs.Close
+  'fetch the updated table ..
+  rs.Open "SELECT * FROM my_ado", conn
+    Debug.Print rs.RecordCount
+    rs.MoveFirst
+    Debug.Print String(50, "-") &#38; "Updated my_ado Result Set "
+                       &#38; String(50, "-")
+    For Each fld In rs.Fields
+      Debug.Print fld.Name,
+      Next
+      Debug.Print
+      Do Until rs.EOF
+      For Each fld In rs.Fields
+      Debug.Print fld.Value,
+      Next
+      rs.MoveNext
+      Debug.Print
+    Loop
+  rs.Close
+  conn.Close
+End Sub
+</PRE></P>
+
+<H2><A NAME="DAO_-_rs.addNew">6.3.2 DAO: rs.addNew, rs.update и прокрутка</A>
+</H2>
+<P>Следующий пример для <STRONG>DAO</STRONG> <CODE>(Data Access Objects)
+</CODE> создает таблицу my_dao и показывает использование rs.addNew,
+rs.update, а также прокрутку (скроллинг) набора результатов.
+<PRE>
+Private Sub myodbc_dao_Click()
+  Dim ws As Workspace
+  Dim conn As Connection
+  Dim queryDef As queryDef
+  Dim str As String
+
+  'connect to MySQL using MySQL ODBC 3.51 Driver
+  Set ws = DBEngine.CreateWorkspace("", "venu", "venu", dbUseODBC)
+  str = "odbc;DRIVER={MySQL ODBC 3.51 Driver};"_
+                      &#38; "SERVER=localhost;"_
+                      &#38; " DATABASE=test;"_
+                      &#38; "UID=venu;PWD=venu; OPTION=35"
+  Set conn = ws.OpenConnection("test", dbDriverNoPrompt, False, str)
+  'Create table my_dao
+  Set queryDef = conn.CreateQueryDef("", "drop table if exists my_dao")
+  queryDef.Execute
+  Set queryDef = conn.CreateQueryDef("", "create table my_dao(Id
+                 INT AUTO_INCREMENT PRIMARY KEY, " _
+                 &#38; "Ts TIMESTAMP(14) NOT NULL,Name varchar(20),
+                 Id2 INT)")
+  queryDef.Execute
+  'Insert new records using rs.addNew
+  Set rs = conn.OpenRecordset("my_dao")
+  Dim i As Integer
+    For i = 10 To 15
+    rs.AddNew
+    rs!Name = "insert record" &#38; i
+    rs!Id2 = i
+    rs.Update
+    Next i
+    rs.Close
+  'rs update..
+  Set rs = conn.OpenRecordset("my_dao")
+  rs.Edit
+  rs!Name = "updated-string"
+  rs.Update
+  rs.Close
+  'fetch the table back...
+  Set rs = conn.OpenRecordset("my_dao", dbOpenDynamic)
+  str = "Results:"
+  rs.MoveFirst
+  While Not rs.EOF
+  str = " " &#38; rs!Id &#38; " , " &#38; rs!Name &#38; ", "
+        &#38; rs!Ts &#38; ", " &#38; rs!Id2
+  Debug.Print "DATA:" &#38; str
+  rs.MoveNext
+  Wend
+  'rs Scrolling
+  rs.MoveFirst
+  str = " FIRST ROW: " &#38; rs!Id &#38; " , " &#38; rs!Name &#38; ", "
+        &#38; rs!Ts &#38; ", " &#38; rs!Id2
+  Debug.Print str
+  rs.MoveLast
+  str = " LAST ROW: " &#38; rs!Id &#38; " , " &#38; rs!Name &#38; ", "
+        &#38; rs!Ts &#38; ", " &#38; rs!Id2
+  Debug.Print str
+  rs.MovePrevious
+  str = " LAST-1 ROW: " &#38; rs!Id &#38; " , " &#38; rs!Name &#38; ", "
+        &#38; rs!Ts &#38; ", " &#38; rs!Id2
+  Debug.Print str
+  'free all resources
+  rs.Close
+  queryDef.Close
+  conn.Close
+  ws.Close
+End Sub
+</PRE></P>
+
+<H2><A NAME="RDO_-_rs.addNew_and_rs.update">6.3.3 RDO: rs.addNew и rs.update
+</A></H2>
+<P>Следующий пример для <STRONG>RDO</STRONG> <CODE>(Remote Data Objects)
+</CODE> создает таблицу my_rdo и показывает использование rs.addNew и
+rs.update.
+<PRE>
+Dim rs As rdoResultset
+  Dim cn As New rdoConnection
+  Dim cl As rdoColumn
+  Dim SQL As String
+
+  'cn.Connect = "DSN=test;"
+  cn.Connect = "DRIVER={MySQL ODBC 3.51 Driver};"_
+                       &#38; "SERVER=localhost;"_
+                       &#38; " DATABASE=test;"_
+                       &#38; "UID=venu;PWD=venu; OPTION=35"
+  cn.CursorDriver = rdUseOdbc
+  cn.EstablishConnection rdDriverPrompt
+  'drop table my_rdo
+  SQL = "drop table if exists my_rdo"
+  cn.Execute SQL, rdExecDirect
+  'create table my_rdo
+  SQL = "create table my_rdo(id int, name varchar(20))"
+  cn.Execute SQL, rdExecDirect
+  'insert - direct
+  SQL = "insert into my_rdo values (100,'venu')"
+  cn.Execute SQL, rdExecDirect
+  SQL = "insert into my_rdo values (200,'MySQL')"
+  cn.Execute SQL, rdExecDirect
+  'rs insert
+  SQL = "select * from my_rdo"
+  Set rs = cn.OpenResultset(SQL, rdOpenStatic, rdConcurRowVer, rdExecDirect)
+  rs.AddNew
+  rs!id = 300
+  rs!Name = "Insert1"
+  rs.Update
+  rs.Close
+  'rs insert
+  SQL = "select * from my_rdo"
+  Set rs = cn.OpenResultset(SQL, rdOpenStatic, rdConcurRowVer, rdExecDirect)
+  rs.AddNew
+  rs!id = 400
+  rs!Name = "Insert 2"
+  rs.Update
+  rs.Close
+  'rs update
+  SQL = "select * from my_rdo"
+  Set rs = cn.OpenResultset(SQL, rdOpenStatic, rdConcurRowVer, rdExecDirect)
+  rs.Edit
+  rs!id = 999
+  rs!Name = "updated"
+  rs.Update
+  rs.Close
+  'fetch back...
+  SQL = "select * from my_rdo"
+  Set rs = cn.OpenResultset(SQL, rdOpenStatic, rdConcurRowVer, rdExecDirect)
+  Do Until rs.EOF
+  For Each cl In rs.rdoColumns
+      Debug.Print cl.Value,
+    Next
+    rs.MoveNext
+    Debug.Print
+    Loop
+  Debug.Print "Row count="; rs.RowCount
+  'close
+  rs.Close
+  cn.Close
+End Sub
+</PRE></P>
+
+<H1><A NAME="MyODBC_With_.NET">6.4 MyODBC и Microsoft .NET</A></H1>
+<P>Эта глава содержит простые примеры, чтобы показать использование драйверов
+MyODBC с ODBC.NET.</P>
+
+<H2><A NAME="ODBC.NET(C#)">6.4.1 ODBC.NET: CSHARP(C#)</A></H2>
+<P>Следующий пример создает таблицу my_odbc_net и показывает использование в
+C#.
+<PRE>
+/**
+ * @sample  : mycon.cs
+ * @purpose : Demo sample for ODBC.NET using MyODBC or MyODBC 3.51
+ * @author  : Venu, venu@mysql.com
+ *
+ * (C) Copyright MySQL AB, 1995-2002
+ *
+**/
+
+/* build command
+  *
+  *  csc /t:exe
+  *      /out:mycon.exe mycon.cs
+  *      /r:Microsoft.Data.Odbc.dll
+ */
+using Console = System.Console;
+using Microsoft.Data.Odbc;
+
+namespace myodbc3
+{
+  class mycon
+  {
+    static void Main(string[] args)
+    {
+      try
+      {
+        //Connection string for MyODBC 2.50
+        /*string MyConString = "DRIVER={MySQL};" + "SERVER=localhost;" +
+                               "DATABASE=test;" + "UID=venu;" +
+                               "PASSWORD=venu;" + "OPTION=3";
+        */
+        //Connection string for MyODBC 3.51
+        string MyConString = "DRIVER={MySQL ODBC 3.51 Driver};" +
+                             "SERVER=localhost;" + "DATABASE=test;" +
+                             "UID=venu;" + "PASSWORD=venu;" + "OPTION=3";
+        //Connect to MySQL using MyODBC
+        OdbcConnection MyConnection = new OdbcConnection(MyConString);
+        MyConnection.Open();
+        Console.WriteLine("\n !!! success, connected successfully !!!\n");
+        //Display connection information
+        Console.WriteLine("Connection Information:");
+        Console.WriteLine("\tConnection String:" +
+                          MyConnection.ConnectionString);
+        Console.WriteLine("\tConnection Timeout:" +
+                          MyConnection.ConnectionTimeout);
+        Console.WriteLine("\tDatabase:" + MyConnection.Database);
+        Console.WriteLine("\tDataSource:" + MyConnection.DataSource);
+        Console.WriteLine("\tDriver:" + MyConnection.Driver);
+        Console.WriteLine("\tServerVersion:" + MyConnection.ServerVersion);
+        //Create a sample table
+        OdbcCommand MyCommand = new OdbcCommand("DROP TABLE IF EXISTS
+                                                my_odbc_net",MyConnection);
+        MyCommand.ExecuteNonQuery();
+        MyCommand.CommandText = "CREATE TABLE my_odbc_net(id int, name
+                                varchar(20), idb bigint)";
+        MyCommand.ExecuteNonQuery();
+        //Insert
+        MyCommand.CommandText = "INSERT INTO my_odbc_net VALUES(10,'venu',
+                                300)";
+        Console.WriteLine("INSERT, Total rows affected:" +
+                          MyCommand.ExecuteNonQuery());;
+        //Insert
+        MyCommand.CommandText = "INSERT INTO my_odbc_net
+                                VALUES(20,'mysql',400)";
+        Console.WriteLine("INSERT, Total rows affected:" +
+                          MyCommand.ExecuteNonQuery());
+        //Insert
+        MyCommand.CommandText = "INSERT INTO my_odbc_net
+                                VALUES(20,'mysql',500)";
+        Console.WriteLine("INSERT, Total rows affected:" +
+                          MyCommand.ExecuteNonQuery());
+        //Update
+        MyCommand.CommandText = "UPDATE my_odbc_net SET id=999 WHERE id=20";
+        Console.WriteLine("Update, Total rows affected:" +
+                          MyCommand.ExecuteNonQuery());
+        //COUNT(*)
+        MyCommand.CommandText = "SELECT COUNT(*) as TRows FROM my_odbc_net";
+        Console.WriteLine("Total Rows:" + MyCommand.ExecuteScalar());
+        //Fetch
+        MyCommand.CommandText = "SELECT * FROM my_odbc_net";
+        OdbcDataReader MyDataReader;
+        MyDataReader =  MyCommand.ExecuteReader();
+        while (MyDataReader.Read())
+        {
+          if (string.Compare(MyConnection.Driver,"myodbc3.dll") == 0) {
+             Console.WriteLine("Data:" + MyDataReader.GetInt32(0) + " " +
+                               MyDataReader.GetString(1) + " " +
+                               MyDataReader.GetInt64(2));
+          }
+          else
+          {
+            Console.WriteLine("Data:" + MyDataReader.GetInt32(0) + " " +
+                              MyDataReader.GetString(1) + " " +
+                              MyDataReader.GetInt32(2));
+                              // BIGINTs not supported by MyODBC
+          }
+        }
+        // Close all resources
+        MyDataReader.Close();
+        MyConnection.Close();
+      }
+      catch (OdbcException MyOdbcException)  // Catch any ODBC exception ..
+      {
+        for (int i=0; i &#60; MyOdbcException.Errors.Count; i++)
+        {
+          Console.Write("ERROR #" + i + "\n" +
+            "Message: " + MyOdbcException.Errors[i].Message + "\n" +
+            "Native: " + MyOdbcException.Errors[i].NativeError.ToString() +
+            "\n" + "Source: " + MyOdbcException.Errors[i].Source + "\n" +
+            "SQL: " + MyOdbcException.Errors[i].SQLState + "\n");
+        }
+      }
+    }
+  }
+}
+</PRE></P>
+
+<H2><A NAME="ODBC.NET(VB)">6.4.2 ODBC.NET: VB</A></H2>
+<P>Следующий пример создает таблицу my_vb_net и показывает использование в VB.
+<PRE>
+' @sample  : myvb.vb
+' @purpose : Demo sample for ODBC.NET using MyODBC or MyODBC 3.51
+' @author  : Venu, <a HREF="mailto:venu@mysql.com">venu@mysql.com</a>
+'
+' (C) Copyright MySQL AB, 1995-2002
+'
+' build command
+'
+' vbc /target:exe
+'     /out:myvb.exe
+'     /r:Microsoft.Data.Odbc.dll
+'     /r:System.dll
+'     /r:System.Data.dll
+Imports Microsoft.Data.Odbc
+Imports System
+
+Module myvb
+  Sub Main()
+    Try
+      'MyODBC 3.51 connection string
+      Dim MyConString As String = "DRIVER={MySQL ODBC 3.51 Driver};" &#38; _
+          "SERVER=localhost;" &#38; _
+          "DATABASE=test;" &#38; _
+          "UID=venu;" &#38; _
+          "PASSWORD=venu;" &#38; _
+          "OPTION=3;"
+      'Connection
+      Dim MyConnection As New OdbcConnection(MyConString)
+      MyConnection.Open()
+      Console.WriteLine("Connection State::" &#38;
+                        MyConnection.State.ToString)
+      'Drop
+      Console.WriteLine ("Dropping table")
+      Dim MyCommand As New OdbcCommand()
+      MyCommand.Connection = MyConnection
+      MyCommand.CommandText = "DROP TABLE IF EXISTS my_vb_net"
+      MyCommand.ExecuteNonQuery()
+      'Create
+      Console.WriteLine ("Creating....")
+      MyCommand.CommandText = "CREATE TABLE my_vb_net(id int,
+                              name varchar(30))"
+      MyCommand.ExecuteNonQuery()
+      'Insert
+      MyCommand.CommandText = "INSERT INTO my_vb_net VALUES(10,'venu')"
+      Console.WriteLine("INSERT, Total rows affected:" &#38;
+                        MyCommand.ExecuteNonQuery())
+      'Insert
+      MyCommand.CommandText = "INSERT INTO my_vb_net VALUES(20,'mysql')"
+      Console.WriteLine("INSERT, Total rows affected:" &#38;
+                        MyCommand.ExecuteNonQuery())
+      'Insert
+      MyCommand.CommandText = "INSERT INTO my_vb_net VALUES(20,'mysql')"
+      Console.WriteLine("INSERT, Total rows affected:" &#38;
+                        MyCommand.ExecuteNonQuery())
+      'Insert
+      MyCommand.CommandText = "INSERT INTO my_vb_net(id) VALUES(30)"
+      Console.WriteLine("INSERT, Total rows affected:" &#38;
+                        MyCommand.ExecuteNonQuery())
+      'Update
+      MyCommand.CommandText = "UPDATE my_vb_net SET id=999 WHERE id=20"
+      Console.WriteLine("Update, Total rows affected:" &#38;
+                        MyCommand.ExecuteNonQuery())
+      'COUNT(*)
+      MyCommand.CommandText = "SELECT COUNT(*) as TRows FROM my_vb_net"
+      Console.WriteLine("Total Rows:" &#38; MyCommand.ExecuteScalar())
+      'Select
+      Console.WriteLine ("Select * FROM my_vb_net")
+      MyCommand.CommandText = "SELECT * FROM my_vb_net"
+      Dim MyDataReader As OdbcDataReader
+      MyDataReader = MyCommand.ExecuteReader
+      While MyDataReader.Read
+        If MyDataReader("name") Is DBNull.Value Then
+           Console.WriteLine("id = " &#38; CStr(MyDataReader("id")) &#38;
+                             "  name = " &#38; "NULL")
+        Else Console.WriteLine("id = " &#38; CStr(MyDataReader("id")) &#38;
+                               "  name = " &#38; CStr(MyDataReader("name")))
+        End If
+      End While
+      'Catch ODBC Exception
+      Catch MyOdbcException As OdbcException
+        Dim i As Integer
+        Console.WriteLine (MyOdbcException.ToString)
+      'Catch program exception
+      Catch MyException As Exception
+        Console.WriteLine (MyException.ToString)
+    End Try
+  End Sub
+End Module
+</PRE></P>
+
+<H1><A NAME="Credits">6.5 Авторы</A></H1>
+<P>Это разработчики, которые работают в MySQL AB полный рабочий день над
+драйверами MyODBC и MyODBC 3.51.</P>
+
+<UL><LI>Micheal (Monty) Widenius, <a HREF="mailto:monty@mysql.com">
+monty@mysql.com</a>
+<LI>Venu Anuganti, <a HREF="mailto:venu@mysql.com">venu@mysql.com</a></UL>
+</P>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

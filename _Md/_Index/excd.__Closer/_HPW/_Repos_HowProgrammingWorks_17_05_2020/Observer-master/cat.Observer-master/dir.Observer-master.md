@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Observer-master\cat.Observer-master\dir.Observer-master.md">Observer-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Observer-master\README.md">README.md</a>
+        - *## Pattern Observer

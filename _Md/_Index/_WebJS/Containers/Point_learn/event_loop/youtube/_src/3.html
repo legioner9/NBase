@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+<button id="btn">
+    this button
+</button>
+</body>
+
+<script>
+
+    Promise.resolve().then(() => console.log('Form promise')); // microTask .then
+    console.log('Form console.log');
+
+    // blocking render code loop
+    // const loop = function () {
+    //     Promise.resolve().then(loop);
+    // }
+
+    btn.addEventListener('click', () => {
+        Promise.resolve().then(() => console.log('MicroTask_1')); // microTask .then
+        console.log('Listener_1');
+    })
+
+    btn.addEventListener('click', () => {
+        Promise.resolve().then(() => console.log('MicroTask_2')); // microTask .then
+        console.log('Listener_2');
+    })
+
+    // if user Click
+    // Form console.log - this run (far) release stack and :
+    // Form promise
+    // Listener_1 - this run (far) release stack and :
+    // MicroTask_1
+    // Listener_2 - this run (far) release stack and :
+    // MicroTask_2
+
+    btn.click();
+
+    // if work click():
+    // Form console.log - this run (far) release stack and :
+    // Listener_1 - run click()
+    // Listener_2 - run click() (far) release stack and :
+    // Form promise
+    // MicroTask_1
+    // MicroTask_1
+
+</script>
+
+</html>

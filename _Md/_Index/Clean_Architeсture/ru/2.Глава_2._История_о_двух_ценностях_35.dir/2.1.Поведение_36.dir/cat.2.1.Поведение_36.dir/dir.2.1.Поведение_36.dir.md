@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\Clean_Architeсture\ru\2.Глава_2._История_о_двух_ценностях_35.dir\2.1.Поведение_36.dir\cat.2.1.Поведение_36.dir\dir.2.1.Поведение_36.dir.md">2.1.Поведение_36.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\Clean_Architeсture\ru\2.Глава_2._История_о_двух_ценностях_35.dir\2.1.Поведение_36.dir\2.1.Поведение_36.md">2.1.Поведение_36.md</a>
+        - *## Сложность - масштаб NOT форма

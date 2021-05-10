@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\Clean_Architeсture\ru\3.Глава_3._Обзор_парадигм_43.dir\cat.3.Глава_3._Обзор_парадигм_43.dir\dir.3.Глава_3._Обзор_парадигм_43.dir.md">3.Глава_3._Обзор_парадигм_43.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\Clean_Architeсture\ru\3.Глава_3._Обзор_парадигм_43.dir\ReadMe.md">ReadMe.md</a>
+        - *@@ far Clean Arcitecture 

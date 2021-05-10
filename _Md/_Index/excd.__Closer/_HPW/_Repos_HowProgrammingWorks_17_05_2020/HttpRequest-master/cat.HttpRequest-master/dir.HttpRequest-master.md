@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\HttpRequest-master\cat.HttpRequest-master\dir.HttpRequest-master.md">HttpRequest-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\HttpRequest-master\README.md">README.md</a>
+        - *## HTTP Request, XMLHttpRequest, fetch

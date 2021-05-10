@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_C++\Containers\Intro_to_this\Vasiliev\1.Основы_языка_C++_...12.dir\1.5.ОБЪЯВЛЕНИЕ_И_ИНИЦИАЛИЗАЦИЯ_ПЕРЕМЕННОЙ...18.dir\cat.1.5.ОБЪЯВЛЕНИЕ_И_ИНИЦИАЛИЗАЦИЯ_ПЕРЕМЕННОЙ...18.dir\dir.1.5.ОБЪЯВЛЕНИЕ_И_ИНИЦИАЛИЗАЦИЯ_ПЕРЕМЕННОЙ...18.dir.md">1.5.ОБЪЯВЛЕНИЕ_И_ИНИЦИАЛИЗАЦИЯ_ПЕРЕМЕННОЙ...18.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_C++\Containers\Intro_to_this\Vasiliev\1.Основы_языка_C++_...12.dir\1.5.ОБЪЯВЛЕНИЕ_И_ИНИЦИАЛИЗАЦИЯ_ПЕРЕМЕННОЙ...18.dir\1.5.ОБЪЯВЛЕНИЕ_И_ИНИЦИАЛИЗАЦИЯ_ПЕРЕМЕННОЙ...18.md">1.5.ОБЪЯВЛЕНИЕ_И_ИНИЦИАЛИЗАЦИЯ_ПЕРЕМЕННОЙ...18.md</a>
+        - *# declaration - type, initialisation - value

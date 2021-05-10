@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Deferred-master\cat.Deferred-master\dir.Deferred-master.md">Deferred-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Deferred-master\README.md">README.md</a>
+        - *## Deferred (and comparison to Future and Promise)

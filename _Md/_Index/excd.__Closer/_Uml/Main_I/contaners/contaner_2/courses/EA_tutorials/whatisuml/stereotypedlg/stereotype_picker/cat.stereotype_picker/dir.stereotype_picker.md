@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\stereotypedlg\stereotype_picker\cat.stereotype_picker\dir.stereotype_picker.md">stereotype_picker</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\stereotypedlg\stereotype_picker\stereotype_picker.md">stereotype_picker.md</a>
+        - *### [Stereotype Selector](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/stereotype_picker.html)  Селектор стереотипов

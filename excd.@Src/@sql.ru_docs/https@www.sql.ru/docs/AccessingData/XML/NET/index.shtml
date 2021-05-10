@@ -1,0 +1,251 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<TITLE>Доступ к XML и реляционным данным
+</TITLE>
+<META CONTENT="text/html; charset=windows-1251" http-equiv=Content-Type>
+<META NAME="Description" CONTENT="1. Введение">
+<META NAME="Keywords" CONTENT="SQL, Microsoft, Server">
+<META HTTP-EQUIV="Set-Cookie" CONTENT="cookie=set; path=/">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+
+<!--SQLComment-->
+<TABLE BORDER="0" WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top  bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<!--/SQLComment-->
+<a href="../../index.shtml">Доступ к данным</a> |<A HREF="index.shtml">Доступ к XML и реляционным данным</A> | <b>Краткий обзор
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="2.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+
+
+</TD>
+</TR>
+</TABLE>
+<TABLE border="0" cellpadding="2" cellspacing="2" >
+<TR>
+<TD>
+<div align=justify>
+<a href="#01000"><b>1. Краткий обзор</b></a><br>
+<a href="#01010"><b>1.1. Архитектура XML.NET</b></a><br>
+<a href="#01020"><b>1.2. Microsoft .NET XML классы</a></b></p>
+
+<a name="01000">
+<p>
+<b>1. Краткий обзор</b></p>
+<p>
+Микрософт .NET Framework использует XML Document Object Model (DOM), чтобы обеспечить доступ к 
+данным в XML документах и дополнительные классы для чтения, записи и навигации в пределах XML 
+документа. Эти классы поддерживаются пространством имён System.XML, которое также объединяет XML 
+DOM с механизмом доступа к данным средствами ADO.NET. XMLDataDocument является одним из подклассов 
+DOM в указанном пространстве имён, и обеспечивает доступ к реляционным данным. XMLDataDocument 
+отображает XML на реляционные данные в ADO.NET DataSet. Микрософт .NET-based прикладные программы 
+могут использовать специальные классы в пространстве имён System.XML для  управления и обращения 
+к документам XML и реляционными данными в DataDocument. Этот механизм поддерживает многослойную 
+архитектуру n-tiered для сбора и распределения данных.</p>
+<p>
+Microsoft .NET XML и средства ADO.NET используют единую модель программирования для доступа к 
+XML данным (текст, разграниченный структурирующими данные тэгами) и реляционным данным (таблицы, 
+состоящие из строк и столбцов). XML Framework читает XML данные из любого потока данных в узле 
+дерева DOM, если к данным можно обращаться программным путём, в то время как ADO.NET Framework 
+обеспечивает управление и обращение к реляционным данным в пределах объекта DataSet.<br>
+Есть три ключевых компонента для доступа к данным в XML Framework и ADO.NET:</p>
+<p>
+- DataSet, представляющий источник реляционных данных в ADO.NET Framework.;<br>
+- XMLDocument, использующий DOM в XML Framework. <br>
+- XMLDataDocument, объединяющий ADO.NET и XML Framework и  представляющий реляционные данные из 
+DataSet, а также, синхронизирующий их с моделью XML документа.</p>
+<p>
+XMLDataDocument является подклассом XMLDocument. .NET-приложение может использовать XMLDataDocument 
+для загрузки XML или реляционных данных и управлять ими, используя DOM. Когда XMLDataDocument 
+загружает реляционные данные, происходит синхронизация данных между DataSet и DOM. После того, 
+как XMLDataDocument загрузит реляционные данные, приложение может обращаться к ним программным 
+путём, с помощью .NET XML Framework API.<br>
+Классы, которые включают XML и ADO.NET Framework, допускают применение трёх общих сценариев:</p>
+<p>
+<table border=1 cellspacing=2 cellpadding=2><tr><td valign=top><b>Сценарий</b></td><td valign=top><b>Задачи</b></td></tr>
+<tr><td valign=top>Доступ к реляционным данным с помощью ADO.NET</td>
+<td valign=top>- Создание, и использование DataSet для обращения к реляционным данным без использования XML.<br>
+- Чтение, и запись XML данных в/из DataSet без использования XmlDataDocument (любая информация XML, не соответствующая реляционному представлению, будет потеряна.)</td></tr>
+<tr><td valign=top>Доступ к XML документам</td>
+<td valign=top>- Создание и использование XmlDocument для обращения к потокам XML данных.<br>
+- Использование структурированных данных в XmlDataDocument без таблиц, строк, столбцов, отношений и других реляционных элементов. Это делается аналогично XmlDocument.</td></tr>
+<tr><td valign=top>Доступ к реляционным данным в XML документах (XML и ADO.NET)</td>
+<td valign=top>- Структурированные, реляционные данные в XmlDataDocument вместе с DataSet.<br>
+- Получить DataSet из XmlDataDocument, в порядке реляционного представления  и запроса структурированного контента XML документа.<br>
+- Работа с XML представлением  реляционных данных в DataSet.<br>
+- Поддержка реляционных и основанных на XML компонент для приложений, обслуживающих данные. Например, Вы можете редактировать и показывать реляционные данные без воздействия на точность XML документа, применять XSLT (Extensible Stylesheet Language Transformations) к реляционным данным. Исполнение XPath запросов к реляционным данным.</td></tr></table>
+</p>
+
+<a name="01010">
+<p>
+<b>1.1. Архитектура XML.NET</b></p>
+<p>
+Классы XML.NET в пространстве имён System.XML предназначены для того, чтобы обеспечить взаимодействие 
+так, как проиллюстрировано на этом рисунке:</p>
+<p><center>
+<img src="XMLNETArchitecture.gif" width="328" height="278" alt="" border="0" ALIGN="top"></p>
+<p></center>
+Абстрактный класс XmlReader предназначен только для обеспечения быстрой, не кэшируемой отправки 
+потока доступа к XML данным. Абстрактный класс XmlWriter обеспечивает быстрый, не кэшированный, 
+однонаправленный путь создания XML потоков, содержащих XML документы, которые соответствуют 
+спецификация W3C Extensible Markup Language (XML) 1.0 и пространству имён из спецификации XML. 
+XmlTextWriter и XmlTextReader - предназначенные для непосредственного исполнения классы в 
+пространстве имён System.Xml.<br>
+Класс XmlDocument обеспечивает инструментарий первого (http://www.w3.org/TR/DOM-Level-1/) и второго 
+(http://www.w3.org/TR/DOM-Level-2/) уровней спецификации W3C XML Document Object Model (DOM).<br>
+XmlNodeReader обеспечивает XmlReader API к ответвлениям узла DOM. Он возвращает любые узлы, которые 
+находит в дереве DOM, включая узлы - ссылки на объекты. XmlElement представляет элемент в дереве 
+DOM. XmlAttribute представляет атрибут объекта XmlElement.<br>
+Класс XmlTransform осуществляет WC3 преобразования в терминах спецификации XSL (XSLT) 
+(http://www.w3.org/TR/XSLT), которые позволяют преобразовать один XML документ в другой. Он 
+возвращает XmlWriter или XmlReader, чтобы обеспечить запись или чтение преобразованного XML 
+документа.<br>
+Класс XmlNavigator определяет доступную для редактирования модель курсора по XML документу. 
+Он обеспечивает встроенные в поддержку для WC3 XML Path Language (XPath) выражения 
+(http://www.w3.org/TR/XPath) и используется XslTransform.<br>
+Абстрактный класс XmlResolver разрешает внешние XML ресурсы, называемые Uniform Resource Identifier 
+(URI - унифицированный идентификатор ресурса). XmlResolver используется XmlTextReader для загрузки 
+внешних DTD объектов и схем. Также, он используется XslTransform для обработки элементов 
+&lt;xsl:include&gt;. XmlUrlResolver - конкретное исполнение XmlResolver для URL.<br>
+Абстрактный класс XmlNameTable обеспечивает таблицу расщеплённых строковых объектов. Он обеспечивает 
+эффективные средства для синтаксического анализатора XML, который позволяет использовать тот же 
+самый объект-строку для повторных элементов и имён атрибутов в XML документе. Прикладная программа 
+может использовать объект XmlNameTable или его собственное исполнение класса XmlNameTable в целях 
+повышения эффективности.</p>
+
+<a name="01020">
+<p>
+<b>1.2. Microsoft .NET XML классы</p></b>
+<p>
+Представленные ниже классы Микрософт.NET Framework обеспечивают поддержку Xml стандартов и 
+предоставляют мощный API для доступа к Xml документам. Обеспечивается поддержка пространств имён, 
+типов данных, XSL схем, XSL операций, сохранения документов, и навигация по документам.</p>
+<p>
+<table border=1 cellspacing=2 cellpadding=2>
+<tr><td valign=top><b>Класс</b></td><td valign=top><b>Описание</b></td></tr>
+<tr><td valign=top>XmlDataDocument</td>
+<td valign=top>Представляет исполняемый XmlDocument, который может быть связан с объектом ADO.NET 
+DataSet. Вы можете одновременно просматривать и управлять структурированным XML через реляционное 
+представление DataSet или представления DOM XmlDataDocument.</td></tr>
+<tr><td valign=top>XmlNavigator (abstract)</td>
+<td valign=top>Чтение и запись Xml данных с использованием модели курсора. Обеспечивает Xpath, 
+поддерживаемый для XmlDocument. Это абстрактный класс.</td></tr>
+<tr><td valign=top>DocumentNavigator</td>
+<td valign=top>Обеспечивает cursor-style модель, для управления memory-resident деревом Xml и 
+поддерживает XPath выражения. Также, предоставляет XmlNavigator для DOM.</td></tr>
+<tr><td valign=top>DataDocumentNavigator</td>
+<td valign=top>Чтение и запись реляционных данных с использованием модели курсора. Обеспечивает 
+поддержку Xpath для XmlDataDocument. Предоставляет XmlNavigator по XmlDataDocument.</td></tr>
+<tr><td valign=top>XmlResolver (abstract)</td>
+<td valign=top>Определяет внешние Xml ресурсы, называемые Uniform Resource Identifier (URI). Это 
+абстрактный класс.</td></tr>
+<tr><td valign=top>XmlUrlResolver</td>
+<td valign=top>Определяет внешние Xml ресурсы, называемые URI. Обеспечивает XmlResolver для URL.</td></tr>
+<tr><td valign=top>XmlSchemaCollection</td>
+<td valign=top>Содержит набор из пространства имён URI. Каждое пространство имён также имеет 
+связанный собственный кэш данных, соответствующий XML-Data Schema или W3C Xml Schema. XmlSchemaCollection 
+может загружать XSD и  XDR схемы, и компилировать их во внутренний "cooked schema representation". 
+Тогда метод Validate()  использует это внутреннее представление для эффективной проверки правильности 
+(в смысле: run-time) любого заданного поддерева.</td></tr>
+<tr><td valign=top>XmlReader (abstract)</td>
+<td valign=top>Представляет механизм чтения, который обеспечивает быстрый, non-cached, forward-only 
+поток доступа к Xml данным. Этот механизм чтения может читать поток или документ Xml. Это абстрактный 
+класс.</td></tr>
+<tr><td valign=top>XmlTextReader</td>
+<td valign=top>Обеспечивает быстрый, non-cached, forward-only поток доступ к Xml данным. Обеспечивает 
+XmlReader для байтового потока.</td></tr>
+<tr><td valign=top>XmlWriter (abstract)</td>
+<td valign=top>Обеспечивает быструю, non-cached, forward-only генерацию правильно построенных Xml 
+потоков. Этот механизм записи предназначен для записи в поток или документ. Это абстрактный класс.</td></tr>
+<tr><td valign=top>XmlTextWriter</td>
+<td valign=top>Обеспечивает быструю, non-cached, forward-only генерацию Xml потоков, содержащих 
+Xml документы, которые соответствуют спецификации W3C Xml 1.0 и пространству имён в спецификации 
+Xml. Использует XmlWriter.</td></tr>
+<tr><td valign=top>XmlNameTable (abstract)</td>
+<td valign=top>Таблица, группирующая строки, гарантирует, что обеспечиваются эффективные средства 
+для синтаксического анализатора Xml, и что используется один и тот же объект строки для каждого 
+повторяющегося элемента и имёни атрибута в Xml документе.</td></tr>
+<tr><td valign=top>XmlNodeReader</td>
+<td valign=top>Представляет механизм чтения, который обеспечивает быструю, non-cached отправку 
+потока доступа к Xml данным в XmlDocument или в определенный XmlNode в рамках XmlDocument.</td></tr>
+<tr><td valign=top>XslTransform</td>
+<td valign=top>Преобразовывает Xml данные, используя XSL таблицу стилей.</td></tr>
+<tr><td valign=top>XmlConvert</td>
+<td valign=top>Кодирует и декодирует имена в Xml, которые содержат недопустимые символы (такие, 
+как пробелы или половинчатые символы  Katakana) что необходимо при отображении Xml имён без поддержки 
+или представления схем.</td></tr>
+<tr><td valign=top>XmlException</td>
+<td valign=top>Возвращает детализированную информацию о последней ошибке синтаксического анализа, 
+включая: номер ошибки, номер строки, символьную позицию, и текстовое описание.</td></tr>
+</table></p>
+</DIV>
+<TD>
+<TR>
+</TABLE>
+<TABLE BORDER=0 WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<a href="../../index.shtml">Доступ к данным</a> |<A HREF="index.shtml">Доступ к XML и реляционным данным</A> | <b>Краткий обзор
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="2.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+</TD>
+</TR>
+</TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>

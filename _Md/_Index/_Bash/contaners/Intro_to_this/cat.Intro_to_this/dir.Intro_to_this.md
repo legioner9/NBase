@@ -1,0 +1,16 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Bash\contaners\Intro_to_this\cat.Intro_to_this\dir.Intro_to_this.md">Intro_to_this</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Bash\contaners\Intro_to_this\Common\cat.Common\dir.Common.md">Common</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Bash\contaners\Intro_to_this\Common\custom_aliases.md">custom_aliases.md</a>
+            - *# [Узнайте, как создавать собственные команды bash менее чем за 4 минуты](https://dev-gang.ru/article/uznaite-kak-sozdavat-sobstvennye-komandy-bash-menee-czem-za-4-minuty-mj650lpidd/)
+            - *## touch ~/.custom_aliases
+            - *## Прежде чем создавать псевдонимы
+            - *### Шаг 1 - Создайте файл custom_aliases
+            - *### Шаг 2 - Открыть файл custom_aliases
+            - *### Шаг 3. Создание ярлыков (псевдонимов)
+            - *### Шаг 4. Обновление изменений
+            - *### Шаг 5 - Выполнить новую команду bash
+            - *## Запуск нескольких команд
+            - *### Пример 1 - Создание функции
+            - *### Пример 2 - Создание псевдонима
+            - *# [НАПИСАНИЕ СКРИПТОВ НА BASH](https://losst.ru/napisanie-skriptov-na-bash)
+    

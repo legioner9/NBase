@@ -1,0 +1,1039 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=">
+  <title>Глава 9. Связи с несколькими хостами</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-j-multi-host-connections"></a>
+Глава 9. Связи с несколькими хостами</h1>
+<a class="indexterm" name="idm45064739024912"></a>
+<p>Следующие разделы обсуждают много тем, которые включают связи с
+несколькими хостами, а именно выравнивание нагрузки
+сервера, отказоустойчивость и репликацию.</p>
+
+<p>Разработчики должны знать следующие вещи о таких связях, которые
+организованы через Connector/J:</p>
+<ul><li><p>Каждая мультисвязь это обертка основных физических связей.
+</p></li>
+
+<li><p>У каждой из основных физических связей есть своя собственная сессия.
+Сессии не могут быть прослежены, разделены или скопированы, они
+заданы архитектурой MySQL.</p></li>
+
+<li><p>Каждый переключатель между физическими связями означает
+переключатель между сессиями.</p></li>
+<li><p>В границе транзакции между физическими связями нет никаких
+переключателей. Вне границы транзакции нет никакой гарантии, что
+не происходит переключения.</p>
+
+<p>Если приложение повторно использует данные сессии (например, переменные)
+вне границы транзакции, неудачи возможны, так как переключение между
+физическими связями (что является также переключателем между сессиями), могло
+бы произойти. Поэтому применение должно повторно подготовить данные о сессии
+и также перезапустить последнюю транзакцию в случае исключения, или это
+должно повторно подготовить данные о сессии к каждой новой транзакции, если
+это не хочет иметь дело с обработкой исключений.</p></li></ul>
+
+<h2><a name="connector-j-config-failover"></a>
+9.1. Формирование отказоустойчивости сервера для связей, используя JDBC</h2>
+<a class="indexterm" name="idm45064739015632"></a>
+<p>MySQL Connector/J поддерживает отказоустойчивость сервера.
+Отказоустойчивость происходит, когда связанные со связью ошибки происходят
+для основной, активной связи. Ошибки связи, по умолчанию, размножены клиенту,
+который должен обращаться с ними, например, воссоздавая рабочие объекты
+(<code class="literal">Statement</code>,
+<code class="literal">ResultSet</code> и т.д.) и перезапуск процессов. Иногда
+драйвер мог бы в конечном счете отступить к оригинальному хосту
+автоматически, прежде чем клиентское приложение продолжит работу, в этом
+случае переключение хоста прозрачно, клиентское приложение даже
+не заметит его.</p>
+
+<p>Связь использует поддержку кластерных систем точно так же, как
+стандартную связь: клиент не испытывает разрушений в процессе
+отказоустойчивости. Это означает, что клиент может полагаться на тот же самый
+экземпляр связи, даже если два последовательных запроса могли бы быть
+выполнены на двух различных физических хостах.
+Однако это не означает, что клиент не должен иметь дело с исключениями,
+вызванными переключением сервера.</p>
+
+<p>Отказоустойчивость формируется на стадии начальной настройки связи сервера
+связью URL (см. объяснения формата
+<a href="refer.htm#connector-j-reference-jdbc-url-format">здесь</a>):</p>
+
+<pre class="programlisting">
+jdbc:mysql://[primary host][:port],[secondary host 1][:port][,[secondary host 2][:port]]...[/[database]]
+[?propertyName1=propertyValue1[&amp;propertyName2=propertyValue2]...]
+</pre>
+
+<p>Список хостов в связи URL включает два типа хостов primary и secondary.
+Начиная новую связь, драйвер всегда пытается соединиться с основным хостом
+сначала и при необходимости с вторичными в списке последовательно, когда есть
+проблемы коммуникации. Даже если начальная связь с основным хостом
+прерывается, и драйвер связан с вторичным хостом, основной
+никогда не теряет особый статус: например, это может формироваться с режимом
+доступа, отличным от вторичных, это может быть помещено на более высокий
+приоритет, когда хост должен быть выбран во
+время процесса отказоустойчивости.</p>
+
+<p>Поддержка кластерных систем формируется следующими свойствами связи (их
+функции объяснены в параграфах ниже):</p>
+<ul><li><p><code class="literal">failOverReadOnly</code></p></li>
+<li><p><code class="literal">secondsBeforeRetryMaster</code></p></li>
+<li><p><code class="literal">queriesBeforeRetryMaster</code></p></li>
+<li><p><code class="literal">retriesAllDown</code></p></li>
+<li><p><code class="literal">autoReconnect</code></p></li>
+<li><p><code class="literal">autoReconnectForPools</code></p></li></ul>
+
+<h3><a name="idm45064738993440"></a>Формирование режима доступа связи</h3>
+<p>Как с любой стандартной связью, начальная связь с основным хостом
+находится в режиме чтения-записи. Однако, если драйвер
+не устанавливает начальную связь с основным хостом, и она автоматически
+переключается на следующий хост в списке, режим доступа теперь зависит от
+значения параметра <code class="literal">failOverReadOnly</code>, которое
+<span class="quote">true</span> по умолчанию. То же самое происходит, если
+драйвер первоначально связан с основным хостом и из-за некоторой неудачи
+связи, он переключается на вторичный хост. Каждый раз, когда связь отступает
+к основному хосту, ее режим доступа будет чтением-записью, независимо от
+того, была ли связь с основным хостом раньше. Режим доступа связи может быть
+изменен в любое время во время выполнения, вызвав метод
+method<code class="literal"> Connection.setReadOnly(boolean)</code>,
+который частично перекрывает свойство
+<code class="literal">failOverReadOnly</code>. При
+<code class="literal">failOverReadOnly=false</code>
+и режим доступа явно установлен, это становится режимом для каждой связи
+после переключения хоста, неважно с каким типом хоста связываются, но, если
+<code class="literal">failOverReadOnly=true</code>,
+изменение режима доступа к чтению-записи возможно только, если драйвер
+соединяется с основным хостом, однако, даже если режим доступа не может быть
+изменен для текущей связи, драйвер помнит последнее намерение клиента, и
+отступая к основному хосту, это является способом, который будет
+использоваться. Для иллюстрации посмотрите следующие последовательности
+событий со связью с двумя хостами.</p>
+
+<ul><li><p>Последовательность A с
+<code class="literal">failOverReadOnly=true</code>:</p>
+<ol type="1"><li><p>Соединяется с основным хостом в режиме чтения-записи.
+</p></li>
+
+<li><p>Выполняет <code class="literal">Connection.setReadOnly(true)</code>,
+основной хост теперь в режиме только для чтения.</p></li>
+<li><p>Событие отказоустойчивости, соединяется со вторичным хостом в режиме
+только для чтения.</p></li>
+
+<li><p>Выполняет <code class="literal">Connection.setReadOnly(false)</code>,
+вторичный хост остается в режиме только для чтения.</p></li>
+<li><p>Отступает к основному хосту, связь теперь в режиме чтения-записи.
+</p></li></ol></li>
+
+<li><p>Последовательность B с <code class="literal">failOverReadOnly=false
+</code>:</p>
+<ol type="1"><li><p>Соединяется с основным хостом в режиме чтения-записи.
+</p></li>
+
+<li><p>Выполняет <code class="literal">Connection.setReadOnly(true)</code>,
+основной хост теперь в режиме только для чтения.</p></li>
+<li><p>Событие отказоустойчивости, соединяется со вторичным хостом в режиме
+только для чтения.</p></li>
+
+<li><p>Выполняет <code class="literal">Connection.setReadOnly(false)</code>,
+связь со вторичным хостом переключается в режим чтения-записи.</p></li>
+<li><p>Отступает к основному хосту, связь теперь в режиме чтения-записи.
+</p></li></ol></li></ul>
+
+<p>Различие между этими двумя сценариями находится в шаге 4: режим доступа
+для вторичного хоста в последовательности A не изменяется в том шаге, но
+драйвер помнит и использует установленный режим, отступая к основному хосту,
+который был бы только для чтения иначе, но в последовательности B, режим
+доступа для вторичного хоста немедленно изменяется.</p>
+
+<h3><a name="idm45064738968832"></a>
+Формирование отступления к основному хосту</h3>
+<p>Как уже упомянуто, основной хост особенный в договоренности
+отказоустойчивости когда дело доходит до режима доступа хоста.
+Кроме того, драйвер пытается отступить к основному хосту как можно скорее по
+умолчанию, даже если никакое коммуникационное исключение не происходит.
+Два свойства <code class="literal">secondsBeforeRetryMaster</code> и
+<code class="literal">queriesBeforeRetryMaster</code> определяют, когда
+драйвер будет готов повторить повторное соединение с основным хостом
+(<code class="literal">Master</code> в имени свойства указывает на основной
+хоста нашей связи URL, который является не обязательно
+основным хостом в репликации):</p>
+
+<ul><li><p><code class="literal">secondsBeforeRetryMaster</code>
+определяет, сколько времени драйвер ждет прежде, чем попытаться
+отступить к основному хосту.</p></li>
+
+<li><p><code class="literal">queriesBeforeRetryMaster</code>
+определяет количество запросов, которые выполняются, прежде чем
+драйвер пытается отступить к основному хосту. Заметьте, что для драйвера
+каждый вызов метода <code class="literal">Statement.execute*()</code>
+увеличивает счетчик выполнения запросов, поэтому, когда сделан вызов
+<code class="literal">Statement.executeBatch()</code> или если включены
+<code class="literal">allowMultiQueries</code> или
+<code class="literal">rewriteBatchStatements</code>, у драйвера
+может не быть точного фактического количества запросов, выполненных на
+сервере. Кроме того, драйвер вызывает методы
+<code class="literal">Statement.execute*()</code>
+внутренне в нескольких случаях. Все это значит, что можно применить
+<code class="literal">queriesBeforeRetryMaster</code> только как грубую
+спецификацию того, когда примерно отступить к основному хосту.</p></li></ul>
+
+<p>В целом попытка к отступлению к основному хосту предпринята, когда по
+крайней мере одно из условий, определенных этими двумя свойствами, выполнено,
+и попытка всегда происходит в границах транзакции. Однако, если выключен
+auto-commit, проверка происходит только когда вызван метод
+<code class="literal">Connection.commit()</code> или
+<code class="literal">Connection.rollback()</code>.
+Автоматическое отступление к основному хосту может быть вообще выключено,
+установив одновременно <code class="literal">secondsBeforeRetryMaster</code>
+и <code class="literal">queriesBeforeRetryMaster</code> в
+<span class="quote">0</span>. Установка одного из свойств в
+<span class="quote">0</span> отключает только одну часть проверки.</p>
+
+<h3><a name="connector-j-config-reconnect"></a>
+Формирование попыток повторного соединения</h3>
+<p>Устанавливая новую связь или когда событие отказоустойчивости имеет место,
+драйвер пытается соединиться последовательно со следующим кандидатом в списке
+хостов. Когда конец списка был достигнут, это начинает снова с начала списка,
+однако, через основной хост перескакивает, если: (a)
+НЕ все вторичные хосты были уже проверены, по крайней мере, однажды И
+(b) условия отступления, определенные
+<code class="literal">secondsBeforeRetryMaster</code> и
+<code class="literal">queriesBeforeRetryMaster</code>,
+еще не выполняются. Каждый просмотр списка хостов (который не обязательно
+закончен в конце списка) считается как единственная попытка подключения.
+Драйвер пробует столько попыток подключения, сколько определено значением
+<code class="literal">retriesAllDown</code>.</p>
+
+<h3><a name="idm45064738947744"></a>Бесшовное повторное соединение</h3>
+<p>Хотя не рекомендуется, можно заставить драйвер
+выполнить отказоустойчивость, не лишая законной силы активные экземпляры
+<code class="literal">Statement</code> или
+<code class="literal">ResultSet</code>, устанавливая любой параметр
+<code class="literal">autoReconnect</code> или
+<code class="literal">autoReconnectForPools</code> в
+<code class="literal">true</code>. Это позволяет клиенту продолжать
+использовать те же самые экземпляры объектов после события
+отказоустойчивости, не принимая исключительных мер. Это, однако, может
+привести к неожиданным результатам: например, если драйвер будет связан с
+основным хостом с режимом доступа для чтения-записи,
+и он переключается к вторичному хосту в режиме только чтения,
+дальнейшие попытки выполнить изменяющие данные запросы приведут к ошибкам, а
+клиент не будет знать об этом. Это ограничение особенно релевантно, используя
+потоковые данные: после события отказоустойчивости,
+<code class="literal">ResultSet</code> надеется быть в порядке, но основная
+связь уже, возможно, изменилась, и никакой курсор больше не доступен.</p>
+
+<h2><a name="connector-j-client-side-failover-xdevapi"></a>
+9.2. Формирование отказоустойчивости сервера для связей,
+используя X DevAPI</h2>
+<a class="indexterm" name="idm45064738940048"></a>
+<a class="indexterm" name="idm45064738938976"></a>
+<p>Используя X-протокол, Connector/J поддерживает клиентскую функцию
+отказоустойчивости для установления сессии. Если многократные хосты
+определяются в связи URL, когда Connector/J не соединяется с перечисленным
+хостом, это пытается соединиться с другим. Это типовой X DevAPI URL для
+формирования клиентской отказоустойчивости:</p>
+
+<pre class="programlisting">
+mysqlx://sandy:mypassword@[host1:33060,host2:33061]/test
+</pre>
+
+<p>С клиентской формируемой отказоустойчивостью, когда есть отказ установить
+связь, Connector/J продолжает пытаться соединиться с хостом в списке хостов.
+Порядок, в котором хосты проверены для связи, следующий:</p>
+
+<ul><li><p><span class="emphasis"><em>Для связей с установелнным свойством
+<code class="literal">priority</code> для каждого хоста в связи URL
+</em></span> хосты перебраны согласно приоритетам для хостов, которые
+определяются любыми числами от 0 до 100 с большим числом, указывающим на
+более высокий приоритет для связи. Например:</p>
+
+<pre class="programlisting">
+mysqlx://sandy:mypassword@[(address=host1:33060,priority=2),
+(address=host2:33061,priority=1)]/test
+</pre>
+
+<p>В этом примере <code class="literal">host1</code> всегда проверяется до
+<code class="literal">host2</code>, когда новые сессии создаются.</p>
+<p>Приоритеты должны быть установлены для всех или ни для каких хостов.
+</p></li>
+
+<li><p><span class="emphasis"><em>Для связей без свойства
+<code class="literal">priority</code> для каждого хоста в связи URL:
+</em></span></p>
+
+<ul><li><p><span class="emphasis"><em>Для версий 8.0.19 и позже</em></span>:
+хосты проверены один за другим в произвольном порядке.</p></li>
+<li><p><span class="emphasis"><em>Для версий 8.0.18 и ранее</em></span>:
+хосты проверены один за другим в порядке, в котором они появляются в связи
+URL: хост, перечисленный ранее в списке, будет проверен перед хостом,
+перечисленным позже в списке.</p></li></ul></li></ul>
+
+<p>Заметьте, что особенность отказоустойчивости сервера X DevAPI только
+допускает отказоустойчивость, когда Connector/J пытается установить связь, но
+не во время операций после того, как связь была уже установлена.</p>
+
+<p><b>Объединение связи, используя X DevAPI. </b>
+Используя объединение связи с X DevAPI, Connector/J отслеживает любой хост,
+с которым не соединился и в течение короткого времени ожидания после неудачи,
+избегает соединяться с ним во время создания или поиска
+<code class="literal">Session</code>. Однако, если все другие хосты уже
+проверены, исключенные хосты будут проверены без ожидания.
+Как только все хосты проверены и никакие связи не могут быть установлены,
+Connector/J бросает исключение
+<code class="literal">com.mysql.cj.exceptions.CJCommunicationsException
+</code> и возвращает сообщение <code class="literal">Unable to connect to any
+of the target hosts</code>.</p>
+
+<h2><a name="connector-j-usagenotes-j2ee-concepts-managing-load-balanced-connections"></a>
+9.3. Формирование выравнивания нагрузки с Connector/J</h2>
+<a class="indexterm" name="idm45064738918144"></a>
+<a class="indexterm" name="idm45064738916656"></a>
+<p>Connector/J долго обеспечивал эффективное средство, чтобы распределить
+нагрузку чтения-записи на многократные экземпляры сервера MySQL для Cluster
+или средств репликации master-master. Можно динамично формировать
+уравновешенные связи без приостановки обслуживания. Незавершенные транзакции
+не потеряны, никакие прикладные исключения не произведены, если какое-либо
+приложение пытается использовать конкретный экземпляр сервера.</p>
+
+<p>Выравнивание нагрузки формируется на стадии начальной настройки связи
+сервера следующей связью URL, у которого есть формат, аналогичный
+<a href="refer.htm#connector-j-reference-jdbc-url-format">общему URL JDBC для
+подключения MySQL</a>, но со специализированной схемой:</p>
+
+<pre class="programlisting">
+jdbc:mysql:loadbalance://[host1][:port],[host2][:port][,[host3][:port]]...[/[database]]
+[?propertyName1=propertyValue1[&amp;propertyName2=propertyValue2]...]
+</pre>
+
+<p>Есть два свойства конфигурации, связанные с этой функциональностью:</p>
+<ul><li><p><code class="literal">loadBalanceConnectionGroup</code>
+Это обеспечивает способность сгруппировать связи из других источников.
+Это позволяет вам управлять этими источниками JDBC в загрузчике единого
+класса в любой комбинации, которую вы выбираете. Если они используют ту же
+самую конфигурацию, и вы хотите управлять ими как логической единственной
+группой, надо дать им то же самое имя. Это ключевое свойство для управления:
+если вы не определяете имя (последовательность) для
+<code class="literal">loadBalanceConnectionGroup</code>,
+вы не можете управлять связями. Все уравновешенные связи, разделяющие то же
+самое значение <code class="literal">loadBalanceConnectionGroup</code>,
+независимо от того, как приложение создает их, будут управляться вместе.
+</p></li>
+
+<li><p><code class="literal">ha.enableJMX</code> Способность управлять
+связями выставляется, когда вы определяете
+<code class="literal">loadBalanceConnectionGroup</code>,
+но если вы хотите управлять этим внешне, позвольте JMX, установив это
+свойство в <code class="literal">true</code>. Это позволяет внедрение JMX,
+которое реализует управление и контролирующие операции группы связи.
+Далее запустите свое приложение с флагом JVM
+<code class="literal">-Dcom.sun.management.jmxremote</code>.
+Можно тогда управлять соединениями, используя такой клиент JMX, как
+<code class="literal">jconsole</code>.</p></li></ul>
+
+<p>Как только связь была установлена, используя правильные свойства связи,
+много контролирующих свойств доступны:</p>
+<ul><li><p>Текущий счетчик активных хостов.</p></li>
+<li><p>Текущий счетчик активных физических соединений.</p></li>
+<li><p>Текущий счетчик активных логических соединений.</p></li>
+<li><p>Общее число созданных логических соединений.</p></li>
+<li><p>Общее число транзакций.</p></li></ul>
+
+<p>Следующие операции управления могут также быть выполнены:</p>
+<ul><li><p>Добавьте хост.</p></li>
+<li><p>Удалите хост.</p></li></ul>
+
+<p>Интерфейс JMX <code class="literal">
+com.mysql.cj.jdbc.jmx.LoadBalanceConnectionGroupManagerMBean</code>
+имеет следующие методы:</p>
+
+<ul><li><p><code class="literal">int getActiveHostCount(String group);</code>
+</p></li>
+<li><p><code class="literal">int getTotalHostCount(String group);</code>
+</p></li>
+<li><p><code class="literal">long getTotalLogicalConnectionCount(String
+group);</code></p></li>
+<li><p><code class="literal">long getActiveLogicalConnectionCount(String
+group);</code></p></li>
+<li><p><code class="literal">long getActivePhysicalConnectionCount(String
+group);</code></p></li>
+<li><p><code class="literal">long getTotalPhysicalConnectionCount(String
+group);</code></p></li>
+<li><p><code class="literal">long getTotalTransactionCount(String group);
+</code></p></li>
+<li><p><code class="literal">void removeHost(String group, String host)
+throws SQLException;</code></p></li>
+<li><p><code class="literal">void stopNewConnectionsToHost(String group,
+String host) throws SQLException;</code></p></li>
+<li><p><code class="literal">void addHost(String group, String host, boolean
+forExisting);</code></p></li>
+<li><p><code class="literal">String getActiveHostsList(String group);</code>
+</p></li>
+<li><p><code class="literal">String getRegisteredConnectionGroups();</code>
+</p></li></ul>
+
+<p>Метод <code class="literal">getRegisteredConnectionGroups()</code>
+возвращает имена всех групп связи, определенных в этом загрузчике класса.</p>
+<p>Можно проверить эту установку со следующим кодом:</p>
+
+<pre class="programlisting">
+public class Test {
+  private static String URL = "jdbc:mysql:loadbalance://" +
+                 "localhost:3306,localhost:3310/test?" +
+                 "loadBalanceConnectionGroup=first&amp;ha.enableJMX=true";
+
+  public static void main(String[] args) throws Exception {
+    new Thread(new Repeater()).start();
+    new Thread(new Repeater()).start();
+    new Thread(new Repeater()).start();
+  }
+  static Connection getNewConnection() throws SQLException,
+         ClassNotFoundException {
+    Class.forName("com.mysql.cj.jdbc.Driver");
+    return DriverManager.getConnection(URL, "root", "");
+  }
+
+  static void executeSimpleTransaction(Connection c, int conn, int trans) {
+    try {
+      c.setAutoCommit(false);
+      Statement s = c.createStatement();
+      s.executeQuery("SELECT SLEEP(1) /* Connection: " + conn +
+                     ", transaction: " + trans + " */");
+      c.commit();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+  public static class Repeater implements Runnable {
+    public void run() {
+      for(int i=0; i &lt; 100; i++) {
+        try {
+          Connection c = getNewConnection();
+          for(int j=0; j &lt; 10; j++) {
+            executeSimpleTransaction(c, i, j);
+            Thread.sleep(Math.round(100 * Math.random()));
+          }
+          c.close();
+          Thread.sleep(100);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+}
+</pre>
+
+<p>После компилирования приложение может быть запущено с флагом
+<code class="literal">-Dcom.sun.management.jmxremote</code>, чтобы позволить
+удаленное управление. <code class="literal">jconsole</code> может тогда быть
+запущена. Главный класс <code class="literal">Test</code> будет перечислен
+<code class="literal">jconsole</code>. Выберите это и нажмите
+<span class="guibutton">Connect</span>. Можно тогда перейти к
+<code class="literal">com.mysql.cj.jdbc.jmx.LoadBalanceConnectionGroupManager
+</code>. В этом пункте можно нажать на различные операции и
+исследовать возвращенный результат.</p>
+
+<p>Если бы у вас теперь был дополнительный экземпляр MySQL
+на порте 3309, вы могли бы гарантировать, что Connector/J начинает
+использовать его при помощи <code class="literal">addHost()</code>,
+который выставляется в <code class="literal">jconsole</code>.
+Обратите внимание на то, что эти операции могут быть выполнены динамично, не
+имея необходимости останавливать приложение.</p>
+
+<p>Для получения дополнительной информации о комбинации выравнивания нагрузки
+и отказоустойчивости, посмотрите
+<a href="#connector-j-usagenotes-j2ee-concepts-load-balancing-failover">
+раздел 9.5</a>.</p>
+
+<h2><a name="connector-j-master-slave-replication-connection"></a>
+9.4. Формирование репликации Master/Slave с Connector/J</h2>
+<a class="indexterm" name="idm45064738856112"></a>
+<a class="indexterm" name="idm45064738854624"></a>
+<p>Эта секция описывает много особенностей поддержки Connector/J репликации.
+</p>
+
+<p>Повторение формируется на стадии начальной настройки связи сервера связью
+URL, у которой есть формат, аналогичный
+<a href="refer.htm#connector-j-reference-jdbc-url-format">общему URL JDBC для
+подключения MySQL</a>, но со специализированной схемой:</p>
+
+<pre class="programlisting">
+jdbc:mysql:replication://[master host][:port],[slave host 1][:port][,[slave host 2][:port]]...[/[database]]
+[?propertyName1=propertyValue1[&amp;propertyName2=propertyValue2]...]
+</pre>
+
+<p>Пользователи могут определить свойство
+<code class="literal">allowMasterDownConnections=true</code>, чтобы позволить
+объекты <code class="literal">Connection</code>, которые будут созданы даже
+при том, что никакие основные хосты недостижимы. Такие объекты
+<code class="literal">Connection</code> сообщают, что они только для чтения,
+и <code class="literal">isMasterConnection()</code> вернет false для них.
+<code class="literal">Connection</code> проверяет на доступные мастер-хосты
+при вызове <code class="literal">Connection.setReadOnly(false)</code>,
+бросив SQLException, если он не может установить связь с мастер-хостом или
+переключаясь на основную связь, если хост доступен.</p>
+
+<p>Пользователи могут определить свойство
+<code class="literal">allowSlavesDownConnections=true</code>, чтобы позволить
+объекты <code class="literal">Connection</code>, которые будут созданы даже
+при том, что никакие подчиненные хосты недостижимы.
+<code class="literal">Connection</code> во время выполнения проверяются на
+доступные подчиненные хосты при вызове
+<code class="literal">Connection.setReadOnly(true)</code> (см. объяснение
+метода ниже), бросая SQLException, если это не может установить связь с
+подчиненным хостом, если свойство
+<code class="literal">readFromMasterWhenNoSlaves</code> =
+<span class="quote">true</span> (см. ниже для описания свойства).</p>
+
+<h3><a name="idm45064738835504"></a>
+Масштабирование нагрузки чтения, распределяя трафик на хосты Slave</h3>
+<p>Connector/J поддерживает связи репликации.
+Это может автоматически послать запросы read/write на мастер-хост, используя
+отказоустойчивость или циклический алгоритм балансировки на основе статуса
+<code class="literal">Connection.getReadOnly()</code>.</p>
+
+<p>Приложение сигнализирует, что хочет, чтобы транзакция была только для
+чтения, вызывая <code class="literal">Connection.setReadOnly(true)</code>.
+Связь будет использовать одну из slave-связей, которые распределяют нагрузку
+на подчиненные хосты, используя циклическую схему. Данная связь прилипает к
+хосту, пока команда границы транзакции (передача или отмена) не дается, или
+пока хост не удален из службы. После запроса
+<code class="literal">Connection.setReadOnly(true)</code>,
+если вы хотите позволить связь мастер-хосту, когда никакие подчиненные
+не доступны, установите свойство
+<code class="literal">readFromMasterWhenNoSlaves</code> =
+<span class="quote">true</span>. Заметьте, что основной хост будет
+использоваться в статусе только для чтения в этих случаях, как будто это
+подчиненный хост. Также заметьте, что установка
+<code class="literal">readFromMasterWhenNoSlaves=true</code>
+может привести к дополнительной нагрузке для основного хоста.</p>
+
+<p>Если у вас есть транзакция записи или процесс, который чувствителен ко
+времени (помните, репликация в MySQL асинхронная), установите связь в
+режим не только для чтения, вызвав
+<code class="literal">Connection.setReadOnly(false)</code>,
+и драйвер гарантирует, что дальнейшие вызовы посылают в основной сервер
+MySQL. Драйвер заботится о размножении текущего состояния autocommit,
+уровня изоляции и каталога между всеми связями, которые это использует, чтобы
+достигнуть функциональности выравнивания нагрузки.</p>
+
+<p>Чтобы позволить эту функциональность, используйте специализированную схему
+репликации (<code class="literal">jdbc:mysql:replication://
+</code>) соединяясь с сервером.</p>
+
+<p>Вот короткий пример того, как связь могла бы
+использоваться в автономном приложении:</p>
+<a name="connector-j-using-replication-driver-example"></a>
+<pre class="programlisting">
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.Properties;
+import java.sql.DriverManager;
+
+public class ReplicationDemo {
+  public static void main(String[] args) throws Exception {
+    Properties props = new Properties();
+    // We want this for failover on the slaves
+    props.put("autoReconnect", "true");
+    // We want to load balance between the slaves
+    props.put("roundRobinLoadBalance", "true");
+    props.put("user", "foo");
+    props.put("password", "<em class="replaceable"><code>password</code></em>");
+
+    // Looks like a normal MySQL JDBC url, with a
+    // comma-separated list of hosts, the first
+    // being the 'master', the rest being any number
+    // of slaves that the driver will load balance against
+    Connection conn =
+      DriverManager.getConnection("jdbc:mysql:replication://master,
+                                  slave1,slave2,slave3/test", props);
+
+    // Perform read/write work on the master
+    // by setting the read-only flag to "false"
+    conn.setReadOnly(false);
+    conn.setAutoCommit(false);
+    conn.createStatement().executeUpdate("UPDATE some_table ....");
+    conn.commit();
+
+    // Now, do a query from a slave, the driver automatically picks one
+    // from the list
+    conn.setReadOnly(true);
+    ResultSet rs = conn.createStatement().executeQuery("SELECT a,b
+                                                       FROM alt_table");
+    .......
+  }
+}
+</pre>
+
+<p>Рассмотрите использование Load Balancing JDBC Pool
+(<span class="command"><strong>lbpool</strong></span>),
+который обеспечивает обертку вокруг типичного драйвера JDBC
+и позволяет вам использовать пул соединения с БД, который включает проверки
+на системные отказы и неравномерное распределение нагрузки.
+Для получения дополнительной информации посмотрите
+<a href="../../../code.google.com/p/mysql-lbpool/default.htm" target="_top">Load
+Balancing JDBC Driver for MySQL (mysql-lbpool)</a>.</p>
+
+<h3><a name="connector-j-multiple-master-replication"></a>
+Поддержка топографий репликации с несколькими мастерами</h3>
+<p>Connector/J репликации с несколькими мастерами.</p>
+
+<p>Связь URL для репликации рассмотрена ранее в формате
+<code class="literal">jdbc:mysql:replication://master,slave1,slave2,
+slave3/test</code>). Она предполагает, что первым (и только первым) хостом
+является мастер. Поддержка развертывания с произвольным числом мастеров и
+подчиненных требует синтаксис URL "address-equals"
+для многократной связи хоста, обсужденной в
+<a href="refer.htm#connector-j-reference-jdbc-url-format">разделе 6.2</a>,
+со свойством <code class="literal">type=[master|slave]</code>:</p>
+
+<pre class="programlisting">
+jdbc:mysql:replication://address=(type=master)(host=master1host),
+                         address=(type=master)(host=master2host),
+                         address=(type=slave)(host=slave1host)/database
+</pre>
+
+<p>Connector/J использует уравновешенную связь внутренне для управления
+основными связями, это означает, что
+<code class="literal">ReplicationConnection</code>,
+когда формируется, чтобы использовать многократные мастер-хосты, выставляет
+те же самые опции уравновесить нагрузку через основные хосты, как описано в
+<a href="#connector-j-usagenotes-j2ee-concepts-managing-load-balanced-connections">
+разделе 9.3</a>.</p>
+
+<h3><a name="idm45064738813456"></a>
+Живая реконфигурация топографии репликации</h3>
+<p><a name="connector-j-live-reconfiguration-replication"></a>
+Connector/J также поддерживает живое управление хостом репликации.
+Это позволяет пользователям продвинуть хосты для приложений Java, не
+требуя перезапуска приложений.</p>
+
+<p>Хостами репликации наиболее эффективно управляют в контексте
+группы соединения репликации. Класс ReplicationConnectionGroup
+представляет логическую группировку связей, которые могут быть организованы
+вместе. Могут быть одна или более таких групп соединения репликации в данном
+загрузчике класса Java (может быть приложение с двумя различными ресурсами
+JDBC, которые должны управляться независимо). Этот ключевой класс выставляет
+методы управления хоста для соединений репликации и объекты
+<code class="literal">ReplicationConnection</code> регистрируются с
+соответствующим <code class="literal">ReplicationConnectionGroup</code>,
+если значение для нового свойства
+<code class="literal">replicationConnectionGroup</code> определяется.
+Объект <code class="literal">ReplicationConnectionGroup</code>
+отслеживает эти связи, пока они не закрываются, и это используется, чтобы
+управлять хостами, связанными с этими связями.</p>
+
+<p>Некоторые важные методы, связанные с управлением хостами, включают:</p>
+<ul><li><p><code class="literal">getMasterHosts()</code>:
+Возвращает коллекцию последовательностей, представляющих мастер-хосты.
+</p></li>
+
+<li><p><code class="literal">getSlaveHosts()</code>:
+Возвращает коллекцию последовательностей, представляющих подчиненные хосты.
+</p></li>
+
+<li><p><code class="literal">addSlaveHost(String host)</code>:
+Добавляет новый хост в пул возможных подчиненных хостов для выбора в начале
+новой рабочей нагрузки только для чтения.</p></li>
+
+<li><p><code class="literal">promoteSlaveToMaster(String host)</code>:
+Удаляет хост из пула потенциальных хостов для будущих процессов только для
+чтения (существующему процессу только для чтения позволяют продолжиться до
+завершения) и добавляет хост в пул потенциальных основных хостов.</p></li>
+
+<li><p><code class="literal">removeSlaveHost(String host, boolean
+closeGently)</code>: Удаляет хост (совпадение имени хоста должно быть точным)
+из списка формируемых подчиненных, если
+<code class="literal">closeGently</code> = false,
+существующие связи, у которых есть этот хост, как в настоящее время активный,
+будут закрыты сразу (приложение должно ожидать исключения).</p></li>
+
+<li><p><code class="literal">removeMasterHost(String host, boolean
+closeGently)</code>: Аналог <code class="literal">removeSlaveHost()</code>,
+но удаляет хост из списка мастер-хостов.</p></li></ul>
+
+<p>Некоторые полезные метрики управления включают:</p>
+<ul><li><p><code class="literal">getConnectionCountWithHostAsSlave(String
+host)</code>: Возвращает количество объектов ReplicationConnection, у которых
+есть данный хост, формируемый как возможный подчиненный.</p></li>
+
+<li><p><code class="literal"> getConnectionCountWithHostAsMaster(String
+host)</code>: Возвращает количество объектов ReplicationConnection, у которых
+есть данный хост, формируемый как возможный мастер-хост.</p></li>
+
+<li><p><code class="literal">getNumberOfSlavesAdded()</code>:
+Возвращает число раз, которое хост был динамически добавлен к пулу.</p></li>
+<li><p><code class="literal">getNumberOfSlavesRemoved()</code>:
+Возвращает число раз, которое хост был динамически удален из пула.</p></li>
+
+<li><p><code class="literal">getNumberOfSlavePromotions()</code>:
+Возвращает число раз, которое хост был продвинут до мастера.</p></li>
+<li><p><code class="literal">getTotalConnectionCount()</code>:
+Возвращает количество объектов ReplicationConnection, которые были
+зарегистрированы в этой группе.</p></li>
+
+<li><p><code class="literal">getActiveConnectionCount()</code>:
+Возвращает количество объектов ReplicationConnection
+в настоящее время управляемых этой группой.</p></li></ul>
+
+<h3><a name="idm45064738782768"></a>ReplicationConnectionGroupManager</h3>
+<p><code class="literal">
+com.mysql.cj.jdbc.ha.ReplicationConnectionGroupManager</code>
+обеспечивает доступ к группам соединения репликации, вместе с
+некоторыми служебными методами.</p>
+
+<ul><li><p><code class="literal">getConnectionGroup(String groupName)</code>:
+Вернет объект <code class="literal">ReplicationConnectionGroup</code>,
+соответствующий обеспеченному groupName.</p></li></ul>
+
+<p>Другие методы <code class="literal">ReplicationConnectionGroupManager
+</code> отражают <code class="literal">ReplicationConnectionGroup</code>
+за исключением того, что первый аргумент это название группы (String).
+Эти методы будут управлять на всем соответствии ReplicationConnectionGroups,
+что полезно для удаления сервера из обслуживания и цдаления его из всех
+имеющихся <code class="literal">ReplicationConnectionGroups</code>.</p>
+
+<p>Эти методы могли бы быть полезны для управления хостами репликации в JVM,
+если применение вызывает изменения топографии. Для управления конфигурациями
+хоста снаружи JVM может использоваться JMX.</p>
+
+<h3><a name="idm45064738774592"></a>
+Применение JMX для управления хостами репликации</h3>
+<p>Когда Connector/J начат с <code class="literal">ha.enableJMX=true</code>
+и значение установлено для свойства
+<code class="literal">replicationConnectionGroup</code>, JMX MBean
+будет зарегистрирован, позволяя манипуляцию хостов репликации клиентом JMX.
+Интерфейс MBean определяется в <code class="literal">
+com.mysql.cj.jdbc.jmx.ReplicationGroupManagerMBean</code> и позволяет
+статические методы <code class="literal">ReplicationConnectionGroupManager
+</code>:</p>
+
+<pre class="programlisting">
+public abstract void addSlaveHost(String groupFilter, String host) throws SQLException;
+public abstract void removeSlaveHost(String groupFilter, String host) throws SQLException;
+public abstract void promoteSlaveToMaster(String groupFilter, String host) throws SQLException;
+public abstract void removeMasterHost(String groupFilter, String host) throws SQLException;
+public abstract String getMasterHostsList(String group);
+public abstract String getSlaveHostsList(String group);
+public abstract String getRegisteredConnectionGroups();
+public abstract int getActiveMasterHostCount(String group);
+public abstract int getActiveSlaveHostCount(String group);
+public abstract int getSlavePromotionCount(String group);
+public abstract long getTotalLogicalConnectionCount(String group);
+public abstract long getActiveLogicalConnectionCount(String group);
+</pre>
+
+<h2><a name="connector-j-usagenotes-j2ee-concepts-load-balancing-failover">
+</a>9.5. Продвинутая конфигурация выравнивания нагрузки и отказоустойчивости
+</h2>
+<p>Connector/J обеспечивает полезное внедрение выравнивания нагрузки для
+MySQL Cluster или систем с несколькими мастер-хостами, как объяснено в
+<a href="#connector-j-usagenotes-j2ee-concepts-managing-load-balanced-connections">
+разделе 9.3</a>. Это же самое внедрение используется для балансирования
+нагрузки между подчиненными хостами только для чтения при репликации.</p>
+
+<p>Пытаясь уравновесить рабочую нагрузку между многократными серверами,
+драйвер должен определить, когда безопасно менять серверы, так как такое
+действие, например, посреди транзакции может вызвать проблемы.
+Важно не потерять статус информацию. Поэтому Connector/J только попытается
+выбрать новый сервер, когда одно из следующего произойдет:</p>
+
+<ol type="1"><li><p>На границах транзакции (транзакции явно
+переданы или отменены).</p></li>
+<li><p>При коммуникационном исключении (статус SQL, начинающийся с "08").
+</p></li>
+
+<li><p>Когда условия совпадения <code class="literal">SQLException</code>
+определяются пользователем, используя точки расширения, определенные
+свойствами <code class="literal">loadBalanceSQLStateFailover</code>,
+<code class="literal">loadBalanceSQLExceptionSubclassFailover</code> или
+<code class="literal">loadBalanceExceptionChecker</code>.</p></li></ol>
+
+<p>Третье условие обрабатывает три свойства, которые позволяют вам управлять
+триггером отказоустойчивости <code class="literal">SQLException</code>:</p>
+<ul><li><p><code class="literal">loadBalanceExceptionChecker</code>: свойство
+<code class="literal">loadBalanceExceptionChecker</code> действительно ключ.
+Это берет полностью квалифицированное имя класса, который осуществляет новый
+интерфейс <code class="literal">
+com.mysql.cj.jdbc.ha.LoadBalanceExceptionChecker</code>. Этот интерфейс очень
+прост, и необходимо осуществить только следующий метод:</p>
+
+<pre class="programlisting">
+public boolean shouldExceptionTriggerFailover(SQLException ex)
+</pre>
+
+<p><code class="literal">SQLException</code> передается, возвращается
+значение типа boolean. Значение <code class="literal">true</code>
+вызывает отказоустойчивость, <code class="literal">false</code> нет.</p>
+
+<p>Можно использовать это, чтобы осуществить собственную логику.
+Пример, где это могло бы быть полезно, имея дело со случайными ошибками,
+используя MySQL Cluster, где определенные буферы могут стать перегруженными.
+Следующий фрагмент кода иллюстрирует это:</p>
+
+<pre class="programlisting">
+public class NdbLoadBalanceExceptionChecker extends
+       StandardLoadBalanceExceptionChecker {
+  public boolean shouldExceptionTriggerFailover(SQLException ex) {
+    return super.shouldExceptionTriggerFailover(ex) ||
+           checkNdbException(ex);
+  }
+  private boolean checkNdbException(SQLException ex) {
+    // Have to parse the message since most NDB errors
+    // are mapped to the same DEMC.
+    return (ex.getMessage().startsWith("Lock wait timeout exceeded") ||
+           (ex.getMessage().startsWith("Got temporary error") &amp;&amp;
+           ex.getMessage().endsWith("from NDB")));
+  }
+}
+</pre>
+
+<p>Код выше расширяет
+<code class="literal">com.mysql.cj.jdbc.ha.StandardLoadBalanceExceptionChecker
+</code>, который является реализацией по умолчанию. Есть несколько удобных
+коротких путей, встроенных в это для тех, кто хочет иметь некоторый уровень
+контроля, используя свойства, не сочиняя код Java.
+Эта реализация по умолчанию использует два остающихся свойства:
+<code class="literal">loadBalanceSQLStateFailover</code> и
+<code class="literal">loadBalanceSQLExceptionSubclassFailover
+</code>.</p></li>
+
+<li><p><code class="literal">loadBalanceSQLStateFailover</code>:
+позволяет вам определять разграниченный запятой список кодовых префиксов
+<code class="literal">SQLState</code>, с которыми сравнивается
+<code class="literal">SQLException</code>.
+Если префикс соответствует, переключение вызывается.
+Так, например, следующее вызвало бы переключение, если данный
+<code class="literal">SQLException</code> начинается с "00" или с "12345":
+</p>
+
+<pre class="programlisting">
+loadBalanceSQLStateFailover=00,12345
+</pre></li>
+
+<li><p><code class="literal">loadBalanceSQLExceptionSubclassFailover</code>:
+может использоваться вместе с
+<code class="literal">loadBalanceSQLStateFailover</code>
+или самостоятельно. Если вы хотите, чтобы определенные подклассы
+<code class="literal">SQLException</code> вызывали переключение,
+просто предоставьте разграниченный запятой список полностью
+квалифицированного класса или интерфейсных имен, чтобы сравнить с ними.
+Например, если вы хотите, чтобы все
+<code class="literal">SQLTransientConnectionExceptions</code>
+вызывали переключение, вы определили бы:</p>
+
+<pre class="programlisting">
+loadBalanceSQLExceptionSubclassFailover=java.sql.SQLTransientConnectionException
+</pre></li></ul>
+
+<p>В то время как три условия отказоустойчивости перечислили
+большинство ситуаций, если <code class="literal">autocommit</code> включен,
+Connector/J никогда не балансирует повторно и продолжает использовать ту же
+самую физическую связь. Это может быть проблематично, особенно когда
+выравнивание нагрузки используется, чтобы распределить нагрузку только для
+чтения на много хостов. Однако Connector/J может формироваться, чтобы
+повторно балансировать после того, как определенное число запросов будет
+выполнено, когда включен <code class="literal">autocommit</code>.
+Эта функциональность зависит от следующих свойств:</p>
+
+<ul><li><p><code class="literal">loadBalanceAutoCommitStatementThreshold
+</code> определяет количество соответствия запросов, которые вызовут
+драйвер, чтобы потенциально обменять физические связи сервера. Значение по
+умолчанию 0 сохраняет поведение, когда связи с включенным
+<code class="literal">autocommit</code> никогда не уравновешиваются.</p></li>
+
+<li><p><code class="literal">loadBalanceAutoCommitStatementRegex</code>
+регулярное выражение, которому должны соответствовать запросы. Значение по
+умолчанию: пустое. Соответствует всем запросам. Так, например, использование
+следующих свойств заставит Connector/J повторно балансировать после каждого
+третьего запроса, который содержит последовательность
+<span class="quote">test</span>:</p>
+
+<pre class="programlisting">
+loadBalanceAutoCommitStatementThreshold=3
+loadBalanceAutoCommitStatementRegex=.*test.*
+</pre>
+
+<p><code class="literal">loadBalanceAutoCommitStatementRegex</code>
+может оказаться полезным во многих ситуациях. Ваш запрос может использовать
+временные таблицы, переменные состояния сеанса серверной стороны или
+состояние связи, где разрешение драйверу произвольно менять физические связи,
+прежде чем обработка завершена, может вызвать потерю данных или другие
+проблемы. Это позволяет вам определять триггер запроса, который выполняется
+только когда безопасно менять физические связи.</p></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

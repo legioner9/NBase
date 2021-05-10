@@ -1,0 +1,3254 @@
+<html>
+<head>
+   <title>Глава 10. Поддержка наборов символов</title>
+   <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+   <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+   <META NAME="Author" CONTENT="Alexey V. Pautov">
+</head>
+
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084"
+      alink="#0000FF">
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+
+<h2><a name="charset"></a>Глава 10. Поддержка наборов символов</h2>
+<p>MySQL включает поддержку набора символов, которая дает возможность Вам
+сохранить данные, использующие ряд наборов символов и выполнять сравнения
+согласно ряду объединений. Вы можете определять наборы символов на уровне
+сервера, базы данных, таблицы и столбца. MySQL поддерживает использование
+наборов символов для типов хранения <code>MyISAM</code>,
+<code>MEMORY</code>, <code>NDBCluster</code> и <code>InnoDB</code>.</p>
+
+<p>Эта глава обсуждает следующие темы</p>
+<ul type="disc"><li><p>Что является наборами символов и объединениями?
+</p></li>
+
+<li><p>Заданная по умолчанию система с многоими уровнями для
+назначения набора символов.</p></li>
+<li><p>Синтаксис для определения наборов символов и объединений.</p></li>
+
+<li><p>Функции и операции с символами.</p></li>
+<li><p>Поддержка стандарта Unicode.</p></li>
+<li><p>Наборы символов и объединения, которые доступны, с примечаниями.
+</p></li></ul>
+
+<p>Проблемы набора символов воздействуют на хранение данных, но также и на
+связь между программами пользователя и сервером MySQL. Если Вы хотите, чтобы
+программа пользователя связалась с сервером, использующим набор символов,
+отличный от значения по умолчанию, вы должны будете указать, который именно.
+Например, чтобы использовать <code>utf8</code> Unicode, выдайте эту
+инструкцию после соединения с сервером:</p>
+<pre>
+SET NAMES 'utf8';
+</pre>
+
+<h2><a name="charset-general"></a>10.1. Наборы символов и объединения вообще
+</h2>
+<p>Набор символов представляет собой множество символов и их кодов.
+Объединение задает набор правил для сравнения символов в наборе символов.
+Давайте сделаем различие явным с помощью примера.</p>
+
+<p>Предположите, что мы имеем алфавит с четырьмя символами: <code>A</code>,
+<code>B</code>, <code>a</code>, <code>b</code>. Мы даем каждому символу
+номер: <code>A</code> = 0, <code>B</code> = 1, <code>a</code> = 2,
+<code>b</code> = 3. Символ <code>A</code> имеет номер 0, который
+the <span class="bold"><strong>кодирует</strong></span> символ
+<code>A</code>, комбинация из всех четырех символов и их кодирования как раз
+и есть набор символов.</p>
+
+<p>Предположите, что мы хотим сравнивать два строковых значения,
+<code>A</code> и <code>B</code>. Самый простой способ сделать это состоит в
+том, чтобы рассмотреть кодирование: 0 = <code>A</code> и 1 = <code>B</code>.
+Поскольку 0 меньше чем 1, мы говорим, что <code>A</code> меньше чем
+<code>B</code>. Что мы только что сделали? Применили объединение к нашему
+набору символов. Объединение задает набор правил (только одно правило в этом
+случае). Самым простым из всех возможных объединений является
+<em class="firstterm">двоичное</em> объединение.</p>
+
+<p>Но что, если мы хотим считать, что нижний регистр и прописные буквы
+эквивалентны? Мы имели бы по крайней мере два правила: (1) обрабатывает
+символы нижнего регистра <code>a</code> и <code>b</code> как эквивалент
+<code>A</code> и <code>B</code>, (2) затем сравнивает кодирование. Мы
+называем это объединением без учета регистра. Это немного более сложно,
+чем двоичное объединение.</p>
+
+<p>В реальной жизни большинство наборов символов имеет много символов: не
+только <code>A</code> и <code>B</code>, а целые алфавиты, иногда много
+алфавитов или восточные системы записи с тысячами символов, наряду с многими
+специальными символами и знаками препинания. Также в реальной жизни
+большинство объединений имеет много правил, не только для того, чтобы
+отличить регистр символов, но также и для того, чтобы отличить диакритические
+знаки. А также для многосимвольных отображений
+(типа правил в немецком языке).</p>
+
+<p>MySQL может делать эти дела для Вас:</p>
+<ul type="disc"><li><p>Хранить строки, использующие ряд наборов символов.
+</p></li>
+
+<li><p>Сравнивать строки, использующие ряд объединений.</p></li>
+<li><p>Смешивать строки с различными наборами символов или объединениями в
+той же самой базе данных или даже той же самой таблице.</p></li>
+<li><p>Позволяет спецификацию набора символов и объединения в любом уровне.
+</p></li></ul>
+
+<p>В этих отношениях MySQL далек от большинства других систем управления
+базами данных. Однако, чтобы использовать эти свойства, Вы должны знать,
+какие наборы символов и объединения являются доступными, как изменить
+значения по умолчанию, и как они воздействуют на поведение
+строковых операторов и функций.</p>
+
+<h2><a name="charset-mysql"></a>10.2. Наборы символов и объединения в MySQL
+</h2>
+<p>Сервер MySQL может поддерживать много наборов символов. Чтобы вносить в
+список доступные наборы символов, используйте инструкцию <code>SHOW CHARACTER
+SET</code>. Ниже приведен кусок вывода этой команды:</p>
+
+<pre>
+mysql&gt; <strong><code>SHOW CHARACTER SET;</code></strong>
++----------+-----------------------------+---------------------+--------+
+| Charset  | Description                 | Default collation   | Maxlen |
++----------+-----------------------------+---------------------+--------+
+|     big5 | Big5 Traditional Chinese    | big5_chinese_ci     | 2      |
+|     dec8 | DEC West European           | dec8_swedish_ci     | 1      |
+|    cp850 | DOS West European           | cp850_general_ci    | 1      |
+|      hp8 | HP West European            | hp8_english_ci      | 1      |
+|    koi8r | KOI8-R Relcom Russian       | koi8r_general_ci    | 1      |
+|   latin1 | cp1252 West European        | latin1_swedish_ci   | 1      |
+|   latin2 | ISO 8859-2 Central European | latin2_general_ci   | 1      |
+|     swe7 | 7bit Swedish                | swe7_swedish_ci     | 1      |
+|    ascii | US ASCII                    | ascii_general_ci    | 1      |
+|     ujis | EUC-JP Japanese             | ujis_japanese_ci    | 3      |
+|     sjis | Shift-JIS Japanese          | sjis_japanese_ci    | 2      |
+|   hebrew | ISO 8859-8 Hebrew           | hebrew_general_ci   | 1      |
+|   tis620 | TIS620 Thai                 | tis620_thai_ci      | 1      |
+|    euckr | EUC-KR Korean               | euckr_korean_ci     | 2      |
+|    koi8u | KOI8-U Ukrainian            | koi8u_general_ci    | 1      |
+|   gb2312 | GB2312 Simplified Chinese   | gb2312_chinese_ci   | 2      |
+|    greek | ISO 8859-7 Greek            | greek_general_ci    | 1      |
+|   cp1250 | Windows Central European    | cp1250_general_ci   | 1      |
+|      gbk | GBK Simplified Chinese      | gbk_chinese_ci      | 2      |
+|   latin5 | ISO 8859-9 Turkish          | latin5_turkish_ci   | 1      |
+...
+</pre>
+
+<p>Любой заданный набор символов всегда имеет по крайней мере одно
+объединение, но может иметь и несколько объединений. Чтобы вносить в список
+объединения для набора символов, используйте инструкцию <code>SHOW
+COLLATION</code>. Например, чтобы увидеть объединения для набора символов
+<code>latin1</code>, используйте эту инструкцию, чтобы найти те имена
+объединения, которые начинаются с <code>latin1</code>:</p>
+
+<pre>
+mysql&gt; <strong><code>SHOW COLLATION LIKE 'latin1%';</code></strong>
++--------------------+---------+----+---------+----------+---------+
+| Collation          | Charset | Id | Default | Compiled | Sortlen |
++--------------------+---------+----+---------+----------+---------+
+| latin1_german1_ci  | latin1  |  5 |         |          | 0       |
+| latin1_swedish_ci  | latin1  |  8 | Yes     | Yes      | 1       |
+| latin1_danish_ci   | latin1  | 15 |         |          | 0       |
+| latin1_german2_ci  | latin1  | 31 |         | Yes      | 2       |
+| latin1_bin         | latin1  | 47 |         | Yes      | 1       |
+| latin1_general_ci  | latin1  | 48 |         |          | 0       |
+| latin1_general_cs  | latin1  | 49 |         |          | 0       |
+| latin1_spanish_ci  | latin1  | 94 |         |          | 0       |
++--------------------+---------+----+---------+----------+---------+
+</pre>
+
+<p>Объединения в <code>latin1</code> имеют следующие значения:</p>
+<table border="1"><tbody><tr><td><span class="bold"><strong>Объединение
+</strong></span></td><td><span class="bold"><strong>Значение</strong>
+</span></td></tr>
+
+<tr><td><code>latin1_german1_ci</code></td><td>German DIN-1</td></tr>
+<tr><td><code>latin1_swedish_ci</code></td><td>Swedish/Finnish</td></tr>
+<tr><td><code>latin1_danish_ci</code></td><td>Danish/Norwegian</td></tr>
+
+<tr><td><code>latin1_german2_ci</code></td><td>German DIN-2</td></tr>
+<tr><td><code>latin1_bin</code></td><td>Binary according to
+<code>latin1</code> encoding</td></tr>
+<tr><td><code>latin1_general_ci</code></td><td>
+Multilingual (Western European)</td></tr>
+
+<tr><td><code>latin1_general_cs</code></td><td>Multilingual (ISO Western
+European), case sensitive</td></tr>
+<tr><td><code>latin1_spanish_ci</code></td><td>Modern Spanish</td>
+</tr></tbody></table>
+
+<p>Объединения имеют эти общие характеристики:</p>
+<ul type="disc"><li><p>Два различных набора символов не могут иметь то
+же самое объединение.</p></li>
+
+<li><p>Каждый набор символов имеет одно объединение, которое является
+заданным по умолчанию объединением. Например, заданное по умолчанию
+объединение для <code>latin1</code>: <code>latin1_swedish_ci</code>. Вывод
+<code>SHOW CHARACTER SET</code> указывает, который объединение является
+значением по умолчанию для каждого отображаемого набора символов.</p></li>
+
+<li><p>Имеется соглашение для имен объединения: они начинаются с имени набора
+символов, с которым они связаны, они обычно включают имя языка, и они
+заканчиваются на <code>_ci</code> (case insensitive), <code>_cs</code> (case
+sensitive) или на <code>_bin</code> (binary).</p></li></ul>
+
+<h2><a name="charset-syntax"></a>10.3.
+Определение наборов символов и объединений</h2>
+<p>Имеются установки по умолчанию для наборов символов и объединений в
+четырех уровнях: сервер, база данных, таблица и столбец. Следующее описание
+может показаться сложным, но было показано практически, что много уровней
+значений по умолчанию ведет к естественным и очевидным результатам.</p>
+
+<p><code>CHARACTER SET</code> используется в предложениях, которые определяют
+набор символов. <code>CHARSET</code> может использоваться как синоним
+для <code>CHARACTER SET</code>.</p>
+
+<h3><a name="charset-server"></a>10.3.1. Набор символов и объединение
+на стороне сервера</h3>
+<p>Сервер MySQL имеет набор символов и объединение сервера. Они могут быть
+установлены при запуске и изменены во время выполнения.</p>
+
+<p>Первоначально, набор символов и объединение зависят от параметров, которые
+Вы используете, когда запускаете <span><strong>mysqld
+</strong></span>. Вы можете использовать
+<code class="option">--character-set-server</code> для набора символов.
+Наряду с этим, Вы можете добавлять
+<code class="option">--collation-server</code> для объединения. Если Вы не
+определяете набор символов, считается, что задано
+<code class="option">--character-set-server=latin1</code>. Если Вы
+определяете только набор символов (например, <code>latin1</code>), но не
+задаете объединение, считается, что задано
+<code class="option">--character-set-server=latin1</code>
+<code class="option">--collation-server=latin1_swedish_ci</code>, потому что
+<code>latin1_swedish_ci</code> заданное по умолчанию объединение для
+<code>latin1</code>. Следовательно, следующий три команды все имеют тот
+же самый эффект:</p>
+
+<pre>
+shell&gt; <strong><code>mysqld</code></strong>
+shell&gt; <strong><code>mysqld --character-set-server=latin1</code></strong>
+shell&gt; mysqld --character-set-server=latin1 \
+                 --collation-server=latin1_swedish_ci
+</pre>
+
+<p>Один способ изменят параметры настройки: перекомпиляция. Если Вы хотите
+изменять заданный по умолчанию набор символов сервера и объединение при
+формировании из исходных текстов, используйте:
+<code class="option">--with-charset</code> и
+<code class="option">--with-collation</code> в качестве параметров для
+<span><strong>configure</strong></span>. Например:</p>
+
+<pre>
+shell&gt; <strong><code>./configure --with-charset=latin1</code></strong>
+</pre>
+
+<p>Или:</p>
+<pre>
+shell&gt; ./configure --with-charset=latin1 \
+                      --with-collation=latin1_german1_ci
+</pre>
+
+<p><span><strong>mysqld</strong></span> и скрипт
+<span><strong>configure</strong></span> проверяют, что
+комбинация объединений и наборов символов допустима. Если это не так, каждая
+из упомянутых программ отображает сообщение об ошибке и завершается.</p>
+
+<p>Текущий набор символов и объединение сервера могут быть определены из
+значений переменных системы <code>character_set_server</code> и
+<code>collation_server</code>. Эти переменные могут быть изменены
+во время выполнения.</p>
+
+<h3><a name="charset-database"></a>10.3.2.
+Набор символов и объединение базы данных</h3>
+<p>Каждая база данных имеет набор символов и объединение базы данных.
+Инструкции <code>CREATE DATABASE</code> и <code>ALTER DATABASE</code>
+имеет факультативные предложения для определения набора символов
+базы данных и объединения:</p>
+
+<pre>
+CREATE DATABASE <em><code>db_name</code></em>
+       [[DEFAULT] CHARACTER SET <em><code>charset_name</code></em>]
+       [[DEFAULT] COLLATE <em><code>collation_name</code></em>]
+
+ALTER DATABASE <em><code>db_name</code></em>
+      [[DEFAULT] CHARACTER SET <em><code>charset_name</code></em>]
+      [[DEFAULT] COLLATE <em><code>collation_name</code></em>]
+</pre>
+<p>Ключевое слово <code>SCHEMA</code>
+может использоваться вместо <code>DATABASE</code>.</p>
+
+<p>Все параметры базы данных сохранены в текстовом файле
+<code class="filename">db.opt</code>, который может быть найден в
+каталоге баз данных.</p>
+
+<p>Предложения <code>CHARACTER SET</code> и <code>COLLATE</code> делают
+возможным создать базы данных с различными наборами символов и объединениями
+на том же самом сервере MySQL.</p>
+
+<p>Пример:</p>
+<pre>
+CREATE DATABASE <em><code>db_name</code></em> CHARACTER SET latin1
+       COLLATE latin1_swedish_ci;
+</pre>
+
+<p>MySQL выбирает набор символов и объединение базы
+данных следующим способом:</p>
+<ul type="disc"><li><p>Если <code>CHARACTER SET
+<em><code>X</code></em></code> и <code>COLLATE <em><code>Y</code></em></code>
+были определены, то используются набор символов
+<em><code>X</code></em> и объединение <em><code>Y</code></em>.</p></li>
+
+<li><p>Если <code>CHARACTER SET <em><code>X</code></em></code> указан без
+<code>COLLATE</code>, то применяется набор символов <em><code>X</code></em> и
+заданное по умолчанию объединение для него.</p></li>
+
+<li><p>Если <code>COLLATE <em><code>Y</code></em></code> был определен без
+<code>CHARACTER SET</code>, то используются набор символов, связанный с
+<em><code>Y</code></em>, и объединение <em><code>Y</code></em>.</p></li>
+<li><p>Иначе, применяется набор символов и объединение сервера.</p></li></ul>
+
+<p>Набор символов базы данных и объединение используется как значения по
+умолчанию, если набор символов таблицы и объединение не определен в
+инструкции <code>CREATE TABLE</code>. Они не имеют никакой другой цели.</p>
+
+<p>Набор символов и объединение для заданной по умолчанию базы данных может
+быть определено из значений переменных системы
+<code>character_set_database</code> и <code>collation_database</code>.
+Сервер устанавливает эти переменные всякий раз, когда заданная по умолчанию
+база данных изменяется. Если не имеется никакой заданной по умолчанию базы
+данных, переменные имеют то же самое значение, что и соответствующие
+переменные системы уровня сервера:
+<code>character_set_server</code> и <code>collation_server</code>.</p>
+
+<h3><a name="charset-table"></a>10.3.3. Набор символов и объединение таблицы
+</h3>
+<p>Каждая таблица имеет набор символов таблицы и объединение. Инструкции
+<code>CREATE TABLE</code> и <code>ALTER TABLE</code> имеют факультативные
+предложения для определения набора символов таблицы и объединения:</p>
+
+<pre>
+CREATE TABLE <em><code>tbl_name</code></em>
+             (<em><code>column_list</code></em>)
+       [[DEFAULT] CHARACTER SET <em><code>charset_name</code></em>]
+       [COLLATE <em><code>collation_name</code></em>]]
+ALTER TABLE <em><code>tbl_name</code></em>
+      [[DEFAULT] CHARACTER SET <em><code>charset_name</code></em>]
+      [COLLATE <em><code>collation_name</code></em>]
+</pre>
+
+<p>Пример:</p>
+<pre>
+CREATE TABLE t1 ( ... ) CHARACTER SET latin1 COLLATE latin1_danish_ci;
+</pre>
+
+<p>MySQL выбирает набор символов таблицы и объединение следующим способом:
+</p>
+<ul type="disc"><li><p>Если <code>CHARACTER SET <em><code>X</code></em>
+</code> и <code>COLLATE <em><code>Y</code></em></code> были определены, то
+применяются набор символов <em><code>X</code></em> и объединение
+<em><code>Y</code></em>.</p></li>
+
+<li><p>Если <code>CHARACTER SET <em><code>X</code></em></code> был определен
+без <code>COLLATE</code>, то используется набор символов
+<em><code>X</code></em> и заданное по умолчанию объединение.</p></li>
+
+<li><p>Если <code>COLLATE <em><code>Y</code></em></code> был определен без
+<code>CHARACTER SET</code>, то используется набор символов, связанный с
+<em><code>Y</code></em> и объединение <em><code>Y</code></em>.</p></li>
+<li><p>Иначе, используется набор символов и объединение от базы данных.
+</p></li></ul>
+
+<p>Набор символов таблицы и объединение используется как значения по
+умолчанию, если набор символов столбца и объединение не определен в
+индивидуальных определениях столбца. Набор символов и объединение таблицы
+представляют собой расширения MySQL, не имеется ничего
+такого в стандарте SQL.</p>
+
+<h3><a name="charset-column"></a>10.3.4. Набор символов и объединение столбца
+</h3>
+<p>Каждый <span class="quote">символьный</span> столбец (то есть, столбец
+типа <code>CHAR</code>, <code>VARCHAR</code> или <code>TEXT</code>) имеет
+набор символов и объединение столбца. Синтаксис определения столбца имеет
+факультативные предложения для определения набора
+символов и объединения столбца:</p>
+
+<pre>
+<em><code>col_name</code></em> {CHAR | VARCHAR | TEXT}
+(<em><code>col_length</code></em>)
+[CHARACTER SET <em><code>charset_name</code></em>]
+[COLLATE <em><code>collation_name</code></em>]
+</pre>
+
+<p>Пример:</p>
+<pre>
+CREATE TABLE Table1
+       (column1 VARCHAR(5) CHARACTER SET latin1
+       COLLATE latin1_german1_ci);
+</pre>
+
+<p>MySQL выбирает набор символов столбца и объединение следующим способом:
+</p>
+<ul type="disc"><li><p>Если были определены
+<code>CHARACTER SET <em><code>X</code></em></code> и <code>COLLATE
+<em><code>Y</code></em></code>, то используются набор символов
+<em><code>X</code></em> и объединение <em><code>Y</code></em>.</p></li>
+
+<li><p>Есл был определен <code>CHARACTER SET <em><code>X</code></em></code>
+без <code>COLLATE</code>, то используется набор символов
+<em><code>X</code></em> и заданное по умолчанию объединение.</p></li>
+
+<li><p>Если <code>COLLATE <em><code>Y</code></em></code> был определен без
+<code>CHARACTER SET</code>, то применяется набор символов, связанный с
+<em><code>Y</code></em>, и объединение <em><code>Y</code></em>.</p></li>
+
+<li><p>Иначе, используется набор символов и объединение таблицы.
+</p></li></ul>
+<p>Предложения <code>CHARACTER SET</code> и
+<code>COLLATE</code> стандартны для SQL.</p>
+
+<h3><a name="charset-literal"></a>10.3.5. Набор символов и объединение
+символьных строковых литералов</h3>
+<p>Каждый символьный строковый литерал имеет набор символов и объединение.
+</p>
+
+<p>Символьный строковый литерал может иметь факультативный набор
+символов и предложение <code>COLLATE</code>:</p>
+
+<pre>
+[_<em><code>charset_name</code></em>]'<em><code>string</code></em>'
+[COLLATE <em><code>collation_name</code></em>]
+</pre>
+
+<p>Пример:</p>
+<pre>
+SELECT '<em><code>string</code></em>';
+SELECT _latin1'<em><code>string</code></em>';
+SELECT _latin1'<em><code>string</code></em>' COLLATE latin1_danish_ci;
+</pre>
+
+<p>Для простой инструкции <code>SELECT '<em><code>string</code></em>'</code>,
+строка имеет набор символов и объединение, определенное переменными системы
+<code>character_set_connection</code> и <code>collation_connection</code>.
+</p>
+
+<p>Выражение <code>_<em><code>charset_name</code></em></code> формально
+названо <span class="emphasis"><em>introducer</em></span>. Это сообщает
+синтаксическому анализатору, что строка предположительно соответствует набору
+символов <em><code>X</code></em>. Поскольку было много путаницы в прошлом,
+следует особо подчеркнуть, что introducer не вызывает никаких преобразований,
+это строго сигнал, который не изменяет значение строки. Introducer также
+допустим перед стандартным шестнадцатеричным литералом и числовой
+шестнадцатеричной литеральной записью
+(<code>x'<em><code>literal</code></em>'</code> и
+<code>0x<em><code>nnnn</code></em></code>)&gt;.</p>
+
+<p>Пример:</p>
+<pre>
+SELECT _latin1 x'AABBCC';
+SELECT _latin1 0xAABBCC;
+</pre>
+
+<p>MySQL определяет набор символов литерала и объединение следующим способом:
+</p>
+<ul type="disc"><li><p>Если были определены <em><code>_X</code></em> и
+<code>COLLATE <em><code>Y</code></em></code>, то используется набор символов
+<em><code>X</code></em> и объединение <em><code>Y</code></em>.</p></li>
+
+<li><p>Если определен <em><code>_X</code></em>, но не определен
+<code>COLLATE</code>, то используется набор символов <em><code>X</code></em>
+и заданное по умолчанию объединение.</p></li>
+
+<li><p>Иначе, используются набор символов и объединение, заданные
+переменными системы <code>character_set_connection</code> и
+<code>collation_connection</code>.</p></li></ul>
+
+<p>Пример:</p>
+<ul type="disc"><li><p>Строка с набором символов <code>latin1</code> и
+объединением <code>latin1_german1_ci</code>:</p>
+
+<pre>
+SELECT _latin1'M├╝ller' COLLATE latin1_german1_ci;
+</pre></li>
+
+<li><p>Строка с набором символов <code>latin1</code> и заданным по умолчанию
+объединением (то есть, <code>latin1_swedish_ci</code>):</p>
+<pre>
+SELECT _latin1'M├╝ller';
+</pre></li>
+
+<li><p>Строка с набором символов и объединением по умолчанию подключения:
+</p>
+<pre>
+SELECT 'M├╝ller';
+</pre></li></ul>
+<p>Набор символов и предложение <code>COLLATE</code> выполнены
+согласно стандарту SQL</p>
+
+<p>introducer указывает набор символов для следующей строки, но не изменяет
+того, как синтаксический анализатор выполняет обработку Escape внутри строки.
+Escape всегда интерпретируются синтаксическим анализатором согласно набору
+символов, заданному в <code>character_set_connection</code>.</p>
+
+<p>Следующие примеры показывают, что происходит обработка Escape, используя
+<code>character_set_connection</code> даже в присутствии introducer. Примеры
+используют <code>SET NAMES</code> (который изменяет
+<code>character_set_connection</code>) и отображает возникающие в результате
+строки, использующие <code>HEX()</code>, чтобы было видно
+точное строковое содержимое.</p>
+
+<p>Пример 1:</p>
+<pre>
+mysql&gt; <strong><code>SET NAMES latin1;</code></strong>
+Query OK, 0 rows affected (0.01 sec)
+mysql&gt; <strong><code>SELECT HEX('├а\n'), HEX(_sjis'├а\n');</code></strong>
++-------------+------------------+
+| HEX('├а\n') | HEX(_sjis'├а\n') |
++-------------+------------------+
+|        E00A | E00A             |
++-------------+------------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>Здесь <code>├а</code> (шестнадцатеричное значение <code>E0</code>)
+сопровождается <code>\n</code>, управляющей последовательностью для новой
+строки. Управляющая последовательность интерпретируется, используя значение
+<code>character_set_connection</code> <code>latin1</code>, чтобы произвести
+литерал newline (новая строка, шестнадцатеричное значение <code>0A</code>).
+Это случается даже для второй строки. То есть introducer <code>_sjis</code>
+не воздействует на обработку синтаксического анализатора Escape.</p>
+
+<p>Пример 2:</p>
+<pre>
+mysql&gt; <strong><code>SET NAMES sjis;</code></strong>
+Query OK, 0 rows affected (0.00 sec)
+mysql&gt; <strong><code>SELECT HEX('├а\n'), HEX(_latin1'├а\n');</code></strong>
++-------------+--------------------+
+| HEX('├а\n') | HEX(_latin1'├а\n') |
++-------------+--------------------+
+|      E05C6E |             E05C6E |
++-------------+--------------------+
+1 row in set (0.04 sec)
+</pre>
+
+<p>Здесь <code>character_set_connection</code> равен <code>sjis</code>,
+набор символов в котором последовательность <code>├а</code> сопровождается
+<code>\</code> (шестнадцатеричные значения <code>05</code> и
+<code>5C</code>), допустимый многобайтовый символ. Следовательно, первые два
+байта строки интерпретируются как одиночный символ <code>sjis</code>, и
+<code>\</code> не обрабатывается как символ ESC. Следующий <code>n</code>
+(шестнадцатеричное значение <code>6E</code>) не интерпретируется как часть
+управляющей последовательности. Таким образом, introducer
+<code>_latin1</code> не воздействует на обработку Escape.</p>
+
+<h3><a name="charset-national"></a>10.3.6. Национальный набор символов</h3>
+<p>Стандарт SQL определяет <code>NCHAR</code> или <code>NATIONAL CHAR</code>
+как способ указать, что столбец <code>CHAR</code> должен использовать
+некоторый предопределенный набор символов. MySQL 5.1 использует
+<code>utf8</code> как этот предопределенный набор символов. Например, эти
+объявления типа данных эквивалентны:</p>
+
+<pre>
+CHAR(10) CHARACTER SET utf8
+NATIONAL CHARACTER(10)
+NCHAR(10)
+</pre>
+
+<p>Эти тоже взаимозаменяемы:</p>
+<pre>
+VARCHAR(10) CHARACTER SET utf8
+NATIONAL VARCHAR(10)
+NCHAR VARCHAR(10)
+NATIONAL CHARACTER VARYING(10)
+NATIONAL CHAR VARYING(10)
+</pre>
+
+<p>Вы можете использовать <code>N'<em><code>literal</code></em>'</code>,
+чтобы создать строку в национальном наборе символов.
+Эти две инструкции эквивалентны:</p>
+
+<pre>
+SELECT N'some text';
+SELECT _utf8'some text';
+</pre></p>
+
+<h3><a name="charset-examples"></a>10.3.7.
+Примеры назначения набора символов и объединения</h3>
+<p>Следующие примеры показывают, как MySQL определяет заданные по умолчанию
+набор символов и объединение.</p>
+
+<p><span class="bold"><strong>Пример 1: определение таблицы и столбца
+</strong></span></p>
+<pre>
+CREATE TABLE t1 (c1 CHAR(10) CHARACTER SET latin1 COLLATE latin1_german1_ci)
+       DEFAULT CHARACTER SET latin2
+       COLLATE latin2_bin;
+</pre>
+
+<p>Здесь мы имеем столбец с набором символов <code>latin1</code> и
+объединением <code>latin1_german1_ci</code>. Определение явно, так что это
+просто. Обратите внимание, что не имеется никакой проблемы с сохранением
+столбца <code>latin1</code> в таблице <code>latin2</code>.</p>
+
+<p><span class="bold"><strong>Пример 2: определение таблицы и столбца
+</strong></span></p>
+<pre>
+CREATE TABLE t1 (c1 CHAR(10) CHARACTER SET latin1)
+       DEFAULT CHARACTER SET latin1
+       COLLATE latin1_danish_ci;
+</pre>
+
+<p>На сей раз мы имеем столбец с набором символов <code>latin1</code> и
+заданным по умолчанию объединением. Хотя это могло бы показаться
+естественным, заданное по умолчанию объединение не принимается из уровня
+таблицы. Вместо этого, поскольку заданное по умолчанию объединение для
+<code>latin1</code> обязательно <code>latin1_swedish_ci</code>, столбец
+<code>c1</code> имеет объединение <code>latin1_swedish_ci</code> (не
+<code>latin1_danish_ci</code>).</p>
+
+<p><span class="bold"><strong>Пример 3: определение таблицы и столбца
+</strong></span></p>
+<pre>
+CREATE TABLE t1 (c1 CHAR(10))
+       DEFAULT CHARACTER SET latin1
+       COLLATE latin1_danish_ci;
+</pre>
+
+<p>Мы имеем столбец с заданными по умолчанию набором символов и объединением.
+В этой ситуации MySQL проверяет уровень таблицы, чтобы определить набор
+символов столбца и объединение. Следовательно, набор символов для столбца
+<code>c1</code> <code>latin1</code> и объединение
+<code>latin1_danish_ci</code>.</p>
+
+<p><span class="bold"><strong>Пример 4: определение базы данных, таблицы и
+столбца</strong></span></p>
+<pre>
+CREATE DATABASE d1 DEFAULT CHARACTER SET latin2
+       COLLATE latin2_czech_ci; USE d1;
+CREATE TABLE t1 (c1 CHAR(10));
+</pre>
+
+<p>Мы создаем столбец без того, чтобы определить набор символов и
+объединение. Мы также не определяем набор символов и объединение в уровне
+таблицы. В этой ситуации MySQL проверяет уровень базы данных, чтобы
+определить параметры настройки таблицы, которые с этого времени станут
+параметрами настройки столбца. Следовательно, набор символов для столбца
+<code>c1</code> <code>latin2</code> и объединение
+<code>latin2_czech_ci</code>.</p>
+
+<h3><a name="charset-compatibility"></a>10.3.8. Совместимость с другими СУБД
+</h3>
+<p>Для совместимости с MaxDB эти две инструкции те же самые:</p>
+<pre>
+CREATE TABLE t1 (f1 CHAR(<em><code>N</code></em>) UNICODE);
+CREATE TABLE t1 (f1 CHAR(<em><code>N</code></em>)
+       CHARACTER SET ucs2);
+</pre>
+
+<h2><a name="charset-connection"></a>10.4. Наборы символов и объединения
+подключения</h2>
+<p>Несколько переменных системы для наборов символов и объединений касаются
+взаимодействия пользователя с сервером. Некоторые из них были упомянуты в
+более ранних разделах:</p>
+
+<ul type="disc"><li><p>Набор символов и объединение сервера могут быть
+определены из значений переменных системы <code>character_set_server</code> и
+<code>collation_server</code>.</p></li>
+
+<li><p>Набор символов и объединение заданной по умолчанию базы данных могут
+быть определены из значений переменных системы
+<code>character_set_database</code> и
+<code>collation_database</code>.</p></li></ul>
+
+<p>Дополнительный набор символов и объединения переменные системы включаются
+в трафике обработки для подключения. Каждый пользователь имеет связанные с
+подключением переменные системы набора символов и объединения.</p>
+
+<p>Когда Вы соединяетесь с сервером, клиент посылает инструкции SQL. Сервер
+посылает ответы, типа наборов результатов, обратно пользователю. Это ведет к
+нескольким вопросам относительно набора символов и обработки объединения для
+подключений пользователя, каждому из которых можно отвечать в
+терминах переменных системы:</p>
+
+<ul type="disc"><li><p>В каком наборе символов является
+инструкция от пользователя?</p>
+<p>Сервер берет переменную системы <code>character_set_client</code>, чтобы
+разобраться с набором символов, в котором инструкции посланы пользователем.
+</p></li>
+
+<li><p>В какой набор символов сервер должен транслировать
+инструкцию после получения?</p>
+<p>Для этого сервер использует переменные системы
+<code>character_set_connection</code> и <code>collation_connection</code>.
+Это преобразовывает инструкции, посланные пользователем, из
+<code>character_set_client</code> в <code>character_set_connection</code> (но
+не строковые литералы, которые имеют introducer типа <code>_latin1</code> или
+<code>_utf8</code>). <code>collation_connection</code> важен для сравнений
+литеральных строк. Для сравнений строк со значениями столбца
+<code>collation_connection</code> не имеет значения, потому что столбцы имеют
+их собственное объединение, которое имеет более высокое старшинство.</p></li>
+
+<li><p>К какому набор символов сервер должен транслировать данные перед
+пересылкой наборов результатов или сообщений об ошибках обратно пользователю?
+</p>
+<p>Переменная системы <code>character_set_results</code> указывает набор
+символов, в котором сервер возвращает результаты запроса пользователю. Это
+включает данные результата типа значений столбца, и метаданных результата
+типа имени столбца.</p></li></ul>
+
+<p>Вы можете подстраивать параметры настройки для этих переменных или
+зависеть от значений по умолчанию (тогда Вы можете пропустить остальную
+часть этого раздела).</p>
+
+<p>Имеются две инструкции, которые воздействуют на
+наборы символов подключения:</p>
+<pre>
+SET NAMES '<em><code>charset_name</code></em>'
+SET CHARACTER SET <em><code>charset_name</code></em>
+</pre>
+
+<p><code>SET NAMES</code> указывает то, какой набор символов применяет
+пользователь, чтобы послать инструкции SQL на сервер. Таким образом,
+<code>SET NAMES 'cp1251'</code> сообщает, что будущие входящие сообщения от
+этого пользователя находятся в наборе символов <code>cp1251</code></span>.
+Это также определяет набор символов, который сервер должен использовать для
+посылки результатов обратно пользователю. Например, это указывает то, какой
+набор символов использовать для значений столбца, если Вы
+используете инструкцию <code>SELECT</code>.</p>
+
+<p>Инструкция <code>SET NAMES '<em><code>x</code></em>'</code> эквивалентна
+этим трем инструкциям:</p>
+<pre>
+SET character_set_client = <em><code>x</code></em>;
+SET character_set_results = <em><code>x</code></em>;
+SET character_set_connection = <em><code>x</code></em>;
+</pre>
+
+<p>Установка <code>character_set_connection</code> в <em><code>x</code></em>
+также устанавливает <code>collation_connection</code> к заданному по
+умолчанию объединению для <em><code>x</code></em>. Чтобы определять
+специфическое объединение для наборов символов, используйте
+факультативное предложение <code>COLLATE</code>:</p>
+
+<pre>
+SET NAMES '<em><code>charset_name</code></em>'
+    COLLATE '<em><code>collation_name</code></em>'
+</pre>
+
+<p><code>SET CHARACTER SET</code> подобен <code>SET NAMES</code>, но
+устанавливает <code>character_set_connection</code> и
+<code>collation_connection</code> в <code>character_set_database</code> и
+<code>collation_database</code>. Инструкция <code>SET CHARACTER
+SET <em><code>x</code></em></code> эквивалентна этим трем инструкциям:</p>
+
+<pre>
+SET character_set_client = <em><code>x</code></em>;
+SET character_set_results = <em><code>x</code></em>;
+SET collation_connection = @@collation_database;
+</pre>
+
+<p>Установка <code>collation_connection</code> также устанавливает
+<code>character_set_connection</code> к набору символов, связанному с
+объединением (эквивалент выполнения
+<code>SET character_set_connection = @@character_set_database</code>).</p>
+
+<p>Когда пользователь соединяется, он посылает серверу имя набора символов,
+который требуется использовать. Сервер использует имя, чтобы установить
+переменные системы <code>character_set_client</code>,
+<code>character_set_results</code> и <code>character_set_connection</code>.
+В действительности сервер выполняет операцию <code>SET NAMES</code>,
+использующую имя набора символов.</p>
+
+<p>С клиентом <span><strong>mysql</strong></span> нет
+необходимости выполнять <code>SET NAMES</code> каждый раз при запуске, если
+Вы хотите использовать набор символов, отличный от значения по умолчанию. Вы
+можете добавить опцию <code class="option">--default-character-set</code>
+в операторной строке <span><strong>mysql</strong></span>
+или в Вашем файле опций. Например, следующий файл опций, устанавливает
+изменения трех переменных наборов символов к <code>koi8r</code> каждый раз,
+когда Вы вызываете <span><strong>mysql</strong></span>:</p>
+
+<pre>
+[mysql]
+default-character-set=koi8r
+</pre>
+
+<p>Если Вы используете клиент
+<span><strong>mysql</strong></span> с поддержкой реконнекта
+(что вообще-то не рекомендуется), предпочтительно использовать команду
+<code>charset</code>, а не <code>SET NAMES</code>. Например:</p>
+
+<pre>
+mysql&gt; <strong><code>charset utf8</code></strong>
+Charset changed
+</pre>
+
+<p>Команда <code>charset</code> выдает инструкцию <code>SET NAMES</code>, а
+также изменяет заданный по умолчанию набор символов, который используется,
+если <span><strong>mysql</strong></span> повторно соединяется
+после того, как подключение прервалось.</p>
+
+<p>Пример: Предположите, что <code>column1</code> определен как
+<code>CHAR(5) CHARACTER SET latin2</code>. Если Вы не говорите
+<code>SET NAMES</code> или <code>SET CHARACTER SET</code>, то для
+then for <code>SELECT column1 FROM t</code> сервер посылает обратно все
+значения <code>column1</code>, использующий набор символов, который
+пользователь определил, когда соединялся. С другой стороны, если Вы говорите
+<code>SET NAMES 'latin1'</code> или <code>SET CHARACTER SET latin1</code>
+перед выдачей инструкции <code>SELECT</code>, сервер преобразовывает значения
+<code>latin2</code> в <code>latin1</code> только перед посылкой результатов
+обратно. Преобразование может быть с потерями, если имеются символы, которые
+не представлены в обоих наборах символов.</p>
+
+<p>Если Вы не хотите, чтобы сервер выполнил любое преобразование наборов
+результатов, установите <code>character_set_results</code> в
+<code>NULL</code>:</p>
+
+<pre>
+SET character_set_results = NULL;
+</pre>
+
+<p><span class="bold"><strong>Обратите внимание</strong></span>: в настоящее
+время UCS-2 не может использоваться как набор символов пользователя, это
+означает, что <code>SET NAMES 'ucs2'</code> не работает.</p>
+
+<p>Чтобы видеть значения переменных системы набора символов и объединения,
+которые обращаются к Вашему подключению, используйте эти инструкции:</p>
+<pre>
+SHOW VARIABLES LIKE 'character_set%';
+SHOW VARIABLES LIKE 'collation%';
+</pre>
+
+<h2><a name="charset-collations"></a>10.5. Проблемы объединения</h2>
+<p>Следующие разделы излагают различные аспекты объединений набора символов.
+</p>
+
+<h3><a name="charset-collate"></a>10.5.1. Использование <code>COLLATE</code>
+в SQL-инструкциях</h3>
+<p>С предложением <code>COLLATE</code> Вы можете отменять любое заданное по
+умолчанию объединение для сравнения. <code>COLLATE</code> может
+использоваться в различных частях инструкций SQL. Имеются некоторые примеры:
+</p>
+
+<ul type="disc"><li><p>С <code>ORDER BY</code>:</p>
+<pre>
+SELECT k FROM t1 ORDER BY k COLLATE latin1_german2_ci;
+</pre></li>
+
+<li><p>С <code>AS</code>:</p>
+<pre>
+SELECT k COLLATE latin1_german2_ci AS k1 FROM t1 ORDER BY k1;
+</pre></li>
+
+<li><p>С <code>GROUP BY</code>:</p>
+<pre>
+SELECT k FROM t1 GROUP BY k COLLATE latin1_german2_ci;
+</pre></li>
+
+<li><p>С агрегатными функциями:</p>
+<pre>
+SELECT MAX(k COLLATE latin1_german2_ci) FROM t1;
+</pre></li>
+
+<li><p>С <code>DISTINCT</code>:</p>
+<pre>
+SELECT DISTINCT k COLLATE latin1_german2_ci FROM t1;
+</pre></li>
+
+<li><p>С <code>WHERE</code>:</p>
+<pre>
+SELECT * FROM t1 WHERE _latin1 'M├╝ller' COLLATE latin1_german2_ci = k;
+SELECT * FROM t1 WHERE k LIKE _latin1 'M├╝ller' COLLATE latin1_german2_ci;
+</pre></li>
+
+<li><p>С <code>HAVING</code>:</p>
+<pre>
+SELECT k FROM t1 GROUP BY k
+         HAVING k = _latin1 'M├╝ller' COLLATE latin1_german2_ci;
+</pre></li></ul>
+
+<h3><a name="charset-collate-precedence"></a>10.5.2. Старшинство предложения
+<code>COLLATE</code></h3>
+<p>Предложение <code>COLLATE</code> имеет высокое старшинство (выше, чем
+<code>||</code>), так следующие два выражения эквивалентны:</p>
+
+<pre>
+x || y COLLATE z
+x || (y COLLATE z)
+</pre>
+
+<h3><a name="charset-binary-op"></a>10.5.3. Оператор <code>BINARY</code></h3>
+<p>Оператор <code>BINARY</code> приводит строку после него к двоичной строке.
+Это простой способ вынудить сравнение быть выполненным байт в байт, а не
+символ в символ. <code>BINARY</code> также заставляет конечные
+пробелы быть значительными.</p>
+
+<pre>
+mysql&gt; <strong><code>SELECT 'a' = 'A';</code></strong>
+    -&gt; 1
+mysql&gt; <strong><code>SELECT BINARY 'a' = 'A';</code></strong>
+    -&gt; 0
+mysql&gt; <strong><code>SELECT 'a' = 'a ';</code></strong>
+    -&gt; 1
+mysql&gt; <strong><code>SELECT BINARY 'a' = 'a ';</code></strong>
+    -&gt; 0
+</pre>
+<p><code>BINARY <em><code>str</code></em></code> сокращение для
+<code>CAST(<em><code>str</code></em> AS BINARY)</code>.</p>
+
+<p>Атрибут <code>BINARY</code> на символьных определениях столбца имеет
+различный эффект. Символьному столбцу, определенному с атрибутом
+<code>BINARY</code>, назначено двоичное объединение набора символов столбца.
+Каждый набор символов имеет двоичное объединение. Например, двоичное
+объединение для набора символов <code>latin1</code>: <code>latin1_bin</code>,
+так что, если набор символов по умолчанию таблицы <code>latin1</code>, эти
+два столбца определены эквивалентно:</p>
+
+<pre>
+CHAR(10) BINARY
+CHAR(10) CHARACTER SET latin1 COLLATE latin1_bin
+</pre>
+
+<p>Эффект <code>BINARY</code> как атрибута столбца отличается от эффекта до
+MySQL 4.1. Прежде <code>BINARY</code> помечал столбец, который обрабатывался
+как двоичная строка, то есть строка байтов, которая не имеет никакого набора
+символов или объединения, что отличается от не двоичной символьной строки,
+которая имеет двоичное объединение. Для обоих типов строк сравнения основаны
+на числовых значениях строкового модуля, но для не двоичных строк, модулем
+является символ, и некоторые наборы символов позволяют многобайтовые символы.
+</p>
+
+<p>Использование <code>CHARACTER SET binary</code> на определении
+столбца <code>CHAR</code>, <code>VARCHAR</code> или <code>TEXT</code>
+заставляет столбец обрабатываться как двоичный тип данных. Например,
+следующие пары определений эквивалентны:</p>
+
+<pre>
+CHAR(10) CHARACTER SET binary
+BINARY(10)
+VARCHAR(10) CHARACTER SET binary
+VARBINARY(10)
+TEXT CHARACTER SET binary
+BLOB
+</pre>
+
+<h3><a name="charset-collate-tricky"></a>10.5.4. Некоторые специальные
+случаи, где определение объединения сложно</h3>
+<p>В большинстве инструкций, очевидно, какое объединение MySQL использует,
+чтобы решить операцию сравнения. Например, в следующих случаях, должно быть
+четко ясно, что объединением будет объединение столбца <code>x</code>:</p>
+
+<pre>
+SELECT x FROM T ORDER BY x;
+SELECT x FROM T WHERE x = x;
+SELECT DISTINCT x FROM T;
+</pre>
+
+<p>Однако, когда включаются многократные операнды, может
+иметься неоднозначность. Например:</p>
+<pre>
+SELECT x FROM T WHERE x = 'Y';
+</pre>
+<p>Это должно использовать объединение из столбца
+<code>x</code> или от литерала строки <code>'Y'</code>?</p>
+
+<p>Стандарт SQL решает такие вопросы, применяя правило
+<span class="quote">coercibility</span>. В основном это означает: раз
+<code>x</code> и <code>'Y'</code> имеют объединения, которое объединение
+имеет приоритет? Это может быть трудно решить, но следующие правила
+покрывают большинство ситуаций:</p>
+
+<ul type="disc"><li><p>Явное предложение <code>COLLATE</code> имеет
+0 (не имеет coercible вообще).</p></li>
+<li><p>Конкатенация двух строк с различными
+объединениями имеет coercibility 1.</p></li>
+
+<li><p>Объединение столбца, сохраненного стандартного параметра или локальной
+переменной имеет coercibility 2.</p></li>
+<li><p><span class="quote">Константа системы</span> (строка, возвращенная
+функциями типа <code>USER()</code> или
+<code>VERSION()</code>) имеет coercibility 3.</p></li>
+
+<li><p>Объединение литерала имеет coercibility 4.</p></li>
+<li><p><code>NULL</code> или выражение, которое получено из
+<code>NULL</code>, имеет coercibility 5.</p></li></ul>
+
+<p>Предшествующие значения coercibility текущие для MySQL 5.1.</p>
+<p>Эти правила решают неоднозначности следующим способом:</p>
+<ul type="disc"><li><p> Используют объединение с самым
+низким значение coercibility.</p></li>
+
+<li><p>Если обе стороны имеют тот же самый coercibility, то это ошибка, если
+объединения не те же самые.</p></li></ul>
+<p>Пример:</p>
+
+<table border="1"><tbody><tr><td><code>column1 = 'A'</code></td>
+<td>Использует объединение <code>column1</code></td></tr>
+<tr><td><code>column1 = 'A' COLLATE x</code></td>
+<td>Использует объединение <code>'A' COLLATE x</code></td></tr>
+<tr><td><code>column1 COLLATE x = 'A' COLLATE y</code></td>
+<td>Ошибка</td></tr></tbody></table>
+
+<p>Функция <code>COERCIBILITY()</code> может использоваться, чтобы определить
+coercibility строкового выражения:</p>
+<pre>
+mysql&gt; <strong><code>SELECT COERCIBILITY('A' COLLATE latin1_swedish_ci);</code></strong>
+    -&gt; 0
+mysql&gt; <strong><code>SELECT COERCIBILITY(VERSION());</code></strong>
+    -&gt; 3
+mysql&gt; <strong><code>SELECT COERCIBILITY('A');</code></strong>
+    -&gt; 4
+</pre>
+
+<h3><a name="charset-collation-charset"></a>10.5.5. Объединения должны быть
+для правильного набора символов</h3>
+<p>Каждый набор символов имеет одно или большее количество объединений, но
+каждое объединение связано с одним и только одним набором символов.
+Следовательно, следующая инструкция вызывает сообщение об ошибке, потому что
+объединение <code>latin2_bin</code> не допустимо с набором символов
+<code>latin1</code>:</p>
+
+<pre>
+mysql&gt; SELECT _latin1 'x' COLLATE latin2_bin;
+ERROR 1253 (42000): COLLATION 'latin2_bin' is not valid
+for CHARACTER SET 'latin1'
+</pre>
+
+<h3><a name="charset-collation-effect"></a>10.5.6. Пример эффекта объединения
+</h3>
+<p>Предположите, что столбец <code>X</code> в таблице <code>T</code> имеет
+эти значения столбца <code>latin1</code>:</p>
+
+<pre>
+Muffler
+M├╝ller
+MX Systems
+MySQL
+</pre>
+
+<p>Предположите также, что значения столбца получены,
+используя следующую инструкцию:</p>
+<pre>
+SELECT X FROM T ORDER BY X COLLATE <em><code>collation_name</code></em>;
+</pre>
+
+<p>Следующая таблица показывает возникающий в результате порядок значений,
+если мы используем <code>ORDER BY</code> с различными объединениями:</p>
+<table border="1"><tbody><tr><td><code>latin1_swedish_ci</code></td>
+<td><code>latin1_german1_ci</code></td><td><code>latin1_german2_ci
+</code></td></tr>
+
+<tr><td>Muffler</td><td>Muffler</td><td>M├╝ller</td></tr><tr>
+<td>MX Systems</td><td>M├╝ller</td><td>Muffler</td></tr>
+<tr><td>M├╝ller</td><td>MX Systems</td><td>MX Systems</td></tr>
+<tr><td>MySQL</td><td>MySQL</td><td>MySQL</td></tr></tbody></table>
+
+<p>Символ, который вызывает различные порядки сортировки в этом примере: U
+с двумя точками сверху, который в Германии известен как
+<span class="quote">U-umlaut.</span></p>
+
+<ul type="disc"><li><p>Первый столбец показывает результат
+<code>SELECT</code>, использующего правило объединения Swedish/Finnish,
+которое говорит, что U-umlaut сортируется после Y.</p></li>
+
+<li><p>Второй столбец показывает результат <code>SELECT</code>, использующего
+правило German DIN-1, которое говорит, что U-umlaut сортируется с U.</p></li>
+<li><p>Третий столбец показывает результат <code>SELECT</code>, использующего
+правило German DIN-2 rule, которое говорит, что U-umlaut сортируется с UE.
+</p></li></ul>
+
+<h2><a name="charset-operations"></a>10.6. Операции, на которые
+воздействует поддержка набора символов</h2>
+<p>Этот раздел описывает операции, которые берут во внимание
+информацию о наборе символов.</p>
+
+<h3><a name="charset-result"></a>10.6.1. Строки результата</h3>
+<p>MySQL имеет много операторов и функций, которые возвращают строку. Этот
+раздел отвечает на вопрос: каков набор символов и объединение у такой строки?
+</p>
+
+<p>Для простых функций, которые берут строку ввода и возвращают строковый
+результат как вывод, набор символов и объединение вывода такие же, как
+таковые у входного значения. Например,
+<code>UPPER(<em><code>X</code></em>)</code> возвращает строку, чья символьная
+строка и объединение являются такими же, как <em><code>X</code></em>. Это
+относится к <code>INSTR()</code>, <code>LCASE()</code>,
+<code>LOWER()</code>, <code>LTRIM()</code>, <code>MID()</code>,
+<code>REPEAT()</code>, <code>REPLACE()</code>, <code>REVERSE()</code>,
+<code>RIGHT()</code>, <code>RPAD()</code>, <code>RTRIM()</code>,
+<code>SOUNDEX()</code>, <code>SUBSTRING()</code>, <code>TRIM()</code>,
+<code>UCASE()</code> и <code>UPPER()</code>.</p>
+
+<p>Обратите внимание: функция <code>REPLACE()</code>, в отличие от всех
+других функций, всегда игнорирует объединение строкового ввода и выполняет
+чувствительное к регистру сравнение.</p>
+
+<p>Если строковый ввод или функциональный результат является двоичной
+строкой, она не имеет никакого набора символов или объединения. Это может
+быть проверено, используя функции <code>CHARSET()</code> и
+<code>COLLATION()</code>, которые вернут <code>binary</code>, чтобы указать,
+что их параметр двоичная строка:</p>
+
+<pre>
+mysql&gt; SELECT CHARSET(BINARY 'a'), COLLATION(BINARY 'a');
++---------------------+-----------------------+
+| CHARSET(BINARY 'a') | COLLATION(BINARY 'a') |
++---------------------+-----------------------+
+|              binary |                binary |
++---------------------+-----------------------+
+</pre>
+
+<p>Для операций, которые объединяют многостроковые вводы и возвращают
+одиночный строковый вывод, правила соединения частей стандарта SQL дают
+определение объединения результата:</p>
+
+<ul type="disc"><li><p>Если явно задан <code>COLLATE
+<em><code>X</code></em></code>, использовать
+<em><code>X</code></em>.</p></li>
+
+<li><p>Если явно заданы <code>COLLATE <em><code>X</code></em></code>
+и <code>COLLATE <em><code>Y</code></em></code>, выдать ошибку.</p></li>
+<li><p>Иначе, если все объединения <em><code>X</code></em>, используовать
+<em><code>X</code></em>.</p></li>
+<li><p>Иначе, результат не имеет никакого объединения вообще.</p></li></ul>
+
+<p>Например, с <code>CASE ... WHEN a THEN b WHEN b THEN c COLLATE
+<em><code>X</code></em> END</code> возникающее в результате объединение
+<em><code>X</code></em>. То же самое для <code>UNION</code>,
+<code>||</code>, <code>CONCAT()</code>, <code>ELT()</code>,
+<code>GREATEST()</code>, <code>IF()</code> и <code>LEAST()</code>.</p>
+
+<p>Для операций, которые преобразовываются в символьные данные, набор
+символов и объединение строк результата операции определены переменными
+системы <code>character_set_connection</code> и
+<code>collation_connection</code>. Это применяется только для
+<code>CAST()</code>, <code>CONV()</code>, <code>FORMAT()</code>,
+<code>HEX()</code> и <code>SPACE()</code>.</p>
+
+<p>Если Вы не уверены относительно набора символов или объединения
+результата, возвращенного строковой функцией, Вы можете использовать функцию
+<code>CHARSET()</code> или <code>COLLATE()</code>, чтобы выяснить:</p>
+
+<pre>
+mysql&gt; SELECT USER(), CHARSET(USER()), COLLATION(USER());
++----------------+-----------------+-------------------+
+| USER()         | CHARSET(USER()) | COLLATION(USER()) |
++----------------+-----------------+-------------------+
+| test@localhost | utf8            | utf8_general_ci   |
++----------------+-----------------+-------------------+
+</pre>
+
+<h3><a name="charset-convert"></a>10.6.2. <code>CONVERT()</code> и
+<code>CAST()</code></h3>
+<p><code>CONVERT()</code> обеспечивает способ преобразовать данные между
+различными наборами символов. Синтаксис:</p>
+
+<pre>
+CONVERT(<em><code>expr</code></em> USING <em><code>transcoding_name</code></em>)
+</pre>
+
+<p>В MySQL имена перекодировки такие же, как соответствующие
+имена наборов символов.</p>
+<p>Примеры:</p>
+<pre>
+SELECT CONVERT(_latin1'M├╝ller' USING utf8);
+INSERT INTO utf8table (utf8column)
+SELECT CONVERT(latin1field USING utf8) FROM latin1table;
+</pre>
+
+<p><code>CONVERT(... USING ...)</code> выполнено согласно стандарту SQL.</p>
+<p>Вы можете также использовать <code>CAST()</code>, чтобы преобразовать
+строку в иной набор символов. Синтаксис:</p>
+
+<pre>
+CAST(<em><code>character_string</code></em> AS
+     <em><code>character_data_type</code></em>
+     CHARACTER SET <em><code>charset_name</code></em>)
+</pre>
+
+<p>Пример:</p>
+<pre>
+SELECT CAST(_latin1'test' AS CHAR CHARACTER SET utf8);
+</pre>
+
+<p>Если Вы используете <code>CAST()</code> без того, чтобы определить
+<code>CHARACTER SET</code>, возникающие в результате набор символов и
+объединение определены переменными системы
+<code>character_set_connection</code> и <code>collation_connection</code>.
+Если Вы используете <code>CAST()</code> с <code>CHARACTER SET X</code>,
+возникающие в результате набор символов и объединение <code>X</code> и
+заданное по умолчанию объединение для <code>X</code>.</p>
+
+<p>Вы не можете использовать предложение <code>COLLATE</code> внутри
+<code>CAST()</code>, но Вы можете использовать это снаружи. То есть
+<code>CAST(... COLLATE ...)</code> запрещено, но <code>CAST(...)
+COLLATE ...</code> допустимо.</p>
+
+<p>Пример:</p>
+<pre>
+SELECT CAST(_latin1'test' AS CHAR CHARACTER SET utf8) COLLATE utf8_bin;
+</pre>
+
+<h3><a name="charset-show"></a>10.6.3. Инструкции <code>SHOW</code> и
+<code>INFORMATION_SCHEMA</code></h3>
+<p>Несколько инструкций <code>SHOW</code> обеспечивают дополнительную
+информацию о наборе символов. Они включают <code>SHOW CHARACTER SET</code>,
+<code>SHOW COLLATION</code>, <code>SHOW CREATE DATABASE</code>,
+<code>SHOW CREATE TABLE</code> и <code>SHOW COLUMNS</code>. Эти инструкции
+описаны здесь кратко.</p>
+
+<p><code>INFORMATION_SCHEMA</code> имеет несколько таблиц, которые содержат
+информацию, подобную отображаемой инструкциями <code>SHOW</code>. Например,
+таблицы <code>CHARACTER_SETS</code> и <code>COLLATIONS</code> содержат
+информацию, отображаемую <code>SHOW CHARACTER SET</code> и
+<code>SHOW COLLATION</code>.</p>
+
+<p>Команда <code>SHOW CHARACTER SET</code> показывает все доступные наборы
+символов. Требуется факультативное предложение <code>LIKE</code>, которое
+указывает, которым именам набора символов соответствовать. Например:</p>
+
+<pre>
+mysql&gt; <strong><code>SHOW CHARACTER SET LIKE 'latin%';</code></strong>
++---------+-----------------------------+-------------------+--------+
+| Charset | Description                 | Default collation | Maxlen |
++---------+-----------------------------+-------------------+--------+
+| latin1  | cp1252 West European        | latin1_swedish_ci | 1      |
+| latin2  | ISO 8859-2 Central European | latin2_general_ci | 1      |
+| latin5  | ISO 8859-9 Turkish          | latin5_turkish_ci | 1      |
+| latin7  | ISO 8859-13 Baltic          | latin7_general_ci | 1      |
++---------+-----------------------------+-------------------+--------+
+</pre>
+
+<p>Вывод <code>SHOW COLLATION</code> включает все доступные наборы символов.
+Требуется факультативное предложение <code>LIKE</code>, которое указывает,
+которым именам объединения соответствовать. Например:</p>
+
+<pre>
+mysql&gt; <strong><code>SHOW COLLATION LIKE 'latin1%';</code></strong>
++-------------------+---------+----+---------+----------+---------+
+| Collation         | Charset | Id | Default | Compiled | Sortlen |
++-------------------+---------+----+---------+----------+---------+
+| latin1_german1_ci | latin1  |  5 |         |          | 0       |
+| latin1_swedish_ci | latin1  |  8 | Yes     | Yes      | 0       |
+| latin1_danish_ci  | latin1  | 15 |         |          | 0       |
+| latin1_german2_ci | latin1  | 31 |         | Yes      | 2       |
+| latin1_bin        | latin1  | 47 |         | Yes      | 0       |
+| latin1_general_ci | latin1  | 48 |         |          | 0       |
+| latin1_general_cs | latin1  | 49 |         |          | 0       |
+| latin1_spanish_ci | latin1  | 94 |         |          | 0       |
++-------------------+---------+----+---------+----------+---------+
+</pre>
+
+<p><code>SHOW CREATE DATABASE</code> отображает инструкцию
+<code>CREATE DATABASE</code>, которая создала эту базу данных:</p>
+<pre>
+mysql&gt; <strong><code>SHOW CREATE DATABASE test;</code></strong>
++----------+-----------------------------------------+
+| Database | Create Database                         |
++----------+-----------------------------------------+
+| test     | CREATE DATABASE `test` /*!40100 DEFAULT |
+|          | CHARACTER SET latin1 */                 |
++----------+-----------------------------------------+
+</pre>
+<p>Если никакое предложение <code>COLLATE</code> не показывается, заданное по
+умолчанию объединение для набора символов применяется.</p>
+
+<p><code>SHOW CREATE TABLE</code> подобна, но отображает инструкцию
+<code>CREATE TABLE</code>, чтобы создать данную таблицу. Определения столбца
+указывают любые спецификации набора символов, и параметры таблицы включают
+информацию набора символов.</p>
+
+<p>Инструкция <code>SHOW COLUMNS</code> отображает объединения столбцов
+таблицы когда вызывается как <code>SHOW FULL COLUMNS</code>. Столбцы с типами
+данных <code>CHAR</code>, <code>VARCHAR</code> или <code>TEXT</code> имеют
+объединения. Числовые и другие не-символьные типы не имеют никакого
+объединения (обозначены <code>NULL</code> как
+значение <code>Collation</code>). Например:</p>
+
+<pre>
+mysql&gt; <strong><code>SHOW FULL COLUMNS FROM person\G</code></strong>
+*************************** 1. row ***************************
+Field: id
+Type: smallint(5) unsigned
+Collation: NULL
+Null: NO
+Key: PRI
+Default: NULL
+Extra: auto_increment
+Privileges: select, insert, update, references
+Comment:
+*************************** 2. row ***************************
+Field: name
+Type: char(60)
+Collation: latin1_swedish_ci
+Null: NO
+Key:
+Default:
+Extra:
+Privileges: select, insert, update, references
+Comment:
+</pre>
+<p>Набор символов не отображается, но подразумевается именем объединения.</p>
+
+<h2><a name="charset-unicode"></a>10.7. Поддержка Unicode</h2>
+<p>MySQL 5.1 поддерживает два набора символов для сохранения данных Unicode:
+</p>
+
+<ul type="disc"><li><p>
+<code>ucs2</code>, набор символов UCS-2 Unicode.</p></li>
+<li><p><code>utf8</code>, набор символов UTF-8 Unicode.</p></li></ul>
+
+<p>В UCS-2 (двоичное представление Unicode) каждый символ представляется
+двухбайтным Unicode-кодом со старшим байтом сначала. Например: <code>LATIN
+CAPITAL LETTER A</code> имеет код <code>0x0041</code>, и это сохранено как
+двухбайтовая последовательность <code>0x00 0x41</code>. <code>CYRILLIC
+SMALL LETTER YERU</code> (Unicode <code>0x044B</code>) сохранена как
+двухбайтовая последовательность <code>0x04 0x4B</code>. Для получения
+символов Unicode и их кодов, пожалуйста, обратитесь к Unicode Home Page
+(<a href="../../../www.unicode.org/default.htm" target="_top">http://www.unicode.org</a>).
+</p>
+
+<p>В настоящее время UCS-2 не может использоваться как набор символов
+пользователя, это означает, что <code>SET NAMES 'ucs2'</code> не работает.
+</p>
+
+<p>UTF-8 (трансформируемое представление Unicode) представляет собой
+альтернативный способ сохранить Unicode данные. Это выполнено согласно RFC
+3629. Идея относительно UTF-8 состоит в том, что различные символы Unicode,
+используя последовательности байтов различных длин:</p>
+
+<ul type="disc"><li><p>Базисные латинские символы, цифры и пунктуация
+используют один байт.</p></li>
+
+<li><p>Большинство европейских и ближневосточных символов вписываются в
+двухбайтовую последовательность: расширенные латинские символы (с тильдой,
+апострофом, острые, умлауты и другие диакритические знаки), кириллица,
+греческие, армянские, еврейские, арабские, сирийские и прочие.</p></li>
+
+<li><p>Корейские, китайские и японские иероглифы
+использует трехбайтовые последовательности.</p></li></ul>
+<p>RFC 3629 описывает последовательности кодирования, которые берут от одного
+до четырех байтов. В настоящее время MySQL-поддержка для UTF-8 не включает
+последовательности с четырьмя байтами. Старый стандарт для кодирования UTF-8
+задан RFC 2279 и описывает UTF-8-последовательности, которые берут от одного
+до шести байтов. RFC 3629 объявляет RFC 2279 устаревшим, по этой причине
+последовательности с пятью и шестью байтами больше не используются.</p>
+
+<p><span class="bold"><strong>Совет</strong></span>: чтобы сохранять пробел а
+UTF-8, используйте <code>VARCHAR</code> вместо <code>CHAR</code>. Иначе MySQL
+должен резервировать по три байта для каждого символа в столбце
+<code>CHAR CHARACTER SET utf8</code>, потому что это максимальная возможная
+длина. Например, MySQL должен резервировать 30 байтов для столбца
+<code>CHAR(10) CHARACTER SET utf8</code>.</p>
+
+<h2><a name="charset-metadata"></a>10.8. UTF-8 для метаданных</h2>
+<p><em class="firstterm">Метаданные</em> представляют собой такие данные,
+которые описывают базу данных в противоположность данным, являющимся
+содержанием базы данных. Таким образом, имена столбцов, базы данных,
+пользователей, версия и большинство строк-результатов <code>SHOW</code> как
+раз и являются именно метаданными. Это также истинно для содержания таблиц в
+<code>INFORMATION_SCHEMA</code>, потому что те таблицы по определению
+содержат информацию относительно объектов базы данных.</p>
+
+<p>Представление метаданных должно удовлетворять эти требованиям:</p>
+<ul type="disc"><li><p>Все метаданные должны быть в том же самом наборе
+символов. Иначе, ни команды <code>SHOW</code>, ни инструкции
+<code>SELECT</code> для таблиц в <code>INFORMATION_SCHEMA</code> не работали
+бы правильно, потому что различные строки в том же самом столбце результатов
+этих операций будут в различных наборах символов.</p></li>
+
+<li><p>Метаданные должны включить все символы во все языки. Иначе
+пользователи не способны называть столбцы и таблицы, использующие
+их собственные языки.</p></li></ul>
+
+<p>Чтобы удовлетворять обоим требованиям, MySQL сохраняет метаданные в
+наборе символов Unicode, а именно в UTF-8. Это не вызывает никаких сбоев,
+если Вы никогда не используете не латинские или символы с диакритическим
+знаком. Но если Вы это делаете, Вы должны знать, что
+метаданные находятся в UTF-8.</p>
+
+<p>Требования метаданных означают, что возвращаемые значения функций
+<code>USER()</code>, <code>CURRENT_USER()</code>,
+<code>SESSION_USER()</code>, <code>SYSTEM_USER()</code>,
+<code>DATABASE()</code> и <code>VERSION()</code> имеют по умолчанию
+набор символов UTF-8.</p>
+
+<p>Сервер устанавливает переменную системы <code>character_set_system</code>
+к имени набора символов метаданных:</p>
+<pre>
+mysql&gt; SHOW VARIABLES LIKE 'character_set_system';
++----------------------+-------+
+| Variable_name        | Value |
++----------------------+-------+
+| character_set_system | utf8  |
++----------------------+-------+
+</pre>
+
+<p>Хранение метаданных, использующих Unicode, не означает, что сервер
+возвращает заголовки столбцов и результатов функции <code>DESCRIBE</code> в
+наборе символов <code>character_set_system</code> по умолчанию. Когда Вы
+используете <code>SELECT column1 FROM t</code>, имя <code>column1</code>
+непосредственно возвращено в наборе символов, определенном значением
+переменной системы <code>character_set_results</code>, которая имеет значение
+по умолчанию <code>latin1</code>. Если Вы хотите, чтобы сервер передал
+результаты метаданных в ином наборе символов, используйте инструкцию
+<code>SET NAMES</code>, чтобы выполнять преобразование набора символов.
+<code>SET NAMES</code> устанавливает <code>character_set_results</code> и
+другие связанные переменные системы. В качестве альтернативы программа
+пользователя может выполнять преобразование после получения результата с
+сервера. Это более эффективно для пользователя, но эта опция не всегда
+доступна для всей клиентуры.</p>
+
+<p>Если <code>character_set_results</code> установлен в <code>NULL</code>,
+никакое преобразование не выполняется и метаданные возвращаются, используя
+первоначальный набор символов (набор, обозначенный
+<code>character_set_system</code>).</p>
+
+<p>Сообщения об ошибках, возвращенные сервером, преобразованы в набор
+символов пользователя автоматически, как в случае с метаданными.</p>
+<p>Если Вы используете (например) функцию <code>USER()</code> для сравнения
+или назначения внутри одиночной инструкции, можете не волноваться. MySQL
+выполняет автоматическое преобразование для Вас.</p>
+
+<pre>
+SELECT * FROM Table1 WHERE USER() = latin1_column;
+</pre>
+<p>Это работает потому, что содержание <code>latin1_column</code>
+автоматически преобразовано в UTF-8 перед сравнением.</p>
+
+<pre>
+INSERT INTO Table1 (latin1_column) SELECT USER();
+</pre>
+<p>Это работает потому, что содержание <code>USER()</code> автоматически
+преобразовано в <code>latin1</code> перед назначением. Автоматическое
+преобразование полностью все же не выполнено, но должно работать правильно в
+более поздней версии.</p>
+
+<p>Хотя автоматическое преобразование не в SQL стандарте, документ
+SQL-стандарта говорит, что каждый набор символов (в терминах обеспечиваемых
+символов) подмножество Unicode. Поэтому объединение для Unicode может
+применяться для сравнения с не-Unicode строками.</p>
+
+<h2><a name="charset-conversion"></a>10.9.
+Преобразование набора символов столбца</h2>
+<p>Чтобы преобразовывать двоичный или не двоичный строковый столбец, чтобы
+использовать специфический набор символов, примените <code>ALTER
+TABLE</code>. Для успешного преобразования одно из следующих
+условий должно примениться:</p>
+
+<ul type="disc"><li><p>Если столбец имеет двоичный тип данных
+(<code>BINARY</code>, <code>VARBINARY</code>, <code>BLOB</code>), все
+значения, которые он содержит, должны быть закодированы, используя одиночный
+набор символов. Если Вы используете двоичный столбец, чтобы сохранить
+информацию в нескольких наборах символов, MySQL не имеет никакого способа
+узнать, который набор символов применять и не может
+преобразовывать данные правильно.</p></li>
+
+<li><p>Если столбец имеет не двоичный тип данных (<code>CHAR</code>,
+<code>VARCHAR</code>, <code>TEXT</code>), содержание должно быть закодировано
+в наборе символов столбца, а не в некотором другом наборе символов. Если
+содержание закодировано в ином наборе символов, Вы можете преобразовывать
+столбец, чтобы сначала использовать двоичный тип данных, а затем к не
+двоичному столбцу с желательным набором символов.</p></li></ul>
+
+<p>Предположите, что таблица <code>t</code> имеет двоичный столбец
+<code>col1</code>, определенный как <code>BINARY(50)</code>. При условии,
+что информация в столбце закодирована, используя одиночный набор символов, Вы
+можете преобразовывать это в не двоичный столбец, который имеет нужный набор
+символов. Например, если <code>col1</code> содержит двоичные символы
+представления данных в греческом наборе символов (<code>greek</code>), Вы
+можете преобразовывать это следующим образом:</p>
+
+<pre>
+ALTER TABLE t MODIFY col1 CHAR(50) CHARACTER SET greek;
+</pre>
+
+<p>Предположите, что таблица <code>t</code> имеет не двоичный столбец
+<code>col1</code>, определенный как <code>CHAR(50) CHARACTER SET latin1
+</code>, но Вы хотите преобразовывать это, чтобы использовать
+<code>utf8</code> так, чтобы Вы могли сохранять значения из многих языков.
+Следующая инструкция выполняет это:</p>
+
+<pre>
+ALTER TABLE t MODIFY col1 CHAR(50) CHARACTER SET utf8;
+</pre>
+<p>Преобразование может быть с потерями, если столбец содержит символы,
+которые не содержатся в обоих наборах символов.</p>
+
+<p>Специальный случай происходит, если Вы имеете старые таблицы из MySQL 4.0
+или ранее, где не двоичный столбец содержит значения, которые фактически
+закодированы в наборе символов, отличном от заданного по умолчанию набора
+символов сервера. Например, прикладная программа могла бы сохранить значения
+<code>sjis</code> в столбце даже при том, что заданный по умолчанию набор
+символов MySQL <code>latin1</code>. Возможно преобразовать столбец, чтобы
+использовать соответствующий набор символов, но дополнительный шаг требуется.
+Предположите, что заданный по умолчанию набор символов сервера был
+<code>latin1</code>, а <code>col1</code> определен как <code>CHAR(50)</code>,
+но содержит значения в <code>sjis</code>. Первый шаг должен преобразовать
+столбец в двоичный тип данных, который удаляет существующую информацию набора
+символов без того, чтобы выполнить любое символьное преобразование:</p>
+
+<pre>
+ALTER TABLE t MODIFY col1 BINARY(50);
+</pre>
+
+<p>Следующий шаг должен преобразовать столбец в не двоичный тип данных с
+соответствующим набором символов:</p>
+<pre>
+ALTER TABLE t MODIFY col1 CHAR(50) CHARACTER SET sjis;
+</pre>
+
+<p>Эта процедура требует, чтобы таблица не изменилась с инструкциями типа
+<code>INSERT</code> или <code>UPDATE</code> после обновления до MySQL 4.1
+или позже. В этом случае MySQL сохранил бы новые значения в столбце,
+использующем <code>latin1</code>, и столбец будет содержать смесь значений
+<code>sjis</code> и <code>latin1</code>, а значит не может
+быть преобразован правильно.</p>
+
+<p>Если Вы определили атрибуты при создании столбца первоначально, Вы должны
+также определить их, при изменении таблицы с помощью <code>ALTER
+TABLE</code>. Например, если Вы определили <code>NOT NULL</code> и явное
+значение <code>DEFAULT</code>, Вы должны также обеспечить их в инструкции
+<code>ALTER TABLE</code>. Иначе возникающее в результате определение столбца
+не будет включать эти атрибуты.</p>
+
+<h2><a name="charset-charsets"></a>10.10. Наборы символов и объединения,
+которые поддерживает MySQL</h2>
+<p>MySQL поддерживает свыше 70 объединений для более 30 наборов символов.
+Этот раздел указывает, которые наборы символов MySQL поддерживает. Имеется
+один подраздел для каждой группы связанных наборов символов. Для каждого
+набора символов, перечислены допустимые объединения.</p>
+
+<p>Вы можете всегда вносить в список доступные наборы символов и их заданные
+по умолчанию объединения инструкцией <code>SHOW CHARACTER SET</code>:</p>
+<pre>
+mysql&gt; <strong><code>SHOW CHARACTER SET;</code></strong>
++----------+-----------------------------+---------------------+
+| Charset  | Description                 | Default collation   |
++----------+-----------------------------+---------------------+
+| big5     | Big5 Traditional Chinese    | big5_chinese_ci     |
+| dec8     | DEC West European           | dec8_swedish_ci     |
+| cp850    | DOS West European           | cp850_general_ci    |
+| hp8      | HP West European            | hp8_english_ci      |
+| koi8r    | KOI8-R Relcom Russian       | koi8r_general_ci    |
+| latin1   | cp1252 West European        | latin1_swedish_ci   |
+| latin2   | ISO 8859-2 Central European | latin2_general_ci   |
+| swe7     | 7bit Swedish                | swe7_swedish_ci     |
+| ascii    | US ASCII                    | ascii_general_ci    |
+| ujis     | EUC-JP Japanese             | ujis_japanese_ci    |
+| sjis     | Shift-JIS Japanese          | sjis_japanese_ci    |
+| hebrew   | ISO 8859-8 Hebrew           | hebrew_general_ci   |
+| tis620   | TIS620 Thai                 | tis620_thai_ci      |
+| euckr    | EUC-KR Korean               | euckr_korean_ci     |
+| koi8u    | KOI8-U Ukrainian            | koi8u_general_ci    |
+| gb2312   | GB2312 Simplified Chinese   | gb2312_chinese_ci   |
+| greek    | ISO 8859-7 Greek            | greek_general_ci    |
+| cp1250   | Windows Central European    | cp1250_general_ci   |
+| gbk      | GBK Simplified Chinese      | gbk_chinese_ci      |
+| latin5   | ISO 8859-9 Turkish          | latin5_turkish_ci   |
+| armscii8 | ARMSCII-8 Armenian          | armscii8_general_ci |
+| utf8     | UTF-8 Unicode               | utf8_general_ci     |
+| ucs2     | UCS-2 Unicode               | ucs2_general_ci     |
+| cp866    | DOS Russian                 | cp866_general_ci    |
+| keybcs2  | DOS Kamenicky Czech-Slovak  | keybcs2_general_ci  |
+| macce    | Mac Central European        | macce_general_ci    |
+| macroman | Mac West European           | macroman_general_ci |
+| cp852    | DOS Central European        | cp852_general_ci    |
+| latin7   | ISO 8859-13 Baltic          | latin7_general_ci   |
+| cp1251   | Windows Cyrillic            | cp1251_general_ci   |
+| cp1256   | Windows Arabic              | cp1256_general_ci   |
+| cp1257   | Windows Baltic              | cp1257_general_ci   |
+| binary   | Binary pseudo charset       | binary              |
+| geostd8  | GEOSTD8 Georgian            | geostd8_general_ci  |
+| cp932    | SJIS for Windows Japanese   | cp932_japanese_ci   |
+| eucjpms  | UJIS for Windows Japanese   | eucjpms_japanese_ci |
++----------+-----------------------------+---------------------+
+</pre>
+
+<h3><a name="charset-unicode-sets"></a>10.10.1. Наборы символов Unicode</h3>
+<p>MySQL имеет два набора символов Unicode. Вы можете сохранять текст
+приблизительно для 650 языков, используя эти наборы символов.</p>
+
+<ul type="disc"><li><p>Объединения <code>ucs2</code> (UCS-2 Unicode):</p>
+<ul type="circle"><li><p><code>ucs2_bin</code></p></li>
+<li><p><code>ucs2_czech_ci</code></p></li>
+<li><p><code>ucs2_danish_ci</code></p></li>
+<li><p><code>ucs2_esperanto_ci</code></p></li>
+<li><p><code>ucs2_estonian_ci</code></p></li>
+<li><p><code>ucs2_general_ci</code> (default)</p></li>
+<li><p><code>ucs2_hungarian_ci</code></p></li>
+<li><p><code>ucs2_icelandic_ci</code></p></li>
+<li><p><code>ucs2_latvian_ci</code></p></li>
+<li><p><code>ucs2_lithuanian_ci</code></p></li>
+<li><p><code>ucs2_persian_ci</code></p></li>
+<li><p><code>ucs2_polish_ci</code></p></li>
+<li><p><code>ucs2_roman_ci</code></p></li>
+<li><p><code>ucs2_romanian_ci</code></p></li>
+<li><p><code>ucs2_slovak_ci</code></p></li>
+<li><p><code>ucs2_slovenian_ci</code></p></li>
+<li><p><code>ucs2_spanish2_ci</code></p></li>
+<li><p><code>ucs2_spanish_ci</code></p></li>
+<li><p><code>ucs2_swedish_ci</code></p></li>
+<li><p><code>ucs2_turkish_ci</code></p></li>
+<li><p><code>ucs2_unicode_ci</code></p></li></ul></li>
+
+<li><p>Объединения <code>utf8</code> (UTF-8 Unicode):</p>
+<ul type="circle"><li><p><code>utf8_bin</code></p></li>
+<li><p><code>utf8_czech_ci</code></p></li>
+<li><p><code>utf8_danish_ci</code></p></li>
+<li><p><code>utf8_esperanto_ci</code></p></li>
+<li><p><code>utf8_estonian_ci</code></p></li>
+<li><p><code>utf8_general_ci</code> (default)</p></li>
+<li><p><code>utf8_hungarian_ci</code></p></li>
+<li><p><code>utf8_icelandic_ci</code></p></li>
+<li><p><code>utf8_latvian_ci</code></p></li>
+<li><p><code>utf8_lithuanian_ci</code></p></li>
+<li><p><code>utf8_persian_ci</code></p></li>
+<li><p><code>utf8_polish_ci</code></p></li>
+<li><p><code>utf8_roman_ci</code></p></li>
+<li><p><code>utf8_romanian_ci</code></p></li>
+<li><p><code>utf8_slovak_ci</code></p></li>
+<li><p><code>utf8_slovenian_ci</code></p></li>
+<li><p><code>utf8_spanish2_ci</code></p></li>
+<li><p><code>utf8_spanish_ci</code></p></li>
+<li><p><code>utf8_swedish_ci</code></p></li>
+<li><p><code>utf8_turkish_ci</code></p></li>
+<li><p><code>utf8_unicode_ci</code></p></li></ul></li></ul>
+
+<p>Обратите внимание, что в объединениях <code>ucs2_roman_ci</code> и
+<code>utf8_roman_ci</code> <code>I</code> и <code>J</code> считаются
+эквивалентными, равно как и пара <code>U</code> и <code>V</code>.</p>
+
+<p>Объединения <code>ucs2_hungarian_ci</code> и
+<code>utf8_hungarian_ci</code> были добавлены в MySQL 5.1.5.</p>
+<p>MySQL осуществляет объединение <code>utf8_unicode_ci</code> согласно
+Unicode Collation Algorithm (UCA), описанному на
+<a href="../../../www.unicode.org/reports/tr10/default.htm" target="_top">
+http://www.unicode.org/reports/tr10/</a>. Объединение использует
+version-4.0.0 UCA weight keys:
+<a href="../../../www.unicode.org/Public/UCA/4.0.0/allkeys-4.0.0.txt"
+target="_top">http://www.unicode.org/Public/UCA/4.0.0/allkeys-4.0.0.txt</a>.
+Следующее обсуждение использует <code>utf8_unicode_ci</code>, но это также
+верно и для <code>ucs2_unicode_ci</code>.</p>
+
+<p>В настоящее время объединение <code>utf8_unicode_ci</code> имеет только
+частичную поддержку для Unicode Collation Algorithm. Некоторые символы все же
+не обеспечиваются. Также полностью не обеспечивается объединение меток.
+Это воздействует прежде всего на вьетнамский и некоторые малораспространенные
+языки в России, типа Udmurt, Tatar, Bashkir и Mari.</p>
+
+<p>Старшее свойство в <code>utf8_unicode_ci</code>: это поддерживает
+расширения, то есть когда один символ сравнивается как равный комбинациям
+других символов. Например, в немецком и некоторых других языках
+<code>├Я</code> равен <code>ss</code>.</p>
+
+<p><code>utf8_general_ci</code> объединение, которое не поддерживает
+расширения. Это может делать только взаимно-однозначные сравнения между
+символами. Это означает, что сравнения для объединения
+<code>utf8_general_ci</code> быстрее, но немного менее правильные, чем
+сравнения для <code>utf8_unicode_ci</code>.</p>
+
+<p>Например, следующие равенства верны в
+<code>utf8_general_ci</code> и в <code>utf8_unicode_ci</code>:</p>
+<pre>
+├Д = A
+├Ц = O
+├Ь = U
+</pre>
+
+<p>Различие между объединениями: это является истинным для
+<code>utf8_general_ci</code>:</p>
+<pre>
+├Я = s
+</pre>
+
+<p>В то время, как это истинно для <code>utf8_unicode_ci</code>:</p>
+<pre>
+├Я = ss
+</pre>
+
+<p>MySQL осуществляет специфические для языка объединения для набора символов
+<code>utf8</code> только, если упорядочение с <code>utf8_unicode_ci</code>
+не работает хорошо для языка. Например, <code>utf8_unicode_ci</code> работает
+прекрасно для German и French, а значит нет никакой потребности создавать
+специальные объединения <code>utf8</code> для этих двух языков.</p>
+
+<p><code>utf8_general_ci</code> также удовлетворителен для German и French
+за исключением того, что <code>├Я</code> равно <code>s</code>, но
+<code>ss</code>. Если это приемлемо для вашей прикладной программы, то
+применяйте <code>utf8_general_ci</code>, потому что это быстрее. Иначе,
+используйте <code>utf8_unicode_ci</code>, потому что это более точно.</p>
+
+<p><code>utf8_swedish_ci</code>, подобно другим специфическим для языка
+объединениям <code>utf8</code>, получен из <code>utf8_unicode_ci</code> с
+дополнительными правилами языка. Например, в Swedish следующие связи
+хранения, которые неприменимы для German или French:</p>
+
+<pre>
+├Ь = Y &lt; ├Ц
+</pre>
+
+<p>Объединения <code>utf8_spanish_ci</code> и <code>utf8_spanish2_ci</code>
+соответствуют современному и традиционному испанскому, соответственно. В
+обоих объединениях <code>├▒</code> (n-tilde) отдельный символ между
+<code>n</code> и <code>o</code>. Кроме того, для традиионного испанского
+<code>ch</code> отдельный символ между <code>c</code> и <code>d</code>, а
+<code>ll</code> отдельный символ между <code>l</code> и <code>m</code></p>
+
+<h3><a name="charset-we-sets"></a>10.10.2. Западноевропейские наборы символов
+</h3>
+<p>Западноевропейские наборы символов покрывают большинство
+западноевропейских языков, типа French, Spanish, Catalan, Basque, Portuguese,
+Italian, Albanian, Dutch, German, Danish, Swedish, Norwegian, Finnish,
+Faroese, Icelandic, Irish, Scottish и English.</p>
+
+<ul type="disc"><li><p>Объединения <code>ascii</code> (US ASCII):</p>
+<ul type="circle"><li><p><code>ascii_bin</code></p></li>
+<li><p><code>ascii_general_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>cp850</code> (DOS West European):</p>
+<ul type="circle"><li><p><code>cp850_bin</code></p></li>
+<li><p><code>cp850_general_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>dec8</code> (DEC Western European):</p>
+<ul type="circle"><li><p><code>dec8_bin</code></p></li>
+<li><p><code>dec8_swedish_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>hp8</code> (HP Western European):</p>
+<ul type="circle"><li><p><code>hp8_bin</code></p></li>
+<li><p><code>hp8_english_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>latin1</code> (cp1252 West European):</p>
+<ul type="circle"><li><p><code>latin1_bin</code></p></li>
+<li><p><code>latin1_danish_ci</code></p></li>
+<li><p><code>latin1_general_ci</code></p></li>
+<li><p><code>latin1_general_cs</code></p></li>
+<li><p><code>latin1_german1_ci</code></p></li>
+<li><p><code>latin1_german2_ci</code></p></li>
+<li><p><code>latin1_spanish_ci</code></p></li>
+<li><p><code>latin1_swedish_ci</code> (значение по умолчанию)</p></li></ul>
+
+<p><code>latin1</code> заданный по умолчанию набор символов.
+MySQL <code>latin1</code> представляет собой тот же набор символов, что и
+Windows <code>cp1252</code>. Это означает, что это официальный
+<code>ISO 8859-1</code> или IANA (Internet Assigned Numbers Authority)
+<code>latin1</code>, но IANA <code>latin1</code> обрабатывает точки между
+<code>0x80</code> и <code>0x9f</code> как <span class="quote">неопределенные
+</span> в то время, как <code>cp1252</code> и, следовательно, MySQL
+<code>latin1</code> назначают символы для тех позиций. Например,
+<code>0x80</code> знак Euro. Для <span class="quote">неопределенных</span>
+записей в <code>cp1252</code> MySQL транслирует <code>0x81</code> в Unicode
+<code>0x0081</code>, <code>0x8d</code> в <code>0x008d</code>,
+<code>0x8f</code> в <code>0x008f</code>, <code>0x90</code> в
+<code>0x0090</code> и <code>0x9d</code> в <code>0x009d</code>.</p>
+
+<p>Объединение <code>latin1_swedish_ci</code> это значение по умолчанию,
+которое, вероятно, используется большинством заказчиков MySQL. Хотя часто
+скажется, что это основано на правилах объединения Swedish/Finnish, имеются
+шведы и финны, кто не соглашаются с этой инструкцией.</p>
+
+<p>Объединения основаны на <code>latin1_german1_ci</code> и
+<code>latin1_german2_ci</code> на стандартах DIN-1 и DIN-2, где DIN замещает
+<span class="foreignphrase"><em class="foreignphrase">Deutsches Institut
+f├╝r Normung</em></span> (немецкий эквивалент ANSI, в общем). DIN-1
+называется <span class="quote">словарным объединением</span>, а DIN-2
+называется <span class="quote">объединением телефонного справочника</span>.
+</p>
+
+<ul type="circle"><li><p>Правила <code>latin1_german1_ci</code> (словарного):
+</p>
+<pre>
+├Д = A
+├Ц = O
+├Ь = U
+├Я = s
+</pre></li>
+
+<li><p>Правила <code>latin1_german2_ci</code> (телефонного справочника):</p>
+<pre>
+├Д = AE
+├Ц = OE
+├Ь = UE
+├Я = ss
+</pre></li></ul>
+
+<p>В объединении <code>latin1_spanish_ci</code>
+<code>├▒</code> (n-tilde) отдельный символ между
+letter between <code>n</code> и <code>o</code>.</p></li>
+
+<li><p>Объединения <code>macroman</code> (Mac West European):</p>
+<ul type="circle"><li><p><code>macroman_bin</code></p></li>
+<li><p><code>macroman_general_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>swe7</code> (7bit Swedish):</p>
+<ul type="circle"><li><p><code>swe7_bin</code></p></li>
+<li><p><code>swe7_swedish_ci</code> (значение по умолчанию)
+</p></li></ul></li></ul>
+
+<h3><a name="charset-ce-sets"></a>10.10.3.
+Центральноевропейские наборы символов</h3>
+<p>MySQL обеспечивает поддержку для наборов символов, используемых в Czech
+Republic, Slovakia, Hungary, Romania, Slovenia, Croatia и Poland.</p>
+
+<ul type="disc"><li><p>Объединения <code>cp1250</code>
+(Windows Central European):</p>
+<ul type="circle"><li><p><code>cp1250_bin</code></p></li>
+<li><p><code>cp1250_croatian_ci</code></p></li>
+<li><p><code>cp1250_czech_cs</code></p></li>
+<li><p><code>cp1250_general_ci</code> (значение по умолчанию)</p></li>
+<li><p><code>cp1250_polish_ci</code></p></li></ul></li>
+
+<li><p>Объединения <code>cp852</code> (DOS Central European):</p>
+<ul type="circle"><li><p><code>cp852_bin</code></p></li>
+<li><p><code>cp852_general_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>keybcs2</code> (DOS Kamenicky Czech-Slovak):</p>
+<ul type="circle"><li><p><code>keybcs2_bin</code></p></li>
+<li><p><code>keybcs2_general_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>latin2</code> (ISO 8859-2 Central European):</p>
+<ul type="circle"><li><p><code>latin2_bin</code></p></li>
+<li><p><code>latin2_croatian_ci</code></p></li>
+<li><p><code>latin2_czech_cs</code></p></li>
+<li><p><code>latin2_general_ci</code> (значение по умолчанию)</p></li>
+<li><p><code>latin2_hungarian_ci</code></p></li></ul></li>
+
+<li><p>Объединения <code>macce</code> (Mac Central European):</p>
+<ul type="circle"><li><p><code>macce_bin</code></p></li>
+<li><p><code>macce_general_ci</code> (значение по умолчанию)
+</p></li></ul></li></ul>
+
+<h3><a name="charset-se-me-sets"></a>10.10.4. Южноевропейские и
+ближневосточные наборы символов</h3>
+<p>Южныоевропейские и ближневосточные наборы символов, обеспечиваемые MySQL,
+включают Armenian, Arabic, Georgian, Greek, Hebrew и Turkish.</p>
+
+<ul type="disc"><li><p>Объединения <code>armscii8</code>
+(ARMSCII-8 Armenian):</p>
+<ul type="circle"><li><p><code>armscii8_bin</code></p></li>
+<li><p><code>armscii8_general_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>cp1256</code> (Windows Arabic):</p>
+<ul type="circle"><li><p><code>cp1256_bin</code></p></li>
+<li><p><code>cp1256_general_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>geostd8</code> (GEOSTD8 Georgian):</p>
+<ul type="circle"><li><p><code>geostd8_bin</code></p></li>
+<li><p><code>geostd8_general_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>greek</code> (ISO 8859-7 Greek):</p>
+<ul type="circle"><li><p><code>greek_bin</code></p></li>
+<li><p><code>greek_general_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>hebrew</code> (ISO 8859-8 Hebrew):</p>
+<ul type="circle"><li><p><code>hebrew_bin</code></p></li>
+<li><p><code>hebrew_general_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>latin5</code> (ISO 8859-9 Turkish):</p>
+<ul type="circle"><li><p><code>latin5_bin</code></p></li>
+<li><p><code>latin5_turkish_ci</code> (значение по умолчанию)
+</p></li></ul></li></ul>
+
+<h3><a name="charset-baltic-sets"></a>10.10.5. Балтийские наборы символов
+</h3>
+<p>Балтийские наборы символов охватывают Estonian, Latvian и Lithuanian.</p>
+<ul type="disc"><li><p>Объединения <code>cp1257</code> (Windows Baltic):</p>
+<ul type="circle"><li><p><code>cp1257_bin</code></p></li>
+<li><p><code>cp1257_general_ci</code> (значение по умолчанию)</p></li>
+<li><p><code>cp1257_lithuanian_ci</code></p></li></ul></li>
+
+<li><p>Объединения <code>latin7</code> (ISO 8859-13 Baltic):</p>
+<ul type="circle"><li><p><code>latin7_bin</code></p></li>
+<li><p><code>latin7_estonian_cs</code></p></li>
+<li><p><code>latin7_general_ci</code> (значение по умолчанию)</p></li>
+<li><p><code>latin7_general_cs</code></p></li></ul></li></ul>
+
+<h3><a name="charset-cyrillic-sets"></a>10.10.6. Наборы символов кириллицы
+</h3>
+<p>Наборы символов и объединения кириллицы для использования с
+Belarusian, Bulgarian, Russian и Ukrainian.</p>
+
+<ul type="disc"><li><p>Объединения <code>cp1251</code> (Windows Cyrillic):
+</p>
+<ul type="circle"><li><p><code>cp1251_bin</code></p></li>
+<li><p><code>cp1251_bulgarian_ci</code></p></li>
+<li><p><code>cp1251_general_ci</code> (значение по умолчанию)</p></li>
+<li><p><code>cp1251_general_cs</code></p></li>
+<li><p><code>cp1251_ukrainian_ci</code></p></li></ul></li>
+
+<li><p>Объединения <code>cp866</code> (DOS Russian):</p>
+<ul type="circle"><li><p><code>cp866_bin</code></p></li>
+<li><p><code>cp866_general_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>koi8r</code> (KOI8-R Relcom Russian):</p>
+<ul type="circle"><li><p><code>koi8r_bin</code></p></li>
+<li><p><code>koi8r_general_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>koi8u</code> (KOI8-U Ukrainian):</p>
+<ul type="circle"><li><p><code>koi8u_bin</code></p></li>
+<li><p><code>koi8u_general_ci</code> (значение по умолчанию)
+</p></li></ul></li></ul>
+
+<h3><a name="charset-asian-sets"></a>10.10.7. Азиатские наборы символов</h3>
+<p>Азиатские наборы символов, которые поддерживает пакет, включают Chinese,
+Japanese, Korean и Thai. Они могут быть усложнены. Например, китайские наборы
+должны учесть тысячи различных символов.</p>
+
+<ul type="disc"><li><p>Объединения <code>big5</code> (Big5
+Traditional Chinese):</p>
+<ul type="circle"><li><p><code>big5_bin</code></p></li>
+<li><p><code>big5_chinese_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>cp932</code> (SJIS for Windows Japanese):</p>
+<ul type="circle"><li><p><code>cp932_bin</code></p></li>
+<li><p><code>cp932_japanese_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>eucjpms</code> (UJIS for Windows Japanese):</p>
+<ul type="circle"><li><p><code>eucjpms_bin</code></p></li>
+<li><p><code>eucjpms_japanese_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>euckr</code> (EUC-KR Korean):</p>
+<ul type="circle"><li><p><code>euckr_bin</code></p></li>
+<li><p><code>euckr_korean_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>gb2312</code> (GB2312 Simplified Chinese):</p>
+<ul type="circle"><li><p><code>gb2312_bin</code></p></li>
+<li><p><code>gb2312_chinese_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>gbk</code> (GBK Simplified Chinese):</p>
+<ul type="circle"><li><p><code>gbk_bin</code></p></li>
+<li><p><code>gbk_chinese_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>sjis</code> (Shift-JIS Japanese):</p>
+<ul type="circle"><li><p><code>sjis_bin</code></p></li>
+<li><p><code>sjis_japanese_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>tis620</code> (TIS620 Thai):</p>
+<ul type="circle"><li><p><code>tis620_bin</code></p></li>
+<li><p><code>tis620_thai_ci</code> (значение по умолчанию)
+</p></li></ul></li>
+
+<li><p>Объединения <code>ujis</code> (EUC-JP Japanese):</p>
+<ul type="circle"><li><p><code>ujis_bin</code></p></li>
+<li><p><code>ujis_japanese_ci</code> (значение по умолчанию)
+</p></li></ul></li></ul>
+
+<h4><a name="charset-cp932"></a>10.10.7.1. Набор символов <code>cp932</code>
+</h4>
+<p><span class="bold"><strong>А на кой вообще нужен <code>cp932</code>?
+</strong></span></p>
+
+<p>В MySQL набор символов <code>sjis</code> соответствует
+<code>Shift_JIS</code> определенному IANA, который поддерживает символы
+JIS X0201 и JIS X0208 (см.
+<a href="../../../www.iana.org/assignments/character-sets" target="_top">
+http://www.iana.org/assignments/character-sets</a>).</p>
+
+<p>Однако, значение <span class="quote">SHIFT JIS</span> как описательный
+термин стало очень неопределенным, и это часто включает расширения
+<code>Shift_JIS</code>, которые определены различными поставщиками. Короче,
+больше стандартов, хороших и разных!</p>
+
+<p>Например, <span class="quote">SHIFT JIS</span>, использованный в Japanese
+Windows, представляет расширение <code>Shift_JIS</code> от Microsoft, и его
+точное название <code>Microsoft Windows Codepage: 932</code> или
+<code>cp932</code>. В дополнение к символам, обеспечиваемым
+<code>Shift_JIS</code>, <code>cp932</code> поддерживает символы расширения
+типа специальных и изюранных символов NEC и расширенных символов IBM.</p>
+
+<p>Много японских пользователей испытали проблемы при использовании этих
+символов расширения. Эта проблема складывается из следующих факторов:</p>
+<ul type="disc"><li><p>MySQL автоматически преобразовывает наборы символов.
+</p></li>
+
+<li><p>Наборы символов преобразованы через Unicode (<code>ucs2</code>).
+</p></li>
+<li><p>Набор символов <code>sjis</code> не поддерживает преобразование
+этих символов расширения.</p></li>
+
+<li><p>Имеются несколько правил преобразования из так называемого
+<span class="quote">SHIFT JIS</span> в Unicode, и некоторые символы
+преобразованы в Unicode по-другому, в зависимости от правила преобразования.
+MySQL поддерживает только одно из этих правил.</p></li></ul>
+
+<p>Набор символов MySQL <code>cp932</code> разработан, чтобы
+решить эти проблемы.</p>
+<p>Поскольку MySQL поддерживает преобразование набора символов, важно
+отделить IANA <code>Shift_JIS</code> от <code>cp932</code>: это два различных
+набора символов, потому что они обеспечивают разные правила преобразования.
+</p>
+
+<p><span class="bold"><strong>А в чем разница между <code>cp932</code> и
+<code>sjis</code>?</strong></span></p>
+<p>Набор символов <code>cp932</code> отличается
+от <code>sjis</code> следующим:</p>
+
+<ul type="disc"><li><p><code>cp932</code> поддерживает специальные и
+избранные символы NEC, а также расширенные символы от IBM.</p></li>
+<li><p>Некоторые символы в <code>cp932</code> имеют два различных кода, оба
+из которых преобразовываются в ту же самую Unicode-метку. При преобразовании
+из Unicode обратно в <code>cp932</code> один из кодов должен быть выбран. Для
+этого используется правило, рекомендуемое Microsoft (подробности на
+<a href="../../../support.microsoft.com/kb/170559/EN-US/default.htm" target="_top">
+http://support.microsoft.com/kb/170559/EN-US/</a>).</p>
+
+<p>Правило преобразования работает примерно так:</p>
+<ul type="circle"><li><p>Если символ находится в JIS X 0208 и в специальных
+символах NEC, применяется код из JIS X 0208.</p></li>
+
+<li><p>Если символ находится в специальных символах NEC и в расширенных
+символах IBM, применяется код из специальных символов NEC.</p></li>
+<li><p>Если символ находится в избранных символах IBM и в расширенных
+символах IBM, применяется код из расширенных символов IBM.</p></li></ul>
+
+<p>Таблица, показанная на
+<a href="../../../www.microsoft.com/globaldev/reference/dbcs/932.htm"
+target="_top">http://www.microsoft.com/globaldev/reference/dbcs/932.htm</a>
+обеспечивает информацию относительно значений Unicode символов
+<code>cp932</code>. Для входов таблицы с символами <code>cp932</code>, под
+которыми появляется четырехразрядный код, он представляет соответствующий
+код из Unicode (<code>ucs2</code>). Для входов таблицы с подчеркнутым
+значением с двумя цифрами имеется диапазон символьных значений
+<code>cp932</code>, которые начинаются с тех двух цифр. Щелчок на таком входе
+таблицы отправит Вас к странице, которая отображает значение Unicode для
+каждого из символов <code>cp932</code>, которые начинаются с тех цифр.</p>
+
+<p>Следующие ссылки имеют особый интерес. Они соответствуют кодированию
+для следующих наборов символов:</p>
+<ul type="circle"><li><p>Специальные символы NEC:</p>
+<pre>
+<a href="../../../www.microsoft.com/globaldev/reference/dbcs/932/932_87.htm"
+target="_top">
+http://www.microsoft.com/globaldev/reference/dbcs/932/932_87.htm</a>
+</pre></li>
+
+<li><p>Избранные NEC расширенные символы IBM:</p>
+<pre>
+<a href="../../../www.microsoft.com/globaldev/reference/dbcs/932/932_ED.htm"
+target="_top">
+http://www.microsoft.com/globaldev/reference/dbcs/932/932_ED.htm</a>
+<a href="../../../www.microsoft.com/globaldev/reference/dbcs/932/932_EE.htm"
+target="_top">
+http://www.microsoft.com/globaldev/reference/dbcs/932/932_EE.htm</a>
+</pre></li>
+
+<li><p>Избранные символы IBM:</p>
+<pre>
+<a href="../../../www.microsoft.com/globaldev/reference/dbcs/932/932_FA.htm"
+target="_top">
+http://www.microsoft.com/globaldev/reference/dbcs/932/932_FA.htm</a>
+<a href="../../../www.microsoft.com/globaldev/reference/dbcs/932/932_FB.htm"
+target="_top">
+http://www.microsoft.com/globaldev/reference/dbcs/932/932_FB.htm</a>
+<a href="../../../www.microsoft.com/globaldev/reference/dbcs/932/932_FC.htm"
+target="_top">
+http://www.microsoft.com/globaldev/reference/dbcs/932/932_FC.htm</a>
+</pre></li></ul></li>
+
+<li><p><code>cp932</code> поддерживает преобразование определяемых
+пользователем символов в комбинации с <code>eucjpms</code> и решает проблемы
+с преобразованием <code>sjis</code>/<code>ujis</code>. Подробности на
+<a href="../../../www.opengroup.or.jp/jvc/cde/sjis-euc-e.html" target="_top">
+http://www.opengroup.or.jp/jvc/cde/sjis-euc-e.html</a>.
+</p></li></ul>
+
+<p>Для некоторых символов, преобразование в и из <code>ucs2</code> отлично
+для <code>sjis</code> и <code>cp932</code>. Следующие таблицы
+иллюстрируют эти различия.</p>
+
+<p>Преобразование в <code>ucs2</code>:</p>
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>sjis
+</code>/<code>cp932</code>Значение</strong></span></td>
+<td><span class="bold"><strong><code>sjis</code> -&gt; <code>ucs2</code>
+преобразование</strong></span></td><td><span class="bold"><strong><code>
+cp932</code> -&gt;<code>ucs2</code> преобразование</strong></span></td></tr>
+
+<tr><td>5C</td><td>005C</td><td>005C</td></tr>
+<tr><td>7E</td><td>007E</td><td>007E</td></tr>
+<tr><td>815C</td><td>2015</td><td>2015</td></tr>
+
+<tr><td>815F</td><td>005C</td><td>FF3C</td></tr>
+<tr><td>8160</td><td>301C</td><td>FF5E</td></tr>
+<tr><td>8161</td><td>2016</td><td>2225</td></tr>
+
+<tr><td>817C</td><td>2212</td><td>FF0D</td></tr>
+<tr><td>8191</td><td>00A2</td><td>FFE0</td></tr>
+<tr><td>8192</td><td>00A3</td><td>FFE1</td></tr>
+<tr><td>81CA</td><td>00AC</td><td>FFE2</td></tr></tbody></table>
+
+<p>Преобразование из <code>ucs2</code>:</p>
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>ucs2</code>
+значение </strong></span></td><td><span class="bold"><strong><code>ucs2
+</code> -&gt; <code>sjis</code> преобразование</strong></span></td><td>
+<span class="bold"><strong><code>ucs2</code> -&gt; <code>cp932
+</code> преобразование</strong></span></td></tr>
+
+<tr><td>005C</td><td>815F</td><td>5C</td></tr>
+<tr><td>007E</td><td>7E</td><td>7E</td></tr>
+<tr><td>00A2</td><td>8191</td><td>3F</td></tr>
+
+<tr><td>00A3</td><td>8192</td><td>3F</td></tr>
+<tr><td>00AC</td><td>81CA</td><td>3F</td></tr>
+<tr><td>2015</td><td>815C</td><td>815C</td></tr>
+
+<tr><td>2016</td><td>8161</td><td>3F</td></tr>
+<tr><td>2212</td><td>817C</td><td>3F</td></tr>
+<tr><td>2225</td><td>3F</td><td>8161</td></tr>
+
+<tr><td>301C</td><td>8160</td><td>3F</td></tr>
+<tr><td>FF0D</td><td>3F</td><td>817C</td></tr>
+<tr><td>FF3C</td><td>3F</td><td>815F</td></tr>
+<tr><td>FF5E</td><td>3F</td><td>8160</td></tr>
+<tr><td>FFE0</td><td>3F</td><td>8191</td></tr>
+<tr><td>FFE1</td><td>3F</td><td>8192</td></tr>
+<tr><td>FFE2</td><td>3F</td><td>81CA</td></tr></tbody></table>
+
+<p>Пользователи любых японских наборов символов должны знать, что
+использование опций <code>--character-set-client-handshake</code> (или
+<code>--skip-character-set-client-handshake</code>) имеет важный эффект.</p>
+
+<h2><a name="faqs-cjk"></a>10.11. MySQL 5 FAQ: поддержка наборов символов CJK
+</h2>
+<p>Этот набор вопросов происходит из опыта поддержки MySQL в обработке
+запросов относительно проблем кириллицы и CJK (Chinese-Japanese-Korean).</p>
+
+<p><a name="qandaitem-28-11-1"></a><span class="bold"><strong>10.11.1:
+</strong></span><span class="bold"><strong>Я вставил символы CJK в мою
+таблицу. Почему <code>SELECT</code> отображает их как символы
+<span class="quote">?</span>?</strong></span></p>
+
+<p>Эта проблема обычно из-за установки в MySQL, который не соответствует
+параметрам настройки для прикладной программы или операционной системы.
+Имеются некоторые общие шаги для исправления этих типов проблем:</p>
+
+<ul type="disc"><li><p><span class="emphasis"><em>Определите версию MySQL
+</em></span>. Используйте инструкцию <code>SELECT
+VERSION();</code> для этого.</p></li>
+
+<li><p><span class="emphasis"><em>Проверьте, что база данных фактически
+использует желательный набор символов.</em></span>.</p>
+<p>Люди часто думают, что набор символов пользователя всегда такой же, как
+набор символов сервера используемый для целей отображения. Однако, оба эти
+предположения неправильны. Вы можете удостовериться в этом, проверяя
+результат <code>SHOW CREATE TABLE <em><code>tablename</code></em></code>, а
+лучше используя эту инструкцию:</p>
+
+<pre>
+SELECT character_set_name, collation_name FROM information_schema.columns
+       WHERE table_schema = your_database_name AND
+       table_name = your_table_name AND column_name = your_column_name;
+</pre></li>
+
+<li><p><span class="emphasis"><em>Определите шестнадцатеричное значение
+символа или символов, которые не отображаются правильно.</em></span>.</p>
+<p>Вы можете получать эту информацию для столбца
+<em><code>column_name</code></em> в таблице
+<em><code>table_name</code></em>, используя следующий запрос:</p>
+<pre>
+SELECT HEX(<em><code>column_name</code></em>)
+       FROM <em><code>table_name</code></em>;
+</pre>
+
+<p><code>3F</code> кодирует символ <code>?</code>. Это означает, что
+<code>?</code> является символом, фактически сохраненным в столбце. Это
+наиболее часто случается из-за проблемы при преобразовании специфического
+символа от Вашего набора символов пользователя до целевого набора символов.
+</p></li>
+
+<li><p><span class="emphasis"><em>Удостоверьтесь, что возможное путешествие
+туда и обратно, то есть когда Вы выбираете <em><code>literal</code></em> (или
+<em><code>_introducer hexadecimal-value</code></em>), Вы получаете в
+результате именно <em><code>literal</code></em></em></span>.</p>
+
+<p>Например, японский символ
+<span class="foreignphrase"><em class="foreignphrase">Katakana</em></span>
+<span class="foreignphrase"><em class="foreignphrase">Pe</em></span>
+(<code>уГЪ'</code>) существует во всех CJK наборах символов, и имеет значение
+<code>0x30da</code>. Чтобы проверять путешествие туда и обратно для этого
+символа, используйте этот запрос:</p>
+
+<pre>
+SELECT 'уГЪ' AS `уГЪ`; /* or SELECT _ucs2 0x30da; */
+</pre>
+<p>Если результат не такой, путешествие туда и обратно потерпело неудачу.</p>
+</p></li>
+
+<li><p><span class="emphasis"><em>Удостоверьтесь, что проблема не с окном
+просмотра или другой прикладной программой, а именно с MySQL</em></span>.</p>
+<p>Используйте программу пользователя <span><strong>mysql</strong></span>
+(в Windows: <span><strong>mysql.exe</strong></span>), чтобы выполнить эту
+задачу. Если <span><strong>mysql</strong></span> отображает все правильно, но
+Ваша прикладная программа этого не делает, то проблема, вероятно, из-за
+параметров настройки системы.</p>
+
+<p>Чтобы выяснять, каковы Ваши параметры настройки, используйте инструкцию
+<code>SHOW VARIABLES</code> вывод которой должен походить на то,
+что показывается здесь:</p>
+
+<pre>
+mysql&gt; <strong><code>SHOW VARIABLES LIKE 'char%';</code></strong>
++--------------------------+----------------------------------------+
+| Variable_name            | Value                                  |
++--------------------------+----------------------------------------+
+| character_set_client     | utf8                                   |
+| character_set_connection | utf8                                   |
+| character_set_database   | latin1                                 |
+| character_set_filesystem | binary                                 |
+| character_set_results    | utf8                                   |
+| character_set_server     | latin1                                 |
+| character_set_system     | utf8                                   |
+| character_sets_dir       | /usr/local/mysql/share/mysql/charsets/ |
++--------------------------+----------------------------------------+
+8 rows in set (0.03 sec)
+</pre>
+
+<p>Это типичные параметры настройки набора символов для
+международно-ориентируемого пользователя (обратите внимание на использование
+<code>utf8</code> Unicode), связанного с сервером на западе
+(<code>latin1</code> является набором символов западной Европы и значением
+по умолчанию для MySQL).</p>
+
+<p>Хотя Unicode (обычно вариант <code>utf8</code> на Unix и <code>ucs2</code>
+в Windows) предпочтителен для Latin, это часто не то, что Ваши утилиты
+операционной системы поддерживают лучше всего. Много пользователей Windows
+находят, что набор символов Microsoft, типа <code>cp932</code> для Japanese
+Windows, подходит им лучше.</p>
+
+<p>Если Вы не можете управлять параметрами настройки сервера, и Вы понятия не
+имеете, каков Ваш основной компьютер, то пробуйте изменить набор символов на
+общий для страны, в которой Вы находитесь (<code>euckr</code> = Korea;
+<code>gb2312</code> или <code>gbk</code> = People's Republic of China;
+<code>big5</code> = Taiwan; <code>sjis</code>,
+<code>ujis</code>, <code>cp932</code> или <code>eucjpms</code> = Japan;
+<code>ucs2</code> or <code>utf8</code> = где угодно). Обычно необходимо
+изменить только параметры настройки пользователя, результатов и подключение.
+Имеется простая инструкция, которая изменяется все три сразу:
+<code>SET NAMES</code>. Например:</p>
+<pre>
+SET NAMES 'big5';
+</pre>
+
+<p>Если только установка правильна, Вы можете делать это постоянным,
+редактируя <code>my.cnf</code> или <code>my.ini</code>. Например Вы могли бы
+добавлять строки, походящие на эти:</p>
+
+<pre>
+[mysqld]
+character-set-server=big5
+
+[client]
+default-character-set=big5
+</pre>
+<p>Также возможно, что имеются проблемы с установкой конфигурации API,
+используемой в вашей прикладной программе.</p></li></ul>
+
+<p><a name="qandaitem-28-11-2"></a><span class="bold"><strong>10.11.2:
+</strong></span><span class="bold"><strong>Какие китайские (GB) наборы
+символов понимает MySQL?</strong></span></p>
+
+<p>MySQL поддерживает два общих варианта GB
+<em class="firstterm">GB</em> (<span class="foreignphrase">
+<em class="foreignphrase">Guojia Biaozhun</em></span> или
+<span class="emphasis"><em>национального эталона</em></span>) набора
+символов, которые являются официальными в КНР: <code>gb2312</code> и
+<code>gbk</code>. Иногда люди пробуют вставлять символы <code>gbk</code> в
+<code>gb2312</code>, и это работает в большинстве случаев, потому что
+<code>gbk</code> является надмножеством <code>gb2312</code>, но в конечном
+счете они пробуют вставлять старые китайские символы, и это не работает (см.
+<a href="../../../bugs.mysql.com/16072" target="_top">Глюк #16072</a>).</p>
+
+<p>Здесь мы пробуем разъяснять точно, какие символы являются законными в
+<code>gb2312</code> или <code>gbk</code> в отношении официальных документов.
+Пожалуйста, проверьте эти ссылки перед сообщением об ошибках в
+<code>gb2312</code> или <code>gbk</code>.</p>
+
+<ul type="disc"><li><p>Для полной распечатки символов <code>gb2312</code>,
+упорядоченных согласно объединению <code>gb2312_chinese_ci</code>:
+<a href="../../../d.udm.net/bar/~bar/charts/gb2312_chinese_ci.html"
+target="_top">http://d.udm.net/bar/~bar/charts/gb2312_chinese_ci.html</a>.
+</p></li>
+
+<li><p>MySQL <code>gbk</code> в действительности <span class="quote">
+Microsoft code page 936</span>. Это отличается от официального
+<code>gbk</code> для символов <code>A1A4</code> (middle dot),
+<code>A1AA</code> (em dash), <code>A6E0-A6F5</code> и <code>A8BB-A8C0</code>.
+Для получения распечатки различий см.
+<a href="../../../recode.progiciels-bpi.ca/showfile.html@name=dist_2Flibiconv_2Fgbk.h"
+target="_top">
+http://recode.progiciels-bpi.ca/showfile.html?name=dist/libiconv/gbk.h</a>.
+</p></li>
+
+<li><p>Для получения распечатки отображений <code>gbk</code>/Unicode см.
+<a href="../../../www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP936.TXT"
+target="_top">
+http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP936.TXT
+</a>.</p></li>
+
+<li><p>Для получения распечатки MySQL-символов <code>gbk</code> см.
+<a href="../../../d.udm.net/bar/~bar/charts/gbk_chinese_ci.html" target="_top">
+http://d.udm.net/bar/~bar/charts/gbk_chinese_ci.html</a>.</p></li></ul>
+
+<p><a name="qandaitem-28-11-3"></a><span class="bold"><strong>10.11.3:
+</strong></span><span class="bold"><strong>Какие проблемы я должен знать при
+работе с китайским набором символов Big5?</strong></span></p>
+
+<p>MySQL поддерживает набор символов Big5, который является общим в Гонконге
+и на Tайване (Republic of China). MySQL <code>big5</code> в действительности
+кодовая страница Microsoft 950, которая очень похожа на оригинальный набор
+символов <code>big5</code>. Пакет перешео на этот набор символов, начиная с
+MySQL 4.1.16/5.0.16 (в результате <a href="../../../bugs.mysql.com/12476"
+target="_top">Глюка #12476</a>). Например, следующие инструкции работают в
+текущих версиях MySQL, но не в старых версиях:</p>
+
+<pre>
+mysql&gt; CREATE TABLE big5 (BIG5 CHAR(1) CHARACTER SET BIG5);
+Query OK, 0 rows affected (0.13 sec)
+mysql&gt; INSERT INTO big5 VALUES (0xf9dc);
+Query OK, 1 row affected (0.00 sec)
+mysql&gt; SELECT * FROM big5;
++------+
+| big5 |
++------+
+| хл║  |
++------+
+1 row in set (0.02 sec)
+</pre>
+
+<p>Просьба о добавлении расщирения <code>HKSCS</code> была зарегистрирована.
+Те, кто нуждается в этом расширении, могут найти интересной предложенную
+заплатку для <a href="../../../bugs.mysql.com/13577" target="_top">Глюка #13577
+</a>.</p>
+
+<p><a name="qandaitem-28-11-4"></a><span class="bold"><strong>10.11.4:
+</strong></span><span class="bold"><strong>Почему японские преобразования
+набора символов терпят неудачу?</strong></span></p>
+
+<p>MySQL поддерживает наборы символов <code>sjis</code>, <code>ujis</code>,
+<code>cp932</code> и <code>eucjpms</code> так же, как Unicode. Общая
+потребность состоит в том, чтобы преобразоваться между наборами символов.
+Например, есть Unix-сервер (обычно с <code>sjis</code> или <code>ujis</code>)
+и Windows-клиент (а здесь почти всегда встречается <code>cp932</code>).</p>
+
+<p>В следующей таблице преобразования столбец <code>ucs2</code> представляет
+источник, а столбцы <code>sjis</code>, <code>cp932</code>, <code>ujis</code>
+и <code>eucjpms</code> представляют адресатов, то есть последние 4 столбца
+обеспечивают шестнадцатеричный результат, когда Вы используете
+<code>CONVERT(ucs2)</code> или назначаете столбец, содержащий значение
+<code>ucs2</code>, столбцу в <code>sjis</code>, <code>cp932</code>,
+<code>ujis</code> или <code>eucjpms</code>.</p>
+
+<table border="1"><thead><tr><th>Имя символа</th>
+<th align="left">ucs2</th><th align="left">sjis</th>
+<th align="left">cp932</th><th align="left">ujis</th>
+<th align="left">eucjpms</th></tr></thead>
+
+<tbody><tr><td>BROKEN BAR</td><td align="left">00A6</td><td align="left">
+3F</td><td align="left">3F</td><td align="left">8FA2C3</td>
+<td align="left">3F</td></tr>
+
+<tr><td>FULLWIDTH BROKEN BAR</td><td align="left">FFE4</td><td align="left">
+3F</td><td align="left">FA55</td><td align="left">3F</td>
+<td align="left">8FA2</td></tr>
+
+<tr><td>YEN SIGN</td><td align="left">00A5</td><td align="left">3F</td>
+<td align="left">3F</td><td align="left">20</td><td align="left">3F</td></tr>
+<tr><td>FULLWIDTH YEN SIGN</td><td align="left">FFE5</td><td align="left">
+818F</td><td align="left">818F</td><td align="left">A1EF</td>
+<td align="left">3F</td></tr>
+
+<tr><td>TILDE</td><td align="left">007E</td><td align="left">7E</td>
+<td align="left">7E</td><td align="left">7E</td><td align="left">7E</td></tr>
+<tr><td>OVERLINE</td><td align="left">203E</td><td align="left">3F</td>
+<td align="left">3F</td><td align="left">20</td><td align="left">3F</td></tr>
+
+<tr><td>HORIZONTAL BAR</td><td align="left">2015</td><td align="left">815C
+</td><td align="left">815C</td><td align="left">A1BD</td>
+<td align="left">A1BD</td></tr>
+
+<tr><td>EM DASH</td><td align="left">2014</td><td align="left">3F</td>
+<td align="left">3F</td><td align="left">3F</td><td align="left">3F</td></tr>
+<tr><td>REVERSE SOLIDUS</td><td align="left">005C</td><td align="left">
+815F</td><td align="left">5C</td><td align="left">5C</td>
+<td align="left">5C</td></tr>
+
+<tr><td>FULLWIDTH ""</td><td align="left">FF3C</td><td align="left">3F</td>
+<td align="left">815F</td><td align="left">3F</td>
+<td align="left">A1C0</td></tr>
+
+<tr><td>WAVE DASH</td><td align="left">301C</td><td align="left">8160</td>
+<td align="left">3F</td><td align="left">A1C1</td>
+<td align="left">3F</td></tr><tr>
+
+<td>FULLWIDTH TILDE</td><td align="left">FF5E</td><td align="left">3F</td>
+<td align="left">8160</td><td align="left">3F</td>
+<td align="left">A1C1</td></tr>
+
+<tr><td>DOUBLE VERTICAL LINE</td><td align="left">2016</td><td align="left">
+8161</td><td align="left">3F</td><td align="left">A1C2</td><td align="left">
+3F</td></tr>
+
+<tr><td>PARALLEL TO</td><td align="left">2225</td><td align="left">3F</td>
+<td align="left">8161</td><td align="left">3F</td><td align="left">
+A1C2</td></tr>
+
+<tr><td>MINUS SIGN</td><td align="left">2212</td><td align="left">817C</td>
+<td align="left">3F</td><td align="left">A1DD</td>
+<td align="left">3F</td></tr>
+
+<tr><td>FULLWIDTH HYPHEN-MINUS</td><td align="left">FF0D</td>
+<td align="left">3F</td><td align="left">817C</td>
+<td align="left">3F</td><td align="left">A1DD</td></tr>
+
+<tr><td>CENT SIGN</td><td align="left">00A2</td><td align="left">8191</td>
+<td align="left">3F</td><td align="left">A1F1</td>
+<td align="left">3F</td></tr>
+
+<tr><td>FULLWIDTH CENT SIGN</td><td align="left">FFE0</td><td align="left">
+3F</td><td align="left">8191</td><td align="left">3F</td>
+<td align="left">A1F1</td></tr>
+
+<tr><td>POUND SIGN</td><td align="left">00A3</td><td align="left">8192</td>
+<td align="left">3F</td><td align="left">A1F2</td>
+<td align="left">3F</td></tr>
+
+<tr><td>FULLWIDTH POUND SIGN</td><td align="left">FFE1</td><td align="left">
+3F</td><td align="left">8192</td><td align="left">3F</td>
+<td align="left">A1F2</td></tr>
+
+<tr><td>NOT SIGN</td><td align="left">00AC</td><td align="left">
+81CA</td><td align="left">3F</td><td align="left">A2CC</td>
+<td align="left">3F</td></tr>
+
+<tr><td>FULLWIDTH NOT SIGN</td><td align="left">FFE2</td><td align="left">3F
+</td><td align="left">81CA</td><td align="left">3F</td><td align="left">A2CC
+</td></tr></tbody></table>
+
+<p>Теперь рассмотрите эту часть таблицы:</p>
+<table border="1"><thead><tr><th> </th><th align="right">ucs2</th>
+<th align="right">sjis</th><th align="right">cp932</th></tr></thead>
+<tbody><tr><td>NOT SIGN</td><td align="right">00AC</td><td align="right">
+81CA</td><td align="right">3F</td></tr>
+<tr><td>FULLWIDTH NOT SIGN</td><td align="right">FFE2</td><td align="right">
+3F</td><td align="right">81CA</td></tr></tbody></table>
+
+<p>Это означает, что MySQL преобразовывает <code>NOT SIGN</code> (Unicode
+<code>U+00AC</code>) в <code>sjis</code> <code>0x81CA</code> и в
+<code>cp932</code> <code>3F</code> (<code>3F</code> как раз и есть знак
+вопроса (<span class="quote">?</span>), то есть то, что всегда используется,
+когда преобразование не может выполняться.</p>
+
+<p><a name="qandaitem-28-11-5"></a><span class="bold"><strong>10.11.5:
+</strong></span><span class="bold"><strong>Что я должен делать,
+если я хочу преобразовывать SJIS <code>81CA</code> в <code>cp932</code>?
+</strong></span></p>
+
+<p>Имеются серьезные жалобы относительно этого: много людей предпочли бы
+свободное преобразование так, чтобы <code>81CA (NOT SIGN)</code> в
+<code>sjis</code> становился <code>81CA (FULLWIDTH NOT SIGN)</code> в
+<code>cp932</code>. Изменение для этого поведения планируется.</p>
+
+<p><a name="qandaitem-28-11-6"></a><span class="bold"><strong>10.11.6:
+</strong></span><span class="bold"><strong>Как MySQL представляют знак Yen
+(<code>┬е</code>)?</strong></span></p>
+
+<p>Проблема возникает потому, что некоторые версии японских наборов символов
+(<code>sjis</code> и <code>euc</code>) обрабатывают <code>5C</code> как
+<em class="firstterm">reverse solidus</em> (<code>\</code> он же backslash),
+а другие обрабатывают это как знак йены (<code>┬е</code>).</p>
+
+<p>MySQL следует только за одной версией JIS (Japanese Industrial Standards).
+В MySQL <span class="emphasis"><em><code>5C</code> всегда обратный слэш
+(<code>\</code>)</em></span>.</p>
+
+<p><a name="qandaitem-28-11-7"></a><span class="bold"><strong>10.11.7:
+</strong></span><span class="bold"><strong>MySQL планирует делать отдельный
+набор символов, где <code>5C</code> представляет знак йены?
+</strong></span></p>
+<p>Это одно из возможных решений для проблемы знака йены, однако, это не
+будет в MySQL 5.1 или 5.2.</p>
+
+<p><a name="qandaitem-28-11-8"></a><span class="bold"><strong>10.11.8:
+</strong></span><span class="bold"><strong>Какие проблемы я должен знать при
+работе с корейскими наборами символов в MySQL?</strong></span></p>
+
+<p>В теории, хотя есть несколько версий набора символов <code>euckr</code>
+(<em class="firstterm">Extended Unix Code Korea</em>),
+только одна проблема была отмечена.</p>
+
+<p>Мы используем <span class="quote">ASCII</span>-вариант EUC-KR, в котором
+код <code>0x5c</code> указывает REVERSE SOLIDUS, <code>\</code> вместо
+<span class="quote">KS-Roman</span>-варианта EUC-KR, в котором код
+<code>0x5c</code> определяет <code>WON SIGN</code>(<code>тВй</code>). Это
+означает, что Вы не можете
+преобразовывать Unicode <code>U+20A9</code> в <code>euckr</code>:</p>
+
+<pre>
+mysql&gt; SELECT CONVERT('тВй' USING euckr) AS euckr,
+    -&gt;        HEX(CONVERT('тВй' USING euckr)) AS hexeuckr;
++-------+----------+
+| euckr | hexeuckr |
++-------+----------+
+| ?     | 3F       |
++-------+----------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>Графическая корейская диаграмма MySQL здесь:
+<a href="../../../d.udm.net/bar/~bar/charts/euckr_korean_ci.html" target="_top">
+http://d.udm.net/bar/~bar/charts/euckr_korean_ci.html</a>.</p>
+
+<p><a name="qandaitem-28-11-9"></a><span class="bold"><strong>10.11.9:
+</strong></span><span class="bold"><strong>Почему я получаю сообщения об
+ошибке "<span class="errortext">Data truncated</span>"?</strong></span></p>
+
+<p>Для иллюстрации мы создадим таблицу с одним столбцом Unicode
+(<code>ucs2</code>) и другим Chinese (<code>gb2312</code>):</p>
+<pre>
+mysql&gt; CREATE TABLE ch
+    -&gt;        (ucs2 CHAR(3) CHARACTER SET ucs2,
+    -&gt;        gb2312 CHAR(3) CHARACTER SET gb2312);
+Query OK, 0 rows affected (0.05 sec)
+</pre>
+
+<p>Мы пробуем помещать редкий символ <code>ц▒М</code> в обоих столбцах:</p>
+<pre>
+mysql&gt; <strong><code>INSERT INTO ch VALUES ('Aц▒МB','Aц▒МB');</code></strong>
+Query OK, 1 row affected, 1 warning (0.00 sec)
+</pre>
+
+<p>Имеется предупреждение. Давайте посмотрим, что там случилось:</p>
+<pre>
+mysql&gt; <strong><code>SHOW WARNINGS;</code></strong>
++---------+------+---------------------------------------------+
+| Level   | Code | Message                                     |
++---------+------+---------------------------------------------+
+| Warning | 1265 | Data truncated for column 'gb2312' at row 1 |
++---------+------+---------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>Так что это предупреждение только относительно столбца <code>gb2312</code>.
+</p>
+<pre>
+mysql&gt; SELECT ucs2, HEX(ucs2), gb2312, HEX(gb2312) FROM ch;
++-------+--------------+--------+-------------+
+| ucs2  | HEX(ucs2)    | gb2312 | HEX(gb2312) |
++-------+--------------+--------+-------------+
+| Aц▒МB | 00416C4C0042 | A?B    | 413F42      |
++-------+--------------+--------+-------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>Имеются несколько вещей, которые надлежит понять здесь:</p>
+<ol type="1"><li><p>Факт, что это является <span class="quote">
+предупреждением</span>, а не <span class="quote">ошибкой</span>, характерным
+для MySQL. Мы предпочитаем пробовать сделать то, что можем, чтобы получить
+метод наилучшего приближения, чем отказываться.</p></li>
+
+<li><p>Символ <code>ц▒М</code> не находится в наборе символов
+<code>gb2312</code>. Мы рассматривали эту проблему ранее.</p></li>
+<li><p>По общему признанию сообщение вводит в заблуждение. В этом случае не
+было никакого усечения: а произошла тривиальная замена символа на
+вопросительный знак. Авторы уже имели недовольство относительно этого
+сообщения (см. <a href="../../../bugs.mysql.com/9337" target="_top">Глюк #9337
+</a>). Но пока они придумывают кое-что получше, имейте в виду что сообщение
+2165 может означать ряд вещей.</p></li>
+
+<li><p>С <code>SQL_MODE=TRADITIONAL</code> имелось бы сообщение об ошибке, но
+вместо ошибки 2165 Вы будете видеть: <code>ERROR 1406 (22001): Data too long
+for column 'gb2312' at row 1</code>.</p></li></ol>
+
+<p><a name="qandaitem-28-11-10"></a><span class="bold"><strong>10.11.10:
+</strong></span><span class="bold"><strong>Почему мой внешний GUI-интерфейс
+или окно просмотра не отображает символы CJK правильно в моей прикладной
+программе, использующей Access, PHP или другой API?</strong></span></p>
+
+<p>Получите прямое подключение к серверу, применяя клиент
+<span><strong>mysql</strong></span> (в Windows:
+<span><strong>mysql.exe</strong></span>), и попытайтесь
+выполнить тот же самый запрос там. Если
+<span><strong>mysql</strong></span> отвечает правильно, то
+проблема может быть в том, что Ваш интерфейс прикладной программы требует
+инициализации. Используйте <span><strong>mysql</strong></span>, чтобы
+понять, какой набор символов это использует с помощью инструкции
+<code>SHOW VARIABLES LIKE 'char%';</code>. Если Вы используете Access, то Вы
+наиболее вероятно соединяетесь с MyODBC. В этом случае Вы должны проверить
+конфигурацию ODBC. Если, например, Вы используете <code>big5</code>, Вы ввели
+бы <code>SET NAMES 'big5'</code>. Обратите внимание, что <code>;</code> не
+требуется в этом случае. Если Вы используете ASP, Вы могли бы добавить
+<code>SET NAMES</code> в код. Имеется пример, который работал в прошлом:</p>
+
+<pre>
+&lt;%
+Session.CodePage=0
+Dim strConnection
+Dim Conn
+strConnection="driver={MySQL ODBC 3.51 Driver}; \
+               server=<em>server</em>;uid=<em><code>username</code></em>;" \
+               &amp; "pwd=<em><code>password</code></em>; \
+               database=<em><code>database</code></em>; \
+               stmt=SET NAMES 'big5';"
+Set Conn = Server.CreateObject("ADODB.Connection")
+Conn.Open strConnection
+%&gt;
+</pre>
+
+<p>Аналогичным способом, если Вы используете любой набор символов, другой,
+чем <code>latin1</code> с Connector/NET, Вы должны определить набор символов
+в строке подключения. Если Вы используете PHP, опробуйте это:</p>
+
+<pre>
+&lt;?php
+$link = mysql_connect($host, $usr, $pwd);
+mysql_select_db($db);
+if (mysql_error()) {
+   print "Database ERROR: " . mysql_error();
+}
+mysql_query("SET NAMES 'utf8'", $link);
+?&gt;
+</pre>
+
+<p>В этом случае мы использовали <code>SET NAMES</code>, чтобы изменить
+<code>character_set_client</code>, <code>character_set_connection</code> и
+<code>character_set_results</code>.</p>
+
+<p>Правильно использовать более нового расширения <code>mysqli</code>, а не
+старого <code>mysql</code>. При использовании <code>mysqli</code> предыдущий
+пример мог бы быть переписан как показано здесь:</p>
+
+<pre>
+&lt;?php
+$link = new mysqli($host, $usr, $pwd, $db);
+if (mysqli_connect_errno()) {
+   printf("Connect failed: %s\n", mysqli_connect_error());
+   exit();
+}
+$link-&gt;query("SET NAMES 'utf8'");
+?&gt;
+</pre>
+
+<p>Другая проблема, с которой часто сталкиваются в прикладных программах на
+PHP: что делать с предположениями, сделанными браузером. Иногда добавление
+или изменение тэга <code>&lt;meta&gt;</code> достаточно, чтобы исправить
+проблему: например, чтобы обеспечить, чтобы агент пользователя
+интерпретировал содержание страницы как <code>UTF-8</code>, Вы должны
+включить <code>&lt;meta http-equiv="Content-Type" content="text/html;
+charset=utf-8"&gt;</code> в <code>&lt;head&gt;</code> HTML-страницы.</p>
+
+<p><a name="qandaitem-28-11-11"></a><span class="bold"><strong>10.11.11:
+</strong></span><span class="bold"><strong>Я обновился до MySQL 5.1.
+Как я могу возвращаться к поведению, аналогичному MySQL 4.0,
+относительно наборов символов?</strong></span></p>
+
+<p>В MySQL 4.0 имелся один <span class="quote">глобальный</span> набор
+символов для клиента и сервера, который назначался администратором. Это
+изменилось в MySQL 4.1. Когда пользователь соединяется, он посылает серверу
+имя набора символов, который требуется использовать. Сервер использует это
+имя, чтобы установить переменные системы <code>character_set_client</code>,
+<code>character_set_results</code> и <code>character_set_connection</code>. В
+действительности сервер выполняет операцию <code>SET NAMES</code>,
+использующую имя набора символов. Эффект этого: Вы не можете управлять
+набором символов пользователя, запуская <span><strong>mysqld</strong></span>
+с параметром <code>--character-set-server=utf8</code>. Однако, некоторые
+заказчики сказали, что предпочитают поведение MySQL 4.0. Чтобы делать
+возможным сохранить это поведение, разработчики добавили в
+<span><strong>mysqld</strong></span> переключатель
+<code>--character-set-client-handshake</code>, который может быть выключен с
+<code>--skip-character-set-client-handshake</code>. Если Вы запускаете
+<span><strong>mysqld</strong></span> с
+<code>--skip-character-set-client-handshake</code>, то, когда пользователь
+соединяется, это посылает серверу имя набора символов, который требуется
+использовать. Однако, сервер проигнорирует этот запрос от пользователя.</p>
+
+<p>Например, предположите, что Ваш любимый набор символов сервера
+<code>latin1</code> (вряд ли это так в области CJK, но это значение по
+умолчанию). Предположите далее, что пользователь использует <code>utf8</code>
+потому, что операционная система пользователя поддерживает. Теперь запустите
+сервер с <code>latin1</code> как заданный по умолчанию набор символов:</p>
+<pre>
+mysqld --character-set-server=latin1
+</pre>
+
+<p>Затем запустите пользователя с заданным по умолчанию
+набором символов <code>utf8</code>:</p>
+<pre>
+mysql --default-character-set=utf8
+</pre>
+
+<p>Текущие параметры настройки могут быть выяснены, рассматривая
+вывод <code>SHOW VARIABLES</code>:</p>
+<pre>
+mysql&gt; <strong><code>SHOW VARIABLES LIKE 'char%';</code></strong>
++--------------------------+----------------------------------------+
+| Variable_name            | Value                                  |
++--------------------------+----------------------------------------+
+| character_set_client     | utf8                                   |
+| character_set_connection | utf8                                   |
+| character_set_database   | latin1                                 |
+| character_set_filesystem | binary                                 |
+| character_set_results    | utf8                                   |
+| character_set_server     | latin1                                 |
+| character_set_system     | utf8                                   |
+| character_sets_dir       | /usr/local/mysql/share/mysql/charsets/ |
++--------------------------+----------------------------------------+
+8 rows in set (0.01 sec)
+</pre>
+
+<p>Теперь остановите пользователя, а затем и сервер, используя
+<span><strong>mysqladmin</strong></span>. Затем запустите
+сервер снова, но на сей раз сообщите, чтобы он не менял набор символов:</p>
+<pre>
+mysqld --character-set-server=utf8 --skip-character-set-client-handshake
+</pre>
+
+<p>Запустите пользователя с <code>utf8</code> еще раз как заданный по
+умолчанию набор символов, а затем отобразите текущие параметры настройки:</p>
+<pre>
+mysql&gt; <strong><code>SHOW VARIABLES LIKE 'char%';</code></strong>
++--------------------------+----------------------------------------+
+| Variable_name            | Value                                  |
++--------------------------+----------------------------------------+
+| character_set_client     | latin1                                 |
+| character_set_connection | latin1                                 |
+| character_set_database   | latin1                                 |
+| character_set_filesystem | binary                                 |
+| character_set_results    | latin1                                 |
+| character_set_server     | latin1                                 |
+| character_set_system     | utf8                                   |
+| character_sets_dir       | /usr/local/mysql/share/mysql/charsets/ |
++--------------------------+----------------------------------------+
+8 rows in set (0.01 sec)
+</pre>
+
+<p>Как Вы можете видеть, сравнивая отличия выводов <code>SHOW
+VARIABLES</code>, сервер игнорирует начальные установки пользователя, если
+используется опция <code>--skip-character-set-client-handshake</code>.</p>
+
+<p><a name="qandaitem-28-11-12"></a><span class="bold"><strong>10.11.12:
+</strong></span><span class="bold"><strong>Почему некоторые
+<code>LIKE</code> и поиск <code>FULLTEXT</code> с символами CJK срываются?
+</strong></span></p>
+
+<p>Имеется очень простая проблема с поисками <code>LIKE</code> на столбцах
+<code>BINARY</code> и <code>BLOB</code>: мы должны знать конец символа. С
+многобайтовыми наборами символов, различные символы могли бы иметь различные
+длины. Например, в <code>utf8</code>, <code>A</code> требует один байт, но
+<code>уГЪ</code> требует трех байтов, как показано здесь:</p>
+
+<pre>
++-------------------------+---------------------------+
+| OCTET_LENGTH(_utf8 'A') | OCTET_LENGTH(_utf8 'уГЪ') |
++-------------------------+---------------------------+
+| 1                       | 3                         |
++-------------------------+---------------------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>Если мы не знаем, где символьные концы, то мы не знаем, где начинаются
+следующие символы даже в очень простых поисках, типа <code>LIKE '_A%'</code>.
+Решение состоит в том, чтобы использовать регулярный набор символов CJK или
+преобразовываться в набор символов CJK перед сравнением.</p>
+
+<p>Это одна причина, почему MySQL не может позволять кодирование
+несуществующих символов. Если это не строго относительно отклонения, то не
+имеется никакого способа узнавать, где символы заканчиваются.</p>
+
+<p>Для поисков <code>FULLTEXT</code> мы должны знать, где слова начинаются и
+заканчиваются. С западными языками это редко проблема, потому что большинство
+(если не все) они используют пробел, чтобы идентифицировать конец слова.
+Однако, это не так с азиатской записью.</p>
+
+<p><a name="qandaitem-28-11-13"></a><span class="bold"><strong>10.11.13:
+</strong></span><span class="bold"><strong>Какие наборы символов
+CJK доступны в MySQL?</strong></span></p>
+<p>Список наборов символов CJK может изменяться в зависимости от Вашей версии
+MySQL. Например, набор символов <code>eucjpms</code> не обеспечивался до
+MySQL 5.0.3. Однако, так как имя соответствующего языка появляется в столбце
+<code>DESCRIPTION</code> для каждого входа в таблице
+<code>INFORMATION_SCHEMA.CHARACTER_SETS</code>, Вы можете получать текущий
+список всех не-Unicode наборов символов CJK, используя этот запрос:</p>
+
+<pre>
+mysql&gt; SELECT CHARACTER_SET_NAME, DESCRIPTION FROM
+    -&gt;        INFORMATION_SCHEMA.CHARACTER_SETS
+    -&gt;        WHERE DESCRIPTION LIKE '%Chinese%' OR
+    -&gt;        DESCRIPTION LIKE '%Japanese%' OR DESCRIPTION LIKE '%Korean%'
+    -&gt;        ORDER BY CHARACTER_SET_NAME;
++--------------------+---------------------------+
+| CHARACTER_SET_NAME | DESCRIPTION               |
++--------------------+---------------------------+
+| big5               | Big5 Traditional Chinese  |
+| cp932              | SJIS for Windows Japanese |
+| eucjpms            | UJIS for Windows Japanese |
+| euckr              | EUC-KR Korean             |
+| gb2312             | GB2312 Simplified Chinese |
+| gbk                | GBK Simplified Chinese    |
+| sjis               | Shift-JIS Japanese        |
+| ujis               | EUC-JP Japanese           |
++--------------------+---------------------------+
+8 rows in set (0.01 sec)
+</pre>
+
+<p><a name="qandaitem-28-11-14"></a><span class="bold"><strong>10.11.14:
+</strong></span><span class="bold"><strong>Как я узнаю, является ли символ
+<em><code>X</code></em> доступным во всех наборах символов?
+</strong></span></p>
+
+<p>Большинство упрощеннных китайских и японских символов
+<span class="foreignphrase"><em class="foreignphrase">Kana</em></span>
+появляются во всех CJK-наборах символов. Эта сохраненная процедура принимает
+символ <code>UCS-2</code> Unicode, преобразует это во все другие наборы
+символов и отображает результаты в шестнадцатеричном формате.</p>
+
+<pre>
+DELIMITER //
+CREATE PROCEDURE p_convert(ucs2_char CHAR(1) CHARACTER SET ucs2)
+BEGIN
+  CREATE TABLE tj (ucs2 CHAR(1) character set ucs2,
+                   utf8 CHAR(1) character set utf8,
+                   big5 CHAR(1) character set big5,
+                   cp932 CHAR(1) character set cp932,
+                   eucjpms CHAR(1) character set eucjpms,
+                   euckr CHAR(1) character set euckr,
+                   gb2312 CHAR(1) character set gb2312,
+                   gbk CHAR(1) character set gbk,
+                   sjis CHAR(1) character set sjis,
+                   ujis CHAR(1) character set ujis);
+  INSERT INTO tj (ucs2) VALUES (ucs2_char);
+  UPDATE tj SET utf8=ucs2, big5=ucs2, cp932=ucs2, eucjpms=ucs2, euckr=ucs2,
+                gb2312=ucs2, gbk=ucs2, sjis=ucs2, ujis=ucs2;
+
+  /* If there's a conversion problem, UPDATE will produce a warning. */
+  SELECT hex(ucs2) AS ucs2, hex(utf8) AS utf8, hex(big5) AS big5,
+         hex(cp932) AS cp932, hex(eucjpms) AS eucjpms, hex(euckr) AS euckr,
+         hex(gb2312) AS gb2312, hex(gbk) AS gbk, hex(sjis) AS sjis,
+         hex(ujis) AS ujis FROM tj;
+  DROP TABLE tj;
+END//
+</pre>
+
+<p>Ввод может быть любым одиночным символом <code>ucs2</code> или значением
+отметки кода (шестнадцатеричное представление) для этого символа. Например,
+из списка Unicode кодирования и имен <code>ucs2</code>
+(<a href="../../../www.unicode.org/Public/UNIDATA/UnicodeData.txt" target="_top">
+http://www.unicode.org/Public/UNIDATA/UnicodeData.txt</a>) мы знаем, что
+символ <span class="foreignphrase"><em class="foreignphrase">Katakana</em>
+</span> <span class="foreignphrase"><em class="foreignphrase">Pe</em></span>
+появляется во всех CJK-наборах символов, и что значение отметки кода
+<code>0x30da</code>. Если мы используем это значение как параметр для
+<code>p_convert()</code>, результат показывается здесь:</p>
+
+<pre>
+mysql&gt; <strong><code>CALL p_convert(0x30da)//</code></strong>
++------+--------+------+-------+---------+-----+------+------+------+------+
+| ucs2 | utf8   | big5 | cp932 | eucjpms |euckr|gb2312| gbk  | sjis | ujis |
++------+--------+------+-------+---------+-----+------+------+------+------+
+| 30DA | E3839A | C772 | 8379  | A5DA    |ABDA |A5DA  | A5DA | 8379 | A5DA |
++------+--------+------+-------+---------+-----+------+------+------+------+
+1 row in set (0.04 sec)
+</pre>
+
+<p>Так как ни одно из значений столбца не <code>3F</code>, то есть символ
+вопросительного знака (<code>?</code>), мы знаем, что
+каждое преобразование сработало.</p>
+
+<p><a name="qandaitem-28-11-15"></a><span class="bold"><strong>10.11.15:
+</strong></span><span class="bold"><strong>Почему CJK-строки не
+сортируются правильно в Unicode? (I)</strong></span></p>
+<p>Иногда люди наблюдают, что результат поиска <code>utf8_unicode_ci</code>
+или <code>ucs2_unicode_ci</code>, либо сортировка <code>ORDER BY</code> не
+то, что они ожидали. Хотя мы никогда не исключаем возможность, что имеется
+ошибка, в прошлом было установлено, что много людей не читают правильно
+стандартную таблицу весов для алгоритма объединения Unicode. MySQL использует
+таблицу, найденную на
+<a href="../../../www.unicode.org/Public/UCA/4.0.0/allkeys-4.0.0.txt"
+target="_top">http://www.unicode.org/Public/UCA/4.0.0/allkeys-4.0.0.txt</a>.
+Это не первая таблица, которую Вы найдете, начав с <code>unicode.org</code>,
+потому что MySQL использует старую таблицу 4.0.0 <span class="quote">allkeys
+</span>, а не более новую 4.1.0. Это потому, что разработчики очень осторожны
+относительно изменения упорядочения, которое воздействует на индексы, чтобы
+не вызывать ситуации типа сообщенной в
+<a href="../../../bugs.mysql.com/16526" target="_top">Глюке #16526</a>,
+иллюстрируемой следующим образом:</p>
+
+<pre>
+mysql&lt; CREATE TABLE tj (s1 CHAR(1) CHARACTER SET utf8 COLLATE
+                 utf8_unicode_ci);
+Query OK, 0 rows affected (0.05 sec)
+
+mysql&gt; <strong><code>INSERT INTO tj VALUES ('уБМ'),('уБЛ');</code></strong>
+Query OK, 2 rows affected (0.00 sec)
+Records: 2 Duplicates: 0 Warnings: 0
+mysql&gt; <strong><code>SELECT * FROM tj WHERE s1 = 'уБЛ';</code></strong>
++-----+
+| s1  |
++-----+
+| уБМ |
+| уБЛ |
++-----+
+2 rows in set (0.00 sec)
+</pre>
+
+<p>Символ в первой строке результатов не тот, который мы искали. Почему MySQL
+находит это? Сначала мы ищем значение отметки кода Unicode, которое является
+возможным, читая шестнадцатеричный номер для
+<code>ucs2</code>-версии символов:</p>
+
+<pre>
+mysql&gt; SELECT s1, HEX(CONVERT(s1 USING ucs2)) FROM tj;
++-----+-----------------------------+
+| s1  | HEX(CONVERT(s1 USING ucs2)) |
++-----+-----------------------------+
+| уБМ | 304C                        |
+| уБЛ | 304B                        |
++-----+-----------------------------+
+2 rows in set (0.03 sec)
+</pre>
+
+<p>Теперь мы ищем <code>304B</code> и <code>304C</code> в таблице <code>4.0.0
+allkeys</code> и находим эти строки:</p>
+<pre>
+304B; [.1E57.0020.000E.304B] # HIRAGANA LETTER KA
+304C; [.1E57.0020.000E.304B][.0000.0140.0002.3099] # HIRAGANA LETTER GA; QQCM
+</pre>
+
+<p>Официальные имена Unicode (после метки <span class="quote">#</span>)
+сообщают нам японский символ (Hiragana), неофициальную классификацию (символ,
+цифра или знак препинания) и западный идентификатор (<code>KA</code> или
+<code>GA</code>, произносимые и непроизносимые компоненты той же самой пары
+символов). Более важен первичный вес (<em class="firstterm">primary weight
+</em>, первый шестнадцатеричный номер внутри квадратных скобок)
+<code>1E57</code> на обеих строках. Для сравнений в поиске и сортировке MySQL
+использует только первичный вес, игнорируя все другие числа. Это означает,
+что мы сортируем <code>уБМ</code> и <code>уБЛ</code> правильно, согласно
+Unicode спецификации. Если мы хотим отличить их, мы должны будем использовать
+non-UCA (Unicode Collation Algorithm) объединение
+(<code>utf8_unicode_bin</code> или <code>utf8_general_ci</code>), либо
+сравнивать значения <code>HEX()</code>, либо применять <code>ORDER BY
+CONVERT(s1 USING sjis)</code>. Быть правильным, согласно Unicode, конечно,
+недостаточно: человек, который представил на рассмотрение ошибку, был прав.
+Мы планируем добавлять другое объединение для японских символов согласно
+стандарту JIS X 4061, в котором высказанные/невысказанные пары символов,
+подобные <code>KA</code>/<code>GA</code>, являются различимыми
+для целей упорядочения.</p>
+
+<p><a name="qandaitem-28-11-16"></a><span class="bold"><strong>10.11.16:
+</strong></span><span class="bold"><strong>Почему CJK-строки не
+сортируются правильно в Unicode? (дополнение)</strong></span></p>
+
+<p>Если Вы используете Unicode (<code>ucs2</code> или <code>utf8</code>) и Вы
+знаете порядок сортировки Unicode, но MySQL все еще сортирует Вашу таблицу
+неправильно, то Вы должны сначала проверить набор символов таблицы:</p>
+
+<pre>
+mysql&gt; <strong><code>SHOW CREATE TABLE t\G</code></strong>
+******************** 1. row ******************
+Table: t
+Create Table: CREATE TABLE `t` (`s1` char(1) CHARACTER SET ucs2 DEFAULT NULL)
+                     ENGINE=MyISAM DEFAULT CHARSET=latin1
+1 row in set (0.00 sec)
+</pre>
+
+<p>Так как набор символов правильный, давайте посмотрим то, какую информацию
+таблица <code>INFORMATION_SCHEMA.COLUMNS</code> может
+обеспечивать относительно этого столбца:</p>
+
+<pre>
+mysql&gt; SELECT COLUMN_NAME, CHARACTER_SET_NAME, COLLATION_NAME
+    -&gt;        FROM INFORMATION_SCHEMA.COLUMNS
+    -&gt;        WHERE COLUMN_NAME = 's1' AND TABLE_NAME = 't';
++-------------+--------------------+-----------------+
+| COLUMN_NAME | CHARACTER_SET_NAME | COLLATION_NAME  |
++-------------+--------------------+-----------------+
+| s1          | ucs2               | ucs2_general_ci |
++-------------+--------------------+-----------------+
+1 row in set (0.01 sec)
+</pre>
+
+<p>Вы можете видеть, что объединение <code>ucs2_general_ci</code> вместо
+<code>ucs2_unicode_ci</code>. Причина того, почему это так, может быть
+найдена, используя <code>SHOW CHARSET</code>, как показано здесь:</p>
+
+<pre>
+mysql&gt; <strong><code>SHOW CHARSET LIKE 'ucs2%';</code></strong>
++---------+---------------+-------------------+--------+
+| Charset | Description   | Default collation | Maxlen |
++---------+---------------+-------------------+--------+
+| ucs2    | UCS-2 Unicode | ucs2_general_ci   | 2      |
++---------+---------------+-------------------+--------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>Для <code>ucs2</code> и <code>utf8</code> заданное по умолчанию
+объединение: <span class="quote">general</span>. Чтобы определять объединение
+Unicode, используйте <code>COLLATE ucs2_unicode_ci</code>.</p>
+
+<p><a name="qandaitem-28-11-17"></a><span class="bold"><strong>10.11.17:
+</strong></span><span class="bold"><strong>Почему мои дополнительные
+символы отклонены MySQL?</strong></span></p>
+
+<p>MySQL не поддерживает дополнительные символы, то есть символы, которые
+нуждаются больше, чем в 3 байтах для <code>UTF-8</code>. Пакет поддерживает
+только <span class="emphasis"><em>Basic Multilingual Plane/Plane 0</em>
+</span>. Только несколько очень редких символов Han дополнительны; поддержка
+для них необыкновенна. Это привело к отчетам типа найденного в
+<a href="../../../bugs.mysql.com/12600" target="_top">Глюке #12600</a>, который
+авторы отклонили как <span class="quote">не ошибка</span>. С
+<code>utf8</code> мы должны усечь входную строку, когда сталкиваемся с
+байтами, которые не понимаем. Иначе мы не знали бы, какой
+длины многобайтовый символ.</p>
+
+<p>Одно возможное решение должно использовать <code>ucs2</code> вместо
+<code>utf8</code>, когда символы изменены на вопросительные знаки. Однако,
+никакое усечение не происходит. Вы можете также изменять тип данных на
+<code>BLOB</code> или <code>BINARY</code>, которые не выполняют
+никакую проверку правильности.</p>
+
+<p><a name="qandaitem-28-11-18"></a><span class="bold"><strong>10.11.18:
+</strong></span><span class="bold"><strong>Разве это не должен быть
+<span class="quote">CJKV</span>?</strong></span></p>
+
+<p>Нет. Термин <span class="quote">CJKV</span> (<em class="firstterm">Chinese
+Japanese Korean Vietnamese</em>) обращается к вьетнамским наборам символов,
+которые содержат Han (изначально китайские) символы. MySQL не имеет никакого
+плана, чтобы поддерживать старый вьетнамский вариант, использующий символы
+Han. MySQL поддерживает современный вьетнамский вариант с символами Western.
+</p>
+
+<p><a href="../../../bugs.mysql.com/4745" target="_top">Глюк #4745</a> просьба
+о специализированном вьетнамском объединении, которое может быть добавлено в
+будущем, если имеется достаточная потребность в этом.</p>
+
+<p><a name="qandaitem-28-11-19"></a><span class="bold"><strong>10.11.19:
+</strong></span><span class="bold"><strong>MySQL позволяет символам CJK
+использоваться в именах баз данных и таблиц?</strong></span></p>
+<p>Эта проблема отфиксирована в MySQL 5.1, автоматически переписывая
+имена соответствующих каталогов и файлов.</p>
+
+<p>Например, если Вы создаете базу данных <code>цео</code> на сервере, чья
+операционная система не поддерживает CJK в именах каталогов, MySQL создает
+каталог <code>@0w@00a5@00ae</code>, который является только причудливым
+способом кодирования <code>E6A5AE</code>, то есть шестнадцатеричное
+представление для Unicode-символа <code>цео</code>. Однако, если Вы
+выполняете инструкцию <code>SHOW DATABASES</code>, Вы можете видеть, что база
+данных перечислена как <code>цео</code>.</p>
+
+<p><a name="qandaitem-28-11-20"></a><span class="bold"><strong>10.11.20:
+</strong></span><span class="bold"><strong>Где я могу находить переводы
+руководства по MySQL на китайский, корейский и японский языки?
+</strong></span></p>
+
+<p>Упрощенная китайская версия руководства для MySQL 5.1.12 может быть
+найдена на  <a href="../../../dev.mysql.com/doc/#chinese-5.1" target="_top">
+http://dev.mysql.com/doc/#chinese-5.1</a>. Японская для MySQL 4.1 может быть
+получена с <a href="../../../dev.mysql.com/doc/#japanese-4.1" target="_top">
+http://dev.mysql.com/doc/#japanese-4.1</a>.</p>
+
+<p><a name="qandaitem-28-11-21"></a><span class="bold"><strong>10.11.21:
+</strong></span><span class="bold"><strong>Где я могу получать справку по CJK
+и связанным проблемам в MySQL?</strong></span></p>
+
+<p>Следующие ресурсы доступны:</p>
+<ul type="disc"><li><p>Перечень групп пользователей MySQL может быть найден
+на <a href="../../../dev.mysql.com/user-groups/default.htm" target="_top">
+http://dev.mysql.com/user-groups/</a>.</p></li>
+
+<li><p>Вы можете входить в контакт с инженером сбыта в MySQL KK Japan:</p>
+<pre>
+Tel: +81(0)3-5326-3133
+Fax: +81(0)3-5326-3001
+Email: dsaito@mysql.com
+</pre></li>
+
+<li><p>Просмотр показывает запросы в отношении проблем набора символов на
+<a href="../../../tinyurl.com/y6xcuf" target="_top">
+http://tinyurl.com/y6xcuf</a>.</p></li>
+
+<li><p>Посетите форум "MySQL Character Sets, Collation, Unicode" на
+<a href="../../../forums.mysql.com/list.php@103" target="_top">
+http://forums.mysql.com/list.php?103</a>.</p></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</html>

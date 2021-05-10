@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\usecasegroup\cat.usecasegroup\dir.usecasegroup.md">usecasegroup</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\usecasegroup\usecasegroup.md">usecasegroup.md</a>
+        - *##### [Use Case Toolbox](https://sparxsystems.com/enterprise_architect_user_guide/15.1/modeling/usecasegroup.html)

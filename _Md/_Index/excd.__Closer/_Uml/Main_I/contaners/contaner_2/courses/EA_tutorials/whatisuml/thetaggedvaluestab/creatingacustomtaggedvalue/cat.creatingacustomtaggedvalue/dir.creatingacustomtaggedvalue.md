@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\thetaggedvaluestab\creatingacustomtaggedvalue\cat.creatingacustomtaggedvalue\dir.creatingacustomtaggedvalue.md">creatingacustomtaggedvalue</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\thetaggedvaluestab\creatingacustomtaggedvalue\creatingacustomtaggedvalue.md">creatingacustomtaggedvalue.md</a>
+        - *### [Create Custom Masked Tagged Value Type](https://sparxsystems.com/enterprise_architect_user_guide/15.1/modeling/creatingacustomtaggedvalue.html) Создать настраиваемый тип значения с тегами с маской

@@ -1,0 +1,154 @@
+<HTML>
+<HEAD>
+<TITLE>IBDatabase. Что такое deadlock и как с ним бороться. [SQL.RU]</TITLE>
+<META http-equiv="Content-Type" CONTENT="text/html; charset=windows-1251">
+<META HTTP-EQUIV="Window-target" CONTENT="_top">
+<META HTTP-EQUIV="Last-Modified" CONTENT="29-03-2001">
+<META NAME="Description" CONTENT="Использование языка SQL, создание клиент-серверных систем. Конференция по MSSQL, Oracle, Interbase, MySQL. Полезные ссылки, документация, рекомендации по разработке информационных систем, сертификация, заказ книг и многое другое.">
+<META NAME="Keywords" CONTENT="SQL, конференция, Database Server, Oracle, Interbase, MySQL, документация, статьи, примеры, книги, ссылки, сертификация, работа, СУБД">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER=0 CELLSPACING=10><TR><TD>
+<CENTER>
+<H2 class="headline">
+Что такое deadlock и как с ним бороться</H2></CENTER>
+<BR><B>Кузьменко Дмитрий, Epsylon Technologies</B>
+</CENTER>
+<P>Начнем с того, что буквальный перевод слова deadlock означает "мертвая 
+блокировка". При работе с BDE (Delphi, C++Builder, ...) с клиентской части и в 
+IB Database с триггерами и хранимыми процедурами мы имеем два случа появления 
+сообщения deadlock - при чтении и при обновлении. До действительно "мертвого" 
+блокирования дело не доходит, поскольку IB SQL Link стартует любую транзакцию с 
+параметром NO WAIT (т.е. не ожидать разрешения конфликта). 
+<CENTER>
+<H3>Deadlock при обновлении</H3></CENTER>Две транзакции, еще не завершившиеся, 
+но пытающиеся обновить одни и те-же записи, считаются конкурирующими. Существует 
+два режима обработки deadlock - wait и no wait (с ожиданием и без ожидания). В 
+BDE для любых транзакций IB используется режим без ожидания, и режим с ожиданием 
+можно установить только при прямой работе с IB API (например через 
+FreeIBComponents). <BR>"Неудачливой", естественно, считается транзакция, 
+получившая сообщение о deadlock. Это означает, что одно из действий, проводимых 
+в транзакции, не может быть выполнено. Следовательно, такая транзакция должна 
+быть отменена (rollback). Следует избегать длительных транзакций, которые могут 
+попасть в такую ситуацию - единственным выходом из нее будет попытка начать 
+транзакцию снова и повторить все действия. <BR>Уменьшить число возможных 
+конфликтов обновления можно сократив врем выполнения транзакции. Например, 
+сначала принимаются данные от пользователя, и если он подтверждает введенную 
+информацию, приложение стартует транзакцию, быстро передает данные на сервер, и 
+завершается. Чем быстрее пройдет транзакция, тем больше у нее шансов завершиться 
+успешно. Именно для этого в BDE 3.x был введен режим Cached Updates 
+(кэшированные изменения). При Cached Updates изменения накапливаются на 
+клиентской части приложения, затем при вызове метода ApplyUpdates изменения 
+"выстреливаются" на сервер. В любом случае, даже если вы не можете избавиться от 
+длительных обновляющих транзакций, нужно продумать логику приложения и 
+обязательно предусматривать в приложении обработку возникающих конфликтов. 
+<CENTER>
+<H3>Deadlock при чтении</H3></CENTER>
+<CENTER><B><FONT color=#ff0000>Все описываемые ниже проблемы исправлены в BDE 
+4.01. При этом параметр DRIVER FLAGS указывать не нужно.</FONT></B></CENTER>
+<P>Deadlock при чтении возникает в основном в SQL-серверах, которые используют 
+страничные блокировки при чтении или модификации данных (MS SQL и Sybase). 
+Кажется странным, что при работе с IB, в котором блокировки вообще отсутствуют 
+(конфликт обновления блокировкой не считается - это не блокировка а именно 
+конфликт), иногда все-таки возникает deadlock при чтении данных. <BR>Причина вот 
+в чем: транзакции уровня изоляции Read Committed имеют в IB два режима - NO 
+RECORD VERSION и RECORD VERSION. В первом случае, если при чтении записи ядро IB 
+обнаруживает наличие неподтвержденной (uncommitted) версии этой записи, то 
+возвращает сообщение о deadlock. Это как-бы сигнализирует приложению, что скоро 
+эта запись возможно будет обновлена (ведь в ReadCommitted чужие изменения будут 
+видны сразу после их подтверждения (commit)). В режиме RECORD VERSION наличие 
+неподтвержденных версий записей игнорируется, и всегда возвращается старая 
+версия записи. 
+<P>Казалось-бы, так почему-бы BDE не работать по умолчанию в режиме RECORD 
+VERSION ? К сожалению, так изначально было заложено - транзакция Read Committed 
+в BDE запускается с параметром NO RECORD VERSION - но до версии Delphi 2.0 этого 
+неудобства почти никто не заметил. А вот почему не заметили, читаем дальше. 
+<CENTER>
+<H3>Уровень изоляции в AUTOCOMMIT в разных версиях BDE</H3></CENTER>В 
+зависимости от версии BDE менялись уровни изоляции по умолчанию. Когда вы явно 
+не используете методы управления транзакциями (Database.StartTransaction, Commit 
+и Rollback), то за вас это делает BDE. Не верите ? Посмотрите в SQL Monitor. 
+Самое главное, что тип транзакции по умолчанию "зашит" в SQL Link. И даже если 
+вы поместили на форму компонент TDatabase, и изменили у него свойство 
+tiTransIsolation, то это не влияет на BDE, пока вы не вызовете метод 
+Database.StartTransaction. <BR>Итак, какие-же транзакции стартует по умолчанию 
+BDE ? 
+<LI><B>Delphi 1.0, BDE 2.52 - Repeatable Read</B> 
+<LI><B>Delphi 2.0, BDE 3.x - Read Committed</B> 
+<LI><B>Delphi 3.0, BDE 4.0 - Read Committed</B> 
+<LI><B>Delphi 3.01, BDE 4.01, 4.51 - Read Committed с параметром RECORD VERSION 
+- deadlock-и при чтении отсутствуют.</B> <BR>&nbsp; 
+<P> 
+<P>Итак, deadlock-и при чтении заметили только в Delphi 2.0, именно потому что 
+транзакция по умолчанию сменилась на Read Committed. Кстати, в READLINK.TXT для 
+Delphi 2.x и 3.0 написано, что если нужно изменить транзакцию по умолчанию на 
+Repeatable Read, то следует установить в параметрах драйвера DRIVER FLAGS = 512. 
+Т.е. фактически "обеспечить совместимость" поведени приложений, перенесенных в 
+Delphi 2 из Delphi 1. 
+<P>! Не устанавливайте DRIVER FLAGS не прочитав предварительно READLINK.TXT. 
+Дело в том, что например в версии 4.0 количество флагов увеличилось: </P>
+<LI>0 Read Committed, немедленное подтверждение любых изменений (может вызвать 
+перечитывание курсоров TQuery) 
+<LI>512 Repeatable Read, немедленное подтверждение любых изменений (может 
+вызвать перечитывание курсоров TQuery) 
+<LI>4096 Read committed, подтверждение изменений выполняется как COMMIT RETAIN, 
+сохраняя контекст курсоров TQuery 
+<LI>4608 Repeatable read, подтверждение изменений выполняется как COMMIT RETAIN, 
+сохраняя контекст курсоров TQuery 
+<P><BR>
+</TD></TR></TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../top100.rambler.ru/home@id=236431">
+<img src="../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../top.mail.ru/jump@from=58574"><img
+src="../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>
+

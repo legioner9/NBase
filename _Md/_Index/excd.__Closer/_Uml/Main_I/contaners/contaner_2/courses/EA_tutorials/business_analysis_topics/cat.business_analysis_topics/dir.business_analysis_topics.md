@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\business_analysis_topics\cat.business_analysis_topics\dir.business_analysis_topics.md">business_analysis_topics</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\business_analysis_topics\business_analysis_topics.md">business_analysis_topics.md</a>
+        - *# <a href="https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/business_analysis_topics.html" target="_blank">Business Models</a> Бизнес-модели

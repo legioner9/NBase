@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\1.HTML.dir\1.4.1_.4._HTML-текст.dir\cat.1.4.1_.4._HTML-текст.dir\dir.1.4.1_.4._HTML-текст.dir.md">1.4.1_.4._HTML-текст.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\1.HTML.dir\1.4.1_.4._HTML-текст.dir\1.4.1_.4._HTML-текст.md">1.4.1_.4._HTML-текст.md</a>
+        - *## 1.4. [HTML-текст](https://html5book.ru/html-text/)

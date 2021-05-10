@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<TITLE>Доступ к XML и реляционным данным
+</TITLE>
+<META CONTENT="text/html; charset=windows-1251" http-equiv=Content-Type>
+<META NAME="Description" CONTENT="1. Введение">
+<META NAME="Keywords" CONTENT="SQL, Microsoft, Server">
+<META HTTP-EQUIV="Set-Cookie" CONTENT="cookie=set; path=/">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER="0" WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top  bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>XML-шаблоны как разновидность хранимых процедур
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="11.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+
+
+</TD>
+</TR>
+</TABLE>
+<TABLE border="0" cellpadding="2" cellspacing="2" >
+<TR>
+<TD>
+<div align=justify>
+<p>
+Шаблоны (templates) объединяют в себе квантово-волновой (SQL / XML) дуализм SQL Server. Козьма Прутков 
+мог бы смело их уподобить хранимым процедурам, которые допускают как SQL-, так и XPath-запросы. Шаблон 
+- это XML-файл, структура которого показана на рис.6. 
+<p><pre><tt><font color=blue>
+&lt;?<font color=#990000>xml</font> <font color=red>version</font>="1.0" <font color=red>encoding</font>="utf-8" ?> 
+&lt;<font color=#990000>Солянка xmlns:sql</font>="urn:schemas-microsoft-com:xml-sql">
+  &lt;<font color=#990000>sql:header</font>>
+     &lt;<font color=#990000>sql:param</font> <font color=red>name</font>="Колво">&lt;/<font color=#990000>sql:param</font>>
+     &lt;<font color=#990000>sql:param name</font>="Сумма">1000&lt;/<font color=#990000>sql:param</font>>
+  &lt;/<font color=#990000>sql:header</font>>
+  &lt;<font color=#990000>sql:query</font> <font color=red>client-side-xml</font>="0"></font>
+    SELECT TOP 1 * FROM Employees FOR XML AUTO<font color=blue>
+  &lt;/<font color=#990000>sql:query</font>>
+  &lt;<font color=#990000>sql:query</font> <font color=red>client-side-xml</font>="1"></font>
+    SELECT c.ContactName, COUNT(o.OrderDate) AS 'Кол-во' 
+	FROM Customers c INNER JOIN Orders o ON c.CustomerID = o.CustomerID 
+	GROUP BY c.ContactName HAVING COUNT(o.OrderDate) >= @Колво 
+	FOR XML NESTED<font color=blue>
+  &lt;/<font color=#990000>sql:query</font>>
+  &lt;<font color=#990000>sql:xpath-query</font> <font color=red>mapping-schema</font>="..\Schemas\SQLSchema1.xsd"></font>
+	Клиент[number(Заказы/Заказ/Стоимость)&amp;gt;</font>$Сумма]<font color=blue>
+  &lt;/<font color=#990000>sql:xpath-query</font>>
+  &lt;<font color=#990000>sql:xpath-query</font> <font color=red>mapping-schema</font>="..\Schemas\SQLSchema2.xsd"></font>
+    Сотрудник<font color=blue>
+  &lt;/<font color=#990000>sql:xpath-query</font>>
+&lt;/<font color=#990000>Солянка</font>></p></pre></tt></font>
+<p>
+<div align=justify></font><center>						
+<font color=blue><b>Рис.6</font></p></b></center>
+<p>
+Он состоит из частей трех основных типов. Каждая часть является опциональной. В 
+<font color=blue>&lt;<font color=#990000>sql:query</font>></font> перечисляются 
+операторы SQL, в <font color=blue>&lt;<font color=#990000>sql:xpath-query</font>></font> - 
+запросы XPath, в <font color=blue>&lt;<font color=#990000>sql:header</font>></font> 
+описываются параметры для запросов 
+(как SQL, так и XPath). Привязка описаний параметров в заголовке к параметрам в запросах осуществляется 
+при помощи атрибута <font color=red>name</font> (<font color=blue>"Колво"</font> - @Колво, <font color=blue>"Сумма"</font> - $Сумма). В одной секции <font color=blue>&lt;<font color=#990000>sql:query</font>></font> может находиться 
+несколько SQL-запросов, в отличие от XPath-запросов, каждый из которых должен заключаться в свою секцию 
+<font color=blue>&lt;<font color=#990000>sql:xpath-query</font>></font>. В данном примере SQL-запросы 
+пришлось разнести по разным секциям, так как первый из 
+них выполняется на сервере, а второй - на клиенте. Атрибут <font color=red>client-side-xml</font> эквивалентен свойству ClientSideXml 
+класса SqlXmlCommand, с которым мы сталкивались в п.6. В <font color=blue>&lt;<font color=#990000>sql:query</font>></font> могут присутствовать не только select'ы, 
+но и операторы объявления и модификации данных, а также вызовы хранимых процедур, что позволяет помещать 
+в секцию не просто несколько разрозненных операторов, а последовательность, связанную логикой выполнения. 
+Условие - весь select-вывод должен идти в виде XML. Допускаются опции AUTO и EXPLICIT. XPath-запросы 
+выполняются относительно заданной в атрибуте <font color=red>mapping-schema</font> аннотированной схемы. Для каждого XPath-запроса 
+она может быть своя. Отметим, что некоторые (хоть все) из задействованных аннотированных схем могут 
+располагаться непосредственно в файле шаблона, так что предыдущий шаблон можно записать как:
+<p><pre><tt><font color=blue>
+&lt;?<font color=#990000>xml</font> <font color=red>version</font>="1.0" <font color=red>encoding</font>="utf-8" ?> 
+&lt;<font color=#990000>Солянка xmlns</font><font color=red>:sql</font>="urn:schemas-microsoft-com:xml-sql">
+  &lt;<font color=#990000>xs:chema xmlns</font><font color=red>:xs</font>="http://www.w3.org/2001/XMLSchema"            	                             
+  <font color=#990000>_    xmlns</font><font color=red>:ms</font>="urn:schemas-microsoft-com:mapping-schema"
+	     <font color=red>id</font>="SQLSchema2" <font color=#990000>sql:</font><font color=red>is-mapping-schema</font>="1"></font>
+<i>...Схема с рис.5...</i><font color=blue>
+  &lt;/<font color=#990000>xs</font><font color=red>:schema</font>></font>
+ <i>...&lt;sql:header> и &lt;sql:query>-секции с рис.6...</i><font color=blue>
+  &lt;<font color=#990000>sql:xpath-query</font> <font color=red>mapping-schema</font>="..\Schemas\SQLSchema1.xsd"></font>
+	Клиент[number(Заказы/Заказ/Стоимость)&amp;gt;$Сумма]<font color=blue>
+  &lt;/<font color=#990000>sql:xpath-query</font>>
+  &lt;<font color=#990000>sql:xpath-query</font> <font color=red>mapping-schema</font>="#SQLSchema2"></font>
+    Сотрудник<font color=blue>
+  &lt;/<font color=#990000>sql:xpath-query</font>>
+&lt;/<font color=#990000>Солянка</font>></font></p></pre></tt>
+<p>
+<div align=justify></font><center>						
+<font color=blue><b>Рис.7</font></p></b></center>
+<p>
+Таким образом, результат выполнения шаблона может состоять из фрагментов различных схем, 
+соответствующих разным секциям, объединенных корневым элементом. Остается сохранить его в файле 
+формата UTF-8  (Скрипт 11).
+<p><pre><tt>
+<font color=blue>static void</font> Execute_TemplateFile_SQLXML()
+{
+	...
+	cmd.CommandText = "..\\Templates\\XMLTemplate1.xml";
+	<b>cmd.CommandType = SqlXmlCommandType.TemplateFile;</b>
+	SqlXmlParameter prm = cmd.CreateParameter();
+	prm.Name = "@Колво"; prm.Value = 20; 
+	XmlDocument xml = <font color=blue>new</font> XmlDocument();
+	xml.Load(cmd.ExecuteStream());
+	...
+}</p></pre></tt>
+<p>
+<div align=justify></font><center>						
+<font color=blue><b>Скрипт 11</font></p></b></center>
+<p>
+Вызывающее приложение передает шаблону только один параметр @Колво = 20 (показать клиентов и 
+количество сделанных ими заказов, если оно превышает 20). Для другого запроса будет взято значение 
+параметра по умолчанию из шаблона - <font color=blue>&lt;<font color=#990000>sql:param</font> <font color=red>
+name</font>="Сумма"></font>1000<font color=blue>&lt;/<font color=#990000>sql:param</font>></font> (показать только тех клиентов, 
+которые сделали хотя бы один заказ на сумму свыше 1000). Если приложение не обеспечивает параметра при 
+вызове шаблона и секция <font color=blue>&lt;<font color=#990000>sql:header</font>></font> не 
+содержит значение параметра по умолчанию, то для него будет 
+использовано значение по умолчанию, определенное в схеме SQL Server (DEFAULT для поля таблицы или для 
+параметра хранимой процедуры). Если значение по умолчанию в схеме SQL Server также не определено, 
+значение параметра полагается в NULL. Стоит обратить внимание на конвертацию number(Заказы/Заказ/Стоимость) 
+в одном из XPath-запросов в шаблонах рис.6, 7. Дело в том, что несмотря на объявление стоимости как 
+<font color=#990000>xs:type</font><font color=blue>="xs:float"</font> 
+параметр $Сумма норовит передаваться как nvarchar, что приводит к неверным результатам (напр. '5.00' > '1000'). 
+Еще один, эквивалентный, способ вызова шаблона из SqlXml состоит в использовании свойства CommandStream 
+вместо CommandText. Соответственно должно быть скорректировано свойство CommandType.
+<p><pre><tt>
+...
+cmd.CommandStream = <font color=blue>new</font> FileStream("..\\Templates\\XMLTemplate1.xml", FileMode.Open, FileAccess.Read);
+cmd.CommandType = SqlXmlCommandType.<b>Template</b>;
+...</p></pre></tt>
+<p>
+Или даже так:</p>
+<p><pre><tt>
+...
+cmd.CommandStream = <font color=blue>new</font> MemoryStream();
+		StreamWriter sw = <font color=blue>new</font> StreamWriter(cmd.CommandStream, System.Text.Encoding.UTF8); 
+		sw.Write("&lt;?xml version='1.0' encoding='utf-8' ?> " +
+		"&lt;Солянка xmlns:sql='urn:schemas-microsoft-com:xml-sql'>" +
+		<br>
+<i>...Содержание шаблона с рис.6...</i>	
+		<br>
+		"&lt;/Солянка>");
+		sw.Flush(); cmd.CommandStream.Position = 0; 
+		cmd.CommandType = SqlXmlCommandType.Template;
+...</p></pre></tt>
+<p>
+В свойстве XslPath класса SqlXmlCommand может задаваться ссылка на XSL-преобразование, которому 
+подвергается сформированный на основе шаблона XML-файл. Преобразование можно также оговорить в 
+корневом элементе шаблона (например, <font color=#990000>sql:xsl</font><font color=blue>="....xsl"></font>).<br>
+Для повышения производительности применяется кэширование шаблонов, что означает, что они не выгружаются 
+из памяти после первого выполнения. Емкость кэша (в штуках) задается в 
+HKLM\SOFTWARE\Microsoft\MSSQLServer\Client\SQLXML3\TemplateCacheSize и по умолчанию равна 31. 
+Чтобы запретить кэширование, необходимо зайти в закладку Advanced свойств виртуальной директории SQL 
+Server (см. п.13) и отметить Disable Caching of template. Аналогично настраивается кэширование аннотированных 
+схем (HKLM\SOFTWARE\Microsoft\MSSQLServer\Client\SQLXML3\SchemaCacheSize).</p>
+</DIV>
+<TD>
+<TR>
+</TABLE>
+<TABLE BORDER=0 WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>XML-шаблоны как разновидность хранимых процедур
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="11.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+</TD>
+</TR>
+</TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>

@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Memoization-master\cat.Memoization-master\dir.Memoization-master.md">Memoization-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Memoization-master\README.md">README.md</a>
+        - *## Мемоизация функций: memoize в JavaScript

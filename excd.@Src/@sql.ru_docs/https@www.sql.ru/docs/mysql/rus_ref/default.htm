@@ -1,0 +1,468 @@
+<HTML>
+<HEAD>
+<TITLE>Документация по MySQL. [SQL.RU]</TITLE>
+<META http-equiv="Content-Type" CONTENT="text/html; charset=windows-1251">
+<META HTTP-EQUIV="Window-target" CONTENT="_top">
+<META HTTP-EQUIV="Last-Modified" CONTENT="29-03-2001">
+<META NAME="Description" CONTENT="Использование языка SQL, создание клиент-серверных систем. Конференция по MSSQL, Oracle, Interbase, MySQL. Полезные ссылки, документация, рекомендации по разработке информационных систем, сертификация, заказ книг и многое другое.">
+<META NAME="Keywords" CONTENT="SQL, конференция, Database Server, Oracle, Interbase, MySQL, документация, статьи, примеры, книги, ссылки, сертификация, работа, СУБД">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER=0 CELLSPACING=10><TR><TD>
+<CENTER>
+<H2 class="headline">Документация по MySQL</H2></CENTER>
+<P><B>Версия пакета MySQL : 3.20.29</B><BR>
+<B>Автор: <a href="mailto:rldp@ftp.botik.ru@subject=MySQL"></B>Alexey Pautov</a>
+<P ALIGN=RIGHT><A HREF=../../../../www.ozon.ru/detail.cfm/ent=2&ID=32137&str=mysql&ex=0&partner=judge>Купить книжку по MySQL на русском языке (180 руб).</A></P>
+<H3>Оглавление</H3>
+<P><UL type=disc><LI><B>Введение</B>
+  <UL type=circle><LI><A HREF="#About">О чем это?</A></LI>
+    <LI><A HREF="#What">Что такое MySQL?</A></LI>
+    <LI><A HREF="#Does">Чем хорош MySQL?</A></LI>
+    <LI><A HREF="#SQL">Что такое SQL?</A></LI>
+    <LI><A HREF="#Talk">Интерфейс с языками программирования</A></LI></UL>
+    </LI>
+  <LI><B><A HREF="commands.shtml">Команды пакета MySQL</A></B>
+  <UL type=circle><LI><A HREF="commands.shtml#Overview">Коротко о главном</A>
+  </LI>
+    <LI><A HREF="commands.shtml#Core">Основные команды</A></LI>
+    <UL type=disc><LI><A HREF="commands.shtml#Mysql">mysql</A></LI>
+      <LI><A HREF="commands.shtml#Mysqlaccess">mysqlaccess</A></LI>
+      <LI><A HREF="commands.shtml#Mysqladmin">mysqladmin</A></LI>
+      <LI><A HREF="commands.shtml#Mysqld">mysqld</A></LI>
+      <LI><A HREF="commands.shtml#Mysqldump">mysqldump</A></LI>
+      <LI><A HREF="commands.shtml#Mysqlshow">mysqlshow</A></LI>
+      <LI><A HREF="commands.shtml#Isamchk">isamchk</A></LI>
+      <LI><A HREF="commands.shtml#Isamlog">isamlog</A></LI>
+      <LI><A HREF="commands.shtml#Safe_mysqld">safe_mysqld</A></LI></UL>
+    <LI><A HREF="commands.shtml#NonCore">Дополнительные команды</A></LI>
+    <UL type=disc><LI><A HREF="commands.shtml#Comp_Err">comp_err</A></LI>
+      <LI><A HREF="commands.shtml#Msql2mysql">msql2mysql</A></LI>
+      <LI><A HREF="commands.shtml#Mysqlbug">mysqlbug</A></LI>
+      <LI><A HREF="commands.shtml#Perror">perror</A></LI>
+      <LI><A HREF="commands.shtml#Replace">replace</A></LI>
+      <LI><A HREF="commands.shtml#Which1">which1</A></LI>
+      <LI><A HREF="commands.shtml#Zap">zap</A></LI></UL></UL></LI>
+  <LI><B><A HREF="sql.shtml">Реализация языка SQL в СУБД MySQL</A></B>
+  <UL type=circle><LI><A HREF="sql.shtml#Overview">Коротко о главном</A></LI>
+    <LI><A HREF="sql.shtml#AlterTable">ALTER TABLE</A></LI>
+    <LI><A HREF="sql.shtml#Create">CREATE TABLE</A></LI>
+    <LI><A HREF="sql.shtml#Dtypes">Типы данных</A></LI>
+    <LI><A HREF="sql.shtml#Keys">Ключи</A></LI>
+    <LI><A HREF="sql.shtml#Blobs">BLOB'ы</A></LI>
+    <LI><A HREF="sql.shtml#BBlobs">Двоичные данные в BLOBS</A></LI>
+    <LI><A HREF="sql.shtml#CIndex">CREATE INDEX</A></LI>
+    <LI><A HREF="sql.shtml#Delete">DELETE</A></LI>
+    <LI><A HREF="sql.shtml#Desc">DESCRIBE</A></LI>
+    <LI><A HREF="sql.shtml#Drop">DROP</A></LI>
+    <LI><A HREF="sql.shtml#DIndex">DROP INDEX</A></LI>
+    <LI><A HREF="sql.shtml#Grant">GRANT</A></LI>
+    <LI><A HREF="sql.shtml#Select">SELECT</A></LI>
+    <UL type=disc><LI><A HREF="sql.shtml#Functions">Функции</A></LI>
+      <LI><A HREF="sql.shtml#Lfunc">Логические операторы</A></LI>
+      <UL type=circle><LI><SAMP>+,-,*,/</SAMP></LI>
+        <LI><SAMP>%</SAMP></LI>
+        <LI><SAMP>|, &</SAMP></LI>
+        <LI><SAMP>-</SAMP></LI>
+        <LI><SAMP>()</SAMP></LI>
+        <LI><SAMP>BETWEEN</SAMP></LI>
+        <LI><SAMP>BIT_COUNT()</SAMP></LI>
+        <LI><SAMP>ELT</SAMP></LI>
+        <LI><SAMP>FIELD</SAMP></LI>
+        <LI><SAMP>IF</SAMP></LI>
+        <LI><SAMP>IFNULL</SAMP></LI>
+        <LI><SAMP>ISNULL</SAMP></LI>
+        <LI><SAMP>NOT/!</SAMP></LI>
+        <LI><SAMP>OR,AND</SAMP></LI>
+        <LI><SAMP>SIGN</SAMP></LI>
+        <LI><SAMP>SUM()</SAMP></LI>
+        <LI><SAMP>= &lt;&gt; &lt;= &lt; &gt;= &gt;</SAMP></LI>
+        <LI><SAMP>expr LIKE expr</SAMP></LI>
+        <LI><SAMP>expr NOT LIKE expr</SAMP></LI>
+        <LI><SAMP>expr REGEXP expr</SAMP></LI>
+        <LI><SAMP>expr NOT REGEXP expr</SAMP></LI></UL>
+      <LI><A HREF="sql.shtml#Mfunc">Математические функции</A></LI>
+        <UL type=circle><LI><SAMP>ABS</SAMP></LI>
+        <LI><SAMP>CEILING</SAMP></LI>
+        <LI><SAMP>EXP</SAMP></LI>
+        <LI><SAMP>FORMAT</SAMP></LI>
+        <LI><SAMP>LOG</SAMP></LI>
+        <LI><SAMP>LOG10</SAMP></LI>
+        <LI><SAMP>MAX</SAMP></LI>
+        <LI><SAMP>MIN</SAMP></LI>
+        <LI><SAMP>MOD</SAMP></LI>
+        <LI><SAMP>POW</SAMP></LI>
+        <LI><SAMP>ROUND</SAMP></LI>
+        <LI><SAMP>RAND</SAMP></LI>
+        <LI><SAMP>SQRT</SAMP></LI></UL>
+      <LI><A HREF="sql.shtml#Sfunc">Работа со строками</A></LI>
+      <UL type=circle><LI><SAMP>CONCAT</SAMP></LI>
+        <LI><SAMP>INTERVAL</SAMP> (назывался INTERVALL в предыдущих версиях)
+        </LI>
+        <LI><SAMP>INSERT</SAMP></LI>
+        <LI><SAMP>LCASE</SAMP></LI>
+        <LI><SAMP>LEFT</SAMP></LI>
+        <LI><SAMP>LENGTH</SAMP></LI>
+        <LI><SAMP>LOCATE</SAMP></LI>
+        <LI><SAMP>LTRIM</SAMP></LI>
+        <LI><SAMP>REPLACE</SAMP></LI>
+        <LI><SAMP>RIGHT</SAMP></LI>
+        <LI><SAMP>RTRIM</SAMP></LI>
+        <LI><SAMP>STRCMP</SAMP></LI>
+        <LI><SAMP>SUBSTRING</SAMP></LI>
+        <LI><SAMP>STRCMP</SAMP></LI>
+        <LI><SAMP>UCASE</SAMP></LI></UL>
+      <LI><A HREF="sql.shtml#MSfunc">Вспомогательные примочки</A></LI>
+      <UL type=circle><LI><SAMP>CURDATE</SAMP></LI>
+        <LI><SAMP>DATABASE</SAMP></LI>
+        <LI><SAMP>FROM_DAYS</SAMP></LI>
+        <LI><SAMP>NOW</SAMP></LI>
+        <LI><SAMP>PASSWORD</SAMP></LI>
+        <LI><SAMP>PERIOD_ADD</SAMP></LI>
+        <LI><SAMP>PERIOD_DIFF</SAMP></LI>
+        <LI><SAMP>TO_DAYS</SAMP></LI>
+        <LI><SAMP>UNIX_TIMESTAMP</SAMP></LI>
+        <LI><SAMP>USER</SAMP></LI>
+        <LI><SAMP>WEEKDAY</SAMP></LI></UL>
+      <LI><A HREF="sql.shtml#Gfunc">Групповые функции</A></LI>
+      <UL type=circle><LI><SAMP>AVG</SAMP></LI>
+        <LI><SAMP>SUM</SAMP></LI>
+        <LI><SAMP>COUNT</SAMP></LI>
+        <LI><SAMP>MIN</SAMP></LI>
+        <LI><SAMP>MAX</SAMP></LI></UL>
+      <LI><A HREF="sql.shtml#Joins">Связи</A></LI>
+      <LI><A HREF="sql.shtml#Aliases">Псевдонимы</A></LI>
+      <LI><A HREF="sql.shtml#Insert">INSERT INTO</A></LI>
+      <LI><A HREF="sql.shtml#LDI">LOAD DATA INFILE</A></LI>
+      <LI><A HREF="sql.shtml#SetOption">SET OPTION</A></LI>
+      <LI><A HREF="sql.shtml#Update">UPDATE</A></LI>
+      <LI><A HREF="sql.shtml#Show">SHOW</A></LI>
+      <LI><A HREF="sql.shtml#Strings">Строки</A></LI>
+      <LI><A HREF="sql.shtml#Numbers">Числа</A></LI></UL></UL>
+  <LI><B><A HREF="c_api.shtml">Интерфейс для С (C API)</A></B>
+  <UL type=circle><LI><A HREF="c_api.shtml#Overview">Коротко о главном</A></LI>
+    <LI><A HREF="c_api.shtml#Preparation">Подготовка</A></LI>
+    <LI><A HREF="c_api.shtml#DStruct">Клиентские функции</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_affected_rows">mysql_affected_rows</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_close">mysql_close</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_connect">mysql_connect</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_create_db">mysql_create_db</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_data_seek">mysql_data_seek</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_drop_db">mysql_drop_db</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_eof">mysql_eof</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_error">mysql_error</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_fetch_field">mysql_fetch_field</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_fetch_lengths">mysql_fetch_lengths</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_fetch_row">mysql_fetch_row</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_field_seek">mysql_field_seek</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_free_result">mysql_free_result</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_get_client_info">mysql_get_client_info</A>
+    </LI>
+    <LI><A HREF="c_api.shtml#mysql_get_host_info">mysql_get_host_info</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_get_proto_info">mysql_get_proto_info</A>
+    </LI>
+    <LI><A HREF="c_api.shtml#mysql_get_server_info">mysql_get_server_info</A>
+    </LI>
+    <LI><A HREF="c_api.shtml#mysql_insert_id">mysql_insert_id</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_list_dbs">mysql_list_dbs</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_list_fields">mysql_list_fields</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_list_processes">mysql_list_processes</A>
+    </LI>
+    <LI><A HREF="c_api.shtml#mysql_list_tables">mysql_list_tables</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_num_fields">mysql_num_fields</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_num_rows">mysql_num_rows</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_query">mysql_query</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_real_query">mysql_real_query</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_reload">mysql_reload</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_select_db">mysql_select_db</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_shutdown">mysql_shutdown</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_stat">mysql_stat</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_store_result">mysql_store_result</A></LI>
+    <LI><A HREF="c_api.shtml#mysql_use_result">mysql_use_result</A></LI></UL>
+  <LI><B><A HREF="admin.shtml">Администрирование пакета</A></B>
+  <UL type=circle><LI><A href="admin.shtml#About">Предоставление доступа к
+                      базам данных</A></LI>
+    <LI><A href="admin.shtml#password">Как работают пароли</A></LI></UL>
+  <LI><A href="admin.shtml#mysqld">Запуск mysqld (при загрузке системы)</A></LI>
+  <LI><A href="admin.shtml#mysqldru">Запуск mysqld (при запущенной системе)</A>
+  </LI>
+  <LI><A href="admin.shtml#compile">Опции, задаваемые при компиляции пакета</A>
+  </LI>
+  <LI><A href="admin.shtml#logins">Выключение альтернативных пользовательских
+  логинов</A></LI>
+  <LI><A href="admin.shtml#autodef">Выключение автоматического присваивания
+  значений по умолчанию</A></LI>
+  <LI><A href="admin.shtml#keylen">Изменение используемой длины ключа</A></LI>
+  <LI><A href="admin.shtml#sort">Изменение порядка сортировки</A></LI>
+  <LI><A href="admin.shtml#Adding">Добавление функций в MySQL</A></LI>
+  <LI><A href="admin.shtml#fastload">Быстрая загрузка данных</A></LI>
+  <LI><A href="admin.shtml#tuning">Настройка mysqld</A></LI>
+  <LI><A href="admin.shtml#notes">Полезные замечания</A></LI>
+  <UL type=circle><LI><A href="admin.shtml#hints">Маленькие хитрости по
+                 улучшению производительности</A></LI>
+    <LI><A href="admin.shtml#optquery">Оптимизация запросов</A></LI>
+    <LI><A href="admin.shtml#optwhere">Какая оптимизация выполняется для
+        условия WHERE?</A></LI>
+    <LI><A href="admin.shtml#optmem">Оптимизация памяти, используемой таблицами
+    </A></LI>
+    <LI><A href="admin.shtml#tpms">Несоответствия типов в INSERT</A></LI></UL>
+  <LI><A href="admin.shtml#versql">О чем говорит номер версии MySQL</A></LI>
+  <LI>Протокол "клиент-сервер"</LI>
+  <UL type=circle><LI><A href="admin.shtml#cliser">Обозначения</A></LI>
+    <LI><A href="admin.shtml#cliserdt">Детальное описание</A></LI>
+    <LI><A href="admin.shtml#clisertp">Типы пакетов</A></LI>
+    <LI><A href="admin.shtml#cliserok">:ok</A></LI>
+    <LI><A href="admin.shtml#cliserer">:error</A></LI>
+    <LI><A href="admin.shtml#clisercm">:command</A></LI>
+    <LI><A href="admin.shtml#cliserqu">:query</A></LI>
+    <LI><A href="admin.shtml#cliserda">:data</A></LI></UL>
+    <LI><A HREF="admin.shtml#Table_Details">Подробно о таблицах</A></LI>
+    <LI><A HREF="admin.shtml#About_Keys">Ключи и все о них</A></LI>
+    <LI><A HREF="admin.shtml#MySQL_Future">MySQL: планы на будущее</A></LI>
+    <LI><A HREF="admin.shtml#LinuxThreads">Потоки в Linux</A></LI></UL>
+  <LI><B><A HREF="perl_api.shtml">Интерфейс с perl (MySQL perl API)</A></B>
+  <UL type=circle><LI><A HREF="perl_api.shtml#Overview">Коротко о главном</A>
+  </LI>
+    <LI><A HREF="perl_api.shtml#Main">Основной интерфейс с perl</A></LI>
+    <LI><A HREF="perl_api.shtml#LongLong">Очень большие числа</A></LI>
+    <LI><A HREF="perl_api.shtml#Connect">Connect</A></LI>
+    <LI><A HREF="perl_api.shtml#ChangePort">Смена порта</A></LI>
+    <LI><A HREF="perl_api.shtml#SelectDB">SelectDB</A></LI>
+    <LI><A HREF="perl_api.shtml#ListFields">ListFields</A></LI>
+    <LI><A HREF="perl_api.shtml#Query">Query</A></LI>
+    <LI><A HREF="perl_api.shtml#ListDBs">ListDBs</A></LI>
+    <LI><A HREF="perl_api.shtml#ListTables">ListTables</A></LI>
+    <LI><A HREF="perl_api.shtml#FetchCol">FetchCol</A></LI>
+    <LI><A HREF="perl_api.shtml#FetchHash">FetchHash</A></LI>
+    <LI><A HREF="perl_api.shtml#FetchRow">FetchRow</A></LI>
+    <LI><A HREF="perl_api.shtml#DataSeek">DataSeek</A></LI>
+    <LI><A HREF="perl_api.shtml#Escape_Binary">Обработка двоичных строк</A>
+    </LI>
+    <LI><A HREF="perl_api.shtml#NoClose">Потерянные значения</A></LI>
+    <LI><A HREF="perl_api.shtml#Metadata">Метаданные</A></LI>
+    <LI><A HREF="perl_api.shtml#DatabaseHandle">Дескриптор базы данных</A></LI>
+    <LI><A HREF="perl_api.shtml#StatementHandle">Операторный дескриптор</A>
+    </LI>
+    <LI><A HREF="perl_api.shtml#Prerequisites">Предупреждение</A></LI>
+    <LI><A HREF="perl_api.shtml#Author">Об авторе интерфейса</A></LI>
+    <LI><B><A HREF="perl_api.shtml#DBI2">MySQL DBD/DBI PERL API</A></B></LI>
+    <UL type=disc>
+      <LI><A HREF="perl_api.shtml#DBI_Overview">Коротко о главном</A></LI>
+      <LI><A HREF="perl_api.shtml#LongLong2">Очень большие числа</A></LI>
+      <LI><A HREF="perl_api.shtml#BinStr">Вставка двоичных строк</A>
+      <LI><A HREF="perl_api.shtml#Author2">Об авторе интерфейса</A></LI></UL>
+    <LI><A HREF="perl_api.shtml#See_Also">Что можно почитать</A></LI></UL></UL>
+<LI><B><A HREF="app2.shtml">Библиотека отладчика MySQL</A></B></LI>
+<LI>Функции библиотеки отладчика:</LI>
+<UL type=circle><LI><A HREF="app2.shtml#dbpush">_db_push_</A></LI>
+  <LI><A HREF="app2.shtml#flags">Символы флажка отладки</A></LI>
+  <LI><A HREF="app2.shtml#dbpop">_db_pop_</A></LI>
+  <LI><A HREF="app2.shtml#dbenter">_db_enter_</A></LI>
+  <LI><A HREF="app2.shtml#dbret">_db_return_</A></LI>
+  <LI><A HREF="app2.shtml#dbpargs">_db_pargs_</A></LI>
+  <LI><A HREF="app2.shtml#dbdoprnt">_db_doprnt_</A></LI>
+  <LI><A HREF="app2.shtml#dbdump">_db_dump_</A></LI>
+  <LI><A HREF="app2.shtml#ListPars">ListParse</A></LI>
+  <LI><A HREF="app2.shtml#InList">InList</A></LI>
+  <LI><A HREF="app2.shtml#PushStat">PushState</A></LI>
+  <LI><A HREF="app2.shtml#DoTrace">DoTrace</A></LI>
+  <LI><A HREF="app2.shtml#DoProf">DoProfile</A></LI>
+  <LI><A HREF="app2.shtml#dbkey">_db_keyword</A></LI>
+  <LI><A HREF="app2.shtml#Indent">Indent</A></LI>
+  <LI><A HREF="app2.shtml#FreeList">FreeList</A></LI>
+  <LI><A HREF="app2.shtml#StrDup">StrDup</A></LI>
+  <LI><A HREF="app2.shtml#DoPrefix">DoPrefix</A></LI>
+  <LI><A HREF="app2.shtml#OpenFile">OpenFile</A></LI>
+  <LI><A HREF="app2.shtml#OpenProf">OpenProfile</A></LI>
+  <LI><A HREF="app2.shtml#CloseF">CloseFile</A></LI>
+  <LI><A HREF="app2.shtml#DbugExit">DbugExit</A></LI>
+  <LI><A HREF="app2.shtml#DbugMall">DbugMalloc</A></LI>
+  <LI><A HREF="app2.shtml#ststok">static_strtok</A></LI>
+  <LI><A HREF="app2.shtml#BaseName">BaseName</A></LI>
+  <LI><A HREF="app2.shtml#Writable">Writable</A></LI>
+  <LI><A HREF="app2.shtml#ChgOwner">ChangeOwner</A></LI>
+  <LI><A HREF="app2.shtml#dbset">_db_setjmp_</A></LI>
+  <LI><A HREF="app2.shtml#dblong">_db_longjmp_</A></LI>
+  <LI><A HREF="app2.shtml#DelayArg">DelayArg</A></LI>
+  <LI><A HREF="app2.shtml#perror">perror</A></LI></UL>
+<LI><B><A HREF="app3.shtml">Портирование кода из mSQL в MySQL</A></B></LI>
+<UL type=circle><LI><A HREF="app3.shtml#cliserdf">Чем отличается реализация
+                    протокола клиент/сервер в MySQL от своего аналога в mSQL?
+                    </A></LI>
+  <LI><A HREF="app3.shtml#diff">Отличия между msql 2.0b7 и MySQL</A></LI></UL>
+<LI><B><A HREF="app4.shtml">Утилиты для MySQL</A></B></LI>
+<LI><B><A HREF="app1.shtml">Пример базы данных</A></B></LI>
+<LI><B><A HREF="app6.shtml">Лицензия на использование MySQL</A></B></LI></UL>
+
+<P><HR WIDTH="100%"><CENTER><H2><A NAME="About">О чем это?</A></H2></CENTER>
+<P>В этом описании рассматривается СУБД MySQL. Руководство рассчитано на
+пользователей среднего уровня подготовки. Оно может быть использовано как в
+качестве справочного руководства по данной СУБД, так и в качестве учебника.
+В целях его использования в качестве справочника, в самом начале документа
+предусмотрено полное оглавление.
+
+<P><B>ЭТО НЕ ПЕРЕВОД ОРИГИНАЛЬНОЙ ДОКУМЕНТАЦИИ!</B> Этот документ написан
+после прочтения фирменной документации, работы с пакетом и даже попыток его
+повалить, правда, не слишком удачных. Таким образом, в документе нашлось
+место и для личного мнения автора по ряду вопросов. Этот абзац мне пришлось
+включить на основании опыта подготовки подобной документации. Увы, описания,
+выстраданные кропотливым изучением программ, посчитали примитивным переводом,
+что говорит о том, что с ними просто не ознакомились должным образом. Я не
+отрицаю изучения мной оригинальной документации на пакет, но этот документ
+переводом не является.
+
+<P>С другой стороны, мне понравилась структура оригинальной документации, и я
+ее по, возможности, придерживался. Однако, структура-это еще не документация.
+
+<P>Данное описание пакета MySQL подготовлено Паутовым Алексеем Валентиновичем
+в качестве курсовой работы. По вопросам использования данного документа прошу
+обращаться по <a href="mailto:rldp@ftp.botik.ru?subject=MySQL">e-mail</a>.
+
+<P>Я заранее приношу извинения за ошибки и неточности (если таковые здесь
+есть), и прошу Вас <a href="mailto:rldp@ftp.botik.ru?subject=MySQL error">
+сообщить мне о них</a>. Я постараюсь их исправить. Я не несу какой-либо
+ответственности за какие бы то ни было последствия применения данного
+документа или сведений, изложенных в нем (в частности, упоминания возможных
+дыр в защите СУБД). Так что, если кто-то, прочитав этот документ возьмет, да
+и сотрет базу данных записей этак тысяч на сто, то я тут ни при чем!
+
+<P>В заключение хочется попросить Вас, если Вам понравилась эта страничка
+или пригодилась изложенная здесь информация,
+<A href="mailto:rldp@ftp.botik.ru?subject=Спасибо!&body=Спасибо за
+работу!">послать благодарность автору.</A> Это поможет мне вести статистику
+того, скольким людям пригодилось хоть что-то из моих трудов.
+
+<P>Ну а теперь к делу...
+
+<CENTER><H2><A NAME="What">Что такое MySQL?</A></H2></CENTER>
+<P>MySQL разработал Михаэль Видениус (Michael Widenius,
+<A HREF="MAILTO:monty@analytikerna.se">monty@analytikerna.se</A>). MySQL
+является относительно небольшой и быстрой реляционной СУБД основанной на
+традициях Hughes Technologies Mini SQL (mSQL).
+
+<P>Последнюю версию MySQL можно скачать с <A HREF="../../../../www.tcx.se/default.shtml">
+www.tcx.se</A>.
+
+<CENTER><H2><A NAME="Does">Чем хорош MySQL?</A></H2></CENTER>
+<P>Перечислю основные приятные стороны пакета MySQL.
+
+<P><UL type=disc><LI>Многопоточность. Поддержка нескольких одновременных
+запросов.</LI>
+<LI>Оптимизация связей с присоединением многих данных за один проход.</LI>
+<LI>Записи фиксированной и переменной длины.</LI>
+<LI>ODBC драйвер в комплекте с исходником</LI>
+<LI>Гибкая система привилегий и паролей.</LI>
+<LI>До 16 ключей в таблице. Каждый ключ может иметь до 15 полей.</LI>
+<LI>Поддержка ключевых полей и специальных полей в операторе CREATE.</LI>
+<LI>Поддержка чисел длинной от 1 до 4 байт (ints, float, double, fixed),
+    строк переменной длины и меток времени.</LI>
+<LI>Интерфейс с языками C и perl.</LI>
+<LI>Основанная на потоках, быстрая система памяти.</LI>
+<LI>Утилита проверки и ремонта таблицы (<A HREF="commands.shtml#Isamchk">
+    isamchk</A>).</LI>
+<LI>Все данные хранятся в формате ISO8859_1.</LI>
+<LI>Все операции работы со строками не обращают внимания на регистр символов
+    в обрабатываемых строках.</LI>
+<LI>Псевдонимы применимы как к таблицам, так и к отдельным колонкам в
+    таблице.</LI>
+<LI>Все поля имеют значение по умолчанию. INSERT можно использовать на
+    любом подмножестве полей.</LI>
+<LI>Легкость управления таблицей, включая добавление и удаление ключей и
+    полей.</LI></UL>
+
+<CENTER><H2><A NAME="SQL">Что такое SQL?</A></H2></CENTER>
+<P>SQL - это сокращение от Structured Query Language (структурированный язык
+запросов). SQL создан для работы с реляционными базами данных. Он позволяет
+пользователям взаимодействовать с базами данных (просматривать, искать,
+добавлять и управлять данными). MySQL соответствует спецификации ANSI 92
+SQL. <A HREF="sql.shtml">Подробности</A>.
+
+<CENTER><H2><A NAME="Talk">Интерфейс с языками программирования</A></H2>
+</CENTER>
+<P>Наиболее простой способ работы с MySQL сводится к использованию программы
+MySQL. Это клиентская часть СУБД MySQL. Можно выполнять команды SQL
+непосредственно из командной строки системы unix или из интерактивного
+режима MySQL. <A HREF="commands.shtml">Подробнее</A> о клиентских программах.
+
+<P>СУБД MySQL имеет библиотеку C API. Ее можно использовать для запросов к
+базе данных, вставки данных, создания таблиц и т.п. C API поддерживает все
+функции MySQL. Подробности в главе <A HREF="c_api.shtml">"Интерфейс для С (C
+API)"</A>.
+
+<P>Язык perl поддерживается сразу двумя способами:
+<UL><LI>Портирован интерфейс с perl из mini-SQL, разработанный Андреасом
+Коенигом (Andreas Koenig <A HREF=MAILTO:a.koenig@mind.de>a.koenig@mind.de
+</A>).</LI>
+<LI>Есть модуль perl DBD</LI></UL>
+Подробнее этот вопрос рассмотрен в главе <A HREF="perl_api.shtml">"Интерфейс с
+perl (MySQL perl API)"</A>.
+
+<P>Также доступен 32-битный ODBC драйвер для MySQL. Он позволяет запрашивать
+и получать данные из других источников с поддержкой ODBC. С подробностями
+можно ознакомиться на <A HREF="../../../../www.tcx.se/default.htm">домашней страничке MySQL
+</A> (увы, только на английском языке).
+
+<P>В заключение хочется попросить Вас, если Вам понравилась эта страничка или
+пригодилась изложенная здесь информация,
+<A href="mailto:rldp@ftp.botik.ru?subject=Спасибо!&body=Спасибо за
+работу!">послать благодарность автору.</A> Это поможет мне
+вести статистику того, скольким людям пригодилось хоть что-то из моих трудов.
+
+<P><A href="mysqlrus.shtml">Перейти к оглавлению.</A>
+
+</TD></TR></TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>
+

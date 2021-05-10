@@ -1,0 +1,9 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Arch\_EGE\Русский\contaners\contaner_1\24\cat.24\dir.24.md">24</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Arch\_EGE\Русский\contaners\contaner_1\24\100.md">100.md</a>
+        - *# значение слова
+        - *# синонимы / контекстные синонимы
+        - *# антонимы / контекстные антонимы
+        - *# разговорные / нейтральные / книжные слова
+        - *## стили речи
+        - *## стили слова
+        - *# фразеологизмы

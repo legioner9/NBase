@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="btn_1" value="button">this bad button</button>
+
+    <button id="btn_2" value="button">this good button</button>
+
+    <button id="btn_3" value="button">this 3 point bad button</button>
+
+    <button id="btn_4" value="button">this 3 point currectly rAf treat button</button>
+
+    <button id="btn_5" value="button">this 3 point currectly gCS treat button</button>
+
+    <a href="E:\Node_projects\Node_Way\NBase\_Md\_Index\_WebJS\Containers\Point_learn\event_loop\youtube\Jake_Archibald.md">for  Jake_Archibald.md </a>
+
+    <script>
+
+
+        btn_1.addEventListener('click', event => {
+            // block
+            while (true) {
+
+            }
+
+        })
+
+        btn_2.addEventListener('click', event => {
+
+            loop()
+
+        })
+
+        // render ONLY box.style.transform = 'translateX(500px)':
+        btn_3.addEventListener('click', event => {
+
+            box.style.transform = 'translateX(1000px)'
+            box.style.transform = 'transform 1s ease-in-out'
+            box.style.transform = 'translateX(500px)'
+
+        })
+
+        btn_4.addEventListener('click', event => {
+
+            box.style.transform = 'translateX(1000px)'// (*)
+            box.style.transform = 'transform 1s ease-in-out'// (**)
+
+            requestAnimationFrame(() => {
+                // render (*) and (**)
+                requestAnimationFrame(() => {
+                    // render endpoint position
+                    box.style.transform = 'translateX(500px)'
+                })
+            }) 
+
+        })
+
+        btn_5.addEventListener('click', event => {
+
+            box.style.transform = 'translateX(1000px)'
+            box.style.transform = 'transform 1s ease-in-out'
+            getComputedStyle(box).transform;
+            box.style.transform = 'translateX(500px)'
+
+        })
+
+
+
+        // not block 
+        const loop = function () {
+            setTimeout(loop, 0);
+        }
+
+        const callback = function () {
+            console.log('from requestAnimationFrame(callback)');
+        }
+
+        // 60 Hz
+        requestAnimationFrame(callback);
+
+
+    </script>
+</body>
+
+</html>

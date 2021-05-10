@@ -1,0 +1,1141 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 8. Connector/ODBC: советы и подсказки</title>
+  <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-odbc-usagenotes"></a>
+Глава 8. Connector/ODBC: советы и подсказки</h1>
+<a class="indexterm" name="idm139746779242416"></a>
+<p>Вот некоторые общие примечания и советы для использования Connector/ODBC
+в различной окружающей среде и инструментах. Примечания, обеспеченные здесь,
+основаны на событиях разработчиков и пользователей Connector/ODBC.</p>
+
+<h2><a name="connector-odbc-usagenotes-functionality"></a>
+8.1. Общая функциональность Connector/ODBC</h2>
+<p>Этот раздел предоставляет общие вопросы помощи в области функциональности
+в MySQL и как использовать их с Connector/ODBC.</p>
+
+<h3><a name="connector-odbc-usagenotes-functionality-last-insert-id"></a>
+8.1.1. Получение значений Auto-Increment</h3>
+<a class="indexterm" name="idm139746779238080"></a>
+<p>Получение значения столбца, который использует
+<code class="literal">AUTO_INCREMENT</code> после
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html" target="_top">
+<code class="literal">INSERT</code></a> может быть достигнуто различными
+способами. Получить значение немедленно после
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html"
+target="_top"><code class="literal">INSERT</code></a> можно через
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/select.html"
+target="_top"><code class="literal">SELECT</code></a> с функцией
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/information-functions.html#function_last-insert-id"
+target="_top"><code class="literal">LAST_INSERT_ID()</code></a>.</p>
+
+<p>Например, при использовании Connector/ODBC вы выполнили бы два отдельных
+запроса: <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html"
+target="_top"><code class="literal">INSERT</code></a> и
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/select.html"
+target="_top"><code class="literal">SELECT</code></a>, чтобы получить
+значение auto-increment.</p>
+
+<pre class="programlisting">
+INSERT INTO tbl (auto,text) VALUES(NULL,'text');
+SELECT LAST_INSERT_ID();
+</pre>
+
+<p>Если вы не требуете значение в рамках запроса, но действительно требуете
+значение как часть другого
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html" target="_top">
+<code class="literal">INSERT</code></a>, весь процесс может быть обработан,
+выполнив следующие запросы:</p>
+
+<pre class="programlisting">
+INSERT INTO tbl (auto,text) VALUES(NULL,'text');
+INSERT INTO tbl2 (id,text) VALUES(LAST_INSERT_ID(),'text');
+</pre>
+
+<p>Определенные приложения ODBC (включая Delphi и Access)
+могут испытать затруднения при получении значения auto-increment,
+используя предыдущие примеры. В этом случае попробуйте
+следующее как альтернативу:</p>
+
+<pre class="programlisting">
+SELECT * FROM tbl WHERE auto IS NULL;
+</pre>
+
+<p>Этот альтернативный метод требует, чтобы переменная
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_sql_auto_is_null"
+target="_top"><code class="literal">sql_auto_is_null</code></a> не была
+установлена в 0. См. <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html"
+target="_top">Server System Variables</a>.</p>
+<p>См. также <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/getting-unique-id.html"
+target="_top">How to Get the Unique ID for the Last Inserted Row</a>.</p>
+
+<h3><a name="connector-odbc-usagenotes-functionality-dynamic-cursor"></a>
+8.1.2. Поддержка динамического курсора</h3>
+<p>Поддержка <code class="literal">динамического курсора</code>
+обеспечивается в Connector/ODBC 3.51, но динамические курсоры не позволены по
+умолчанию. Можно позволить эту функцию в Windows, выбрав опцию
+<code class="literal">Enable Dynamic Cursor</code> в
+ODBC Data Source Administrator.</p>
+
+<p>На других платформах можно позволить динамический курсор, добавив
+<code class="literal">32</code> в значение
+<code class="literal">OPTION</code>, создавая DSN.</p>
+
+<h3><a name="connector-odbc-usagenotes-functionality-performance"></a>
+8.1.3. Производительность Connector/ODBC</h3>
+<p>Драйвер Connector/ODBC был оптимизирован, чтобы обеспечить очень быструю
+работу. Если вы испытываете проблемы с исполнением Connector/ODBC или
+замечаете большой объем активности диска для простых запросов, есть много
+аспектов, чтобы проверить:</p>
+
+<ul><li class="listitem"><p>Гарантируйте, что выключен
+<code class="literal">ODBC Tracing</code>. С отслеживанием большая информация
+зарегистрирована в файле менеджером ODBC. Можно проверить и отключить
+трассировку в Windows, используя панель
+<span class="guibutton">Tracing</span> в ODBC Data Source Administrator.
+В macOS проверьте панель <span class="guibutton">Tracing</span> в ODBC
+Administrator. См. <a href="config.htm#connector-odbc-configuration-trace">
+раздел 5.8</a>.</p></li>
+
+<li class="listitem"><p>Удостоверьтесь, что вы используете стандартную версию
+драйвера, а не отладочную версию.
+Отладочная версия включает дополнительные проверки.</p></li>
+
+<li class="listitem"><p>Отключите трассировку драйвера Connector/ODBC
+и журналы запросов. Эти варианты позволены для каждого DSN, поэтому
+удостоверьтесь, что исследовали только DSN, который вы используете в своем
+запросе. В Windows можно отключить трассировку Connector/ODBC и журналы
+запросов, изменив конфигурацию DSN. В macOS и Unix гарантируйте, что
+трассировка драйвера (значение опции 4) и регистрация запросов
+(значение опции 524288) выключены.</p></li></ul>
+
+<h3><a name="connector-odbc-usagenotes-functionality-query-timeout"></a>
+8.1.4. Установка тайм-аута запроса ODBC в Windows</h3>
+<p>Для получения дополнительной информации о том, как установить
+тайм-аут запроса в Microsoft Windows, выполняя запросы через ODBC,
+прочитайте документ базы знаний Microsoft
+<a href="../../../support.microsoft.com/default.aspx@scid=kb_253Ben-us_253B153756"
+target="_top">http://support.microsoft.com/default.aspx?scid=kb%3Ben-us%3B153756</a>.
+</p>
+
+<h2><a name="connector-odbc-usagenotes-apptips"></a>
+8.2. Специализированные подсказки Connector/ODBC</h2>
+<p>Большинство программ должно работать с Connector/ODBC, но для каждой
+из перечисленных здесь, есть определенные примечания и подсказки, чтобы
+улучшить работу с Connector/ODBC.</p>
+
+<p>Со всеми запросами гарантируйте, что вы используете последние драйверы
+Connector/ODBC, ODBC Manager и любые библиотеки поддержки и интерфейсы,
+используемые вашим запросом. Например, в Windows, использование последней
+версии Microsoft Data Access Components (MDAC) улучшит совместимость с ODBC в
+целом, и с Connector/ODBC.</p>
+
+<h3><a name="connector-odbc-usagenotes-apptips-microsoft"></a>
+8.2.1. Использование Connector/ODBC с Microsoft Applications</h3>
+<p>Большинство приложений Microsoft было проверено с Connector/ODBC, включая
+Microsoft Office, Microsoft Access различные языки программирования,
+поддержанные в ASP и Microsoft Visual Studio.</p>
+
+<h4><a name="connector-odbc-usagenotes-apptips-microsoft-access"></a>
+8.2.1.1. Microsoft Access</h4>
+<a class="indexterm" name="idm139746779201328"></a>
+<p>Улучшить интеграцию между Microsoft Access и
+MySQL через Connector/ODBC:</p>
+
+<ul><li class="listitem"><p>Для всех версий Access включите опцию
+Connector/ODBC <code class="literal">Return matching rows</code>.
+Для Access 2.0 также включите опцию <code class="literal">Simulate ODBC 1.0
+</code>.</p></li>
+
+<li class="listitem"><p>
+Включайте столбцы <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/datetime.html"
+target="_top"><code class="literal">TIMESTAMP</code></a> во все таблицы,
+которые вы хотите обновить. Для максимальной мобильности не используйте
+спецификацию длины в декларации столбца (которая не поддерживается в MySQL в
+версиях ранее, чем 4.1).</p></li>
+
+<li class="listitem"><p>
+Включайте <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_primary_key"
+target="_top">первичный ключ</a> в каждую таблицу MySQL, которую хотите
+использовать с Access. В противном случае новые или обновленные строки
+могут обнаружиться как <code class="literal">#DELETED#</code>.</p></li>
+
+<li class="listitem"><p>Используйте только плавающие значения типа
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/floating-point-types.html"
+target="_top"><code class="literal">DOUBLE</code></a>.
+Access терпит неудачу, сравнивая плавающие значения одинарной точности.
+Признак: обычно новые или обновленные строки могут обнаружиться как
+<code class="literal">#DELETED#</code>,
+или вы не можете найти или обновить строки.</p></li>
+
+<li class="listitem"><p>При использовании Connector/ODBC, чтобы связаться с
+таблицей, у которой есть столбец
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/integer-types.html"
+target="_top"><code class="literal">BIGINT</code></a>, результаты показаны
+как <code class="literal">#DELETED#</code>. Починить можно так:</p>
+
+<ul><li class="listitem"><p>Имейте еще один фиктивный столбец
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/datetime.html"
+target="_top"><code class="literal">TIMESTAMP</code></a> как тип данных.
+</p></li>
+
+<li class="listitem"><p>Выберите опцию <code class="literal">Change BIGINT
+columns to INT</code> в диалоге связи в ODBC DSN Administrator.</p></li>
+<li class="listitem"><p>Удалите связь таблицы из Access и пересоздайте ее.
+</p></li></ul>
+
+<p>Старые записи могут все еще показать как
+<code class="literal">#DELETED#</code>, но недавно
+добавленные/обновленные показаны правильно.</p></li>
+
+<li class="listitem"><p>Если вы все еще получаете ошибку
+<code class="literal">Another user has changed your data</code>
+после добавления столбца
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/datetime.html"
+target="_top"><code class="literal">TIMESTAMP</code></a>, следующая уловка
+может помочь вам:</p>
+
+<p>Не используйте представление таблицы данных
+<code class="literal">table</code>. Вместо этого создайте форму с областями,
+которые вы хотите, и используйте представление таблицы данных
+<code class="literal">form</code>. Установите свойство
+<code class="literal">DefaultValue</code> для столбца
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/datetime.html"
+target="_top"><code class="literal">TIMESTAMP</code></a> в
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_now"
+target="_top"><code class="literal">NOW()</code></a>.
+Рассмотрите сокрытие столбца
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/datetime.html"
+target="_top"><code class="literal">TIMESTAMP</code></a> из представления,
+так ваши пользователи не перепутаны.</p></li>
+
+<li class="listitem"><p>В некоторых случаях Access может произвести
+SQL-операторы, которые не может понять MySQL. Можно исправить это, выбрав
+<code class="literal">"Query|SQLSpecific|Pass-Through"</code>
+из меню Access.</p></li>
+
+<li class="listitem"><p>В Windows NT Access покажет столбцы
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/blob.html" target="_top">
+<code class="literal">BLOB</code></a> как
+<code class="literal">OLE OBJECTS</code>. Если вы хотите иметь вместо этого
+столбцы <code class="literal">MEMO</code>, смените
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/blob.html" target="_top">
+<code class="literal">BLOB</code></a> на
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/blob.html" target="_top">
+<code class="literal">TEXT</code></a> через
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/alter-table.html"
+target="_top"><code class="literal">ALTER TABLE</code></a>.</p></li>
+
+<li class="listitem"><p>Access не всегда может обращаться со столбцами MySQL
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/datetime.html"
+target="_top"><code class="literal">DATE</code></a>. Если вы имеете проблему
+с ними, измените столбцы на
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/datetime.html"
+target="_top"><code class="literal">DATETIME</code></a>.</p></li>
+
+<li class="listitem"><p>Если у вас есть в Access столбец
+<code class="literal">BYTE</code>, Access пытается экспортировать это как
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/integer-types.html"
+target="_top"><code class="literal">TINYINT</code></a> вместо
+<code class="literal">TINYINT UNSIGNED</code>. Это дает вам проблемы, если у
+вас есть значения больше 127.</p></li>
+
+<li class="listitem"><p>Если у вас есть очень большие (длинные) таблицы в
+Access, могло бы потребоваться очень долгое время, чтобы открыть их. Или вы
+могли бы испытать нехватку виртуальной памяти и в конечном счете получить
+ошибку <code class="literal">ODBC Query Failed</code>.
+Чтобы иметь дело с этим, выберите следующие опции:</p>
+
+<ul><li class="listitem"><p>Return Matching Rows (2)</p></li>
+<li class="listitem"><p>Allow BIG Results (8).</p></li></ul>
+<p>Они составляют в целом значение 10
+(<code class="literal">OPTION=10</code>).</p></li></ul>
+
+<p>Некоторые внешние статьи и подсказки, которые могут быть полезными,
+используя Access, ODBC и Connector/ODBC:</p>
+<ul><li class="listitem"><p>
+<a href="../../../support.microsoft.com/support/kb/articles/Q124/9/01.asp@LN=EN-US&SD=gn&FR=0_253CP_253E"
+target="_top">How to Trap ODBC Login Error Messages in Access</a>.</p></li>
+
+<li class="listitem"><p>Оптимизация доступа приложения Access ODBC.</p>
+<ul><li class="listitem"><p>
+<a href="../../../support.microsoft.com/default.aspx@scid=kb;en-us;128808"
+target="_top">Optimizing for Client/Server Performance</a>.</p></li>
+
+<li class="listitem"><p>
+<a href="../../../support.microsoft.com/default.aspx@scid=kb;en-us;164481"
+target="_top">Tips for Converting Applications to Using ODBC Direct</a>.
+</p></li>
+
+<li class="listitem"><p>
+<a href="../../../support.microsoft.com/default.aspx@scid=kb;EN-US;q99321"
+target="_top">Tips for Optimizing Queries on Attached SQL Tables</a>.
+</p></li></ul></li></ul>
+
+<h4><a name="connector-odbc-usagenotes-apptips-microsoft-excel"></a>
+8.2.1.2. Microsoft Excel и типы столбца</h4>
+<a class="indexterm" name="idm139746779145184"></a>
+<p>Если у вас есть проблемы при импортировании данных в Microsoft Excel,
+особенно числовые, даты и временные, это, вероятно, из-за ошибки в Excel,
+где тип столбца исходных данных используется, чтобы определить тип данных,
+когда те данные вставляются в ячейку в рабочем листе. Результат состоит в
+том, что Excel неправильно определяет содержание, это затрагивает формат
+отображения и данные, когда это используется в рамках вычислений.</p>
+
+<p>Чтобы решить эту проблему, используйте функцию
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_concat"
+target="_top"><code class="literal">CONCAT()</code></a> в запросах.
+Применение <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_concat"
+target="_top"><code class="literal">CONCAT()</code></a> заставляет Excel
+рассматривать значение как последовательность, ее Excel разберет и обычно
+правильно определит вложенную информацию.</p>
+
+<p>Однако даже с этим выбором, некоторые данные могут быть неправильно
+отформатированы, даже при том, что исходные данные остаются неизменными.
+Используйте опцию <code class="literal">Format Cells</code> в Excel, чтобы
+изменить формат показанной информации.</p>
+
+<h4><a name="connector-odbc-usagenotes-apptips-microsoft-visualbasic"></a>
+8.2.1.3. Microsoft Visual Basic</h4>
+<a class="indexterm" name="idm139746779138096"></a>
+<p>Чтобы быть в состоянии обновить таблицу, необходимо определить
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_primary_key"
+target="_top">первичный ключ</a> для нее.</p>
+
+<p>Visual Basic с ADO не может обращаться с большими целыми числами.
+Это означает что некоторые запросы вроде
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/show-processlist.html"
+target="_top"><code class="literal">SHOW PROCESSLIST</code></a>
+не работайте правильно. Решение должно использовать
+<code class="literal">OPTION=16384</code> в строке соединения ODBC
+или выбор опции <code class="literal">Change BIGINT columns to INT</code>
+на экране подключения Connector/ODBC. Можно также выбрать опцию
+<code class="literal">Return matching rows</code>.</p>
+
+<h4><a name="connector-odbc-usagenotes-apptips-microsoft-visualinterdev"></a>
+8.2.1.4. Microsoft Visual InterDev</h4>
+<a class="indexterm" name="idm139746779131008"></a>
+<p>Если у вас есть <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/integer-types.html"
+target="_top"><code class="literal">BIGINT</code></a> в вашем результате
+можно получить ошибку <code class="literal">[Microsoft] [ODBC Driver Manager]
+Driver does not support this parameter</code>. Попытайтесь выбрать опцию
+<code class="literal">Change BIGINT columns to INT</code> на экране
+подключения Connector/ODBC.</p>
+
+<h4><a name="connector-odbc-usagenotes-apptips-microsoft-visualobjects"></a>
+8.2.1.5. Visual Objects</h4>
+<a class="indexterm" name="idm139746779125936"></a>
+<p>Выберите опцию <code class="literal">Don't optimize column widths</code>.
+</p>
+
+<h4><a name="connector-odbc-usagenotes-apptips-microsoft-ado"></a>
+8.2.1.6. Microsoft ADO</h4>
+<a class="indexterm" name="idm139746779122912"></a>
+<p>Когда вы кодируете с ADO API и Connector/ODBC, необходимо обратить
+внимание на некоторые свойства по умолчанию, которые не поддерживаются
+сервером MySQL. Например, использование
+<code class="literal">CursorLocation Property</code> как
+<code class="literal">adUseServer</code> возвращает результат -1 для
+<code class="literal">RecordCount Property</code>. Чтобы иметь правильное
+значение, необходимо установить это свойство в
+<code class="literal">adUseClient</code>, как показано в коде VB здесь:</p>
+
+<pre class="programlisting">
+Dim myconn As New ADODB.Connection
+Dim myrs As New Recordset
+Dim mySQL As String
+Dim myrows As Long
+
+myconn.Open "DSN=MyODBCsample"
+mySQL = "SELECT * from user"
+myrs.Source = mySQL
+Set myrs.ActiveConnection = myconn
+myrs.CursorLocation = adUseClient
+myrs.Open
+myrows = myrs.RecordCount
+myrs.Close
+myconn.Close
+</pre>
+
+<p>Можно использовать <code class="literal">SELECT COUNT(*)</code>
+для подобного запроса, чтобы получить правильное количество строк.</p>
+
+<p>Чтобы узнать число строк, затронутое определенным SQL-оператором в ADO,
+используйте свойство <code class="literal">RecordsAffected</code>
+в методе ADO execute. См.
+<a href="../../../msdn.microsoft.com/library/default.asp@url=_2Flibrary_2Fen-us_2Fado270_2Fhtm_2Fmdmthcnnexecute.asp"
+target="_top">http://msdn.microsoft.com/library/default.asp?url=/library/en-us/ado270/htm/mdmthcnnexecute.asp
+</a>.</p>
+<p>См. <a href="../../../support.microsoft.com/default.aspx@scid=kb;EN-US;q183606"
+target="_top">ActiveX Data Objects(ADO) Frequently Asked Questions</a>.</p>
+
+<h4><a name="connector-odbc-usagenotes-apptips-microsoft-asp"></a>
+8.2.1.7. Использование Connector/ODBC с Active Server Pages (ASP)</h4>
+<a class="indexterm" name="idm139746779112528"></a>
+<p>Выберите опцию <code class="literal">Return matching rows</code> в DSN.
+</p>
+
+<p>Для получения дополнительной информации о том, как получить доступ к MySQL
+через ASP, используя Connector/ODBC, обратитесь к следующим статьям:</p>
+<ul><li class="listitem"><p>
+<a href="../../../www.devarticles.com/c/a/ASP/Using-MyODBC-To-Access-Your-MySQL-Database-Via-ASP/default.htm"
+target="_top">Using MyODBC To Access Your MySQL Database Via ASP</a>.
+</p></li>
+
+<li class="listitem"><p>
+<a href="../../../www.dwam.net/mysql/asp_myodbc.asp" target="_top">
+ASP and MySQL at DWAM.NT</a>.</p></li></ul>
+
+<p>Frequently Asked Questions для ASP можно найти на
+<a href="../../../support.microsoft.com/default.aspx@scid=_2FSupport_2FActiveServer_2Ffaq_2Fdata_2Fadofaq.asp"
+target="_top">http://support.microsoft.com/default.aspx?scid=/Support/ActiveServer/faq/data/adofaq.asp</a>.
+</p>
+
+<h4><a name="connector-odbc-usagenotes-apptips-microsoft-vb-asp"></a>
+8.2.1.8. Connector/ODBC с Visual Basic (ADO, DAO и RDO) и ASP</h4>
+<p>Некоторые статьи, которые могут помочь с Visual Basic и ASP:</p>
+
+<ul><li class="listitem"><p>
+<a href="../../../dev.mysql.com/tech-resources/articles/vb-blob-handling.html"
+target="_top">MySQL BLOB columns and Visual Basic 6</a> by Mike Hillyer
+(<code>&lt;<a href="mailto:mike@openwin.org">
+mike@openwin.org</a>&gt;</code>).</p></li>
+
+<li class="listitem"><p>
+<a href="../../../dev.mysql.com/tech-resources/articles/visual-basic-datatypes.html"
+target="_top">How to map Visual basic data type to MySQL types</a> by
+Mike Hillyer (<code>
+&lt;<a href="mailto:mike@openwin.org">mike@openwin.org</a>&gt;</code>).
+</p></li></ul>
+
+<h3><a name="connector-odbc-usagenotes-apptips-borland"></a>
+8.2.2. Connector/ODBC с приложениями Borland</h3>
+<a class="indexterm" name="idm139746779098640"></a>
+<a class="indexterm" name="idm139746779097248"></a>
+<p>Со всеми приложениями Borland, где Borland Database Engine (BDE)
+используется, выполните эти шаги, чтобы улучшить совместимость:</p>
+
+<ul><li class="listitem"><p>Обновление до BDE 3.2 или более нового.</p></li>
+<li class="listitem"><p>Включите опцию <code class="literal">Don't optimize
+column widths</code> в DSN.</p></li>
+<li class="listitem"><p>Включите опцию <code class="literal">
+Return matching rows</code> в DSN.</p></li></ul>
+
+<h4><a name="connector-odbc-usagenotes-apptips-borland-builder"></a>
+8.2.2.1. Connector/ODBC с Borland Builder 4</h4>
+<p>Когда вы начинаете запрос, можно использовать свойство
+<code class="literal">Active</code> или метод
+<code class="literal">Open</code>.</p>
+
+<p>Свойство <code class="literal">Active</code> ставится автоматически
+при запуске запроса <code class="literal">SELECT * FROM ...</code>.
+Это может затронуть производительность для больших таблиц.</p>
+
+<h4><a name="connector-odbc-usagenotes-apptips-borland-delphi"></a>
+8.2.2.2. Connector/ODBC и Delphi</h4>
+<a class="indexterm" name="idm139746779086336"></a>
+<p>Кроме того, вот некоторый потенциально полезный код Delphi, который
+настраивает записи ODBC и BDE для Connector/ODBC. Запись BDE требует
+BDE Alias Editor, который свободно доступен на Delphi Super Page
+(благодаря Bryan Brunton
+<code>&lt;<a href="mailto:bryan@flesherfab.com">bryan@flesherfab.com</a>&gt;
+</code>):</p>
+
+<pre class="programlisting">
+fReg:= TRegistry.Create;
+fReg.OpenKey('\Software\ODBC\ODBC.INI\DocumentsFab', True);
+fReg.WriteString('Database', 'Documents');
+fReg.WriteString('Description', ' ');
+fReg.WriteString('Driver', 'C:\WINNT\System32\myodbc.dll');
+fReg.WriteString('Flag', '1');
+fReg.WriteString('Password', '');
+fReg.WriteString('Port', ' ');
+fReg.WriteString('Server', 'xmark');
+fReg.WriteString('User', 'winuser');
+fReg.OpenKey('\Software\ODBC\ODBC.INI\ODBC Data Sources', True);
+fReg.WriteString('DocumentsFab', 'MySQL');
+fReg.CloseKey;
+fReg.Free;
+
+Memo1.Lines.Add('DATABASE NAME=');
+Memo1.Lines.Add('USER NAME=');
+Memo1.Lines.Add('ODBC DSN=DocumentsFab');
+Memo1.Lines.Add('OPEN MODE=READ/WRITE');
+Memo1.Lines.Add('BATCH COUNT=200');
+Memo1.Lines.Add('LANGDRIVER=');
+Memo1.Lines.Add('MAX ROWS=-1');
+Memo1.Lines.Add('SCHEMA CACHE DIR=');
+Memo1.Lines.Add('SCHEMA CACHE SIZE=8');
+Memo1.Lines.Add('SCHEMA CACHE TIME=-1');
+Memo1.Lines.Add('SQLPASSTHRU MODE=SHARED AUTOCOMMIT');
+Memo1.Lines.Add('SQLQRYMODE=');
+Memo1.Lines.Add('ENABLE SCHEMA CACHE=FALSE');
+Memo1.Lines.Add('ENABLE BCD=FALSE');
+Memo1.Lines.Add('ROWSET SIZE=20');
+Memo1.Lines.Add('BLOBS TO CACHE=64');
+Memo1.Lines.Add('BLOB SIZE=32');
+AliasEditor.Add('DocumentsFab','MySQL',Memo1.Lines);
+</pre>
+
+<h4><a name="connector-odbc-usagenotes-apptips-borland-cppbuilder"></a>
+8.2.2.3. Connector/ODBC и C++ Builder</h4>
+<a class="indexterm" name="idm139746779080144"></a>
+<p>Проверено с BDE 3.0. Единственная известная проблема состоит в том, что,
+когда схема таблицы изменяется, поля запроса не обновляются. BDE, однако,
+кажется, не признает первичные ключи, только индекс, названный
+<code class="literal">PRIMARY</code>, хотя это не было проблемой.</p>
+
+<h3><a name="connector-odbc-usagenotes-apptips-coldfusion"></a>
+8.2.3. Connector/ODBC с ColdFusion</h3>
+<a class="indexterm" name="idm139746779076656"></a>
+<p>Следующая информация взята из документации по ColdFusion:</p>
+
+<p>Используйте следующую информацию, чтобы формировать ColdFusion Server
+for Linux для применения драйвера <code class="literal">unixODBC</code> с
+Connector/ODBC для источника данных MySQL. Можно загрузить Connector/ODBC с
+<a href="../../../https@dev.mysql.com/downloads/Connector/ODBC/default.htm" target="_top">
+https://dev.mysql.com/downloads/Connector/ODBC/</a>.</p>
+
+<p>ColdFusion version 4.5.1 позволяет вам использовать ColdFusion
+Administrator, чтобы добавить источник данных MySQL. Однако драйвер
+не включен в ColdFusion 4.5.1. Прежде чем драйвер MySQL появится в выпадающем
+списке источников данных ODBC, соберите и скопируйте драйвер Connector/ODBC
+в <code class="filename">/opt/coldfusion/lib/libmyodbc.so</code>.</p>
+
+<p>Каталог Contrib содержит программу
+<code class="filename">mydsn-<em class="replaceable"><code>xxx</code></em>
+.zip</code>, которая позволяет вам построить и удалить файл реестра DSN для
+драйвера Connector/ODBC в ColdFusion.</p>
+
+<p>Для получения дополнительной информации о ColdFusion и
+Connector/ODBC посмотрите следующие сайты:</p>
+<ul><li class="listitem"><p>
+<a href="../../../www.macromedia.com/v1/handlers/index.cfm@ID=11328&Method=Full&PageCall=_2Fsupport_2Findex.cfm"
+target="_top">Troubleshooting Data Sources and Database Connectivity
+for Unix Platforms</a>.</p></li></ul>
+
+<h3><a name="connector-odbc-usagenotes-apptips-openoffice"></a>
+8.2.4. Connector/ODBC с OpenOffice.org</h3>
+<p>Open Office (<a href="../../../www.openoffice.org/default.htm" target="_top">
+http://www.openoffice.org</a>)
+<a href="../../../wiki.services.openoffice.org/wiki/Connect_MySQL_and_Base"
+target="_top">How-to: MySQL + OpenOffice</a>.
+<a href="../../../www.unixodbc.org/doc/OOoMySQL.pdf" target="_top">How-to:
+OpenOffice + MyODBC + unixODBC</a>.</p>
+
+<h3><a name="connector-odbc-usagenotes-apptips-sambarserver"></a>
+8.2.5. Connector/ODBC с Sambar Server</h3>
+<p>Sambar Server (<a href="../../../www.sambarserver.info/default.htm" target="_top">
+http://www.sambarserver.info</a>)
+<a href="../../../www.sambarserver.info/article.php@sid=66" target="_top">
+How-to: MyODBC + SambarServer + MySQL</a>.</p>
+
+<h3><a name="connector-odbc-usagenotes-apptips-datajunction"></a>
+8.2.6. Connector/ODBC и Pervasive Software DataJunction</h3>
+<a class="indexterm" name="idm139746779061056"></a>
+<p>Необходимо изменить его, чтобы произвести вывод
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/char.html" target="_top">
+<code class="literal">VARCHAR</code></a> вместо
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/enum.html" target="_top">
+<code class="literal">ENUM</code></a>, поскольку это экспортирует последним
+способом, который вызывает проблемы MySQL.</p>
+
+<h3><a name="connector-odbc-usagenotes-apptips-vision"></a>
+8.2.7. Connector/ODBC и SunSystems Vision</h3>
+<a class="indexterm" name="idm139746779056576"></a>
+<p>Выберите опцию <code class="literal">Return matching rows</code>.</p>
+
+<h2><a name="connector-odbc-both-openssl"></a>
+8.3. Connector/ODBC и приложения, использующие OpenSSL</h2>
+<a class="indexterm" name="idm139746779053424"></a>
+<a class="indexterm" name="idm139746779052032"></a>
+<p>Если Connector/ODBC соединяется надежно с сервером MySQL, и приложение,
+используя связь сделало вызовы к библиотеке OpenSSL, оно могло бы потерпеть
+неудачу, поскольку тогда две копии библиотеки OpenSSL будут использоваться.
+</p>
+
+<p>Connector/ODBC 8.0 и выше компонуется с OpenSSL динамически
+в то время, как ранние версии Connector/ODBC компонуются с OpenSSL
+статически. Это решает проблемы, связанные с использованием двух копий
+OpenSSL тем же приложением.</p>
+
+<p>Чтобы предотвратить проблему, в вашем запросе,
+не позволяют инициализацию OpenSSL в одном потоке и открытие связи
+Connector/ODBC в другом (который также инициализирует openSSL) одновременно.
+Например, используйте mutex, чтобы гарантировать синхронизацию между
+вызовами <code class="literal">SQLDriverConnect()</code> или
+<code class="literal">SQLConnect()</code> и инициализацией openSSL.
+В дополнение к этому, сделайте следующее, если возможно:</p>
+
+<ul><li class="listitem"><p>Используйте сборку Connector/ODBC, которая
+компонуется (статически или динамически) с версией библиотеки
+<code class="literal">libmysqlclient</code>, которая в свою очередь
+динамически связана с той же самой библиотекой OpenSSL,
+которую вызывает приложение.</p></li>
+
+<li class="listitem"><p>Собирая Connector/ODBC, который компонуется
+(статически или динамически) с версией библиотеки
+<code class="literal">libmysqlclient</code>, которая в свою очередь
+статически скомпонована с библиотекой OpenSSL, НЕ экспортируйте символы
+OpenSSL в вашей сборке. Это предотвращает неправильное разрешение символов
+приложений, однако, это не предотвращает другие проблемы с управлением двумя
+копиями кода OpenSSL в рамках отдельного приложения.</p></li></ul>
+
+<h2><a name="connector-odbc-errors"></a>
+8.4. Connector/ODBC ошибки и решения (FAQ)</h2>
+<p>Следующий раздел детализирует некоторые распространенные ошибки и их
+исправление или альтернативное решение. Если вы все еще испытываете проблемы,
+используйте список рассылки Connector/ODBC, посмотрите
+<a href="support.htm#connector-odbc-support-community">раздел 9.1</a>.</p>
+
+<p>Много проблем могут быть решены, модернизировав ваши драйверы
+Connector/ODBC до последнего доступного выпуска. На Windows удостоверьтесь,
+что у вас есть последняя версия Microsoft Data Access Components (MDAC).</p>
+
+<h3><a name="idm139746779039280"></a>
+64-Bit Windows и ODBC Data Source Administrator</h3>
+<p>Я установил Connector/ODBC на Windows XP x64 Edition или Windows
+Server 2003 R2 x64. Установка закончена успешно, но драйвер Connector/ODBC
+не появляется в <code class="literal">ODBC Data Source Administrator</code>.
+</p>
+
+<p>Это не ошибка, но связано со способом, которым Windows x64 работает с
+драйвером ODBC. В Windows x64 драйвер Connector/ODBC устанавливается в
+каталог <code class="filename">%SystemRoot%\SysWOW64</code>.
+Однако по умолчанию <code class="literal">ODBC Data Source Administrator
+</code> в <code class="filename">Administrative Tools</code>
+или <code class="filename">Control Panel</code> в Windows x64 расположен в
+<code class="filename">%SystemRoot%\system32</code> и только там
+ищет драйверы ODBC.</p>
+
+<p>В Windows x64 используйте утилиту управления ODBC в
+<code class="filename">%SystemRoot%\SysWOW64\odbcad32.exe</code>,
+это правильно определит местонахождение установленных драйверов
+Connector/ODBC и позволит вам создать Connector/ODBC DSN.</p>
+<p>Об этой проблеме первоначально сообщили как Bug #20301.</p>
+
+<h3><a name="idm139746779031808"></a>Error 10061 (Cannot connect to server)
+</h3>
+<p>Соединяясь или используя кнопку <span class="guibutton">Test</span> в
+<code class="literal">ODBC Data Source Administrator</code> я получаю ошибку
+10061 (Cannot connect to server).</p>
+
+<p>Эта ошибка может быть поднята многими другими вопросами, включая проблемы
+с сервером, сетевые проблемы и брандмауэр и проблемы блокирования порта.
+Для получения дополнительной информации посмотрите
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/can-not-connect-to-server.html"
+target="_top">Can't connect to [local] MySQL server</a>.</p>
+
+<h3><a name="idm139746779028048"></a>"Transactions are not enabled" Error</h3>
+<p>О следующей ошибке сообщают, используя транзакции:
+<code class="literal">Transactions are not enabled</code>.</p>
+
+<p>Эта ошибка указывает, что вы пытаетесь использовать
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_transaction"
+target="_top">транзакции</a> с таблицей MySQL, которая их не поддерживает.
+Они поддерживаются в MySQL, используя ядро базы данных
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/innodb-storage-engine.html"
+target="_top"><code class="literal">InnoDB</code></a>, которое является
+механизмом хранения по умолчанию в MySQL 5.5 и выше. В версиях MySQL до
+MySQL 5.1 можно также использовать <code class="literal">BDB</code>.</p>
+
+<p>Проверьте следующее перед продолжением:</p>
+<ul><li class="listitem"><p>Проверьте, что ваш сервер MySQL поддерживает
+транзакционное ядро базы данных. Используйте
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/show-engines.html"
+target="_top"><code class="literal">SHOW ENGINES</code></a>, чтобы
+получить список доступных механизмов хранения.</p></li>
+
+<li class="listitem"><p>Проверьте, что таблицы,
+которые вы обновляете, используют транзакционное ядро базы данных.</p></li>
+<li class="listitem"><p>Гарантируйте, что вы не включили опцию
+<code class="literal">disable transactions</code> в DSN.</p></li></ul>
+
+<h3><a name="idm139746779018160"></a>#DELETED# Records Reported by Access</h3>
+<p>Access сообщает о записях как <code class="literal">#DELETED#</code>,
+вставляя или обновляя записи в связанных таблицах.</p>
+
+<p>Если вставленные или обновленные записи показывают
+как <code class="literal">#DELETED#</code> в Access:</p>
+<ul><li class="listitem"><p>При использовании Access 2000, получите и
+установите новейший (версия 2.6 или выше) Microsoft MDAC
+(<code class="literal">Microsoft Data Access Components</code>) с
+<a href="../../../support.microsoft.com/kb/110093" target="_top">
+http://support.microsoft.com/kb/110093</a>.
+Это исправляет ошибку в Access, когда вы экспортируете данные в MySQL,
+таблица и имена столбцов не определяются.</p>
+
+<p>Также поставьте Microsoft Jet 4.0 Service Pack 5 (SP5), который доступен
+на <a href="../../../support.microsoft.com/default.aspx@scid=kb;EN-US;q239114"
+target="_top">http://support.microsoft.com/default.aspx?scid=kb;EN-US;q239114
+</a>. Это исправляет некоторые случаи, где столбцы отмечены
+как <code class="literal">#DELETED#</code> в Access.</p></li>
+
+<li class="listitem"><p>Для всех версий Access включите в Connector/ODBC
+опцию <code class="literal">Return matching rows</code>. Для Access 2.0
+также включите опцию <code class="literal">Simulate ODBC 1.0</code>.</p></li>
+<li class="listitem"><p>Добавьте во все таблицы, которые вы хотите быть в
+состоянии обновить, <code class="literal">TIMESTAMP</code>.</p></li>
+
+<li class="listitem"><p>
+Добавьте в таблицу <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_primary_key"
+target="_top">primary key</a>. В противном случае новые или обновленные
+строки могут обнаружиться как <code class="literal">#DELETED#</code>.
+</p></li>
+
+<li class="listitem"><p>Используйте плавающие поля только типа
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/floating-point-types.html"
+target="_top"><code class="literal">DOUBLE</code></a>. Access рехнется
+работая с плавающими числами одинарной точности. Признак: новые или
+обновленные строки могут обнаружиться как
+<code class="literal">#DELETED#</code> или вы не можете найти
+или обновить строки.</p></li>
+
+<li class="listitem"><p>При использовании Connector/ODBC, чтобы связаться с
+таблицей со столбцом
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/integer-types.html"
+target="_top"><code class="literal">BIGINT</code></a>, результаты показаны
+как <code class="literal">#DELETED</code>. Решение:</p>
+
+<ul><li class="listitem"><p>Имейте еще один фиктивный столбец
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/datetime.html"
+target="_top"><code class="literal">TIMESTAMP</code></a>.</p></li>
+
+<li class="listitem"><p>Выберите в диалоге соединения в ODBC
+DSN Administrator опцию
+<code class="literal">Change BIGINT columns to INT</code>.</p></li>
+<li class="listitem"><p>Удалите и пересоздайте связь таблицы из Access.
+</p></li></ul>
+<p>Старые записи будут показаны как <code class="literal">#DELETED#</code>,
+но недавно добавленные/обновленные правильно.</p></li></ul>
+
+<h3><a name="idm139746778994192"></a>Конфликты записи или
+ошибки местоположения строки</h3>
+<p>Как обработать ошибки Write Conflicts или Row Location?</p>
+
+<p>Если вы видите следующие ошибки, выберите опцию
+<code class="literal">Return Matching Rows</code> в диалоге настройки DSN
+или укажите <code class="literal">OPTION=2</code> как параметр связи:</p>
+
+<pre class="programlisting">
+Write Conflict. Another user has changed your data.
+
+Row cannot be located for updating. Some values may have been changed
+since it was last read.
+</pre>
+
+<h3><a name="idm139746778990608"></a>Экспорт из Access 97</h3>
+<p>Экспорт данных из Access 97 в MySQL сообщает
+<code class="literal">Syntax Error</code>.</p>
+<p>Эта ошибка специфичная для Access 97 и версий Connector/ODBC до 3.51.02.
+Обновление до последней версии Connector/ODBC решит проблему.</p>
+
+<h3><a name="idm139746778988288"></a>Экспорт из Microsoft DTS</h3>
+<p>Экспорт данных из Microsoft DTS в MySQL сообщает
+<code class="literal">Syntax Error</code>.</p>
+
+<p>Эта ошибка происходит только с таблицами MySQL со столбцами
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/blob.html" target="_top">
+<code class="literal">TEXT</code></a> или
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/char.html" target="_top">
+<code class="literal">VARCHAR</code></a>. Можно исправить эту ошибку,
+модернизировав Connector/ODBC до версии 3.51.02 или выше.</p>
+
+<h3><a name="idm139746778983984"></a>SQL_NO_DATA Exception из ODBC.NET</h3>
+<p>Используя ODBC.NET с Connector/ODBC, получая пустую строку (нулевой
+длины), это выдает исключение <code class="literal">SQL_NO_DATA</code>.</p>
+
+<p>Можно получить патч, который решает эту проблему с
+<a href="../../../support.microsoft.com/default.aspx@scid=kb;EN-US;q319243"
+target="_top">http://support.microsoft.com/default.aspx?scid=kb;EN-US;q319243
+</a>.</p>
+
+<h3><a name="idm139746778981168"></a>Ошибка с SELECT COUNT(*)</h3>
+<p><code class="literal">SELECT COUNT(*) FROM
+<em class="replaceable"><code>tbl_name</code></em></code> в Visual
+Basic и ASP вернет ошибку.</p>
+
+<p>Эта ошибка происходит потому, что выражение
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_count"
+target="_top"><code class="literal">COUNT(*)</code></a> возвращает
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/integer-types.html"
+target="_top"><code class="literal">BIGINT</code></a>, а ADO не может понять
+столь большое число, выберите опцию <code class="literal">Change BIGINT
+columns to INT</code> (значение 16384).</p>
+
+<h3><a name="idm139746778975952"></a>Операционная ошибка многократного шага
+</h3>
+<p>При использовании методов ADO <code class="function">AppendChunk()</code>
+или <code class="function">GetChunk()</code> получается ошибка
+<code class="literal">Multiple-step operation generated errors.
+Check each status value</code>.</p>
+
+<p>Методы <code class="function">GetChunk()</code> и
+<code class="function">AppendChunk()</code> из ADO
+не работают как ожидалось, когда позиция курсора определяется как
+<code class="literal">adUseServer</code>. С другой стороны, можно преодолеть
+эту ошибку при помощи <code class="literal">adUseClient</code>.</p>
+
+<p>Простой пример может быть найден на
+<a href="../../../www.dwam.net/iishelp/ado/docs/adomth02_4.htm" target="_top">
+http://www.dwam.net/iishelp/ado/docs/adomth02_4.htm</a>.</p>
+
+<h3><a name="idm139746778969024"></a>Modified Record Error</h3>
+<p>Access вернет <code class="literal">Another user had modified the record
+that you have modified</code>, редактируя записи в связанной таблице.</p>
+
+<p>В большинстве случаев это может быть решено, делая одну
+из следующих вещей:</p>
+<ul><li class="listitem"><p>
+Добавьте <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_primary_key"
+target="_top">primary key</a> для таблицы.</p></li>
+
+<li class="listitem"><p>Добавьте столбец типа timestamp.</p></li>
+<li class="listitem"><p>Используйте поля плавающих чисел только
+двойной точности. Некоторые программы могут потерпеть неудачу, когда они
+сравнивают значения одинарной точности.</p></li></ul>
+
+<p>Если эти стратегии не помогают, начните, делая файл журнала от менеджера
+ODBC (регистрация, которую вы получаете, из ODBCADMIN) и журнал
+Connector/ODBC, чтобы помочь вам выяснить, почему вещи идут не так, как надо.
+Для инструкций посмотрите
+<a href="config.htm#connector-odbc-configuration-trace">раздел 5.8</a>.</p>
+
+<h3><a name="idm139746778961856"></a>
+Прямая компоновка приложений под Unix или Linux</h3>
+<p>Компонуя приложение непосредственно с библиотекой Connector/ODBC под
+Unix или Linux, приложение падает.</p>
+
+<p>Connector/ODBC под Unix или Linux не совместим с прямой компоновкой.
+Чтобы соединиться с источником ODBC, используйте менеджер драйвера, такой как
+<code class="literal">iODBC</code> или <code class="literal">unixODBC</code>.
+</p>
+
+<h3><a name="idm139746778958864"></a>Microsoft Office и столбцы
+DATE или TIMESTAMP</h3>
+<p>Приложения в Microsoft Office не могут обновить таблицы,
+которые имеют столбцы
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/datetime.html"
+target="_top"><code class="literal">DATE</code></a> или
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/datetime.html"
+target="_top"><code class="literal">TIMESTAMP</code></a>.</p>
+
+<p>Это известная проблема с Connector/ODBC. Гарантируйте, что у поля
+есть значение по умолчанию (а не <code class="literal">NULL</code>)
+и что значение по умолчанию отличное от нуля (то есть, что-то другое, чем
+<code class="literal">0000-00-00 00:00:00</code>).</p>
+
+<h3><a name="idm139746778953488"></a>База данных INFORMATION_SCHEMA</h3>
+<p>Присоединяя Connector/ODBC 5.x к серверу MySQL 4.x, можно получить ошибку
+<code class="literal">1044 Access denied for user 'xxx'@'%' to
+database 'information_schema'</code>.</p>
+
+<p>Connector/ODBC 5.x разработан, чтобы работать с MySQL 5.0 или позже,
+использовав в своих интересах базу данных
+<code class="literal">INFORMATION_SCHEMA</code>, чтобы определить информацию
+об определении данных.</p>
+
+<h3><a name="idm139746778950160"></a>S1T00 Error</h3>
+<p>При вызове <code class="literal">SQLTables</code> возвращается ошибка
+<code class="literal">S1T00</code>, но я не могу найти это в списке кодов
+ошибки для Connector/ODBC.</p>
+
+<p><code class="literal">S1T00</code> указывает, что тайм-аут
+произошел в системе ODBC и не является ошибкой MySQL. Как правило, это
+указывает, что связь, которую вы используете, устарела, сервер слишком занят,
+чтобы принять ваш запрос или что сервер отвалился.</p>
+
+<h3><a name="idm139746778946016"></a>Ошибка "Table does not exist" в Access
+2000</h3>
+<p>Связываясь с таблицами в Access 2000 и производя связи с таблицами
+программно, а не через интерфейс дизайнера таблиц можно получить ошибки о
+не существующих таблицах.</p>
+
+<p>Есть известная проблема с определенной версией
+<code class="filename">msjet40.dll</code>, которая показывает эту проблему.
+Затронутая версия 4.0.9025.0. Возвращение к более старой версии позволит вам
+создать связи. Если вы недавно обновили свою версию, проверьте ваш каталог
+<code class="filename">WINDOWS</code> для более старой версии файла и
+скопируйте ее в каталог драйверов.</p>
+
+<h3><a name="idm139746778942576"></a>Пакетные запросы</h3>
+<p>Когда я пытаюсь использовать скомплектованные запросы,
+выполнение терпит неудачу.</p>
+
+<p>Пакетная поддержка была добавлена в 3.51.18. Поддержка пакетных запросов
+не позволена по умолчанию. Включите опцию <code class="literal">
+FLAG_MULTI_STATEMENTS</code>, значение 67108864, или поставьте галочку
+<span class="guilabel">Allow multiple statements</span> в GUI.</p>
+
+<h3><a name="idm139746778939312"></a>Пакетные ошибки с ADODB и Excel</h3>
+<p>Соединяясь с сервером MySQL, используя ADODB и Excel, иногда приложение не
+общается с сервером и получает ошибку
+<code class="literal">Got an error reading communication packets</code>.</p>
+
+<p>Эта ошибка может быть связана с Keyboard Logger 1.1 от PanteraSoft.com,
+который, как известно, вмешивается в сетевую связь между MySQL
+Connector/ODBC и MySQL.</p>
+
+<h3><a name="idm139746778936656"></a>Ошибка Outer Join</h3>
+<p>Используя некоторые приложения, чтобы получить доступ к серверу MySQL,
+используя Connector/ODBC и внешние объединения, об ошибке сообщают
+относительно Escape-последовательности Outer Join.</p>
+
+<p>Это известная проблема с MySQL Connector/ODBC, который правильно не
+разбирает "Outer Join Escape Sequence", согласно
+<a href="../../../msdn2.microsoft.com/en-us/library/ms710299.aspx"
+target="_top">Microsoft ODBC Specs</a>. В настоящее время Connector/ODBC
+возвратит значение &gt;0, когда спросили относительно
+<code class="literal">SQL_OJ_CAPABILITIES</code> даже при том, что никакой
+парсинг не происходит в драйвере, чтобы обращаться с
+escape-последовательностью внешнего объединения.</p>
+
+<h3><a name="idm139746778933152"></a>Символы Hebrew/CJK</h3>
+<p>Я могу правильно сохранить расширенные символы в базе данных (Hebrew/CJK)
+с использованием Connector/ODBC 5.1, но когда я получаю данные, текст не
+отформатирован правильно, и я получаю искаженные знаки.</p>
+
+<p>Используя ASP и знаки UTF8, добавьте следующее к своим файлам ASP, чтобы
+гарантировать, что возвращенные данные правильно закодированы:</p>
+<pre class="programlisting">
+Response.CodePage = 65001
+Response.CharSet = "utf-8"
+</pre>
+
+<h3><a name="idm139746778930560"></a>
+Двойная запись в установленном списке программ</h3>
+<p>У меня есть двойная запись MySQL Connector/ODBC в рамках моего списка
+<span class="guilabel">Installed Programs</span>, но я не могу удалить
+одну из них.</p>
+
+<p>Эта проблема может произойти, когда вы модернизируете существующую
+установку Connector/ODBC вместо удаления и затем
+установки обновленной версии.</p>
+
+<p>Чтобы решить проблему, используйте любые рабочие деинсталляторы, чтобы
+удалить существующие установки, тогда, вероятно, придется отредактировать
+содержание реестра. Удостоверьтесь, что у вас есть резервная копия вашей
+информации реестра прежде, чем делать попытку любого его редактирования!</p>
+
+<h3><a name="idm139746778926912"></a>Значения урезаются до 255 символов</h3>
+<p>Представляя запросы с использованием привязки параметров
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/update.html" target="_top">
+<code class="literal">UPDATE</code></a>, мои значения полей
+усечены до 255 символов.</p>
+
+<p>Гарантируйте, что опция <code class="literal">FLAG_BIG_PACKETS</code>
+установлена для вашей связи. Это удаляет ограничение в 255 символов
+на связанные параметры.</p>
+
+<h3><a name="idm139746778923264"></a>Выключение Data-At-Execution</h3>
+<p>Действительно ли возможно отключить data-at-execution через параметр?</p>
+<p>Если вы не хотите использовать data-at-execution,
+удалите соответствующие требования. Например:</p>
+
+<pre class="programlisting">
+SQLLEN ylen = SQL_LEN_DATA_AT_EXEC(10);
+SQLBindCol(hstmt, 2, SQL_C_BINARY, buf, 10, &amp;ylen);
+</pre>
+
+<p>Стал бы:</p>
+<pre class="programlisting">
+SQLBindCol(hstmt, 2, SQL_C_BINARY, buf, 10, NULL);
+</pre>
+
+<p>Этот пример также заменил &amp;ylen with NULL в вызове на
+<code class="literal">SQLBindCol()</code>.</p>
+<p>Для получения дополнительной информации обратитесь к
+<a href="../../../msdn.microsoft.com/en-us/library/ms711010(VS.85).aspx"
+target="_top">документации MSDN</a> на
+<code class="literal">SQLBindCol()</code>.</p>
+
+<h3><a name="idm139746778916400"></a>Атрибут NULLABLE для
+столбцов AUTO_INCREMENT Columns</h3>
+<p>Когда вы вызываете <code class="literal">SQLColumns()</code>
+для столбца таблицы, который является <code class="literal">AUTO_INCREMENT
+</code>, столбец <code class="literal">NULLABLE</code> набора результатов
+всегда <code class="literal">SQL_NULLABLE (1)</code>.</p>
+
+<p>Это вызвано тем, что MySQL сообщает значение
+<code class="literal">DEFAULT</code> для такого столбца как
+<code class="literal">NULL</code>. Это означает, если вы вставляете
+значение <code class="literal">NULL</code> в столбец, вы получите следующее
+целочисленное значение для счетчика
+<code class="literal">auto_increment</code> таблицы.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

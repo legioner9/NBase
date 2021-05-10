@@ -1,0 +1,1408 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>����� 6. ������� Connector/ODBC</title>
+  <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="�������@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: �������� ����� ���������� �"+
+" ����������� �� 24 ����' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-odbc-examples"></a>
+����� 6. ������� Connector/ODBC</h1>
+<p>��� ������ �� ������������ DSN, ����� ���������� ������ � ���� ������, ���
+�� ��������� ������ � ����������� ��� �����, ������� �� ���������� ��� �����
+����������������. ��������� ODBC ������������������� ���������, �����
+���������� ��� ����, ������� ������������ ODBC, ����� ������������ DSN �
+����������� � ����� ������.</p>
+
+<h2><a name="connector-odbc-examples-overview"></a>
+6.1. �������� ���� ���������� Connector/ODBC</h2>
+<p>�������������� � �������� MySQL �� ����������, ��������� Connector/ODBC,
+��� �������, �������� ��������� ��������:</p>
+
+<ul><li class="listitem"><p>��������� Connector/ODBC DSN.</p></li>
+<li class="listitem"><p>���������� � MySQL server.</p>
+<p>��� ����� �� ��������: ��������� ����������� ���������, ��������� ������
+ODBC, ���������� ����������� ����������, ����� � �������� �
+����������� ��������� ����������.</p></li>
+
+<li class="listitem"><p>������� �������������.</p>
+<p>��� ����� �� ��������: ���������� ����������� �������� �
+��������� �� ���������.</p></li>
+
+<li class="listitem"><p>���������� SQL-����������.</p>
+<p>��� ����� �� ��������: ���������� � ���������� SQL-��������� ���
+���������� ��� ��������������� ��� ����������.</p></li>
+
+<li class="listitem"><p>��������� ����������, � ����������� �� ���� �������.
+</p>
+<p>��� SELECT / SHOW / Catalog API ���������� ����� �� ��������:
+����� ��������, ���������� � ��������, ��������� ����� � ��������� ������ �
+������. ��� Delete / Update / Insert ���������� ����� �� ��������
+����� ��������������� �����.</p></li>
+
+<li class="listitem"><p>
+���������� <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_transaction"
+target="_top">����������</a>, �������� ��� ������.</p></li>
+
+<li class="listitem"><p>������������ �� �������.</p>
+<p>��� ����� �� ��������: ������������ ����� � ������������ ������������.
+</p></li></ul>
+
+<p>����������� �������� ���������� ��������� ��������� ���� �����.
+�������� ���������� ���� ����� ���������� � ��������� ���������:</p>
+<a name="figure-myflowchart"></a>
+<p><b>���. 6.1. ����-����� ���������������� Connector/ODBC</b></p>
+<img src="images/myflowchart.png" width="598" height="737"
+alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h2><a name="connector-odbc-examples-walkthrough"></a>
+6.2. ��������� ����������� � ���������� � ����� ������ MySQL
+����� Connector/ODBC</h2>
+<p>�������� ��������, ��� �� ���������� �� Connector/ODBC, ������ ��������
+������ � ���� ������ �� ����� Linux ��� Unix � ������ Windows.</p>
+
+<p>��� ������ ��������, ����������, ����� ����������� ������ ����� �����
+��������, ���������� �������� ����. ��� ���������� ������������, ��� ��
+���������� � �������� ALPHA �� ������� BETA � ������ ������������ � �������
+<code class="literal">myuser</code> �
+<code class="literal">mypassword</code>.</p>
+
+<p>�� ������� ALPHA (������ MySQL) ��������� ��� ����:</p>
+<ol type="1"><li class="listitem"><p>��������� ������ MySQL.</p></li>
+<li class="listitem"><p>
+����������� <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/grant.html"
+target="_top"><code class="literal">GRANT</code></a>, ����� ���������
+������ � ������ ������������ <code class="literal">myuser</code>, �������
+����� ����������� �� ������� BETA, ��������� ������
+<code class="literal">myuser</code> � ���� ������
+<code class="literal">test</code>:</p>
+
+<pre class="programlisting">
+GRANT ALL ON test.* to 'myuser'@'BETA' IDENTIFIED BY 'mypassword';
+</pre>
+
+<p>��� ��������� �������������� ���������� � ����������� MySQL, ���������� �
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/access-control.html"
+target="_top">Access Control and Account Management</a>.</p></li></ol>
+
+<p>�� ������� BETA (������ Connector/ODBC), ��������� ��� ����:</p>
+<ol type="1"><li class="listitem"><p>��������� Connector/ODBC DSN �
+�������������� ����������, ������� ������������� �������, ���� ������ �
+���������� ��������������, ��� �� ������ ��� ����������� �� ������� ALPHA.
+</p>
+
+<table><thead><tr>
+<th scope="col">��������</th>
+<th scope="col">��������</th>
+<th scope="col">�����������</th></tr></thead>
+<tbody><tr><td scope="row">DSN</td><td>remote_test</td>
+<td>���, ����� ���������� �����.</td></tr>
+<tr><td scope="row">SERVER</td><td>ALPHA</td>
+<td>����� ���������� �������.</td></tr>
+<tr><td scope="row">DATABASE</td><td>test</td>
+<td>�������� ���� ������ �� ���������.</td></tr>
+<tr><td scope="row">USER</td><td>myuser</td>
+<td>��� ������������ ��� ������� � ���� ���� ������.</td></tr>
+<tr><td scope="row">PASSWORD</td><td>mypassword</td>
+<td>������ ��� ������ <code class="literal">myuser</code>.</td>
+</tr></tbody></table></li>
+
+<li class="listitem"><p>��������� ODBC-����������, ����� ��� Microsoft
+Office, ����������� � �������� MySQL, ��������� DSN, ������� �� ������ ���
+�������. ���� ����� �����������, ����������� �����������, ����� �����������
+������� �����. ����������
+<a href="config.htm#connector-odbc-configuration-trace">������ 5.8</a>.
+</p></li></ol>
+
+<h2><a name="connector-odbc-examples-tools"></a>
+6.3. Connector/ODBC � ��������� ������� ODBC</h2>
+<p>��� ������ �� ������������ ���� Connector/ODBC DSN,
+����� �������� ������ � ���� ������ MySQL ����� ����� ����������, �������
+������������ ��������� ODBC, ������� ����� ����������������.
+���� ������ �������� ������ ��� ������������� Connector/ODBC � ����������
+ODBC-������������ �������������, �������
+Microsoft Word, Microsoft Excel � Adobe/Macromedia ColdFusion.</p>
+
+<p>Connector/ODBC ��� �������� �� ���������� ������������:</p>
+<table><thead><tr>
+<th scope="col">�����������</th>
+<th scope="col">����������</th>
+<th scope="col">���������</th></tr></thead>
+<tbody><tr><td scope="row">Adobe</td><td>ColdFusion</td>
+<td>������ Macromedia ColdFusion</td></tr>
+<tr><td scope="row">Borland</td><td>C++ Builder</td><td></td></tr>
+<tr><td scope="row"></td><td>Builder 4</td><td></td></tr>
+<tr><td scope="row"></td><td>Delphi</td><td></td></tr>
+<tr><td scope="row">Business Objects</td><td>Crystal Reports</td></tr>
+<tr><td scope="row">Claris</td><td>Filemaker Pro</td><td></td></tr>
+<tr><td scope="row">Corel</td><td>Paradox</td></tr>
+<tr><td scope="row">Computer Associates</td><td>Visual Objects</td>
+<td>����� �������� ��� CAVO</td></tr>
+<tr><td scope="row"></td><td>AllFusion ERwin Data Modeler</td></tr>
+<tr><td scope="row">Gupta</td><td>Team Developer</td>
+<td>����� ��������� ��� Centura Team Developer, Gupta SQL/Windows</td></tr>
+<tr><td scope="row">Gensym</td><td>G2-ODBC Bridge</td></tr>
+<tr><td scope="row">Inline</td><td>iHTML</td></tr>
+<tr><td scope="row">Lotus</td><td>Notes</td><td>������ 4.5 � 4.6</td></tr>
+<tr><td scope="row">Microsoft</td><td>Access</td><td></td></tr>
+<tr><td scope="row"></td><td>Excel</td><td></td></tr>
+<tr><td scope="row"></td><td>Visio Enterprise</td><td></td></tr>
+<tr><td scope="row"></td><td>Visual C++</td><td></td></tr>
+<tr><td scope="row"></td><td>Visual Basic</td><td></td></tr>
+<tr><td scope="row"></td><td>ODBC.NET</td>
+<td>��� C#, Visual Basic, C++</td></tr>
+<tr><td scope="row"></td><td>FoxPro</td><td></td></tr>
+<tr><td scope="row"></td><td>Visual Interdev</td><td></td></tr>
+<tr><td scope="row">OpenOffice.org</td><td>OpenOffice.org</td></tr>
+<tr><td scope="row">Perl</td><td>DBD::ODBC</td></tr>
+<tr><td scope="row">Pervasive Software</td><td>DataJunction</td></tr>
+<tr><td scope="row">Sambar Technologies</td><td>Sambar Server</td></tr>
+<tr><td scope="row">SPSS</td><td>SPSS</td></tr>
+<tr><td scope="row">SoftVelocity</td><td>Clarion</td></tr>
+<tr><td scope="row">SQLExpress</td><td>SQLExpress for Xbase++</td></tr>
+<tr><td scope="row">Sun</td><td>StarOffice</td></tr>
+<tr><td scope="row">SunSystems</td><td>Vision</td></tr>
+<tr><td scope="row">Sybase</td><td>PowerBuilder</td></tr>
+<tr><td scope="row"></td><td>PowerDesigner</td></tr>
+<tr><td scope="row">theKompany.com</td><td>Data Architect</td>
+</tr></tbody></table>
+
+<h2><a name="connector-odbc-examples-tools-with-access"></a>
+6.4. Connector/ODBC � Microsoft Access</h2>
+<p>����� ������������ ���� ������ MySQL � Microsoft Access, ���������
+Connector/ODBC. ���� ������ MySQL ����� �������������� � �������� ���������
+�������, ����������� ��������� ��� � �������� ��������� ������� ��� �������
+������������� � Access, ����� �������, ����� ������������ Access ���
+��������� � ���� ������ MySQL.</p>
+
+<h3><a name="connector-odbc-examples-tools-with-access-export"></a>
+6.4.1. ������� �� Access � MySQL</h3>
+<p>��������������, ��� ����������, ������� �� ������������� � MySQL
+������������� ��� ��������������� ����� ������ MySQL.
+��������, ������� ������������� � Access, �� �� ��������� ������������ �����
+������ MySQL, ����� ������� ������ <span class="quote">overflow</span>.</p>
+
+<p>����� �������������� ������� �� Access � MySQL,
+�������� ���� �����������:</p>
+<ol type="1"><li class="listitem"><p>� �������� ����� ������ Access
+� ������ ����� ������ ��������, ����� �������, ��� �������
+� ���� ������, ������� �������� ��� �������� (���� ��� �� ���, ���������
+��������� ��������� ������ ����������). �������� ������ ������� ���� ��
+�������, ������� �� ������ ��������������, � � ����, ������� ����������,
+�������� <span class="guimenu">Export</span>,
+<span class="guimenuitem">ODBC Database</span>.</p>
+
+<a name="figure-myaccess-2016"></a>
+<p><b>���. 6.2. Access: ���� Export ODBC Database</b></p>
+<img src="images/myaccess-2016.png" width="650" height="670"
+alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li class="listitem"><p>��������� ���� <span class="guilabel">Export</span>.
+������� �������� ��� ��� ������� ����� ������� � ������
+MySQL � ������� <span class="guimenu">OK</span>.</p>
+
+<a name="figure-myaccess-odbc-2016"></a>
+<p><b>���. 6.3. ���� ����� ��� �������������� �������</b></p>
+<img src="images/myaccess-odbc-2016.png" width="400" height="167"
+alt='Example Export dialog shows a table named "Cats" entered and ready to be
+exported.'><br class="figure-break"></li>
+
+<li class="listitem"><p>�������� ���������� ����
+<span class="guilabel">Select Data Source</span>,
+��� ����������� ��������� ��������� ������ ��� ����� ��������� ODBC,
+������������� �� ����� ����������. �������� <span class="guilabel">
+File Data Source</span> ��� <span class="guilabel">Machine Data Source</span>
+� ����� ������ �������� �� Connector/ODBC DSN, � ������� �� ������
+�������������� �������. ����� ���������� ����� DSN ��� Connector/ODBC ������
+�����, ������� <span class="guibutton">New</span> � �������� ����������� �
+<a href="config.htm#connector-odbc-configuration-dsn-windows">������� 5.3
+</a>, ������ �������� �� ������ DSN ����� ����, ��� �� ����� ������.</p>
+
+<a name="figure-myaccess-odbc-select-2016"></a>
+<p><b>���. 6.4. ����� ���� ������ ODBC</b></p>
+<img src="images/myaccess-odbc-select-2016.png" width="612" height="489"
+alt='Shows the Select Data Source dialog with the "Machine Data Source" tab
+active and an example Data Source Name "MySQL 5.7" selected.'>
+<br class="figure-break">
+
+<p>���� �������� ������ ODBC, ������� �� �������, �������, ����� ��
+��������������, ������� login ID � ������, ����� �������
+<span class="guibutton">OK</span>.</p></li>
+
+<li class="listitem"><p>���������� ���������� ���� � ���������� ������, ����
+������� �������. � ���������� ���� �� ������ ���������
+���������� ���� ��� ������ ���������� � �������.</p>
+
+<a name="figure-myaccess-odbc-success-2016"></a>
+<p><b>���. 6.5. ��������� �� ������</b></p>
+<img src="images/myaccess-odbc-success-2016.png" width="756" height="232"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>���� �� ������ ��������� ��������� �� ������ ������ �����, ����� ��
+��������� �������������� � Connector/ODBC DSN, ��� ��������, ��� �� ��
+������� <span class="guimenu">Database</span>, ����� ����������� � ���, �����
+�� ���������� ��� �������������� � DSN. �������� ����������� DSN � ����������
+<span class="guilabel">Database</span> (��.
+<a href="config.htm#connector-odbc-configuration-dsn-windows">������ 5.3</a>)
+��� �������� <span class="guilabel">Database</span>,
+����� �� �������������� � DSN.</p>
+
+<a name="figure-myaccess-odbc-failure-2016"></a>
+<p><b>���. 6.6. ������: Database Not Selected</b></p>
+<img src="images/myaccess-odbc-failure-2016.png" width="455" height="130"
+alt='Shows the error described in the surrounding text of this figure for the
+error containing the text "ODBC -- call failed" and "No database selected".'>
+<br class="figure-break"></li></ol>
+
+<h3><a name="connector-odbc-examples-tools-with-access-import"></a>
+6.4.2. ������ �� MySQL � Access</h3>
+<p>�������� ���� �����������:</p>
+
+<ol type="1"><li class="listitem"><p>�������� ���� ������ Access, � �������
+������ ������������� ������ MySQL.</p></li>
+<li class="listitem"><p>�� ������� <span class="guimenu">External Data</span>
+�������� <span class="guimenuitem">ODBC Database</span>.</p>
+
+<a name="figure-external-data-odbc"></a>
+<p><b>���. 6.7. External Data: ODBC Database</b></p>
+<img src="images/external-data-odbc.png" width="619" height="370"
+alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li class="listitem"><p>� ������� <code class="literal">Get External Data
+</code> �������� <span class="guilabel">Import the source data into
+a new table in the current database</span> � �������
+<span class="guibutton">OK</span>.</p>
+
+<a name="figure-myaccess-get-external-data"></a>
+<p><b>���. 6.8. Get External Data: ODBC Database</b></p>
+<img src="images/myaccess-get-external-data.png" width="752" height="308"
+alt='Shows the "Get External Data" dialog with two options: Import the source
+data into a new table in the current database (selected), and Link to the
+data source by creating a linked table.'><p><br class="figure-break">
+</p></li>
+
+<li class="listitem"><p>
+��������� ������ <span class="guilabel">Select Data Source</span>.
+��� ����������� ��������� ��������� ������ ��� ����� ��������� ODBC,
+������������� �� ����� ����������. ��������
+<span class="guilabel">File Data Source</span> ���
+<span class="guilabel">Machine Data Source</span> � ����� ������ �������� ��
+Connector/ODBC DSN, �� �������� �� ������ ������������� ���� ������.
+����� ���������� ����� DSN ��� Connector/ODBC ������ �����, �������
+<span class="guibutton">New</span> � �������� ����������� �
+<a href="config.htm#connector-odbc-configuration-dsn-windows">������� 5.3
+</a>, ������ �������� �� ������ DSN ����� ����, ��� �� ����� ������.</p>
+
+<a name="figure-823-myaccess-odbc-select-2016"></a>
+<p><b>���. 6.9. ������ Select Data Source</b></p>
+<img src="images/myaccess-odbc-select-2016.png" width="612" height="489"
+alt='Shows the "Select Data Source" dialog with two tabs: File Data Source
+and Machine Data Source. The Machine Data Source tab is selected and displays
+three columns: Data Source Name, Type, Description. The selected row has
+"MySQL 5.7" defined as the Data Source Name, and "System" as the Type.'>
+<br class="figure-break">
+
+<p>���� �������� ������ ODBC, ������� �� �������, �������, ����� ��
+��������������, ������� ������ � �������
+<span class="guibutton">OK</span>.</p></li>
+
+<li class="listitem"><p>Microsoft Access ����������� � �������� MySQL �
+���������� ������ ������ (�������), ������� ����� �������������. ��������
+������� , ������� �� ������ ������������� �� ����� ������� �������� �������
+(��� ������� <span class="guibutton">Select All</span>), ����� �������
+<span class="guibutton">OK</span>.</p>
+
+<a name="figure-myaccess-import-objects"></a>
+<p><b>���. 6.10. ������ Import Objects</b></p>
+<img src="images/myaccess-import-objects.png" width="560" height="262"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<ul><li class="listitem"><p>���� ������� ������� �� ��������, ��� ����� ��
+���� ������, ��� �� �� ������� <span class="guimenu">Database</span>,
+����� �� ���������� ��� �������������� � DSN. �������� ����������� DSN �
+���������� <span class="guilabel">Database</span> (��.
+<a href="config.htm#connector-odbc-configuration-dsn-windows">������ 5.3</a>)
+��� �������� <span class="guilabel">Database</span>, �����
+�� �������������� � DSN.</p></li>
+
+<li class="listitem"><p>���� � ����� ���� ������ Access ��� ���� �������
+� ��� �� ����� ������ ��� ��, ��� �� ������������, Access ������� ����� �
+�������� ��������������� �������.</p></li></ul></li>
+
+<li class="listitem"><p>���������� ���� ���������� � ���������� ������, ����
+������ �������. � ���������� ���� �� ������ ���������
+���� ������� ��� ������ ���������� � �������.</p>
+
+<a name="figure-myaccess-save-import-steps"></a>
+<p><b>���. 6.11. �������� ������� ������</b></p>
+<img src="images/myaccess-save-import-steps.png" width="752" height="233"
+alt='The Save Import Steps dialog shows a checkbox option titled
+"Save import steps."'><br class="figure-break"></li></ol>
+
+<h3><a name="connector-odbc-examples-tools-with-access-linked-tables"></a>
+6.4.3. Microsoft Access ��� ��������� MySQL</h3>
+<p>����� ������������ Microsoft Access � �������� ���������� � MySQL,
+�������� ������� � ���� ������ Microsoft Access � ���������, �������
+���������� � ���� ������ MySQL. ����� ������ ������� ������� � Access, ODBC
+������������, ����� ��������� ������ �� ���� ������ MySQL.</p>
+
+<p><span class="bold"><strong>������� ��������� �������</strong></span>:</p>
+<ol type="1"><li class="listitem"><p>�������� ���� ������ Access, ������� ��
+������ ������� � MySQL.</p></li>
+<li class="listitem"><p>�� ������� <span class="guimenu">External Data</span>
+�������� <span class="guimenuitem">ODBC Database</span>.</p>
+
+<a name="figure-709-external-data-odbc"></a>
+<p><b>���. 6.12. ������� ������: ���� ������ ODBC</b></p>
+<img src="images/external-data-odbc.png" width="619" height="370"
+alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li class="listitem"><p>� ������� <code class="literal">Get External Data
+</code> �������� <span class="guilabel">Link to the data source by
+creating a linked table</span> � �������
+<span class="guibutton">OK</span>.</p>
+
+<a name="figure-myaccess-get-external-data-link"></a>
+<p><b>���. 6.13. ����� � ����� ������ ODBC</b></p>
+<img src="images/myaccess-get-external-data-link.png" width="752"
+height="286" alt='Shows the "Get External Data" dialog with two options:
+Import the source data into a new table in the current database, and Link to
+the data source by creating a linked table (selected).'><p>
+<br class="figure-break"></p></li>
+
+<li class="listitem"><p>� ������� <span class="guilabel">Select Data Source
+</span> ������������� ��������� ��������� ������ ��� ����� ��������� ODBC,
+������������� �� ����� ����������. ��������
+<span class="guilabel">File Data Source</span> ���
+<span class="guilabel">Machine Data Source</span> � ����� ������ �������� ��
+Connector/ODBC DSN, � ������� �� ������ ������� ���� �������.
+����� ���������� ����� DSN ��� Connector/ODBC ������ �����, �������
+<span class="guibutton">New</span> � �������� ����������� �
+<a href="config.htm#connector-odbc-configuration-dsn-windows">������� 5.3
+</a>, ������ �������� �� ������ DSN ����� ����, ��� �� ����� ������.</p>
+
+<a name="figure-738-myaccess-odbc-select-2016"></a>
+<p><b>���. 6.14. ����� ���� ������</b></p>
+<img src="images/myaccess-odbc-select-2016.png" width="612" height="489"
+alt='Shows the Select Data Source dialog with two tabs: "File Data Source"
+and "Machine Data Source." The Machine Data Source tab is selected and
+displays three columns: Data Source Name, Type, Description.
+The selected row has "MySQL 5.7" defined as the Data Source Name, and
+"System" as the Type.'><br class="figure-break">
+
+<p>���� �������� ������ ODBC, ������� �� �������, �������, ����� ��
+��������������, ������� ������ � �������
+<span class="guibutton">OK</span>.</p></li>
+
+<li class="listitem"><p>Microsoft Access ����������� � �������� MySQL �
+���������� ������ ������, � �������� ����� ���������. �������� �������
+(��� ������� <span class="guibutton">Select All</span>) � �������
+<span class="guibutton">OK</span>.</p>
+
+<a name="figure-myaccess-link-tables"></a>
+<p><b>���. 6.15. ������ Link Tables</b></p>
+<img src="images/myaccess-link-tables.png" width="560" height="329"
+alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<ul><li class="listitem"><p>���� ��� ������ ��� ������,
+��� ����� �� ���� ������, ��� �� �� �������
+<span class="guimenu">Database</span>, ����� �����������, ����� ����������
+��� �������������� � DSN. �������� ����������� DSN � ����������
+<span class="guilabel">Database</span> (��.
+<a href="config.htm#connector-odbc-configuration-dsn-windows">������ 5.3</a>)
+��� �������� <span class="guilabel">Database</span>, �����
+�� �������������� � DSN.</p></li>
+
+<li class="listitem"><p>���� � ����� ���� ������ � Access ��� ���� �������
+� ��� �� ����� ������, Access ������� ����� � ��������
+����� ��������� �������.</p></li></ul></li>
+
+<li class="listitem"><p>���� Microsoft Access ����� ���������� ����������
+���������� ������������� ������ ��� ������� �������������, ��� ��������,
+����� �� ������� ������� (��� ���������� ��������), ����� ������������,
+����� ���������� ���������� ������ ������ �� �������� �������.
+�������� ������� � ������� <span class="guibutton">OK</span>.</p>
+
+<a name="figure-myaccess-select-identifier"></a>
+<p><b>���. 6.16. ����� ����������� �������������� ������</b></p>
+<img src="images/myaccess-select-identifier.png" width="389" height="370"
+alt='Shows the "Select Unique Record Identifier" dialog with a list of fields
+in the selected table. In this example, the table name is cats2 and the
+unique fields are CatID, CatName, OwnerID, and Birthday.
+The available buttons are "OK" and "Cancel".'>
+<br class="figure-break"></li></ol>
+
+<p>��� ������ ������� ��� ��������, ����� ��������� ���������� � �������
+� ��������� ��������, ��� ��� ����� ���� ������ Access.</p>
+<p>����������� ��������� ���������, ����� ����������� ����� ��� �������� ��,
+����� ��������� ��������� ������ ���������.</p>
+
+<ol type="1"><li class="listitem"><p>�������� ���� ������, �������
+�������� ����� � MySQL.</p></li>
+<li class="listitem"><p>�� ������� <span class="guimenu">External Data</span>
+�������� <span class="guimenuitem">Linked Table Manager</span>.</p>
+
+<a name="figure-myaccess-linked-table-manager"></a>
+<p><b>���. 6.17. Linked Table Manager</b></p>
+<img src="images/myaccess-linked-table-manager.png" width="597" height="368"
+alt='Shows "Linked Table Manager" under the "External Data" tab in Microsoft
+Access. Underneath are two panes: The All Access Objects pane shows the
+available tables, and the second pane shows data from the table.
+The "cats2" table is selected.'><br class="figure-break"></li>
+
+<li class="listitem"><p>�������� ����� ��� ������, ����� ������� �� ������
+��������. ������� <span class="guibutton">OK</span>, ����� �������� �����.
+</p>
+
+<a name="figure-myaccess-linked-table-manager-selected"></a>
+<p><b>���. 6.18. ������ Linked Table Manager</b></p>
+<img src="images/myaccess-select-linked-table.png" width="816" height="382"
+alt='Shows the "Linked Table Manager" dialog with the cats2 table selected
+with its associated checkbox selected.'><br class="figure-break"></li></ol>
+
+<p>Microsoft Access ������������ �������� ���������� ���
+���������� ��������� �� ������, � ���� ������ ���������� �������� �����
+�� ����� ����.</p>
+
+<p><span class="bold"><strong>����� �������� ���� ��� ��������� ������
+</strong></span>:</p>
+<ol type="1"><li class="listitem"><p>�������� ���� ������, �������
+�������� ��������� �������.</p></li>
+
+<li class="listitem"><p>�� ������� <span class="guimenu">External Data</span>
+�������� <span class="guimenuitem">Linked Table Manager</span>.</p></li>
+<li class="listitem"><p>� <span class="guimenuitem">Linked Table Manager
+</span> �������� ����� <span class="guilabel">Always Prompt
+For A New Location</span>.</p></li>
+
+<li class="listitem"><p>�������� ����� ��� ������, ����� ������� �� ������
+��������, ����� ������� <span class="guibutton">OK</span>.</p></li>
+<li class="listitem"><p>� ������� <span class="guilabel">Select Data Source
+</span> �������� ����� DSN � ���� ������ � ���.</p></li></ol>
+
+<h2><a name="connector-odbc-examples-tools-with-wordexcel"></a>
+6.5. Connector/ODBC � Microsoft Word ��� Excel</h2>
+<p>����� ������������ Microsoft Word � Microsoft Excel, ����� �������� ������
+� ���������� �� ���� ������ MySQL, ��������� Connector/ODBC.
+� Microsoft Word ��� �������� �������� ����� ��������, ���������� ������ ���
+��������������� ����������� ����������� �����, ��� ��� ������
+� ������, ������� ����� �������� � ������. � Microsoft Excel ����� ���������
+������� �� ������� MySQL � ������������� ������ ��������������� � �������
+���� Excel, ���������� ������ ��� ����� ����� � ��������.</p>
+
+<p>� ������ ������������ � ������ �������� ������ � ����������� �����
+<span class="application">Microsoft Query</span>, ������� ��������� ���
+��������� ������ ����� �������� ODBC. �� ����������� Microsoft Query, �����
+��������� SQL-��������, ������� ����� ��������, ������� �������, ����,
+�������� ������ � ������� ����������. ��������, ����� �������� ����������
+�� ������� � ���� ������ World � ����������� ������� Excel, ��������� �������
+DSN, ���������� � <a href="config.htm">����� 5</a>:</p>
+
+<ol type="1"><li class="listitem"><p>�������� ����� ������� ����.</p></li>
+<li class="listitem"><p>�� ���� <code class="literal">Data</code>
+�������� <code class="literal">Import External Data</code> �
+<code class="literal">New Database Query</code>.</p></li>
+
+<li class="listitem"><p>���������� <span class="application">Microsoft Query
+</span>. ���������� ������� �������� ������, ������ ������������
+��� ��������� ������.</p>
+
+<a name="figure-myaccess-choose-data-source-excel"></a>
+<p><b>���. 6.19. Microsoft Query Wizard</b></p>
+<img src="images/myodbc-excel-step1.png" width="460" height="238"
+alt="Shows the initial &quot;Choose Data Source&quot; dialog in the Microsoft
+Query wizard. The three available tabbed sections are &quot;Databases&quot;,
+&quot;Queries&quot;, and &quot;OLAP Cubes&quot;. The &quot;Databases&quot;
+tab is selected that shows the following fields: &quot;New Data Source&quot;,
+&quot;dBASE Files&quot;, &quot;Excel Files&quot;, &quot;MS Access
+Database&quot; and &quot;Test World&quot; where &quot;Test World&quot; is
+selected. The &quot;Use the Query Wizard to create/edit queries&quot;
+option's checkbox is selected."><br class="figure-break"></li>
+
+<li class="listitem"><p>� <code class="literal">Query Wizard</code>
+�������� �������, ����� �������������. ������ ������, ��������� ������������,
+����� DSN, ���������� �����, �������, ������� ����� ��������� � ������
+�������, ���������� ������. �������, ������� �� ���������, ������������ ��� �
+������ ������� ������� <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/select.html"
+target="_top"><code class="literal">SELECT</code></a>.
+������� <span class="guibutton">Next</span>.</p>
+
+<a name="figure-myodbc-excel-step2"></a>
+<p><b>���. 6.20. ����� ��������</b></p>
+<img src="images/myodbc-excel-step2.png" width="498" height="308"
+alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li class="listitem"><p>����� ������������� ������ � �������
+(���������� <code class="literal">WHERE</code>), ��������� ������
+<code class="literal">Filter Data</code>.</p>
+
+<a name="figure-myodbc-excel-step3"></a>
+<p><b>���. 6.21. Microsoft Query Wizard: Filter Data</b></p>
+<img src="images/myodbc-excel-step3.png" width="499" height="310"
+alt="The left pane titled &quot;Column to filter&quot; lists available
+columns, and the right pane titled &quot;Only include rows where&quot; with
+six select boxes each with &quot;And&quot; and &quot;Or&quot; options for
+defining the filter's WHERE clause behavior."><br class="figure-break"></li>
+
+<li class="listitem"><p>�������� (��������������) ������� ���������� ���
+������. ��� ������������ ������������� <code class="literal">ORDER BY</code>
+� ����� SQL-�������. ����� ������� �� ���� �������� ��� ����������
+����������, ������������ ��������.</p>
+
+<a name="figure-myodbc-excel-step4"></a>
+<p><b>���. 6.22. Microsoft Query Wizard: ������� ����������</b></p>
+<img src="images/myodbc-excel-step4.png" width="497" height="306"
+alt='Shows sorting options "Sort by" and "Then by", each with "Ascending" and
+"Descending" options.'><br class="figure-break"></li>
+
+<li class="listitem"><p>�������� ����� ���������� ��� ������ �������.
+����� ������� ���������� ������ Microsoft Excel, ��� ����� ������� �������
+���� � ������, ��� ������ ����� ���������, ����� ���������� �������������
+������ � ���������� � Microsoft Query, ��� ����� ��������������� SQL-������ �
+���������� ������ � ������������� ������������ ����������, ��� ����� �������
+OLAP Cube �� �������, ������� ����� ����� �������������� ��������������� �
+Microsoft Excel. ������� <span class="guibutton">Finish</span>.</p>
+
+<a name="figure-myodbc-excel-step5"></a>
+<p><b>���. 6.23. Microsoft Query Wizard: ����� ����������</b></p>
+<img src="images/myodbc-excel-step5.png" width="498" height="307"
+alt="Content is described in the surrounding text.">
+<br class="figure-break"></li></ol>
+
+<p>��� �� ����� ������� ����� ��������������, ����� ������������� ������ �
+�������� Word, ��� ������ ����� ��������� ��� �������.
+��� ����� �������������� � ����� ������� (��� ������� ������ ��������� ��
+������� Word), ��� ��� �� ������ �������� ������ � ������ ������
+��� ������� ���������.</p>
+
+<h2><a name="connector-odbc-examples-tools-with-crystalreports"></a>
+6.6. Connector/ODBC � Crystal Reports</h2>
+<p>Crystal Reports ����� ������������ ODBC DSN, ����� ����������� � �����
+������, ����� ������� ������ � ���������� ��� ��������� � �����.</p>
+
+<p>���� ��������� �������� � ������������� �������� Crystal Reports, ���
+���������� �� �������� ������� � ����������� ������� � ���� ����������� �����
+ODBC. ����� �������������� Crystal Reports � MySQL, ����������, ������������,
+����� � ��� ���� ���������� ��������� ������, ������� ����� ������ ����������
+� ������� �����������. ��� ��������� �������������� ���������� ��
+���� �������� ����������
+<a href="../../../support.crystaldecisions.com/library/kbase/new_articles/c2013269.asp"
+target="_top">Business) Objects Knowledgebase</a>.</p>
+
+<p>��������, ����� ������� ������� ����� � ������������� �������� � ������
+Crystal Reports XI:</p>
+<ol type="1"><li class="listitem"><p>�������� DSN � ��������������
+<code class="literal">Data Sources (ODBC)</code>.
+����� ���������� ������ ���� ������, ������� ��� ������������ � ������ ���
+����� ��������� �������� DSN � ������������ Crystal Reports, ����� ����������
+��� ������������ � ������.</p>
+<p>� ����� ����� ������� ��� ������ DSN, ������� ������������ ����� �
+����� ������ MySQL Sakila.</p></li>
+
+<li class="listitem"><p>�������� Crystal Reports
+� �������� ����� ������ ��� �������� ������������, � ������� �� ������
+�������� ������ �� ������ ��������� ������ MySQL.</p></li>
+
+<li class="listitem"><p>��������� Cross-Tab Report Wizard,
+������� �� ������ �� Start Page. ���������� �����
+<span class="guilabel">Create New Connection</span>, �����
+<span class="guilabel">ODBC (RDO)</span>, ����� �������� ������
+���������� ������ ODBC.</p>
+
+<p>��� �������� ������� �������� ������.</p>
+<a name="figure-myodbc-crystal-1"></a>
+<p><b>���. 6.24. Cross-Tab Report Creation Wizard</b></p>
+<img src="images/myodbc-crystal-1.png" width="690" height="476"
+alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li class="listitem"><p>����� �������� ����� <span class="guilabel">ODBC
+(RDO)</span>, ������� ����� Data Source Selection.
+������ ����� ������� �������������� ������������������ DSN, �������
+���������� �� ����� DSN ��� ������ ������ �����������. ��� ����� �������
+����� �������������� ��������������
+������������������ <span class="guilabel">Sakila</span> DSN.</p>
+
+<p>���� DSN �������� ��� ������������/������, ��� �� ������ ������������
+���� ������ �����������, ������� <span class="guibutton">Next</span>,
+����� ����� � ������ ������������ � �������, ������� �� ������ ������������.
+����� ������� <span class="guibutton">Finish</span>, ����� ���������� �����.
+</p>
+
+<a name="figure-myodbc-crystal-2"></a>
+<p><b>���. 6.25. ODBC (RDO) Data Source Selection Wizard</b></p>
+<img src="images/myodbc-crystal-2.png" width="457" height="469"
+alt='Three options include "Select Data Source" that displays a list of
+selectable pre-configured Data Source Names, "Find File DSN" with a select
+box to choose a file, and "Enter Connection String" to manually enter a
+connection string.'><br class="figure-break"></li>
+
+<li class="listitem"><p>�� ������ ���������� � Cross-Tab Report Creation
+Wizard. ������ ���������� ������� ���� ������ � �������, ������� �� ������
+�������� � ��� �����. ��� ������ ������� �� �������� ���������� ���� ������
+Sakila. �������� ������� <code class="literal">city</code> � �����������
+������ <span class="guibutton">&gt;</span>, ����� �������� �������
+� ������. ��������� �������� � �������� <code class="literal">country</code>.
+������������� ����� ������� ����� ������ � �������� �� � ������.</p>
+
+<p>�������, ����� ������� ������������ ������
+<span class="guilabel">Sakila</span> � �������� �������� � ������.</p>
+<p>��� ������ �� ������� �������, ������� <span class="guibutton">Next</span>.
+</p>
+
+<a name="figure-myodbc-crystal-3"></a>
+<p><b>���. 6.26. Cross-Tab Report Creation Wizard � �������� ODBC (RDO)
+</b></p><img src="images/myodbc-crystal-3.png" width="689" height="476"
+alt="Content is described in the surrounding text."><br class="figure-break">
+</li>
+
+<li class="listitem"><p>Crystal Reports ������ ��������� ����������� �������
+� ������������� ��������� ����� ����� ���������. ������������� ������ �����
+���� ��������� Crystal Reports ������������� ������ � ����������� ����������
+�� ������ ���� ������ � ���� ������, �������� ������ �������.
+���� Crystal Reports ���������� ��������� ����������, ����� ������� �������
+����� ����� ������ � ��������, ������� �� �������.</p>
+
+<p>������� �� <span class="guibutton">Next</span>.</p>
+<a name="figure-myodbc-crystal-4"></a>
+<p><b>���. 6.27. Cross-Tab Report Creation Wizard</b></p>
+<img src="images/myodbc-crystal-4.png" width="690" height="476"
+alt='Example shows two linked tables named "city" and "country".
+The left pane shows the two table objects as boxes with column names with a
+line linking tables city to country. The right pane includes options to
+"Auto-Arrange", "Auto-Link" by name or key, "Order Links", "Clear Links",
+"Delete Link", "Link Options", and "Index Legend".'>
+<br class="figure-break"></li>
+
+<li class="listitem"><p>����� ������ ������� ������� � ������, ����� ��������
+� ����� ������ � ������������� ��������. ���������� ��� ��������� ������
+<span class="guibutton">&gt;</span>, ����� �������� ����
+� ������ ������� ������. � ���������� ������� �� ������� ������������
+�������, �������������� �������, ������� ���������� ������� � ������ ������.
+���� �� ������ ����������� ������, �������� ������� � �������
+<span class="guibutton">Browse Data...</span>.</p>
+
+<p>������� <span class="guibutton">Next</span>, ����� ������� ����
+�����������. ��� ��� �� �� ������� ���� �� ���� ������, �������
+<span class="guibutton">Finish</span>, ����� ���������� �����.</p>
+
+<a name="figure-myodbc-crystal-5"></a>
+<p><b>���. 6.28. Cross-Tab Report Creation Wizard: ������
+Cross-Tab Selection</b></p>
+<table border="0">
+<tr><td><img src="images/myodbc-crystal-5.png" width="100%"
+alt="Content is described in the surrounding text."></td></tr></table>
+<br class="figure-break"></li>
+
+<li class="listitem"><p>����������� ����� �������
+������� ������ �� ���� ������-������� Sakila.</p>
+
+<a name="figure-myodbc-crystal-6"></a>
+<p><b>���. 6.29. Cross-Tab Report Creation Wizard: �������� �����</b></p>
+<img src="images/myodbc-crystal-6.png" width="329" height="512"
+alt="The generated final report example includes three columns,
+from left-to-right: Country, City, and Total. Each country includes an
+associated total, and a total of all countries is displayed on top in the
+right-most column."><br class="figure-break"></li></ol>
+<p>��� ������ ����� ODBC ���� ������� � ������ Crystal Reports, �����
+����������� � �������� ����� ���� � ��������� �������� � ������.</p>
+
+<h2><a name="connector-odbc-examples-programming"></a>
+6.7. ���������������� Connector/ODBC</h2>
+<p>� ���������� ���������� ODBC � ������������� ��������� Connector/ODBC
+����� ���� ���������������� ��� ���������� �����, ������� ����� ����������
+ODBC, ����� ����������� � ����� ������ MySQL ����� Connector/ODBC.</p>
+
+<p>��� ��������, �� �� ��������������, ������� Microsoft
+(������� Visual Basic, C# � ����� ����������, ��� ODBC.NET),
+Perl (����� ������ DBI � ������� DBD::ODBC).</p>
+
+<h3><a name="connector-odbc-examples-programming-vb"></a>
+6.7.1. Connector/ODBC � Visual Basic, ��������� ADO, DAO � RDO</h3>
+<p>���� ������ �������� ������� ������� ������������� Connector/ODBC �
+ADO, DAO � RDO.</p>
+
+<h4><a name="connector-odbc-examples-programming-vb-ado"></a>
+6.7.1.1. ADO: <code class="literal">rs.addNew</code>,
+<code class="literal">rs.delete</code> �
+<code class="literal">rs.update</code></h4>
+<p>��������� ������ ADO (ActiveX Data Objects) ���������� �������
+table <code class="literal">my_ado</code> � ������������� �������������
+<code class="literal">rs.addNew</code>,
+<code class="literal">rs.delete</code> �
+<code class="literal">rs.update</code>.</p>
+
+<pre class="programlisting">
+Private Sub myodbc_ado_Click()
+
+Dim conn As ADODB.Connection
+Dim rs As ADODB.Recordset
+Dim fld As ADODB.Field
+Dim sql As String
+
+'connect to MySQL server using Connector/ODBC
+Set conn = New ADODB.Connection
+conn.ConnectionString = "DRIVER={MySQL ODBC 3.51 Driver};"_
+     &amp; "SERVER=localhost;"_
+     &amp; " DATABASE=test;"_
+     &amp; "UID=venu;PWD=venu; OPTION=3"
+conn.Open
+
+'create table
+conn.Execute "DROP TABLE IF EXISTS my_ado"
+conn.Execute "CREATE TABLE my_ado(id int not null primary key, name varchar(20)," _
+             &amp; "txt text, dt date, tm time, ts timestamp)"
+
+'direct insert
+conn.Execute "INSERT INTO my_ado(id,name,txt) values(1,100,'venu')"
+conn.Execute "INSERT INTO my_ado(id,name,txt) values(2,200,'MySQL')"
+conn.Execute "INSERT INTO my_ado(id,name,txt) values(3,300,'Delete')"
+
+Set rs = New ADODB.Recordset
+rs.CursorLocation = adUseServer
+
+'fetch the initial table ..
+rs.Open "SELECT * FROM my_ado", conn
+Debug.Print rs.RecordCount
+rs.MoveFirst
+Debug.Print String(50, "-") &amp; "Initial my_ado Result Set " &amp; String(50, "-")
+For Each fld In rs.Fields
+  Debug.Print fld.Name,
+Next
+Debug.Print
+
+Do Until rs.EOF
+  For Each fld In rs.Fields
+    Debug.Print fld.Value,
+  Next
+  rs.MoveNext
+  Debug.Print
+Loop
+rs.Close
+
+'rs insert
+rs.Open "select * from my_ado", conn, adOpenDynamic, adLockOptimistic
+rs.AddNew
+rs!ID = 8
+rs!Name = "Mandy"
+rs!txt = "Insert row"
+rs.Update
+rs.Close
+
+'rs update
+rs.Open "SELECT * FROM my_ado"
+rs!Name = "update"
+rs!txt = "updated-row"
+rs.Update
+rs.Close
+
+'rs update second time..
+rs.Open "SELECT * FROM my_ado"
+rs!Name = "update"
+rs!txt = "updated-second-time"
+rs.Update
+rs.Close
+
+'rs delete
+rs.Open "SELECT * FROM my_ado"
+rs.MoveNext
+rs.MoveNext
+rs.Delete
+rs.Close
+
+'fetch the updated table ..
+rs.Open "SELECT * FROM my_ado", conn
+Debug.Print rs.RecordCount
+rs.MoveFirst
+Debug.Print String(50, "-") &amp; "Updated my_ado Result Set " &amp; String(50, "-")
+For Each fld In rs.Fields
+  Debug.Print fld.Name,
+Next
+Debug.Print
+
+Do Until rs.EOF
+  For Each fld In rs.Fields
+    Debug.Print fld.Value,
+  Next
+  rs.MoveNext
+  Debug.Print
+Loop
+rs.Close
+conn.Close
+End Sub
+</pre>
+
+<h4><a name="connector-odbc-examples-programming-vb-dao"></a>
+6.7.1.2. DAO: <code class="literal">rs.addNew</code>,
+<code class="literal">rs.update</code> � ���������</h4>
+<p>��������� ������ DAO (Data Access Objects) ���������� �������
+table <code class="literal">my_dao</code>, ������������� �������������
+<code class="literal">rs.addNew</code>,
+<code class="literal">rs.update</code> � ���������� ������ �����������.</p>
+
+<pre class="programlisting">
+Private Sub myodbc_dao_Click()
+Dim ws As Workspace
+Dim conn As Connection
+Dim queryDef As queryDef
+Dim str As String
+
+'connect to MySQL using MySQL ODBC 3.51 Driver
+Set ws = DBEngine.CreateWorkspace("", "venu", "venu", dbUseODBC)
+str = "odbc;DRIVER={MySQL ODBC 3.51 Driver};"_
+      &amp; "SERVER=localhost;"_
+      &amp; " DATABASE=test;"_
+      &amp; "UID=venu;PWD=venu; OPTION=3"
+Set conn = ws.OpenConnection("test", dbDriverNoPrompt, False, str)
+
+'Create table my_dao
+Set queryDef = conn.CreateQueryDef("", "drop table if exists my_dao")
+queryDef.Execute
+
+Set queryDef = conn.CreateQueryDef("", "create table my_dao(Id INT AUTO_INCREMENT PRIMARY KEY, " _
+    &amp; "Ts TIMESTAMP(14) NOT NULL, Name varchar(20), Id2 INT)")
+queryDef.Execute
+
+'Insert new records using rs.addNew
+Set rs = conn.OpenRecordset("my_dao")
+Dim i As Integer
+
+For i = 10 To 15
+  rs.AddNew
+  rs!Name = "insert record" &amp; i
+  rs!Id2 = i
+  rs.Update
+Next i
+rs.Close
+
+'rs update.
+Set rs = conn.OpenRecordset("my_dao")
+rs.Edit
+rs!Name = "updated-string"
+rs.Update
+rs.Close
+
+'fetch the table back...
+Set rs = conn.OpenRecordset("my_dao", dbOpenDynamic)
+str = "Results:"
+rs.MoveFirst
+While Not rs.EOF
+  str = " " &amp; rs!Id &amp; " , " &amp; rs!Name &amp; ", " &amp; rs!Ts &amp; ", " &amp; rs!Id2
+  Debug.Print "DATA:" &amp; str
+  rs.MoveNext
+Wend
+
+'rs Scrolling
+rs.MoveFirst
+str = " FIRST ROW: " &amp; rs!Id &amp; " , " &amp; rs!Name &amp; ", " &amp; rs!Ts &amp; ", " &amp; rs!Id2
+Debug.Print str
+rs.MoveLast
+str = " LAST ROW: " &amp; rs!Id &amp; " , " &amp; rs!Name &amp; ", " &amp; rs!Ts &amp; ", " &amp; rs!Id2
+Debug.Print str
+rs.MovePrevious
+str = " LAST-1 ROW: " &amp; rs!Id &amp; " , " &amp; rs!Name &amp; ", " &amp; rs!Ts &amp; ", " &amp; rs!Id2
+Debug.Print str
+
+'free all resources
+rs.Close
+queryDef.Close
+conn.Close
+ws.Close
+End Sub
+</pre>
+
+<h4><a name="connector-odbc-examples-programming-vb-rdo"></a>
+6.7.1.3. RDO: <code class="literal">rs.addNew</code> �
+<code class="literal">rs.update</code></h4>
+<p>��������� ������ RDO (Remote Data Objects) ���������� �������
+<code class="literal">my_rdo</code> � ������������� �������������
+<code class="literal">rs.addNew</code> �
+<code class="literal">rs.update</code>.</p>
+
+<pre class="programlisting">
+Dim rs As rdoResultset
+Dim cn As New rdoConnection
+Dim cl As rdoColumn
+Dim SQL As String
+
+'cn.Connect = "DSN=test;"
+cn.Connect = "DRIVER={MySQL ODBC 3.51 Driver};"_
+             &amp; "SERVER=localhost;"_
+             &amp; " DATABASE=test;"_
+             &amp; "UID=venu;PWD=venu; OPTION=3"
+cn.CursorDriver = rdUseOdbc
+cn.EstablishConnection rdDriverPrompt
+
+'drop table my_rdo
+SQL = "drop table if exists my_rdo"
+cn.Execute SQL, rdExecDirect
+
+'create table my_rdo
+SQL = "create table my_rdo(id int, name varchar(20))"
+cn.Execute SQL, rdExecDirect
+
+'insert - direct
+SQL = "insert into my_rdo values (100,'venu')"
+cn.Execute SQL, rdExecDirect
+SQL = "insert into my_rdo values (200,'MySQL')"
+cn.Execute SQL, rdExecDirect
+
+'rs insert
+SQL = "select * from my_rdo"
+Set rs = cn.OpenResultset(SQL, rdOpenStatic, rdConcurRowVer, rdExecDirect)
+rs.AddNew
+rs!id = 300
+rs!Name = "Insert1"
+rs.Update
+rs.Close
+
+'rs insert
+SQL = "select * from my_rdo"
+Set rs = cn.OpenResultset(SQL, rdOpenStatic, rdConcurRowVer, rdExecDirect)
+rs.AddNew
+rs!id = 400
+rs!Name = "Insert 2"
+rs.Update
+rs.Close
+
+'rs update
+SQL = "select * from my_rdo"
+Set rs = cn.OpenResultset(SQL, rdOpenStatic, rdConcurRowVer, rdExecDirect)
+rs.Edit
+rs!id = 999
+rs!Name = "updated"
+rs.Update
+rs.Close
+
+'fetch back...
+SQL = "select * from my_rdo"
+Set rs = cn.OpenResultset(SQL, rdOpenStatic, rdConcurRowVer, rdExecDirect)
+Do Until rs.EOF
+   For Each cl In rs.rdoColumns
+       Debug.Print cl.Value,
+   Next
+   rs.MoveNext
+   Debug.Print
+Loop
+Debug.Print "Row count="; rs.RowCount
+
+'close
+rs.Close
+cn.Close
+End Sub
+</pre>
+
+<h3><a name="connector-odbc-examples-programming-net"></a>
+6.7.2. Connector/ODBC � .NET</h3>
+<a class="indexterm" name="idm139746780040368"></a>
+<a class="indexterm" name="idm139746780039360"></a>
+<p>���� ������ �������� ������� �������, ������� ������������� �������������
+��������� Connector/ODBC � ODBC.NET.</p>
+
+<h4><a name="connector-odbc-examples-programming-net-csharp"></a>
+6.7.2.1. Connector/ODBC � ODBC.NET � C# (C sharp)</h4>
+<p>��������� ������� ���������� �������
+<code class="literal">my_odbc_net</code> �
+������������� �� ������������� � C#.</p>
+
+<pre class="programlisting">
+/**
+ * @sample: mycon.cs
+ * @purpose : Demo sample for ODBC.NET using Connector/ODBC
+ *
+ **/
+
+/* build command
+ *
+ *csc /t:exe
+ */out:mycon.exe mycon.cs
+ */r:Microsoft.Data.Odbc.dll
+*/
+using Console = System.Console;
+using Microsoft.Data.Odbc;
+
+namespace myodbc3
+{
+  class mycon
+  {
+    static void Main(string[] args)
+    {
+      try
+      {
+        //Connection string for Connector/ODBC 3.51
+        string MyConString = "DRIVER={MySQL ODBC 3.51 Driver};" +
+                             "SERVER=localhost;" +
+                             "DATABASE=test;" +
+                             "UID=venu;" +
+                             "PASSWORD=venu;" +
+                             "OPTION=3";
+        //Connect to MySQL using Connector/ODBC
+        OdbcConnection MyConnection = new OdbcConnection(MyConString);
+        MyConnection.Open();
+        Console.WriteLine("\n !!! success, connected successfully !!!\n");
+        //Display connection information
+        Console.WriteLine("Connection Information:");
+        Console.WriteLine("\tConnection String:" +
+                          MyConnection.ConnectionString);
+        Console.WriteLine("\tConnection Timeout:" +
+                          MyConnection.ConnectionTimeout);
+        Console.WriteLine("\tDatabase:" + MyConnection.Database);
+        Console.WriteLine("\tDataSource:" + MyConnection.DataSource);
+        Console.WriteLine("\tDriver:" + MyConnection.Driver);
+        Console.WriteLine("\tServerVersion:" + MyConnection.ServerVersion);
+        //Create a sample table
+        OdbcCommand MyCommand =
+          new OdbcCommand("DROP TABLE IF EXISTS my_odbc_net", MyConnection);
+        MyCommand.ExecuteNonQuery();
+        MyCommand.CommandText =
+          "CREATE TABLE my_odbc_net(id int, name varchar(20), idb bigint)";
+        MyCommand.ExecuteNonQuery();
+
+        //Insert
+        MyCommand.CommandText =
+          "INSERT INTO my_odbc_net VALUES(10,'venu', 300)";
+        Console.WriteLine("INSERT, Total rows affected:" +
+                          MyCommand.ExecuteNonQuery());;
+        //Insert
+        MyCommand.CommandText =
+          "INSERT INTO my_odbc_net VALUES(20,'mysql',400)";
+        Console.WriteLine("INSERT, Total rows affected:" +
+                          MyCommand.ExecuteNonQuery());
+        //Insert
+        MyCommand.CommandText =
+          "INSERT INTO my_odbc_net VALUES(20,'mysql',500)";
+        Console.WriteLine("INSERT, Total rows affected:" +
+                          MyCommand.ExecuteNonQuery());
+        //Update
+        MyCommand.CommandText = "UPDATE my_odbc_net SET id=999 WHERE id=20";
+        Console.WriteLine("Update, Total rows affected:" +
+          MyCommand.ExecuteNonQuery());
+        //COUNT(*)
+        MyCommand.CommandText = "SELECT COUNT(*) as TRows FROM my_odbc_net";
+        Console.WriteLine("Total Rows:" + MyCommand.ExecuteScalar());
+
+        //Fetch
+        MyCommand.CommandText = "SELECT * FROM my_odbc_net";
+        OdbcDataReader MyDataReader;
+        MyDataReader =MyCommand.ExecuteReader();
+        while (MyDataReader.Read())
+        {
+          if (string.Compare(MyConnection.Driver,"myodbc3.dll") == 0)
+          {
+             //Supported only by Connector/ODBC 3.51
+             Console.WriteLine("Data:" + MyDataReader.GetInt32(0) + " " +
+                               MyDataReader.GetString(1) + " " +
+                               MyDataReader.GetInt64(2));
+          } else {
+            //BIGINTs not supported by Connector/ODBC
+            Console.WriteLine("Data:" + MyDataReader.GetInt32(0) + " " +
+                              MyDataReader.GetString(1) + " " +
+                              MyDataReader.GetInt32(2));
+          }
+        }
+        //Close all resources
+        MyDataReader.Close();
+        MyConnection.Close();
+      }
+      catch (OdbcException MyOdbcException) //Catch any ODBC exception.
+      {
+        for (int i=0; i &lt; MyOdbcException.Errors.Count; i++)
+        {
+          Console.Write("ERROR #" + i + "\n" + "Message: " +
+                        MyOdbcException.Errors[i].Message + "\n" +
+                        "Native: " +
+                        MyOdbcException.Errors[i].NativeError.ToString() +
+                        "\n" + "Source: " +
+                        MyOdbcException.Errors[i].Source + "\n" +
+                        "SQL: " + MyOdbcException.Errors[i].SQLState + "\n");
+        }
+      }
+    }
+  }
+}
+</pre>
+
+<h4><a name="connector-odbc-examples-programming-net-vb"></a>
+6.7.2.2. Connector/ODBC � ODBC.NET � Visual Basic</h4>
+<p>��������� ������� ���������� �������
+<code class="literal">my_vb_net</code> � ���������� �� � VB.</p>
+
+<pre class="programlisting">
+' @sample: myvb.vb
+' @purpose : Demo sample for ODBC.NET using Connector/ODBC
+'
+' build command
+'
+' vbc /target:exe
+' /out:myvb.exe
+' /r:Microsoft.Data.Odbc.dll
+' /r:System.dll
+' /r:System.Data.dll
+'
+Imports Microsoft.Data.Odbc
+Imports System
+
+Module myvb
+Sub Main()
+Try
+'Connector/ODBC 3.51 connection string
+Dim MyConString As String = "DRIVER={MySQL ODBC 3.51 Driver};" &amp; _
+    "SERVER=localhost;" &amp; _
+    "DATABASE=test;" &amp; _
+    "UID=venu;" &amp; _
+    "PASSWORD=venu;" &amp; _
+    "OPTION=3;"
+
+'Connection
+Dim MyConnection As New OdbcConnection(MyConString)
+MyConnection.Open()
+Console.WriteLine("Connection State::" &amp; MyConnection.State.ToString)
+
+'Drop
+Console.WriteLine("Dropping table")
+Dim MyCommand As New OdbcCommand()
+MyCommand.Connection = MyConnection
+MyCommand.CommandText = "DROP TABLE IF EXISTS my_vb_net"
+MyCommand.ExecuteNonQuery()
+
+'Create
+Console.WriteLine("Creating....")
+MyCommand.CommandText = "CREATE TABLE my_vb_net(id int, name varchar(30))"
+MyCommand.ExecuteNonQuery()
+
+'Insert
+MyCommand.CommandText = "INSERT INTO my_vb_net VALUES(10,'venu')"
+Console.WriteLine("INSERT, Total rows affected:" &amp; _
+MyCommand.ExecuteNonQuery())
+
+'Insert
+MyCommand.CommandText = "INSERT INTO my_vb_net VALUES(20,'mysql')"
+Console.WriteLine("INSERT, Total rows affected:" &amp; _
+MyCommand.ExecuteNonQuery())
+
+'Insert
+MyCommand.CommandText = "INSERT INTO my_vb_net VALUES(20,'mysql')"
+Console.WriteLine("INSERT, Total rows affected:" &amp; _
+MyCommand.ExecuteNonQuery())
+
+'Insert
+MyCommand.CommandText = "INSERT INTO my_vb_net(id) VALUES(30)"
+Console.WriteLine("INSERT, Total rows affected:" &amp; _
+MyCommand.ExecuteNonQuery())
+
+'Update
+MyCommand.CommandText = "UPDATE my_vb_net SET id=999 WHERE id=20"
+Console.WriteLine("Update, Total rows affected:" &amp; _
+MyCommand.ExecuteNonQuery())
+
+'COUNT(*)
+MyCommand.CommandText = "SELECT COUNT(*) as TRows FROM my_vb_net"
+Console.WriteLine("Total Rows:" &amp; MyCommand.ExecuteScalar())
+
+'Select
+Console.WriteLine("Select * FROM my_vb_net")
+MyCommand.CommandText = "SELECT * FROM my_vb_net"
+Dim MyDataReader As OdbcDataReader
+MyDataReader = MyCommand.ExecuteReader
+While MyDataReader.Read
+  If MyDataReader("name") Is DBNull.Value Then
+     Console.WriteLine("id = " &amp; _
+     CStr(MyDataReader("id")) &amp; "name = " &amp; _
+          "NULL")
+  Else
+    Console.WriteLine("id = " &amp; _
+    CStr(MyDataReader("id")) &amp; "name = " &amp; _
+    CStr(MyDataReader("name")))
+  End If
+End While
+
+'Catch ODBC Exception
+Catch MyOdbcException As OdbcException
+Dim i As Integer
+Console.WriteLine(MyOdbcException.ToString)
+
+'Catch program exception
+Catch MyException As Exception
+Console.WriteLine(MyException.ToString)
+End Try
+End Sub
+</pre>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // ������������� ��������
+    var begun_auto_limit            =              5;     // ����� ���������� ��������� �� ��������
+    var begun_auto_width            =            250;     // ������ ����� ����������
+    begun_auto_colors[0]            =      '#0000CC';     // ���� ������ ����������
+    begun_auto_colors[1]            =      '#000000';     // ���� ������ ����������
+    begun_auto_colors[2]            =      '#00CC00';     // ���� ������ ����������
+    begun_auto_colors[3]            =      '#FFFFFF';     // ���� ���� ����� ����������
+    begun_auto_fonts_size[0]        =          '9pt';     // �-��� ������ ������ ����������
+    begun_auto_fonts_size[1]        =          '9pt';     // �-��� ������ ������ ����������
+    begun_auto_fonts_size[2]        =          '8pt';     // �-��� ������ ������ ����������
+    begun_auto_fonts_size[3]        =          '8pt';     // �-��� ������ ��������
+    var begun_block_type            =     'Vertical';     // ��� �����
+    var begun_rambler_type          =              1;     // ���� ����� ������ �������
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>�����</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">�� �����</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">� �������</label></font></td></tr>
+<tr><td><input type="submit" value="�����" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>����� ����� ������!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>�� ������ <A HREF="mailto:alexey.v.pautov@mail.ru">
+��������� ������</A> �������������� ���� ���������, ������� �������.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

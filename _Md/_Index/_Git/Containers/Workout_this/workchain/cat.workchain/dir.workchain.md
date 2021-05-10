@@ -1,0 +1,13 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\workchain\cat.workchain\dir.workchain.md">workchain</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\workchain\first_level\cat.first_level\dir.first_level.md">first_level</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\workchain\first_level\fixup_git.md">fixup_git.md</a>
+            - *# First level
+            - *## init project
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\workchain\first_level\gitconfig.md">gitconfig.md</a>
+            - *# [Git clone не загружает все файлы из-за ограничения длины пути к файлу windows](https://coderoad.ru/55343976/Git-clone-%D0%BD%D0%B5-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B6%D0%B0%D0%B5%D1%82-%D0%B2%D1%81%D0%B5-%D1%84%D0%B0%D0%B9%D0%BB%D1%8B-%D0%B8%D0%B7-%D0%B7%D0%B0-%D0%BE%D0%B3%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%B5%D0%BD%D0%B8%D1%8F-%D0%B4%D0%BB%D0%B8%D0%BD%D1%8B-%D0%BF%D1%83%D1%82%D0%B8-%D0%BA-%D1%84%D0%B0%D0%B9%D0%BB%D1%83-windows)
+            - *## result .gitconfig
+            - *# [merge tools config](https://www.atlassian.com/ru/git/tutorials/setting-up-a-repository/git-config)
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\workchain\first_level\start_projects.md">start_projects.md</a>
+            - *# First level
+            - *## init project
+    

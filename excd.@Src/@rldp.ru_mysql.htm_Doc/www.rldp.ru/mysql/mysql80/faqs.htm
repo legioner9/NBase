@@ -1,0 +1,2840 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <title>Приложение A. MySQL 8.0 Frequently Asked Questions</title>
+<meta name="generator" content="DocBook XSL Stylesheets + chunker.py v1.9.2" />
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="faqs"></a>Приложение A. MySQL 8.0 Frequently Asked Questions</h1>
+<h2><a name="faqs-general"></a>A.1. MySQL 8.0 FAQ: Общие вопросы</h2>
+<table border="0">
+<tbody><tr><td align="left" valign="top"><a name="faq-mysql-version-ga"></a>
+<a name="idm139965271572704"></a><p><b>A.1.1.</b></p></td>
+<td align="left" valign="top"><p>Какая версия MySQL готовая (GA)?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+MySQL 5.7 и MySQL 5.6 поддержаны для производственного использования.</p>
+
+<p>MySQL 5.7 имеет состояние General Availability (GA) с MySQL 5.7.9,
+который был выпущен для производственного использования 21 октября 2015.</p>
+<p>MySQL 5.6 имеет состояние General Availability (GA) с MySQL 5.6.10,
+который был выпущен для производственного использования 5 февраля 2013.</p>
+
+<p>MySQL 5.5 имеет состояние General Availability (GA) с MySQL 5.5.8,
+который был выпущен для производственного использования 3 декабря 2010.
+MySQL 5.5 больше не актуален, но все еще поддержан.</p>
+
+<p>MySQL 5.1 имеет состояние General Availability (GA) с MySQL 5.1.30,
+который был выпущен для производственного использования 14 ноября 2008.
+Активное развитие MySQL 5.1 закончилось.</p>
+
+<p>MySQL 5.0 имеет состояние General Availability (GA) с MySQL 5.0.15,
+который был выпущен для производственного использования 19 октября 2005.
+Активное развитие MySQL 5.0 закончилось.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-version-non-ga"></a>
+<a name="idm139965271567600"></a><p><b>A.1.2.</b></p></td>
+<td align="left" valign="top"><p>Каково состояние разрабатываемых
+(non-GA) версий?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+MySQL следует модели выпуска, которая вводит особенности
+"предпроизводственного качества" и стабилизирует их, чтобы выпустить
+окончательную версию (см.
+<a href="../../../dev.mysql.com/doc/mysql-development-cycle/en/index.html"
+target="_top">http://dev.mysql.com/doc/mysql-development-cycle/en/index.html
+</a>). Пожалуйста, проверьте журналы изменений, чтобы идентифицировать
+состояние конкретного выпуска.</p>
+
+<p>MySQL 5.4 был версией для разработчиков. Работа над ним прекращена.</p>
+<p>Преемник MySQL 5.7 активно развивается, используя методологию
+выпуска, описанную выше.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-do-subqueries"></a>
+<a name="idm139965271563680"></a><p><b>A.1.3.</b></p></td>
+<td align="left" valign="top"><p>
+Может MySQL 8.0 делать подзапросы?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. См. <a href="sql.htm#subqueries">раздел 14.2.10</a>.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-do-multiple-iud"></a>
+<a name="idm139965271560976"></a><p><b>A.1.4.</b></p></td>
+<td align="left" valign="top"><p>
+Может MySQL 8.0 делать мультитабличные вставки, обновления и удаления?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. Для синтаксиса, требуемого для этого, см. разделы
+<a href="sql.htm#update">14.2.11</a> и <a href="sql.htm#delete">14.2.2</a>.
+</p>
+
+<p>Мультитабличная вставка может быть достигнута, используя триггер
+с предложением <code>FOR EACH ROW</code>, содержащим много запросов
+<a href="sql.htm#insert"><code>INSERT</code></a> в пределах блока
+<code>BEGIN ... END</code>. См.
+<a href="stored.htm#triggers">раздел 21.3</a>.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-have-query-cache"></a>
+<a name="idm139965271553600"></a><p><b>A.1.5.</b></p></td>
+<td align="left" valign="top"><p>
+У MySQL 8.0 есть кэш запроса? Это работает для сервера или базы данных?
+</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. Кэш запроса работает на уровне сервера, кэшируя полные наборы
+результатов, соответствующие оригинальной строке запроса. Если точно
+идентичный запрос сделан (что часто происходит, особенно в веб-приложениях),
+никакой парсинг или выполнение не необходимы: результат посылается
+непосредственно из кэша. Различные настраивающие опции доступны. См.
+<a href="optimiz.htm#query-cache">раздел 9.10.3</a>.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-have-sequences"></a>
+<a name="idm139965271550480"></a><p><b>A.1.6.</b></p></td>
+<td align="left" valign="top"><p>У MySQL 8.0 есть последовательности
+(Sequences)?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Нет. Однако, MySQL имеет систему <code>AUTO_INCREMENT</code>, которая в MySQL
+8.0 может также обработать вставки в репликации с несколькими ведущими
+системами. Используя системные переменные
+<a href="replica.htm#sysvar_auto_increment_increment"><code>
+auto_increment_increment</code></a> и
+<a href="replica.htm#sysvar_auto_increment_offset"><code>
+auto_increment_offset</code></a> Вы можете установить каждый сервер, чтобы
+произвести значения автоинкремента, которые не находятся в противоречии с
+другими серверами. Значение
+<a href="replica.htm#sysvar_auto_increment_increment"><code>
+auto_increment_increment</code></a> должно быть больше, чем число серверов, и
+у каждого сервера должно быть уникальное смещение.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-have-now-fractions"></a>
+<a name="idm139965271543600"></a><p><b>A.1.7.</b></p></td>
+<td align="left" valign="top"><p>Имеет ли MySQL 8.0 функцию
+<a href="funct.htm#function_now"><code>NOW()</code></a> с долями секунд?
+</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. См. <a href="types.htm#fractional-seconds">раздел 12.3.6</a>.
+</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-support-multi-core"></a>
+<a name="idm139965271539664"></a><p><b>A.1.8.</b></p></td>
+<td align="left" valign="top"><p>
+MySQL 8.0 работает с мультиядерными процессорами?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. MySQL полностью многопоточный и использует много процессоров при условии,
+что операционная система поддерживает их.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-why-multiple-processes">
+</a><a name="idm139965271537504"></a><p><b>A.1.9.</b></p></td>
+<td align="left" valign="top"><p>
+Почему я вижу много процессов для <code>mysqld</code>?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Используя LinuxThreads, Вы должны видеть минимум три процесса
+<a href="programs.htm#mysqld"><span><strong>mysqld</strong></span></a>.
+Это фактически потоки. Есть один поток для менеджера LinuxThreads, один
+поток, чтобы обработать соединения, и один поток, чтобы
+обработать аварийные сигналы.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-have-acid-transactions">
+</a><a name="idm139965271533280"></a><p><b>A.1.10.</b></p></td>
+<td align="left" valign="top"><p>
+Может MySQL 8.0 выполнять ACID-транзакции?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. Все текущие версии MySQL поддерживают транзакции. Механизм хранения
+<code>InnoDB</code> предлагает полные ACID-транзакции с блокировкой на уровне
+строки, multi-versioning, повторимыми чтениями без блокировки и всеми
+четырьмя стандартными уровнями изоляции SQL.</p>
+
+<p>Механизм хранения
+The <a href="../../../dev.mysql.com/doc/refman/5.7/en/mysql-cluster.html"
+target="_top"><code>NDB</code></a> поддерживает только операционный уровень
+изоляции <a href="innodb.htm#isolevel_read-committed"><code>READ COMMITTED
+</code></a>.</p></td></tr></tbody></table>
+
+<h2><a name="faqs-storage-engines"></a>A.2. MySQL 8.0 FAQ: механизмы хранения
+</h2>
+<table border="0">
+<tbody><tr><td align="left" valign="top">
+<a name="faq-mysql-what-storage-engines"></a><a name="idm139965271525984">
+</a><p><b>A.2.1.</b></p></td><td align="left" valign="top"><p>
+Где я могу получить полную документацию для механизмов хранения MySQL?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+См. <a href="storage.htm">главу 17</a>. Та глава содержит информацию обо всех
+механизмах хранения MySQL за исключением
+<a href="../../../dev.mysql.com/doc/refman/5.7/en/mysql-cluster.html"
+target="_top"><code>NDB</code></a>, который используется для MySQL Cluster.
+<a href="../../../dev.mysql.com/doc/refman/5.7/en/mysql-cluster.html"
+target="_top"><code>NDB</code></a> описан в
+<a href="../../../dev.mysql.com/doc/refman/5.7/en/mysql-cluster.html"
+target="_top">MySQL Cluster NDB 7.5</a>.</p></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-mysql-have-new-storage-engines"></a>
+<a name="idm139965271520176"></a><p><b>A.2.2.</b></p></td>
+<td align="left" valign="top"><p>Есть ли какие-либо новые
+механизмы хранения в MySQL 8.0?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Нет. <code>InnoDB</code> механизм хранения по умолчанию для новых таблиц.
+См. <a href="innodb.htm#innodb-introduction">раздел 16.1</a>.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-removed-storage-engines">
+</a><a name="idm139965271516656"></a><p><b>A.2.3.</b></p></td>
+<td align="left" valign="top"><p>Какие-либо механизмы хранения
+были удалены в MySQL 8.0?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Нет.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-what-archive-engine">
+</a><a name="idm139965271514656"></a><p><b>A.2.4.</b></p></td>
+<td align="left" valign="top"><p>Что является уникальной выгодой
+механизма хранения <code>ARCHIVE</code>?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Механизм хранения <code>ARCHIVE</code> идеально подходит для
+того, чтобы сохранить большие объемы данных без индексов: это имеет очень
+маленькие накладные расходы и выполняет выборки сканированием таблицы. См.
+<a href="storage.htm#archive-storage-engine">раздел 17.5</a>.</p></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-mysql-new-storage-engine-features"></a>
+<a name="idm139965271510336"></a><p><b>A.2.5.</b></p></td>
+<td align="left" valign="top"><p>Новые особенности в MySQL 8.0 относятся ко
+всем механизмам хранения?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Общие новые особенности, такие как обзоры, хранимые процедуры, триггеры,
+<code>INFORMATION_SCHEMA</code>, точная математика (тип столбца
+<a href="types.htm#fixed-point-types"><code>DECIMAL</code></a>) и столбцы
+типа <a href="types.htm#bit-type"><code>BIT</code></a>, применяются ко всем
+механизмам хранения. Есть также дополнения и изменения для
+определенных механизмов хранения.</p></td></tr></tbody></table>
+
+<h2><a name="faqs-sql-modes"></a>A.3. MySQL 8.0 FAQ: Режимы SQL</h2>
+<table border="0">
+<tbody><tr><td align="left" valign="top"><a name="faq-mysql-what-sql-modes">
+</a><a name="idm139965271503392"></a><p><b>A.3.1.</b></p></td>
+<td align="left" valign="top"><p>Что такое режимы SQL?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Hежимы SQL определяют то, что должен поддерживать синтаксис SQL в MySQL и
+какое подтверждение правильности данных требуется. Это облегчает
+использование MySQL в различной окружающей среде и вместе с другими серверами
+базы данных. Сервер MySQL применяет эти режимы индивидуально к различным
+клиентам. Для получения дополнительной информации см.
+<a href="server.htm#sql-mode">раздел 6.1.8</a>.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-count-sql-modes"></a><a name="idm139965271500368"></a><p><b>A.3.2.</b></p></td><td align="left" valign="top"><p>
+Сколько режимов SQL?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Каждый режим может быть независимо включен. См.
+<a href="server.htm#sql-mode">раздел 6.1.8</a>.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-how-see-sql-mode"></a>
+<a name="idm139965271497536"></a><p><b>A.3.3.</b></p></td>
+<td align="left" valign="top"><p>Как Вы определяете режим SQL?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Вы можете установить режим SQL по умолчанию (для запуска
+<a href="programs.htm#mysqld"><span><strong>mysqld</strong></span></a>)
+опцией <a href="server.htm#option_mysqld_sql-mode"><code>--sql-mode</code>
+</a>. Используя <a href="sql.htm#set-variable"><code>SET [GLOBAL|SESSION]
+sql_mode='<em><code>modes</code></em>'</code></a>,
+Вы можете изменить настройки изнутри соединения. Вы можете получить текущий
+режим запросом <code>SELECT @@sql_mode</code>.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-sql-mode-dependency">
+</a><a name="idm139965271490672"></a><p><b>A.3.4.</b></p></td>
+<td align="left" valign="top"><p>Действительно ли режим зависит от базы
+данных или соединения?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Режим не связан с базой данных. Режимы могут быть установлены в местном
+масштабе для сеанса (соединения) или глобально для сервера. Вы можете
+изменить эти настройки через использование
+<a href="sql.htm#set-variable"><code>SET [GLOBAL|SESSION]
+sql_mode='<em><code>modes</code></em>'</code></a>.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-extend-strict-mode"></a>
+<a name="idm139965271486784"></a><p><b>A.3.5.</b></p></td>
+<td align="left" valign="top"><p>Могут ли правила для строгого
+режима быть расширены?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Когда мы обращаемся к <span><em>строгому режиму</em></span>, мы имеем в виду
+режим где по крайней мере один из режимов
+<a href="server.htm#sqlmode_traditional"><code>TRADITIONAL</code></a>,
+<a href="server.htm#sqlmode_strict_trans_tables"><code>STRICT_TRANS_TABLES
+</code></a> или <a href="server.htm#sqlmode_strict_all_tables"><code>
+STRICT_ALL_TABLES</code></a> включен. Опции могут быть объединены, таким
+образом, Вы можете добавить ограничения на режим. См.
+<a href="server.htm#sql-mode">раздел 6.1.8</a>.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-strict-impact"></a>
+<a name="idm139965271479760"></a><p><b>A.3.6.</b></p></td>
+<td align="left" valign="top"><p>
+Строгий режим воздействует на производительность?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Интенсивная проверка допустимости входных данных требует большего количества
+времени, чем если бы проверка допустимости не была сделана. Если Вы не
+требуете такой проверки допустимости (возможно, Ваше приложение уже
+обрабатывает все это), то MySQL дает Вам опцию отключения строгого режима.
+Однако, если Вы действительно требуете проверку данных, строгий режим может
+обеспечить такую проверку допустимости.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-what-default-mode"></a>
+<a name="idm139965271477264"></a><p><b>A.3.7.</b></p></td><td align="left" valign="top"><p>
+Каков по умолчанию режим SQL, когда MySQL 8.0 установлен?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Значение по умолчанию режима SQL в MySQL 8.0 включает эти режимы:
+<a href="server.htm#sqlmode_only_full_group_by"><code>ONLY_FULL_GROUP_BY
+</code></a>,
+<a href="server.htm#sqlmode_strict_trans_tables"><code>STRICT_TRANS_TABLES
+</code></a>,
+<a href="server.htm#sqlmode_no_zero_in_date"><code>NO_ZERO_IN_DATE</code>
+</a>,
+<a href="server.htm#sqlmode_no_zero_date"><code>NO_ZERO_DATE</code></a>,
+<a href="server.htm#sqlmode_error_for_division_by_zero"><code>
+ERROR_FOR_DIVISION_BY_ZERO</code></a>,
+<a href="server.htm#sqlmode_no_auto_create_user"><code>NO_AUTO_CREATE_USER
+</code></a> и
+<a href="server.htm#sqlmode_no_engine_substitution"><code>
+NO_ENGINE_SUBSTITUTION</code></a>.</p></td></tr></tbody></table>
+
+<h2><a name="faqs-stored-procs"></a>A.4. MySQL 8.0 FAQ: Хранимые процедуры
+и функции</h2>
+<table border="0">
+<tbody><tr><td align="left" valign="top">
+<a name="faq-mysql-have-procedures-functions"></a>
+<a name="idm139965271464816"></a><p><b>A.4.1.</b></p></td>
+<td align="left" valign="top"><p>MySQL 8.0 поддерживает хранимые процедуры
+и функции?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. MySQL 8.0 поддерживает хранимые процедуры и функции.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-where-procedures-functions-docs"></a>
+<a name="idm139965271462624"></a><p><b>A.4.2.</b></p></td>
+<td align="left" valign="top"><p>Где я могу найти документацию для
+хранимых процедур MySQL?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+См. <a href="stored.htm#stored-routines">раздел 21.2</a>.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-where-procedures-forum">
+</a><a name="idm139965271459920"></a><p><b>A.4.3.</b></p></td>
+<td align="left" valign="top"><p>Есть ли дискуссионный форум для
+хранимых процедур MySQL?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. См. <a href="../../../forums.mysql.com/list.php@98" target="_top">
+http://forums.mysql.com/list.php?98</a>.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-where-ansi-2003-spec">
+</a><a name="idm139965271457104"></a><p><b>A.4.4.</b></p></td>
+<td align="left" valign="top"><p>Где я могу найти спецификацию ANSI SQL 2003
+для хранимых процедур?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+К сожалению, официальные технические требования не в свободном доступе (ANSI
+делает их доступными для покупки). Однако, есть такие книги, как
+<em>SQL-99 Complete, Really</em> by Peter Gulutzan and
+Trudy Pelzer, которые обеспечивают всесторонний краткий обзор стандарта,
+включая освещение хранимых процедур.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-how-manage-routines">
+</a><a name="idm139965271454272"></a><p><b>A.4.5.</b></p></td>
+<td align="left" valign="top"><p>Как Вы управляете сохраненными функциями?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Всегда хорошая практика использовать ясную схему именования для Ваших
+сохраненных процедур. Вы можете управлять хранимыми процедурами с помощью
+<code>CREATE [FUNCTION|PROCEDURE]</code>,
+<code>ALTER [FUNCTION|PROCEDURE]</code>,
+<code>DROP [FUNCTION|PROCEDURE]</code> и
+<code>SHOW CREATE [FUNCTION|PROCEDURE]</code>.
+Вы можете получить информацию о существующих хранимых процедурах, используя
+таблицу <a href="inform.htm#routines-table"><code>ROUTINES</code></a> в базе
+данных <code>INFORMATION_SCHEMA</code> (см.
+<a href="inform.htm#routines-table">раздел 22.19</a>).</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-how-view-procedures-functions"></a>
+<a name="idm139965271446528"></a><p><b>A.4.6.</b></p></td>
+<td align="left" valign="top"><p>Есть способ рассмотреть все хранимые
+процедуры и сохраненные функции в данной базе данных?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. Для базы данных <em><code>dbname</code></em> используйте этот запрос на
+таблице <a href="inform.htm#routines-table"><code>INFORMATION_SCHEMA.ROUTINES
+</code></a>:
+<pre>
+SELECT ROUTINE_TYPE, ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES
+       WHERE ROUTINE_SCHEMA='<em><code>dbname</code></em>';
+</pre>
+
+<p>Тело сохраненной процедуры может быть рассмотрено, используя
+<a href="sql.htm#show-create-function"><code>SHOW CREATE FUNCTION</code></a>
+(для функций) или <a href="sql.htm#show-create-procedure"><code>SHOW CREATE
+PROCEDURE</code></a> (для процедур). См.
+<a href="sql.htm#show-create-procedure">раздел 14.7.5.9</a>.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-where-procedures-stored">
+</a><a name="idm139965271436720"></a><p><b>A.4.7.</b></p></td>
+<td align="left" valign="top"><p>Где хранимые процедуры сохранены?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Хранимые процедуры сохранены в таблицах <code>mysql.routines</code> и
+<code>mysql.parameters</code>, которые являются частью словаря данных. Вы не
+можете получить доступ к этим таблицам непосредственно. Вместо этого
+запросите из <code>INFORMATION_SCHEMA</code> таблицы
+<a href="inform.htm#routines-table"><code>ROUTINES</code></a> и
+<a href="inform.htm#parameters-table"><code>PARAMETERS</code></a>.</p>
+
+<p>Вы можете также использовать <a href="sql.htm#show-create-function"><code>
+SHOW CREATE FUNCTION</code></a>, чтобы получить информацию о сохраненных
+функциях, и <a href="sql.htm#show-create-procedure"><code>SHOW CREATE
+PROCEDURE</code></a>, чтобы получить информацию о хранимых процедурах. См.
+<a href="sql.htm#show-create-procedure">раздел 14.7.5.9</a>.</p></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-mysql-how-group-procedures-functions"></a>
+<a name="idm139965271424928"></a><p><b>A.4.8.</b></p></td>
+<td align="left" valign="top"><p>Действительно ли возможно сгруппировать
+хранимые процедуры или сохраненные функции в пакеты?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Нет. Это не поддерживается в MySQL 8.0.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-can-procedure-call-procedure"></a>
+<a name="idm139965271422896"></a><p><b>A.4.9.</b></p></td>
+<td align="left" valign="top"><p>Хранимая процедура может вызвать
+другую хранимую процедуру?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-can-procedure-call-trigger"></a>
+<a name="idm139965271420864"></a><p><b>A.4.10.</b></p></td>
+<td align="left" valign="top"><p>Хранимая процедура может вызвать триггер?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Хранимая процедура может выполнить запрос SQL, подобный
+<a href="sql.htm#update"><code>UPDATE</code></a>, который
+вызывает срабатывание триггера.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-can-procedure-access-table"></a>
+<a name="idm139965271417520"></a><p><b>A.4.11.</b></p></td>
+<td align="left" valign="top"><p>Действительно ли хранимая процедура может
+получить доступ к таблицам?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. Хранимая процедура может получить доступ к одной или более таблицам,
+как ей требуется.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-can-procedure-raise-error"></a>
+<a name="idm139965271415424"></a><p><b>A.4.12.</b></p></td>
+<td align="left" valign="top"><p>У хранимых процедур есть запрос для того,
+чтобы создать ошибку приложения?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. MySQL 8.0 реализует стандартные SQL-запросы <code>SIGNAL</code> и
+<code>RESIGNAL</code>. См. <a href="sql.htm#condition-handling">раздел
+14.6.7</a>.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-have-exceptions"></a>
+<a name="idm139965271411184"></a><p><b>A.4.13.</b></p></td>
+<td align="left" valign="top"><p>Хранимые процедуры обеспечивают
+обработку исключения?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+MySQL реализует определения <a href="sql.htm#handler"><code>HANDLER</code>
+</a> согласно стандарту SQL. См.
+<a href="sql.htm#declare-handler">раздел 14.6.7.2</a>.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-can-routine-results">
+</a><a name="idm139965271407184"></a><p><b>A.4.14.</b></p></td>
+<td align="left" valign="top"><p>Может сохраненная процедура в MySQL 8.0
+возвращать наборы результатов?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+<span><em>Сохраненная процедура</em></span> да, сохраненная функция нет.
+Если Вы выполняете одиночный
+<a href="sql.htm#select"><code>SELECT</code></a> в хранимой процедуре, набор
+результатов возвращен непосредственно клиенту. Вы должны использовать для
+этого протокол клиент-сервер MySQL 4.1 (или выше). Это означает, что,
+например, в PHP Вы должны использовать расширение <code>mysqli</code>, а
+не старое <code>mysql</code>.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-have-with-recompile">
+</a><a name="idm139965271401744"></a><p><b>A.4.15.</b></p></td>
+<td align="left" valign="top"><p>
+Is <code>WITH RECOMPILE</code> поддержан для хранимых процедур?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Не в MySQL 8.0.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-have-mod-plsql"></a>
+<a name="idm139965271398992"></a><p><b>A.4.16.</b></p></td>
+<td align="left" valign="top"><p>Есть ли MySQL-эквивалент использованию
+<code>mod_plsql</code> как шлюз к Apache, чтобы работать непосредственно с
+хранимой процедурой в базе данных?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Нет эквивалента в MySQL 8.0.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-can-procedure-array">
+</a><a name="idm139965271396192"></a><p><b>A.4.17.</b></p></td>
+<td align="left" valign="top"><p>Я могу передать массив как
+ввод хранимой процедуре?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Не MySQL 8.0.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-can-pass-cursor-in"></a>
+<a name="idm139965271394144"></a><p><b>A.4.18.</b></p></td>
+<td align="left" valign="top"><p>Могу я передавать курсор как параметр
+<code>IN</code> хранимой процедуре?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+В MySQL 8.0 курсоры доступны только внутри хранимых процедур.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-can-return-cursor-out">
+</a><a name="idm139965271391392"></a><p><b>A.4.19.</b></p></td>
+<td align="left" valign="top"><p>Могу я возвращать курсор как параметр
+<code>OUT</code> из хранимой процедуры?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+В MySQL 8.0 курсоры доступны только внутри хранимых процедур.
+Однако, если Вы не открываете курсор на
+<a href="sql.htm#select"><code>SELECT</code></a>,
+результат пошлют непосредственно клиенту. Вы можете также
+направить <code>SELECT INTO</code> в переменные. См.
+<a href="sql.htm#select">раздел 14.2.9</a>.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-can-print-var-in-procedure"></a>
+<a name="idm139965271385888"></a><p><b>A.4.20.</b></p></td>
+<td align="left" valign="top"><p>Я могу распечатать значение переменной в
+пределах сохраненной процедуры для того, чтобы отладить код?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да, Вы можете сделать это в <span><em>хранимой процедуре</em></span>,
+но не в сохраненной функции. Если Вы выполняете одиночный
+<a href="sql.htm#select"><code>SELECT</code></a> в хранимой процедуре, набор
+результатов возвращен непосредственно клиенту. Вы должны будете использовать
+для этого протокол клиент-сервер MySQL 4.1 (или выше).</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-can-rollback-transaction-procedure"></a>
+<a name="idm139965271380304"></a><p><b>A.4.21.</b></p></td>
+<td align="left" valign="top"><p>Я могу передать или отменить
+транзакцию в хранимой процедуре?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. Однако, Вы не можете выполнить транзакционные действия
+в пределах сохраненной функции.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-can-procedures-replicatation"></a>
+<a name="idm139965271378160"></a><p><b>A.4.22.</b></p></td>
+<td align="left" valign="top"><p>В MySQL 8.0 хранимые процедуры и
+функции работают с репликацией?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да, стандартные действия, выполненные в хранимых процедурах и функциях,
+копируются с сервера ведущего устройства на ведомый сервер. Есть несколько
+ограничений, которые описаны подробно в
+<a href="stored.htm#stored-programs-logging">разделе 21.7</a>.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-are-procedures-replicated"></a>
+<a name="idm139965271375216"></a><p><b>A.4.23.</b></p></td>
+<td align="left" valign="top"><p>Хранимые процедуры и функции создаются на
+главном сервере, копируемом на ведомый?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да, создание хранимых процедур и функций, выполнено через нормальные запросы
+DDL о главном сервере, поэтому они скопируются на ведомый, таким образом,
+объекты будут существовать на обоих серверах. <code>ALTER</code> и
+<code>DROP</code> для хранимых процедур и функций также копируются.
+</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-how-procedures-replicated"></a>
+<a name="idm139965271371440"></a><p><b>A.4.24.</b></p></td>
+<td align="left" valign="top"><p>Как действия, которые имеют место в хранимых
+процедурах и копируемых функциях, реплицируются?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+MySQL делает запись каждого случая DML, который происходит в хранимой
+процедуре, и копирует эти отдельные действия на ведомый сервер. Фактические
+вызовы, сделанные, чтобы выполнить хранимые процедуры, не копируются.</p>
+<p>Сохраненные функции, которые изменяют данные, зарегистрированы как
+запросы, а не как события DML, которые происходят в каждой функции.
+</p></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-mysql-security-procedures-replication"></a>
+<a name="idm139965271368592"></a><p><b>A.4.25.</b></p></td>
+<td align="left" valign="top"><p>Есть ли специальные требования безопасности
+для того, чтобы использовать хранимые процедуры и
+функции вместе с репликацией?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. Поскольку у ведомого сервера есть полномочия выполнить любой запрос,
+считанный из двоичного журнала ведущего устройства, специальные ограничения
+безопасности существуют для того, чтобы использовать сохраненные функции с
+репликацией. Если репликация или двоичный журнал вообще (с целью
+восстановления момента времени), являются активными, MySQL DBA имеет две
+опции безопасности, открытые для них:</p>
+
+<ol type="1"><li><p>Любому пользователю, желающему создать сохраненные
+функции, нужно предоставить привилегию
+<a href="security.html#priv_super"><code>SUPER</code></a>.</li>
+
+<li>Альтернативно DBA может установить системную переменную
+<a href="server.htm#sysvar_log_bin_trust_function_creators"><code>
+log_bin_trust_function_creators</code></a> в 1, что позволяет любому со
+стандартной привилегией <a href="security.html#priv_create-routine"><code>
+CREATE ROUTINE</code></a> создать сохраненные функции.
+</p></li></ol></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-mysql-limitations-procedures-replication"></a>
+<a name="idm139965271359536"></a><p><b>A.4.26.</b></p></td>
+<td align="left" valign="top"><p>Какие ограничения существуют для того, чтобы
+копировать хранимую процедуру и функциональные действия?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Недетерминированные (случайные) или основанные на времени действия,
+встроенные в хранимые процедуры, возможно, не копируются должным образом. По
+самому их характеру результаты, к которым они приводят, непредсказуемы и не
+могут быть точно воспроизведены, поэтому, случайные действия, копируемые
+ведомому устройству, не будут зеркально отражать выполненные на ведущем
+устройстве. Объявление сохраненных функций <code>DETERMINISTIC</code>
+или установка переменной
+<a href="server.htm#sysvar_log_bin_trust_function_creators"><code>
+log_bin_trust_function_creators</code></a> в 0 не будет позволять случайно
+оцененным операциям быть вызванными.</p>
+
+<p>Кроме того, основанные на времени действия не могут быть воспроизведены
+на ведомом устройстве, потому что синхронизация таких действий в хранимой
+процедуре не восстанавливаема через двоичной журнал, используемый для
+репликации. Это делает запись только событий DML и не делает
+фактора в синхронизации времени.</p>
+
+<p>Наконец, нетранзакционные таблицы, для которых ошибки происходят во время
+больших действий DML (таких, как большая вставка) могут испытать проблемы
+репликации, в которых ведущее устройство может быть частично обновлено от
+деятельности DML, но никакие обновления не сделаны на ведомом устройстве
+из-за ошибок. Обходное решение для действий функции DML, которые будут
+выполнены с ключевым словом <code>IGNORE</code>, чтобы обновления на ведущем
+устройстве, которые вызывают ошибки, были проигнорированы, а обновления,
+которые не вызывают ошибки, копируются к ведомому устройству.</p></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-mysql-limitations-pit-recovery"></a>
+<a name="idm139965271352640"></a><p><b>A.4.27.</b></p></td>
+<td align="left" valign="top"><p>Предыдущие ограничения затрагивают
+способность MySQL сделать восстановление момента времени?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Те же самые ограничения, которые затрагивают репликацию, действительно
+затрагивают восстановление момента времени.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-when-limitations-resolved"></a>
+<a name="idm139965271350480"></a><p><b>A.4.28.</b></p></td>
+<td align="left" valign="top"><p>
+Что делать, чтобы исправить вышеупомянутые ограничения?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Вы можете выбрать репликацию, основанную на запросе или на строке.
+Оригинальное выполнение репликации основано на запросе и двоичном журнале.
+Основанное на строке двоичное журналирование решает
+ограничения, упомянутые ранее.</p>
+
+<p><span>Смешанная</span> репликация также доступна (запуская сервер с
+<a href="server.htm#option_mysqld_binlog-format"><code>--binlog-format=mixed
+</code></a>). Этот гибрид, <span>умная</span> форма репликации,
+динамически определяет, может ли репликация на уровне запроса безопасно
+использоваться или требуется репликация на уровне строки.</p>
+</td></tr></tbody></table>
+
+<h2><a name="faqs-triggers"></a>A.5. MySQL 8.0 FAQ: Триггеры</h2>
+<table border="0">
+<tbody><tr><td align="left" valign="top">
+<a name="faq-mysql-where-triggers-docs"></a><a name="idm139965271342384"></a>
+<p><b>A.5.1.</b></p></td><td align="left" valign="top"><p>
+Где я могу найти документацию для триггеров в MySQL 8.0?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+См. <a href="stored.htm#triggers">раздел 21.3</a>.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-where-triggers-forum">
+</a><a name="idm139965271339664"></a><p><b>A.5.2.</b></p></td>
+<td align="left" valign="top"><p>
+Есть дискуссионный форум для триггеров в MySQL?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. <a href="../../../forums.mysql.com/list.php@99"
+target="_top">http://forums.mysql.com/list.php?99</a>.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-have-trigger-levels">
+</a><a name="idm139965271337040"></a><p><b>A.5.3.</b></p></td>
+<td align="left" valign="top"><p>У MySQL 8.0 есть триггеры на уровне строки
+или на уровне запроса?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+В MySQL 8.0 все триггеры <code>FOR EACH ROW</code> то есть, триггер
+активирован для каждой строки, которая вставлена, обновлена или удалена.
+MySQL 8.0 не поддерживает использование триггеров
+<code>FOR EACH STATEMENT</code>.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-have-trigger-defaults">
+</a><a name="idm139965271333376"></a><p><b>A.5.4.</b></p></td>
+<td align="left" valign="top"><p>Есть ли какие-либо триггеры по умолчанию?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Не явно. У MySQL действительно есть определенное специальное поведение для
+некоторых столбцов <a href="types.htm#datetime"><code>TIMESTAMP</code></a>,
+так же как для столбцов, которые определены,
+используя <code>AUTO_INCREMENT</code>.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-how-triggers-managed">
+</a><a name="idm139965271329280"></a><p><b>A.5.5.</b></p></td>
+<td align="left" valign="top"><p>
+Как управлять триггерами в MySQL?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+В MySQL 8.0 триггеры могут быть созданы, используя
+<a href="sql.htm#create-trigger"><code>CREATE TRIGGER</code></a>, и удалены
+через <a href="sql.htm#drop-trigger"><code>DROP TRIGGER</code></a>. См.
+разделы <a href="sql.htm#create-trigger">14.1.17</a> и
+<a href="sql.htm#drop-trigger">14.1.27</a>.</p>
+
+<p>Информация о триггерах может быть получена, запрашивая таблицу
+<a href="inform.htm#triggers-table"><code>INFORMATION_SCHEMA.TRIGGERS</code>
+</a>.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-can-view-all-triggers">
+</a><a name="idm139965271320960"></a><p><b>A.5.6.</b></p></td>
+<td align="left" valign="top"><p>
+Есть способ рассмотреть все триггеры в базе данных?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. Вы можете получить перечисление всех триггеров, определенных в базе
+данных <code>dbname</code> с использованием запроса в таблице
+<a href="inform.htm#triggers-table"><code>INFORMATION_SCHEMA.TRIGGERS</code>
+</a> как показано здесь:
+<pre>
+SELECT TRIGGER_NAME, EVENT_MANIPULATION, EVENT_OBJECT_TABLE,
+       ACTION_STATEMENT FROM INFORMATION_SCHEMA.TRIGGERS
+       WHERE TRIGGER_SCHEMA='<em><code>dbname</code></em>';
+</pre>
+
+<p>Вы можете также использовать запрос <a href="sql.htm#show-triggers"><code>
+SHOW TRIGGERS</code></a>, который является специфичным для MySQL. См.
+<a href="sql.htm#show-triggers">раздел 14.7.5.38</a>.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-how-triggers-stored">
+</a><a name="idm139965271312096"></a><p><b>A.5.7.</b></p></td>
+<td align="left" valign="top"><p>Где сохранены триггеры?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Триггеры сохранены в системной таблице <code>mysql.triggers</code>,
+которая является частью словаря данных.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-can-trigger-procedure">
+</a><a name="idm139965271309296"></a><p><b>A.5.8.</b></p></td>
+<td align="left" valign="top"><p>Триггер может вызвать хранимую процедуру?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-can-triggers-tables">
+</a><a name="idm139965271307280"></a><p><b>A.5.9.</b></p></td>
+<td align="left" valign="top"><p>Действительно ли триггеры
+могут получить доступ к таблицам?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Триггер может получить доступ к старым и новым данным в своей собственной
+таблице. Он может также затронуть другие таблицы, но не разрешено изменять
+таблицу, которая уже используется (для чтения или записи) запросом, который
+вызвал функцию или триггер.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-can-triggers-same-events"></a>
+<a name="idm139965271304992"></a><p><b>A.5.10.</b></p></td>
+<td align="left" valign="top"><p>У таблицы может быть много триггеров
+с тем же самым событием и временем действия?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+В MySQL 8.0 возможно определить много триггеров для данной таблицы, у которых
+есть то же самое событие и время действия. Например, Вы можете иметь два
+триггера <code>BEFORE UPDATE</code> для таблицы. По умолчанию триггеры, у
+которых есть то же самое событие и время действия, активируются в порядке,
+в котором они создавались. Чтобы затронуть более аккуратный порядок,
+определите пункт после <code>FOR EACH ROW</code>, который указывает
+<code>FOLLOWS</code> или <code>PRECEDES</code> и название существующего
+триггера, у которого есть то же самое событие и время действия. С
+<code>FOLLOWS</code> новый триггер активируется после существующего. С
+<code>PRECEDES</code> до него.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-can-triggers-udf"></a>
+<a name="idm139965271298032"></a><p><b>A.5.11.</b></p></td>
+<td align="left" valign="top"><p>Триггеры могут вызвать внешнее
+приложение через UDF?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. Например, триггер мог вызвать <code>sys_exec()</code> UDF.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-can-triggers-remote">
+</a><a name="idm139965271295280"></a><p><b>A.5.12.</b></p></td>
+<td align="left" valign="top"><p>Действительно ли возможно обновить триггером
+таблицы на удаленном сервере?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. Таблица на удаленном сервере могла быть обновлена, используя механизм
+хранения <code>FEDERATED</code>. См.
+<a href="storage.htm#federated-storage-engine">раздел 17.8</a>.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-can-triggers-replication"></a>
+<a name="idm139965271291824"></a><p><b>A.5.13.</b></p></td>
+<td align="left" valign="top"><p>Триггеры работают с репликацией?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. Однако, путь, которым они работают, зависит от того, используете ли Вы
+<span>классическую</span> репликацию MySQL, основанную на
+запросе, доступную во всех версиях MySQL, или основанную на строке,
+введенную в MySQL 5.1.</p>
+
+<p>Используя основанную на запросе репликацию, триггеры на ведомом
+устройстве выполнены запросами, которые выполнены на ведущем устройстве (и
+копируются к ведомому устройству).</p>
+
+<p>Используя основанную на строке репликацию, триггеры не выполнены на
+ведомом устройстве из-за запросов, которые были выполнены на ведущем
+устройстве и затем копировались к ведомому устройству. Вместо этого,
+используя основанную на строке репликацию, изменения, вызванные, выполняя
+триггер на ведущем устройстве, применены на ведомом устройстве.</p></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-mysql-how-triggers-master-slave"></a>
+<a name="idm139965271286576"></a><p><b>A.5.14.</b></p></td>
+<td align="left" valign="top"><p>Как действия, выполненные через триггер
+на ведущем устройстве, копируются на ведомое устройство?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+
+Снова, это зависит от того, используете ли Вы
+<span>классическую</span> репликацию MySQL, основанную на
+запросе, доступную во всех версиях MySQL, или основанную на строке,
+введенную в MySQL 5.1.</p>
+
+<p><b>Основанная на запросе репликация. </b>
+Во-первых, триггеры, которые существуют на ведущем устройстве, должны быть
+обновлены на ведомом сервере. Как только это сделано, поток репликации
+работает как любой другой стандартный запрос DML, который участвует в
+репликации. Например, рассмотрите таблицу <code>EMP</code>, которая имеет
+триггер <code>AFTER</code> на insert, который существует на сервере ведущего
+устройства MySQL. Те же самые таблица <code>EMP</code> и триггер
+<code>AFTER</code> существуют также и на ведомом сервере.
+Поток рпеликации был бы:</p>
+
+<ol type="1"><li><p>Запрос <a href="sql.htm#insert"><code>INSERT</code></a>
+сделан на <code>EMP</code>.</li>
+<li>Активирован триггер <code>AFTER</code> на <code>EMP</code>.</li>
+<li><a href="sql.htm#insert"><code>INSERT</code></a>
+записан в двоичный журнал.</li>
+
+<li>Ведомое устройство выполняет
+<a href="sql.htm#insert"><code>INSERT</code></a> на <code>EMP</code>.</li>
+<li>Триггер <code>AFTER</code> на <code>EMP</code>, который
+существует на ведомом устройстве, активируется.</p></li></ol>
+
+<p><b>Основанная на строке репликация. </b>
+Когда Вы используете основанную на строке репликацию, изменения, вызванные
+выполнением триггера на ведущем устройстве, применены на ведомом устройстве.
+Однако, сами триггеры фактически не выполнены на ведомом устройстве при
+основанной на строке репликации, потому что, если ведущее и ведомое
+устройства применяли изменения с ведущего и, кроме того, триггер, вызывающий
+эти изменения, был применен на ведомом устройстве, изменения будут в
+действительности применены дважды на ведомом устройстве, приводя к различным
+данным по ведущему и ведомому устройствам.</p>
+
+<p>В большинстве случаев результат тот же самый для обоих вариантов
+репликации. Однако, если Вы используете различные триггеры на ведущем и
+ведомом устройствах, Вы не можете использовать основанную на строке
+репликацию, потому что основанный на строке формат копирует изменения,
+произведенные выполнением триггеров на ведущем устройстве ведомым
+устройствам, а не запросами, которые заставили триггеры выполниться, так что
+соответствующие триггеры на ведомом устройстве не будут выполнены. Вместо
+этого любые запросы, выполняющие такие триггеры, должны копироваться,
+используя основанную на запросе репликацию.</p>
+</td></tr></tbody></table>
+
+<h2><a name="faqs-views"></a>A.6. MySQL 8.0 FAQ: Views</h2>
+<table border="0">
+<tbody><tr><td align="left" valign="top"><a name="faq-mysql-where-docs-views"></a><a name="idm139965271261408"></a><p><b>A.6.1.</b></p></td><td align="left" valign="top"><p>
+Где я могу найти документацию о MySQL Views?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+См. <a href="stored.htm#views">раздел 21.5</a>.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-where-views-forum"></a>
+<a name="idm139965271258576"></a><p><b>A.6.2.</b></p></td>
+<td align="left" valign="top"><p>Есть дискуссионный форум для MySQL Views?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. <a href="../../../forums.mysql.com/list.php@100" target="_top">
+http://forums.mysql.com/list.php?100</a></p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-where-view-dropped-table"></a>
+<a name="idm139965271255808"></a><p><b>A.6.3.</b></p></td>
+<td align="left" valign="top"><p>Что происходит с представлением, если
+основная таблица удалена или переименована?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+После того, как представление было создано, возможно удалить или изменить
+таблицу или представление, к которому относится определение. Чтобы проверить
+определение представления на проблемы этого вида, используйте запрос
+<a href="sql.htm#check-table"><code>CHECK TABLE</code></a>.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-have-table-snapshots">
+</a><a name="idm139965271251632"></a><p><b>A.6.4.</b></p></td>
+<td align="left" valign="top"><p>У MySQL 8.0 есть табличные снимки?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Нет.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-have-materialized-views">
+</a><a name="idm139965271249616"></a><p><b>A.6.5.</b></p></td>
+<td align="left" valign="top"><p>MySQL 8.0 имеет осуществленные представления?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Нет.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-can-insert-joins-views">
+</a><a name="idm139965271247600"></a><p><b>A.6.6.</b></p></td>
+<td align="left" valign="top"><p>Вы можете вставить в представления, которые
+основаны на объединениях?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Это возможно, при условии, что Ваш запрос
+<a href="sql.htm#insert"><code>INSERT</code></a> имеет список столбцов,
+который проясняет, что есть только одна вовлеченная таблица.</p>
+<p>Вы не <span><em>можете</em></span> вставить в много таблиц с единственной
+вставкой на представлении.</p></td></tr></tbody></table>
+
+<h2><a name="faqs-information-schema"></a>A.7. MySQL 8.0 FAQ:
+INFORMATION_SCHEMA</h2>
+<table border="0">
+<tbody><tr><td align="left" valign="top">
+<a name="faq-mysql-where-docs-information-schema"></a>
+<a name="idm139965271241824"></a><p><b>A.7.1.</b></p></td>
+<td align="left" valign="top"><p>Где я могу найти документацию для базы
+данных MySQL <code>INFORMATION_SCHEMA</code>?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+См. <a href="inform.htm">главу 22</a>.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-where-forum-information-schema"></a>
+<a name="idm139965271238384"></a><p><b>A.7.2.</b></p></td>
+<td align="left" valign="top"><p>Есть ли дискуссионный форум для
+<code>INFORMATION_SCHEMA</code>?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+<a href="../../../forums.mysql.com/list.php@101" target="_top">
+http://forums.mysql.com/list.php?101</a>.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-where-ansi-information-schema"></a>
+<a name="idm139965271234944"></a><p><b>A.7.3.</b></p></td>
+<td align="left" valign="top"><p>Где можно прочитать спецификацию
+ANSI SQL 2003 для <code>INFORMATION_SCHEMA</code>?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+К сожалению, официальные технические требования не в свободном доступе
+(ANSI делает их доступными для покупки). Однако, есть такие доступные книги,
+как <em>SQL-99 Complete, Really</em> by Peter Gulutzan and Trudy Pelzer,
+которые обеспечивают всесторонний краткий обзор стандарта,
+включая <code>INFORMATION_SCHEMA</code>.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-compare-oracle-data-dir-info-schema"></a>
+<a name="idm139965271230768"></a><p><b>A.7.4.</b></p></td>
+<td align="left" valign="top"><p>
+Что является различием между Oracle Data Dictionary и
+MySQL <code>INFORMATION_SCHEMA</code>?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Оба обеспечивают метаданные в таблицах. Однако, Oracle и MySQL
+используют различные имена таблиц и имена столбцов. Выполнение MySQL более
+подобно DB2 и SQL Server, которые также поддерживают
+<code>INFORMATION_SCHEMA</code> как определено в стандарте SQL.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-can-modify-information-schema"></a>
+<a name="idm139965271227024"></a><p><b>A.7.5.</b></p></td>
+<td align="left" valign="top"><p>Могу я добавлять или иначе изменять таблицы
+в базе данных <code>INFORMATION_SCHEMA</code>?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Нет. Так как приложения могут положиться на структуру определенного
+стандарта, это не должно быть изменено. Поэтому <span><em>мы не можем
+допустить ошибки или другие проблемы, которые следуют из изменения
+таблиц или данных в <code>INFORMATION_SCHEMA</code></em></span>.
+</p></td></tr></tbody></table>
+
+<h2><a name="faqs-migration"></a>A.8. MySQL 8.0 FAQ: Миграция</h2>
+<table border="0">
+<tbody><tr><td align="left" valign="top">
+<a name="faq-mysql-how-migration-mysql"></a><a name="idm139965271221424"></a>
+<p><b>A.8.1.</b></p></td><td align="left" valign="top"><p>
+Где я могу найти информацию о том, как мигрировать с MySQL 5.7 на MySQL 8.0?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Для подробной информации об обновлении см.
+<a href="install.htm#upgrading">раздел 2.10.1</a>.
+Не пропускайте главную версию, обновляя, а завершайте процесс по шагам,
+обновляя от одной главной версии до следующей на каждом шаге. Это может
+казаться более сложным, но это будет экономить время и поможет избежать
+проблем. Если Вы столкнетесь с проблемами во время обновления, то их
+происхождение будет легче идентифицировать Вам или, если у Вас есть подписка
+MySQL Enterprise, поддержкой MySQL.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-mysql-how-storage-engines-changed"></a>
+<a name="idm139965271218224"></a><p><b>A.8.2.</b></p></td>
+<td align="left" valign="top"><p>Как поддержка механизмов хранения (типов
+таблиц) изменилась в MySQL 8.0?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Поддержка механизма хранения изменилась следующим образом:</p>
+
+<ul><li><p>Поддержка таблиц <code>ISAM</code> удалена в MySQL 5.0, и Вы
+должны теперь использовать <code>MyISAM</code> вместо <code>ISAM</code>.
+Преобразовать таблицу <em><code>tblname</code></em> из
+<code>ISAM</code> в <code>MyISAM</code> просто:
+<pre>
+ALTER TABLE <em><code>tblname</code></em> ENGINE=MYISAM;
+</pre></li>
+
+<li><p>Внутренний <code>RAID</code> для <code>MyISAM</code> был также удален
+в MySQL 5.0. Это прежде использовалось, чтобы позволить большие таблицы в
+файловых системах, которые не поддерживали размеры файла больше 2GB.
+Все современные файловые системы учитывают большие таблицы, кроме того, есть
+теперь другие решения, например, <code>MERGE</code> и views.</li>
+
+<li>Тип столбца <a href="types.htm#char"><code>VARCHAR</code></a>
+теперь сохраняет конечные пробелы во всех механизмах хранения.</li>
+
+<li>Таблицы <code>MEMORY</code> (прежде известные как <code>HEAP</code>)
+могут также содержать столбцы
+<a href="types.htm#char"><code>VARCHAR</code></a>.
+</p></li></ul></td></tr></tbody></table>
+
+<h2><a name="faqs-security"></a>A.9. MySQL 8.0 FAQ: Безопасность</h2>
+<table border="0">
+<tbody><tr><td align="left" valign="top">
+<a name="faq-mysql-where-docs-security"></a><a name="idm139965271199168"></a>
+<p><b>A.9.1.</b></p></td><td align="left" valign="top"><p>Где я могу найти
+документацию, которая обращается к вопросам безопасности для MySQL?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Лучшим местом, чтобы начать является <a href="security.html">Глава 7</a>.</p>
+
+<p>Другие части документации MySQL, которую Вы можете счесть полезным
+относительно определенных проблем безопасности, включают следующее:</p>
+<ul><li><p><a href="security.html#security-guidelines">Раздел 7.1.1</a>.</li>
+<li><a href="security.html#security-against-attack">Раздел 7.1.3</a>.</li>
+<li><a href="error.htm#resetting-permissions">Раздел B.5.3.2</a>.</li>
+<li><a href="security.html#changing-mysql-user">Раздел 7.1.5</a>.</li>
+<li><a href="extend.htm#udf-security">Раздел 26.4.2.6</a>.</li>
+<li><a href="security.html#security-options">Раздел 7.1.4</a>.</li>
+<li><a href="security.html#load-data-local">Раздел 7.1.6</a>.</li>
+<li><a href="install.htm#postinstallation">Раздел 2.9</a>.</li>
+<li><a href="security.html#secure-connections">Раздел 7.4</a>.</p></li>
+</ul></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-have-native-ssl"></a>
+<a name="idm139965271181648"></a><p><b>A.9.2.</b></p></td>
+<td align="left" valign="top"><p>MySQL 8.0 имеет поддержку SSL?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+У большинства двоичных модулей 8.0 есть поддержка соединений SSL между
+клиентом и сервером. См. <a href="security.html#secure-connections">раздел
+7.4</a>.</p>
+
+<p>Вы можете также туннелировать соединение, используя SSH, если (например)
+приложение-клиент не поддерживает соединения SSL. Для примера см.
+<a href="security.html#windows-and-ssh">раздел 7.4.7</a>.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-mysql-is-ssl-available"></a>
+<a name="idm139965271177616"></a><p><b>A.9.3.</b></p></td>
+<td align="left" valign="top"><p>Поддержка SSL встроена в двоичные модули
+или я должен повторно собрать пакет самостоятельно, чтобы включить ее?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Двоичные файлы 8.0 имеют SSL для соединений клиент-сервер, которые
+безопасны, авторизованы или то и другое сразу. См.
+<a href="security.html#secure-connections">раздел 7.4</a>.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-have-builtin-ldap"></a>
+<a name="idm139965271174736"></a><p><b>A.9.4.</b></p></td>
+<td align="left" valign="top"><p>У MySQL 8.0 есть встроенная
+аутентификация для LDAP?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Версия Enterprise включает
+<a href="../../../dev.mysql.com/doc/refman/5.7/en/pam-authentication-plugin.html"
+target="_top">PAM Authentication Plugin</a>, который поддерживает
+аутентификацию по LDAP.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-mysql-have-builtin-rbac"></a>
+<a name="idm139965271171808"></a><p><b>A.9.5.</b></p></td>
+<td align="left" valign="top"><p>MySQL 8.0 включают поддержку
+Roles Based Access Control (RBAC)?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Нет.</p></td></tr></tbody></table>
+
+<h2><a name="faqs-mysql-cluster"></a>A.10. MySQL 8.0 FAQ: MySQL Cluster</h2>
+<p>В следующем разделе мы отвечаем на вопросы, которые часто спрашивают о
+MySQL Cluster и механизме хранения
+<a href="../../../dev.mysql.com/doc/refman/5.7/en/mysql-cluster.html"
+target="_top"><code>NDB</code></a>.</p>
+
+<table border="0">
+<tbody><tr><td align="left" valign="top">
+<a name="faq-cluster-which-versions-support-cluster"></a>
+<a name="idm139965271162016"></a><p><b>A.10.1.</b></p></td>
+<td align="left" valign="top"><p>Какие версии программного обеспечения MySQL
+поддерживают Cluster? Я должен собрать из исходных текстов?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+MySQL Cluster не поддержан в MySQL Server 8.0. Вместо этого
+MySQL Cluster выпущен как отдельный продукт, доступный как
+MySQL Cluster NDB 7.3 и MySQL Cluster NDB 7.4. Вы должны использовать
+MySQL Cluster NDB 7.4 для нового развертывания и запланировать обновление,
+если Вы используете предыдущую версию MySQL Cluster. Для краткого обзора
+усовершенствований, сделанных в MySQL Cluster NDB 7.3 см.
+<a href="../../../dev.mysql.com/doc/refman/5.6/en/mysql-cluster-what-is-new-7-3.html"
+target="_top">What is New in MySQL Cluster NDB 7.3</a>, то же про MySQL
+Cluster NDB 7.4:
+<a href="../../../dev.mysql.com/doc/refman/5.6/en/mysql-cluster-what-is-new-7-4.html"
+target="_top">What is New in MySQL Cluster NDB 7.4</a>.
+MySQL Cluster NDB 7.5 основан на MySQL Server 5.7, также доступен для
+тестирования и предварительного осмотра новых особенностей, но еще не
+считается готовым к производственному использованию. Для краткого обзора
+усовершенствований, сделанных в MySQL Cluster NDB 7.5, см.
+<a href="../../../dev.mysql.com/doc/refman/5.7/en/mysql-cluster-what-is-new.html"
+target="_top">What is New in MySQL Cluster NDB 7.5</a>.</p>
+
+<p>Для получения дальнейшей информации о развертывании и использовании
+MySQL Cluster см.
+<a href="../../../dev.mysql.com/doc/refman/5.7/en/mysql-cluster.html"
+target="_top">MySQL Cluster NDB 7.5</a>.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-cluster-what-is-ndb"></a>
+<a name="idm139965271155600"></a><p><b>A.10.2.</b></p></td>
+<td align="left" valign="top"><p>Что делает
+<span>NDB</span> и <span>NDBCLUSTER</span>?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+<span>NDB</span> означает <span><span><strong>N</strong></span>etwork
+<span><strong>D</strong></span>ata<span><strong>b</strong></span>ase</span>.
+<code>NDB</code> и <code>NDBCLUSTER</code> это названия механизма хранения,
+который позволяет кластеризировать поддержку с MySQL. <code>NDB</code>
+предпочтен, но любое имя правильно.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-cluster-what-min-hosts-cluster"></a>
+<a name="idm139965271147744"></a><p><b>A.10.3.</b></p></td>
+<td align="left" valign="top"><p>Сколько компьютеров нужно, чтобы выполнить
+MySQL Cluster и почему?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Минимум три компьютера нужны, чтобы выполнять жизнеспособный кластер. Однако,
+минимальное <span><em>рекомендуемое</em></span> число компьютеров в кластере
+MySQL четыре: по одному, чтобы выполнить управление и узлы SQL, и два
+компьютера, чтобы служить узлами данных. Цель этих двух узлов данных состоит
+в том, чтобы обеспечить избыточность, управленческий узел должен работать на
+отдельной машине, чтобы гарантировать работу арбитражных служб, когда один из
+узлов данных падает.</p>
+
+<p>Чтобы обеспечить увеличенную пропускную способность и высокую доступность,
+Вы должны использовать много узлов SQL (MySQL Server, соединенные с
+кластером). Также возможно (хотя не строго необходимо) выполнить
+много управленческих серверов.</p></td></tr></tbody></table>
+
+<h2><a name="faqs-cjk"></a>A.11. MySQL 8.0 FAQ: Наборы символов Chinese,
+Japanese и Korean в MySQL</h2>
+<p>Этот набор часто задаваемых вопросов получен из опыта поддержки
+MySQL и групп развития в обработке многих запросов о CJK
+(китайско-японско-корейских) проблем.</p>
+
+<table border="0">
+<tbody><tr><td align="left" valign="top"><a name="faq-cjk-what-cjk-avail">
+</a><a name="idm139965271069120"></a><p><b>A.11.1.</b></p></td>
+<td align="left" valign="top"><p>Какие наборы символов CJK доступны в MySQL?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Список наборов символов CJK может измениться в зависимости от Вашей версии
+MySQL. Например, набор символов <code>gb18030</code> не был поддержан до
+MySQL 5.7.4. Однако, так как название применимого языка появляется в
+столбце <code>DESCRIPTION</code> для каждого входа в таблице
+<a href="inform.htm#character-sets-table"><code>
+INFORMATION_SCHEMA.CHARACTER_SETS</code></a>, Вы можете получить текущий
+список всех не-Unicode наборов символов CJK, используя этот запрос:
+<pre>
+mysql&gt; SELECT CHARACTER_SET_NAME, DESCRIPTION
+                 FROM INFORMATION_SCHEMA.CHARACTER_SETS
+                 WHERE DESCRIPTION LIKE '%Chin%' OR
+                 DESCRIPTION LIKE '%Japanese%' OR
+                 DESCRIPTION LIKE '%Korean%' ORDER BY CHARACTER_SET_NAME;
++--------------------+---------------------------------+
+| CHARACTER_SET_NAME | DESCRIPTION                     |
++--------------------+---------------------------------+
+| big5               | Big5 Traditional Chinese        |
+| cp932              | SJIS for Windows Japanese       |
+| eucjpms            | UJIS for Windows Japanese       |
+| euckr              | EUC-KR Korean                   |
+| gb18030            | China National Standard GB18030 |
+| gb2312             | GB2312 Simplified Chinese       |
+| gbk                | GBK Simplified Chinese          |
+| sjis               | Shift-JIS Japanese              |
+| ujis               | EUC-JP Japanese                 |
++--------------------+---------------------------------+
+</pre>
+
+<p>MySQL поддерживает три разновидности <span>GB</span> (<span><em>Guojia
+Biaozhun</em></span>, or <span><em>National Standard</em></span> или
+<span><em>Simplified Chinese</em></span>) наборов символов, которые
+официальны в Китайской Народной Республике: <code>gb2312</code>,
+<code>gbk</code> и <code>gb18030</code> (добавлен в MySQL 5.7.4).</p>
+
+<p>Иногда люди пытаются вставить символы <code>gbk</code> в
+<code>gb2312</code>, и это работает большую часть времени потому, что
+<code>gbk</code> супернабор <code>gb2312</code>, но в конечном счете они
+пытаются вставить более редкий китайский символ, и это не работает. См. Bug
+#16072).</p>
+
+<p>Здесь, мы пытаемся разъяснить точно, какие символы законны в
+<code>gb2312</code> или <code>gbk</code> в отношении официальных документов.
+Пожалуйста, проверьте эти ссылки перед сообщением об ошибке в
+<code>gb2312</code> или <code>gbk</code>.</p>
+
+<ul><li><p>Набор символов MySQL <code>gbk</code> в действительности
+<span>Microsoft code page 936</span>. Это отличается от официальной
+<code>gbk</code> символами <code>A1A4</code> (middle dot), <code>A1AA</code>
+(em dash), <code>A6E0-A6F5</code> и <code>A8BB-A8C0</code>.</li>
+
+<li>Для перечисления отображений <code>gbk</code>/Unicode см.
+<a href="../../../www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP936.TXT"
+target="_top">
+http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP936.TXT</a>.
+</p></li></ul></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-cjk-why-cjk-question-marks">
+</a><a name="idm139965271036832"></a><p><b>A.11.2.</b></p></td>
+<td align="left" valign="top"><p>Я вставил символы CJK в свою таблицу. Почему
+<a href="sql.htm#select"><code>SELECT</code></a> выводит на экран их как
+<span>?</span>?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Эта проблема обычно происходит из-за установки в MySQL, которая не
+соответствует настройки для приложения или операционной системы.
+Вот некоторые общие шаги для того, чтобы исправить эти типы проблем:</p>
+
+<ul><li><p><span><em>Будьте уверены, какую версию MySQL Вы используете</em>
+</span>.</p>
+<p>Используйте <code>SELECT VERSION();</code>, чтобы определить это.</li>
+
+<li><span><em>Удостоверьтесь, что база данных фактически использует
+желаемый набор символов</em></span>.</p>
+<p>Люди часто думают, что набор символов клиента всегда тот
+же самый как набор символов сервера или набор символов, используемый в целях
+отображения. Однако, оба эти предположения ложные. Вы можете удостовериться,
+проверяя результат <code>SHOW CREATE TABLE <em><code>tablename</code></em>
+</code> или при использовании этого запроса:
+<pre>
+SELECT character_set_name, collation_name
+       FROM information_schema.columns
+       WHERE table_schema = your_database_name AND
+       table_name = your_table_name AND column_name = your_column_name;
+</pre></li>
+
+<li><p><span><em>Определите шестнадцатеричное значение символа или символов,
+которые не выводятся на экран правильно</em></span>.</p>
+<p>Вы можете получить эту информацию для столбца
+<em><code>column_name</code></em> в таблице
+<em><code>table_name</code></em> с использованием следующего запроса:
+<pre>
+SELECT HEX(<em><code>column_name</code></em>)
+       FROM <em><code>table_name</code></em>;
+</pre>
+
+<p><code>3F</code> код для символа <code>?</code>, это означает
+символ <code>?</code>, фактически сохраненный в столбце. Это чаще всего
+происходит из-за проблемы преобразования особого символа Вашего набора
+символов клиента в целевой набор символов.</li>
+
+<li><span><em>Удостоверьтесь, что конвертация туда и обратно реальна,
+то есть, когда Вы выбираете <em><code>literal</code></em> (или
+<em><code>_introducer hexadecimal-value</code></em>), Вы получаете
+<em><code>literal</code></em> в результате</em></span>.</p>
+
+<p>Например, японский символ Katakana
+<span><em>Pe</em></span> (<code>Ц┐ '</code>)
+существует во всех наборах символов CJK, и имеет значение кодовой точки
+(шестнадцатеричное кодирование) <code>0x30da</code>. Чтобы проверить
+конвертацию этого символа, используйте этот запрос:
+<pre>
+SELECT 'Ц┐ ' AS `Ц┐ `; /* or SELECT _ucs2 0x30da; */
+</pre>
+
+<p>Если результат не <code>Ц┐ </code>, что-то не так.</p>
+<p>Для отчетов об ошибках относительно таких отказов мы могли бы попросить,
+чтобы Вы предоставили результат <code>SELECT HEX('Ц┐ ');</code>.
+Тогда мы можем определить, правильно ли клиент кодирует.</li>
+
+<li><span><em>Удостоверьтесь, что проблема не с браузером или другим
+приложением, а именно с MySQL</em></span>.</p>
+<p>Используйте клиент <a href="programs.htm#mysql"><span><strong>mysql
+</strong></span></a> (в Windows <a href="programs.htm#mysql"><span><strong>
+mysql.exe</strong></span></a>), чтобы выполнить эту задачу. Если
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+выводит на экран правильно, но Ваше приложение так не делает, то Ваша
+проблема происходит, вероятно, из-за системных настроек.</p>
+
+<p>Чтобы узнать, каковы Ваши настройки, используйте
+<a href="sql.htm#show-variables"><code>SHOW VARIABLES</code></a>,
+вывод которого должен выглядеть примерно так:
+<pre>
+mysql&gt; SHOW VARIABLES LIKE 'char%';
++--------------------------+----------------------------------------+
+| Variable_name            | Value                                  |
++--------------------------+----------------------------------------+
+| character_set_client     | utf8                                   |
+| character_set_connection | utf8                                   |
+| character_set_database   | latin1                                 |
+| character_set_filesystem | binary                                 |
+| character_set_results    | utf8                                   |
+| character_set_server     | latin1                                 |
+| character_set_system     | utf8                                   |
+| character_sets_dir       | /usr/local/mysql/share/mysql/charsets/ |
++--------------------------+----------------------------------------+
+8 rows in set (0.03 sec)
+</pre>
+
+<p>Это типичные настройки набора символов для международно ориентированного
+клиента (заметьте использование <code>utf8</code> Unicode), соединенного с
+сервером (<code>latin1</code> набор символов по умолчанию для MySQL).</p>
+
+<p>Хотя Unicode (обычно <code>utf8</code> в Unix и <code>ucs2</code> в
+Windows) предпочтителен для латыни, это часто не то, что Ваши утилиты
+операционной системы поддерживают лучше всего. Много пользователей Windows
+находят что набор символов Microsoft, такой как
+<code>cp932</code> для Japanese Windows, является подходящим.</p>
+
+<p>Если Вы не можете управлять настройками сервера и Вы понятия не имеете,
+каков Ваш основной компьютер, то попытайтесь измениться на общий набор
+символов для страны, в которой Вы находитесь
+(<code>euckr</code> = Korea;
+<code>gb18030</code>, <code>gb2312</code> или <code>gbk</code> = КНР;
+<code>big5</code> = Taiwan; <code>sjis</code>,
+<code>ujis</code>, <code>cp932</code> или
+<code>eucjpms</code> = Japan; <code>ucs2</code> или <code>utf8</code> = где
+угодно). Обычно необходимо изменить только настройки клиента, результатов и
+соединения. Есть простой запрос, который изменяет все три сразу:
+<code>SET NAMES</code>. Например:
+<pre>
+SET NAMES 'big5';
+</pre>
+
+<p>Как только установка правильна, Вы можете сделать ее постоянной,
+редактируя <code>my.cnf</code> или <code>my.ini</code>.
+Например Вы могли бы добавить такие строки:
+<pre>
+[mysqld]
+character-set-server=big5
+
+[client]
+default-character-set=big5
+</pre>
+<p>Также возможно, что есть проблемы с установкой конфигурации API,
+используемой в Вашем приложении.</p></li></ul>
+
+</td></tr>
+<tr><td align="left" valign="top"><a name="faq-cjk-what-problems-big5"></a>
+<a name="idm139965270981984"></a><p><b>A.11.3.</b></p></td>
+<td align="left" valign="top"><p>О каких проблемах я должен знать, работая с
+китайским набором символов Big5?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+MySQL поддерживает набор символов Big5, который распространен в Гонконге и
+Тайване (республика Китая). MySQL набор символов <code>big5</code>
+в действительности кодовая страница Microsoft 950, которая очень
+подобна оригиналу <code>big5</code>.</p>
+
+<p>Запрос новых функций для того, чтобы добавить расширения
+<code>HKSCS</code> был зарегистрирован. Люди, которые нуждаются в этом
+расширении, могут найти патч для Bug #13577 интересным.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-cjk-what-japanese-chars-fail">
+</a><a name="idm139965270976976"></a><p><b>A.11.4.</b></p></td>
+<td align="left" valign="top"><p>Почему японские преобразования набора
+символов терпят неудачу?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+MySQL поддерживает наборы символов <code>sjis</code>,
+<code>ujis</code>, <code>cp932</code> и <code>eucjpms</code> так же,
+как Unicode. Общая потребность состоит в том, чтобы преобразовать между
+наборами символов. Например, может быть сервер Unix (как правило с
+<code>sjis</code> или <code>ujis</code>) и клиент Windows
+(как правило с <code>cp932</code>).</p>
+
+<p>В следующей таблице преобразования столбец <code>ucs2</code>
+представляет источник, а столбцы <code>sjis</code>,
+<code>cp932</code>, <code>ujis</code> и <code>eucjpms</code>
+представляют назначение то есть, последние 4 столбца обеспечивают
+шестнадцатеричный результат, когда мы используем
+<a href="funct.htm#function_convert"><code>CONVERT(ucs2)</code></a>
+или мы назначаем столбец <code>ucs2</code>, содержащий значение, к столбцу
+<code>sjis</code>, <code>cp932</code>, <code>ujis</code> или <code>eucjpms
+</code>.</p>
+
+<table border="1">
+<thead><tr><th scope="col">Имя символа</th><th scope="col" align="left">ucs2
+</th><th scope="col" align="left">sjis</th><th scope="col" align="left">cp932
+</th><th scope="col" align="left">ujis</th><th scope="col" align="left">
+eucjpms</th></tr></thead>
+<tbody><tr><td scope="row">BROKEN BAR</td><td align="left">00A6</td>
+<td align="left">3F</td><td align="left">3F</td><td align="left">8FA2C3</td>
+<td align="left">3F</td></tr>
+<tr><td scope="row">FULLWIDTH BROKEN BAR</td><td align="left">FFE4</td>
+<td align="left">3F</td><td align="left">FA55</td><td align="left">3F</td>
+<td align="left">8FA2</td></tr>
+<tr><td scope="row">YEN SIGN</td><td align="left">00A5</td><td align="left">
+3F</td><td align="left">3F</td><td align="left">20</td><td align="left">3F
+</td></tr>
+<tr><td scope="row">FULLWIDTH YEN SIGN</td><td align="left">FFE5</td>
+<td align="left">818F</td><td align="left">818F</td><td align="left">A1EF
+</td><td align="left">3F</td></tr>
+<tr><td scope="row">TILDE</td><td align="left">007E</td><td align="left">7E
+</td><td align="left">7E</td><td align="left">7E</td><td align="left">7E</td>
+</tr>
+<tr><td scope="row">OVERLINE</td><td align="left">203E</td><td align="left">
+3F</td><td align="left">3F</td><td align="left">20</td><td align="left">3F
+</td></tr>
+<tr><td scope="row">HORIZONTAL BAR</td><td align="left">2015</td>
+<td align="left">815C</td><td align="left">815C</td><td align="left">A1BD
+</td><td align="left">A1BD</td></tr>
+<tr><td scope="row">EM DASH</td><td align="left">2014</td><td align="left">3F
+</td><td align="left">3F</td><td align="left">3F</td><td align="left">3F</td>
+</tr>
+<tr><td scope="row">REVERSE SOLIDUS</td><td align="left">005C</td>
+<td align="left">815F</td><td align="left">5C</td><td align="left">5C</td>
+<td align="left">5C</td></tr>
+<tr><td scope="row">FULLWIDTH ""</td><td align="left">FF3C</td>
+<td align="left">3F</td><td align="left">815F</td><td align="left">3F</td>
+<td align="left">A1C0</td></tr>
+<tr><td scope="row">WAVE DASH</td><td align="left">301C</td><td align="left">
+8160</td><td align="left">3F</td><td align="left">A1C1</td><td align="left">
+3F</td></tr>
+<tr><td scope="row">FULLWIDTH TILDE</td><td align="left">FF5E</td>
+<td align="left">3F</td><td align="left">8160</td><td align="left">3F</td>
+<td align="left">A1C1</td></tr>
+<tr><td scope="row">DOUBLE VERTICAL LINE</td><td align="left">2016</td>
+<td align="left">8161</td><td align="left">3F</td><td align="left">A1C2</td>
+<td align="left">3F</td></tr>
+<tr><td scope="row">PARALLEL TO</td><td align="left">2225</td>
+<td align="left">3F</td><td align="left">8161</td><td align="left">3F</td>
+<td align="left">A1C2</td></tr>
+<tr><td scope="row">MINUS SIGN</td><td align="left">2212</td>
+<td align="left">817C</td><td align="left">3F</td><td align="left">A1DD</td>
+<td align="left">3F</td></tr>
+<tr><td scope="row">FULLWIDTH HYPHEN-MINUS</td><td align="left">FF0D</td>
+<td align="left">3F</td><td align="left">817C</td><td align="left">3F</td>
+<td align="left">A1DD</td></tr>
+<tr><td scope="row">CENT SIGN</td><td align="left">00A2</td><td align="left">
+8191</td><td align="left">3F</td><td align="left">A1F1</td><td align="left">
+3F</td></tr>
+<tr><td scope="row">FULLWIDTH CENT SIGN</td><td align="left">FFE0</td>
+<td align="left">3F</td><td align="left">8191</td><td align="left">3F</td>
+<td align="left">A1F1</td></tr>
+<tr><td scope="row">POUND SIGN</td><td align="left">00A3</td>
+<td align="left">8192</td><td align="left">3F</td><td align="left">A1F2</td>
+<td align="left">3F</td></tr>
+<tr><td scope="row">FULLWIDTH POUND SIGN</td><td align="left">FFE1</td>
+<td align="left">3F</td><td align="left">8192</td><td align="left">3F</td>
+<td align="left">A1F2</td></tr>
+<tr><td scope="row">NOT SIGN</td><td align="left">00AC</td><td align="left">
+81CA</td><td align="left">3F</td><td align="left">A2CC</td><td align="left">
+3F</td></tr>
+<tr><td scope="row">FULLWIDTH NOT SIGN</td><td align="left">FFE2</td>
+<td align="left">3F</td><td align="left">81CA</td><td align="left">3F</td>
+<td align="left">A2CC</td></tr></tbody></table>
+
+<p>Теперь рассмотрите следующую часть таблицы:</p>
+<table border="1">
+<thead><tr><th scope="col"> </th><th scope="col" align="right">ucs2</th>
+<th scope="col" align="right">sjis</th><th scope="col" align="right">cp932
+</th></tr></thead>
+<tbody><tr><td scope="row">NOT SIGN</td><td align="right">00AC</td>
+<td align="right">81CA</td><td align="right">3F</td></tr>
+<tr><td scope="row">FULLWIDTH NOT SIGN</td><td align="right">FFE2</td>
+<td align="right">3F</td><td align="right">81CA</td></tr></tbody></table>
+
+<p>Это означает, что MySQL преобразовывает <code>NOT SIGN</code>
+(Unicode <code>U+00AC</code>) к <code>sjis</code>
+кодовая точка <code>0x81CA</code> и к <code>cp932</code> кодовая точка
+<code>3F</code> (<code>3F</code> это вопросительный знак
+<span>?</span>), то, что всегда используется, когда преобразование не
+может быть выполнено.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-cjk-how-convert-81ca-cp932">
+</a><a name="idm139965270872928"></a><p><b>A.11.5.</b></p></td>
+<td align="left" valign="top"><p>Что я должен делать, если я хочу
+преобразовать SJIS <code>81CA</code> к <code>cp932</code>?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Есть серьезные жалобы об этом: много людей предпочли бы
+преобразование, так, чтобы <code>81CA (NOT SIGN)</code> в
+<code>sjis</code> становится <code>81CA (FULLWIDTH NOT SIGN)</code> в
+<code>cp932</code>. Мы рассматриваем изменение этого поведения.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-cjk-how-represent-yen"></a>
+<a name="idm139965270865552"></a><p><b>A.11.6.</b></p></td>
+<td align="left" valign="top"><p>Как MySQL, представляют Иену?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Проблема возникает потому что некоторые версии японских наборов символов
+(<code>sjis</code> и <code>euc</code>) представляют
+<code>5C</code> как <span>reverse solidus</span>
+(<code>\</code> также известен как backslash), а
+другие обрабатывают это как знак иены (<code>б╔</code>).</p>
+
+<p>MySQL следует только за одной версией JIS (Japanese Industrial
+Standards). В MySQL <span><em><code>5C</code> всегда reverse solidus
+(<code>\</code>)</em></span>.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-cjk-will-5c-yen-change"></a>
+<a name="idm139965270856320"></a><p><b>A.11.7.</b></p></td>
+<td align="left" valign="top"><p>
+MySQL планирует сделать отдельный набор символов где
+<code>5C</code> знак Yen как делает по крайней мере одна другая главная
+система управления базами данных?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Это - одно возможное решение проблемы знака Иены, однако, это не будет
+происходить в MySQL 5.1 или 6.0.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-cjk-what-problems-korean"></a>
+<a name="idm139965270853424"></a><p><b>A.11.8.</b></p></td>
+<td align="left" valign="top"><p>
+О каких проблемах я должен знать, работая с корейскими
+наборами символов в MySQL?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+В теории, в то время как было несколько версий набора символов
+<code>euckr</code> (<span>Extended Unix Code Korea</span>),
+только одна проблема была отмечена.</p>
+
+<p>Мы используем вариант <span>ASCII</span> EUC-KR, в котором кодовая точка
+<code>0x5c</code> REVERSE SOLIDUS, <code>\</code>, вместо
+<span>KS-Roman</span> EUC-KR, в котором кодовая точка
+<code>0x5c</code> <code>WON SIGN</code>(<code>Б┌╘</code>). Это означает, что
+Вы не можете конвертировать Unicode <code>U+20A9</code> в <code>euckr</code>:
+<pre>
+mysql&gt; SELECT CONVERT('Б┌╘' USING euckr) AS euckr,
+                 HEX(CONVERT('Б┌╘' USING euckr)) AS hexeuckr;
++-------+----------+
+| euckr | hexeuckr |
++-------+----------+
+| ?     | 3F       |
++-------+----------+
+</pre></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-cjk-why-incorrect-string-value"></a>
+<a name="idm139965270840368"></a><p><b>A.11.9.</b></p></td>
+<td align="left" valign="top"><p>Почему я получаю сообщения об ошибках
+<span>Incorrect string value</span>?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Для иллюстрации мы составим таблицу с одним столбцом Unicode
+(<code>ucs2</code>) и одним столбцом Chinese (<code>gb2312</code>).
+<pre>
+mysql&gt; CREATE TABLE ch (ucs2 CHAR(3) CHARACTER SET ucs2,
+                           gb2312 CHAR(3) CHARACTER SET gb2312);
+</pre>
+
+<p>Мы попытаемся поместить редкий символ <code>Ф╠▄</code> в обоих столбцах.
+<pre>
+mysql&gt; INSERT INTO ch VALUES ('AФ╠▄B','AФ╠▄B');
+Query OK, 1 row affected, 1 warning (0.00 sec)
+</pre>
+
+<p>Есть предупреждение. Используйте следующий запрос, чтобы
+видеть, каково это:
+<pre>
+mysql&gt; SHOW WARNINGS\G
+*************************** 1. row ***************************
+  Level: Warning
+   Code: 1366
+Message: Incorrect string value: '\xE6\xB1\x8CB' for column 'gb2312' at row 1
+1 row in set (0.00 sec)
+</pre>
+
+<p>Таким образом, это предупреждение только о столбце <code>gb2312</code>.
+<pre>
+mysql&gt; SELECT ucs2,HEX(ucs2),gb2312,HEX(gb2312) FROM ch;
++-------+--------------+--------+-------------+
+| ucs2  | HEX(ucs2)    | gb2312 | HEX(gb2312) |
++-------+--------------+--------+-------------+
+| AФ╠▄B | 00416C4C0042 | A?B    | 413F42      |
++-------+--------------+--------+-------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>Несколько вещей нуждаются в объяснении здесь:</p>
+<ol type="1"><li><p>Факт, что предупреждение происходит, а не ошибка,
+характерен для MySQL, который пытается сделать, что может, чтобы получить
+лучшую подгонку, вместо того, чтобы бросить.</li>
+
+<li>Символ <code>Ф╠▄</code> не находится в наборе символов
+<code>gb2312</code>, как описано ранее.</li>
+<li>Если Вы будете использовать старую версию MySQL, то Вы будете, вероятно,
+видеть иное сообщение.</li>
+<li>С <a href="server.htm#sysvar_sql_mode"><code>sql_mode=TRADITIONAL</code>
+</a> будет сообщение об ошибке, а не предупреждение.</p></li></ol>
+
+</td></tr>
+<tr><td align="left" valign="top"><a name="faq-cjk-why-gui-not-display-cjk">
+</a><a name="idm139965270818896"></a><p><b>A.11.10.</b></p></td>
+<td align="left" valign="top"><p>Почему мой GUI или браузер не выводят на
+экран символы CJK правильно в моем приложении, используя Access, PHP
+или другой API?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Получите прямую связь с сервером, используя клиент
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+(Windows: <a href="programs.htm#mysql"><span><strong>mysql.exe</strong>
+</span></a>) и попытайтесь выполнить тот же самый запрос там. Если
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+отвечает правильно, то проблема может состоять в том, что Ваш интерфейс
+приложения требует инициализации. Используйте
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>, чтобы
+сказать, какой набор символов нужен, через использование <code>SHOW VARIABLES
+LIKE 'char%';</code>. Если Вы используете Access, то Вы наиболее вероятно
+соединяетесь с Connector/ODBC. В этом случае Вы должны проверить
+<a href="../../../dev.mysql.com/doc/connector-odbc/en/connector-odbc-configuration.html"
+target="_top">Configuring Connector/ODBC</a>. Если, например, Вы используете
+<code>big5</code>, надо скомандовать <code>SET NAMES 'big5'</code>.
+Отметьте, что нет <code>;</code> в этом случае. Если Вы используете ASP,
+Вы, возможно, должны были бы добавить <code>SET NAMES</code> в код.
+Вот пример, который работал в прошлом:
+<pre>
+&lt;%
+Session.CodePage=0
+Dim strConnection
+Dim Conn
+str Connection="driver={MySQL ODBC 3.51 Driver};server=<em><code>server</code></em>;uid=<em><code>username</code></em>;" \
+    &amp; "pwd=<em><code>password</code></em>;database=<em><code>database</code></em>;stmt=SET NAMES 'big5';"
+Set Conn = Server.CreateObject("ADODB.Connection")
+Conn.Open strConnection
+%&gt;
+</pre>
+
+<p>Почти таким же способом, если Вы используете какой-либо набор символов,
+кроме <code>latin1</code> с Connector/Net, Вы должны определить набор
+символов в строке подключения. См.
+<a href="../../../dev.mysql.com/doc/connector-net/en/connector-net-programming-connecting.html"
+target="_top">Connecting to MySQL Using Connector/Net</a>.</p>
+
+<p>Если Вы используете PHP, попробуйте это:
+<pre>
+&lt;?php
+  $link = new mysqli($host, $usr, $pwd, $db);
+  if (mysqli_connect_errno()) {
+     printf("Connect failed: %s\n", mysqli_connect_error());
+     exit();
+  }
+  $link-&gt;query("SET NAMES 'utf8'");
+?&gt;
+</pre>
+
+<p>В этом случае мы использовали <code>SET NAMES</code>, чтобы изменить
+<a href="server.htm#sysvar_character_set_client"><code>character_set_client
+</code></a>, <a href="server.htm#sysvar_character_set_connection"><code>
+character_set_connection</code></a> и
+<a href="server.htm#sysvar_character_set_results"><code>character_set_results
+</code></a>.</p>
+
+<p>Другая проблема, с которой часто сталкиваются в приложениях PHP, имеет
+отношение к предположениям, сделанным браузером. Иногда добавляя или изменяя
+тэг <code>&lt;meta&gt;</code> можно исправить проблему: например, чтобы
+обеспечить, чтобы пользовательский агент интерпретировал контент страницы как
+<code>UTF-8</code>, Вы должны включить <code>&lt;meta
+http-equiv="Content-Type" content="text/html; charset=utf-8"&gt;</code> в
+<code>&lt;head&gt;</code> HTML-страницы.</p>
+
+<p>Если Вы используете Connector/J, см.
+<a href="../../../dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-charsets.html"
+target="_top">Using Character Sets and Unicode</a>.
+</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-cjk-how-use-4-0-charset"></a>
+<a name="idm139965270790512"></a><p><b>A.11.11.</b></p></td>
+<td align="left" valign="top"><p>
+Я обновил до MySQL 8.0. Как я могу вернуться к поведению как в MySQL 4.0
+относительно наборов символов?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+В MySQL Version 4.0 был единственный глобальный набор символов для сервера и
+клиента, решения, относительно того, какой символ использовать, было сделано
+администратором сервера. Это изменено с MySQL Version 4.1.
+Что происходит теперь, описано в <a href="global.htm#charset-connection">
+разделе 11.1.4</a>:</p>
+
+<blockquote><p>Когда клиент соединяется, это посылает в сервер название
+набора символов, который хочет использовать. Сервер использует имя для
+установки системных переменных
+<a href="server.htm#sysvar_character_set_client"><code>
+character_set_client</code></a>,
+<a href="server.htm#sysvar_character_set_results"><code>character_set_results
+</code></a> и <a href="server.htm#sysvar_character_set_connection"><code>
+character_set_connection</code></a>. В действительности сервер выполняет
+<code>SET NAMES</code>, используя имя набора символов.</p></blockquote>
+
+<p>Эффект этого состоит в том, что Вы не можете управлять набором символов
+клиента, запуская <a href="programs.htm#mysqld"><span><strong>mysqld</strong>
+</span></a> с опцией <a href="server.htm#option_mysqld_character-set-server">
+<code>--character-set-server=utf8</code></a>. Однако, некоторые из наших
+азиатских клиентов сказали, что предпочитают поведение MySQL 4.0. Чтобы
+позволить сохранить это поведение, мы добавили выключатель
+<a href="server.htm#option_mysqld_character-set-client-handshake"><code>
+--skip-character-set-client-handshake</code></a>. Если Вы запускаете
+<a href="programs.htm#mysqld"><span><strong>mysqld</strong></span></a> с
+<a href="server.htm#option_mysqld_character-set-client-handshake"><code>
+--skip-character-set-client-handshake</code></a>, когда клиент соединяется,
+это посылает в сервер название набора символов, который хочет применить,
+однако, <span><em>сервер игнорирует этот запрос от клиента</em></span>.</p>
+
+<p>Посредством примера, предположите, что Ваш любимый набор символов сервера
+<code>latin1</code> (вряд ли в CJK, но это значение по умолчанию).
+Предположите далее, что клиент использует <code>utf8</code> потому что это
+поддерживает операционная система клиента. Теперь запустите сервер с
+<code>latin1</code> как его набор символов по умолчанию:
+<pre>
+mysqld --character-set-server=latin1
+</pre>
+
+<p>И затем запустите клиента с набором символов
+по умолчанию <code>utf8</code>:
+<pre>
+mysql --default-character-set=utf8
+</pre>
+
+<p>Текущие настройки могут быть просмотрены через
+<a href="sql.htm#show-variables"><code>SHOW VARIABLES</code></a>:
+<pre>
+mysql&gt; SHOW VARIABLES LIKE 'char%';
++--------------------------+----------------------------------------+
+| Variable_name            | Value                                  |
++--------------------------+----------------------------------------+
+| character_set_client     | utf8                                   |
+| character_set_connection | utf8                                   |
+| character_set_database   | latin1                                 |
+| character_set_filesystem | binary                                 |
+| character_set_results    | utf8                                   |
+| character_set_server     | latin1                                 |
+| character_set_system     | utf8                                   |
+| character_sets_dir       | /usr/local/mysql/share/mysql/charsets/ |
++--------------------------+----------------------------------------+
+8 rows in set (0.01 sec)
+</pre>
+
+<p>Теперь остановите клиента и сервер, используя
+<a href="programs.htm#mysqladmin"><span><strong>mysqladmin</strong></span>
+</a>. Теперь запустите сервер снова, но на сей раз скажите
+ему пропускать квитирование:
+<pre>
+mysqld --character-set-server=utf8 --skip-character-set-client-handshake
+</pre>
+
+<p>Запустите клиента еще раз с <code>utf8</code> как набор символов
+по умолчанию, затем выведите на экран текущие настройки:
+<pre>
+mysql&gt; SHOW VARIABLES LIKE 'char%';
++--------------------------+----------------------------------------+
+| Variable_name            | Value                                  |
++--------------------------+----------------------------------------+
+| character_set_client     | latin1                                 |
+| character_set_connection | latin1                                 |
+| character_set_database   | latin1                                 |
+| character_set_filesystem | binary                                 |
+| character_set_results    | latin1                                 |
+| character_set_server     | latin1                                 |
+| character_set_system     | utf8                                   |
+| character_sets_dir       | /usr/local/mysql/share/mysql/charsets/ |
++--------------------------+----------------------------------------+
+8 rows in set (0.01 sec)
+</pre>
+
+<p>Как Вы можете видеть, сравнивая отличающиеся результаты
+<a href="sql.htm#show-variables"><code>SHOW VARIABLES</code></a>,
+сервер игнорирует начальные установки клиента, если используется
+<a href="server.htm#option_mysqld_character-set-client-handshake"><code>
+--skip-character-set-client-handshake</code></a>.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-cjk-why-cjk-fail-searches">
+</a><a name="idm139965270753792"></a><p><b>A.11.12.</b></p></td>
+<td align="left" valign="top"><p>Почему некоторые поиски
+<a href="funct.htm#operator_like"><code>LIKE</code></a> и
+<code>FULLTEXT</code> с символами CJK терпят неудачу?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Есть очень простая проблема с
+<a href="funct.htm#operator_like"><code>LIKE</code></a> на столбцах
+<a href="types.htm#binary-varbinary"><code>BINARY</code></a> и
+<a href="types.htm#blob"><code>BLOB</code></a>: мы должны знать конец
+символа. С многобайтовыми наборами символов у различных символов могут быть
+различные длины октета. Например, в <code>utf8</code> <code>A</code> требует
+одного байта, но <code>Ц┐ </code> требует трех байтов, как показано здесь:
+<pre>
++-------------------------+---------------------------+
+| OCTET_LENGTH(_utf8 'A') | OCTET_LENGTH(_utf8 'Ц┐ ') |
++-------------------------+---------------------------+
+|   1                     | 3                         |
++-------------------------+---------------------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>Если мы не знаем, где первый символ заканчивается, то мы не знаем, где
+второй символ начинается, когда даже очень простые поиски, например,
+<a href="funct.htm#operator_like"><code>LIKE '_A%'</code></a> не работают.
+Решение состоит в том, чтобы использовать регулярный набор символов CJK
+или преобразовать в набор символов CJK перед сравнением.</p>
+
+<p>Это одна из причин, почему MySQL не может позволить кодировки
+несуществующих символов. Если нет строгого ограничения об отклонении плохого
+ввода, то нет никакого способа знать, где символы заканчиваются.</p>
+
+<p>Для поисков <code>FULLTEXT</code> мы должны знать, где слова начинаются и
+заканчиваются. С западными языками это редко проблема, потому что большинство
+(если не все) из них используют пробел. Однако, это обычно не так с азиатским
+письмом. Мы могли использовать произвольные лежащие на полпути меры,
+например, считать, что все символы Han представляют слова, или (для японского
+языка) в зависимости от изменений переключаться между Katakana и Hiragana
+из-за грамматических окончаний. Однако, единственное верное решение требует
+всестороннего списка слов, что означает, что мы должны были бы включать
+словарь в сервер для каждого поддержанного азиатского языка.
+Это просто не выполнимо.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-cjk-how-know-avail-characters"></a><a name="idm139965270737840">
+</a><p><b>A.11.13.</b></p></td><td align="left" valign="top"><p>Как узнать,
+доступен ли символ <em><code>X</code></em> во всех наборах символов?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Большинство упрощенного китайского и основных символов японского алфавита
+появляется во всех наборах символов CJK. Эта хранимая процедура принимает
+символ <code>UCS-2</code> Unicode, преобразует во все другие наборы символов
+и выводит на экран результаты в шестнадцатеричном виде.
+<pre>
+DELIMITER //
+CREATE PROCEDURE p_convert(ucs2_char CHAR(1) CHARACTER SET ucs2)
+BEGIN
+CREATE TABLE tj (ucs2 CHAR(1) character set ucs2,
+                 utf8 CHAR(1) character set utf8,
+                 big5 CHAR(1) character set big5,
+                 cp932 CHAR(1) character set cp932,
+                 eucjpms CHAR(1) character set eucjpms,
+                 euckr CHAR(1) character set euckr,
+                 gb2312 CHAR(1) character set gb2312,
+                 gbk CHAR(1) character set gbk,
+                 sjis CHAR(1) character set sjis,
+                 ujis CHAR(1) character set ujis);
+INSERT INTO tj (ucs2) VALUES (ucs2_char);
+UPDATE tj SET utf8=ucs2, big5=ucs2, cp932=ucs2, eucjpms=ucs2,
+       euckr=ucs2, gb2312=ucs2, gbk=ucs2, sjis=ucs2, ujis=ucs2;
+
+/* If there is a conversion problem, UPDATE will produce a warning. */
+SELECT hex(ucs2) AS ucs2, hex(utf8) AS utf8, hex(big5) AS big5,
+       hex(cp932) AS cp932, hex(eucjpms) AS eucjpms, hex(euckr) AS euckr,
+       hex(gb2312) AS gb2312, hex(gbk) AS gbk, hex(sjis) AS sjis,
+       hex(ujis) AS ujis FROM tj;
+DROP TABLE tj;
+END//
+</pre>
+
+<p>Ввод может быть любым символом <code>ucs2</code> или значением
+кодовой точки (шестнадцатеричное представление) этого символа. Например,
+из списка Unicode <code>ucs2</code> и имен
+(<a href="../../../www.unicode.org/Public/UNIDATA/UnicodeData.txt"
+target="_top">http://www.unicode.org/Public/UNIDATA/UnicodeData.txt</a>)
+мы знаем, что символ Katakana <span><em>Pe</em></span> появляется во всех
+наборах символов CJK, и что его значение кодовой точки <code>0x30da</code>.
+Если мы используем это значение в качестве параметра
+<code>p_convert()</code>, результат показан здесь:
+<pre>
+mysql&gt; CALL p_convert(0x30da)//
++------+--------+------+-------+---------+-------+--------+------+------+------+
+| ucs2 | utf8   | big5 | cp932 | eucjpms | euckr | gb2312 | gbk  | sjis | ujis |
++------+--------+------+-------+---------+-------+--------+------+------+------+
+| 30DA | E3839A | C772 | 8379  | A5DA    | ABDA  | A5DA   | A5DA | 8379 | A5DA |
++------+--------+------+-------+---------+-------+--------+------+------+------+
+1 row in set (0.04 sec)
+</pre>
+
+<p>Так как ни одно из значений столбцов не <code>3F</code>
+(<code>?</code>), мы знаем, что каждое преобразование сработало.
+</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-cjk-how-cjk-sort-unicode-1">
+</a><a name="idm139965270724064"></a><p><b>A.11.14.</b></p></td>
+<td align="left" valign="top"><p>
+Почему CJK сортирует в виде строки неправильно в Unicode? (I)
+</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Иногда люди замечают что результат поиска с
+<code>utf8_unicode_ci</code> или <code>ucs2_unicode_ci</code> или сортировки
+<code>ORDER BY</code> не то, что они думают. Хотя мы никогда не
+исключаем возможность, что есть ошибка, мы нашли в прошлом, что много людей
+не читают правильно стандартную таблицу весов для Unicode Collation
+Algorithm. MySQL использует таблицу, найденную в
+<a href="../../../www.unicode.org/Public/UCA/4.0.0/allkeys-4.0.0.txt"
+target="_top">http://www.unicode.org/Public/UCA/4.0.0/allkeys-4.0.0.txt</a>.
+Это не первая таблица, которую Вы найдете, перемещаясь от основной страницы
+<code>unicode.org</code>, потому что MySQL использует более старые таблицы
+4.0.0 <span>allkeys</span>, а не 4.1.0. Сопоставления <code>'520'</code> в
+MySQL 5.6 и позже используют таблицы 5.2 <span>allkeys</span>. Это потому,
+что мы очень осторожны в изменении упорядочивания, которые могут вызвать
+проблемы, как в Bug #16526:
+<pre>
+mysql&lt; CREATE TABLE tj (s1 CHAR(1) CHARACTER SET utf8
+                 COLLATE utf8_unicode_ci);
+Query OK, 0 rows affected (0.05 sec)
+
+mysql&gt; INSERT INTO tj VALUES ('Ц│▄'),('Ц│▀');
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql&gt; SELECT * FROM tj WHERE s1 = 'Ц│▀';
++-----+
+| s1  |
++-----+
+| Ц│▄ |
+| Ц│▀ |
++-----+
+2 rows in set (0.00 sec)
+</pre>
+
+<p>Символ в первой строке результата не тот, который мы искали.
+Почему MySQL получил это? Сначала мы ищем значение кодовой точки Unicode,
+которое возможно найти, читая шестнадцатеричное число для
+<code>ucs2</code>-версии символов:
+<pre>
+mysql&gt; SELECT s1, HEX(CONVERT(s1 USING ucs2)) FROM tj;
++------+-----------------------------+
+| s1   | HEX(CONVERT(s1 USING ucs2)) |
++------+-----------------------------+
+| Ц│▄  | 304C                        |
+| Ц│▀  | 304B                        |
++------+-----------------------------+
+2 rows in set (0.03 sec)
+</pre>
+
+<p>Теперь мы ищем <code>304B</code> и <code>304C</code> в таблице
+<code>4.0.0 allkeys</code> и находим эти строки:
+<pre>
+304B ; [.1E57.0020.000E.304B] # HIRAGANA LETTER KA
+304C ; [.1E57.0020.000E.304B][.0000.0140.0002.3099] # HIRAGANA LETTER GA; QQCM
+</pre>
+
+<p>Официальные имена Unicode (после <span>#</span>) указывают на японскую
+слоговую азбуку (Hiragana), неофициальная классификация
+(буквы, цифры и знаки препинания) и западный идентификатор (<code>KA</code>
+или <code>GA</code>. Что еще более важно, <span>первичный вес</span> (первое
+шестнадцатеричное число в квадратных скобках) <code>1E57</code> в обоих
+строках. Для сравнений в поиске и в сортировке, MySQL обращает внимание
+только на основной (первичный) вес, игнорируя все другие числа. Это означает,
+что мы сортируем <code>Ц│▄</code> и <code>Ц│▀</code> правильно, согласно
+спецификации Unicode. Если бы мы хотели отличить их, то мы должны были бы
+использовать сопоставление не-UCA (Unicode Collation Algorithm)
+(<code>utf8_bin</code> или <code>utf8_general_ci</code>) или сравнить
+значения <a href="funct.htm#function_hex"><code>HEX()</code></a> или
+использовать <code>ORDER BY CONVERT(s1 USING sjis)</code>.
+Быть правильным <span>согласно Unicode</span> недостаточно, конечно:
+человек, который представил ошибку, был одинаково прав. Мы планируем добавить
+другое сопоставление для японского языка согласно стандарту JIS X 4061.
+</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-cjk-how-cjk-sort-unicode-2">
+</a><p><b>A.11.15.</b></p></td><td align="left" valign="top"><p>
+Почему CJK сортирует в виде строки неправильно в Unicode? (II)</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Если Вы используете Unicode (<code>ucs2</code> или <code>utf8</code>), и
+знаете, что порядок сортировки Unicode (см. <a href="faqs.html#faqs-cjk">
+раздел A.11</a>), но MySQL все еще, кажется, сортирует Вашу таблицу
+неправильно, тогда Вы должны сначала проверить табличный набор символов:
+<pre>
+mysql&gt; SHOW CREATE TABLE t\G
+******************** 1. row ******************
+Table: t
+Create Table: CREATE TABLE `t` (
+`s1` char(1) CHARACTER SET ucs2 DEFAULT NULL)
+ENGINE=MyISAM DEFAULT CHARSET=latin1
+</pre>
+
+<p>Так как набор символов, кажется, правилен, давайте смотреть, что
+<a href="inform.htm#columns-table"><code>INFORMATION_SCHEMA.COLUMNS</code>
+</a> сообщает об этом столбце:
+<pre>
+mysql&gt; SELECT COLUMN_NAME, CHARACTER_SET_NAME, COLLATION_NAME
+                 FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 's1' AND
+                 TABLE_NAME = 't';
++-------------+--------------------+-----------------+
+| COLUMN_NAME | CHARACTER_SET_NAME | COLLATION_NAME  |
++-------------+--------------------+-----------------+
+| s1          | ucs2               | ucs2_general_ci |
++-------------+--------------------+-----------------+
+</pre>
+
+<p>Вы можете видеть, что сопоставление <code>ucs2_general_ci</code>
+использовано вместо <code>ucs2_unicode_ci</code>. Причина почему это так,
+может быть найдена, используя <code>SHOW CHARSET</code>:
+<pre>
+mysql&gt; SHOW CHARSET LIKE 'ucs2%';
++---------+---------------+-------------------+--------+
+| Charset | Description   | Default collation | Maxlen |
++---------+---------------+-------------------+--------+
+| ucs2    | UCS-2 Unicode | ucs2_general_ci   | 2      |
++---------+---------------+-------------------+--------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>Для <code>ucs2</code> и <code>utf8</code> сопоставление по умолчанию
+<span>general</span>. Чтобы определить сопоставление Unicode, надо
+использовать <code>COLLATE ucs2_unicode_ci</code>.</p></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-cjk-why-supplement-char-rejected"></a>
+<a name="idm139965270674720"></a><p><b>A.11.16.</b></p></td>
+<td align="left" valign="top"><p>Почему мои дополнительные
+символы отклонены MySQL?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+До MySQL 5.5.3 MySQL не поддерживает дополнительный набор символов,
+то есть, символы, которые нуждаются больше, чем в 3 байтах для
+<code>UTF-8</code>. Мы поддерживаем только то, что в Unicode называется
+<span><em>Basic Multilingual Plane / Plane 0</em></span>. Только несколько
+очень редких символов Han дополнительны, поддержка их необычна. Это привело к
+отчетам, таким как Bug #12600, который мы отклонили как
+<span>это не баг, это фича</span>. С <code>utf8</code> мы должны усечь строку
+ввода, когда сталкиваемся с байтами, которые не понимаем. Иначе мы не знали
+бы, какой длины плохой мультибайтный символ.</p>
+
+<p>Одно возможное обходное решение должно использовать <code>ucs2</code>
+вместо <code>utf8</code>, когда <span>плохие</span> символы изменены на
+вопросительные знаки, однако, никакого усечения нет. Вы можете также изменить
+тип данных на <a href="types.htm#blob"><code>BLOB</code></a> или
+<a href="types.htm#binary-varbinary"><code>BINARY</code></a>,
+которые не выполняют проверки законности.</p>
+
+<p>С MySQL 5.5.3 поддержка Unicode расширена, чтобы включать дополнительные
+символы посредством дополнительных наборов символов Unicode:
+<code>utf16</code>, <code>utf32</code> и четырехбайтного <code>utf8mb4</code>.
+Эти наборы символов поддерживают дополнительные символы Unicode вне
+Basic Multilingual Plane (BMP).</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-cjk-why-cjk-not-cjkv"></a>
+<a name="idm139965270661888"></a><p><b>A.11.17.</b></p></td>
+<td align="left" valign="top"><p>
+Разве это не должен быть <span>CJKV</span>?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Нет. Термин <span>CJKV</span> (<span>Chinese Japanese Korean Vietnamese
+</span>) относится к вьетнамским наборам символов, которые содержат
+Han (первоначально китайские) символы. У MySQL нет никакого плана поддержать
+старый вьетнамский сценарий, используя символы Han. MySQL действительно,
+конечно, поддерживает современный вьетнамский сценарий с западными символами.
+</p>
+<p>С MySQL 5.6 есть вьетнамские сопоставления для наборов символов Unicode,
+как описано в <a href="global.htm#charset-unicode-sets">разделе 11.1.10.1</a>.
+</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-cjk-how-cjk-db-table-names">
+</a><a name="idm139965270656784"></a><p><b>A.11.18.</b></p></td>
+<td align="left" valign="top"><p>MySQL позволяет символам CJK использоваться
+в именах базы данных и таблиц?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Эта проблема исправлена в MySQL 5.1, автоматически переписывая названия
+соответствующих каталогов и файлов.</p>
+
+<p>Например, если Вы создаете базу данных <code>Ф╔╝</code> на сервере,
+операционная система которого не поддерживает CJK в именах каталогов, MySQL
+создает названный каталог <code>@0w@00a5@00ae</code>,
+который является только необычным способом закодировать <code>E6A5AE</code>
+то есть, шестнадцатеричное представление Unicode для символа
+<code>Ф╔╝</code>. Однако, если Вы выполняете запрос
+<a href="sql.htm#show-databases"><code>SHOW DATABASES</code></a>,
+Вы можете видеть, что база данных перечислена как <code>Ф╔╝</code>.
+</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-cjk-where-doc-translations">
+</a><a name="idm139965270649008"></a><p><b>A.11.19.</b></p></td>
+<td align="left" valign="top"><p>Где я могу найти переводы руководства MySQL
+на китайский, японский и корейский языки?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Японский перевод руководства MySQL 5.6 может быть загружен с
+downloaded from <a href="../../../dev.mysql.com/doc/default.htm" target="_top">
+http://dev.mysql.com/doc/</a>.</p></td></tr>
+<tr><td align="left" valign="top"><a name="faq-cjk-help-with-cjk"></a>
+<a name="idm139965270646320"></a><p><b>A.11.20.</b></p></td>
+<td align="left" valign="top"><p>Где я могу получить справку по CJK и
+связанным проблемам в MySQL?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Следующие ресурсы доступны:</p>
+
+<ul><li><p>Список групп пользователей MySQL может быть найден на
+<a href="../../../https@wikis.oracle.com/display/mysql/List+of+MySQL+User+Groups"
+target="_top">
+https://wikis.oracle.com/display/mysql/List+of+MySQL+User+Groups</a>.</li>
+
+<li>Запросы новых функций представления, касающиеся набора символов,
+выходят в <a href="../../../tinyurl.com/y6xcuf" target="_top">
+http://tinyurl.com/y6xcuf</a>.</li>
+
+<li>Посетите MySQL
+<a href="../../../forums.mysql.com/list.php@103" target="_top">
+Character Sets, Collation, Unicode Forum</a>.
+<a href="../../../forums.mysql.com/default.htm" target="_top">
+http://forums.mysql.com/</a> также обеспечивает форумы иностранного языка.
+</p></li></ul></td></tr></tbody></table>
+
+<h2><a name="faqs-connectors-apis"></a>A.12. MySQL 8.0 FAQ:
+Connector &amp; API</h2>
+<p>Для общих вопросов, касающихся MySQL Connector и других API, см.
+следующие области руководства:</p>
+
+<ul><li><p><a href="connect.htm#c-api-problems">Раздел 25.8.15</a>.</li>
+<li><a href="../../../dev.mysql.com/doc/apis-php/en/apis-php-problems.html"
+target="_top">Common Problems with MySQL and PHP</a>.</li>
+<li><a href="../../../dev.mysql.com/doc/connector-odbc/en/connector-odbc-usagenotes.html"
+target="_top">Connector/ODBC Notes and Tips</a>.</li>
+
+<li><a href="../../../dev.mysql.com/doc/connector-net/en/connector-net-programming.html"
+target="_top">Connector/Net Programming</a>.</li>
+<li><a href="../../../dev.mysql.com/doc/connector-j/5.1/en/default.htm" target="_top">
+MySQL Connector/J 5.1 Developer Guide</a>.</p></li></ul>
+
+<h2><a name="faqs-replication"></a>A.13. MySQL 8.0 FAQ: Репликация</h2>
+<p>В следующем разделе мы обеспечиваем ответы на вопросы, которые наиболее
+часто встречаются в темах о репликации в MySQL.</p>
+
+<table border="0">
+<tbody><tr><td align="left" valign="top">
+<a name="faq-replication-replication-have-connected-slave"></a>
+<a name="idm139965270623760"></a><p><b>A.13.1.</b></p></td>
+<td align="left" valign="top"><p>
+Ведомое устройство должно быть соединено с ведущим устройством все время?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Нет. Ведомое устройство может отключиться в течение многих часов или даже
+дней, и затем повторно соединиться и нагнать обновления. Например, Вы можете
+настроить основные/ведомые отношения по коммутируемой линии, где связь
+бывает только спорадически и в течение коротких промежутков времени. Значение
+этого то, что в любой момент времени ведомое устройство не будет в
+синхронизации с ведущим устройством, если Вы не предпримете
+некоторые специальные меры.</p>
+
+<p>Чтобы гарантировать, что синхронизация может быть выполнена для ведомого
+устройства, которое было разъединено, Вы не должны удалять двоичные файлы
+системного журнала ведущего устройства, которые содержат информацию, которая
+еще не копировалась к ведомым устройствам. Асинхронный ответ может работать,
+только если ведомое устройство в состоянии продолжить читать двоичный журнал
+с того места, где чтение было прервано.</p></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-replication-replication-have-enable-networking"></a>
+<a name="idm139965270620432"></a><p><b>A.13.2.</b></p></td>
+<td align="left" valign="top"><p>
+Я должен включить сеть на моем ведущем и ведомом устройствах,
+чтобы включить репликацию?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да, сеть должна быть включена на ведущем и ведомом устройствах. Если сеть не
+включена, ведомое устройство не может соединиться с ведущим и передать
+двоичный журнал. Проверьте, что опция
+<a href="server.htm#option_mysqld_skip-networking"><code>skip-networking
+</code></a> НЕ включена в конфигурационном файле ни для одного сервера.
+</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-replication-replication-how-compare-slave-date"></a>
+<a name="idm139965270617072"></a><p><b>A.13.3.</b></p></td>
+<td align="left" valign="top"><p>
+Как я узнаю дату последнего запроса, копируемого ведомым устройством?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Проверьте столбец <code>Seconds_Behind_Master</code> в выводе
+<a href="sql.htm#show-slave-status"><code>SHOW SLAVE STATUS</code></a>.</p>
+
+<p>Когда ведомый поток SQL запускает событие, считанное с ведущего
+устройства, он изменяет свое собственное время к timestamp события.
+Это причина того, почему <a href="types.htm#datetime"><code>TIMESTAMP</code>
+</a> хорошо копируется. Столбец <code>Time</code> в выводе
+<a href="sql.htm#show-processlist"><code>SHOW PROCESSLIST</code></a>
+указывает число секунд для ведомого потока SQL и является числом секунд между
+timestamp последнего копируемого события и реальным временем ведомой машины.
+Вы можете использовать это, чтобы определить дату последнего копируемого
+события. Отметьте, что, если Ваше ведомое устройство отсоединялось от
+ведущего в течение одного часа, а затем повторно соединяется, Вы можете
+немедленно видеть большое значение <code>Time</code>, например, 3600 в
+<a href="sql.htm#show-processlist"><code>SHOW PROCESSLIST</code></a>. Это
+потому, что ведомое устройство выполняет запросы, которые помечены
+одним часом. См. <a href="replica.htm#replication-implementation-details">
+раздел 19.2.2</a>.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-replication-replication-how-block-updates"></a>
+<a name="idm139965270605248"></a><p><b>A.13.4.</b></p></td>
+<td align="left" valign="top"><p>Как я вынуждаю ведущее устройство
+заблокировать обновления, пока ведомое его не нагонит?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Используйте следующую процедуру:</p>
+
+<ol type="1"><li><p>На ведущем выполните эти запросы:
+<pre>
+mysql&gt; FLUSH TABLES WITH READ LOCK;
+mysql&gt; SHOW MASTER STATUS;
+</pre>
+
+<p>Сделайте запись координат репликации (текущее имя файла двоичного
+системного журнала и позиция в нем) из вывода
+<a href="sql.htm#show"><code>SHOW</code></a>.</li>
+
+<li>На ведомом устройстве, сделайте следующий запрос, где параметры
+<a href="funct.htm#function_master-pos-wait"><code>MASTER_POS_WAIT()</code>
+</a> значения координаты репликации, полученные на предыдущем шаге:
+<pre>
+mysql&gt; SELECT MASTER_POS_WAIT('<em><code>log_name</code></em>', <em><code>log_pos</code></em>);
+</pre>
+
+<p>Запрос <a href="sql.htm#select"><code>SELECT</code></a> блокирует запросы
+пока ведомый сервер не достигнет нужных координат репликации. В этой точке
+ведомое устройство находится в синхронизации с ведущим устройством.</li>
+
+<li>На ведущем устройстве сделайте следующий запрос, чтобы
+начать обрабатывать обновления снова:
+<pre>
+mysql&gt; UNLOCK TABLES;
+</pre></li></ol></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-replication-replication-how-two-way-problems"></a>
+<a name="idm139965270588832"></a><p><b>A.13.5.</b></p></td>
+<td align="left" valign="top"><p>О каких проблемах я должен знать,
+настраивая двухстороннюю репликацию?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Репликация MySQL в настоящее время не поддерживает протокола блокировки между
+ведущим и ведомым устройством, чтобы гарантировать атомичность
+распределенного обновления. Другими словами, для клиента A возможно сделать
+обновление cо-ведущего устройства 1, а тем временем, прежде, чем это
+размножится на cо-ведущее устройство 2, клиент B мог сделать обновление
+cо-ведущего устройства 2, которое делает обновление клиента A, работающего
+по-другому, чем это сделано на cо-ведущем устройстве 1. Таким образом, когда
+обновление клиента А сделано на cо-ведущем устройстве 2, это производит
+таблицы, которые отличаются от того, что Вы имеете на cо-ведущем устройстве
+1, даже после того, как все обновления от cо-ведущего устройства 2 также
+размножились. Это означает, что Вы не должны объединить два сервера в цепочку
+вместе в двухсторонних отношениях репликации, если Вы не уверены, что Ваши
+обновления могут безопасно произойти в любом порядке, или если Вы заботитесь
+о неправильных упорядоченных обновлениях так или иначе в коде клиента.</p>
+
+<p>Вы должны также понять, что двухсторонняя репликация
+фактически не очень улучшает работу (если вообще). Каждый сервер должен
+сделать то же самое число обновлений, как если бы у Вас был единственный
+сервер Единственная разница то, что есть немного меньше блокировок, потому
+что обновления, происходящие на другом сервере, преобразованы в
+последовательную форму в одном ведомом потоке. Даже эта выгода может быть
+нивелирована сетевыми задержками.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-replication-replication-how-improves-performance"></a>
+<a name="idm139965270584864"></a><p><b>A.13.6.</b></p></td>
+<td align="left" valign="top"><p>Как я могу использовать репликацию, чтобы
+улучшить производительность моей системы?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Настройте один сервер как ведущее устройство и пишите все на него. Тогда
+сконфигурируйте так много ведомых устройств, как Вам позволяет бюджет,
+и распределите чтения между ведущим и ведомыми устройствами. Вы можете также
+запустить ведомые устройства с опциями
+<a href="innodb.htm#option_mysqld_innodb"><code>--skip-innodb</code></a>,
+<a href="server.htm#option_mysqld_low-priority-updates"><code>
+--low-priority-updates</code></a> и
+<a href="server.htm#option_mysqld_delay-key-write"><code>
+--delay-key-write=ALL</code></a>, чтобы получить прирост скорости на ведомом
+конце. В этом случае ведомые используют нетранзакционные таблицы
+<code>MyISAM</code> вместо таблиц <code>InnoDB</code>, чтобы получить больше
+скорости, устраняя накладные расходы транзакций.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-replication-replication-how-prepare-for-replication"></a>
+<a name="idm139965270577968"></a><p><b>A.13.7.</b></p></td>
+<td align="left" valign="top"><p>Что я должен сделать, чтобы подготовить код
+клиента в моих собственныхприложениях, чтобы использовать
+улучшающую работу репликацию?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+См. руководство по использованию репликации в
+<a href="replica.htm#replication-solutions-scaleout">разделе 19.3.5</a>.
+</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-replication-replication-how-benefits-me"></a>
+<a name="idm139965270575072"></a><p><b>A.13.8.</b></p></td>
+<td align="left" valign="top"><p>Когда и насколько репликация MySQL может
+улучшить производительность моей системы?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Репликация MySQL является самой выгодной для системы, которая обрабатывает
+частые чтения и нечасто пишет. В теории, при использовании варианта с одним
+ведущим и несколькими ведомыми серверами Вы можете масштабировать систему,
+добавляя больше ведомых устройств до нужного числа.</p>
+
+<p>Чтобы определить, сколько ведомых устройств Вы можете использовать,
+и насколько Вы можете улучшить исполнение своего сайта, Вы должны знать свои
+образцы запроса и определить опытным путем эффективность отношения пропускной
+способности для чтения и записи на типичных ведущем и ведомом устройствах.
+Пример здесь показывает весьма упрощенное вычисление того, что Вы можете
+получить с репликацией для гипотетической системы. Через
+<code>reads</code> и <code>writes</code> обозначьте число чтений и
+записей в секунду, соответственно.</p>
+
+<p>Скажем, системная загрузка состоит из 10% записей и 90% чтений
+и мы определили эффективность <code>reads</code> = 1200-2*<code>writes
+</code>. Другими словами, система может сделать
+1200 чтений в секунду без записей, средняя запись вдвое медленнее среднего
+чтения и отношения линейны. Предположите, что у ведущего устройства и каждого
+ведомого устройства есть та же самая пропускная способность, у нас есть одно
+ведущее устройство и <em><code>N</code></em> ведомых. Тогда мы имеем для
+каждого сервера (ведущее или ведомое устройство):</p>
+
+<p><code>reads</code> = 1200 - 2 * <code>writes</code></p>
+<p><code>reads</code> = 9 * <code>writes</code> /
+(<em><code>N</code></em> + 1) (чтения разделены, но записи
+копируются всем ведомым устройствам).</p>
+
+<p>9 * <code>writes</code> / (<em><code>N</code></em> +
+1) + 2 * <code>writes</code> = 1200</p>
+<p><code>writes</code> = 1200 / (2 + 9/(<em><code>N</code></em> + 1))</p>
+
+<p>Последнее уравнение указывает максимальное количество записей для
+<em><code>N</code></em> ведомых устройств, учитывая максимальный возможный
+уровень чтения 1200 в секунду и отношение в девять чтений на одну запись.</p>
+
+<p>Этот анализ приводит к следующим заключениям:</p>
+<ul><li><p>Если <em><code>N</code></em> = 0 (у нас нет никакой репликации),
+наша система может обработать 1200/11 = 109 записей в секунду.</li>
+
+<li>Если <em><code>N</code></em> = 1, то уже 184 записи в секунду.</li>
+<li>Если <em><code>N</code></em> = 8, то 400 записей в секунду.</li>
+<li>Если <em><code>N</code></em> = 17, то 480 записей в секунду.</li>
+
+<li>В конечном счете, устремив <em><code>N</code></em> в бесконечность
+(и наш бюджет в отрицательную бесконечность), мы можем подобраться очень
+близко к 600 записям в секеунду, увеличивая системную пропускную способность
+приблизительно в 5,5 раз. Однако, только с восемью серверами, мы увеличиваем
+это почти в четыре раза.</p></li></ul>
+
+<p>Эти вычисления принимают бесконечную сетевую пропускную способность и
+пренебрегают несколькими другими факторами, которые могли быть существенными
+на Вашей системе. Во многих случаях, Вы не можете быть в состоянии выполнить
+вычисление, подобное только что показанному, которое точно предсказывает то,
+что произойдет на Вашей системе, если Вы добавите <em><code>N</code></em>
+ведомых устройств. Однако, ответ на следующие вопросы должен помочь Вам
+решить, насколько репликация улучшит исполнение Вашей системы:</p>
+
+<ul><li><p>Каково отношение чтения к записи на Вашей системе?</li>
+<li>Сколько еще записей один сервер может обработать, если
+Вы уменьшаете чтения?</li>
+<li>Для скольких ведомых устройств Вы имеете пропускную способность в
+наличии в своей сети?</p></li></ul></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-replication-replication-how-high-availability"></a>
+<a name="idm139965270546800"></a><p><b>A.13.9.</b></p></td>
+<td align="left" valign="top"><p>Как я могу использовать репликацию, чтобы
+обеспечить избыточность или высокую доступность?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+То, как Вы осуществляете избыточность, полностью зависит от Вашего приложения
+и обстоятельств. Высоконадежные решения (с автоматическим аварийным
+переключением) требуют, чтобы активный контроль и\или пользовательские
+скрипты (или сторонние инструменты) оказали поддержку от оригинального
+сервера MySQL до ведомого устройства.</p>
+
+<p>Чтобы обработать процесс вручную, Вы должны быть в состоянии переключиться
+от упавшего ведущего устройства на предварительно сконфигурированное ведомое,
+изменяя Ваше приложение, чтобы говорить с новым сервером или корректируя DNS
+для сервера MySQL.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-replication-replication-how-know-log-format"></a>
+<a name="idm139965270542528"></a><p><b>A.13.10.</b></p></td>
+<td align="left" valign="top"><p>
+Как узнать использует ли главный сервер репликацию, основанную на запросе
+или на строке?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Проверьте значение переменной
+<a href="replica.htm#sysvar_binlog_format"><code>binlog_format</code></a>:
+<pre>
+mysql&gt; SHOW VARIABLES LIKE 'binlog_format';
+</pre>
+
+<p>Показанное значение будет одним из: <code>STATEMENT</code>,
+<code>ROW</code> или <code>MIXED</code>. Для режима <code>MIXED</code>
+по умолчанию используется основанная на запросе, но переключается
+автоматически на основанную на строке при определенных условиях, таких как
+опасные запросы. Для информации о том, когда это может произойти, см.
+<a href="server.htm#binary-log-mixed">раздел 6.4.4.3</a>.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-replication-replication-how-use-row-based"></a>
+<a name="idm139965270533536"></a><p><b>A.13.11.</b></p></td>
+<td align="left" valign="top"><p>
+Как сказать ведомому устройству использовать основанную на строке репликацию?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Ведомые устройства автоматически знают который формат использовать.
+</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-replication-replication-how-prevent-grant-revoke"></a>
+<a name="idm139965270531424"></a><p><b>A.13.12.</b></p></td>
+<td align="left" valign="top"><p>
+Как защитить запросы <a href="sql.htm#grant"><code>GRANT</code></a> and
+<a href="sql.htm#revoke"><code>REVOKE</code></a> от репликации?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Запустите сервер с опцией
+<a href="replica.htm#option_mysqld_replicate-wild-ignore-table">
+<code>--replicate-wild-ignore-table=mysql.%</code></a>, чтобы проигнорировать
+репликацию для таблиц в базе данных <code>mysql</code>.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-replication-replication-can-mix-os"></a>
+<a name="idm139965270525088"></a><p><b>A.13.13.</b></p></td>
+<td align="left" valign="top"><p>Репликация работает со смешанными
+операционными системами (например, основной сервер под Linux, ведомые
+под OS X и Windows)?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-replication-replication-can-mix-arch"></a>
+<a name="idm139965270522928"></a><p><b>A.13.14.</b></p></td>
+<td align="left" valign="top"><p>Репликация работает со смешанной
+архитектурой аппаратных средств (например, основной сервер на
+64-битной, а подчиненные на 32-битных системах)?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да.</p></td></tr></tbody></table>
+
+<h2><a name="faqs-innodb-change-buffer"></a>A.14.
+MySQL 8.0 FAQ: Буфер изменений InnoDB</h2>
+<table border="0">
+<tbody><tr><td align="left" valign="top">
+<a name="faq-innodb-change-buffer-innodb-change-buffer-operations"></a>
+<a name="idm139965270519184"></a><p><b>A.14.1.</b></p></td>
+<td align="left" valign="top"><p>Какие типы операций меняют вторичные
+индексы и результат в буфере изменений?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+<code>INSERT</code>, <code>UPDATE</code> и <code>DELETE</code> меняют
+вторичные индексы. Если затронутая индексная страница не находится в буферном
+бассейне, изменения могут быть буферизованы в буфере изменения.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-innodb-change-buffer-innodb-change-buffer-benefits"></a>
+<a name="idm139965270514816"></a><p><b>A.14.2.</b></p></td>
+<td align="left" valign="top"><p>
+Что является выгодой буфера изменения <code>InnoDB</code>?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Вторичная буферизация индексирует изменения, когда вторичные индексные
+страницы не находятся в буферном бассейне, это позволяет избегать дорогих
+операций ввода/вывода произвольного доступа, которые были бы обязаны
+немедленно читать затронутые индексные страницы с диска.
+Буферизованные изменения могут быть применены позже, в пакетах, когда
+страницы считаны в буферный бассейн другими операциями чтения.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-innodb-change-buffer-innodb-change-buffer-index-types"></a>
+<a name="idm139965270511328"></a><p><b>A.14.3.</b></p></td>
+<td align="left" valign="top"><p>Буфер изменений понимает
+другие типы индексов?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Нет, только вторичные индексы. Кластеризируемый, полнотекстовый и
+пространственный индексы не поддержаны. Полнотекстовый индекс имеет
+собственный механизм кэширования.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-innodb-change-buffer-innodb-change-buffer-space-max-size"></a>
+<a name="idm139965270509040"></a><p><b>A.14.4.</b></p></td>
+<td align="left" valign="top"><p>Как много места <code>InnoDB</code>
+использует для буфера изменений?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+До введения опции <a href="innodb.htm#sysvar_innodb_change_buffer_max_size">
+<code>innodb_change_buffer_max_size</code></a> в MySQL 5.6 максимальный
+размер буфера изменения на диске в системном табличном пространстве был
+1/3 <code>InnoDB</code> размер бассейна буферов.</p>
+
+<p>В MySQL 5.6 и позже опция
+<a href="innodb.htm#sysvar_innodb_change_buffer_max_size">
+<code>innodb_change_buffer_max_size</code></a> определяет максимальный
+размер буфера изменения как процент полного буферного размера бассейна.
+По умолчанию <a href="innodb.htm#sysvar_innodb_change_buffer_max_size">
+<code>innodb_change_buffer_max_size</code></a> составляет 25. Максимум 50.
+</p>
+
+<p><code>InnoDB</code> не буферизует работу, если это заставило бы буфер
+изменения на диске превышать определенный предел.</p>
+<p>Буферные страницы изменения не обязаны сохраняться в буферном бассейне и
+могут быть удалены операциями LRU.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-innodb-change-buffer-innodb-change-buffer-current-size"></a>
+<a name="idm139965270499104"></a><p><b>A.14.5.</b></p></td>
+<td align="left" valign="top"><p>Как определить текущий
+размер буфера изменения?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Текущий размер буфера изменения сообщает
+<code>SHOW ENGINE INNODB STATUS \G</code> под заголовком
+<code>INSERT BUFFER AND ADAPTIVE HASH INDEX</code>. Например:
+<pre>
+-------------------------------------
+INSERT BUFFER AND ADAPTIVE HASH INDEX
+-------------------------------------
+Ibuf: size 1, free list len 0, seg size 2, 0 merges
+</pre>
+
+<p>Соответствующие точки данных включают:</p>
+<ul><li><p><code>size</code>: Число страниц, которые используются в пределах
+буфера изменения. Размер буфера изменения равен <code>seg size - (1 +
+free list len)</code>. Значение <code>1+</code>
+представляет буферную страницу заголовка изменения.</li>
+<li><code>seg size</code>: Размер буфера изменения в страницах.
+</p></li></ul></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-innodb-change-buffer-innodb-change-buffer-merging"></a>
+<a name="idm139965270488064"></a><p><b>A.14.6.</b></p></td>
+<td align="left" valign="top"><p>Когда выполняется слияние буфера изменений?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top">
+<ul><li><p>Когда страница считана в буферный бассейн, буферизованные
+изменения объединены после завершения чтения, но прежде, чем страница
+будет сделана доступной.</li>
+
+<li>Буферное слияние выполнено как фоновая задача. Параметр
+<a href="innodb.htm#sysvar_innodb_io_capacity"><code>innodb_io_capacity
+</code></a> устанавливает верхний предел для деятельности I/O, выполненной
+такими фоновыми задачами <code>InnoDB</code>, как слияние
+данных буфера изменений.</li>
+
+<li>Буферное слияние выполнено во время восстановления катастрофического
+отказа. Изменения применены из буфера изменения (в системном табличном
+пространстве) к страницам вторичных индексов, когда индексные страницы
+считаны в буферный бассейн.</li>
+
+<li>Буфер изменения переживет системный катастрофический отказ. При
+перезапуске операции слияния буфера изменений продолжатся
+как часть нормального функционирования.</li>
+
+<li>Полное слияние буфера изменения может быть вызвано как часть медленного
+завершения работы сервера с применением
+<a href="innodb.htm#sysvar_innodb_fast_shutdown"><code>
+--innodb-fast-shutdown=0</code></a>.</p></li></ul></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-innodb-change-buffer-innodb-change-buffer-flush-time"></a>
+<a name="idm139965270477824"></a><p><b>A.14.7.</b></p></td>
+<td align="left" valign="top"><p>Когда буфер изменения сбрасывается?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Обновленные страницы сбрасываются тем же самым механизмом, который
+сбрасывает другие страницы, которые занимают буферный бассейн.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-innodb-change-buffer-innodb-change-buffer-when-to-enable"></a>
+<a name="idm139965270475616"></a><p><b>A.14.8.</b></p></td>
+<td align="left" valign="top"><p>Когда используется буфер изменений?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Буфер изменения особенность, разработанная, чтобы уменьшить случайный
+I/O вторичных индексов, когда индексы растут и больше не вписываются в
+буферный бассейн <code>InnoDB</code>. Вообще, буфер изменения должен
+использоваться, когда весь набор данных не вписывается в буферный бассейн,
+когда есть существенная деятельность DML, которая изменяет вторичные
+индексные страницы, или когда есть много вторичных индексов, которые
+регулярно изменяются деятельностью DML.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-innodb-change-buffer-innodb-change-buffer-when-to-disable"></a>
+<a name="idm139965270472368"></a><p><b>A.14.9.</b></p></td>
+<td align="left" valign="top"><p>Когда буфер изменений не используется?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Вы могли бы рассмотреть отключение буфера изменения, если весь набор данных
+помещается в буферный бассейн <code>InnoDB</code>, если Вы имеете
+относительно немного вторичных индексов или если Вы используете хранение
+SSD, где случайные чтения работают с такой же скоростью, как последовательные
+чтения. Прежде, чем произвести изменения конфигурации, рекомендуется, чтобы
+Вы выполнили тесты, используя представительную рабочую нагрузку, чтобы
+определить, обеспечивает ли отключение буфера изменения какую-то выгоду.
+</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-innodb-change-buffer-innodb-change-buffer-info"></a>
+<a name="idm139965270469152"></a><p><b>A.14.10.</b></p></td>
+<td align="left" valign="top"><p>Где я могу найти дополнительную
+информацию о буфере изменения?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Следующие разделы и сообщения в блогах обеспечивают дополнительную информацию
+о буфере изменения <code>InnoDB</code> change buffer:</p>
+
+<ul><li><p><a href="innodb.htm#innodb-insert-buffering">раздел 16.4.2</a>
+</li>
+<li><a href="innodb.htm#innodb-performance-change_buffering">раздел 16.6.4
+</a></li>
+<li><a href="../../../https@blogs.oracle.com/mysqlinnodb/entry/mysql_5_5_innodb_change"
+target="_top">MySQL 5.5: InnoDB Change Buffering</a>
+</p></li></ul></td></tr></tbody></table>
+
+<h2><a name="faqs-tablespace-encryption"></a>A.15.
+MySQL 8.0 FAQ: Шифрование табличного пространства InnoDB</h2>
+<table border="0">
+<tbody><tr><td align="left" valign="top">
+<a name="faq-tablespace-encryption-tablespace-encryption-access"></a>
+<a name="idm139965270458448"></a><p><b>A.15.1.</b></p></td>
+<td align="left" valign="top"><p>
+Данные дешифрованы для пользователей, которые уполномочены видеть их?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. Шифрование табличного пространства <code>InnoDB</code> разработано,
+чтобы предоставить клиентам способность прозрачно применить шифрование в
+пределах базы данных, не воздействуя на существующие приложения. Возвращение
+данных в зашифрованном формате сломало бы большинство существующих
+приложений. Шифрование табличного пространства <code>InnoDB</code>
+обеспечивает выгоду шифрования без накладок, связанных с традиционными
+решениями для шифрования базы данных, которые, как правило, требовали бы
+дорогих и существенных изменений приложений.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-tablespace-encryption-tablespace-encryption-overhead"></a>
+<a name="idm139965270454352"></a><p><b>A.15.2.</b></p></td>
+<td align="left" valign="top"><p>Что является накладными расходами,
+связанными с шифрованием табличного пространства <code>InnoDB</code>?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Нет никакого дополнительного хранения. Согласно внутренним точкам отсчета,
+разница в производительности около 0,1%.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-tablespace-encryption-tablespace-encryption-algorithm"></a>
+<a name="idm139965270451440"></a><p><b>A.15.3.</b></p></td>
+<td align="left" valign="top"><p>Что является алгоритмами шифрования,
+используемыми в шифровании табличного пространства <code>InnoDB</code>?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Шифрование табличного пространства <code>InnoDB</code> поддерживает
+Advanced Encryption Standard (AES256). Он использует режим блочного
+шифрования Electronic Codebook (ECB) для шифрования ключей табличного
+пространства и режим блочного шифрования Cipher Block Chaining (CBC)
+для шифрования данных.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-tablespace-encryption-tablespace-encryption-other-algorithms">
+</a><a name="idm139965270447632"></a><p><b>A.15.4.</b></p></td>
+<td align="left" valign="top"><p>Возможно использовать сторонние алгоритмы
+шифрования вместо обеспеченного <code>InnoDB</code>?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Нет, невозможно использовать другие алгоритмы шифрования.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-tablespace-encryption-tablespace-encryption-indexed-columns">
+</a><a name="idm139965270444608"></a><p><b>A.15.5.</b></p></td>
+<td align="left" valign="top"><p>
+Индексированные столбцы могут быть зашифрованы?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Шифрование табличного пространства <code>InnoDB</code>
+поддерживает все индексы прозрачно.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-tablespace-encryption-tablespace-encryption-data-types"></a>
+<a name="idm139965270441776"></a><p><b>A.15.6.</b></p></td>
+<td align="left" valign="top"><p>Какие типы данных и длины данных
+поддерживает шифрование табличного пространства <code>InnoDB</code>?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Шифрование табличного пространства <code>InnoDB</code> поддерживает все
+поддержанные типы данных. Нет никакого ограничения длины данных.
+</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-tablespace-encryption-tablespace-encryption-network"></a>
+<a name="idm139965270438128"></a><p><b>A.15.7.</b></p></td>
+<td align="left" valign="top"><p>Данные остаются зашифрованными в сети?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Данные, зашифрованные <code>InnoDB</code>, дешифрованы, когда они считаны из
+файла табличного пространства. Таким образом, если данные находятся в сети,
+они там находятся в форме открытого текста. Однако, данные в сети могут быть
+зашифрованы, используя шифрование сети MySQL, которое шифрует данные,
+используя SSL/TLS.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-tablespace-encryption-tablespace-encryption-database-memory">
+</a><a name="idm139965270435040"></a><p><b>A.15.8.</b></p></td>
+<td align="left" valign="top"><p>Память базы данных содержит открытый текст
+или зашифрованные данные?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+С <code>InnoDB</code> данные в памяти дешифрованы,
+что обеспечивает 100% прозрачность.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-tablespace-encryption-tablespace-encryption-data-to-encrypt">
+</a><a name="idm139965270432128"></a><p><b>A.15.9.</b></p></td>
+<td align="left" valign="top"><p>Как я узнаю, которые данные зашифровать?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Согласие со стандартом PCI-DSS требует, чтобы номера кредитной карточки
+(Primary Account Number, 'PAN') были сохранены в зашифрованной форме. Законы
+об уведомлении (например, CA SB 1386, CA AB 1950 и подобные)
+требуют шифрования имени, фамилии, номера водительских прав и других личных
+данных. В начале 2008 CA AB 1298 добавил медицинскую и информация о
+медицинском страховании к данным PII. Кроме того, могут быть отраслевые
+стандарты и требования по этой части.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-tablespace-encryption-tablespace-encryption-mysql-encryption">
+</a><a name="idm139965270429120"></a><p><b>A.15.10.</b></p></td>
+<td align="left" valign="top"><p>Как шифрование табличного пространства
+<code>InnoDB</code> отличается от функций шифрования, которые MySQL
+уже и так имеет?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Есть симметричные и асимметричные API шифрования в MySQL, которые могут
+использоваться, чтобы вручную зашифровать данные в пределах базы данных.
+Однако, приложение должно управлять ключами шифрования и выполнить требуемое
+шифрование и дешифрование, вызывая функции API. <code>InnoDB</code> не
+требует никаких изменений приложения, прозрачно для конечных пользователей и
+обеспечивает автоматизированный встроенный менеджмент ключей.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-tablespace-encryption-tablespace-encryption-transportable-tablespaces">
+</a><a name="idm139965270425056"></a><p><b>A.15.11.</b></p></td>
+<td align="left" valign="top"><p>Переносимы ли зашифрованные данные?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-tablespace-encryption-tablespace-encryption-compression"></a>
+<a name="idm139965270421360"></a><p><b>A.15.12.</b></p></td>
+<td align="left" valign="top"><p>
+Сжимает ли данные шифрование <code>InnoDB</code>?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Клиенты, использующие шифрование табличного пространства <code>InnoDB</code>,
+получает полную возможность сжатия, потому что сжатие применено прежде, чем
+блоки данных зашифрованы.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-tablespace-encryption-tablespace-encryption-mysqldump"></a>
+<a name="idm139965270417696"></a><p><b>A.15.13.</b></p></td>
+<td align="left" valign="top"><p>Можно ли применить
+<a href="programs.htm#mysqlpump"><span><strong>mysqlpump</strong>
+</span></a> или <code>mysqldump</code> с зашифрованными таблицами?
+</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да. Поскольку эти утилиты создают логические резервные копии, данные,
+выведенные из зашифрованных таблиц, не зашифрованы.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-tablespace-encryption-tablespace-encryption-key-rotation"></a>
+<a name="idm139965270413568"></a><p><b>A.15.14.</b></p></td>
+<td align="left" valign="top"><p>
+Как сменить основной ключ шифрования?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Шифрование табличного пространства <code>InnoDB</code>
+использует два ключевых механизма. Когда шифрование используется, отдельные
+ключи сохранены в заголовке основного файла с данными табличного
+пространства. Ключи табличного пространства зашифрованы, используя основной
+ключ шифрования. Основной ключ шифрования произведен, когда шифрование
+табличного пространства включено, и сохранен вне базы данных. Основной ключ
+шифрования ротируется, используя команду <a href="sql.htm#alter-instance">
+<code>ALTER INSTANCE ROTATE INNODB MASTER KEY</code></a>, которая производит
+новый основной ключ шифрования.</p></td></tr>
+<tr><td align="left" valign="top">
+<a name="faq-tablespace-encryption-tablespace-encryption-data-migration"></a>
+<p><b>A.15.15.</b></p></td>
+<td align="left" valign="top"><p>Как мигрировать данные из открытого текста
+в зашифрованное табличное пространство <code>InnoDB</code>?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Передача данных из одного табличного пространства в другое не требуется.
+Зашифровать данные в <code>InnoDB</code> можно командой
+<a href="sql.htm#alter-table"><code>ALTER TABLE
+<em><code>tbl_name</code></em> ENCRYPTION='Y'</code></a>.
+Шифрование табличного пространства в <code>InnoDB</code> поддержано только
+с табличными пространствами <a href="glossary.htm#glos_file_per_table">
+file-per-table</a>.</p></td></tr></tbody></table>
+
+<h2><a name="faqs-virtualization"></a>A.16.
+MySQL 8.0 FAQ: Поддержка виртуализации</h2>
+<table border="0">
+<tbody><tr><td align="left" valign="top">
+<a name="faq-virtualization-virtualization-support"></a>
+<a name="idm139965270398368"></a><p><b>A.16.1.</b></p></td>
+<td align="left" valign="top"><p>MySQL поддерживает виртуальное окружение
+Oracle VM, VMWare, Docker, Microsoft Hyper-V или что-то такое?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+MySQL поддерживает виртуальное окружение, но сертифицирован пока только для
+<a href="../../../www.oracle.com/technetwork/server-storage/vm/index.html"
+target="_top">Oracle VM</a>. Подробности в техподдержке Oracle.
+</p></td></tr></tbody></table>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

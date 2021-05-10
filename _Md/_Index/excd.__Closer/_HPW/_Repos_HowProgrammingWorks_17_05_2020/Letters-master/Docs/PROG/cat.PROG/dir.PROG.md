@@ -1,0 +1,14 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\PROG\cat.PROG\dir.PROG.md">PROG</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\PROG\README.md">README.md</a>
+        - *# Парадигмы программирования
+        - *## Первый семестр
+        - *### Базовый синтаксис
+        - *### Базовые концепции
+        - *### Структуры данных
+        - *## Второй семестр
+        - *### Концепции и техники
+        - *### Парадигмы и техники программирования
+        - *## Третий семестр
+        - *### Системная архитектура программ
+        - *### Комплексные примеры проектов
+        - *### Метапрограммирование

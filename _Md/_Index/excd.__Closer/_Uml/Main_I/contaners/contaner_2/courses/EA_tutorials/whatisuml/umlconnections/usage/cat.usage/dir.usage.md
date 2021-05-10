@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\usage\cat.usage\dir.usage.md">usage</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\usage\usage.md">usage.md</a>
+        - *##### [Usage](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/usage.html) использование

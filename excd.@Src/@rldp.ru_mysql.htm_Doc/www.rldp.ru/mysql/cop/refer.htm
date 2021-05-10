@@ -1,0 +1,3142 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 10. Connector/Python API</title>
+  <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-python-reference"></a>
+Глава 10. Connector/Python API</h1>
+<p>Эта глава содержит описание API для Connector/Python.
+Примеры нужно рассмотреть, работая на Python 2.7 или Python 3.1 и выше.
+Они могли бы также работать на более старых версиях (таких как Python 2.4),
+если они не используют функции, введенные в более новых версиях Python.
+Например, обработка исключений используя ключевое слово
+<code class="literal">as</code> была введена в Python 2.6
+и не будет работать в Python 2.4.</p>
+
+<p>Следующий обзор показывает пакет
+<code class="literal">mysql.connector</code> с его модулями.
+В настоящее время только самые полезные модули, классы и методы для
+конечных пользователей описаны.</p>
+
+<pre class="programlisting">
+mysql.connector
+errorcode
+errors
+connection
+constants
+conversion
+cursor
+dbapi
+locales
+eng
+client_error
+protocol
+utils
+</pre>
+
+<h2><a name="connector-python-api-mysql-connector"></a>
+10.1. Модуль mysql.connector</h2>
+<a class="indexterm" name="idm45244849034256"></a>
+<a class="indexterm" name="idm45244849033248"></a>
+<p>Модуль <code class="literal">mysql.connector</code>
+предоставляет методы и свойства верхнего уровня.</p>
+
+<h3><a name="connector-python-api-mysql-connector-connect"></a>
+10.1.1. Метод mysql.connector.connect()</h3>
+<a class="indexterm" name="idm45244849029888"></a>
+<a class="indexterm" name="idm45244849028880"></a>
+<p>Этот метод настраивает связь, устанавливая сессию связи с
+сервером MySQL. Если никакие аргументы не даны, это использует уже заданные
+или значения по умолчанию. Для полного списка возможных аргументов посмотрите
+<a href="connect.htm#connector-python-connectargs">раздел 7.1</a>.</p>
+
+<p>Связь с сервером MySQL может быть установлена, используя метод
+<code class="literal">mysql.connector.connect()</code> или класс
+<code class="literal">mysql.connector.MySQLConnection()</code>:</p>
+
+<pre class="programlisting">
+cnx = mysql.connector.connect(user='joe', database='test')
+cnx = MySQLConnection(user='joe', database='test')
+</pre>
+<p>Для описаний методов связи и свойств, посмотрите
+<a href="#connector-python-api-mysqlconnection">раздел 10.2</a>.</p>
+
+<h3><a name="connector-python-api-mysql-connector-apilevel"></a>
+10.1.2. Свойство mysql.connector.apilevel</h3>
+<a class="indexterm" name="idm45244849021632"></a>
+<a class="indexterm" name="idm45244849020624"></a>
+<p>Это свойство последовательность, которая указывает на поддержанный
+уровень API DB.</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; mysql.connector.apilevel
+'2.0'
+</pre>
+
+<h3><a name="connector-python-api-mysql-connector-paramstyle"></a>
+10.1.3. Свойство mysql.connector.paramstyle</h3>
+<a class="indexterm" name="idm45244849016768"></a>
+<a class="indexterm" name="idm45244849015760"></a>
+<p>Это свойство последовательность, которая указывает на стиль параметра
+Connector/Python по умолчанию.</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; mysql.connector.paramstyle
+'pyformat'
+</pre>
+
+<h3><a name="connector-python-api-mysql-connector-threadsafety"></a>
+10.1.4. Свойство mysql.connector.threadsafety</h3>
+<a class="indexterm" name="idm45244849011872"></a>
+<a class="indexterm" name="idm45244849010864"></a>
+<p>Это свойство целое число, которое указывает на поддержанный уровень
+потокобезопасности, обеспеченной Connector/Python.</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; mysql.connector.threadsafety
+1
+</pre>
+
+<h3><a name="connector-python-api-mysql-connector-version"></a>
+10.1.5. Свойство mysql.connector.__version__</h3>
+<a class="indexterm" name="idm45244849006976"></a>
+<a class="indexterm" name="idm45244849005968"></a>
+<p>Это свойство указывает версию Connector/Python как строку.
+Это доступно с Connector/Python 1.1.0.</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; mysql.connector.__version__
+'1.1.0'
+</pre>
+
+<h3><a name="connector-python-api-mysql-connector-version-info"></a>
+10.1.6. Свойство mysql.connector.__version_info__</h3>
+<a class="indexterm" name="idm45244849002080"></a>
+<a class="indexterm" name="idm45244849001072"></a>
+<p>Это свойство указывает версию Connector/Python
+как множество компонентов версии. Это доступно с Connector/Python 1.1.0.</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; mysql.connector.__version_info__
+(1, 1, 0, 'a', 0)
+</pre>
+
+<h2><a name="connector-python-api-mysqlconnection"></a>
+10.2. Класс connection.MySQLConnection</h2>
+<a class="indexterm" name="idm45244848996992"></a>
+<a class="indexterm" name="idm45244848995984"></a>
+<p>Класс <code class="literal">MySQLConnection</code>
+используется, чтобы открыть и управлять связью с сервером MySQL.
+Это также раньше посылало команды и SQL-операторы и читало результаты.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-constructor"></a>
+10.2.1. Конструктор connection.MySQLConnection()</h3>
+<a class="indexterm" name="idm45244848992528"></a>
+<a class="indexterm" name="idm45244848991520"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx = MySQLConnection(**kwargs)
+</pre>
+
+<p>Конструктор <code class="literal">MySQLConnection</code>
+инициализирует атрибуты и когда по крайней мере один аргумент передается, он
+пытается соединиться с сервером MySQL.</p>
+<p>Для полного списка аргументов посмотрите
+<a href="connect.htm#connector-python-connectargs">раздел 7.1</a>.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-close"></a>
+10.2.2. Метод MySQLConnection.close()</h3>
+<a class="indexterm" name="idm45244848985824"></a>
+<a class="indexterm" name="idm45244848984816"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.close()
+</pre>
+
+<p><code class="literal">close()</code> синоним
+<code class="literal">disconnect()</code>. См.
+<a href="#connector-python-api-mysqlconnection-disconnect">раздел
+10.2.20</a>.</p>
+
+<p>Для связи, полученной из пула связи, <code class="literal">close()</code>
+на самом деле не закрывает ее, а возвращает в пул и делает доступной для
+последующих запросов связи. Посмотрите
+<a href="other.htm#connector-python-connection-pooling">раздел 9.1</a>.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-commit"></a>
+10.2.3. Метод MySQLConnection.commit()</h3>
+<a class="indexterm" name="idm45244848977296"></a>
+<a class="indexterm" name="idm45244848976288"></a>
+<p>Этот метод посылает <code class="literal">COMMIT</code> серверу MySQL,
+передавая текущую транзакцию. Connector/Python по умолчанию не делает
+autocommit, поэтому важно вызвать этот метод после каждой транзакции, которая
+изменяет данные для таблиц с транзакционным механизмом хранения.</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; cursor.execute("INSERT INTO employees (first_name)
+                            VALUES (%s)", ('Jane'))
+&gt;&gt;&gt; cnx.commit()
+</pre>
+
+<p>Чтобы откатиться назад вместо этого и отказаться от модификаций,
+посмотрите <a href="#connector-python-api-mysqlconnection-rollback">
+метод rollback()</a>.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-config"></a>
+10.2.4. Метод MySQLConnection.config()</h3>
+<a class="indexterm" name="idm45244848970432"></a>
+<a class="indexterm" name="idm45244848969424"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.config(**kwargs)
+</pre>
+
+<p>Формирует экземпляр <code class="literal">MySQLConnection</code>
+после того, как это создано. Для полного списка возможных аргументов
+посмотрите <a href="connect.htm#connector-python-connectargs">раздел
+7.1</a>.</p>
+
+<p>Параметры:</p>
+<ul><li><p><code class="literal">kwargs</code>: Аргументы соединения.
+</p></li></ul>
+
+<p>Вы могли использовать метод <code class="literal">config()</code>,
+чтобы изменить (например), имя пользователя, а затем вызвать
+<code class="literal">reconnect()</code>.</p>
+
+<p>Пример:</p>
+<pre class="programlisting">
+cnx = mysql.connector.connect(user='joe', database='test')
+# Connected as 'joe'
+cnx.config(user='jane')
+cnx.reconnect()
+# Now connected as 'jane'
+</pre>
+
+<p>Для связи, полученной из пула связи,
+<code class="literal">config()</code> поднимает исключение. Посмотрите
+<a href="other.htm#connector-python-connection-pooling">раздел 9.1</a>.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-connect"></a>
+10.2.5. Метод MySQLConnection.connect()</h3>
+<a class="indexterm" name="idm45244848957264"></a>
+<a class="indexterm" name="idm45244848956256"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+MySQLConnection.connect(**kwargs)
+</pre>
+
+<p>Этот метод настраивает связь, устанавливая сессию с сервером MySQL.
+Если никакие аргументы не даны, это использует уже настроенные или значения
+по умолчанию. Для полного списка возможных аргументов посмотрите
+<a href="connect.htm#connector-python-connectargs">раздел 7.1</a>.</p>
+
+<p>Параметры:</p>
+<ul><li><p><code class="literal">kwargs</code>: Аргументы соединения.
+</p></li></ul>
+
+<p>Пример:</p>
+<pre class="programlisting">
+cnx = MySQLConnection(user='joe', database='test')
+</pre>
+
+<p>Для связи, полученной из пула связи, класс объекта связи
+<code class="literal">PooledMySQLConnection</code>.
+Объединенная связь отличается от необъединенной связи, как описано в
+<a href="other.htm#connector-python-connection-pooling">разделе 9.1</a>.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-cursor"></a>
+10.2.6. Метод MySQLConnection.cursor()</h3>
+<a class="indexterm" name="idm45244848946336"></a>
+<a class="indexterm" name="idm45244848945328"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cursor = cnx.cursor([arg=value[, arg=value]...])
+</pre>
+
+<p>Этот метод возвращает объект <code class="literal">MySQLCursor()</code>
+или его подкласс в зависимости от передаваемых аргументов.
+Возвращенный объект это экземпляр
+<code class="literal">cursor.CursorBase</code>.
+Для получения дополнительной информации об объектах курсора, посмотрите
+разделы <a href="#connector-python-api-mysqlcursor">10.5</a> и
+<a href="#connector-python-api-cursor-subclasses">10.6</a>.</p>
+
+<p>Аргументы могут быть переданы методу
+<code class="literal">cursor()</code>, чтобы контролировать,
+какой курсор создать:</p>
+
+<ul><li><p>Если <code class="literal">buffered</code> =
+<code class="literal">True</code>, курсор приносит все строки от сервера
+после того, как операция будет выполнена. Это полезно, когда запросы
+возвращают небольшие наборы результатов.
+<code class="literal">buffered</code> может использоваться один или в
+сочетании с параметром <code class="literal">dictionary</code> или
+<code class="literal">named_tuple</code>.</p>
+
+<p><code class="literal">buffered</code> может также быть передан
+<a href="#connector-python-api-mysql-connector-connect">
+<code class="literal">connect()</code></a>, чтобы установить способ
+буферизации по умолчанию для всех курсоров, созданных из объекта связи.
+Посмотрите <a href="connect.htm#connector-python-connectargs">раздел 7.1</a>.
+</p>
+
+<p>Для получения информации о о последствиях буферизования посмотрите
+<a href="#connector-python-api-mysqlcursorbuffered">раздел 10.6.1
+</a>.</p></li>
+
+<li><p>Если <code class="literal">raw</code> =
+<code class="literal">True</code>, курсор пропускает преобразование от типов
+данных MySQL в типы Python. Сырой курсор обычно используется, чтобы получить
+лучшую производительность или когда вы хотите сделать преобразование сами.
+</p>
+
+<p><code class="literal">raw</code> может также быть передан
+<a href="#connector-python-api-mysql-connector-connect">
+<code class="literal">connect()</code></a>, чтобы установить режим без
+предварительной обработки по умолчанию для всех курсоров, созданных из
+объекта связи. Посмотрите
+<a href="connect.htm#connector-python-connectargs">раздел 7.1</a>.</p></li>
+
+<li><p>Если <code class="literal">dictionary</code> =
+<code class="literal">True</code>, курсор возвращает строки как словари.
+Этот аргумент доступен с Connector/Python 2.0.0.</p></li>
+
+<li><p>Если <code class="literal">named_tuple</code> =
+<code class="literal">True</code>, курсор возвращает строки как названные
+кортежами. Этот аргумент доступен с Connector/Python 2.0.0.</p></li>
+
+<li><p>Если <code class="literal">prepared</code> =
+<code class="literal">True</code>, курсор используется для выполнения
+подготовленных запросов. Этот аргумент доступен с Connector/Python 1.1.2.
+Расширение C поддерживает это с Connector/Python 8.0.17.</p></li>
+
+<li><p>Параметр <code class="literal">cursor_class</code>
+может использоваться, чтобы передать класс для того, чтобы создать
+новый курсор. Это должен быть подкласс
+<code class="literal">cursor.CursorBase</code>.</p></li></ul>
+
+<p>Возвращенный объект зависит от комбинации аргументов. Примеры:</p>
+<ul><li><p>Если not buffered and not raw:
+<code class="literal">MySQLCursor</code>.</p></li>
+
+<li><p>Если buffered and not raw:
+<code class="literal">MySQLCursorBuffered</code>.</p></li>
+<li><p>Если not buffered and raw: <code class="literal">MySQLCursorRaw
+</code>.</p></li>
+<li><p>Если buffered and raw:
+<code class="literal">MySQLCursorBufferedRaw</code>.</p></li></ul>
+
+<h3><a name="connector-python-api-mysqlconnection-cmd-change-user"></a>
+10.2.7. Метод MySQLConnection.cmd_change_user()</h3>
+<a class="indexterm" name="idm45244848909472"></a>
+<a class="indexterm" name="idm45244848908464"></a>
+<p>Изменяет пользователя, использующего <code class="literal">username</code>
+и <code class="literal">password</code>. Это также назначит указанную
+<code class="literal">database</code> базой данных по умолчанию.
+Также возможно изменить набор символов, используя параметр
+<code class="literal">charset</code>.</p>
+
+<p>Синтаксис:</p>
+<pre class="programlisting">
+cnx.cmd_change_user(username='', password='', database='', charset=33)
+</pre>
+<p>Возвращает словарь, содержащий OK информацию о пакете.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-cmd-debug"></a>
+10.2.8. Метод MySQLConnection.cmd_debug()</h3>
+<a class="indexterm" name="idm45244848901248"></a>
+<a class="indexterm" name="idm45244848900240"></a>
+<p>Приказывает серверу писать отладочную информацию в журнал ошибок.
+Подключенный пользователь должен иметь привилегию
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_super"
+target="_top"><code class="literal">SUPER</code></a>.</p>
+<p>Возвращает словарь, содержащий OK информацию о пакете.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-cmd-init-db"></a>
+10.2.9. Метод MySQLConnection.cmd_init_db()</h3>
+<a class="indexterm" name="idm45244848895744"></a>
+<a class="indexterm" name="idm45244848894736"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.cmd_init_db(db_name)
+</pre>
+
+<p>Этот метод делает определенную базу данных базой данных по умолчанию.
+В последующих запросах эта база данных будет умолчанием для ссылок на
+таблицу, которые не включают явного определителя базы данных.</p>
+<p>Возвращает словарь, содержащий OK информацию о пакете.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-cmd-ping"></a>
+10.2.10. Метод MySQLConnection.cmd_ping()</h3>
+<a class="indexterm" name="idm45244848889984"></a>
+<a class="indexterm" name="idm45244848888976"></a>
+<p>Проверка, работает ли связь с сервером.</p>
+
+<p>Этот метод не должен использоваться непосредственно. Используйте
+<a href="#connector-python-api-mysqlconnection-ping">ping()</a> или
+<a href="#connector-python-api-mysqlconnection-is-connected">
+is_connected()</a>.</p>
+<p>Возвращает словарь, содержащий OK информацию о пакете.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-cmd-process-info"></a>
+10.2.11. Метод MySQLConnection.cmd_process_info()</h3>
+<a class="indexterm" name="idm45244848883920"></a>
+<a class="indexterm" name="idm45244848882912"></a>
+<p>Этот метод поднимает исключение NotSupportedError.
+Вместо этого используйте <code class="literal">SHOW PROCESSLIST</code>
+или запрос таблицы в базе данных
+<code class="literal">INFORMATION_SCHEMA</code>.</p>
+<p>Эта функциональность MySQL Server устарела.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-cmd-process-kill"></a>
+10.2.12. Метод MySQLConnection.cmd_process_kill()</h3>
+<a class="indexterm" name="idm45244848877472"></a>
+<a class="indexterm" name="idm45244848876464"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.cmd_process_kill(mysql_pid)
+</pre>
+
+<p>Эта функциональность MySQL Server устарела.</p>
+<p>Просит сервер убить поток <code class="literal">mysql_pid</code>.
+Хотя все еще доступно, лучше использовать SQL-оператор
+<code class="literal">KILL</code>.</p>
+<p>Возвращает словарь, содержащий OK информацию о пакете.</p>
+
+<p>Следующие две строки имеют тот же самый эффект:</p>
+<pre class="programlisting">
+&gt;&gt;&gt; cnx.cmd_process_kill(123)
+&gt;&gt;&gt; cnx.cmd_query('KILL 123')
+</pre>
+
+<h3><a name="connector-python-api-mysqlconnection-cmd-query"></a>
+10.2.13. Метод MySQLConnection.cmd_query()</h3>
+<a class="indexterm" name="idm45244848867904"></a>
+<a class="indexterm" name="idm45244848866896"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.cmd_query(statement)
+</pre>
+
+<p>Этот метод посылает данный <code class="literal">statement</code>
+серверу MySQL и получает результат. Чтобы послать многочисленные запросы,
+используйте <a href="#connector-python-api-mysqlconnection-cmd-query-iter">
+cmd_query_iter()</a>.</p>
+
+<p>Возвращенный словарь содержит информацию в зависимости от того, какой
+запрос был выполнен. Если запрос
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/select.html" target="_top">
+<code class="literal">SELECT</code></a>, результат содержит информацию о
+столбцах. Другие запросы возвращают словарь, содержащий OK или EOF.</p>
+
+<p>Ошибки, полученные от сервера MySQL, подняты как исключения.
+<code class="literal">InterfaceError</code> поднято, когда
+многократные результаты найдены.</p>
+<p>Возвращает словарь.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-cmd-query-iter"></a>
+10.2.14. Метод MySQLConnection.cmd_query_iter()</h3>
+<a class="indexterm" name="idm45244848858224"></a>
+<a class="indexterm" name="idm45244848857216"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.cmd_query_iter(statement)
+</pre>
+
+<p>Аналог <a href="#connector-python-api-mysqlconnection-cmd-query">
+cmd_query()</a>, но вернет объект генератора для итерации результата.
+Используйте <code class="literal">cmd_query_iter()</code> посылая
+многочисленные запросы и отделяете запросы точками с запятой.</p>
+
+<p>Следующий пример показывает, как работать с результатами после
+отправки многочисленных запросов:</p>
+<pre class="programlisting">
+statement = 'SELECT 1; INSERT INTO t1 VALUES (); SELECT 2'
+  for result in cnx.cmd_query_iter(statement):
+  if 'columns' in result:
+     columns = result['columns']
+     rows = cnx.get_rows()
+  else:
+    # do something useful with INSERT result
+</pre>
+<p>Возвращает объект генератора.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-cmd-quit"></a>
+10.2.15. Метод MySQLConnection.cmd_quit()</h3>
+<a class="indexterm" name="idm45244848849680"></a>
+<a class="indexterm" name="idm45244848848672"></a>
+<p>Этот метод посылает <code class="literal">QUIT</code> серверу MySQL,
+закрывая текущую связь. С тех пор от сервера MySQL нет никакого ответа,
+пакет, который послали, возвращен.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-cmd-refresh"></a>
+10.2.16. Метод MySQLConnection.cmd_refresh()</h3>
+<a class="indexterm" name="idm45244848845072"></a>
+<a class="indexterm" name="idm45244848844064"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.cmd_refresh(options)
+</pre>
+<p>Эта функциональность MySQL Server устарела.</p>
+
+<p>Этот метод сбрасывает таблицы или кэши или информацию о сервере
+репликации. Подключенный пользователь должен иметь привилегию
+<code class="literal">RELOAD</code>.</p>
+
+<p><code class="literal">options</code> должен быть значением битовой маски,
+построенной, используя константы из класса
+<code class="literal">constants.RefreshOption</code>.</p>
+<p>Для списка вариантов посмотрите
+<a href="#connector-python-api-refreshoption">раздел 10.11</a>.</p>
+<p>Пример:</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; from mysql.connector import RefreshOption
+&gt;&gt;&gt; refresh = RefreshOption.LOG | RefreshOption.THREADS
+&gt;&gt;&gt; cnx.cmd_refresh(refresh)
+</pre>
+
+<h3><a name="connector-python-api-mysqlconnection-cmd-reset-connection"></a>
+10.2.17. Метод MySQLConnection.cmd_reset_connection()</h3>
+<a class="indexterm" name="idm45244848833584"></a>
+<a class="indexterm" name="idm45244848832576"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.cmd_reset_connection()
+</pre>
+
+<p>Перезагружает связь, посылая
+<code class="literal">COM_RESET_CONNECTION</code>
+серверу, чтобы очистить состояние сеанса.</p>
+
+<p>Этот метод разрешает состоянию сеанса быть очищенным без
+переподтверждения. Для серверов MySQL, более старых, чем 5.7.3 (когда
+был введен <code class="literal">COM_RESET_CONNECTION</code>),
+должен использоваться метод
+<a href="#connector-python-api-mysqlconnection-reset-session">
+<code class="literal">reset_session()</code></a>.
+Этот метод перезагружает состояние сеанса, повторно подтверждая подлинность,
+что является более дорогим.</p>
+<p>Этот метод добавлен в Connector/Python 1.2.1.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-cmd-shutdown"></a>
+10.2.18. Метод MySQLConnection.cmd_shutdown()</h3>
+<a class="indexterm" name="idm45244848825152"></a>
+<a class="indexterm" name="idm45244848824144"></a>
+<p>Эта функциональность MySQL Server устарела.</p>
+
+<p>Просит сервер базы данных завершиться. Подключенный пользователь должен
+иметь привилегию <code class="literal">SHUTDOWN</code>.</p>
+<p>Возвращает словарь, содержащий OK информацию о пакете.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-cmd-statistics"></a>
+10.2.19. Метод MySQLConnection.cmd_statistics()</h3>
+<a class="indexterm" name="idm45244848818912"></a>
+<a class="indexterm" name="idm45244848817904"></a>
+<p>Возвращает словарь, содержащий информацию о сервере MySQL включая
+продолжительность работы в секундах и количество работающих потоков,
+запросов, перезагрузок и открытых таблиц.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-disconnect"></a>
+10.2.20. Метод MySQLConnection.disconnect()</h3>
+<a class="indexterm" name="idm45244848814912"></a>
+<a class="indexterm" name="idm45244848813904"></a>
+<p>Этот метод пытается послать <code class="literal">QUIT</code> и
+закрыть сокет. Это не поднимает исключений.</p>
+
+<p><code class="literal">MySQLConnection.close()</code> синоним
+этого метода и чаще всего используемый.</p>
+<p>Чтобы закрыть связь, не посылая <code class="literal">QUIT</code>,
+используйте <a href="#connector-python-api-mysqlconnection-shutdown">
+<code class="literal">shutdown()</code></a>.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-get-row"></a>
+10.2.21. Метод MySQLConnection.get_row()</h3>
+<a class="indexterm" name="idm45244848807248"></a>
+<a class="indexterm" name="idm45244848806240"></a>
+<p>Этот метод восстанавливает следующую строку
+набора результата запроса, возвращая кортеж.</p>
+
+<p>Кортеж, возвращенный <code class="literal">get_row()</code> состоит из:</p>
+<ul><li><p>Строка как кортеж, содержащий объекты байта или
+<code class="literal">None</code>, когда больше строк недоступно.</p></li>
+
+<li><p>EOF как словарь, содержащий
+<code class="literal">status_flag</code> и
+<code class="literal">warning_count</code> или
+<code class="literal">None</code>,
+когда возвращенная строка не является последней.</p></li></ul>
+
+<p>Метод <code class="literal">get_row()</code> используется
+<a href="#connector-python-api-mysqlcursor">MySQLCursor</a>,
+чтобы получить строки.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-get-rows"></a>
+10.2.22. Метод MySQLConnection.get_rows()</h3>
+<a class="indexterm" name="idm45244848796016"></a>
+<a class="indexterm" name="idm45244848795008"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.get_rows(count=None)
+</pre>
+
+<p>Этот метод получает все или остающиеся строки набора результата запроса,
+возвращая кортеж, содержащий строки как последовательности и EOF.
+Аргумент количества может использоваться, чтобы получить заданное количество
+строк. Если количество не определяется или <code class="literal">None</code>,
+все строки возвращаются.</p>
+
+<p>Кортеж, возвращенный <code class="literal">get_rows()</code> состоит из:
+</p>
+<ul><li><p>Список кортежей, содержащих данные о строке как байт-объекты
+или пустой список, когда никакие строки недоступны.</p></li>
+
+<li><p>EOF как словарь, содержащий
+<code class="literal">status_flag</code> и
+<code class="literal">warning_count</code>.</p></li></ul>
+
+<p><code class="literal">InterfaceError</code> поднято, когда все
+строки были получены.</p>
+<p><a href="#connector-python-api-mysqlcursor">MySQLCursor</a>
+использует метод <code class="literal">get_rows()</code>,
+чтобы получить строки.</p>
+<p>Возвращает кортеж.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-get-server-info"></a>
+10.2.23. Метод MySQLConnection.get_server_info()</h3>
+<a class="indexterm" name="idm45244848782512"></a>
+<a class="indexterm" name="idm45244848781504"></a>
+<p>Этот метод возвращает информацию о сервере MySQL дословно как
+последовательность, например, <code class="literal">'5.6.11-log'</code> или
+<code class="literal">None</code>, если не связан.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-get-server-version"></a>
+10.2.24. Метод MySQLConnection.get_server_version()</h3>
+<a class="indexterm" name="idm45244848777360"></a>
+<a class="indexterm" name="idm45244848776352"></a>
+<p>Этот метод возвращает версию сервера MySQL как кортеж или
+<code class="literal">None</code>, если не связан.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-is-connected"></a>
+10.2.25. Метод MySQLConnection.is_connected()</h3>
+<a class="indexterm" name="idm45244848772848"></a>
+<a class="indexterm" name="idm45244848771840"></a>
+<p>Сообщает, доступна ли связь с MySQL Server.</p>
+
+<p>Этот метод проверяет, является ли связь с MySQL доступной, используя
+метод <a href="#connector-python-api-mysqlconnection-ping">ping()
+</a>, но в отличие от этого <code class="literal">ping()</code>,
+<code class="literal">is_connected()</code> вернет
+<code class="literal">True</code>, когда связь доступна,
+<code class="literal">False</code> иначе.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-isset-client-flag"></a>
+10.2.26. Метод MySQLConnection.isset_client_flag()</h3>
+<a class="indexterm" name="idm45244848765344"></a>
+<a class="indexterm" name="idm45244848764336"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.isset_client_flag(flag)
+</pre>
+<p>Этот метод вернет <code class="literal">True</code>, если флаг клиента был
+установлен, <code class="literal">False</code> иначе.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-ping"></a>
+10.2.27. Метод MySQLConnection.ping()</h3>
+<a class="indexterm" name="idm45244848759056"></a>
+<a class="indexterm" name="idm45244848758048"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.ping(reconnect=False, attempts=1, delay=0)
+</pre>
+
+<p>Проверяет, доступна ли связь с сервером MySQL.</p>
+<p>Когда <code class="literal">reconnect</code> =
+<code class="literal">True</code>, сделано
+<code class="literal">attempts</code> попыток снова соединиться с сервером
+MySQL, и эти опции отправлены методу
+<a href="#connector-python-api-mysqlconnection-reconnect">
+reconnect()</a>. Используйте метод <code class="literal">delay</code>
+(секунды), если вы хотите ждать перед каждой повторной попыткой.</p>
+
+<p>Когда связь недоступна, <code class="literal">InterfaceError</code>
+поднято. Используйте метод
+<a href="#connector-python-api-mysqlconnection-is-connected">
+is_connected()</a>, чтобы проверить связь, не поднимая ошибку.</p>
+<p>Поднимает на ошибках <code class="literal">InterfaceError</code>.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-reconnect"></a>
+10.2.28. Метод MySQLConnection.reconnect()</h3>
+<a class="indexterm" name="idm45244848747360"></a>
+<a class="indexterm" name="idm45244848746352"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.reconnect(attempts=1, delay=0)
+</pre>
+
+<p>Попытка снова соединиться с сервером MySQL.</p>
+<p>Аргумент <code class="literal">attempts</code>
+определяет число раз, которое надо попробовать снова соединиться.
+Аргумент <code class="literal">delay</code> это
+число секунд, которое ждать перед каждой повторной попыткой.</p>
+
+<p>Вы могли бы определить число попыток выше и использовать более длинную
+задержку, когда вы ожидаете, что сервер MySQL остановлен для обслуживания,
+или когда вы будете ожидать, что сеть будет временно недоступна.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-reset-session"></a>
+10.2.29. Метод MySQLConnection.reset_session()</h3>
+<a class="indexterm" name="idm45244848739808"></a>
+<a class="indexterm" name="idm45244848738800"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.reset_session(user_variables = None, session_variables = None)
+</pre>
+
+<p>Перезагружает связь, повторно подтверждая подлинность, чтобы очистить
+состояние сеанса. <code class="literal">user_variables</code>, если задан,
+это словарь имен и значений пользовательских переменных.
+<code class="literal">session_variables</code>, если задан, это словарь
+словарь имен и значений системных переменных.
+Метод устанавливает каждую переменную в данное значение.</p>
+
+<p>Пример:</p>
+<pre class="programlisting">
+user_variables = {'var1': '1', 'var2': '10'}
+session_variables = {'wait_timeout': 100000, 'sql_mode': 'TRADITIONAL'}
+self.cnx.reset_session(user_variables, session_variables)
+</pre>
+
+<p>Этот метод перезагружает состояние сеанса, повторно подтверждая
+подлинность. Для серверов MySQL 5.7 или выше
+<a href="#connector-python-api-mysqlconnection-cmd-reset-connection">
+<code class="literal">cmd_reset_connection()</code></a>
+более легкая альтернатива.</p>
+<p>Этот метод добавлен в Connector/Python 1.2.1.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-rollback"></a>
+10.2.30. Метод MySQLConnection.rollback()</h3>
+<a class="indexterm" name="idm45244848729424"></a>
+<a class="indexterm" name="idm45244848728416"></a>
+<p>Этот метод посылает серверу MySQL запрос
+<code class="literal">ROLLBACK</code>, отменяя все изменения данных от
+текущей транзакции. По умолчанию Connector/Python не делает autocommit,
+таким образом, возможно отменить транзакции, используя механизмы
+хранения транзакций, например, <code class="literal">InnoDB</code>.</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; cursor.execute("INSERT INTO employees (first_name)
+                            VALUES (%s)", ('Jane'))
+&gt;&gt;&gt; cnx.rollback()
+</pre>
+
+<p>Чтобы <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_commit"
+target="_top">передать</a> модификации, посмотрите метод
+<a href="#connector-python-api-mysqlconnection-commit">commit()</a>.
+</p>
+
+<h3><a name="connector-python-api-mysqlconnection-set-charset-collation"></a>
+10.2.31. Метод MySQLConnection.set_charset_collation()</h3>
+<a class="indexterm" name="idm45244848721120"></a>
+<a class="indexterm" name="idm45244848720112"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.set_charset_collation(charset=None, collation=None)
+</pre>
+
+<p>Этот метод устанавливает набор символов и сопоставление для текущей связи.
+Параметр <code class="literal">charset</code> может быть названием набора
+символов или числовым эквивалентом, как определено в
+<code class="literal">constants.CharacterSet</code>.</p>
+
+<p>Когда <code class="literal">collation</code> =
+<code class="literal">None</code>, используется сопоставление по умолчанию
+для набора символов.</p>
+
+<p>В следующем примере мы устанавливаем набор символов в
+<code class="literal">latin1</code> и сопоставление в
+<code class="literal">latin1_swedish_ci</code> (сопоставление по умолчанию
+для <code class="literal">latin1</code>):</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; cnx = mysql.connector.connect(user='scott')
+&gt;&gt;&gt; cnx.set_charset_collation('latin1')
+</pre>
+
+<p>Определите данное сопоставление следующим образом:</p>
+<pre class="programlisting">
+&gt;&gt;&gt; cnx = mysql.connector.connect(user='scott')
+&gt;&gt;&gt; cnx.set_charset_collation('latin1', 'latin1_general_ci')
+</pre>
+
+<h3><a name="connector-python-api-mysqlconnection-set-client-flags"></a>
+10.2.32. Метод MySQLConnection.set_client_flags()</h3>
+<a class="indexterm" name="idm45244848708048"></a>
+<a class="indexterm" name="idm45244848707040"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.set_client_flags(flags)
+</pre>
+
+<p>Этот метод устанавливает флаги клиента, соединяясь с сервером MySQL и
+возвращает новое значение как целое число.
+Параметр <code class="literal">flags</code> может быть целым числом или
+последовательностью действительных флаговых значений клиента (см.
+<a href="#connector-python-api-clientflag">раздел 10.7</a>).</p>
+
+<p>Если <code class="literal">flags</code> последовательность, каждый пункт в
+последовательности устанавливает флаг, когда значение положительно или
+сбрасывает его, когда отрицательно. Например, чтобы сбросить
+<code class="literal">LONG_FLAG</code> и установить
+<code class="literal">FOUND_ROWS</code>:</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; from mysql.connector.constants import ClientFlag
+&gt;&gt;&gt; cnx.set_client_flags([ClientFlag.FOUND_ROWS, -ClientFlag.LONG_FLAG])
+&gt;&gt;&gt; cnx.reconnect()
+</pre>
+
+<p>Флаги клиента устанавливаются или используются только соединяясь с
+сервером MySQL. Поэтому необходимо снова соединиться после внесения изменений.
+</p>
+
+<h3><a name="connector-python-api-mysqlconnection-shutdown"></a>
+10.2.33. Метод MySQLConnection.shutdown()</h3>
+<a class="indexterm" name="idm45244848696976"></a>
+<a class="indexterm" name="idm45244848695968"></a>
+<p>Этот метод закрывает сокет. Это не поднимает исключений.</p>
+
+<p>В отличие от этого,
+<a href="#connector-python-api-mysqlconnection-disconnect">
+<code class="literal">disconnect()</code></a>,
+<code class="literal">shutdown()</code>
+закрывает связь клиента, не пытаясь сначала послать
+<code class="literal">QUIT</code> серверу. Таким образом это не заблокирует,
+если связь будет разрушена по некоторым причинам, например,
+из-за отказа сети.</p>
+<p><code class="literal">shutdown()</code> добавлен в Connector/Python 2.0.1.
+</p>
+
+<h3><a name="connector-python-api-mysqlconnection-start-transaction"></a>
+10.2.34. Метод MySQLConnection.start_transaction()</h3>
+<a class="indexterm" name="idm45244848689232"></a>
+<a class="indexterm" name="idm45244848688224"></a>
+<p>Этот метод начинает транзакцию. Это принимает аргументы, указывающие,
+использовать ли последовательный снимок, который уровень изоляции транзакции
+нужен и операционный режим доступа:</p>
+
+<pre class="programlisting">
+cnx.start_transaction(consistent_snapshot=<em class="replaceable"><code>bool</code></em>,
+                      isolation_level=<em class="replaceable"><code>level</code></em>,
+                      readonly=<em class="replaceable"><code>access_mode</code></em>)
+</pre>
+
+<p>По умолчанию <code class="literal">consistent_snapshot</code> =
+<code class="literal">False</code>. Если значение
+<code class="literal">True</code>, Connector/Python посылает
+<code class="literal">WITH CONSISTENT SNAPSHOT</code> с запросом.
+MySQL игнорирует это для уровней изоляции, для которых не
+применяется этот вариант.</p>
+
+<p>По умолчанию <code class="literal">isolation_level</code> =
+<code class="literal">None</code>, разрешенные значения:
+<code class="literal">'READ UNCOMMITTED'</code>,
+<code class="literal">'READ COMMITTED'</code>,
+<code class="literal">'REPEATABLE READ'</code> и
+<code class="literal">'SERIALIZABLE'</code>. Если
+<code class="literal">isolation_level</code> =
+<code class="literal">None</code>, никакой уровень изоляции не посылают,
+таким образом, применяется уровень по умолчанию.</p>
+
+<p>Параметр <code class="literal">readonly</code> может быть
+<code class="literal">True</code>, чтобы начать транзакцию в режиме
+<code class="literal">READ ONLY</code> или <code class="literal">False</code>
+для режима <code class="literal">READ WRITE</code>. Если
+<code class="literal">readonly</code> пропущен,
+режим доступа сервера по умолчанию используется.
+Для получения дополнительной информации об операционном режиме доступа см.
+описание для <code class="literal">START TRANSACTION</code> в
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/commit.html"
+target="_top">START TRANSACTION, COMMIT, and ROLLBACK Statements</a>.
+Если сервер более старый, чем MySQL 5.6.5, он не поддерживает настройку
+режима доступа, и Connector/Python поднимает исключение
+<code class="literal">ValueError</code>.</p>
+
+<p>Вызов <code class="literal">start_transaction()</code> поднимает
+исключение <code class="literal">ProgrammingError</code>, если вызван
+в то время, как происходит транзакция. Это отличается от выполнения
+SQL-запроса <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/commit.html"
+target="_top"><code class="literal">START TRANSACTION</code></a>
+в то время как происходит транзакция: запрос неявно
+передает текущую транзакцию.</p>
+
+<p>Чтобы определить, активна ли транзакция для связи, используйте свойство
+<a href="#connector-python-api-mysqlconnection-in-transaction">
+in_transaction</a>.</p>
+
+<p><code class="literal">start_transaction()</code> добавлен в
+MySQL Connector/Python 1.1.0. Параметр <code class="literal">readonly</code>
+добавлен в Connector/Python 1.1.5.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-autocommit"></a>
+10.2.35. Свойство MySQLConnection.autocommit</h3>
+<a class="indexterm" name="idm45244848662592"></a>
+<a class="indexterm" name="idm45244848661584"></a>
+<p>Этому свойству можно назначить значение <code class="literal">True</code>
+или <code class="literal">False</code>, чтобы позволить или отключить
+autocommit в MySQL. Свойство может быть вызвано, чтобы
+узнать значение autocommit.</p>
+
+<p>Autocommit отключен по умолчанию, соединяясь через Connector/Python.
+Это может быть позволено, используя
+<a href="connect.htm#connector-python-connectargs">
+параметр соединения</a> <code class="literal">autocommit</code>.</p>
+
+<p>Когда autocommit выключен, необходимо
+<a href="#connector-python-api-mysqlconnection-commit">передавать
+</a> транзакции, используя механизмы системы хранения транзакций, например,
+<code class="literal">InnoDB</code> или
+<code class="literal">NDBCluster</code>.</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; cnx.autocommit
+False
+&gt;&gt;&gt; cnx.autocommit = True
+&gt;&gt;&gt; cnx.autocommit
+True
+</pre>
+
+<h3><a name="connector-python-api-mysqlconnection-unread-results"></a>
+10.2.36. Свойство MySQLConnection.unread_results</h3>
+<a class="indexterm" name="idm45244848651744"></a>
+<a class="indexterm" name="idm45244848650736"></a>
+<p>Указывает, есть ли непрочитанный результат. Это установлено в
+<code class="literal">False</code>, если нет непрочитанного результата, иначе
+<code class="literal">True</code>. Это используется курсорами, чтобы
+проверить, должен ли другой курсор все еще получить свой набор результатов.
+</p>
+
+<p>Не устанавливайте значение этому свойству, поскольку только
+соединитель должен изменить значение. Другими словами, рассматривайте это как
+свойство только для чтения.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-can-consume-results"></a>
+10.2.37. Свойство MySQLConnection.can_consume_results</h3>
+<a class="indexterm" name="idm45244848645648"></a>
+<a class="indexterm" name="idm45244848644640"></a>
+<p>Это свойство указывает на значение параметра связи
+<code class="literal">consume_results</code>, который управляет, прочитаны ли
+наборы результатов, произведенные запросами автоматически. См.
+<a href="connect.htm#connector-python-connectargs">раздел 7.1</a>.</p>
+<p>Это добавлено в Connector/Python 2.1.1.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-charset"></a>
+10.2.38. Свойство MySQLConnection.charset</h3>
+<a class="indexterm" name="idm45244848640112"></a>
+<a class="indexterm" name="idm45244848639104"></a>
+<p>Это свойство возвращает последовательность, указывающую, какой набор
+символов используется для связи.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-collation"></a>
+10.2.39. Свойство MySQLConnection.collation</h3>
+<a class="indexterm" name="idm45244848636160"></a>
+<a class="indexterm" name="idm45244848635152"></a>
+<p>Это свойство возвращает последовательность, указывающую, какое
+сопоставление используется для связи.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-connection-id"></a>
+10.2.40. Свойство MySQLConnection.connection_id</h3>
+<a class="indexterm" name="idm45244848632208"></a>
+<a class="indexterm" name="idm45244848631200"></a>
+<p>Это свойство возвращает ID связи (ID потока или сессии)
+для текущей связи (целое число) или
+<code class="literal">None</code>, если нет связи.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-database"></a>
+10.2.41. Свойство MySQLConnection.database</h3>
+<a class="indexterm" name="idm45244848627648"></a>
+<a class="indexterm" name="idm45244848626640"></a>
+<p>Это свойство устанавливает текущую базу данных, выполняя запрос
+<code class="literal">USE</code>. Свойство может также использоваться, чтобы
+узнать текущее имя базы данных.</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; cnx.database = 'test'
+&gt;&gt;&gt; cnx.database = 'mysql'
+&gt;&gt;&gt; cnx.database
+u'mysql'
+</pre>
+<p>Возвращает последовательность.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-get-warnings"></a>
+10.2.42. Свойство MySQLConnection.get_warnings</h3>
+<a class="indexterm" name="idm45244848621600"></a>
+<a class="indexterm" name="idm45244848620592"></a>
+<p>Этому свойству можно назначить значение <code class="literal">True</code>
+или <code class="literal">False</code>, чтобы позволить или отключить
+автоматическое получение предупреждений.
+Умолчание <code class="literal">False</code>. Свойство может быть применено,
+чтобы узнать текущее состояние предупреждений.</p>
+
+<p>Получение предупреждений автоматически может быть полезным, отлаживая
+запросы. Курсоры делают предупреждения доступными через метод
+<a href="#connector-python-api-mysqlcursor-fetchwarnings">
+MySQLCursor.fetchwarnings()</a>.</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; cnx.get_warnings = True
+&gt;&gt;&gt; cursor.execute('SELECT "a"+1')
+&gt;&gt;&gt; cursor.fetchall()
+[(1.0,)]
+&gt;&gt;&gt; cursor.fetchwarnings()
+[(u'Warning', 1292, u"Truncated incorrect DOUBLE value: 'a'")]
+</pre>
+<p>Возвращает <code class="literal">True</code> или
+<code class="literal">False</code>.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-in-transaction"></a>
+10.2.43. Свойство MySQLConnection.in_transaction</h3>
+<a class="indexterm" name="idm45244848611840"></a>
+<a class="indexterm" name="idm45244848610832"></a>
+<p>Это свойство вернет <code class="literal">True</code> или
+<code class="literal">False</code>, чтобы указать, активна ли транзакция для
+связи. Значение <code class="literal">True</code>
+независимо от того, начинаете ли вы транзакцию, используя вызов API
+<a href="#connector-python-api-mysqlconnection-start-transaction">
+<code class="literal">start_transaction()</code></a>
+или непосредственно выполняя SQL-оператор
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/commit.html" target="_top">
+<code class="literal">START TRANSACTION</code></a> или
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/commit.html" target="_top">
+<code class="literal">BEGIN</code></a>.</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; cnx.start_transaction()
+&gt;&gt;&gt; cnx.in_transaction
+True
+&gt;&gt;&gt; cnx.commit()
+&gt;&gt;&gt; cnx.in_transaction
+False
+</pre>
+<p><code class="literal">in_transaction</code> добавлено в
+MySQL Connector/Python 1.1.0.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-raise-on-warnings"></a>
+10.2.44. Свойство MySQLConnection.raise_on_warnings</h3>
+<a class="indexterm" name="idm45244848600880"></a>
+<a class="indexterm" name="idm45244848599872"></a>
+<p>Этому свойству можно назначить значение <code class="literal">True</code>
+или <code class="literal">False</code>, чтобы позволить или отключить, должны
+ли предупреждения поднять исключения. Умолчание
+<code class="literal">False</code>. Свойство может быть использовано, чтобы
+узнать текущий режим исключений.</p>
+
+<p>Определение <code class="literal">raise_on_warnings</code> также
+установит <code class="literal">get_warnings</code>
+потому что предупреждения должны быть получены, чтобы они могли быть
+подняты как исключения.</p>
+
+<p>Вы могли бы всегда хотеть установить режим SQL, если требуется иметь
+сервер MySQL, непосредственно сообщающий о предупреждениях как об ошибках
+(см. <a href="#connector-python-api-mysqlconnection-sql-mode">
+раздел 10.2.47</a>). Также хорошо использовать транзакционные механизмы,
+таким образом транзакции могут быть отменены, ловя исключение.</p>
+
+<p>Наборы результатов должны быть получены полностью, прежде чем любое
+исключение может быть поднято. Следующий пример показывает выполнение
+запроса, который производит предупреждение:</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; cnx.raise_on_warnings = True
+&gt;&gt;&gt; cursor.execute('SELECT "a"+1')
+&gt;&gt;&gt; cursor.fetchall()
+..
+mysql.connector.errors.DataError: 1292: Truncated incorrect DOUBLE value: 'a'
+</pre>
+<p>Вернет <code class="literal">True</code> или
+<code class="literal">False</code>.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-server-host"></a>
+10.2.45. Свойство MySQLConnection.server_host</h3>
+<a class="indexterm" name="idm45244848588048"></a>
+<a class="indexterm" name="idm45244848587040"></a>
+<p>Это свойство только для чтения возвращает имя хоста или IP-адрес,
+используемый для соединения с сервером MySQL.</p>
+<p>Возвращает последовательность.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-server-port"></a>
+10.2.46. Свойство MySQLConnection.server_port</h3>
+<a class="indexterm" name="idm45244848583728"></a>
+<a class="indexterm" name="idm45244848582720"></a>
+<p>Это свойство только для чтения возвращает порт TCP/IP, используемый для
+соединения с сервером MySQL.</p>
+<p>Возвращает целое число.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-sql-mode"></a>
+10.2.47. Свойство MySQLConnection.sql_mode</h3>
+<a class="indexterm" name="idm45244848579424"></a>
+<a class="indexterm" name="idm45244848578416"></a>
+<p>Это свойство используется, чтобы получить и установить режимы SQL
+для текущей связи. Значение должно быть списком различных режимов, отделенных
+запятой (","), или последовательностью режимов, предпочтительно используя
+класс <code class="literal">constants.SQLMode</code>.</p>
+<p>Чтобы сбросить все режимы, передайте пустую строку
+или пустую последовательность.</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; cnx.sql_mode = 'TRADITIONAL,NO_ENGINE_SUBSTITUTION'
+&gt;&gt;&gt; cnx.sql_mode.split(',')
+[u'STRICT_TRANS_TABLES', u'STRICT_ALL_TABLES', u'NO_ZERO_IN_DATE',
+u'NO_ZERO_DATE', u'ERROR_FOR_DIVISION_BY_ZERO', u'TRADITIONAL',
+u'NO_AUTO_CREATE_USER', u'NO_ENGINE_SUBSTITUTION']
+
+&gt;&gt;&gt; from mysql.connector.constants import SQLMode
+&gt;&gt;&gt; cnx.sql_mode = [ SQLMode.NO_ZERO_DATE, SQLMode.REAL_AS_FLOAT]
+&gt;&gt;&gt; cnx.sql_mode
+u'REAL_AS_FLOAT,NO_ZERO_DATE'
+</pre>
+<p>Возвращает последовательность.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-time-zone"></a>
+10.2.48. Свойство MySQLConnection.time_zone</h3>
+<a class="indexterm" name="idm45244848572352"></a>
+<a class="indexterm" name="idm45244848571344"></a>
+<p>Это свойство используется, чтобы установить или узнать
+переменную сеанса часового пояса для текущей связи.</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; cnx.time_zone = '+00:00'
+&gt;&gt;&gt; cursor = cnx.cursor()
+&gt;&gt;&gt; cursor.execute('SELECT NOW()') ; cursor.fetchone()
+(datetime.datetime(2012, 6, 15, 11, 24, 36),)
+&gt;&gt;&gt; cnx.time_zone = '-09:00'
+&gt;&gt;&gt; cursor.execute('SELECT NOW()') ; cursor.fetchone()
+(datetime.datetime(2012, 6, 15, 2, 24, 44),)
+&gt;&gt;&gt; cnx.time_zone
+u'-09:00'
+</pre>
+<p>Возвращает последовательность.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-unix-socket"></a>
+10.2.49. Свойство MySQLConnection.unix_socket</h3>
+<a class="indexterm" name="idm45244848566832"></a>
+<a class="indexterm" name="idm45244848565824"></a>
+<p>Это свойство только для чтения возвращает файл сокета Unix
+для соединения с сервером MySQL.</p>
+<p>Возвращает последовательность.</p>
+
+<h3><a name="connector-python-api-mysqlconnection-user"></a>
+10.2.50. Свойство MySQLConnection.user</h3>
+<a class="indexterm" name="idm45244848562528"></a>
+<a class="indexterm" name="idm45244848561520"></a>
+<p>Это свойство только для чтения возвращает имя пользователя, используемое
+для соединения с сервером MySQL.</p>
+<p>Возвращает строку.</p>
+
+<h2><a name="connector-python-api-mysqlconnectionpool"></a>
+10.3 pooling.MySQLConnectionPool</h2>
+<a class="indexterm" name="idm45244848558096"></a>
+<a class="indexterm" name="idm45244848557088"></a>
+<p>Этот класс предоставляет экземпляр и управление пулами связи.</p>
+
+<h3><a name="connector-python-api-mysqlconnectionpool-constructor"></a>
+10.3.1. Конструктор pooling.MySQLConnectionPool</h3>
+<a class="indexterm" name="idm45244848554320"></a>
+<a class="indexterm" name="idm45244848553312"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+MySQLConnectionPool(pool_name=None, pool_size=5,
+                    pool_reset_session=True, **kwargs)
+</pre>
+
+<p>Конструктор создает объект, который управляет пулом связи.</p>
+<p>Параметры:</p>
+<ul><li><p><code class="literal">pool_name</code>:
+Название пула. Если этот аргумент не дан, Connector/Python
+автоматически производит имя, составленное из значений
+<code class="literal">host</code>, <code class="literal">port</code>,
+<code class="literal">user</code> и <code class="literal">database</code>
+в <code class="literal">kwargs</code>, именно в этом порядке.</p>
+
+<p>Если несколько пулов имеют одинаковое имя, это не ошибка.
+Приложение, которое должно отличить пулы по их
+<code class="literal">pool_name</code>, должно создать каждый
+пул с отличным именем.</p></li>
+
+<li><p><code class="literal">pool_size</code>: Размер пула.
+Если этот аргумент не дан, умолчание равняется 5.</p></li>
+<li><p><code class="literal">pool_reset_session</code>:
+Перезагрузить ли переменные сеанса, когда связь возвращена в пул.
+Этот аргумент был добавлен в Connector/Python 1.1.5.
+До 1.1.5 переменные сеанса не перезагружаются.</p></li>
+
+<li><p><code class="literal">kwargs</code>: Дополнительные аргументы
+соединения, как описано в <a href="connect.htm#connector-python-connectargs">
+разделе 7.1</a>.</p></li></ul>
+
+<p>Пример:</p>
+<pre class="programlisting">
+dbconfig = {
+  "database": "test",
+  "user": "joe",
+}
+cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "mypool",
+                                                      pool_size = 3,
+                                                      **dbconfig)
+</pre>
+
+<h3><a name="connector-python-api-mysqlconnectionpool-add-connection"></a>
+10.3.2. Метод MySQLConnectionPool.add_connection()</h3>
+<a class="indexterm" name="idm45244848535632"></a>
+<a class="indexterm" name="idm45244848534624"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnxpool.add_connection(cnx = None)
+</pre>
+
+<p>Этот метод добавляет новое или существующее соединение
+<code class="literal">MySQLConnection</code> в пул или поднимает исключение
+<code class="literal">PoolError</code>, если пул полон.</p>
+
+<p>Параметры:</p>
+<ul><li><p><code class="literal">cnx</code>:
+Объект <code class="literal">MySQLConnection</code>, который будет добавлен к
+пулу. Если этот аргумент отсутствует, пул создает новую
+связь и добавляет его.</p></li></ul>
+
+<p>Пример:</p>
+<pre class="programlisting">
+cnxpool.add_connection()# add new connection to pool
+cnxpool.add_connection(cnx) # add existing connection to pool
+</pre>
+
+<h3><a name="connector-python-api-mysqlconnectionpool-get-connection"></a>
+10.3.3. Метод MySQLConnectionPool.get_connection()</h3>
+<a class="indexterm" name="idm45244848525024"></a>
+<a class="indexterm" name="idm45244848524016"></a>
+<p>Синтаксис:</p>
+<pre class="programlisting">
+cnxpool.get_connection()
+</pre>
+
+<p>Этот метод возвращает связь из пула или поднимает исключение
+<code class="literal">PoolError</code>, если никакие связи недоступны.</p>
+<p>Пример:</p>
+<pre class="programlisting">
+cnx = cnxpool.get_connection()
+</pre>
+
+<h3><a name="connector-python-api-mysqlconnectionpool-set-config"></a>
+10.3.4. Метод MySQLConnectionPool.set_config()</h3>
+<a class="indexterm" name="idm45244848518016"></a>
+<a class="indexterm" name="idm45244848517008"></a>
+<p>Синтаксис:</p>
+<pre class="programlisting">
+cnxpool.set_config(**kwargs)
+</pre>
+
+<p>Этот метод устанавливает параметры конфигурации для связей в пуле.
+Связи, получаемые из пула после использования изменения конфигурации, имеют
+новые параметры. Связи, полученные перед изменением, остаются незатронутыми,
+но когда они закрываются (возвращены в пул), будут вновь открыты с новыми
+параметрами прежде, чем возвращены пулом для последующих запросов связи.</p>
+
+<p>Параметры:</p>
+<ul><li><p><code class="literal">kwargs</code>: Аргументы соединения.
+</p></li></ul>
+
+<p>Пример:</p>
+<pre class="programlisting">
+dbconfig = {
+  "database": "performance_schema",
+  "user": "admin",
+  "password": "<em class="replaceable"><code>password</code></em>",
+}
+cnxpool.set_config(**dbconfig)
+</pre>
+
+<h3><a name="connector-python-api-mysqlconnectionpool-pool-name"></a>
+10.3.5. Свойство MySQLConnectionPool.pool_name</h3>
+<a class="indexterm" name="idm45244848509088"></a>
+<a class="indexterm" name="idm45244848508080"></a>
+<p>Синтаксис:</p>
+<pre class="programlisting">
+cnxpool.pool_name
+</pre>
+
+<p>Это свойство возвращает название пула связи.</p>
+<p>Пример:</p>
+<pre class="programlisting">
+name = cnxpool.pool_name
+</pre>
+
+<h2><a name="connector-python-api-pooledmysqlconnection"></a>
+10.4. pooling.PooledMySQLConnection</h2>
+<a class="indexterm" name="idm45244848502592"></a>
+<a class="indexterm" name="idm45244848501584"></a>
+<p>Этот класс используется <code class="literal">MySQLConnectionPool</code>,
+чтобы возвратить объединенный экземпляр связи. Это также класс, используемый
+для связей, полученных вызовом метода <code class="literal">connect()</code>,
+который вызывает пул связи (см.
+<a href="other.htm#connector-python-connection-pooling">раздел 9.1</a>).</p>
+
+<p>Объекты связи <code class="literal">PooledMySQLConnection</code> подобны
+необъединенным объектам связи <code class="literal">MySQLConnection
+</code> с этими различиями:</p>
+
+<ul><li><p>Чтобы освбодить объединенную связь, полученную из пула связи,
+вызовите <code class="literal">close()</code> так же, как для любой
+необъединенной связи. Однако для объединенной связи
+<code class="literal">close()</code> на самом деле не закрывает связь, а
+возвращает ее в пул и делает доступной для последующих запросов связи.
+</p></li>
+
+<li><p>Объединенная связь не может повторно формироваться, используя
+<code class="literal">config()</code>. Изменения связи должны быть сделаны
+через сам объект пула, как описано в
+<a href="other.htm#connector-python-connection-pooling">разделе 9.1</a>.
+</p></li>
+
+<li><p>У объединенной связи есть свойство
+<code class="literal">pool_name</code>, которое возвращает название пула.
+</p></li></ul>
+
+<h3><a name="connector-python-api-pooledmysqlconnection-constructor"></a>
+10.4.1. Конструктор pooling.PooledMySQLConnection</h3>
+<a class="indexterm" name="idm45244848488944"></a>
+<a class="indexterm" name="idm45244848487936"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+PooledMySQLConnection(cnxpool, cnx)
+</pre>
+
+<p>Конструктор конструктор берет пул связи и аргументы соединения и
+возвращает объединенную связь. Это используется классом
+<code class="literal">MySQLConnectionPool</code>.</p>
+
+<p>Параметры:</p>
+<ul><li><p><code class="literal">cnxpool</code>: Экземпляр
+<code class="literal">MySQLConnectionPool</code>.</p></li>
+<li><p><code class="literal">cnx</code>: Экземпляр
+<code class="literal">MySQLConnection</code>.</p></li></ul>
+
+<p>Пример:</p>
+<pre class="programlisting">
+pcnx = mysql.connector.pooling.PooledMySQLConnection(cnxpool, cnx)
+</pre>
+
+<h3><a name="connector-python-api-pooledmysqlconnection-close"></a>
+10.4.2. Метод PooledMySQLConnection.close()</h3>
+<a class="indexterm" name="idm45244848476992"></a>
+<a class="indexterm" name="idm45244848475984"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.close()
+</pre>
+
+<p>Возвращает объединенную связь в ее пул связи.</p>
+<p>Для объединенной связи <code class="literal">close()</code>
+на самом деле не закрывает ее, а возвращает ее в пул и делает доступной
+для последующих запросов связи.</p>
+
+<p>Если параметры конфигурации пула изменяются, возвращенная связь закрыта и
+вновь открыта с новой конфигурацией прежде, чем быть возвращенной из пула
+снова в ответ на запрос связи.</p>
+
+<h3><a name="connector-python-api-pooledmysqlconnection-config"></a>
+10.4.3. Метод PooledMySQLConnection.config()</h3>
+<a class="indexterm" name="idm45244848470064"></a>
+<a class="indexterm" name="idm45244848469056"></a>
+<p>Для объединенных связей <code class="literal">config()</code> поднимает
+исключение <code class="literal">PoolError</code>.
+Конфигурация для объединенных связей должна быть реализована,
+используя объект пула.</p>
+
+<h3><a name="connector-python-api-pooledmysqlconnection-pool-name"></a>
+10.4.4. Свойство PooledMySQLConnection.pool_name</h3>
+<a class="indexterm" name="idm45244848464912"></a>
+<a class="indexterm" name="idm45244848463904"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cnx.pool_name
+</pre>
+
+<p>Это свойство возвращает название пула связи, которому принадлежит связь.
+</p>
+<p>Пример:</p>
+<pre class="programlisting">
+cnx = cnxpool.get_connection()
+name = cnx.pool_name
+</pre>
+
+<h2><a name="connector-python-api-mysqlcursor"></a>
+10.5. cursor.MySQLCursor</h2>
+<a class="indexterm" name="idm45244848458368"></a>
+<a class="indexterm" name="idm45244848457360"></a>
+<p>Класс <code class="literal">MySQLCursor</code> порождает
+объекты, которые могут выполнить операции, такие как SQL-операторы.
+Объекты курсора взаимодействуют с сервером MySQL, используя объект
+<code class="literal">MySQLConnection</code>.</p>
+
+<p>Чтобы создать курсор, используйте метод
+<a href="#connector-python-api-mysqlconnection-cursor">
+<code class="literal">cursor()</code></a> объекта связи:</p>
+
+<pre class="programlisting">
+import mysql.connector
+cnx = mysql.connector.connect(database='world')
+cursor = cnx.cursor()
+</pre>
+
+<p>Несколько связанных классов наследуют
+<code class="literal">MySQLCursor</code>.
+Чтобы создать курсор одного из этих типов, передайте соответствующие
+аргументы <code class="literal">cursor()</code>:</p>
+
+<ul><li><p><code class="literal">MySQLCursorBuffered</code>
+создает буферизированный курсор. Посмотрите
+<a href="#connector-python-api-mysqlcursorbuffered">раздел 10.6.1
+</a>.</p>
+
+<pre class="programlisting">
+cursor = cnx.cursor(buffered=True)
+</pre></li>
+
+<li><p><code class="literal">MySQLCursorRaw</code>
+создает сырой курсор. Посмотрите
+<a href="#connector-python-api-mysqlcursorraw">раздел 10.6.2</a>.</p>
+
+<pre class="programlisting">
+cursor = cnx.cursor(raw=True)
+</pre></li>
+
+<li><p><code class="literal">MySQLCursorBufferedRaw</code>
+создает буферизированный сырой курсор. Посмотрите
+<a href="#connector-python-api-mysqlcursorbufferedraw">раздел 10.6.3
+</a>.</p>
+
+<pre class="programlisting">
+cursor = cnx.cursor(raw=True, buffered=True)
+</pre></li>
+
+<li><p><code class="literal">MySQLCursorDict</code>
+создает курсор, который возвращает строки как словари. Посмотрите
+<a href="#connector-python-api-mysqlcursordict">раздел 10.6.4</a>.
+</p>
+
+<pre class="programlisting">
+cursor = cnx.cursor(dictionary=True)
+</pre></li>
+
+<li><p><code class="literal">MySQLCursorBufferedDict</code>
+создает буферизированный курсор, который возвращает строки как словари.
+Посмотрите <a href="#connector-python-api-mysqlcursorbuffereddict">
+раздел 10.6.5</a>.</p>
+
+<pre class="programlisting">
+cursor = cnx.cursor(dictionary=True, buffered=True)
+</pre></li>
+
+<li><p><code class="literal">MySQLCursorNamedTuple</code>
+создает курсор, который возвращает строки как названные кортежами. Посмотрите
+<a href="#connector-python-api-mysqlcursornamedtuple">раздел 10.6.6
+</a>.</p>
+
+<pre class="programlisting">
+cursor = cnx.cursor(named_tuple=True)
+</pre></li>
+
+<li><p><code class="literal">MySQLCursorBufferedNamedTuple</code>
+создает буферизированный курсор, который возвращает строки как
+названные кортежами. Посмотрите
+<a href="#connector-python-api-mysqlcursorbufferednamedtuple">
+раздел 10.6.7</a>.</p>
+
+<pre class="programlisting">
+cursor = cnx.cursor(named_tuple=True, buffered=True)
+</pre></li>
+
+<li><p><code class="literal">MySQLCursorPrepared</code>
+создает курсор для выполнения подготовленных запросов. Посмотрите
+<a href="#connector-python-api-mysqlcursorprepared">раздел 10.6.8
+</a>.</p>
+
+<pre class="programlisting">
+cursor = cnx.cursor(prepared=True)
+</pre></li></ul>
+
+<h3><a name="connector-python-api-mysqlcursor-constructor"></a>
+10.5.1. Конструктор cursor.MySQLCursor</h3>
+<a class="indexterm" name="idm45244848426224"></a>
+<a class="indexterm" name="idm45244848425216"></a>
+<p>В большинстве случаев метод
+<code class="literal">MySQLConnection</code>
+<a href="#connector-python-api-mysqlconnection-cursor">
+<code class="literal">cursor()</code></a> используется, чтобы создать объект
+<code class="literal">MySQLCursor</code>:</p>
+
+<pre class="programlisting">
+import mysql.connector
+cnx = mysql.connector.connect(database='world')
+cursor = cnx.cursor()
+</pre>
+
+<p>Также возможно создать курсор, передавая объект
+<a href="#connector-python-api-mysqlconnection">
+<code class="literal">MySQLConnection</code></a> к
+<code class="literal">MySQLCursor</code>:</p>
+
+<pre class="programlisting">
+import mysql.connector
+from mysql.connector.cursor
+import MySQLCursor
+cnx = mysql.connector.connect(database='world')
+cursor = MySQLCursor(cnx)
+</pre>
+
+<p>Аргумент соединения дополнительный. Если опущен, курсор создается, но
+метод <a href="#connector-python-api-mysqlcursor-execute">
+<code class="literal">execute()</code></a> поднимает исключение.</p>
+
+<h3><a name="connector-python-api-mysqlcursor-callproc"></a>
+10.5.2. Метод MySQLCursor.callproc()</h3>
+<a class="indexterm" name="idm45244848414592"></a>
+<a class="indexterm" name="idm45244848413584"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+result_args = cursor.callproc(proc_name, args=())
+</pre>
+
+<p>Этот метод вызывает хранимую процедуру, указанную параметром
+<code class="literal">proc_name</code>. Последовательность параметров
+<code class="literal">args</code> должна содержать одну запись для каждого
+аргумента, который процедура ожидает.
+<code class="literal">callproc()</code> возвращает измененную копию входной
+последовательности. Входные параметры оставляют нетронутыми.
+Вывод и параметры ввода/вывода могут быть заменены новыми значениями.</p>
+
+<p>Наборы результатов, произведенные хранимой процедурой, автоматически
+получены и сохранены как экземпляры
+<a href="#connector-python-api-mysqlcursorbuffered">
+MySQLCursorBuffered</a>. Для получения дополнительной информации об
+использовании этих наборов результатов посмотрите
+<a href="#connector-python-api-mysqlcursor-stored-results">
+<code class="literal">stored_results()</code></a>.</p>
+
+<p>Предположим, что хранимая процедура берет два параметра, умножает
+значения и возвращает результат:</p>
+<pre class="programlisting">
+CREATE PROCEDURE multiply(IN pFac1 INT, IN pFac2 INT, OUT pProd INT)
+BEGIN
+  SET pProd := pFac1 * pFac2;
+END;
+</pre>
+
+<p>Следующий пример показывает, как выполнить
+<code class="literal">multiply()</code>:</p>
+<pre class="programlisting">
+&gt;&gt;&gt; args = (5, 6, 0) # 0 is to hold value of the OUT parameter pProd
+&gt;&gt;&gt; cursor.callproc('multiply', args)
+('5', '6', 30L)
+</pre>
+
+<p>Connector/Python 1.2.1 и выше разрешает типам параметра быть
+определенными. Чтобы сделать это, определите параметр как кортеж с двумя
+пунктами, состоящий из значения параметра и типа. Предположим, что процедура
+<code class="literal">sp1()</code> имеет это определение:</p>
+
+<pre class="programlisting">
+CREATE PROCEDURE sp1(IN pStr1 VARCHAR(20), IN pStr2 VARCHAR(20),
+                     OUT pConCat VARCHAR(100))
+BEGIN
+  SET pConCat := CONCAT(pStr1, pStr2);
+END;
+</pre>
+
+<p>Чтобы выполнять эту процедуру от Connector/Python, определяя тип для
+параметра <code class="literal">OUT</code>:</p>
+<pre class="programlisting">
+args = ('ham', 'eggs', (0, 'CHAR'))
+result_args = cursor.callproc('sp1', args)
+print(result_args[2])
+</pre>
+
+<h3><a name="connector-python-api-mysqlcursor-close"></a>
+10.5.3. Метод MySQLCursor.close()</h3>
+<a class="indexterm" name="idm45244848397024"></a>
+<a class="indexterm" name="idm45244848396016"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cursor.close()
+</pre>
+<p>Этот метод закрывает курсор, перезагружает все результаты и гарантирует,
+что у объекта курсора нет ссылки на оригинальный объект связи.</p>
+
+<h3><a name="connector-python-api-mysqlcursor-execute"></a>
+10.5.4. Метод MySQLCursor.execute()</h3>
+<a class="indexterm" name="idm45244848391136"></a>
+<a class="indexterm" name="idm45244848390128"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cursor.execute(operation, params=None, multi=False)
+iterator = cursor.execute(operation, params=None, multi=True)
+</pre>
+
+<p>Этот метод выполняет данное действие
+<code class="literal">operation</code> с базой данных.
+Параметры найдены в кортеже или словаре <code class="literal">params</code>
+и связаны с переменными в операции. Определите использование переменных
+в стиле параметров <code class="literal">%s</code> или
+<code class="literal">%(<em class="replaceable"><code>name</code></em>)s</code>
+(то есть, используя стиль <code class="literal">format</code> или
+<code class="literal">pyformat</code>).
+<code class="literal">execute()</code> возвращает итератор, если
+<code class="literal">multi</code> = <code class="literal">True</code>.</p>
+
+<p>В Python кортеж, содержащий единственную значение, должен включать
+запятую. Например, <span class="emphasis"><em>('abc')</em></span>
+оценено как скаляр, в то время как
+<span class="emphasis"><em>('abc',)</em></span> оценено как кортеж.</p>
+
+<p>Этот пример вставляет информацию о новом сотруднике, затем выбирает данные
+для того человека. Запросы выполняются как отдельные действия
+<code class="literal">execute()</code>:</p>
+
+<pre class="programlisting">
+insert_stmt = (
+  "INSERT INTO employees (emp_no, first_name, last_name, hire_date) "
+  "VALUES (%s, %s, %s, %s)"
+)
+data = (2, 'Jane', 'Doe', datetime.date(2012, 3, 23))
+cursor.execute(insert_stmt, data)
+select_stmt = "SELECT * FROM employees WHERE emp_no = %(emp_no)s"
+cursor.execute(select_stmt, { 'emp_no': 2 })
+</pre>
+
+<p>Значения данных преобразовываются по мере необходимости от объектов Python
+до чего-то, что MySQL понимает. В предыдущем примере экземпляр
+<code class="literal">datetime.date()</code> преобразовывается в
+<code class="literal">'2012-03-23'</code>.</p>
+
+<p>Если <code class="literal">multi</code> =
+<code class="literal">True</code>, <code class="literal">execute()</code>
+в состоянии выполнить многочисленные запросы, определенные в
+<code class="literal">operation</code>. Это возвращает итератор, который
+позволяет обработать результат каждого запроса. Однако использование
+параметров не работает хорошо в этом случае, и обычно хорошая идея выполнить
+каждый запрос самостоятельно.</p>
+
+<p>Следующий пример выбирает и вставляет данные в одной операции
+<code class="literal">execute()</code> и показывает
+результат каждого запроса:</p>
+
+<pre class="programlisting">
+operation = 'SELECT 1; INSERT INTO t1 VALUES (); SELECT 2'
+for result in cursor.execute(operation, multi=True):
+  if result.with_rows:
+     print("Rows produced by statement '{}':".format(
+     result.statement))
+     print(result.fetchall())
+  else:
+    print("Number of rows affected by statement '{}': {}".format(
+          result.statement, result.rowcount))
+</pre>
+
+<p>Если связь формируется, чтобы получить предупреждения, то все
+предупреждения, произведенные операцией, доступны через метод
+<a href="#connector-python-api-mysqlcursor-fetchwarnings">
+MySQLCursor.fetchwarnings()</a>.</p>
+
+<h3><a name="connector-python-api-mysqlcursor-executemany"></a>
+10.5.5. Метод MySQLCursor.executemany()</h3>
+<a class="indexterm" name="idm45244848367760"></a>
+<a class="indexterm" name="idm45244848366752"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+cursor.executemany(operation, seq_of_params)
+</pre>
+
+<p>Этот метод готовит <code class="literal">operation</code> для базы данных
+и выполняет его для всех последовательностей параметра или отображений,
+найденных в последовательности <code class="literal">seq_of_params</code>.</p>
+
+<p>В Python кортеж, содержащий единственную значение, должен включать
+запятую. Например, <span class="emphasis"><em>('abc')</em></span>
+оценено как скаляр, в то время как
+<span class="emphasis"><em>('abc',)</em></span> оценено как кортеж.</p>
+
+<p>В большинстве случаев метод <code class="literal">executemany()</code>
+повторяет последовательность параметров, каждый раз передавая текущие
+параметры к методу <code class="literal">execute()</code>.</p>
+
+<p>Оптимизация применяется для вставок: значения данных, данные
+последовательностями параметра, скомплектованы, используя синтаксис
+многократной строки. Следующий пример вставляет три записи:</p>
+
+<pre class="programlisting">
+data = [
+  ('Jane', date(2005, 2, 12)),
+  ('Joe', date(2006, 5, 23)),
+  ('John', date(2010, 10, 3)),
+]
+stmt = "INSERT INTO employees (first_name, hire_date) VALUES (%s, %s)"
+cursor.executemany(stmt, data)
+</pre>
+
+<p>Для предыдущего примера в MySQL послан такой
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html" target="_top">
+<code class="literal">INSERT</code></a>:</p>
+
+<pre class="programlisting">
+INSERT INTO employees (first_name, hire_date)
+       VALUES ('Jane', '2005-02-12'), ('Joe', '2006-05-23'),
+              ('John', '2010-10-03')
+</pre>
+
+<p>С методом <code class="literal">executemany()</code>
+невозможно определить многочисленные запросы, чтобы выполнить в параметре
+<code class="literal">operation</code>. Выполнение этого поднимает
+исключение <code class="literal">InternalError</code>.
+Рассмотрите использование <code class="literal">execute()</code> с
+<code class="literal">multi=True</code>.</p>
+
+<h3><a name="connector-python-api-mysqlcursor-fetchall"></a>
+10.5.6. Метод MySQLCursor.fetchall()</h3>
+<a class="indexterm" name="idm45244848350208"></a>
+<a class="indexterm" name="idm45244848349200"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+rows = cursor.fetchall()
+</pre>
+
+<p>Метод приносит все (или все остающиеся) строки набора результата запроса и
+возвращает список кортежей. Если больше строк недоступно, это
+возвращает пустой список.</p>
+
+<p>Следующий пример показывает, как получить первые два строки набора
+результатов, а затем любые остающиеся строки:</p>
+<pre class="programlisting">
+&gt;&gt;&gt; cursor.execute("SELECT * FROM employees ORDER BY emp_no")
+&gt;&gt;&gt; head_rows = cursor.fetchmany(size=2)
+&gt;&gt;&gt; remaining_rows = cursor.fetchall()
+</pre>
+<p>Необходимо принести все строки для текущего запроса прежде, чем выполнить
+новые запросы, используя ту же самую связь.</p>
+
+<h3><a name="connector-python-api-mysqlcursor-fetchmany"></a>
+10.5.7. Метод MySQLCursor.fetchmany()</h3>
+<a class="indexterm" name="idm45244848342672"></a>
+<a class="indexterm" name="idm45244848341664"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+rows = cursor.fetchmany(size=1)
+</pre>
+
+<p>Этот метод приносит следующий набор строк результата запроса и возвращает
+список кортежей. Если больше строк недоступно, это возвращает пустой список.
+</p>
+<p>Количество возвращенных строк может быть определено, используя параметр
+<code class="literal">size</code>, который по умолчанию 1. Меньше строк
+возвращено, если меньше строк доступно, чем указано.</p>
+<p>Необходимо принести все строки для текущего запроса прежде, чем выполнить
+новые запросы, используя ту же самую связь.</p>
+
+<h3><a name="connector-python-api-mysqlcursor-fetchone"></a>
+10.5.8. Метод MySQLCursor.fetchone()</h3>
+<a class="indexterm" name="idm45244848335680"></a>
+<a class="indexterm" name="idm45244848334672"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+row = cursor.fetchone()
+</pre>
+
+<p>Этот метод следующую строку набора результата запроса и возвращает
+единственную последовательность или <code class="literal">None</code>,
+если больше строк недоступно. По умолчанию возвращенный кортеж состоит из
+данных, возвращенных сервером MySQL, преобразованных в объекты Python.
+Если курсор сырой, никакое преобразование не происходит, посмотрите
+<a href="#connector-python-api-mysqlcursorraw">раздел 10.6.2</a>.</p>
+
+<p>Метод <code class="literal">fetchone()</code> используется
+<a href="#connector-python-api-mysqlcursor-fetchall">fetchall()</a>
+и <a href="#connector-python-api-mysqlcursor-fetchmany">fetchmany()
+</a>. Это также используется, когда курсор используется в качестве итератора.
+</p>
+
+<p>Следующий пример показывает два эквивалентных способа обработать результат
+запроса. Первое использование <code class="literal">fetchone()</code> в цикле
+<code class="literal">while</code>, второе использование
+курсора как итератора:</p>
+
+<pre class="programlisting">
+# Using a while loop
+cursor.execute("SELECT * FROM employees")
+row = cursor.fetchone()
+while row is not None:
+  print(row)
+  row = cursor.fetchone()
+# Using the cursor as iterator
+cursor.execute("SELECT * FROM employees")
+for row in cursor:
+  print(row)
+</pre>
+<p>Необходимо принести все строки для текущего запроса прежде, чем выполнить
+новые запросы, используя ту же самую связь.</p>
+
+<h3><a name="connector-python-api-mysqlcursor-fetchwarnings"></a>
+10.5.9. Метод MySQLCursor.fetchwarnings()</h3>
+<a class="indexterm" name="idm45244848323296"></a>
+<a class="indexterm" name="idm45244848322288"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+tuples = cursor.fetchwarnings()
+</pre>
+
+<p>Этот метод возвращает список кортежей, содержащих предупреждения,
+произведенные ранее выполненной операцией. Чтобы установить, получать ли
+предупреждения, используйте свойство соединения
+<a href="#connector-python-api-mysqlconnection-get-warnings">
+<code class="literal">get_warnings</code></a>.</p>
+
+<p>Следующий пример показывает
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/select.html" target="_top">
+<code class="literal">SELECT</code></a>, который производит предупреждение:
+</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; cnx.get_warnings = True
+&gt;&gt;&gt; cursor.execute("SELECT 'a'+1")
+&gt;&gt;&gt; cursor.fetchall()
+[(1.0,)]
+&gt;&gt;&gt; cursor.fetchwarnings()
+[(u'Warning', 1292, u"Truncated incorrect DOUBLE value: 'a'")]
+</pre>
+
+<p>Когда предупреждения произведены, возможно поднять ошибки вместо этого,
+используя свойство соединения
+<a href="#connector-python-api-mysqlconnection-raise-on-warnings"
+><code class="literal">raise_on_warnings</code></a>.</p>
+
+<h3><a name="connector-python-api-mysqlcursor-stored-results"></a>
+10.5.10. Метод MySQLCursor.stored_results()</h3>
+<a class="indexterm" name="idm45244848313104"></a>
+<a class="indexterm" name="idm45244848312096"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+iterator = cursor.stored_results()
+</pre>
+
+<p>Этот метод возвращает список итераторов, который может использоваться,
+чтобы обработать наборы результатов, произведенные хранимой процедурой,
+выполненной, используя метод
+<a href="#connector-python-api-mysqlcursor-callproc">callproc()</a>.
+Наборы результатов остаются доступными, пока вы не используете курсор, чтобы
+выполнить другую операцию или вызвать другую хранимую процедуру.</p>
+
+<p>Следующий пример выполняет хранимую процедуру, которая производит два
+набора результатов, затем использует
+<code class="literal">stored_results()</code>, чтобы получить их:</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; cursor.callproc('myproc')
+()
+&gt;&gt;&gt; for result in cursor.stored_results():
+... print result.fetchall()
+...
+[(1,)]
+[(2,)]
+</pre>
+
+<h3><a name="connector-python-api-mysqlcursor-column-names"></a>
+10.5.11. Свойство MySQLCursor.column_names</h3>
+<a class="indexterm" name="idm45244848304752"></a>
+<a class="indexterm" name="idm45244848303744"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+sequence = cursor.column_names
+</pre>
+
+<p>Это свойство только для чтения возвращает имена столбцов
+набора результатов как последовательность строк Unicode.</p>
+<p>Следующий пример показывает, как создать словарь из кортежа, содержащего
+данные с использованием ключей <code class="literal">column_names</code>:</p>
+
+<pre class="programlisting">
+cursor.execute("SELECT last_name, first_name, hire_date "
+               "FROM employees WHERE emp_no = %s", (123,))
+row = dict(zip(cursor.column_names, cursor.fetchone()))
+print("{last_name}, {first_name}: {hire_date}".format(row))
+</pre>
+
+<p>Альтернативно, с Connector/Python 2.0.0 можно принести строки как
+словари непосредственно, посмотрите
+<a href="#connector-python-api-mysqlcursordict">раздел 10.6.4</a>.
+</p>
+
+<h3><a name="connector-python-api-mysqlcursor-description"></a>
+10.5.12. Свойство MySQLCursor.description</h3>
+<a class="indexterm" name="idm45244848296288"></a>
+<a class="indexterm" name="idm45244848295280"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+tuples = cursor.description
+</pre>
+
+<p>Это свойство только для чтения возвращает список кортежей, описывающих
+колонки в наборе результатов. Каждый кортеж в списке содержит
+значения следующим образом:</p>
+
+<pre class="programlisting">
+(column_name,
+  type,
+  None,
+  None,
+  None,
+  None,
+  null_ok,
+  column_flags)
+</pre>
+
+<p>Следующий пример показывает, как интерпретировать кортежи
+<code class="literal">description</code>:</p>
+<pre class="programlisting">
+import mysql.connector
+from mysql.connector import FieldType
+...
+cursor.execute("SELECT emp_no, last_name, hire_date "
+               "FROM employees WHERE emp_no = %s", (123,))
+for i in range(len(cursor.description)):
+  print("Column {}:".format(i+1))
+  desc = cursor.description[i]
+  print("column_name = {}".format(desc[0]))
+  print("type = {} ({})".format(desc[1], FieldType.get_info(desc[1])))
+  print("null_ok = {}".format(desc[6]))
+  print("column_flags = {}".format(desc[7]))
+</pre>
+
+<p>Вывод похож на это:</p>
+<pre class="programlisting">
+Column 1:
+column_name = emp_no
+type = 3 (LONG)
+null_ok = 0
+column_flags = 20483
+Column 2:
+column_name = last_name
+type = 253 (VAR_STRING)
+null_ok = 0
+column_flags = 4097
+Column 3:
+column_name = hire_date
+type = 10 (DATE)
+null_ok = 0
+column_flags = 4225
+</pre>
+
+<p><code class="literal">column_flags</code> это экземпляр класса
+<code class="literal">constants.FieldFlag</code>.
+Чтобы видеть, как интерпретировать его, сделайте это:</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; from mysql.connector import FieldFlag
+&gt;&gt;&gt; FieldFlag.desc
+</pre>
+
+<h3><a name="connector-python-api-mysqlcursor-lastrowid"></a>
+10.5.13. Свойство MySQLCursor.lastrowid</h3>
+<a class="indexterm" name="idm45244848283920"></a>
+<a class="indexterm" name="idm45244848282912"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+id = cursor.lastrowid
+</pre>
+
+<p>Это свойство только для чтения возвращает значение, произведенное для
+столбца <code class="literal">AUTO_INCREMENT</code> последним
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html" target="_top">
+<code class="literal">INSERT</code></a> или
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/update.html" target="_top">
+<code class="literal">UPDATE</code></a>, или
+<code class="literal">None</code>, когда нет такого доступного значения.
+Например, если вы скомандуете
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html" target="_top">
+<code class="literal">INSERT</code></a> на таблице, которая содержит
+столбец <code class="literal">AUTO_INCREMENT</code>,
+<code class="literal">lastrowid</code> вернет значение
+<code class="literal">AUTO_INCREMENT</code> для новой строки.
+Для примера посмотрите
+<a href="example.htm#connector-python-example-cursor-transaction">раздел 5.3
+</a>.</p>
+
+<p>Свойство <code class="literal">lastrowid</code> похоже на функцию C API
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/mysql-insert-id.html"
+target="_top"><code class="literal">mysql_insert_id()</code></a>, см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/mysql-insert-id.html"
+target="_top">mysql_insert_id()</a>.</p>
+
+<h3><a name="connector-python-api-mysqlcursor-rowcount"></a>
+10.5.14. Свойство MySQLCursor.rowcount</h3>
+<a class="indexterm" name="idm45244848269232"></a>
+<a class="indexterm" name="idm45244848268224"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+count = cursor.rowcount
+</pre>
+
+<p>Это свойство только для чтения возвращает количество строк, возвращенных
+для <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/select.html"
+target="_top"><code class="literal">SELECT</code></a> или количество строк,
+затронутых запросами DML, например,
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html" target="_top">
+<code class="literal">INSERT</code></a> или
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/update.html" target="_top">
+<code class="literal">UPDATE</code></a>. Для примера посмотрите
+<a href="#connector-python-api-mysqlcursor-execute">раздел 10.5.4
+</a>.</p>
+
+<p>Для небуферизированных курсоров не может быть известно количество строк
+прежде, чем строки были принесены. В этом случае количество строк -1
+немедленно после выполнения запроса и увеличено, по мере получения строк.</p>
+
+<p>Свойство <code class="literal">rowcount</code> аналогично функции C API
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/mysql-affected-rows.html"
+target="_top"><code class="literal">mysql_affected_rows()</code></a>, см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/mysql-affected-rows.html"
+target="_top">mysql_affected_rows()</a>.</p>
+
+<h3><a name="connector-python-api-mysqlcursor-statement"></a>
+10.5.15. Свойство MySQLCursor.statement</h3>
+<a class="indexterm" name="idm45244848257104"></a>
+<a class="indexterm" name="idm45244848256096"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+str = cursor.statement
+</pre>
+
+<p>Это свойство только для чтения возвращает последний выполненный запрос
+как последовательность. Свойство <code class="literal">statement</code>
+может быть полезно для отладки и показа, что послали в сервер MySQL.</p>
+
+<p>Последовательность может содержать многочисленные запросы, если
+последовательность многократных запросов была выполнена. Это происходит для
+<code class="literal">execute()</code> с
+<code class="literal">multi=True</code>. В этом случае свойство
+<code class="literal">statement</code> содержит всю последовательность
+запросов и вызов <code class="literal">execute()</code> вернет итератор,
+который может использоваться, чтобы обработать следствия отдельных запросов.
+Свойство <code class="literal">statement</code> для этого итератора
+показывает последовательности запроса для отдельных запросов.</p>
+
+<h3><a name="connector-python-api-mysqlcursor-with-rows"></a>
+10.5.16. Свойство MySQLCursor.with_rows</h3>
+<a class="indexterm" name="idm45244848247232"></a>
+<a class="indexterm" name="idm45244848246224"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+boolean = cursor.with_rows
+</pre>
+
+<p>Это свойство только для чтения вернет <code class="literal">True</code>
+или <code class="literal">False</code>, чтобы указать, произвела ли последний
+раз выполненная операция строки.</p>
+
+<p>Свойство <code class="literal">with_rows</code> полезно, когда необходимо
+определить, производит ли запрос набор результатов и получить строки.
+Следующий пример получает строки, возвращенные
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/select.html"
+target="_top"><code class="literal">SELECT</code></a>, но
+только затронутые строки оцениваются для
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/update.html" target="_top">
+<code class="literal">UPDATE</code></a>:</p>
+
+<pre class="programlisting">
+import mysql.connector
+cnx = mysql.connector.connect(user='scott', database='test')
+cursor = cnx.cursor()
+operation = 'SELECT 1; UPDATE t1 SET c1 = 2; SELECT 2'
+for result in cursor.execute(operation, multi=True):
+  if result.with_rows:
+     result.fetchall()
+  else:
+    print("Number of affected rows: {}".format(result.rowcount))
+</pre>
+
+<h2><a name="connector-python-api-cursor-subclasses"></a>
+10.6. Субклассы cursor.MySQLCursor</h2>
+<a class="indexterm" name="idm45244848236192"></a>
+<a class="indexterm" name="idm45244848235184"></a>
+<p>Классы курсора, описанные в следующих разделах, наследуют от класса
+<code class="literal">MySQLCursor</code>, который описан в
+<a href="#connector-python-api-mysqlcursor">разделе 10.5</a>.</p>
+
+<h3><a name="connector-python-api-mysqlcursorbuffered"></a>
+10.6.1. Класс cursor.MySQLCursorBuffered</h3>
+<a class="indexterm" name="idm45244848231312"></a>
+<a class="indexterm" name="idm45244848230304"></a>
+<p>Класс <code class="literal">MySQLCursorBuffered</code> наследует от
+<a href="#connector-python-api-mysqlcursor">
+<code class="literal">MySQLCursor</code></a>.</p>
+
+<p>После выполнения запроса курсор
+<code class="literal">MySQLCursorBuffered</code> получает весь набор
+результатов от сервера и буферизует строки.</p>
+
+<p>Для запросов, выполненных, используя буферизированный курсор, получающие
+строки методы, такие как
+<a href="#connector-python-api-mysqlcursor-fetchone">
+<code class="literal">fetchone()</code></a>, вернут
+строки из набора буферизированных строк. Для небуферизированных курсоров
+строки не получены от сервера, пока метод, получающий строки, не вызывают.
+В этом случае, несомненно, необходимо будет получить все строки набора
+результатов прежде, чем выполнить любые другие запросы на той же самой связи,
+или будет поднято исключение <code class="literal">InternalError</code>
+(Unread result found).</p>
+
+<p><code class="literal">MySQLCursorBuffered</code> может быть полезным в
+ситуациях, где многократные запросы с небольшими наборами результатов должны
+быть объединены или вычислены друг с другом.</p>
+
+<p>Чтобы создать буферизированный курсор, используйте аргумент
+<code class="literal">buffered</code>, вызывая метод связи
+<a href="#connector-python-api-mysqlconnection-cursor">
+<code class="literal">cursor()</code></a>.
+Альтернативно, чтобы сделать все курсоры, созданные из связи, буферизованными
+по умолчанию, используйте <a href="connect.htm#connector-python-connectargs">
+параметр связи</a> <code class="literal">buffered</code>.</p>
+
+<p>Пример:</p>
+<pre class="programlisting">
+import mysql.connector
+cnx = mysql.connector.connect()
+# Only this particular cursor will buffer results
+cursor = cnx.cursor(buffered=True)
+# All cursors created from cnx2 will be buffered by default
+cnx2 = mysql.connector.connect(buffered=True)
+</pre>
+
+<p>Для случая практического применения посмотрите
+<a href="tutor.htm#connector-python-tutorial-cursorbuffered">раздел 6.1</a>.
+</p>
+
+<h3><a name="connector-python-api-mysqlcursorraw"></a>
+10.6.2. Класс cursor.MySQLCursorRaw</h3>
+<a class="indexterm" name="idm45244848215280"></a>
+<a class="indexterm" name="idm45244848214272"></a>
+<p>Класс <code class="literal">MySQLCursorRaw</code> унаследован от
+<a href="#connector-python-api-mysqlcursor">
+<code class="literal">MySQLCursor</code></a>.</p>
+
+<p>Курсор <code class="literal">MySQLCursorRaw</code>
+пропускает преобразование от типов данных MySQL до типов Python,
+когда получает строки. Сырой курсор обычно используется, чтобы получить
+лучшую производительность или когда вы хотите сделать преобразование сами.</p>
+
+<p>Чтобы создать сырой курсор, используйте параметр
+<code class="literal">raw</code>, вызывая метод связи
+<a href="#connector-python-api-mysqlconnection-cursor">
+<code class="literal">cursor()</code></a>. Альтернативно, чтобы сделать все
+курсоры, созданные из связи, сырыми по умолчанию, используйте
+<a href="connect.htm#connector-python-connectargs">параметр связи</a>
+<code class="literal">raw</code>.</p>
+
+<p>Пример:</p>
+<pre class="programlisting">
+import mysql.connector
+cnx = mysql.connector.connect()
+# Only this particular cursor will be raw
+cursor = cnx.cursor(raw=True)
+# All cursors created from cnx2 will be raw by default
+cnx2 = mysql.connector.connect(raw=True)
+</pre>
+
+<h3><a name="connector-python-api-mysqlcursorbufferedraw"></a>
+10.6.3. Класс cursor.MySQLCursorBufferedRaw</h3>
+<a class="indexterm" name="idm45244848203760"></a>
+<a class="indexterm" name="idm45244848202752"></a>
+<p>Класс <code class="literal">MySQLCursorBufferedRaw</code> унаследован от
+<a href="#connector-python-api-mysqlcursor">
+<code class="literal">MySQLCursor</code></a>.</p>
+
+<p>Курсор <code class="literal">MySQLCursorBufferedRaw</code>
+похож на <a href="#connector-python-api-mysqlcursorraw">
+<code class="literal">MySQLCursorRaw</code></a>, но буферизован: после
+выполнения запроса это получает весь набор результатов от сервера и
+буферизует строки. Для получения информации о последствиях буферизования
+посмотрите <a href="#connector-python-api-mysqlcursorbuffered">
+раздел 10.6.1</a>.</p>
+
+<p>Чтобы создать буферизированный сырой курсор, используйте метод
+<code class="literal">raw</code> и параметр
+<code class="literal">buffered</code>, когда вызываете метод соединения
+<a href="#connector-python-api-mysqlconnection-cursor">
+<code class="literal">cursor()</code></a>.
+Альтернативно, чтобы сделать все курсоры созданными сырыми
+и буферизованными по умолчанию, используйте
+<a href="connect.htm#connector-python-connectargs">параметры соединения</a>
+<code class="literal">raw</code> и <code class="literal">buffered</code>.</p>
+
+<p>Пример:</p>
+<pre class="programlisting">
+import mysql.connector
+cnx = mysql.connector.connect()
+# Only this particular cursor will be raw and buffered
+cursor = cnx.cursor(raw=True, buffered=True)
+# All cursors created from cnx2 will be raw and buffered by default
+cnx2 = mysql.connector.connect(raw=True, buffered=True)
+</pre>
+
+<h3><a name="connector-python-api-mysqlcursordict"></a>
+10.6.4. Класс cursor.MySQLCursorDict</h3>
+<a class="indexterm" name="idm45244848188928"></a>
+<a class="indexterm" name="idm45244848187840"></a>
+<p>Класс <code class="literal">MySQLCursorDict</code> унаследован от
+<a href="#connector-python-api-mysqlcursor">
+<code class="literal">MySQLCursor</code></a>.
+Этот класс доступен с Connector/Python 2.0.0.</p>
+
+<p>Курсор <code class="literal">MySQLCursorDict</code>
+возвращает каждую строку как словарь. Ключи для каждого объекта словаря это
+имена столбцов результата MySQL.</p>
+
+<p>Пример:</p>
+<pre class="programlisting">
+cnx = mysql.connector.connect(database='world')
+cursor = cnx.cursor(dictionary=True)
+cursor.execute("SELECT * FROM country WHERE Continent = 'Europe'")
+
+print("Countries in Europe:")
+for row in cursor:
+  print("* {Name}".format(Name=row['Name']
+</pre>
+
+<p>Предыдущий код производит такой вывод:</p>
+<pre class="programlisting">
+Countries in Europe:
+* Albania
+* Andorra
+* Austria
+* Belgium
+* Bulgaria
+...
+</pre>
+
+<p>Может быть удобно передать словарь в
+<code class="literal">format()</code>:</p>
+<pre class="programlisting">
+cursor.execute("SELECT Name, Population FROM country
+               WHERE Continent = 'Europe'")
+print("Countries in Europe with population:")
+for row in cursor:
+  print("* {Name}: {Population}".format(**row))
+</pre>
+
+<h3><a name="connector-python-api-mysqlcursorbuffereddict"></a>
+10.6.5. Класс cursor.MySQLCursorBufferedDict</h3>
+<a class="indexterm" name="idm45244848175888"></a>
+<a class="indexterm" name="idm45244848174800"></a>
+<p>Класс <code class="literal">MySQLCursorBufferedDict</code> унаследован от
+<a href="#connector-python-api-mysqlcursor">
+<code class="literal">MySQLCursor</code></a>.
+Этот класс доступен с Connector/Python 2.0.0.</p>
+
+<p>Курсор <code class="literal">MySQLCursorBufferedDict</code> аналогичен
+<a href="#connector-python-api-mysqlcursordict">
+<code class="literal">MySQLCursorDict</code></a>, но буферизован: после
+выполнения запроса это получает весь набор результатов от сервера и
+буферизует строки. Для получения информации о последствиях буферизования
+посмотрите <a href="#connector-python-api-mysqlcursorbuffered">
+раздел 10.6.1</a>.</p>
+
+<p>Чтобы получить буферизированный курсор, который возвращает словари,
+добавьте параметр <code class="literal">buffered</code>, создлавая
+новый курсор словаря:</p>
+
+<pre class="programlisting">
+cursor = cnx.cursor(dictionary=True, buffered=True)
+</pre>
+
+<h3><a name="connector-python-api-mysqlcursornamedtuple"></a>
+10.6.6. Класс cursor.MySQLCursorNamedTuple</h3>
+<a class="indexterm" name="idm45244848163936"></a>
+<a class="indexterm" name="idm45244848162848"></a>
+<p>Класс <code class="literal">MySQLCursorNamedTuple</code> унаследован от
+<a href="#connector-python-api-mysqlcursor">
+<code class="literal">MySQLCursor</code></a>.
+Этот класс доступен с Connector/Python 2.0.0.</p>
+
+<p>Курсор <code class="literal">MySQLCursorNamedTuple</code>
+возвращает каждую строку как названный кортеж. Признаки для каждого объекта
+названного кортежа это имена столбцов результата MySQL.</p>
+
+<p>Пример:</p>
+<pre class="programlisting">
+cnx = mysql.connector.connect(database='world')
+cursor = cnx.cursor(named_tuple=True)
+cursor.execute("SELECT * FROM country WHERE Continent = 'Europe'")
+
+print("Countries in Europe with population:")
+for row in cursor:
+  print("* {Name}: {Population}".format(Name=row.Name,
+        Population=row.Population))
+</pre>
+
+<h3><a name="connector-python-api-mysqlcursorbufferednamedtuple"></a>
+10.6.7. Класс cursor.MySQLCursorBufferedNamedTuple</h3>
+<a class="indexterm" name="idm45244848154720"></a>
+<a class="indexterm" name="idm45244848153616"></a>
+<p>Класс <code class="literal">MySQLCursorBufferedNamedTuple</code>
+унаследован от <a href="#connector-python-api-mysqlcursor">
+<code class="literal">MySQLCursor</code></a>.
+Этот класс доступен с Connector/Python 2.0.0.</p>
+
+<p>Курсор <code class="literal">MySQLCursorBufferedNamedTuple</code>
+аналогичен <a href="#connector-python-api-mysqlcursornamedtuple">
+<code class="literal">MySQLCursorNamedTuple</code></a>, но буферизован: после
+выполнения запроса это получает весь набор результатов от сервера и
+буферизует строки. Для получения информации о последствиях буферизования
+посмотрите <a href="#connector-python-api-mysqlcursorbuffered">
+раздел 10.6.1</a>.</p>
+
+<p>Чтобы получить буферизированный курсор, который возвращает названные
+кортежи, добавьте параметр <code class="literal">buffered</code> при создании
+нового курсора названного кортежа:</p>
+
+<pre class="programlisting">
+cursor = cnx.cursor(named_tuple=True, buffered=True)
+</pre>
+
+<h3><a name="connector-python-api-mysqlcursorprepared"></a>
+10.6.8. Класс cursor.MySQLCursorPrepared</h3>
+<a class="indexterm" name="idm45244848142624"></a>
+<a class="indexterm" name="idm45244848141536"></a>
+<a class="indexterm" name="idm45244848140032"></a>
+<p>Класс <code class="literal">MySQLCursorPrepared</code> унаследован от
+<a href="#connector-python-api-mysqlcursor">
+<code class="literal">MySQLCursor</code></a>.</p>
+
+<p>Этот класс доступен с Connector/Python 1.1.0.
+Расширение C поддерживает его с Connector/Python 8.0.17.</p>
+<p>В MySQL есть два способа выполнить подготовленный запрос:</p>
+
+<ul><li><p>Использовать запросы
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/prepare.html"
+target="_top"><code class="literal">PREPARE</code></a> и
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/execute.html"
+target="_top"><code class="literal">EXECUTE</code></a>.</p></li>
+
+<li><p>Используйте двоичный протокол клиент-сервер, чтобы послать и получить
+данные. Чтобы неоднократно выполнить тот же самый запрос с различными данными
+для различного выполнения, это более эффективно, чем использование
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/prepare.html"
+target="_top"><code class="literal">PREPARE</code></a> и
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/execute.html"
+target="_top"><code class="literal">EXECUTE</code></a>.
+Для получения информации о протоколе двоичной синхронной передачи данных см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/c-api-prepared-statements.html"
+target="_top">C API Prepared Statements</a>.</p></li></ul>
+
+<p>В Connector/Python есть два способа создать курсор, который позволяет
+выполнение подготовленных запросов, используя протокол двоичной синхронной
+передачи данных. В обоих случаях метод <code class="literal">cursor()</code>
+объекта связи возвращает объект
+<code class="literal">MySQLCursorPrepared</code>:</p>
+
+<ul><li><p>Более простой синтаксис использует параметр
+<code class="literal">prepared=True</code> метода
+<code class="literal">cursor()</code>.
+Этот синтаксис доступен с Connector/Python 1.1.2.</p>
+
+<pre class="programlisting">
+import mysql.connector
+cnx = mysql.connector.connect(database='employees')
+cursor = cnx.cursor(prepared=True)
+</pre></li>
+
+<li><p>Альтернативно, создайте экземпляр класса
+<code class="literal">MySQLCursorPrepared</code>, используя аргумент
+<code class="literal">cursor_class</code> метода
+<code class="literal">cursor()</code>.
+Этот синтаксис доступен с Connector/Python 1.1.0.</p>
+
+<pre class="programlisting">
+import mysql.connector
+from mysql.connector.cursor import MySQLCursorPrepared
+
+cnx = mysql.connector.connect(database='employees')
+cursor = cnx.cursor(cursor_class=MySQLCursorPrepared)
+</pre></li></ul>
+
+<p>Курсор, порожденный от класса
+<code class="literal">MySQLCursorPrepared</code>, работает так:</p>
+<ul><li><p>В первый раз вы передаете запрос методу
+<code class="literal">execute()</code> курсора, это готовит запрос.
+Для последующих вызовов <code class="literal">execute()</code>
+фаза подготовки пропускается, если запрос тот же самый</p></li>
+
+<li><p>Метод <code class="literal">execute()</code> берет дополнительный
+второй аргумент, содержащий список значений данных, чтобы связать с маркерами
+параметра в запросе. Если аргумент списка присутствует, должно быть одно
+значение на маркер параметра.</p></li></ul>
+
+<p>Пример:</p>
+<pre class="programlisting">
+cursor = cnx.cursor(prepared=True)
+stmt = "SELECT fullname FROM employees WHERE id = %s" # (1)
+cursor.execute(stmt, (5,))# (2)
+# ... fetch data ...
+cursor.execute(stmt, (10,)) # (3)
+# ... fetch data ...
+</pre>
+
+<ol type="1"><li><p><code class="literal">%s</code> в рамках запроса это
+маркер параметра. Не помещайте отметки цитаты вокруг маркеров параметра.
+</p></li>
+
+<li><p>Для первого вызова <code class="literal">execute()</code>
+курсор готовит запрос. Если данные даны в том же самом вызове, они также
+выполняют запрос и необходимо получить данные.</p></li>
+
+<li><p>Для последующего вызова <code class="literal">execute()</code>,
+который передает тот же самый SQL-оператор, курсор пропускает фазу подготовки.
+</p></li></ol>
+
+<p>Подготовленные запросы, выполненные с
+<code class="literal">MySQLCursorPrepared</code>, могут использовать стиль
+параметров <code class="literal">format</code>
+(<code class="literal">%s</code>) или
+<code class="literal">qmark</code> (<code class="literal">?</code>).
+Это отличается от неподготовленных запросов, выполненных с
+<code class="literal">MySQLCursor</code>, которые могут использовать стиль
+параметров <code class="literal">format</code> или
+<code class="literal">pyformat</code>.</p>
+
+<p>Чтобы использовать многочисленные подготовленные запросы одновременно,
+создайте многократные курсоры от класса
+<code class="literal">MySQLCursorPrepared</code>.</p>
+
+<a class="indexterm" name="idm45244848096736"></a>
+<p>У протокола MySQL клиент-сервер есть опция послать подготовленные
+параметры операторов через команду
+<code class="literal">COM_STMT_SEND_LONG_DATA</code>.
+Чтобы использовать это из скрипта Connector/Python,
+пошлите параметр в запросе, используя интерфейс
+<code class="literal">IOBase</code>. Пример:</p>
+
+<pre class="programlisting">
+from io import IOBase
+...
+cur = cnx.cursor(prepared=True)
+cur.execute("SELECT (%s)", (io.BytesIO(bytes("A", "latin1")), ))
+</pre>
+
+<h2><a name="connector-python-api-clientflag"></a>
+10.7. Класс constants.ClientFlag</h2>
+<a class="indexterm" name="idm45244848090768"></a>
+<a class="indexterm" name="idm45244848089680"></a>
+<p>Этот класс предоставляет определение констант флагов клиента MySQL,
+которые могут использоваться, когда связь устанавливается, чтобы формировать
+сессию. Класс <code class="literal">ClientFlag</code> доступен, импортируя
+<code class="literal">mysql.connector</code>.</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; import mysql.connector
+&gt;&gt;&gt; mysql.connector.ClientFlag.FOUND_ROWS
+2
+</pre>
+
+<p>См. <a href="#connector-python-api-mysqlconnection-set-client-flags">
+раздел 10.2.32</a> и <a href="connect.htm#connector-python-connectargs">
+параметры соединения</a> <code class="literal">client_flag</code>.</p>
+<p><code class="literal">ClientFlag</code> не может создавать экземпляры.</p>
+
+<h2><a name="connector-python-api-fieldtype"></a>
+10.8. Класс constants.FieldType</h2>
+<a class="indexterm" name="idm45244848079744"></a>
+<a class="indexterm" name="idm45244848078656"></a>
+<p>Этот класс обеспечивает все поддержанные поля MySQL или типы данных.
+Они могут быть полезными, имея дело с необработанными данными или определяя
+ваши собственные конвертеры. Тип поля хзранится с курсором в описании
+для каждого столбца.</p>
+
+<p>Следующий пример показывает, как напечатать название типа данных для
+каждого столбца в наборе результатов.</p>
+<pre class="programlisting">
+from __future__ import print_function
+import mysql.connector
+from mysql.connector import FieldType
+
+cnx = mysql.connector.connect(user='scott', database='test')
+cursor = cnx.cursor()
+cursor.execute("SELECT DATE(NOW()) AS `c1`, TIME(NOW()) AS `c2`, "
+               "NOW() AS `c3`, 'a string' AS `c4`, 42 AS `c5`")
+rows = cursor.fetchall()
+for desc in cursor.description:
+  colname = desc[0]
+  coltype = desc[1]
+  print("Column {} has type {}".format(colname, FieldType.get_info(coltype)))
+cursor.close()
+cnx.close()
+</pre>
+<p><code class="literal">FieldType</code> не может создавать экземпляры.</p>
+
+<h2><a name="connector-python-api-sqlmode"></a>
+10.9. Класс constants.SQLMode</h2>
+<a class="indexterm" name="idm45244848072624"></a>
+<a class="indexterm" name="idm45244848071552"></a>
+<p>Этот класс предоставляет все известные
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/sql-mode.html"
+target="_top">режимы SQL</a>. Это главным образом используется, устанавливая
+режимы SQL во время связи, используя свойство связи
+<code class="literal">sql_mode</code>, см.
+<a href="#connector-python-api-mysqlconnection-sql-mode">раздел
+10.2.47</a>.</p>
+<p>Класс <code class="literal">SQLMode</code> не может создавать экземпляры.
+</p>
+
+<h2><a name="connector-python-api-characterset"></a>
+10.10. Класс constants.CharacterSet</h2>
+<a class="indexterm" name="idm45244848064960"></a>
+<a class="indexterm" name="idm45244848063872"></a>
+<p>Этот класс обеспечивает все известные наборы символов MySQL
+и их сопоставления по умолчанию. Для примеров посмотрите
+<a href="#connector-python-api-mysqlconnection-set-charset-collation">
+раздел 10.2.31</a>.</p>
+<p>Класс <code class="literal">CharacterSet</code>
+не может создавать экземпляры.</p>
+
+<h2><a name="connector-python-api-refreshoption"></a>
+10.11. Класс constants.RefreshOption</h2>
+<a class="indexterm" name="idm45244848058528"></a>
+<a class="indexterm" name="idm45244848057440"></a>
+<p>Этот класс выполняет различные операции по сбросу.</p>
+
+<ul><li><p><code class="literal">RefreshOption.GRANT</code></p>
+<p>Освежить таблицы привилегий, аналогично
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/flush.html#flush-privileges"
+target="_top"><code class="literal">FLUSH PRIVILEGES</code></a>.</p></li>
+
+<li><p><code class="literal">RefreshOption.LOG</code></p>
+<p>Сбросить журналы как
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/flush.html#flush-logs"
+target="_top"><code class="literal">FLUSH LOGS</code></a>.</p></li>
+
+<li><p><code class="literal">RefreshOption.TABLES</code></p>
+<p>Сбросить кэш таблиц как
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/flush.html#flush-tables"
+target="_top"><code class="literal">FLUSH TABLES</code></a>.</p></li>
+
+<li><p><code class="literal">RefreshOption.HOSTS</code></p>
+<p>Сбросить кэш хоста как
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/flush.html#flush-hosts"
+target="_top"><code class="literal">FLUSH HOSTS</code></a>.</p></li>
+
+<li><p><code class="literal">RefreshOption.STATUS</code></p>
+<p>Сбросить переменные статуса аналогично
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/flush.html#flush-status"
+target="_top"><code class="literal">FLUSH STATUS</code></a>.</p></li>
+
+<li><p><code class="literal">RefreshOption.THREADS</code></p>
+<p>Сбросить кэш потоков.</p></li>
+<li><p><code class="literal">RefreshOption.SLAVE</code></p>
+<p>На подчиненном сервере репликации сбросить информацию о главном сервере и
+перезапустить подчиненного аналогично
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/reset-slave.html"
+target="_top"><code class="literal">RESET SLAVE</code></a>.</p></li></ul>
+
+<h2><a name="connector-python-api-errors"></a>
+10.12. Ошибки и исключения</h2>
+<p>Модуль <code class="literal">mysql.connector.errors</code> определяет
+классы исключений для ошибок и предупреждений, поднятых MySQL
+Connector/Python. Большинство классов, определенных в этом модуле, доступно,
+когда вы импортируете <code class="literal">mysql.connector</code>.</p>
+
+<p>Классы исключений, определенные в этом модуле главным образом, следуют
+спецификации Python Database API Specification v2.0 (PEP 249).
+Для некоторых клиентов MySQL или ошибок сервера не всегда ясно,
+которое исключение поднять.</p>
+
+<p>Ошибки MySQL Server отображены на исключения Python на основе их
+значения SQLSTATE (см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-error-reference.html"
+target="_top">Server Error Message Reference</a>).
+Следующая таблица показывает классы SQLSTATE и исключения
+поднимаемые Connector/Python. Однако, возможно пересмотреть, какое исключение
+поднято для каждой ошибки сервера. Исключение по умолчанию
+<code class="literal">DatabaseError</code>.</p>
+
+<a name="connector-python-api-errors-exceptions-map"></a>
+<p><b>Таблица 10.1. Отображение ошибок сервера к исключениям Python</b></p>
+<table><thead><tr>
+<th scope="col">Класс SQLSTATE</th>
+<th scope="col">Исключение Connector/Python</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">02</code></td>
+<td><code class="literal">DataError</code></td></tr>
+<tr><td scope="row"><code class="literal">02</code></td>
+<td><code class="literal">DataError</code></td></tr>
+<tr><td scope="row"><code class="literal">07</code></td>
+<td><code class="literal">DatabaseError</code></td></tr>
+<tr><td scope="row"><code class="literal">08</code></td>
+<td><code class="literal">OperationalError</code></td></tr>
+<tr><td scope="row"><code class="literal">0A</code></td>
+<td><code class="literal">NotSupportedError</code></td></tr>
+<tr><td scope="row"><code class="literal">21</code></td>
+<td><code class="literal">DataError</code></td></tr>
+<tr><td scope="row"><code class="literal">22</code></td>
+<td><code class="literal">DataError</code></td></tr>
+<tr><td scope="row"><code class="literal">23</code></td>
+<td><code class="literal">IntegrityError</code></td></tr>
+<tr><td scope="row"><code class="literal">24</code></td>
+<td><code class="literal">ProgrammingError</code></td></tr>
+<tr><td scope="row"><code class="literal">25</code></td>
+<td><code class="literal">ProgrammingError</code></td></tr>
+<tr><td scope="row"><code class="literal">26</code></td>
+<td><code class="literal">ProgrammingError</code></td></tr>
+<tr><td scope="row"><code class="literal">27</code></td>
+<td><code class="literal">ProgrammingError</code></td></tr>
+<tr><td scope="row"><code class="literal">28</code></td>
+<td><code class="literal">ProgrammingError</code></td></tr>
+<tr><td scope="row"><code class="literal">2A</code></td>
+<td><code class="literal">ProgrammingError</code></td></tr>
+<tr><td scope="row"><code class="literal">2B</code></td>
+<td><code class="literal">DatabaseError</code></td></tr>
+<tr><td scope="row"><code class="literal">2C</code></td>
+<td><code class="literal">ProgrammingError</code></td></tr>
+<tr><td scope="row"><code class="literal">2D</code></td>
+<td><code class="literal">DatabaseError</code></td></tr>
+<tr><td scope="row"><code class="literal">2E</code></td>
+<td><code class="literal">DatabaseError</code></td></tr>
+<tr><td scope="row"><code class="literal">33</code></td>
+<td><code class="literal">DatabaseError</code></td></tr>
+<tr><td scope="row"><code class="literal">34</code></td>
+<td><code class="literal">ProgrammingError</code></td></tr>
+<tr><td scope="row"><code class="literal">35</code></td>
+<td><code class="literal">ProgrammingError</code></td></tr>
+<tr><td scope="row"><code class="literal">37</code></td>
+<td><code class="literal">ProgrammingError</code></td></tr>
+<tr><td scope="row"><code class="literal">3C</code></td>
+<td><code class="literal">ProgrammingError</code></td></tr>
+<tr><td scope="row"><code class="literal">3D</code></td>
+<td><code class="literal">ProgrammingError</code></td></tr>
+<tr><td scope="row"><code class="literal">3F</code></td>
+<td><code class="literal">ProgrammingError</code></td></tr>
+<tr><td scope="row"><code class="literal">40</code></td>
+<td><code class="literal">InternalError</code></td></tr>
+<tr><td scope="row"><code class="literal">42</code></td>
+<td><code class="literal">ProgrammingError</code></td></tr>
+<tr><td scope="row"><code class="literal">44</code></td>
+<td><code class="literal">InternalError</code></td></tr>
+<tr><td scope="row"><code class="literal">HZ</code></td>
+<td><code class="literal">OperationalError</code></td></tr>
+<tr><td scope="row"><code class="literal">XA</code></td>
+<td><code class="literal">IntegrityError</code></td></tr>
+<tr><td scope="row"><code class="literal">0K</code></td>
+<td><code class="literal">OperationalError</code></td></tr>
+<tr><td scope="row"><code class="literal">HY</code></td>
+<td><code class="literal">DatabaseError</code></td></tr>
+</tbody></table><br class="table-break">
+
+<h3><a name="connector-python-api-errorcode"></a>
+10.12.1. Модуль errorcode</h3>
+<a class="indexterm" name="idm45244847918160"></a>
+<a class="indexterm" name="idm45244847917088"></a>
+<p>Этот модуль содержит коды ошибок клиента и сервера MySQL,
+определенные как атрибуты модуля с кодом ошибки как значение.
+Используя коды ошибок вместо номеров ошибок можно сделать чтение исходного
+кода немного легче.</p>
+
+<pre class="programlisting">
+&gt;&gt;&gt; from mysql.connector import errorcode
+&gt;&gt;&gt; errorcode.ER_BAD_TABLE_ERROR
+1051
+</pre>
+
+<p>Для получения дополнительной информации об ошибках MySQL посмотрите
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/error-handling.html"
+target="_top">Errors, Error Codes, and Common Problems</a>.</p>
+
+<h3><a name="connector-python-api-errors-error"></a>
+10.12.2. Исключение errors.Error</h3>
+<a class="indexterm" name="idm45244847911440"></a>
+<a class="indexterm" name="idm45244847910368"></a>
+<p>Это исключение базовый класс для всех других исключений в модуле
+<code class="literal">errors</code>. Это может использоваться, чтобы
+зафиксировать все ошибки в одном запросе <code class="literal">except</code>.
+</p>
+
+<p>Следующий пример показывает, как мы могли поймать синтаксические ошибки:
+</p>
+<pre class="programlisting">
+import mysql.connector
+try:
+  cnx = mysql.connector.connect(user='scott', database='employees')
+  cursor = cnx.cursor()
+  cursor.execute("SELECT * FORM employees") # Syntax error in query
+  cnx.close()
+  except mysql.connector.Error as err:
+  print("Something went wrong: {}".format(err))
+</pre>
+
+<p>Инициализация исключения поддерживает несколько дополнительных аргументов,
+а именно <code class="literal">msg</code>,
+<code class="literal">errno</code>, <code class="literal">values</code>
+и <code class="literal">sqlstate</code>. Все они дополнительные и по
+умолчанию <code class="literal">None</code>.
+<code class="literal">errors.Error</code> внутренне используется
+Connector/Python, чтобы поднять ошибки клиент-сервера MySQL и не должен
+использоваться вашим приложением, чтобы поднять исключения.</p>
+
+<p>Следующие примеры показывают результат, не используя аргументов
+или комбинации аргументов:</p>
+<pre class="programlisting">
+&gt;&gt;&gt; from mysql.connector.errors import Error
+&gt;&gt;&gt; str(Error())
+'Unknown error'
+
+&gt;&gt;&gt; str(Error("Oops! There was an error."))
+'Oops! There was an error.'
+
+&gt;&gt;&gt; str(Error(errno=2006))
+'2006: MySQL server has gone away'
+
+&gt;&gt;&gt; str(Error(errno=2002, values=('/tmp/mysql.sock', 2)))
+"2002: Can't connect to local MySQL server through socket
+'/tmp/mysql.sock' (2)"
+
+&gt;&gt;&gt; str(Error(errno=1146, sqlstate='42S02',
+msg="Table 'test.spam' doesn't exist"))
+"1146 (42S02): Table 'test.spam' doesn't exist"
+</pre>
+
+<p>Пример, который использует код ошибки 1146, используется, когда
+Connector/Python получает ошибочный пакет от сервера MySQL.
+Информация разобрана и передана к исключению
+<code class="literal">Error</code>.</p>
+
+<p>Каждый подкласс исключения от <code class="literal">Error</code>
+может быть инициализирован, используя ранее упомянутые аргументы.
+Кроме того, у каждого экземпляра есть атрибуты
+<code class="literal">errno</code>, <code class="literal">msg</code> и
+<code class="literal">sqlstate</code>, которые могут
+использоваться в вашем коде.</p>
+
+<p>Следующий пример показывает, как обработать ошибки, когда удаляемая
+таблица не существует (когда
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/drop-table.html"
+target="_top"><code class="literal">DROP TABLE</code></a> не включает
+<code class="literal">IF EXISTS</code>):</p>
+
+<pre class="programlisting">
+import mysql.connector
+from mysql.connector import errorcode
+
+cnx = mysql.connector.connect(user='scott', database='test')
+cursor = cnx.cursor()
+try:
+  cursor.execute("DROP TABLE spam")
+  except mysql.connector.Error as err:
+    if err.errno == errorcode.ER_BAD_TABLE_ERROR:
+       print("Creating table spam")
+    else:
+      raise
+</pre>
+
+<p>До Connector/Python 1.1.1 исходное сообщение, переданное
+<code class="literal">errors.Error()</code>,
+не сохранено так, чтобы это могло быть прочитано. Вместо этого атрибут
+<code class="literal">Error.msg</code> был отформатирован со значением
+SQLSTATE и кодом ошибки. С 1.1.1 только исходное сообщение сохраняется в
+атрибуте <code class="literal">Error.msg</code>.
+Отформатированное значение вместе с кодом ошибки и значением SQLSTATE может
+быть получено, печатая или получая строковое представление
+ошибочного объекта. Пример:</p>
+
+<pre class="programlisting">
+try:
+  conn = mysql.connector.connect(database = "baddb")
+  except mysql.connector.Error as e:
+    print "Error code:", e.errno# error number
+    print "SQLSTATE value:", e.sqlstate        # SQLSTATE value
+    print "Error message:", e.msg              # error message
+    print "Error:", e                          # errno, sqlstate, msg values
+    s = str(e)
+    print "Error:", s                          # errno, sqlstate, msg values
+</pre>
+<p><code class="literal">errors.Error</code> это подкласс Python
+<code class="literal">StandardError</code>.</p>
+
+<h3><a name="connector-python-api-errors-dataerror"></a>
+10.12.3. Исключение errors.DataError</h3>
+<a class="indexterm" name="idm45244847882416"></a>
+<a class="indexterm" name="idm45244847881328"></a>
+<p>Это исключение поднято, когда были проблемы с данными.
+Примеры: установка столбца в <code class="literal">NULL</code>, когда
+это не может быть <code class="literal">NULL</code>, выход значения
+из диапазона для столбца, деление на нуль, количество столбцов не
+соответствует количеству значений и т.д.</p>
+<p><code class="literal">errors.DataError</code> это подкласс
+<code class="literal">errors.DatabaseError</code>.</p>
+
+<h3><a name="connector-python-api-errors-databaseerror"></a>
+10.12.4. Исключение errors.DatabaseError</h3>
+<a class="indexterm" name="idm45244847874544"></a>
+<a class="indexterm" name="idm45244847873456"></a>
+<p>Это исключение является умолчанием для любой ошибки MySQL, которая не
+соответствует другим исключениям.</p>
+<p><code class="literal">errors.DatabaseError</code> это подкласс
+<code class="literal">errors.Error</code>.</p>
+
+<h3><a name="connector-python-api-errors-integrityerror"></a>
+10.12.5. Исключение errors.IntegrityError</h3>
+<a class="indexterm" name="idm45244847868320"></a>
+<a class="indexterm" name="idm45244847867232"></a>
+<p>Это исключение поднято, когда относительная целостность данных затронута.
+Например, двойной ключ был вставлен или ограничение внешнего ключа неудачно.
+</p>
+
+<p>Следующий пример показывает, что ошибка дублирования ключа
+подняла IntegrityError:</p>
+<pre class="programlisting">
+cursor.execute("CREATE TABLE t1 (id int, PRIMARY KEY (id))")
+try:
+  cursor.execute("INSERT INTO t1 (id) VALUES (1)")
+  cursor.execute("INSERT INTO t1 (id) VALUES (1)")
+  except mysql.connector.IntegrityError as err:
+  print("Error: {}".format(err))
+</pre>
+<p><code class="literal">errors.IntegrityError</code> это подкласс
+<code class="literal">errors.DatabaseError</code>.</p>
+
+<h3><a name="connector-python-api-errors-interfaceerror"></a>
+10.12.6. Исключение errors.InterfaceError</h3>
+<a class="indexterm" name="idm45244847860336"></a>
+<a class="indexterm" name="idm45244847859248"></a>
+<p>Это исключение поднято для ошибок, происходящих из самого
+Connector/Python, не связанных с сервером MySQL.</p>
+<p><code class="literal">errors.InterfaceError</code> это подкласс
+<code class="literal">errors.Error</code>.</p>
+
+<h3><a name="connector-python-api-errors-internalerror"></a>
+10.12.7. Исключение errors.InternalError</h3>
+<a class="indexterm" name="idm45244847854096"></a>
+<a class="indexterm" name="idm45244847853008"></a>
+<p>Это исключение поднято, когда сервер MySQL сталкивается с внутренней
+ошибкой, например, когда мертвая блокировка произошла.</p>
+<p><code class="literal">errors.InternalError</code> это подкласс
+<code class="literal">errors.DatabaseError</code>.</p>
+
+<h3><a name="connector-python-api-errors-notsupportederror"></a>
+10.12.8. Исключение errors.NotSupportedError</h3>
+<a class="indexterm" name="idm45244847847824"></a>
+<a class="indexterm" name="idm45244847846736"></a>
+<p>Это исключение поднято, когда была использована некоторая функция, которая
+не поддерживается версией MySQL, которая возвратила ошибку.
+Это также поднято, используя функции или запросы, которые не
+поддерживаются сохраненными подпрограммами.</p>
+<p><code class="literal">errors.NotSupportedError</code> это подкласс
+<code class="literal">errors.DatabaseError</code>.</p>
+
+<h3><a name="connector-python-api-errors-operationalerror"></a>
+10.12.9. errors.OperationalError</h3>
+<a class="indexterm" name="idm45244847841408"></a>
+<a class="indexterm" name="idm45244847840320"></a>
+<p>Это исключение поднято для ошибок, которые связаны с действиями MySQL.
+Например: слишком много связей, имя хоста не могло быть найдено,
+плохое рукопожатие, сервер закрывается, ошибки связи.</p>
+<p><code class="literal">errors.OperationalError</code> это подкласс
+<code class="literal">errors.DatabaseError</code>.</p>
+
+<h3><a name="connector-python-api-errors-poolerror"></a>
+10.12.10. Исключение errors.PoolError</h3>
+<a class="indexterm" name="idm45244847835136"></a>
+<a class="indexterm" name="idm45244847834048"></a>
+<p>Это исключение поднято для ошибок пула связи.
+<code class="literal">errors.PoolError</code> это подкласс
+<code class="literal">errors.Error</code>.</p>
+
+<h3><a name="connector-python-api-errors-programmingerror"></a>
+10.12.11. Исключение errors.ProgrammingError</h3>
+<a class="indexterm" name="idm45244847829328"></a>
+<a class="indexterm" name="idm45244847828240"></a>
+<p>Это исключение поднято на программных ошибках, например когда у вас есть
+синтаксическая ошибка в SQL или таблица не была найдена.</p>
+
+<p>Следующий пример показывает, как обращаться с синтаксическими ошибками:
+</p>
+<pre class="programlisting">
+try:
+  cursor.execute("CREATE DESK t1 (id int, PRIMARY KEY (id))")
+  except mysql.connector.ProgrammingError as err:
+    if err.errno == errorcode.ER_SYNTAX_ERROR:
+       print("Check your syntax!")
+    else:
+      print("Error: {}".format(err))
+</pre>
+<p><code class="literal">errors.ProgrammingError</code> это подкласс
+<code class="literal">errors.DatabaseError</code>.</p>
+
+<h3><a name="connector-python-api-errors-warning"></a>
+10.12.12. Исключение errors.Warning</h3>
+<a class="indexterm" name="idm45244847821488"></a>
+<a class="indexterm" name="idm45244847820400"></a>
+<p>Это исключение используется для сообщения о важных предупреждениях,
+однако, Connector/Python не использует его. Это включено, чтобы быть
+совместимым с Python Database Specification v2.0 (PEP-249).</p>
+
+<p>Рассмотрите использование более строгого
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/sql-mode.html"
+target="_top">режима SQL</a> или параметра соединения
+<a href="connect.htm#connector-python-connectargs">raise_on_warnings</a>,
+чтобы заставить Connector/Python поднять ошибки, когда ваши
+запросы произведут предупреждения.</p>
+<p><code class="literal">errors.Warning</code> это подкласс Python
+<code class="literal">StandardError</code>.</p>
+
+<h3><a name="connector-python-api-errors-custom-error-exception"></a>
+10.12.13. Функция errors.custom_error_exception()</h3>
+<a class="indexterm" name="idm45244847813024"></a>
+<a class="indexterm" name="idm45244847811920"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+errors.custom_error_exception(error=None, exception=None)
+</pre>
+
+<p>Этот метод определяет исключения для ошибок сервера MySQL и
+возвращает текущие настройки.</p>
+
+<p>Если <code class="literal">error</code> это номер ошибки MySQL Server,
+необходимо также передать класс <code class="literal">exception</code>.
+Аргумент <code class="literal">error</code> может быть словарем, в этом
+случае ключ это код ошибки сервера, а значение это класс исключения,
+которое будет поднято.</p>
+<p>Чтобы перезагрузить настройки, задайте пустой словарь.</p>
+
+<pre class="programlisting">
+import mysql.connector
+from mysql.connector import errorcode
+# Server error 1028 should raise a DatabaseError
+mysql.connector.custom_error_exception(1028, mysql.connector.DatabaseError)
+
+# Or using a dictionary:
+mysql.connector.custom_error_exception({
+  1028: mysql.connector.DatabaseError,
+  1029: mysql.connector.OperationalError,
+})
+# To reset, pass an empty dictionary:
+mysql.connector.custom_error_exception({})
+</pre>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

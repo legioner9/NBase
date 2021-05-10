@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlelements\umlelementsstructural\primitive\cat.primitive\dir.primitive.md">primitive</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlelements\umlelementsstructural\primitive\primitive.md">primitive.md</a>
+        - *#### <a href="https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/primitive.html" target="_blank">Primitive</a> Примитивный

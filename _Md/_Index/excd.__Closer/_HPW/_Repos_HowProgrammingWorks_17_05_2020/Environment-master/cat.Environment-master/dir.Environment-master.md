@@ -1,0 +1,10 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Environment-master\cat.Environment-master\dir.Environment-master.md">Environment-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Environment-master\README.md">README.md</a>
+        - *# Как настроить окружение и инструменты для Node.js
+        - *## Система контроля версий git
+        - *## Установите Node.js
+        - *##  Инициализация проекта
+        - *## Установите и настройте eslint
+        - *## Что должно получиться
+        - *## Полезные ссылки
+        - *## Мои контакты и профили

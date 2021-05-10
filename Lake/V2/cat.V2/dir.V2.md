@@ -1,0 +1,5 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\Lake\V2\cat.V2\dir.V2.md">V2</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\Lake\V2\V2.md">V2.md</a>
+        - *## Принципы SOLID: объяснение человеческим языком
+        - *%% WalkToSea [Принципы SOLID: объяснение человеческим языком](https://techrocks.ru/2020/08/26/solid-principles-in-plain-russian/)
+        - *### Single Responsibility Principle («Принцип единой ответственности», SRP)

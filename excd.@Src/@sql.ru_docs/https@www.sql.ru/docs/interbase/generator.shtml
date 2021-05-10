@@ -1,0 +1,284 @@
+<HTML>
+<HEAD>
+<TITLE>IBDatabase. Генераторы и их использование. [SQL.RU]</TITLE>
+<META http-equiv="Content-Type" CONTENT="text/html; charset=windows-1251">
+<META HTTP-EQUIV="Window-target" CONTENT="_top">
+<META HTTP-EQUIV="Last-Modified" CONTENT="29-03-2001">
+<META NAME="Description" CONTENT="Использование языка SQL, создание клиент-серверных систем. Конференция по MSSQL, Oracle, Interbase, MySQL. Полезные ссылки, документация, рекомендации по разработке информационных систем, сертификация, заказ книг и многое другое.">
+<META NAME="Keywords" CONTENT="SQL, конференция, Database Server, Oracle, Interbase, MySQL, документация, статьи, примеры, книги, ссылки, сертификация, работа, СУБД">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+<TABLE BORDER=0 CELLSPACING=10><TR><TD>
+<CENTER>
+<H2 class="headline">
+Генераторы и их использование</H2></CENTER> <BR><B>Автор:</B> <A 
+href="mailto:dima@demo.ru">Кузьменко Дмитрий</A> <BR><B>Источники:</B> печатная 
+документация и справочная информация по Borland InterBase, переписка листсервера 
+esunix1. <BR><BR><B>последние изменения:</B> 2 июля 1999. <BR>
+<HR width="100%">
+</CENTER>Большинство SQL-серверов имеет специальные механизмы для создания 
+уникальных идентификаторов. В Borland Interbase для этого существует механизм 
+генераторов. 
+<P>В данной статье будут рассмотрены следующие темы: <BR><A 
+href="#Создание генераторов">Создание 
+генераторов</A> <BR><A 
+href="#Использование генераторов в триггерах и хранимых">Использование 
+генераторов в триггерах и хранимых процедурах</A> <BR><A 
+href="#Изменение значения генератора">Изменение 
+значения генератора</A> <BR><A 
+href="#Получение текущего значения генераторов">Получение 
+текущего значения генератора</A> <BR><A 
+href="#Удаление генераторов">Удаление 
+генераторов</A> <BR><A 
+href="#Нестандартное применение генераторов">Нестандартное 
+применение генераторов</A> <BR>
+<HR width="100%">
+
+<P><A name="Создание генераторов"></A><B><FONT size=+1>Создание 
+генераторов</FONT></B> 
+<P>Генератор - это специальный объект базы данных, который генерирует уникальные 
+последовательные числа. Эти числа могут быть использованы в качестве 
+идентификаторов (например код клиента, номер счета и т.п.). Для создания 
+генератора необходимо использовать оператор DDL 
+<P><B><TT>CREATE GENERATOR generatorname;</TT></B> 
+<P>При выполнении такой команды происходит 2 действия: <BR>1. На специальной 
+странице БД отводится 4 байта для хранения значени генератора <BR>2. В системной 
+таблице RDB$GENERATORS заводится запись, куда помещаетс имя генератора иего 
+номер (фактически смещение на странице генераторов). 
+<P>После создания генератора его значения можно получать при помощи функции 
+<P><B><TT>GEN_ID(generatorname, inc_value)</TT></B> 
+<P>где inc_value - число, на которое необходимо прирастить значение генератора. 
+<P>Генераторы возвращают значения (и сохраняют свои значения на диске) вне 
+контекста транзакции пользователя. Это означает, что если генератора было 
+увеличено с 10 до 11 (инкремент 1), то даже при откате транзакции (ROLLBACK) 
+значение генератора не вернется к предыдущему. Вместе с этим гарантируется что 
+каждому пользователю будет возвращено уникальное значение генератора. 
+<P>При выборке значения генератора запросом вида select gen_id(genname, x) from 
+... следует учитывать буферизацию выборки на клиенте. Т.е. в 
+многопользовательской среде при выполнении двух таких запросов значения 
+генератора будут увеличиваться "пачками", а не на величину x для каждой 
+выбираемой записи. 
+<P><A name="Использование генераторов в триггерах и хранимых"></A><B><FONT 
+size=+1>Использование генераторов в триггерах и хранимых процедурах</FONT></B> 
+<P>Пример триггера, автоматически присваивающего уникальное значение ключевому 
+полю таблицы: 
+<P>создадим генератор для уникальной идентификации клиентов: 
+<P><B><TT>CREATE GENERATOR NEWCLIENT;</TT></B> 
+<P>создадим триггер для таблицы CLIENTS : 
+<P><B><TT>CREATE TRIGGER TBI_CLIENTS FOR CLIENTS</TT></B> <BR><B><TT>ACTIVE 
+BEFORE INSERT POSITION 0</TT></B> <BR><B><TT>AS</TT></B> 
+<BR><B><TT>BEGIN</TT></B> <BR><B><TT>&nbsp; NEW.CLIENT_ID = GEN_ID(NEWCLIENT, 
+1);</TT></B> <BR><B><TT>END</TT></B> 
+<P>В результате при создании новой записи полю CLIENT_ID будет автоматически 
+присваиваться новое значение. 
+<P>Однако при использовании генератора в триггере возникает проблема на 
+клиентской стороне (например в BDE, используемом в Delphi, C++Builder ...), 
+когда клиентское приложение пытается перечитать только-что вставленную запись. 
+Поскольку триггер меняет значение первичного ключа вставляемой записи, BDE 
+"теряет" такую запись и чаще всего выдает сообщение "Record/Key deleted". 
+Поскольку SQL-сервер не может сообщить клиентскому приложению о новом значении 
+ключевого поля, необходимо сначала запросить уникальное значение с сервера, и 
+только затем использовать его во вставляемой записи. Сделать это можно при 
+помощи хранимой процедуры 
+<P><B><TT>CREATE PROCEDURE GETNEWCLIENT</TT></B> <BR><B><TT>RETURNS (NID 
+INTEGER)</TT></B> <BR><B><TT>AS</TT></B> <BR><B><TT>BEGIN</TT></B> 
+<BR><B><TT>&nbsp; NID = GEN_ID(NEWCLIENT, 1);</TT></B> <BR><B><TT>END</TT></B> 
+<P>В Delphi, вы можете поместить компонент TStoredProc на форму, подсоединить 
+его к данной процедуре, и например в методе таблицы BeforePost написать 
+следующее 
+<P><B><TT>begin</TT></B> <BR><B><TT>&nbsp; if DataSource.State = dsInsert 
+then</TT></B> <BR><B><TT>&nbsp;&nbsp;&nbsp; begin</TT></B> 
+<BR><B><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; StoredProc1.ExecProc;</TT></B> 
+<BR><B><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+ClientTable.FieldByName('CLIENT_ID').asInteger:=</TT></B> 
+<BR><B><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+StoredProc1.Params[0].asInteger;</TT></B> <BR><B><TT>&nbsp;&nbsp;&nbsp; 
+end;</TT></B> <BR><B><TT>end;</TT></B> 
+<P>После этого вышеприведенный триггер TBI_CLIENTS можно либо удалить, либо 
+переписать так, чтобы генератор использовался только когда поле первичного ключа 
+случайно приобрело значение NULL (например когда к таблице CLIENTS доступ 
+осуществляется не через ваше приложение): 
+<P><B><TT>ALTER TRIGGER TBI_CLIENTS</TT></B> <BR><B><TT>AS</TT></B> 
+<BR><B><TT>BEGIN</TT></B> <BR><B><TT>&nbsp; IF (NEW.CLIENT_ID IS NULL) 
+THEN</TT></B> <BR><B><TT>&nbsp;&nbsp;&nbsp; NEW.CLIENT_ID = GEN_ID(NEWCLIENT, 
+1);</TT></B> <BR><B><TT>END</TT></B> 
+<P>Однако использование хранимой процедуры не всегда удобно - BDE может решить, 
+что процедура вероятно изменяет какие-то данные на сервере, и в режиме 
+autocommit завершит текущую транзакцию, что вызовет перечитывание данных TTable 
+и TQuery. Более простым способом является получение значения генератора при 
+помощи запроса: <BR>SELECT GEN_ID(NEWCLIENT, 1) FROM RDB$DATABASE 
+<P>При этом, если запрос помещен например в Query2, текст в BeforePost будет 
+следующим:<B><TT></TT></B> 
+<P><B><TT>begin</TT></B> <BR><B><TT>&nbsp; if DataSource.State = dsInsert 
+then</TT></B> <BR><B><TT>&nbsp;&nbsp;&nbsp; begin</TT></B> 
+<BR><B><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Query2.Open;</TT></B> 
+<BR><B><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+ClientTable.FieldByName('CLIENT_ID').asInteger:=</TT></B> 
+<BR><B><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+Query2.Fields[0].asInteger;</TT></B> <BR><B><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+Query2.Close;</TT></B> <BR><B><TT>&nbsp;&nbsp;&nbsp; end;</TT></B> 
+<BR><B><TT>end;</TT></B> <BR>&nbsp; 
+<P>Такой способ более предпочтителен, чем использование хранимой процедуры для 
+получения значения генератора, особенно при большом количестве генераторов. 
+<P><A name="Изменение значения генератора"></A><B><FONT size=+1>Изменение 
+значения генератора</FONT></B> 
+<P>Значение генератора можно переустановить при помощи оператора DDL 
+<P><B><TT>SET GENERATOR generatorname TO value;</TT></B> 
+<P>Однако вы не сможете использовать такое выражение в теле триггера или 
+хранимой процедуры, т.к. там можно использовать только операторы DML (а не DDL). 
+
+<P>Если вы хотите обнулить генератор, или присвоить ему определенное значение в 
+теле хранимой процедуры, то вы можете это сделать используя функцию GEN_ID: 
+<BR>(В данном примере генератор NEWCLIENT увеличивается на свое-же значение с 
+отрицательным знаком.) 
+<P><B><TT>...</TT></B> <BR><B><TT>TEMPVAR = GEN_ID(NEWCLIENT, -GEN_ID(NEWCLIENT, 
+0);</TT></B> <BR><B><TT>...</TT></B> 
+<P>Будьте внимательны при выполнении таких операций в многопользовательских 
+средах. Приложения, процедуры и триггеры, которые в данный момент используют 
+этот генератор, могут предполагать что он не будет "обнулен". Обязательно 
+проверяйте "обнуление" генератора на возникновение конфликтных ситуаций при 
+работе 2-х и более пользователей. 
+<P><A name="Получение текущего значения генераторов"></A><B><FONT 
+size=+1>Получение текущего значения генераторов</FONT></B> 
+<P>Текущее значение генератора можно получить, вызвав функцию GEN_ID с нулевым 
+увеличением значения генератора. Это можно сделать не только в триггере или 
+хранимой процедуре, но и оператором SELECT 
+<P><B><TT>SELECT GEN_ID(NEWCLIENT, 0) FROM RDB$DATABASE</TT></B> 
+<P>Результатом выполнения запроса будет одна запись с одним полем, содержащим 
+текущее значение генератора. Таблица RDB$DATABASES выбрана как содержаща в 
+большинстве случаев одну запись, хотя использовать можно и любую другую таблицу. 
+
+<P>При работе в многопользовательских средах будьте внимательны - в то время как 
+вы получили "текущее" значение генератора, другое приложение может его изменить, 
+и таким образом "текущее" значение окажется устаревшим. Тем более не 
+рекомендуется использовать "текущее" значение генератора для его последующего 
+изменения. 
+<P><A name="Удаление генераторов"></A><B><FONT size=+1>Удаление 
+генераторов</FONT></B> 
+<P>В языке DDL Borland Interbase нет оператора для удаления генератора. 
+Неизвестно, чем это вызвано, но серьезной проблемы не представляет. В самом 
+начале статьи было упомянуто, что запись о генераторе создается в таблице 
+RDB$GENERATORS. Эту запись, безусловно, можно удалить. Однако место, 
+распределенное на странице генераторов, освобождено не будет. Оно будет 
+освобождено только после того, как вы сделаете вашей БД BACKUP/RESTORE. 
+<P><A name="Нестандартное применение генераторов"></A><B><FONT 
+size=+1>Нестандартное применение генераторов</FONT></B> 
+<P>Вы уже видели, что функцию GEN_ID можно использовать в операторе SELECT. 
+<BR><B><FONT size=+1>В</FONT></B>от как можно получить количество записей, 
+выбранных запросом: 
+<P><B><TT>SET GENERATOR MYGEN TO 0;</TT></B> 
+<P><B><TT>SELECT GEN_ID(MYGEN, 1), FIELD1, FIELD2, FIELD3, ... FROM 
+MYTABLE.</TT></B> 
+<P>Такой запрос вернет в качестве первого поля порядковый номер записи, и после 
+выполнения запроса генератор MYGEN будет содержать количество возвращенных 
+записей. Кроме этого, во время выполнения этого запроса любой другой 
+пользователь этой-же БД может получить текущее значение генератора MYGEN и 
+узнать сколько записей уже выбрано запросом на текущий момент (нечто вроде 
+ProgressBar, однако число записей все-равно неизвестно до окончания выполнения 
+запроса). 
+<P><B><FONT size=+1>Ф</FONT></B>ункцию GEN_ID можно также использовать и как 
+"выключатель" длительных запросов. Пример приведен для БД EMPLOYEE.GDB. 
+<P><B><TT>SET GENERATOR EMP_NO_GEN TO 0;</TT></B> 
+<P><B><TT>SELECT * FROM EMPLOYEE, EMPLOYEE, EMPLOYEE</TT></B> <BR><B><TT>WHERE 
+GEN_ID(EMP_NO_GEN, 0) = 0;</TT></B> 
+<P>Фактически такой запрос означает - "выбирать записи пока значение генератора 
+= 0". Как только другой пользователь или ваше приложение в другом коннекте 
+выполнит операцию 
+<P><B><TT>SET GENERATOR EMP_NO_GEN TO 1;</TT></B> 
+<P>запрос прекратится, т.к. условие WHERE станет равным FALSE. <BR>
+<P><I>примечание</I>: обязательно учтитывайте буферизацию записей клиентской 
+частью (gds32.dll) или сервером при выполнении подобных запросов. Например, 
+приведенный выше запрос с проверкой генератора в where "выключится" не сразу, а 
+через некоторое время. 
+<P><B><FONT size=+1>Б</FONT></B>езусловно, в многопользовательской среде 
+невозможно использовать в таких целях один и тот-же генератор. Для решения этой 
+проблемы можно завести глобальный генератор, который будет выдавать уникальные 
+идентификаторы пользователям при коннекте, а клиентское приложение будет 
+запоминать его номер и хранить на локальном компьютере для последующего 
+использования. Логика работы может быть следующая: 
+<LI>Клиентское приложение при запуске определяет, есть-ли для него (например в 
+Registry или INI-файле) "именной" генератор. 
+<LI>Если нет, то оно операцией SELECT GEN_ID(GlobalGen, 1) FROM RDB$DATABASE 
+получает идентификатор (например 150), создает на сервере собственный генератор 
+операцией CREATE GENERATOR USER_N; (например USER150). После чего сохраняет имя 
+этого генератора на локальном диске. 
+<LI>Если да, то приложение обнуляет "именной" генератор операцией SET GENERATOR 
+... TO 0; (в нашем примере SET GENERATOR USER150 TO 0;), и выдает запросы с 
+использованием данного генератора. <BR>&nbsp; 
+<P>&nbsp;<B><FONT size=+1></FONT></B> 
+<P><B><FONT size=+1>П</FONT></B>ри помощи генераторов можно также решить 
+проблему с отсутствием временных таблиц в Borland Interbase. Вы создаете 
+таблицу, например TEMP_TBL, и в качестве первого поля, входящего в первичный 
+ключ, указываете поле типа INTEGER. Пользователь при соединении с сервером 
+получает собственный идентификатор у некоторого общего генератора, и затем 
+использует его при помещении записей в такую "временную" таблицу. В результате, 
+даже если несколько пользователей будут работать с такой таблицей, они никогда 
+не "пересекутся" по значению первого поля первичного ключа "временной" таблицы.. 
+
+<P><B><FONT size=+1>Е</FONT></B>сли вам недостаточно одного генератора в 
+первичном ключе, и первичный ключ должен состоять из двух и более полей, 
+значения которых устанавливаются генераторами, то решить такую задачу только при 
+помощи генераторов невозможно. Для этого необходимо скомбинировать генераторы, 
+триггеры и UDF - см. <A 
+href="../../../ib.demo.ru/Download/Udfdemox.zip">udfdemox.zip(15K)</A>. 
+<P><I>пояснения</I>: </P>
+<LI><FONT size=-1>DDL - Data Definition Language, язык определения данных</FONT> 
+
+<LI><FONT size=-1>DML - Data Manipulation Language, язык обработки данных</FONT> 
+<BR>&nbsp; 
+<P> 
+</TD></TR></TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../top100.rambler.ru/home@id=236431">
+<img src="../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../top.mail.ru/jump@from=58574"><img
+src="../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>
+

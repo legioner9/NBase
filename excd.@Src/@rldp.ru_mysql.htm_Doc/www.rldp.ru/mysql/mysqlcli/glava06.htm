@@ -1,0 +1,2935 @@
+<HTML>
+<HEAD>
+  <TITLE>Функции для использования в SELECT и WHERE</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1><A NAME="Functions">6
+Функции для использования в <CODE>SELECT</CODE> и <CODE>WHERE</CODE></A></H1>
+<P><CODE>select_expression</CODE> или <CODE>where_definition</CODE> в
+инструкции SQL может состоять из любого выражения, использующего
+функции, описанные ниже.</P>
+
+<P>Выражение, которое содержит <CODE>NULL</CODE> всегда, производит значение
+<CODE>NULL</CODE>, если иное не обозначено в документации для операторов и
+функций, включаемых в выражении.</P>
+
+<P><STRONG>ОБРАТИТЕ ВНИМАНИЕ:</STRONG> не должно быть никаких пробелов между
+именем функции и круглой скобкой после него. Это помогает синтаксическому
+анализатору MySQL различать обращения к функции и ссылки к таблицам или
+столбцам, которые, случается, имеют то же самое имя, что и функция. Пробелы
+вокруг параметров разрешаются.</P>
+
+<P>Вы можете заставить MySQL принимать пробелы после имени функции, запуская
+<CODE>mysqld</CODE> с опцией <CODE>--ansi</CODE> или используя параметр
+<CODE>CLIENT_IGNORE_SPACE</CODE> в <CODE>mysql_connect()</CODE>, но в этом
+случае все имена функции станут зарезервированными словами. Подробности в
+разделе "<A HREF="glava01.htm#ANSI_mode">1.4.3 Запуск MySQL в режиме ANSI
+</A>".</P>
+
+<P>Ради краткости, примеры отображают вывод из программы <CODE>mysql</CODE>
+в сокращенной форме. Например:</P>
+
+<PRE>
+mysql&#62; select MOD(29,9);
+1 rows in set (0.00 sec)
+  +-----------+
+  | mod(29,9) |
+  +-----------+
+  |         2 |
+  +-----------+
+</PRE>
+
+<P>Отображается подобно этому:</P>
+<PRE>
+mysql&#62; select MOD(29,9);
+-&#62; 2
+</PRE>
+
+<H3><A NAME="Non-typed_Operators">6.1 Нетипизированные операторы и функции
+</A></H3>
+
+<H4><A NAME="Parenthesis">6.1.1 Скобки</A></H4>
+<PRE>
+( ... )
+</PRE>
+
+<P>Используйте круглую скобку, чтобы принудительно задать порядок оценки в
+вычисляемом выражении. Например:</P>
+<PRE>
+mysql&#62; select 1+2*3;
+    -&#62; 7
+mysql&#62; select (1+2)*3;
+    -&#62; 9
+</PRE>
+
+<H4><A NAME="Comparison_Operators">6.1.2 Операторы сравнения</A></H4>
+<P>Операторы сравнения возвращают значения <CODE>1</CODE> (TRUE),
+<CODE>0</CODE> (FALSE) или <CODE>NULL</CODE>. Эти функции работают для чисел
+и строк. Строки автоматически будут преобразованы в числа, а числа в строки,
+как необходимо (как в языке Perl).</P>
+
+<P>MySQL выполняет все сравнения, использующие следующие правила:</P>
+<UL><LI>Если одни или оба параметра равны <CODE>NULL</CODE>, результат
+сравнения также равен <CODE>NULL</CODE>, кроме операторов
+<CODE>&#60;=&#62;</CODE>.
+
+<LI>Если оба параметра в операции сравнения представляют собой строки, они
+сравниваются как строки.
+<LI>Если оба параметра представляют собой числа, они сравниваются как числа.
+<LI>Шестнадцатеричные значения обрабатываются как двоичные строки, если не
+сравниваются с числом.
+<LI><A NAME="IDX1088"></A><A NAME="IDX1089"></A>Если один из параметров
+представляет собой столбец типа <CODE>TIMESTAMP</CODE> или
+<CODE>DATETIME</CODE>, а другой параметр является константой, то она будет
+преобразована в timestamp прежде, чем сравнение выполняется. Это выполнено,
+чтобы быть более дружественным к ODBC.
+<LI>Во всех других случаях параметры сравниваются как числа с плавающей
+запятой (реальные).</UL>
+
+<P>По умолчанию, сравнения строк выполнены независимо от регистра, используя
+текущий набор символов (по умолчанию это ISO-8859-1 Latin1, который работает
+превосходно для английского языка).</P>
+
+<P>Примеры ниже иллюстрируют преобразование строк в соответствующие числа для
+выполнения операций сравнения:</P>
+
+<PRE>
+mysql&#62; SELECT 1 &#62; '6x';
+     -&#62; 0
+mysql&#62; SELECT 7 &#62; '6x';
+     -&#62; 1
+mysql&#62; SELECT 0 &#62; 'x6';
+     -&#62; 0
+mysql&#62; SELECT 0 = 'x6';
+-&#62; 1
+</PRE>
+
+<DL COMPACT>
+<DT><CODE>=</CODE>
+<DD><A NAME="IDX1090"></A><A NAME="IDX1091"></A>Равны:
+<PRE>
+mysql&#62; select 1 = 0;
+    -&#62; 0
+mysql&#62; select '0' = 0;
+    -&#62; 1
+mysql&#62; select '0.0' = 0;
+    -&#62; 1
+mysql&#62; select '0.01' = 0;
+    -&#62; 0
+mysql&#62; select '.01' = 0.01;
+    -&#62; 1
+</PRE>
+
+<A NAME="IDX1092"></A><A NAME="IDX1093"></A><A NAME="IDX1094"></A>
+<A NAME="IDX1095"></A><DT><CODE>&#60;&#62;</CODE>
+<DD><DT><CODE>!=</CODE>
+<DD>Не равны:
+<PRE>
+mysql&#62; select '.01' &#60;&#62; '0.01';
+    -&#62; 1
+mysql&#62; select .01 &#60;&#62; '0.01';
+    -&#62; 0
+mysql&#62; select 'zapp' &#60;&#62; 'zappp';
+    -&#62; 1
+</PRE>
+
+<A NAME="IDX1096"></A><A NAME="IDX1097"></A>
+<DT><CODE>&#60;=</CODE>
+<DD>Меньше, чем или равны:
+<PRE>
+mysql&#62; select 0.1 &#60;= 2;
+    -&#62; 1
+</PRE>
+
+<A NAME="IDX1098"></A><A NAME="IDX1099"></A><DT><CODE>&#60;</CODE>
+<DD>Строго мньше, чем:
+<PRE>
+mysql&#62; select 2 &#60; 2;
+    -&#62; 0
+</PRE>
+
+<A NAME="IDX1100"></A><A NAME="IDX1101"></A><DT><CODE>&#62;=</CODE>
+<DD>Больше, чем или равны:
+<PRE>
+mysql&#62; select 2 &#62;= 2;
+    -&#62; 1
+</PRE>
+
+<A NAME="IDX1102"></A><A NAME="IDX1103"></A><DT><CODE>&#62;</CODE>
+<DD>Строго больше, чем:
+<PRE>
+mysql&#62; select 2 &#62; 2;
+    -&#62; 0
+</PRE>
+
+<A NAME="IDX1104"></A><A NAME="IDX1105"></A>
+<DT><CODE>&#60;=&#62;</CODE>
+<DD>Null равен:
+<PRE>
+mysql&#62; select 1 &#60;=&#62; 1, NULL &#60;=&#62; NULL, 1 &#60;=&#62; NULL;
+    -&#62; 1 1 0
+</PRE>
+
+<A NAME="IDX1106"></A><A NAME="IDX1107"></A><A NAME="IDX1108"></A>
+<DT><CODE>IS NULL</CODE>
+<DD><DT><CODE>IS NOT NULL</CODE>
+<DD>Проверяет, является или нет значение <CODE>NULL</CODE>:
+<PRE>
+mysql&#62; select 1 IS NULL, 0 IS NULL, NULL IS NULL;
+    -&#62; 0 0 1
+mysql&#62; select 1 IS NOT NULL, 0 IS NOT NULL, NULL IS NOT NULL;
+    -&#62; 1 1 0
+</PRE>
+
+<A NAME="IDX1109"></A><DT><CODE>expr BETWEEN min AND max</CODE>
+<DD>Если <CODE>expr</CODE> больше или равно <CODE>min</CODE>, и
+<CODE>expr</CODE> меньше или равно <CODE>max</CODE>, то <CODE>BETWEEN</CODE>
+вернет <CODE>1</CODE>, иначе это возвращает <CODE>0</CODE>. Это эквивалентно
+выражению <CODE>(min &#60;= expr AND expr &#60;= max)</CODE>, если все
+параметры имеют тот же самый тип. Первый параметр (<CODE>expr</CODE>)
+определяет, как выполняется сравнение следующим образом:
+
+<UL><LI>Если <CODE>expr</CODE> представляет собой столбец типа
+<CODE>TIMESTAMP</CODE>, <CODE>DATE</CODE> или <CODE>DATETIME</CODE>, то
+<CODE>MIN()</CODE> и <CODE>MAX()</CODE> приводятся к тому же самому формату,
+если они константы.
+
+<LI>Если <CODE>expr</CODE> представляет собой строку, нечувствительную к
+регистру, то сравнение выполняется без учета регистра.
+
+<LI>Если <CODE>expr</CODE> представляет собой строку, чувствительную к
+регистру, то сравнение выполняется с учетом регистра символов.
+
+<LI>Если <CODE>expr</CODE> представляет собой целочисленное выражение, будет
+выполнено целочисленное сравнение.
+
+<LI>Иначе, будет выполнено сравнение чисел с плавающей запятой.</UL>
+<PRE>
+mysql&#62; select 1 BETWEEN 2 AND 3;
+    -&#62; 0
+mysql&#62; select 'b' BETWEEN 'a' AND 'c';
+    -&#62; 1
+mysql&#62; select 2 BETWEEN 2 AND '3';
+    -&#62; 1
+mysql&#62; select 2 BETWEEN 2 AND 'x-3';
+    -&#62; 0
+</PRE>
+
+<A NAME="IDX1110"></A><DT><CODE>expr IN (value,...)</CODE>
+<DD>Возвращается <CODE>1</CODE>, если <CODE>expr</CODE> представляет собой
+любое из значений в списке <CODE>IN</CODE>, иначе возвращается
+<CODE>0</CODE>. Если все значения константы, то все значения оценены согласно
+типу <CODE>expr</CODE> и отсортированы. Поиск элемента затем будет выполнен,
+используя двоичный поиск. Это означает, что <CODE>IN</CODE> очень быстр, если
+список значений <CODE>IN</CODE> состоит полностью из констант. Если
+<CODE>expr</CODE> чувствительное к регистру строковое выражение, сравнение
+строк выполняется с учетом регистра:
+
+<PRE>
+mysql&#62; select 2 IN (0,3,5,'wefwf');
+    -&#62; 0
+mysql&#62; select 'wefwf' IN (0,3,5,'wefwf');
+    -&#62; 1
+</PRE>
+
+<A NAME="IDX1111"></A>
+<DT><CODE>expr NOT IN (value,...)</CODE>
+<DD>Аналогично <CODE>NOT (expr IN (value,...))</CODE>.
+
+<A NAME="IDX1112"></A>
+<DT><CODE>ISNULL(expr)</CODE>
+<DD>Если <CODE>expr</CODE> равен <CODE>NULL</CODE>, <CODE>ISNULL()</CODE>
+возвращает <CODE>1</CODE>, иначе это возвращает <CODE>0</CODE>:
+
+<PRE>
+mysql&#62; select ISNULL(1+1);
+    -&#62; 0
+mysql&#62; select ISNULL(1/0);
+    -&#62; 1
+</PRE>
+
+Обратите внимание, что сравнение значений <CODE>NULL</CODE>, использующих
+<CODE>=</CODE> всегда будет равно false!
+
+<A NAME="IDX1113"></A><A NAME="IDX1114"></A><DT><CODE>COALESCE(list)</CODE>
+<DD>Возвращает первый не-<CODE>NULL</CODE> элемент в списке:
+
+<PRE>
+mysql&#62; select COALESCE(NULL,1);
+    -&#62; 1
+mysql&#62; select COALESCE(NULL,NULL,NULL);
+    -&#62; NULL
+</PRE>
+
+<A NAME="IDX1115"></A><DT><CODE>INTERVAL(N,N1,N2,N3,...)</CODE>
+<DD>Возвращает <CODE>0</CODE>, если <CODE>N</CODE> &#60; <CODE>N1</CODE>,
+<CODE>1</CODE>, если <CODE>N</CODE> &#60; <CODE>N2</CODE> и так далее. Все
+параметры обрабатываются как целые числа. Это требует, чтобы выполнялось
+<CODE>N1</CODE> &#60; <CODE>N2</CODE> &#60; <CODE>N3</CODE> &#60;
+<CODE>...</CODE> &#60; <CODE>Nn</CODE> для этой функции, чтобы она могла
+работать правильно. Это потому, что при работе функции используется двоичный
+поиск (очень быстрый):
+
+<PRE>
+mysql&#62; select INTERVAL(23, 1, 15, 17, 30, 44, 200);
+    -&#62; 3
+mysql&#62; select INTERVAL(10, 1, 10, 100, 1000);
+    -&#62; 2
+mysql&#62; select INTERVAL(22, 23, 30, 44, 200);
+    -&#62; 0
+</PRE></DL>
+
+<P>Если Вы сравниваете чувствительную к регистру строку любым из стандартных
+операторов (<CODE>=</CODE>, <CODE>&#60;&#62;</CODE>..., но не
+<CODE>LIKE</CODE>), конечный пробел будет игнорироваться.</P>
+<PRE>
+mysql&#62; select "a" ="A ";
+    -&#62; 1
+</PRE>
+
+<H4><A NAME="Logical_Operators">6.1.3 Логические операторы</A></H4>
+<P>Все логические функции возвращают <CODE>1</CODE> (TRUE), <CODE>0</CODE>
+(FALSE) или <CODE>NULL</CODE> (неизвестное, которое находится в большинстве
+случаев также, как FALSE):</P>
+
+<DL COMPACT>
+<DT><CODE>NOT</CODE>
+<DD><A NAME="IDX1118"></A><A NAME="IDX1119"></A>
+
+<DT><CODE>!</CODE>
+<DD>Логический NOT. Возвращает <CODE>1</CODE>, если параметр <CODE>0</CODE>,
+иначе возвращает <CODE>0</CODE>. Исключительная ситуация: <CODE>NOT
+NULL</CODE> возвращает <CODE>NULL</CODE>:
+
+<PRE>
+mysql&#62; select NOT 1;
+    -&#62; 0
+mysql&#62; select NOT NULL;
+    -&#62; NULL
+mysql&#62; select ! (1+1);
+    -&#62; 0
+mysql&#62; select ! 1+1;
+    -&#62; 1
+</PRE>
+
+Последний пример возвращает <CODE>1</CODE> потому, что выражение оценивается
+так же, как <CODE>(!1)+1</CODE>.
+
+<A NAME="IDX1120"></A><A NAME="IDX1121"></A><DT><CODE>OR</CODE>
+<DD>
+<DT><CODE>||</CODE>
+<DD>Логический OR. Возвращает <CODE>1</CODE>, если любой параметр не
+<CODE>0</CODE> и не <CODE>NULL</CODE>:
+
+<PRE>
+mysql&#62; select 1 || 0;
+    -&#62; 1
+mysql&#62; select 0 || 0;
+    -&#62; 0
+mysql&#62; select 1 || NULL;
+    -&#62; 1
+</PRE>
+
+<A NAME="IDX1122"></A><A NAME="IDX1123"></A><DT><CODE>AND</CODE>
+<DD>
+<DT><CODE>&#38;&</CODE>
+<DD>Логический AND. Возвращается <CODE>0</CODE>, если параметр <CODE>0</CODE>
+или <CODE>NULL</CODE>, иначе возвращается <CODE>1</CODE>:
+
+<PRE>
+mysql&#62; select 1 &#38;& NULL;
+    -&#62; 0
+mysql&#62; select 1 &#38;& 0;
+    -&#62; 0
+</PRE></DL>
+
+<H4><A NAME="Control_flow_functions">6.1.4 Функции ветвления</A></H4>
+<DL COMPACT>
+<DT><CODE>IFNULL(expr1,expr2)</CODE>
+<DD>Если <CODE>expr1</CODE> не <CODE>NULL</CODE>, <CODE>IFNULL()</CODE>
+вернет <CODE>expr1</CODE>, иначе <CODE>expr2</CODE>. <CODE>IFNULL()</CODE>
+возвращает числовое или строковое значение в зависимости от контекста, в
+котором это используется:
+<PRE>
+mysql&#62; select IFNULL(1,0);
+    -&#62; 1
+mysql&#62; select IFNULL(NULL,10);
+    -&#62; 10
+mysql&#62; select IFNULL(1/0,10);
+    -&#62; 10
+mysql&#62; select IFNULL(1/0,'yes');
+    -&#62; 'yes'
+</PRE>
+
+<A NAME="IDX1128"></A><DT><CODE>NULLIF(expr1,expr2)</CODE>
+<DD>Если <CODE>expr1=expr2</CODE>, вернет <CODE>NULL</CODE>, иначе возвращает
+<CODE>expr1</CODE>. Это работает также, как <CODE>CASE WHEN x=y THEN
+NULL ELSE x END</CODE>:
+
+<PRE>
+mysql&#62; select NULLIF(1,1);
+    -&#62; NULL
+mysql&#62; select NULLIF(1,2);
+    -&#62; 1
+</PRE>
+
+Обратите внимание, что <CODE>expr1</CODE> будет оценен дважды в MySQL,
+если параметры равны.
+
+<A NAME="IDX1129"></A><DT><CODE>IF(expr1,expr2,expr3)</CODE>
+<DD>Если <CODE>expr1</CODE> равно TRUE (<CODE>expr1 &#60;&#62; 0</CODE> и
+<CODE>expr1 &#60;&#62; NULL</CODE>), то <CODE>IF()</CODE> вернет
+<CODE>expr2</CODE>, иначе вернет <CODE>expr3</CODE>. <CODE>IF()</CODE>
+возвращает числовое или строковое значение в зависимости от контекста, в
+котором это используется:
+
+<PRE>
+mysql&#62; select IF(1&#62;2,2,3);
+    -&#62; 3
+mysql&#62; select IF(1&#60;2,'yes','no');
+    -&#62; 'yes'
+mysql&#62; select IF(strcmp('test','test1'),'no','yes');
+    -&#62; 'no'
+</PRE>
+
+<CODE>expr1</CODE> будет оценен как целочисленное значение, это означает,
+что, если Вы проверяете выражение с плавающей запятой или строку, Вы должны
+сделать следующее для корректного использования операции сравнения:
+
+<PRE>
+mysql&#62; select IF(0.1,1,0);
+    -&#62; 0
+mysql&#62; select IF(0.1&#60;&#62;0,1,0);
+    -&#62; 1
+</PRE>
+
+В первом случае выше <CODE>IF(0.1)</CODE> вернет <CODE>0</CODE> потому, что
+<CODE>0.1</CODE> преобразован в целочисленное значение, возникающее в
+результате в <CODE>IF(0)</CODE>. Это не может быть тем, что Вы ожидаете. Во
+втором случае сравнение проверяет первоначальное значение с плавающей
+запятой, чтобы видеть,является ли это отличным от нуля. Результат сравнения
+используется как целое число. Заданный по умолчанию тип возврата
+<CODE>IF()</CODE> (который может иметь значение, когда это значение будет
+сохранено во временной таблице) вычислен в MySQL 3.23 следующим образом:
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Выражение</STRONG></TD><TD><STRONG>Возвращаемое значение
+</STRONG></TD></TR>
+<TR><TD>expr2 или expr3 возвращает строку</TD><TD>Строка</TD></TR>
+<TR><TD>expr2 или expr3 возвращает значение с плавающей запятой</TD><TD>Число
+с плавающей запятой</TD></TR>
+<TR><TD>expr2 или expr3 возвращает целое число</TD><TD>Целое число</TD></TR>
+</TABLE>
+
+<A NAME="IDX1130"></A>
+<DT><CODE>CASE value WHEN [compare-value] THEN result
+[WHEN [compare-value] THEN result ...] [ELSE result] END</CODE>
+<DD>
+<DT><CODE>CASE WHEN [condition] THEN result [WHEN [condition]
+THEN result ...] [ELSE result] END</CODE>
+<DD>Первая версия возвращает <CODE>result</CODE>, где
+<CODE>value=compare-value</CODE>. Вторая версия возвращает результат для
+первого условия, которое является истинным. Если не имелось никакого значения
+результата соответствия, то будет возвращен результат после
+<CODE>ELSE</CODE>. Если не имеется части <CODE>ELSE</CODE>, вернется
+<CODE>NULL</CODE>:
+
+<PRE>
+mysql&#62; SELECT CASE 1 WHEN 1 THEN "one" WHEN 2 THEN "two"
+           ELSE "more" END;
+   -&#62; "one"
+mysql&#62; SELECT CASE WHEN 1&#62;0 THEN "true" ELSE "false" END;
+   -&#62; "true"
+mysql&#62; SELECT CASE BINARY "B" when "a" then 1 when "b" then 2 END;
+   -&#62; NULL
+</PRE></DL>
+
+<P>Тип значения возврата (<CODE>INTEGER</CODE>, <CODE>DOUBLE</CODE> или
+<CODE>STRING</CODE>) такое же, как и тип первого возвращенного значения
+(выражение после первого <CODE>THEN</CODE>).</P>
+
+<H3><A NAME="String_functions">6.2 Строковые функции</A></H3>
+<P>Строковые функции возвращают <CODE>NULL</CODE>, если длина результата
+большая, чем параметр сервера <CODE>max_allowed_packet</CODE>.
+
+<P>Для функций, которые оперируют позициями в строке, первая позиция всегда
+пронумерована как 1, а не 0.</P>
+
+<DL COMPACT>
+<DT><CODE>ASCII(str)</CODE><DD><A NAME="IDX1133"></A>
+Возвращает ASCII-код крайнего левого символа строки <CODE>str</CODE>. Вернет
+<CODE>0</CODE>, если <CODE>str</CODE> пустая. Вернет <CODE>NULL</CODE>, если
+<CODE>str</CODE> равна <CODE>NULL</CODE>:
+
+<PRE>
+mysql&#62; select ASCII('2');
+    -&#62; 50
+mysql&#62; select ASCII(2);
+    -&#62; 50
+mysql&#62; select ASCII('dx');
+    -&#62; 100
+</PRE>
+
+См. также описание функции <CODE>ORD()</CODE>.
+
+<A NAME="IDX1134"></A><DT><CODE>ORD(str)</CODE>
+<DD>Если крайний левый символ строки str представляет собой многобайтный
+символ, возвращает код символа, возвращая ASCII-значение кода символа в
+формате: <CODE>((первый байт ASCII-кода)*256+(второй байт ASCII-кода))[*256+
+третий байт ASCII-кода...]</CODE>. Если крайний левый символ не является
+многобайтным, действует аналогично функции <CODE>ASCII()</CODE>:
+
+<PRE>
+mysql&#62; select ORD('2');
+    -&#62; 50
+</PRE>
+
+<A NAME="IDX1135"></A><DT><CODE>CONV(N,from_base,to_base)</CODE>
+<DD>Преобразовывает числа между различными системами счисления. Возвращает
+строковое представление числа <CODE>N</CODE>, преобразованного из
+<CODE>from_base</CODE> в <CODE>to_base</CODE>. Вернет <CODE>NULL</CODE>, если
+любой параметр равен <CODE>NULL</CODE>. Параметр <CODE>N</CODE>
+интерпретируется как целое число, но может быть определен как целое число или
+строка. Минимальная система счисления <CODE>2</CODE>, максимальная
+<CODE>36</CODE>. Если <CODE>to_base</CODE> отрицательное значение,
+<CODE>N</CODE> расценено как число со знаком. Иначе, <CODE>N</CODE>
+обрабатывается как число без знака. Вызов <CODE>CONV</CODE> всегда работает с
+64-разрядной точностью:
+
+<PRE>
+mysql&#62; select CONV("a",16,2);
+    -&#62; '1010'
+mysql&#62; select CONV("6E",18,8);
+    -&#62; '172'
+mysql&#62; select CONV(-17,10,-18);
+    -&#62; '-H'
+mysql&#62; select CONV(10+"10"+'10'+0xa,10,10);
+    -&#62; '40'
+</PRE>
+
+<A NAME="IDX1136"></A><DT><CODE>BIN(N)</CODE>
+<DD>Возвращает строковое представление двоичного значения <CODE>N</CODE>, где
+<CODE>N</CODE> представляет собой число типа longlong (<CODE>BIGINT</CODE>).
+Это эквивалентно <CODE>CONV(N,10,2)</CODE>. Возвращает <CODE>NULL</CODE>,
+если <CODE>N</CODE> равно <CODE>NULL</CODE>:
+
+<PRE>
+mysql&#62; select BIN(12);
+    -&#62; '1100'
+</PRE>
+
+<A NAME="IDX1137"></A><DT><CODE>OCT(N)</CODE>
+<DD>Возвращает строковое представление восьмеричного значения <CODE>N</CODE>,
+где <CODE>N</CODE> представляет собой число типа longlong. Это эквивалентно
+<CODE>CONV(N,10,8)</CODE>. Возвращает <CODE>NULL</CODE>,
+если <CODE>N</CODE> равно <CODE>NULL</CODE>:
+
+<PRE>
+mysql&#62; select OCT(12);
+    -&#62; '14'
+</PRE>
+
+<A NAME="IDX1138"></A><DT><CODE>HEX(N)</CODE>
+<DD>Возвращает строковое представление шестнадцатеричного значения
+<CODE>N</CODE>, где <CODE>N</CODE> представляет собой число типа longlong.
+Это эквивалентно <CODE>CONV(N,10,16)</CODE>. Возвращает <CODE>NULL</CODE>,
+если <CODE>N</CODE> равно <CODE>NULL</CODE>:
+
+<PRE>
+mysql&#62; select HEX(255);
+    -&#62; 'FF'
+</PRE>
+
+<A NAME="IDX1139"></A><DT><CODE>CHAR(N,...)</CODE>
+<DD><CODE>CHAR()</CODE> интерпретируют параметры как целые числа и возвращает
+строку состоящую из символов, заданных значениями ASCII-кодов из тех целых
+чисел. Значения <CODE>NULL</CODE> будут пропущены:
+
+<PRE>
+mysql&#62; select CHAR(77,121,83,81,'76');
+    -&#62; 'MySQL'
+mysql&#62; select CHAR(77,77.3,'77.3');
+    -&#62; 'MMM'
+</PRE>
+
+<A NAME="IDX1140"></A><DT><CODE>CONCAT(str1,str2,...)</CODE>
+<DD>Возвращает строку, которая следует из связывания параметров. Возвращает
+<CODE>NULL</CODE>, если любой параметр <CODE>NULL</CODE>. Может иметь больше,
+чем 2 параметра. Числовой параметр будет автоматически преобразован в
+эквивалентную строковую форму:
+
+<PRE>
+mysql&#62; select CONCAT('My', 'S', 'QL');
+    -&#62; 'MySQL'
+mysql&#62; select CONCAT('My', NULL, 'QL');
+    -&#62; NULL
+mysql&#62; select CONCAT(14.3);
+    -&#62; '14.3'
+</PRE>
+
+<A NAME="IDX1141"></A><DT><CODE>CONCAT_WS(separator, str1, str2,...)</CODE>
+<DD><CODE>CONCAT_WS()</CODE> расшифровывается как CONCAT With Separator и
+представляет собой специальную форму функции <CODE>CONCAT()</CODE>. Первый
+параметр задает разделитель для остальной части параметров. Разделитель может
+быть строкой так же, как и остальная часть параметров. Если разделитель равен
+<CODE>NULL</CODE>, результат превратится в <CODE>NULL</CODE>. Разделитель
+будет добавлен между строками, которые нужно объединить в одну целую:
+
+<PRE>
+mysql&#62; select CONCAT_WS(",","First name","Second name","Last Name");
+   -&#62; 'First name,Second name,Last Name'
+mysql&#62; select CONCAT_WS(",","First name",NULL,"Last Name");
+   -&#62; 'First name,Last Name'
+</PRE>
+
+<A NAME="IDX1142"></A><A NAME="IDX1143"></A><A NAME="IDX1144"></A>
+<A NAME="IDX1145"></A><DT><CODE>LENGTH(str)</CODE>
+<DD>
+<DT><CODE>OCTET_LENGTH(str)</CODE>
+<DD>
+<DT><CODE>CHAR_LENGTH(str)</CODE>
+<DD>
+<DT><CODE>CHARACTER_LENGTH(str)</CODE>
+<DD>Возвращает длину строки <CODE>str</CODE>:
+
+<PRE>
+mysql&#62; select LENGTH('text');
+    -&#62; 4
+mysql&#62; select OCTET_LENGTH('text');
+    -&#62; 4
+</PRE>
+
+Обратите внимание, что для <CODE>CHAR_LENGTH()</CODE> любой многобайтный
+символ считается одним.
+
+<A NAME="IDX1146"></A><A NAME="IDX1147"></A>
+<DT><CODE>LOCATE(substr,str)</CODE>
+<DD>
+<DT><CODE>POSITION(substr IN str)</CODE>
+<DD>Возвращает позицию первого местонахождения подстроки <CODE>substr</CODE>
+в строке <CODE>str</CODE>. Если не нашла <CODE>substr</CODE> в
+<CODE>str</CODE>, вернет <CODE>0</CODE>:
+
+<PRE>
+mysql&#62; select LOCATE('bar', 'foobarbar');
+    -&#62; 4
+mysql&#62; select LOCATE('xbar', 'foobar');
+    -&#62; 0
+</PRE>
+
+Поддерживаются многобайтные символы.
+
+<A NAME="IDX1148"></A><DT><CODE>LOCATE(substr,str,pos)</CODE>
+<DD>Возвращает позицию первого местонахождения подстроки <CODE>substr</CODE>
+в строке <CODE>str</CODE>, после позиции <CODE>pos</CODE>. Если не нашла
+<CODE>substr</CODE> в <CODE>str</CODE>, вернет <CODE>0</CODE>:
+
+<PRE>
+mysql&#62; select LOCATE('bar', 'foobarbar',5);
+    -&#62; 7
+</PRE>
+
+Поддерживаются многобайтные символы.
+
+<A NAME="IDX1149"></A><DT><CODE>INSTR(str,substr)</CODE>
+<DD>Аналог <CODE>LOCATE()</CODE>, но с переставленными параметрами:
+
+<PRE>
+mysql&#62; select INSTR('foobarbar', 'bar');
+    -&#62; 4
+mysql&#62; select INSTR('xbar', 'foobar');
+    -&#62; 0
+</PRE>
+
+Поддерживаются многобайтные символы.
+
+<A NAME="IDX1150"></A><DT><CODE>LPAD(str,len,padstr)</CODE>
+<DD>Возвращает строку <CODE>str</CODE>, дополненную слева строкой
+<CODE>padstr</CODE>. Максимальная длина <CODE>str</CODE> равна
+<CODE>len</CODE> символам. Если <CODE>str</CODE> длиннее, чем
+<CODE>len</CODE>, она будет урезана до <CODE>len</CODE> символов. Если
+<CODE>str</CODE> короче, чем <CODE>len</CODE> символов, <CODE>padstr</CODE>
+будет приписана несколько раз.
+
+<PRE>
+mysql&#62; select LPAD('hi',4,'??');
+    -&#62; '??hi'
+</PRE>
+
+<A NAME="IDX1151"></A><DT><CODE>RPAD(str,len,padstr)</CODE>
+<DD>Аналогично <CODE>LPAD(str,len,padstr)</CODE>, но строка
+<CODE>padstr</CODE> приписывается справа.
+
+<PRE>
+mysql&#62; select RPAD('hi',5,'?');
+    -&#62; 'hi???'
+</PRE>
+
+<A NAME="IDX1152"></A><DT><CODE>LEFT(str,len)</CODE>
+<DD>Возвращает <CODE>len</CODE> крайних левых символов из строки
+<CODE>str</CODE>:
+
+<PRE>
+mysql&#62; select LEFT('foobarbar', 5);
+    -&#62; 'fooba'
+</PRE>
+
+Поддерживаются многобайтные символы.
+
+<A NAME="IDX1153"></A><DT><CODE>RIGHT(str,len)</CODE>
+<DD>Возвращает <CODE>len</CODE> крайних правых символов из строки
+<CODE>str</CODE>:
+
+<PRE>
+mysql&#62; select RIGHT('foobarbar', 4);
+    -&#62; 'rbar'
+</PRE>
+
+Поддерживаются многобайтные символы.
+
+<A NAME="IDX1154"></A><A NAME="IDX1155"></A>
+<DT><CODE>SUBSTRING(str,pos,len)</CODE>
+<DD>
+<DT><CODE>SUBSTRING(str FROM pos FOR len)</CODE>
+<DD>
+<DT><CODE>MID(str,pos,len)</CODE>
+<DD>Возвращает подстроку длиной в <CODE>len</CODE> символов из строки
+<CODE>str</CODE>, начиная с позиции <CODE>pos</CODE>. Иная форма, которая
+использует синтаксис <CODE>FROM</CODE> из ANSI SQL92:
+
+<PRE>
+mysql&#62; select SUBSTRING('Quadratically',5,6);
+    -&#62; 'ratica'
+</PRE>
+
+Поддерживаются многобайтные символы.
+
+<A NAME="IDX1156"></A><DT><CODE>SUBSTRING(str,pos)</CODE>
+<DD>
+<DT><CODE>SUBSTRING(str FROM pos)</CODE>
+<DD>Возвращает подстроку из строки <CODE>str</CODE>. начиная с позиции
+<CODE>pos</CODE>:
+
+<PRE>
+mysql&#62; select SUBSTRING('Quadratically',5);
+    -&#62; 'ratically'
+mysql&#62; select SUBSTRING('foobarbar' FROM 4);
+    -&#62; 'barbar'
+</PRE>
+
+Поддерживаются многобайтные символы.
+
+<A NAME="IDX1157"></A><DT><CODE>SUBSTRING_INDEX(str,delim,count)</CODE>
+<DD>Возвращает подстроку из строки <CODE>str</CODE>, отступив
+<CODE>count</CODE> символов от разделителя <CODE>delim</CODE>. Если
+<CODE>count</CODE> положителен, вернется все левее разделителя. Если
+<CODE>count</CODE> отрицателен, вернется все правее заданного разделителя:
+
+<PRE>
+mysql&#62; select SUBSTRING_INDEX('www.mysql.com', '.', 2);
+    -&#62; 'www.mysql'
+mysql&#62; select SUBSTRING_INDEX('www.mysql.com', '.', -2);
+    -&#62; 'mysql.com'
+</PRE>
+
+Поддерживаются многобайтные символы.
+
+<A NAME="IDX1158"></A><DT><CODE>LTRIM(str)</CODE>
+<DD>Возвращает строку <CODE>str</CODE> с удаленными ведущими пробелами:
+
+<PRE>
+mysql&#62; select LTRIM('  barbar');
+    -&#62; 'barbar'
+</PRE>
+
+<A NAME="IDX1159"></A><DT><CODE>RTRIM(str)</CODE>
+<DD>Возвращает строку <CODE>str</CODE> с удаленными конечными пробелами:
+
+<PRE>
+mysql&#62; select RTRIM('barbar   ');
+    -&#62; 'barbar'
+</PRE>
+
+Поддерживаются многобайтные символы.
+
+<A NAME="IDX1160"></A>
+<DT><CODE>TRIM([[BOTH|LEADING|TRAILING] [remstr] FROM] str)</CODE>
+<DD>Возвращает строку <CODE>str</CODE>, из которой удалены все префиксы и
+суффиксы <CODE>remstr</CODE>. Если ни один из спецификаторов
+<CODE>BOTH</CODE>, <CODE>LEADING</CODE> или <CODE>TRAILING</CODE> не задан,
+принимается <CODE>BOTH</CODE>. Если не задан параметр <CODE>remstr</CODE>,
+будут удалены пробелы:
+
+<PRE>
+mysql&#62; select TRIM('  bar   ');
+    -&#62; 'bar'
+mysql&#62; select TRIM(LEADING 'x' FROM 'xxxbarxxx');
+    -&#62; 'barxxx'
+mysql&#62; select TRIM(BOTH 'x' FROM 'xxxbarxxx');
+    -&#62; 'bar'
+mysql&#62; select TRIM(TRAILING 'xyz' FROM 'barxxyz');
+    -&#62; 'barx'
+</PRE>
+
+Поддерживаются многобайтные символы.
+
+<A NAME="IDX1161"></A><DT><CODE>SOUNDEX(str)</CODE>
+<DD>Возвращает soundex-строку из строки <CODE>str</CODE>. Две строки, которые
+звучат почти одинаково, должны иметь идентичные soundex-строки. Стандартная
+soundex-строка длиной 4 символа, но функция <CODE>SOUNDEX()</CODE> возвращает
+произвольно длинную строку. Вы можете использовать <CODE>SUBSTRING()</CODE>
+на результате, чтобы получить стандартную soundex-строку. Все не
+алфавитно-цифровые символы игнорируются в данной строке. Все международные
+алфавитные символы вне диапазона A-Z обрабатываются как гласные:
+
+<PRE>
+mysql&#62; select SOUNDEX('Hello');
+    -&#62; 'H400'
+mysql&#62; select SOUNDEX('Quadratically');
+    -&#62; 'Q36324'
+</PRE>
+
+<A NAME="IDX1162"></A><DT><CODE>SPACE(N)</CODE>
+<DD>Возвращает строку, состоящую из <CODE>N</CODE> пробелов:
+
+<PRE>
+mysql&#62; select SPACE(6);
+    -&#62; '      '
+</PRE>
+
+<A NAME="IDX1163"></A><DT><CODE>REPLACE(str,from_str,to_str)</CODE>
+<DD>Возвращает строку <CODE>str</CODE>, где все вхождения подстроки
+<CODE>from_str</CODE> заменены на подстроку <CODE>to_str</CODE>:
+
+<PRE>
+mysql&#62; select REPLACE('www.mysql.com', 'w', 'Ww');
+    -&#62; 'WwWwWw.mysql.com'
+</PRE>
+
+Поддерживаются многобайтные символы.
+
+<A NAME="IDX1164"></A><DT><CODE>REPEAT(str,count)</CODE>
+<DD>Возвращает строку, состоящую из вводной строки <CODE>str</CODE>
+повторенной <CODE>count</CODE> раз. Если <CODE>count &#60;=0</CODE>,
+возвращает пустую строку. Если <CODE>str</CODE> или <CODE>count</CODE> равны
+<CODE>NULL</CODE>, вернет <CODE>NULL</CODE>:
+
+<PRE>
+mysql&#62; select REPEAT('MySQL', 3);
+    -&#62; 'MySQLMySQLMySQL'
+</PRE>
+
+<A NAME="IDX1165"></A><DT><CODE>REVERSE(str)</CODE>
+<DD>Возвращает строку <CODE>str</CODE> с обращенным порядком символов:
+
+<PRE>
+mysql&#62; select REVERSE('abc');
+    -&#62; 'cba'
+</PRE>
+
+Поддерживаются многобайтные символы.
+
+<A NAME="IDX1166"></A><DT><CODE>INSERT(str,pos,len,newstr)</CODE>
+<DD>Возвращает строку <CODE>str</CODE> с подстрокой, начинающейся в позиции
+<CODE>pos</CODE> и длиной в <CODE>len</CODE> символов, замененной на строку
+<CODE>newstr</CODE>:
+
+<PRE>
+mysql&#62; select INSERT('Quadratic', 3, 4, 'What');
+    -&#62; 'QuWhattic'
+</PRE>
+
+Поддерживаются многобайтные символы.
+
+<A NAME="IDX1167"></A><DT><CODE>ELT(N,str1,str2,str3,...)</CODE>
+<DD>Возвращает <CODE>str1</CODE>, если <CODE>N</CODE>=<CODE>1</CODE>,
+<CODE>str2</CODE>, если <CODE>N</CODE>=<CODE>2</CODE> и так далее. Возвращает
+<CODE>NULL</CODE>, если <CODE>N</CODE> меньше, чем <CODE>1</CODE>, или
+больше, чем число параметров. <CODE>ELT()</CODE> дополняет функцию
+<CODE>FIELD()</CODE>:
+
+<PRE>
+mysql&#62; select ELT(1, 'ej', 'Heja', 'hej', 'foo');
+    -&#62; 'ej'
+mysql&#62; select ELT(4, 'ej', 'Heja', 'hej', 'foo');
+    -&#62; 'foo'
+</PRE>
+
+<A NAME="IDX1168"></A><DT><CODE>FIELD(str,str1,str2,str3,...)</CODE>
+<DD>Возвращает индекс <CODE>str</CODE> в списке <CODE>str1</CODE>,
+<CODE>str2</CODE>, <CODE>str3</CODE>, <CODE>...</CODE>. Вернет
+<CODE>0</CODE>, если <CODE>str</CODE> не найдена. <CODE>FIELD()</CODE>
+дополняет функцию <CODE>ELT()</CODE>:
+
+<PRE>
+mysql&#62; select FIELD('ej', 'Hej', 'ej', 'Heja', 'hej', 'foo');
+    -&#62; 2
+mysql&#62; select FIELD('fo', 'Hej', 'ej', 'Heja', 'hej', 'foo');
+    -&#62; 0
+</PRE>
+
+<A NAME="IDX1169"></A><DT><CODE>FIND_IN_SET(str,strlist)</CODE>
+<DD>Возвращает значение от <CODE>1</CODE> до <CODE>N</CODE>, если строка
+<CODE>str</CODE> находится в списке <CODE>strlist</CODE>, состоящем из
+<CODE>N</CODE> подстрок. Список строк представляет собой строку, составленную
+из подстрок, отделяемых символом запятой (<SAMP>,</SAMP>). Если первый
+параметр постоянная строка, а второй столбец типа <CODE>SET</CODE>, то
+функция <CODE>FIND_IN_SET()</CODE> оптимизирована, чтобы использовать
+разрядную арифметику. Возвращается <CODE>0</CODE>, если <CODE>str</CODE> не в
+<CODE>strlist</CODE> или <CODE>strlist</CODE> является пустой строкой.
+Возвращает <CODE>NULL</CODE>, если любой параметр <CODE>NULL</CODE>. Эта
+функция не будет работать правильно, если первый параметр содержит запятую:
+
+<PRE>
+mysql&#62; SELECT FIND_IN_SET('b','a,b,c,d');
+    -&#62; 2
+</PRE>
+
+<A NAME="IDX1170"></A><DT><CODE>MAKE_SET(bits,str1,str2,...)</CODE>
+<DD>Возвращает строку, содержащую подстроки, отделяемые запятой
+(<SAMP>,</SAMP>), состоящую из строк, которые имеют соответствующий бит в
+наборе <CODE>bits</CODE>. <CODE>str1</CODE> соответствует биту 0,
+<CODE>str2</CODE> биту 1 и так далее. <CODE>NULL</CODE> в <CODE>str1</CODE>,
+<CODE>str2</CODE>, <CODE>...</CODE> не попадут в результат:
+
+<PRE>
+mysql&#62; SELECT MAKE_SET(1,'a','b','c');
+    -&#62; 'a'
+mysql&#62; SELECT MAKE_SET(1 | 4,'hello','nice','world');
+    -&#62; 'hello,world'
+mysql&#62; SELECT MAKE_SET(0,'a','b','c');
+    -&#62; ''
+</PRE>
+
+<A NAME="IDX1171"></A>
+<DT><CODE>EXPORT_SET(bits,on,off,[separator,[number_of_bits]])</CODE>
+<DD>Возвращает строку, где для каждого бита, установленного в наборе 'bit',
+Вы получите строку 'on', а для каждого неустановленного строку 'off'. Каждая
+отделяется от других разделителем (separator, по умолчанию запятая) и
+используется только 'number_of_bits' бит (по умолчанию 64):
+
+<PRE>
+mysql&#62; select EXPORT_SET(5,'Y','N',',',4)
+    -&#62; Y,N,Y,N
+</PRE>
+
+<A NAME="IDX1172"></A><A NAME="IDX1173"></A><DT><CODE>LCASE(str)</CODE>
+<DD>
+<DT><CODE>LOWER(str)</CODE>
+<DD>Возвращает строку <CODE>str</CODE> со всеми символами, измененными на
+нижний регистр согласно текущему отображению набора символов (значение по
+умолчанию: ISO-8859-1 Latin1):
+
+<PRE>
+mysql&#62; select LCASE('QUADRATICALLY');
+    -&#62; 'quadratically'
+</PRE>
+
+Поддерживаются многобайтные символы.
+
+<A NAME="IDX1174"></A><A NAME="IDX1175"></A><DT><CODE>UCASE(str)</CODE>
+<DD>
+<DT><CODE>UPPER(str)</CODE>
+<DD>Возвращает строку <CODE>str</CODE> со всеми символами, измененными на
+верхний регистр согласно текущему отображению набора символов (значение по
+умолчанию: ISO-8859-1 Latin1):
+
+<PRE>
+mysql&#62; select UCASE('Hej');
+    -&#62; 'HEJ'
+</PRE>
+
+Поддерживаются многобайтные символы.
+
+<A NAME="IDX1176"></A><A NAME="IDX1177"></A>
+<DT><CODE>LOAD_FILE(file_name)</CODE>
+<DD>Читает файл и возвращает содержание файла как строку. Файл должен быть на
+сервере, Вы должны определить полное имя файла и иметь привилегию
+<STRONG>file</STRONG>. Файл должен быть читаем всеми и быть меньше, чем
+<CODE>max_allowed_packet</CODE>. Если файл не существует или не может
+читаться из-за одной из вышеупомянутых причин, функция возвратит
+<CODE>NULL</CODE>:
+
+<PRE>
+mysql&#62; UPDATE table_name
+           SET blob_column=LOAD_FILE("/tmp/picture")
+           WHERE id=1;
+</PRE></DL>
+
+<P>Если Вы не используете MySQL Version 3.23, Вы должны делать чтение файла
+внутри Вашей прикладной программы и создавать инструкцию <CODE>INSERT</CODE>,
+чтобы модифицировать базу данных с информацией из файла. Один способ сделать
+это, если Вы используете библиотеку MySQL++, есть на страничке
+<a HREF="../../../www.mysql.com/documentation/mysql++/mysql++-examples.html">
+http://www.mysql.com/documentation/mysql++/mysql++-examples.html</a>.</P>
+
+<P>MySQL по мере необходимости автоматически преобразует числа в строки и
+наоборот (как в Perl):</P>
+
+<PRE>
+mysql&#62; SELECT 1+"1";
+    -&#62; 2
+mysql&#62; SELECT CONCAT(2,' test');
+    -&#62; '2 test'
+</PRE>
+
+<P>Если Вы хотите преобразовывать число в строку явно, передайте его как
+параметр функции <CODE>CONCAT()</CODE>.</P>
+
+<P>Если строковая функция получает двоичную строку как параметр, возникающая
+в результате строка также будет двоичной. Числа, преобразованные в строку,
+также обрабатываются как двоичные строки. Это важно только для сравнений.</P>
+
+<H4><A NAME="String_comparison_functions">6.2.1 Функции сравнения строк</A>
+</H4>
+<P>Обычно, если любое выражение при сравнении строк чувствительно к регистру,
+сравнение выполняется в режиме чувствительности к регистру символов.</P>
+
+<DL COMPACT>
+<DT><CODE>expr LIKE pat [ESCAPE 'escape-char']</CODE>
+<DD><A NAME="IDX1182"></A>Соответствие, использующее простое регулярное
+сравнение выражения SQL. Возвращает <CODE>1</CODE> (TRUE) или <CODE>0</CODE>
+(FALSE). С <CODE>LIKE</CODE> Вы можете использовать следующие два групповых
+символа в задаваемом образце:
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><CODE>%</CODE></TD><TD>Соответствует любому числу символов.</TD></TR>
+<TR><TD><CODE>_</CODE></TD><TD>Соответствует строго одному символу.</TD></TR>
+</TABLE>
+
+<PRE>
+mysql&#62; select 'David!' LIKE 'David_';
+    -&#62; 1
+mysql&#62; select 'David!' LIKE '%D%v%';
+    -&#62; 1
+</PRE>
+
+Чтобы проверять для литеральных образцов группового символа, экранируйте его
+символом escape. Если Вы не определяете символ <CODE>ESCAPE</CODE>, будет
+принято значение <SAMP>\</SAMP>:
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><CODE>\%</CODE></TD><TD>Соответствует одному символу <CODE>%</CODE>.
+</TD></TR>
+<TR><TD><CODE>\_</CODE></TD><TD>Соответствует одному символу <CODE>_</CODE>.
+</TD></TR></TABLE>
+
+<PRE>
+mysql&#62; select 'David!' LIKE 'David\_';
+    -&#62; 0
+mysql&#62; select 'David_' LIKE 'David\_';
+    -&#62; 1
+</PRE>
+
+Чтобы определять иной символ escape, используйте предложение
+<CODE>ESCAPE</CODE>:
+
+<PRE>
+mysql&#62; select 'David_' LIKE 'David|_' ESCAPE '|';
+    -&#62; 1
+</PRE>
+
+Следующие две инструкции иллюстрируют сравнения нечувствительных к регистру
+строк, если один из операндов не двоичная строка:
+
+<PRE>
+mysql&#62; select 'abc' LIKE 'ABC';
+    -&#62; 1
+mysql&#62; SELECT 'abc' LIKE BINARY 'ABC';
+    -&#62; 0
+</PRE>
+
+<CODE>LIKE</CODE> позволяется на числовых выражениях! Это MySQL-расширение
+ANSI SQL <CODE>LIKE</CODE>.
+
+<PRE>
+mysql&#62; select 10 LIKE '1%';
+    -&#62; 1
+</PRE>
+
+Обратите внимание: поскольку MySQL использует C-escape синтаксис в строках
+(например, <SAMP>\n</SAMP>), Вы должны удвоить любой символ <SAMP>\</SAMP>,
+который Вы используете в Вашем выражении <CODE>LIKE</CODE>. Например, чтобы
+искать <SAMP>\n</SAMP>, определите это как <SAMP>\\n</SAMP>. Чтобы искать
+<SAMP>\</SAMP>, определите это как <SAMP>\\\\</SAMP> (наклонные черты влево
+будут удалены синтаксическим анализатором и повторно, когда соответствие
+образца выполнено, оставляя одиночную наклонную черту влево, которая будет
+согласована в данном выражении).
+
+<A NAME="IDX1183"></A>
+<DT><CODE>expr NOT LIKE pat [ESCAPE 'escape-char']</CODE>
+<DD>Это аналогично вызову <CODE>NOT (expr LIKE pat
+[ESCAPE 'escape-char'])</CODE>.
+
+<A NAME="IDX1184"></A><A NAME="IDX1185"></A><A NAME="IDX1186"></A>
+<A NAME="IDX1187"></A><DT><CODE>expr REGEXP pat</CODE>
+<DD><DT><CODE>expr RLIKE pat</CODE>
+<DD>Выполняет соответствие образца выражения строки <CODE>expr</CODE> для
+образца <CODE>pat</CODE>. Образец может быть расширенным регулярным
+выражением. Подробности в разделе "<A HREF="#Regexp">6.7 Описание
+синтаксиса регулярных выражений MySQL</A>". Возвращает <CODE>1</CODE>, если
+<CODE>expr</CODE> соответствует <CODE>pat</CODE>, иначе вернется
+<CODE>0</CODE>. <CODE>RLIKE</CODE> представляет собой синоним для
+<CODE>REGEXP</CODE>, предусмотренный для совместимости с <CODE>mSQL</CODE>.
+Обратите внимание: поскольку MySQL использует C-escape синтаксис в строках
+(например, <SAMP>\n</SAMP>), Вы должны удвоить любой символ <SAMP>\</SAMP>,
+который Вы используете в Вашем выражении <CODE>REGEXP</CODE>. Например, чтобы
+искать <SAMP>\n</SAMP>, определите это как <SAMP>\\n</SAMP>. Начиная с MySQL
+Version 3.23.4, <CODE>REGEXP</CODE> нечувствителен к регистру для нормальных
+(не двоичных) строк:
+<PRE>
+mysql&#62; select 'Monty!' REGEXP 'm%y%%';
+    -&#62; 0
+mysql&#62; select 'Monty!' REGEXP '.*';
+    -&#62; 1
+mysql&#62; select 'new*\n*line' REGEXP 'new\\*.\\*line';
+    -&#62; 1
+mysql&#62; select "a" REGEXP "A", "a" REGEXP BINARY "A";
+    -&#62; 1  0
+mysql&#62; select "a" REGEXP "^[a-d]";
+    -&#62; 1
+</PRE>
+
+<DT><CODE></CODE>
+<DD><CODE>REGEXP</CODE> и <CODE>RLIKE</CODE> используют текущий набор
+символов (по умолчанию задан ISO-8859-1 Latin1).
+
+<A NAME="IDX1188"></A><DT><CODE>expr NOT REGEXP pat</CODE>
+<DD>
+<DT><CODE>expr NOT RLIKE pat</CODE>
+<DD>Это аналогично вызову <CODE>NOT (expr REGEXP pat)</CODE>.
+
+<A NAME="IDX1189"></A><DT><CODE>STRCMP(expr1,expr2)</CODE>
+<DD><CODE>STRCMP()</CODE> возвращает <CODE>0</CODE>, если строки одинаковые,
+<CODE>-1</CODE>, если первый параметр меньше, чем второй согласно текущему
+порядку сортировки, или <CODE>1</CODE> в противном случае:
+<PRE>
+mysql&#62; select STRCMP('text', 'text2');
+    -&#62; -1
+mysql&#62; select STRCMP('text2', 'text');
+    -&#62; 1
+mysql&#62; select STRCMP('text', 'text');
+    -&#62; 0
+</PRE>
+
+<A NAME="IDX1190"></A><DT><CODE>MATCH (col1,col2,...) AGAINST (expr)</CODE>
+<DD><CODE>MATCH ... AGAINST()</CODE> используется для полнотекстового поиска
+и возвращает релевантность (она же уместность), меру подобия между текстом в
+столбцах <CODE>(col1,col2,...)</CODE> и запросе <CODE>expr</CODE>.
+Релевантность представляет собой положительное число с плавающей запятой.
+Нулевое значение данной величины означает отсутствие схожести. Для работы
+<CODE>MATCH ... AGAINST()</CODE> сначала должен быть создан индекс
+<STRONG>FULLTEXT</STRONG>. Подробности в разделе
+"<A HREF="glava07.htm#CREATE_TABLE">7.3 Синтаксис <CODE>CREATE TABLE</CODE>
+</A>". <CODE>MATCH ... AGAINST()</CODE> доступен в MySQL Version 3.23.23 или
+более поздних. Подробности в разделе
+"<A HREF="glava09.htm#Fulltext_Search">9.4 Полнотекстовый поиск в MySQL</A>".
+</DL>
+
+<H4><A NAME="Case_Sensitivity_Operators">6.2.2
+Чувствительность к регистру символов</A></H4>
+<DL COMPACT>
+<DT><CODE><CODE>BINARY</CODE></CODE>
+<DD><A NAME="IDX1194"></A>Оператор <CODE>BINARY</CODE> приводит строку к
+двоичной форме. Это простой способ вынудить сравнение столбца быть
+чувствительным к регистру, даже если столбец не определен как
+<CODE>BINARY</CODE> или <CODE>BLOB</CODE>:
+
+<PRE>
+mysql&#62; select "a" = "A";
+    -&#62; 1
+mysql&#62; select BINARY "a" = "A";
+    -&#62; 0
+</PRE>
+
+<CODE>BINARY</CODE> появился в MySQL Version 3.23.0. Обратите внимание, что в
+некотором контексте MySQL не будет способен использовать индекс эффективно,
+когда Вы приводите индексированный столбец к <CODE>BINARY</CODE>.</DL>
+
+<P>Если Вы хотите сравнивать нечувствительные к регистру объекты blob, Вы
+можете всегда преобразовывать blob в верхний регистр перед сравнением:</P>
+
+<PRE>
+SELECT 'A' LIKE UPPER(blob_col) FROM table_name;
+</PRE>
+
+<H3><A NAME="Numeric_Functions">6.3 Числовые функции</A></H3>
+<H4><A NAME="Arithmetic_functions">6.3.1 Арифметические операторы</A></H4>
+<P>Обычные арифметические операторы доступны. Обратите внимание, что в случае
+<SAMP>`-'</SAMP>, <SAMP>`+'</SAMP> и <SAMP>`*'</SAMP>, результат вычислен с
+точностью <CODE>BIGINT</CODE> (64-bit), если оба параметра целые числа!</P>
+
+<DL COMPACT>
+<DT><CODE>+</CODE>
+<DD><A NAME="IDX1197"></A><A NAME="IDX1198"></A>Сложение:
+<PRE>
+mysql&#62; select 3+5;
+    -&#62; 8
+</PRE>
+
+<A NAME="IDX1199"></A><A NAME="IDX1200"></A><DT><CODE>-</CODE>
+<DD>Вычитание:
+
+<PRE>
+mysql&#62; select 3-5;
+    -&#62; -2
+</PRE>
+
+<A NAME="IDX1201"></A><A NAME="IDX1202"></A>
+<DT><CODE>*</CODE>
+<DD>Умножение:
+
+<PRE>
+mysql&#62; select 3*5;
+    -&#62; 15
+mysql&#62; select 18014398509481984*18014398509481984.0;
+    -&#62; 324518553658426726783156020576256.0
+mysql&#62; select 18014398509481984*18014398509481984;
+    -&#62; 0
+</PRE>
+
+Результат последнего выражения ошибочен потому, что результат целочисленного
+умножения превышает 64-разрядный
+диапазон вычислений <CODE>BIGINT</CODE>.
+
+<A NAME="IDX1203"></A><A NAME="IDX1204"></A>
+<DT><CODE>/</CODE>
+<DD>Деление:
+
+<PRE>
+mysql&#62; select 3/5;
+    -&#62; 0.60
+</PRE>
+
+Деление на ноль вернет <CODE>NULL</CODE>:
+
+<PRE>
+mysql&#62; select 102/(1-1);
+    -&#62; NULL
+</PRE>
+
+Деление будет вычислено с арифметикой <CODE>BIGINT</CODE> только, если
+выполняется в контексте, где результат преобразован в целое число!</DL>
+
+<H4><A NAME="Mathematical_functions">6.3.2 Математические функции</A></H4>
+<P>Все математические функции возвращают <CODE>NULL</CODE> в случае ошибки.
+</P>
+
+<P><A NAME="IDX1205"></A><A NAME="IDX1206"></A></P>
+<DL COMPACT>
+<DT><CODE>-</CODE>
+<DD><A NAME="IDX1207"></A><A NAME="IDX1208"></A><A NAME="IDX1209"></A>
+Унарный минус. Меняет знак аргумента:
+
+<PRE>
+mysql&#62; select - 2;
+    -&#62; -2
+</PRE>
+
+Обратите внимание, что, если этот оператор используется с
+<CODE>BIGINT</CODE>, значение возврата будет типа <CODE>BIGINT</CODE>!
+Это означает, что Вы должны избегать использования <CODE>-</CODE> на целых
+числах, которые могут иметь значение <CODE>-2^63</CODE>!
+
+<A NAME="IDX1210"></A><DT><CODE>ABS(X)</CODE>
+<DD>Возвращает абсолютное значение <CODE>X</CODE>:
+
+<PRE>
+mysql&#62; select ABS(2);
+    -&#62; 2
+mysql&#62; select ABS(-32);
+    -&#62; 32
+</PRE>
+
+Эта функция безопасна, чтобы использовать со значениями <CODE>BIGINT</CODE>.
+
+<A NAME="IDX1211"></A><DT><CODE>SIGN(X)</CODE>
+<DD>Возвращает знак параметра как <CODE>-1</CODE>, <CODE>0</CODE> или
+<CODE>1</CODE>, в зависимости от того, является ли <CODE>X</CODE>
+отрицательным, нулевым или положительным:
+
+<PRE>
+mysql&#62; select SIGN(-32);
+    -&#62; -1
+mysql&#62; select SIGN(0);
+    -&#62; 0
+mysql&#62; select SIGN(234);
+    -&#62; 1
+</PRE>
+
+<A NAME="IDX1212"></A><A NAME="IDX1213"></A><A NAME="IDX1214"></A>
+<DT><CODE>MOD(N,M)</CODE>
+<DD>
+<DT><CODE>%</CODE>
+<DD>MOD (подобно оператору <CODE>%</CODE> в языке C). Возвращает остаток от
+деления <CODE>N</CODE> на <CODE>M</CODE>:
+
+<PRE>
+mysql&#62; select MOD(234, 10);
+    -&#62; 4
+mysql&#62; select 253 % 7;
+    -&#62; 1
+mysql&#62; select MOD(29,9);
+    -&#62; 2
+</PRE>
+
+Эта функция безопасна, чтобы использовать со значениями <CODE>BIGINT</CODE>.
+
+<A NAME="IDX1215"></A><DT><CODE>FLOOR(X)</CODE>
+<DD>Возвращает самое большое целочисленное значение не большее, чем
+<CODE>X</CODE>:
+
+<PRE>
+mysql&#62; select FLOOR(1.23);
+    -&#62; 1
+mysql&#62; select FLOOR(-1.23);
+    -&#62; -2
+</PRE>
+
+Обратите внимание, что значение возврата преобразовано в <CODE>BIGINT</CODE>!
+
+<A NAME="IDX1216"></A><DT><CODE>CEILING(X)</CODE>
+<DD>Возвращает самое маленькое целочисленное значение не меньше, чем
+<CODE>X</CODE>:
+
+<PRE>
+mysql&#62; select CEILING(1.23);
+    -&#62; 2
+mysql&#62; select CEILING(-1.23);
+    -&#62; -1
+</PRE>
+
+Обратите внимание, что значение возврата преобразовано в <CODE>BIGINT</CODE>!
+
+<A NAME="IDX1217"></A><DT><CODE>ROUND(X)</CODE>
+<DD>Возвращает параметр <CODE>X</CODE>, округленный к самому близкому целому:
+
+<PRE>
+mysql&#62; select ROUND(-1.23);
+    -&#62; -1
+mysql&#62; select ROUND(-1.58);
+    -&#62; -2
+mysql&#62; select ROUND(1.58);
+    -&#62; 2
+</PRE>
+
+Обратите внимание, что поведение <CODE>ROUND()</CODE>, когда параметр
+расположен точно между двумя целыми числами, зависит от реализации библиотеки
+C. Некоторые версии всегда округляют к самому близкому четному числу, другие
+всегда к самому большому, самому меньшему или вообще возвращают ноль. Если Вы
+нуждаетесь в одном виде округления, Вы должны использовать четкую функцию,
+подобно <CODE>TRUNCATE()</CODE> или <CODE>FLOOR()</CODE>.
+
+<A NAME="IDX1218"></A><DT><CODE>ROUND(X,D)</CODE>
+<DD>Возвращает параметр <CODE>X</CODE>, округленный к числу с <CODE>D</CODE>
+десятичными цифрами. Если <CODE>D</CODE> равно <CODE>0</CODE>, результат не
+будет иметь никакой десятичной отметки или дробной части:
+
+<PRE>
+mysql&#62; select ROUND(1.298, 1);
+    -&#62; 1.3
+mysql&#62; select ROUND(1.298, 0);
+    -&#62; 1
+</PRE>
+
+<A NAME="IDX1219"></A><DT><CODE>EXP(X)</CODE>
+<DD>Возвращает значение <CODE>e</CODE> (основание натуральных логарифмов),
+предварительно возведенное в степень <CODE>X</CODE>:
+
+<PRE>
+mysql&#62; select EXP(2);
+    -&#62; 7.389056
+mysql&#62; select EXP(-2);
+    -&#62; 0.135335
+</PRE>
+
+<A NAME="IDX1220"></A><DT><CODE>LOG(X)</CODE>
+<DD>Возвращает натуральный логарифм <CODE>X</CODE>:
+
+<PRE>
+mysql&#62; select LOG(2);
+    -&#62; 0.693147
+mysql&#62; select LOG(-2);
+    -&#62; NULL
+</PRE>
+
+Для других логарифмов пользуйтесь формулой <CODE>LOG(X)/LOG(B)</CODE>.
+
+<A NAME="IDX1221"></A><DT><CODE>LOG10(X)</CODE>
+<DD>Возвращает десятичный логарифм <CODE>X</CODE>:
+
+<PRE>
+mysql&#62; select LOG10(2);
+    -&#62; 0.301030
+mysql&#62; select LOG10(100);
+    -&#62; 2.000000
+mysql&#62; select LOG10(-100);
+    -&#62; NULL
+</PRE>
+
+<A NAME="IDX1222"></A><A NAME="IDX1223"></A><DT><CODE>POW(X,Y)</CODE>
+<DD>
+<DT><CODE>POWER(X,Y)</CODE>
+<DD>Возвращает значение <CODE>X</CODE> в степени <CODE>Y</CODE>:
+
+<PRE>
+mysql&#62; select POW(2,2);
+    -&#62; 4.000000
+mysql&#62; select POW(2,-2);
+    -&#62; 0.250000
+</PRE>
+
+<A NAME="IDX1224"></A><DT><CODE>SQRT(X)</CODE>
+<DD>Возвращает неотрицательный квадратный корень <CODE>X</CODE>:
+
+<PRE>
+mysql&#62; select SQRT(4);
+    -&#62; 2.000000
+mysql&#62; select SQRT(20);
+    -&#62; 4.472136
+</PRE>
+
+<A NAME="IDX1225"></A><DT><CODE>PI()</CODE>
+<DD>Возвращает значение PI. По умолчанию, показывается 5 десятичных чисел, но
+MySQL внутренне использует полный алгоритм расчета PI.
+
+<PRE>
+mysql&#62; select PI();
+    -&#62; 3.141593
+mysql&#62; SELECT PI()+0.000000000000000000;
+    -&#62; 3.141592653589793116
+</PRE>
+
+<A NAME="IDX1226"></A><DT><CODE>COS(X)</CODE>
+<DD>Возвращает косинус <CODE>X</CODE>, где <CODE>X</CODE> задан в радианах:
+
+<PRE>
+mysql&#62; select COS(PI());
+    -&#62; -1.000000
+</PRE>
+
+<A NAME="IDX1227"></A><DT><CODE>SIN(X)</CODE>
+<DD>Возвращает синус <CODE>X</CODE>, где <CODE>X</CODE> задан в радианах:
+
+<PRE>
+mysql&#62; select SIN(PI());
+    -&#62; 0.000000
+</PRE>
+
+<A NAME="IDX1228"></A><DT><CODE>TAN(X)</CODE>
+<DD>Возвращает тангенс <CODE>X</CODE>, где <CODE>X</CODE> задан в радианах:
+
+<PRE>
+mysql&#62; select TAN(PI()+1);
+    -&#62; 1.557408
+</PRE>
+
+<A NAME="IDX1229"></A><DT><CODE>ACOS(X)</CODE>
+<DD>Возвращает арккосинус <CODE>X</CODE>, то есть значение, чей косинус равен
+<CODE>X</CODE>. Вернет <CODE>NULL</CODE>, если <CODE>X</CODE> не в диапазоне
+от <CODE>-1</CODE> до <CODE>1</CODE>:
+
+<PRE>
+mysql&#62; select ACOS(1);
+    -&#62; 0.000000
+mysql&#62; select ACOS(1.0001);
+    -&#62; NULL
+mysql&#62; select ACOS(0);
+    -&#62; 1.570796
+</PRE>
+
+<A NAME="IDX1230"></A><DT><CODE>ASIN(X)</CODE>
+<DD>Возвращает арксинус <CODE>X</CODE>, то есть значение, чей синус равен
+<CODE>X</CODE>. Вернет <CODE>NULL</CODE>, если <CODE>X</CODE> не в диапазоне
+от <CODE>-1</CODE> до <CODE>1</CODE>:
+
+<PRE>
+mysql&#62; select ASIN(0.2);
+    -&#62; 0.201358
+mysql&#62; select ASIN('foo');
+    -&#62; 0.000000
+</PRE>
+
+<A NAME="IDX1231"></A><DT><CODE>ATAN(X)</CODE>
+<DD>Возвращает арктангенс <CODE>X</CODE>, то есть значение, чей тангенс равен
+<CODE>X</CODE>:
+
+<PRE>
+mysql&#62; select ATAN(2);
+    -&#62; 1.107149
+mysql&#62; select ATAN(-2);
+    -&#62; -1.107149
+</PRE>
+
+<A NAME="IDX1232"></A><DT><CODE>ATAN2(Y,X)</CODE>
+<DD>Возвращает тангенс дуги из двух переменных <CODE>X</CODE> и
+<CODE>Y</CODE>. Это подобно вычислению тангенса дуги <CODE>Y/X</CODE>, за
+исключением того, что знаки обоих параметров используются, чтобы определить
+quadrant результата:
+
+<PRE>
+mysql&#62; select ATAN(-2,2);
+    -&#62; -0.785398
+mysql&#62; select ATAN(PI(),0);
+    -&#62; 1.570796
+</PRE>
+
+<A NAME="IDX1233"></A><DT><CODE>COT(X)</CODE>
+<DD>Возвращает котангенс <CODE>X</CODE>:
+
+<PRE>
+mysql&#62; select COT(12);
+    -&#62; -1.57267341
+mysql&#62; select COT(0);
+    -&#62; NULL
+</PRE>
+
+<A NAME="IDX1234"></A><DT><CODE>RAND()</CODE>
+<DD>
+<DT><CODE>RAND(N)</CODE>
+<DD>Возвращает произвольное значение с плавающей запятой в диапазоне от
+<CODE>0</CODE> до <CODE>1.0</CODE>. Если целочисленный параметр
+<CODE>N</CODE> определен, он используется как значение инициализации:
+
+<PRE>
+mysql&#62; select RAND();
+    -&#62; 0.5925
+mysql&#62; select RAND(20);
+    -&#62; 0.1811
+mysql&#62; select RAND(20);
+    -&#62; 0.1811
+mysql&#62; select RAND();
+    -&#62; 0.2079
+mysql&#62; select RAND();
+    -&#62; 0.7888
+</PRE>
+
+Вы не можете использовать столбец со значением <CODE>RAND()</CODE> в
+предложении <CODE>ORDER BY</CODE> потому, что <CODE>ORDER BY</CODE>
+вычисляется несколько раз. В MySQL Version 3.23, Вы, однако, это можете:
+<CODE>SELECT * FROM table_name ORDER BY RAND()</CODE>
+
+Это полезно, чтобы получить произвольную выборку <CODE>SELECT * FROM
+table1,table2 WHERE a=b AND c&#60;d ORDER BY RAND() LIMIT 1000</CODE>.
+
+Обратите внимание, что <CODE>RAND()</CODE> в предложенииi <CODE>WHERE</CODE>
+будет переоценен каждый раз, когда выполняется <CODE>WHERE</CODE>.
+
+<A NAME="IDX1235"></A><DT><CODE>LEAST(X,Y,...)</CODE>
+<DD>С двумя или больше параметрами, возвращает самый маленький параметр.
+Параметры сравниваются по следующим правилам:
+
+<UL><LI>Если значение возврата используется в контексте <CODE>INTEGER</CODE>,
+или все параметры целые числа, они сравниваются как целые числа.
+
+<LI>Если значение возврата применяется в контексте <CODE>REAL</CODE>, или
+все параметры представляют собой числа real, они сравниваются как real.
+
+<LI>Если любой параметр является чувствительной к регистру строкой, все
+параметры сравниваются именно как чувствительные к регистру строки.
+
+<LI>Во всех других случаях параметры всегда сравниваются как нечувствительные
+к регистру обычные строки.</UL>
+
+<PRE>
+mysql&#62; select LEAST(2,0);
+    -&#62; 0
+mysql&#62; select LEAST(34.0,3.0,5.0,767.0);
+    -&#62; 3.0
+mysql&#62; select LEAST("B","A","C");
+    -&#62; "A"
+</PRE>
+
+В MySQL до Version 3.22.5 Вы можете использовать <CODE>MIN()</CODE> вместо
+<CODE>LEAST</CODE>.
+
+<A NAME="IDX1236"></A><DT><CODE>GREATEST(X,Y,...)</CODE>
+<DD>Возвращает самый большой параметр. Параметры сравниваются, используя те
+же самые правила, что касаются и вызова <CODE>LEAST</CODE>:
+
+<PRE>
+mysql&#62; select GREATEST(2,0);
+    -&#62; 2
+mysql&#62; select GREATEST(34.0,3.0,5.0,767.0);
+    -&#62; 767.0
+mysql&#62; select GREATEST("B","A","C");
+    -&#62; "C"
+</PRE>
+
+В MySQL до Version 3.22.5 Вы можете использовать <CODE>MAX()</CODE> вместо
+<CODE>GREATEST</CODE>.
+
+<A NAME="IDX1237"></A><DT><CODE>DEGREES(X)</CODE>
+<DD>Возвращает параметр <CODE>X</CODE>, преобразованный из радиан в градусы:
+
+<PRE>
+mysql&#62; select DEGREES(PI());
+    -&#62; 180.000000
+</PRE>
+
+<A NAME="IDX1238"></A><DT><CODE>RADIANS(X)</CODE>
+<DD>Обратно вызову <CODE>DEGREES(X)</CODE>:
+
+<PRE>
+mysql&#62; select RADIANS(90);
+    -&#62; 1.570796
+</PRE>
+
+<A NAME="IDX1239"></A><DT><CODE>TRUNCATE(X,D)</CODE>
+<DD>Возвращает число <CODE>X</CODE>, усеченное до <CODE>D</CODE> десятичных
+чисел. Если <CODE>D</CODE> равно <CODE>0</CODE>, результат не будет
+иметь никакой десятичной отметки или дробной части:
+
+<PRE>
+mysql&#62; select TRUNCATE(1.223,1);
+    -&#62; 1.2
+mysql&#62; select TRUNCATE(1.999,1);
+    -&#62; 1.9
+mysql&#62; select TRUNCATE(1.999,0);
+    -&#62; 1
+</PRE>
+
+Обратите внимание, что, поскольку десятичные числа обычно сохраняются в
+компьютерах не как точные числа, а как двоичные значения, Вы можете быть
+введены в заблуждение следующим результатом:
+
+<A NAME="IDX1240"></A>
+<PRE>
+mysql&#62; select TRUNCATE(10.28*100,0);
+   -&#62; 1027
+</PRE>
+
+Вышеупомянутое случается потому, что число 10.28 фактически будет сохранено
+как нечто вроде 10.2799999999999999.</DL>
+
+<H3><A NAME="Date_and_time_functions">6.4 Функции для времени и даты</A></H3>
+<P>Обратитесь к разделу "<A HREF="glava05.htm#Date_and_time_types">5.2 Типы
+Date и Time</A>" для описания диапазона значений, которые имеет каждый тип, и
+форматов, в которых значения даты и времени могут быть определены.</P>
+
+<P>Имеется пример, который использует функции даты. Запрос ниже выбирает все
+записи со значением <CODE>date_col</CODE> в пределах последних 30 дней:</P>
+
+<PRE>
+mysql&#62; SELECT something FROM table
+           WHERE TO_DAYS(NOW()) - TO_DAYS(date_col) &#60;= 30;
+</PRE>
+
+<DL COMPACT>
+<DT><CODE>DAYOFWEEK(date)</CODE>
+<DD><A NAME="IDX1243"></A>Возвращает номер дня недели для <CODE>date</CODE>
+(<CODE>1</CODE>=воскресенье, <CODE>2</CODE>=понедельник, ...,
+<CODE>7</CODE>=суббота). Эти индексные значения соответствуют стандарту ODBC:
+
+<PRE>
+mysql&#62; select DAYOFWEEK('1998-02-03');
+    -&#62; 3
+</PRE>
+
+<A NAME="IDX1244"></A><DT><CODE>WEEKDAY(date)</CODE>
+<DD>Возвращает номер дня недели для <CODE>date</CODE>
+(<CODE>0</CODE>=понедельник, <CODE>1</CODE>=вторник, ...,
+<CODE>6</CODE>=воскресенье):
+
+<PRE>
+mysql&#62; select WEEKDAY('1997-10-04 22:23:00');
+    -&#62; 5
+mysql&#62; select WEEKDAY('1997-11-05');
+    -&#62; 2
+</PRE>
+
+<A NAME="IDX1245"></A><DT><CODE>DAYOFMONTH(date)</CODE>
+<DD>Возвращает день месяца для <CODE>date</CODE>, в диапазоне от
+<CODE>1</CODE> до <CODE>31</CODE>:
+
+<PRE>
+mysql&#62; select DAYOFMONTH('1998-02-03');
+    -&#62; 3
+</PRE>
+
+<A NAME="IDX1246"></A><DT><CODE>DAYOFYEAR(date)</CODE>
+<DD>Возвращает день года для <CODE>date</CODE>, в диапазоне от <CODE>1</CODE>
+до <CODE>366</CODE>:
+
+<PRE>
+mysql&#62; select DAYOFYEAR('1998-02-03');
+    -&#62; 34
+</PRE>
+
+<A NAME="IDX1247"></A><DT><CODE>MONTH(date)</CODE>
+<DD>Возвращает месяц для <CODE>date</CODE>, в диапазоне от <CODE>1</CODE> до
+<CODE>12</CODE>:
+
+<PRE>
+mysql&#62; select MONTH('1998-02-03');
+    -&#62; 2
+</PRE>
+
+<A NAME="IDX1248"></A><DT><CODE>DAYNAME(date)</CODE>
+<DD>Возвращает имя дня недели для <CODE>date</CODE>:
+
+<PRE>
+mysql&#62; select DAYNAME("1998-02-05");
+    -&#62; 'Thursday'
+</PRE>
+
+<A NAME="IDX1249"></A><DT><CODE>MONTHNAME(date)</CODE>
+<DD>Возвращает имя месяца для <CODE>date</CODE>:
+
+<PRE>
+mysql&#62; select MONTHNAME("1998-02-05");
+    -&#62; 'February'
+</PRE>
+
+<A NAME="IDX1250"></A><DT><CODE>QUARTER(date)</CODE>
+<DD>Возвращает четверть года для <CODE>date</CODE>, в диапазоне от
+<CODE>1</CODE> до <CODE>4</CODE>:
+
+<PRE>
+mysql&#62; select QUARTER('98-04-01');
+    -&#62; 2
+</PRE>
+
+<A NAME="IDX1251"></A><DT><CODE>WEEK(date)</CODE>
+<DD>
+<DT><CODE>WEEK(date,first)</CODE>
+<DD>С одиночным параметром возвращает неделю для <CODE>date</CODE>, в
+диапазоне от <CODE>0</CODE> до <CODE>53</CODE> (да, могут иметься начала
+недели 53), для расположений, где воскресенье считается первым днем недели.
+Форма с двумя параметрами <CODE>WEEK()</CODE> позволяет Вам определять,
+начинается ли неделя в воскресенье или в понедельник. Неделя начинается в
+воскресенье, если второй параметр равен <CODE>0</CODE>, или в понедельник,
+если он равен <CODE>1</CODE>:
+
+<PRE>
+mysql&#62; select WEEK('1998-02-20');
+    -&#62; 7
+mysql&#62; select WEEK('1998-02-20',0);
+    -&#62; 7
+mysql&#62; select WEEK('1998-02-20',1);
+    -&#62; 8
+mysql&#62; select WEEK('1998-12-31',1);
+    -&#62; 53
+</PRE>
+
+<A NAME="IDX1252"></A><DT><CODE>YEAR(date)</CODE>
+<DD>Возвращает год для <CODE>date</CODE>, в диапазоне от <CODE>1000</CODE> до
+<CODE>9999</CODE>:
+
+<PRE>
+mysql&#62; select YEAR('98-02-03');
+    -&#62; 1998
+</PRE>
+
+<DT><CODE>YEARWEEK(date)</CODE>
+<DD>
+<DT><CODE>YEARWEEK(date,first)</CODE>
+<DD>Возвращает год и неделю для date. Вторые параметры работают точно так же,
+как и второй параметр в вызове <CODE>WEEK()</CODE>. Обратите внимание, что
+год может отличаться от года в параметре для первой и последней недель:
+
+<PRE>
+mysql&#62; select YEARWEEK('1987-01-01');
+    -&#62; 198653
+</PRE>
+
+<A NAME="IDX1253"></A><DT><CODE>HOUR(time)</CODE>
+<DD>Возвращает час для <CODE>time</CODE>, в диапазоне от <CODE>0</CODE> до
+<CODE>23</CODE>:
+
+<PRE>
+mysql&#62; select HOUR('10:05:03');
+    -&#62; 10
+</PRE>
+
+<A NAME="IDX1254"></A><DT><CODE>MINUTE(time)</CODE>
+<DD>Возвращает минуту для <CODE>time</CODE>, в диапазоне от <CODE>0</CODE> до
+<CODE>59</CODE>:
+
+<PRE>
+mysql&#62; select MINUTE('98-02-03 10:05:03');
+    -&#62; 5
+</PRE>
+
+<A NAME="IDX1255"></A><DT><CODE>SECOND(time)</CODE>
+<DD>Возвращает секунды для <CODE>time</CODE>, в диапазоне от <CODE>0</CODE>
+до <CODE>59</CODE>:
+
+<PRE>
+mysql&#62; select SECOND('10:05:03');
+    -&#62; 3
+</PRE>
+
+<A NAME="IDX1256"></A><DT><CODE>PERIOD_ADD(P,N)</CODE>
+<DD>Добавляет <CODE>N</CODE> месяцев к периоду <CODE>P</CODE> (в формате
+<CODE>YYMM</CODE> или <CODE>YYYYMM</CODE>). Возвращает значение в формате
+<CODE>YYYYMM</CODE>. Обратите внимание, что параметр <CODE>P</CODE>
+<EM>НЕ</EM> является датой:
+
+<PRE>
+mysql&#62; select PERIOD_ADD(9801,2);
+    -&#62; 199803
+</PRE>
+
+<A NAME="IDX1257"></A>
+<DT><CODE>PERIOD_DIFF(P1,P2)</CODE>
+<DD>Возвращает число месяцев между периодами <CODE>P1</CODE> и
+<CODE>P2</CODE>. <CODE>P1</CODE> и <CODE>P2</CODE> должны быть в формате
+<CODE>YYMM</CODE> или <CODE>YYYYMM</CODE>. Обратите внимание, что параметры
+<CODE>P1</CODE> и <CODE>P2</CODE> <EM>НЕ</EM> являются датами:
+
+<PRE>
+mysql&#62; select PERIOD_DIFF(9802,199703);
+    -&#62; 11
+</PRE>
+
+<A NAME="IDX1258"></A><A NAME="IDX1259"></A><A NAME="IDX1260"></A>
+<A NAME="IDX1261"></A><A NAME="IDX1262"></A>
+<DT><CODE>DATE_ADD(date,INTERVAL expr type)</CODE>
+<DD>
+<DT><CODE>DATE_SUB(date,INTERVAL expr type)</CODE>
+<DD>
+<DT><CODE>ADDDATE(date,INTERVAL expr type)</CODE>
+<DD>
+<DT><CODE>SUBDATE(date,INTERVAL expr type)</CODE>
+<DD>Эти функции выполняют арифметику даты. Они новы для MySQL Version 3.22.
+<CODE>ADDDATE()</CODE> и <CODE>SUBDATE()</CODE> представляют собой синонимы
+<CODE>DATE_ADD()</CODE> и <CODE>DATE_SUB()</CODE>. В MySQL Version 3.23 Вы
+можете использовать <CODE>+</CODE> и <CODE>-</CODE> вместо
+<CODE>DATE_ADD()</CODE> и <CODE>DATE_SUB()</CODE>, если выражение справа
+является столбом типа datetime или датой (пример ниже). <CODE>date</CODE>
+значение типа <CODE>DATETIME</CODE> или <CODE>DATE</CODE>, определяющее
+стартовую дату. <CODE>expr</CODE> задает выражение, определяющее значение
+интервала, которое будет добавлено или вычтено из стартовой даты.
+<CODE>expr</CODE> является строкой, оно может начинаться с <SAMP>`-'</SAMP>
+для отрицательных интервалов. <CODE>type</CODE> представляет собой ключевое
+слово, указывающее, как данное выражение должно интерпретироваться. Связанная
+функция <CODE>EXTRACT(type FROM date)</CODE> возвращает интервал 'type' даты.
+Следующая таблица показывает, как параметры <CODE>type</CODE> и
+<CODE>expr</CODE> связаны:
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><CODE>type</CODE><STRONG>значение</STRONG></TD><TD>
+<STRONG>ожидаемый формат</STRONG> <CODE>expr</CODE></TD></TR>
+<TR><TD><CODE>SECOND</CODE></TD><TD><CODE>SECONDS</CODE></TD></TR>
+<TR><TD><CODE>MINUTE</CODE></TD><TD><CODE>MINUTES</CODE></TD></TR>
+<TR><TD><CODE>HOUR</CODE></TD><TD><CODE>HOURS</CODE></TD></TR>
+<TR><TD><CODE>DAY</CODE></TD><TD><CODE>DAYS</CODE></TD></TR>
+<TR><TD><CODE>MONTH</CODE></TD><TD><CODE>MONTHS</CODE></TD></TR>
+<TR><TD><CODE>YEAR</CODE></TD><TD><CODE>YEARS</CODE></TD></TR>
+<TR><TD><CODE>MINUTE_SECOND</CODE></TD><TD><CODE>"MINUTES:SECONDS"</CODE>
+</TD></TR>
+<TR><TD><CODE>HOUR_MINUTE</CODE></TD><TD><CODE>"HOURS:MINUTES"</CODE></TD>
+</TR>
+<TR><TD><CODE>DAY_HOUR</CODE></TD><TD><CODE>"DAYS HOURS"</CODE></TD></TR>
+<TR><TD><CODE>YEAR_MONTH</CODE></TD><TD><CODE>"YEARS-MONTHS"</CODE></TD></TR>
+<TR><TD><CODE>HOUR_SECOND</CODE></TD><TD><CODE>"HOURS:MINUTES:SECONDS"</CODE>
+</TD></TR>
+<TR><TD><CODE>DAY_MINUTE</CODE></TD><TD><CODE>"DAYS HOURS:MINUTES"</CODE>
+</TD></TR>
+<TR><TD><CODE>DAY_SECOND</CODE></TD><TD><CODE>"DAYS HOURS:MINUTES:SECONDS"
+</CODE></TD></TR></TABLE>
+
+MySQL позволяет любой разделитель в формате <CODE>expr</CODE>. Показанные в
+таблице представляют собой предложенные разделители. Если параметр
+<CODE>date</CODE> значение типа <CODE>DATE</CODE>, и Ваши вычисления включают
+только части <CODE>YEAR</CODE>, <CODE>MONTH</CODE> и <CODE>DAY</CODE>,
+(то есть никаких частей времени), результат будет значением типа
+<CODE>DATE</CODE>. Иначе будет установлен тип <CODE>DATETIME</CODE>:
+
+<PRE>
+mysql&#62; SELECT "1997-12-31 23:59:59" + INTERVAL 1 SECOND;
+    -&#62; 1998-01-01 00:00:00
+mysql&#62; SELECT INTERVAL 1 DAY + "1997-12-31";
+    -&#62; 1998-01-01
+mysql&#62; SELECT "1998-01-01" - INTERVAL 1 SECOND;
+   -&#62; 1997-12-31 23:59:59
+mysql&#62; SELECT DATE_ADD("1997-12-31 23:59:59",
+                       INTERVAL 1 SECOND);
+    -&#62; 1998-01-01 00:00:00
+mysql&#62; SELECT DATE_ADD("1997-12-31 23:59:59",
+                       INTERVAL 1 DAY);
+    -&#62; 1998-01-01 23:59:59
+mysql&#62; SELECT DATE_ADD("1997-12-31 23:59:59",
+                       INTERVAL "1:1" MINUTE_SECOND);
+    -&#62; 1998-01-01 00:01:00
+mysql&#62; SELECT DATE_SUB("1998-01-01 00:00:00",
+                       INTERVAL "1 1:1:1" DAY_SECOND);
+    -&#62; 1997-12-30 22:58:59
+mysql&#62; SELECT DATE_ADD("1998-01-01 00:00:00",
+                       INTERVAL "-1 10" DAY_HOUR);
+    -&#62; 1997-12-30 14:00:00
+mysql&#62; SELECT DATE_SUB("1998-01-02", INTERVAL 31 DAY);
+    -&#62; 1997-12-02
+</PRE>
+
+Если Вы определяете значение интервала, которое является слишком коротким (не
+включает все части интервала, которые ожидались бы из ключевого слова
+<CODE>type</CODE>), MySQL считает, что Вы не учли крайние левые части
+значения интервала. Например, если Вы определяете <CODE>type</CODE> как
+<CODE>DAY_SECOND</CODE>, значение <CODE>expr</CODE>, как ожидается, будет
+иметь дни, часы, минуты и секунды. Если Вы определяете, что значение выглядит
+как <CODE>"1:10"</CODE>, MySQL считает, что части дней и часов отсутствуют, а
+значение представляет минуты и секунды. Другими словами, <CODE>"1:10"
+DAY_SECOND</CODE> интерпретируется таким способом, которым это является
+эквивалентным <CODE>"1:10" MINUTE_SECOND</CODE>. Это аналогично пути, которым
+MySQL интерпретирует значения <CODE>TIME</CODE> как представление прошедшего
+времени, а не время дня. Обратите внимание, что, если Вы добавляете или
+вычитаете значение date, работая с частями времени, оно будет автоматически
+преобразовано в значение time:
+
+<PRE>
+mysql&#62; select date_add("1999-01-01", interval 1 day);
+    -&#62; 1999-01-02
+mysql&#62; select date_add("1999-01-01", interval 1 hour);
+    -&#62; 1999-01-01 01:00:00
+</PRE>
+
+Если Вы используете, действительно, неправильные даты, результатом будет
+<CODE>NULL</CODE>. Если Вы добавляете <CODE>MONTH</CODE>,
+<CODE>YEAR_MONTH</CODE> или <CODE>YEAR</CODE>, и возникающая в результате
+дата имеет день, который является большим, чем максимальный день нового
+месяца, день откорректирован к максимальному дню в новом месяце:
+
+<PRE>
+mysql&#62; select DATE_ADD('1998-01-30', Interval 1 month);
+    -&#62; 1998-02-28
+</PRE>
+
+Обратите внимание, что слово <CODE>INTERVAL</CODE> и ключевое слово
+<CODE>type</CODE> не чувствительны к регистру.
+
+<A NAME="IDX1263"></A><DT><CODE>EXTRACT(type FROM date)</CODE>
+<DD>Функция <CODE>EXTRACT()</CODE> использует те же самые виды спецификаторов
+типа интервала, что и <CODE>DATE_ADD()</CODE> или <CODE>DATE_SUB()</CODE>, но
+извлекает части даты, а не проводит выполнение арифметики даты.
+
+<PRE>
+mysql&#62; SELECT EXTRACT(YEAR FROM "1999-07-02");
+    -&#62; 1999
+mysql&#62; SELECT EXTRACT(YEAR_MONTH FROM "1999-07-02 01:02:03");
+    -&#62; 199907
+mysql&#62; SELECT EXTRACT(DAY_MINUTE FROM "1999-07-02 01:02:03");
+    -&#62; 20102
+</PRE>
+
+<A NAME="IDX1264"></A><DT><CODE>TO_DAYS(date)</CODE>
+<DD>Берет дату <CODE>date</CODE>, возвращает порядковый номер дня, считая с
+самого первого года:
+
+<PRE>
+mysql&#62; select TO_DAYS(950501);
+    -&#62; 728779
+mysql&#62; select TO_DAYS('1997-10-07');
+    -&#62; 729669
+</PRE>
+
+<CODE>TO_DAYS()</CODE> не предназначена для использования со значениями,
+которые предшествуют появлению Грегорианского календаря (1582) потому, что
+эта функция не принимает во внимание дни, которые были потеряны, когда
+календарь был изменен.
+
+<A NAME="IDX1265"></A><DT><CODE>FROM_DAYS(N)</CODE>
+<DD>Берет номер дня <CODE>N</CODE>, возвращает значение <CODE>DATE</CODE>:
+
+<PRE>
+mysql&#62; select FROM_DAYS(729669);
+    -&#62; '1997-10-07'
+</PRE>
+
+<CODE>FROM_DAYS()</CODE> не предназначена для использования со значениями,
+которые предшествуют появлению Грегорианского календаря (1582) потому, что
+эта функция не принимает во внимание дни, которые были потеряны, когда
+календарь был изменен.
+
+<A NAME="IDX1266"></A><DT><CODE>DATE_FORMAT(date,format)</CODE>
+<DD>Форматирует значение <CODE>date</CODE> согласно строке
+<CODE>format</CODE>. Следующие спецификаторы могут использоваться в формате:
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><CODE>%M</CODE></TD><TD>Имя месяца
+(<CODE>январь</CODE>..<CODE>декабрь</CODE>).</TD></TR>
+<TR><TD><CODE>%W</CODE></TD><TD>День недели
+(<CODE>воскресенье</CODE>..<CODE>суббота</CODE>).</TD></TR>
+<TR><TD><CODE>%D</CODE></TD><TD>День месяца с английским суффиксом
+(<CODE>1st</CODE>, <CODE>2nd</CODE>, <CODE>3rd</CODE>, ...).</TD></TR>
+<TR><TD><CODE>%Y</CODE></TD><TD>Год, числовое представление, 4 цифры.</TD>
+</TR>
+<TR><TD><CODE>%y</CODE></TD><TD>Год, числовое представление, 2 цифры.</TD>
+</TR>
+<TR><TD><CODE>%X</CODE></TD><TD>Год для недель, где воскресенье первый день
+недели, числовое представление, 4 цифры, используемые с '%V'.</TD></TR>
+<TR><TD><CODE>%x</CODE></TD><TD>Год для недель, где понедельник первый день
+недели, числовое представление, 4 цифры, используемые с '%v'.</TD></TR>
+<TR><TD><CODE>%a</CODE></TD><TD>Краткая форма названия дня
+(<CODE>Sun</CODE>..<CODE>Sat</CODE>).</TD></TR>
+<TR><TD><CODE>%d</CODE></TD><TD>День месяца, числовой
+(<CODE>00</CODE>..<CODE>31</CODE>).</TD></TR>
+<TR><TD><CODE>%e</CODE></TD><TD>День месяца, числовой
+(<CODE>0</CODE>..<CODE>31</CODE>).</TD></TR>
+<TR><TD><CODE>%m</CODE></TD><TD>Месяц, числовой
+(<CODE>01</CODE>..<CODE>12</CODE>).</TD></TR>
+<TR><TD><CODE>%c</CODE></TD><TD>Месяц, числовой
+(<CODE>1</CODE>..<CODE>12</CODE>).</TD></TR>
+<TR><TD><CODE>%b</CODE></TD><TD>Краткая форма названия месяца
+(<CODE>Jan</CODE>..<CODE>Dec</CODE>).</TD></TR>
+<TR><TD><CODE>%j</CODE></TD><TD>День года
+(<CODE>001</CODE>..<CODE>366</CODE>).</TD></TR>
+<TR><TD><CODE>%H</CODE></TD><TD>Час (<CODE>00</CODE>..<CODE>23</CODE>).</TD>
+</TR>
+<TR><TD><CODE>%k</CODE></TD><TD>Час (<CODE>0</CODE>..<CODE>23</CODE>).</TD>
+</TR>
+<TR><TD><CODE>%h</CODE></TD><TD>Час (<CODE>01</CODE>..<CODE>12</CODE>).</TD>
+</TR>
+<TR><TD><CODE>%I</CODE></TD><TD>Час (<CODE>01</CODE>..<CODE>12</CODE>).</TD>
+</TR>
+<TR><TD><CODE>%l</CODE></TD><TD>Час (<CODE>1</CODE>..<CODE>12</CODE>).</TD>
+</TR>
+<TR><TD><CODE>%i</CODE></TD><TD>Минуты, числовая форма
+(<CODE>00</CODE>..<CODE>59</CODE>).</TD></TR>
+<TR><TD><CODE>%r</CODE></TD><TD>Время, 12-часовой формат
+(<CODE>hh:mm:ss [AP]M</CODE>).</TD></TR>
+<TR><TD><CODE>%T</CODE></TD><TD>Время, 24-часовой формат
+(<CODE>hh:mm:ss</CODE>).</TD></TR>
+<TR><TD><CODE>%S</CODE></TD><TD>Секунды (<CODE>00</CODE>..<CODE>59</CODE>).
+</TD></TR>
+<TR><TD><CODE>%s</CODE></TD><TD>Секунды (<CODE>00</CODE>..<CODE>59</CODE>).
+</TD></TR>
+<TR><TD><CODE>%p</CODE></TD><TD><CODE>AM</CODE> или <CODE>PM</CODE>.</TD>
+</TR>
+<TR><TD><CODE>%w</CODE></TD><TD>День недели
+(<CODE>0</CODE>=воскресенье..<CODE>6</CODE>=суббота).</TD></TR>
+<TR><TD><CODE>%U</CODE></TD><TD>Неделя (<CODE>0</CODE>..<CODE>53</CODE>), где
+воскресенье первый день недели.</TD></TR>
+<TR><TD><CODE>%u</CODE></TD><TD>Неделя (<CODE>0</CODE>..<CODE>53</CODE>), где
+понедельник первый день недели.</TD></TR>
+<TR><TD><CODE>%V</CODE></TD><TD>Неделя (<CODE>1</CODE>..<CODE>53</CODE>), где
+воскресенье первый день недели. Использован с '%X'.</TD></TR>
+<TR><TD><CODE>%v</CODE></TD><TD>Неделя (<CODE>1</CODE>..<CODE>53</CODE>), где
+понедельник первый день недели. Использован с '%x'.</TD></TR>
+<TR><TD><CODE>%%</CODE></TD><TD>Знак процента (<SAMP>%</SAMP>).</TD></TR>
+</TABLE>
+
+Все другие символы будут только скопированы в результат без интерпретации:
+
+<PRE>
+mysql&#62; select DATE_FORMAT('1997-10-04 22:23:00', '%W %M %Y');
+    -&#62; 'Saturday October 1997'
+mysql&#62; select DATE_FORMAT('1997-10-04 22:23:00', '%H:%i:%s');
+    -&#62; '22:23:00'
+mysql&#62; select DATE_FORMAT('1997-10-04 22:23:00',
+                              '%D %y %a %d %m %b %j');
+    -&#62; '4th 97 Sat 04 10 Oct 277'
+mysql&#62; select DATE_FORMAT('1997-10-04 22:23:00',
+                              '%H %k %I %r %T %S %w');
+    -&#62; '22 22 10 10:23:00 PM 22:23:00 00 6'
+mysql&#62; select DATE_FORMAT('1999-01-01', '%X %V');
+    -&#62; '1998 52'
+</PRE>
+
+Начиная с MySQL Version 3.23, символ <SAMP>%</SAMP> обязательно требуется
+указывать перед символами спецификатора формата. В более ранних версиях MySQL
+символ <SAMP>%</SAMP> был факультативным.
+
+<A NAME="IDX1267"></A><DT><CODE>TIME_FORMAT(time,format)</CODE>
+<DD>Это используется подобно функции <CODE>DATE_FORMAT()</CODE>, но строка
+<CODE>format</CODE> может содержать только те спецификаторы формата, которые
+обрабатывают часы, минуты и секунды. Другие спецификаторы производят значения
+<CODE>NULL</CODE> или <CODE>0</CODE>.
+
+<A NAME="IDX1268"></A><A NAME="IDX1269"></A><DT><CODE>CURDATE()</CODE>
+<DD>
+<DT><CODE>CURRENT_DATE</CODE>
+<DD>Возвращает сегодняшнюю дату как значение в формате
+<CODE>YYYY-MM-DD</CODE> или <CODE>YYYYMMDD</CODE>, в зависимости от того,
+используется ли функция в контексте строки или числа:
+
+<PRE>
+mysql&#62; select CURDATE();
+    -&#62; '1997-12-15'
+mysql&#62; select CURDATE() + 0;
+    -&#62; 19971215
+</PRE>
+
+<A NAME="IDX1270"></A><A NAME="IDX1271"></A><DT><CODE>CURTIME()</CODE>
+<DD>
+<DT><CODE>CURRENT_TIME</CODE>
+<DD>Возвращает текущее время как значение в формате <CODE>HH:MM:SS</CODE> или
+<CODE>HHMMSS</CODE>, в зависимости от того, используется ли функция в
+контексте строки или числа:
+
+<PRE>
+mysql&#62; select CURTIME();
+    -&#62; '23:50:26'
+mysql&#62; select CURTIME() + 0;
+    -&#62; 235026
+</PRE>
+
+<A NAME="IDX1272"></A><A NAME="IDX1273"></A><A NAME="IDX1274"></A>
+<DT><CODE>NOW()</CODE>
+<DD>
+<DT><CODE>SYSDATE()</CODE>
+<DD>
+<DT><CODE>CURRENT_TIMESTAMP</CODE>
+<DD>Возвращает текущую дату и время как значение в формате
+<CODE>YYYY-MM-DD HH:MM:SS</CODE> или <CODE>YYYYMMDDHHMMSS</CODE> в
+зависимости от того, используется ли функция в контексте строки или числа:
+
+<PRE>
+mysql&#62; select NOW();
+    -&#62; '1997-12-15 23:50:26'
+mysql&#62; select NOW() + 0;
+    -&#62; 19971215235026
+</PRE>
+
+<A NAME="IDX1275"></A><DT><CODE>UNIX_TIMESTAMP()</CODE>
+<DD>
+<DT><CODE>UNIX_TIMESTAMP(date)</CODE>
+<DD>Если вызвано без параметра, возвращает Unix timestamp (секунды с момента
+<CODE>1970-01-01 00:00:00</CODE> GMT). Если <CODE>UNIX_TIMESTAMP()</CODE>
+вызван с параметром <CODE>date</CODE>, это возвращает значение параметра как
+секунды с момента <CODE>1970-01-01 00:00:00</CODE> GMT. <CODE>date</CODE>
+может быть строками типов <CODE>DATE</CODE>, <CODE>DATETIME</CODE>,
+<CODE>TIMESTAMP</CODE> или числом в форматах <CODE>YYMMDD</CODE> или
+<CODE>YYYYMMDD</CODE> в местном времени:
+
+<PRE>
+mysql&#62; select UNIX_TIMESTAMP();
+    -&#62; 882226357
+mysql&#62; select UNIX_TIMESTAMP('1997-10-04 22:23:00');
+    -&#62; 875996580
+</PRE>
+
+Когда <CODE>UNIX_TIMESTAMP</CODE> используется на столбце типа
+<CODE>TIMESTAMP</CODE>, функция получит значение непосредственно, без
+неявного преобразования ``string-to-unix-timestamp''. Если Вы задаете
+<CODE>UNIX_TIMESTAMP()</CODE> неправильно, вернется 0.
+
+<A NAME="IDX1276"></A><DT><CODE>FROM_UNIXTIME(unix_timestamp)</CODE>
+<DD>Возвращает представление параметра <CODE>unix_timestamp</CODE> как
+значение в формате <CODE>YYYY-MM-DD HH:MM:SS</CODE> или
+<CODE>YYYYMMDDHHMMSS</CODE> в зависимости от того, используется ли функция в
+контексте строки или числа:
+<PRE>
+mysql&#62; select FROM_UNIXTIME(875996580);
+    -&#62; '1997-10-04 22:23:00'
+mysql&#62; select FROM_UNIXTIME(875996580) + 0;
+    -&#62; 19971004222300
+</PRE>
+
+<A NAME="IDX1277"></A>
+<DT><CODE>FROM_UNIXTIME(unix_timestamp,format)</CODE>
+<DD>Возвращает представление параметра <CODE>unix_timestamp</CODE> как
+строку, форматируемую согласно строке <CODE>format</CODE>. Строка
+<CODE>format</CODE> может содержать те же самые спецификаторы, что и для
+функции <CODE>DATE_FORMAT()</CODE>:
+<PRE>
+mysql&#62; select FROM_UNIXTIME(UNIX_TIMESTAMP(),
+                            '%Y %D %M %h:%i:%s %x');
+    -&#62; '1997 23rd December 03:43:30 x'
+</PRE>
+
+<A NAME="IDX1278"></A><DT><CODE>SEC_TO_TIME(seconds)</CODE>
+<DD>Возвращает параметр <CODE>seconds</CODE>, преобразованный в часы, минуты
+и секунды, как значение в формате <CODE>HH:MM:SS</CODE> или
+<CODE>HHMMSS</CODE> в зависимости от того, используется ли функция в
+контексте строки или числа:
+<PRE>
+mysql&#62; select SEC_TO_TIME(2378);
+    -&#62; '00:39:38'
+mysql&#62; select SEC_TO_TIME(2378) + 0;
+    -&#62; 3938
+</PRE>
+
+<A NAME="IDX1279"></A><DT><CODE>TIME_TO_SEC(time)</CODE>
+<DD>Возвращает параметр <CODE>time</CODE>, преобразованный в секунды:
+<PRE>
+mysql&#62; select TIME_TO_SEC('22:23:00');
+    -&#62; 80580
+mysql&#62; select TIME_TO_SEC('00:39:38');
+    -&#62; 2378
+</PRE></DL>
+
+<H3><A NAME="Other_Functions">6.5 Прочие функции</A></H3>
+<H4><A NAME="Bit_functions">6.5.1 Битовые функции</A></H4>
+<P>MySQL использует <CODE>BIGINT</CODE> (64-bit) арифметику для битовых
+операций, так что эти операторы имеют максимальный диапазон в 64 бита.</P>
+<DL COMPACT>
+<DT><CODE>|</CODE>
+<DD>Побитовое OR:
+<PRE>
+mysql&#62; select 29 | 15;
+    -&#62; 31
+</PRE>
+
+<A NAME="IDX1286"></A><A NAME="IDX1287"></A><DT><CODE>&#38;</CODE>
+<DD>Побитовое AND:
+<PRE>
+mysql&#62; select 29 &#38; 15;
+    -&#62; 13
+</PRE>
+
+<A NAME="IDX1288"></A><DT><CODE>&#60;&#60;</CODE>
+<DD>Сдвигает число типа longlong (<CODE>BIGINT</CODE>) влево:
+<PRE>
+mysql&#62; select 1 &#60;&#60; 2;
+    -&#62; 4
+</PRE>
+
+<A NAME="IDX1289"></A>
+<DT><CODE>&#62;&#62;</CODE>
+<DD>Сдвигает число типа longlong (<CODE>BIGINT</CODE>) вправо:
+<PRE>
+mysql&#62; select 4 &#62;&#62; 2;
+    -&#62; 1
+</PRE>
+
+<A NAME="IDX1290"></A><DT><CODE>~</CODE>
+<DD>Инвертирует все биты:
+<PRE>
+mysql&#62; select 5 &#38; ~1;
+    -&#62; 4
+</PRE>
+
+<A NAME="IDX1291"></A><DT><CODE>BIT_COUNT(N)</CODE>
+<DD>Возвращает число битов, которые установлены в параметре <CODE>N</CODE>:
+<PRE>
+mysql&#62; select BIT_COUNT(29);
+    -&#62; 4
+</PRE></DL>
+
+<H4><A NAME="Miscellaneous_functions">6.5.2 Дополнительные функции</A></H4>
+<DL COMPACT>
+<DT><CODE>DATABASE()</CODE>
+<DD><A NAME="IDX1294"></A>Возвращает текущее имя базы данных:
+<PRE>
+mysql&#62; select DATABASE();
+    -&#62; 'test'
+</PRE>
+
+Если не имеется никакой текущей базы данных, <CODE>DATABASE()</CODE>
+возвращает пустую строку.
+
+<A NAME="IDX1295"></A><A NAME="IDX1296"></A><A NAME="IDX1297"></A>
+<DT><CODE>USER()</CODE>
+<DD>
+<DT><CODE>SYSTEM_USER()</CODE>
+<DD>
+<DT><CODE>SESSION_USER()</CODE>
+<DD>Возвращает текущее имя пользователя MySQL:
+<PRE>
+mysql&#62; select USER();
+    -&#62; 'davida@localhost'
+</PRE>
+
+В MySQL Version 3.22.11 и более поздних версиях это включает hostname
+пользователя, а не только имя пользователя. Вы можете извлекать только часть
+имени пользователя подобно этому:
+<PRE>
+mysql&#62; select substring_index(USER(),"@",1);
+    -&#62; 'davida'
+</PRE>
+
+<A NAME="IDX1298"></A><DT><CODE>PASSWORD(str)</CODE>
+<DD>Вычисляет строку пароля из открытого текста <CODE>str</CODE>. Это
+функция, которая используется для шифрования паролей MySQL для хранения в
+столбце <CODE>Password</CODE> таблицы привилегий <CODE>user</CODE>:
+<PRE>
+mysql&#62; select PASSWORD('badpwd');
+    -&#62; '7f84554057dd964b'
+</PRE>
+
+<A NAME="IDX1299"></A>Шифрование <CODE>PASSWORD()</CODE> необратимо.
+
+<CODE>PASSWORD()</CODE> не выполняет шифрование пароля таким же образом, что
+и Unix. Вы не должны считать, что, если Ваши пароли для Unix и MySQL
+одинаковы, <CODE>PASSWORD()</CODE> выдаст то же самое шифрованное значение,
+какое сохранено в файле паролей Unix. См. функцию <CODE>ENCRYPT()</CODE>.
+
+<A NAME="IDX1300"></A><DT><CODE>ENCRYPT(str[,salt])</CODE>
+<DD>Шифрует <CODE>str</CODE>, используя системный вызов Unix
+<CODE>crypt()</CODE>. Параметр <CODE>salt</CODE> должен быть строкой с двумя
+символами. Начиная с MySQL Version 3.22.16, <CODE>salt</CODE> может быть
+длиннее, чем два символа:
+<PRE>
+mysql&#62; select ENCRYPT("hello");
+    -&#62; 'VxuFAJXVARROc'
+</PRE>
+
+Если <CODE>crypt()</CODE> недоступен на Вашей системе, <CODE>ENCRYPT()</CODE>
+всегда возвращает <CODE>NULL</CODE>. <CODE>ENCRYPT()</CODE> игнорирует все,
+кроме первых 8 символов <CODE>str</CODE>, по крайней мере на некоторых
+системах. Это определено поведением системного вызова <CODE>crypt()</CODE>.
+
+<A NAME="IDX1301"></A><DT><CODE>ENCODE(str,pass_str)</CODE>
+<DD>Шифрует <CODE>str</CODE>, используя <CODE>pass_str</CODE> как пароль.
+Для дешифрования примените вызов <CODE>DECODE()</CODE>. Результат: двоичная
+строка <CODE>string</CODE> той же самой длины. Если Вы хотите сохранять это в
+столбце, используйте тип столбца <CODE>BLOB</CODE>.
+
+<A NAME="IDX1302"></A><DT><CODE>DECODE(crypt_str,pass_str)</CODE>
+<DD>Дешифрует зашифрованную строку <CODE>crypt_str</CODE>, используя
+<CODE>pass_str</CODE> как пароль. <CODE>crypt_str</CODE> должна быть строкой,
+возвращенной из <CODE>ENCODE()</CODE>.
+
+<A NAME="IDX1303"></A><DT><CODE>MD5(string)</CODE>
+<DD>Вычисляет контрольную сумму MD5 для строки. Значение возвращено как 32
+разрядное шестнадцатеричное число, которое может, например, использоваться
+как ключ хэширования:
+<PRE>
+mysql&#62; select MD5("testing");
+    -&#62; 'ae2b1fca515949e5d54fb22b8ed95575'
+</PRE>
+
+Это "RSA Data Security, Inc. MD5 Message-Digest Algorithm".
+
+<A NAME="IDX1304"></A><DT><CODE>LAST_INSERT_ID([expr])</CODE>
+<DD>Возвращает последнее автоматически сгенерированное значение, которое было
+вставлено в столбец с поддержкой <CODE>AUTO_INCREMENT</CODE>.
+<PRE>
+mysql&#62; select LAST_INSERT_ID();
+    -&#62; 195
+</PRE>
+
+Последний ID, который был сгенерирован, поддерживается сервером на основании
+подключения. Это не будет изменено другим пользователем. Это не будет даже
+изменено, если Вы модифицируете другой столбец <CODE>AUTO_INCREMENT</CODE> с
+нормальным значением (то есть значением, которое не <CODE>NULL</CODE> и не
+<CODE>0</CODE>). Если Вы вставляете много строк в то же самое время с
+инструкцией insert, <CODE>LAST_INSERT_ID()</CODE> возвращает значение для
+первой вставленной строки. Причина для этого в том, чтобы сделать возможным
+легкое воспроизведение той же самой инструкции на другом сервере.
+
+<A NAME="IDX1305"></A>Если <CODE>expr</CODE> дан как параметр
+<CODE>LAST_INSERT_ID()</CODE>, то значение параметра возвращенного функцией,
+будет установлено в следующее значение, которое будет возвращено
+<CODE>LAST_INSERT_ID()</CODE> и будет использоваться как следующее значение
+auto_increment. Это может применяться, чтобы моделировать последовательности.
+Сначала создайте таблицу:
+<PRE>
+mysql&#62; create table sequence (id int not null);
+mysql&#62; insert into sequence values (0);
+</PRE>
+
+Затем таблица может использоваться, чтобы генерировать числа
+последовательности подобно этому:
+<PRE>
+mysql&#62; update sequence set id=LAST_INSERT_ID(id+1);
+</PRE>
+
+Вы можете генерировать последовательности без того, чтобы вызвать
+<CODE>LAST_INSERT_ID()</CODE>, но полезность использования функции состоит в
+том, что значение ID поддерживается сервером как последнее автоматически
+сгенерированное значение. Вы можете получить новый ID чтением любого
+нормального значения <CODE>AUTO_INCREMENT</CODE> в MySQL. Например,
+<CODE>LAST_INSERT_ID()</CODE> (без параметра) возвратит новый
+ID. Функция C API <CODE>mysql_insert_id()</CODE> может также использоваться,
+чтобы получить значение. Обратите внимание, что поскольку
+<CODE>mysql_insert_id()</CODE> модифицируется только после инструкций
+<CODE>INSERT</CODE> и <CODE>UPDATE</CODE>, Вы не можете использовать эту
+функцию, чтобы получать значение для <CODE>LAST_INSERT_ID(expr)</CODE> после
+выполнения других инструкций SQL подобно <CODE>SELECT</CODE> или
+<CODE>SET</CODE>.
+
+<A NAME="IDX1306"></A><DT><CODE>FORMAT(X,D)</CODE>
+<DD>Форматирует число <CODE>X</CODE> к формату подобно
+<CODE>#,###,###.##</CODE>, округляя к <CODE>D</CODE> десятичным цифрам. Если
+<CODE>D</CODE> равен <CODE>0</CODE>, результат не будет иметь никакой
+десятичной отметки или дробной части:
+<PRE>
+mysql&#62; select FORMAT(12332.123456, 4);
+    -&#62; '12,332.1235'
+mysql&#62; select FORMAT(12332.1,4);
+    -&#62; '12,332.1000'
+mysql&#62; select FORMAT(12332.2,0);
+    -&#62; '12,332'
+</PRE>
+
+<A NAME="IDX1307"></A><DT><CODE>VERSION()</CODE>
+<DD>Возвращает строку, указывающую версию MySQL:
+<PRE>
+mysql&#62; select VERSION();
+    -&#62; '3.23.13-log'
+</PRE>
+
+Обратите внимание, что, если Ваша версия заканчивается словом
+<CODE>-log</CODE>, это означает, что регистрация допускается.
+
+<A NAME="IDX1308"></A><DT><CODE>CONNECTION_ID()</CODE>
+<DD>Возвращает идентификатор подключения (<CODE>thread_id</CODE>) для
+соединения. Каждое подключение имеет собственный уникальный идентификатор:
+<PRE>
+mysql&#62; select CONNECTION_ID();
+    -&#62; 1
+</PRE>
+
+<A NAME="IDX1309"></A><A NAME="IDX1310"></A>
+<DT><CODE>GET_LOCK(str,timeout)</CODE>
+<DD>Пробует получать блокировку с именем, заданным строкой <CODE>str</CODE>,
+со временем ожидания <CODE>timeout</CODE> секунд. Возвратит <CODE>1</CODE>,
+если блокировка была получена успешно, <CODE>0</CODE> если попытка
+провалилась по тайм-ауту, или <CODE>NULL</CODE> если произошла ошибка (типа
+исчерпания памяти или уничтожения процесса командой <CODE>mysqladmin
+kill</CODE>). Блокировка будет снята, когда Вы выполняете
+<CODE>RELEASE_LOCK()</CODE>, новый вызов <CODE>GET_LOCK()</CODE> или процесс
+завершается. Эта функция может использоваться, чтобы выполнить блокировки
+прикладной программы или моделировать блокировки записи. Это блокирует
+запросы другой клиентуры для блокировок с тем же самым именем: клиентура,
+которая договаривается о данном имени блокировки, может использовать строку,
+чтобы выполнить совместную (кооперативную) консультативную блокировку:
+<PRE>
+mysql&#62; select GET_LOCK("lock1",10);
+    -&#62; 1
+mysql&#62; select GET_LOCK("lock2",10);
+    -&#62; 1
+mysql&#62; select RELEASE_LOCK("lock2");
+    -&#62; 1
+mysql&#62; select RELEASE_LOCK("lock1");
+    -&#62; NULL
+</PRE>
+
+Обратите внимание, что второй вызов <CODE>RELEASE_LOCK()</CODE> вернет
+<CODE>NULL</CODE> потому, что блокировка <CODE>lock1</CODE> была
+автоматически снята вторым вызовом <CODE>GET_LOCK()</CODE>.
+
+<A NAME="IDX1311"></A><DT><CODE>RELEASE_LOCK(str)</CODE>
+<DD>Снимает блокировку, именованную строкой <CODE>str</CODE>, которая была
+получена с <CODE>GET_LOCK()</CODE>. Возвратит <CODE>1</CODE>, если блокировка
+была нормально снята, <CODE>0</CODE>, если блокировка не была блокирована
+этим потоком (когда блокировка не снята), или <CODE>NULL</CODE>, если
+поименованная блокировка не существует. Блокировка не существует, если она
+никогда не была получена обращением к <CODE>GET_LOCK()</CODE> или уже снята.
+
+<A NAME="IDX1312"></A><DT><CODE>BENCHMARK(count,expr)</CODE>
+<DD>Функция <CODE>BENCHMARK()</CODE> выполняет вычисление выражения
+<CODE>expr</CODE> <CODE>count</CODE> раз. Это может использоваться для
+измерения того, как быстро MySQL обрабатывает выражение. Значение результата
+всегда <CODE>0</CODE>. Предназначено для использования клиентом
+<CODE>mysql</CODE>, который сообщает времена выполнения запроса:
+<PRE>
+mysql&#62; select BENCHMARK(1000000,encode("hello","goodbye"));
+  +----------------------------------------------+
+  | BENCHMARK(1000000,encode("hello","goodbye")) |
+  +----------------------------------------------+
+  |                                            0 |
+  +----------------------------------------------+
+1 row in set (4.74 sec)
+</PRE>
+
+Сообщенное время представляет собой время, прошедшее на стороне клиента, а не
+CPU time на сервере! Может быть, желательно выполнить
+<CODE>BENCHMARK()</CODE> несколько раз, и интерпретировать результат с
+отношением к тому, как тяжело был загружен сервер.
+
+<A NAME="IDX1313"></A><DT><CODE>INET_NTOA(expr)</CODE>
+<DD>Возвращает сетевой адрес (4 или 8 байт) для числового выражения:
+<PRE>
+mysql&#62; select INET_NTOA(3520061480);
+    -&#62; "209.207.224.40"
+</PRE>
+
+<A NAME="IDX1314"></A><DT><CODE>INET_ATON(expr)</CODE>
+<DD>Возвращает целое число, которое представляет числовое значение для
+сетевого адреса. Адреса могут быть длиной в 4 или 8 байт:
+<PRE>
+mysql&#62; select INET_ATON("209.207.224.40");
+    -&#62; 3520061480
+</PRE>
+
+Сгенерированное число всегда в порядке сетевых байт. Например, вышеупомянутое
+число вычислено как <CODE>209*255^3+207*255^2+224*255+40</CODE>.
+
+<A NAME="IDX1315"></A><DT><CODE>MASTER_POS_WAIT(log_name, log_pos)</CODE>
+<DD>Блокирует работу пока подчиненный сервер достигает определенной позиции в
+главном файле регистрации в течение репликации. Если главная информация не
+инициализирована, возвращает NULL. Если подчиненный не работает, блокирует
+работу и будет ждать, пока тот не запустится. Если подчиненный уже достиг
+определенной позиции, возврат управления произойдет немедленно. Значение
+возврата: число событий файла регистрации, которое следует пропустить, чтобы
+дойти до определенной позиции, или NULL в случае ошибки. Полезно для
+управления синхронизацией, но было первоначально написано для отладки.</DL>
+
+<H2><A NAME="Group_by_functions">6.6 Функции для применения в
+предложении <CODE>GROUP BY</CODE></A></H2>
+<P>Если Вы используете функцию в инструкции, не содержащей предложение
+<CODE>GROUP BY</CODE>, это эквивалентно группировке на всех строках.</P>
+
+<DL COMPACT>
+<DT><CODE>COUNT(expr)</CODE>
+<DD><A NAME="IDX1848"></A>Возвращает количество не-<CODE>NULL</CODE>
+(возможно, одинаковых) значений в строках, найденных <CODE>SELECT</CODE>:
+<PRE>
+mysql&#62; select student.student_name,COUNT(*) from student,course
+                  where student.student_id=course.student_id
+                  GROUP BY student_name;
+</PRE>
+
+<CODE>COUNT(*)</CODE> оптимизирован, чтобы возвратить данные очень быстро,
+если <CODE>SELECT</CODE> получает данные из одной таблицы, никакие другие
+столбцы не задействованы, и в запросе не имеется никакого предложения
+<CODE>WHERE</CODE>. Например:
+<PRE>
+mysql&#62; select COUNT(*) from student;
+</PRE>
+
+<A NAME="IDX1849"></A><A NAME="IDX1850"></A>
+<DT><CODE>COUNT(DISTINCT expr,[expr...])</CODE>
+<DD>Возвращает число различных значений не-<CODE>NULL</CODE>:
+<PRE>
+mysql&#62; select COUNT(DISTINCT results) from student;
+</PRE>
+
+В MySQL Вы можете получить число различных комбинаций выражений, которые не
+содержат NULL, задавая список выражений. В ANSI SQL Вы были бы должны
+сделать конкатенацию всех выражений внутри <CODE>CODE(DISTINCT...)</CODE>.
+
+<A NAME="IDX1851"></A><DT><CODE>AVG(expr)</CODE>
+<DD>Возвращает среднее значение <CODE>expr</CODE>:
+<PRE>
+mysql&#62; select student_name, AVG(test_score)
+                  from student
+                  GROUP BY student_name;
+</PRE>
+
+<A NAME="IDX1852"></A><A NAME="IDX1853"></A><DT><CODE>MIN(expr)</CODE>
+<DD>
+<DT><CODE>MAX(expr)</CODE>
+<DD>Возвращает минимальное или максимальное значение <CODE>expr</CODE>.
+<CODE>MIN()</CODE> и <CODE>MAX()</CODE> может брать строковый параметр. В
+таких случаях они возвращают минимальное или максимальное значение строки.
+<PRE>
+mysql&#62; select student_name, MIN(test_score), MAX(test_score)
+                  from student
+                  GROUP BY student_name;
+</PRE>
+
+<A NAME="IDX1854"></A><DT><CODE>SUM(expr)</CODE>
+<DD>Возвращает сумму <CODE>expr</CODE>. Обратите внимание, что, если набор
+возвратов не имеет никаких строк, это возвращает NULL!
+
+<A NAME="IDX1855"></A><A NAME="IDX1856"></A><A NAME="IDX1857"></A>
+<A NAME="IDX1858"></A><DT><CODE>STD(expr)</CODE>
+<DD>
+<DT><CODE>STDDEV(expr)</CODE>
+<DD>Возвращает стандартное отклонение <CODE>expr</CODE>. Это расширение ANSI
+SQL. Форма <CODE>STDDEV()</CODE> этой функции предусмотрена
+для совместимости с Oracle.
+
+<A NAME="IDX1859"></A><DT><CODE>BIT_OR(expr)</CODE>
+<DD>Возвращается поразрядный <CODE>OR</CODE> всех битов в <CODE>expr</CODE>.
+Вычисление выполняется с 64-разрядной точностью (<CODE>BIGINT</CODE>).
+
+<A NAME="IDX1860"></A><DT><CODE>BIT_AND(expr)</CODE>
+<DD>Возвращается поразрядный <CODE>AND</CODE> всех битов в <CODE>expr</CODE>.
+Вычисление выполняется с 64-разрядной точностью (<CODE>BIGINT</CODE>).</DL>
+
+<P><A NAME="IDX1861"></A>MySQL расширил использование <CODE>GROUP BY</CODE>.
+Вы можете использовать столбцы или вычисления в выражениях
+<CODE>SELECT</CODE>, которые не появляются в части <CODE>GROUP BY</CODE>.
+Это соответствует <EM>любому возможному значению</EM> для этой группы. Вы
+можете использовать это, чтобы получить лучшую эффективность, избегая
+сортировки и группировки на ненужных элементах. Например, Вы не должны
+группировать на <CODE>customer.name</CODE> в следующем запросе:</P>
+<PRE>
+mysql&#62; select order.custid,customer.name,max(payments)
+                  from order,customer where order.custid=customer.custid
+                  GROUP BY order.custid;
+</PRE>
+
+<P>В ANSI SQL Вы были бы должны добавить <CODE>customer.name</CODE> к
+предложению <CODE>GROUP BY</CODE>. В MySQL имя избыточно, если Вы не
+выполняетесь в ANSI режиме.</P>
+
+<P><STRONG>Не используйте это свойство</STRONG>, если столбцы, которые Вы
+получаете из предложения <CODE>GROUP BY</CODE> не уникальны в группе! Вы
+получите непредсказуемые результаты.</P>
+
+<P>В некоторых случаях Вы можете использовать <CODE>MIN()</CODE> и
+<CODE>MAX()</CODE> чтобы получить специфическое значение столбца, даже если
+оно неуникально. Следующее выдает значение <CODE>column</CODE> из строки,
+содержащей самое маленькое значение в столбце <CODE>sort</CODE>:</P>
+<PRE>
+substr(MIN(concat(rpad(sort,6,' '),column)),7)
+</PRE>
+
+<P>Подробности в разделе
+"<A HREF="glava03.htm#example-Maximum-column-group-row">3.5.4 В какой строке
+максимум по группе</A>".</P>
+
+<P>Обратите внимание, что, если Вы используете MySQL Version 3.22 (или
+ранее), или если Вы пробуете следовать ANSI SQL, Вы не можете использовать
+выражения в предложениях <CODE>GROUP BY</CODE> или <CODE>ORDER BY</CODE>. Вы
+можете обойти это ограничение, используя псевдоним для выражения:</P>
+<PRE>
+mysql&#62; SELECT id,FLOOR(value/100) AS val
+                  FROM tbl_name
+                  GROUP BY id,val ORDER BY val;
+</PRE>
+
+<P>В MySQL Version 3.23 Вы можете сделать:</P>
+<PRE>
+mysql&#62; SELECT id,FLOOR(value/100) FROM tbl_name ORDER BY RAND();
+</PRE>
+
+<H1><A NAME="Regexp">6.7 Описание синтаксиса регулярных выражений MySQL</A>
+</H1>
+<P>Регулярные выражения (они же regular expression или regex) представляют
+собой мощный путь для определения сложного поиска.</P>
+
+<P>MySQL использует реализацию Henry Spencer's, которая нацелена на
+соответствие POSIX 1003.2. MySQL использует ее расширенную версию.</P>
+
+<P>Это упрощенное описание, которое опускает ряд деталей. За подробной
+информацией отсылаю Вас к man-странице Henry Spencer's <CODE>regex(7)</CODE>,
+которая включена в дистрибутив исходного кода.</P>
+
+<P>Регулярное выражение описывает набор строк. Самый простой regexp такой,
+который не имеет никаких специальных символов. Например, regexp
+<CODE>hello</CODE> соответствует <CODE>hello</CODE> и ничему другому.</P>
+
+<P>Нетривиальные регулярные выражения используют некоторые специальные
+конструкции так, чтобы они могли соответствовать больше, чем одной строке.
+Например, regexp <CODE>hello|word</CODE> соответствует строке
+<CODE>hello</CODE> или <CODE>word</CODE>.</P>
+
+<P>Как более сложный пример, regexp <CODE>B[an]*s</CODE> соответствует любой
+из строк <CODE>Bananas</CODE>, <CODE>Baaaaas</CODE>, <CODE>Bs</CODE> и любой
+другой строке, начинающейся с <CODE>B</CODE>, заканчивающейся на
+<CODE>s</CODE> и содержащей любое число символов в диапазоне от
+<CODE>a</CODE> до <CODE>n</CODE> между ними.</P>
+
+<P>Регулярное выражение может использовать любой из следующих спецсимволов:
+<DL COMPACT>
+<DT><CODE>^</CODE>
+<DD>Соответствует началу строки.
+<PRE>
+mysql&#62; select "fo\nfo" REGEXP "^fo$"; -&#62; 0
+mysql&#62; select "fofo" REGEXP "^fo";    -&#62; 1
+</PRE>
+
+<DT><CODE>$</CODE>
+<DD>Соответствует концу строки.
+<PRE>
+mysql&#62; select "fo\no" REGEXP "^fo\no$"; -&#62; 1
+mysql&#62; select "fo\no" REGEXP "^fo$";    -&#62; 0
+</PRE>
+
+<DT><CODE>.</CODE>
+<DD>Соответствует любому символу (включая newline).
+<PRE>
+mysql&#62; select "fofo" REGEXP "^f.*";   -&#62; 1
+mysql&#62; select "fo\nfo" REGEXP "^f.*"; -&#62; 1
+</PRE>
+
+<DT><CODE>a*</CODE>
+<DD>Соответствует любой последовательности из ноля или больше символов.
+<CODE>a</CODE>.
+<PRE>
+mysql&#62; select "Ban" REGEXP "^Ba*n";   -&#62; 1
+mysql&#62; select "Baaan" REGEXP "^Ba*n"; -&#62; 1
+mysql&#62; select "Bn" REGEXP "^Ba*n";    -&#62; 1
+</PRE>
+
+<DT><CODE>a+</CODE>
+<DD>Соответствует любой последовательности из одного или больше символов.
+<CODE>a</CODE>.
+<PRE>
+mysql&#62; select "Ban" REGEXP "^Ba+n"; -&#62; 1
+mysql&#62; select "Bn" REGEXP "^Ba+n";  -&#62; 0
+</PRE>
+
+<DT><CODE>a?</CODE>
+<DD>Соответствует нолю или одному символу <CODE>a</CODE>.
+<PRE>
+mysql&#62; select "Bn" REGEXP "^Ba?n";   -&#62; 1
+mysql&#62; select "Ban" REGEXP "^Ba?n";  -&#62; 1
+mysql&#62; select "Baan" REGEXP "^Ba?n"; -&#62; 0
+</PRE>
+
+<DT><CODE>de|abc</CODE>
+<DD>Соответствует последовательностям <CODE>de</CODE> или <CODE>abc</CODE>.
+<PRE>
+mysql&#62; select "pi" REGEXP "pi|apa";  -&#62; 1
+mysql&#62; select "axe" REGEXP "pi|apa"; -&#62; 0
+mysql&#62; select "apa" REGEXP "pi|apa"; -&#62; 1
+mysql&#62; select "apa" REGEXP "^(pi|apa)$"; -&#62; 1
+mysql&#62; select "pi" REGEXP "^(pi|apa)$";  -&#62; 1
+mysql&#62; select "pix" REGEXP "^(pi|apa)$"; -&#62; 0
+</PRE>
+
+<DT><CODE>(abc)*</CODE>
+<DD>Соответствует нолю или большему количеству образцов последовательности
+<CODE>abc</CODE>.
+<PRE>
+mysql&#62; select "pi" REGEXP "^(pi)*$";   -&#62; 1
+mysql&#62; select "pip" REGEXP "^(pi)*$";  -&#62; 0
+mysql&#62; select "pipi" REGEXP "^(pi)*$"; -&#62; 1
+</PRE>
+
+<DT><CODE>{1}</CODE>
+<DD>
+<DT><CODE>{2,3}</CODE>
+<DD>Более общий путь записи regexp, которые соответствуют нескольким
+местонахождениям предыдущего атома.
+
+<DL COMPACT>
+<DT><CODE>a*</CODE>
+<DD>Может быть написан как <CODE>a{0,}</CODE>.
+<DT><CODE>a+</CODE>
+<DD>Может быть написан как <CODE>a{1,}</CODE>.
+<DT><CODE>a?</CODE>
+<DD>Может быть написан как <CODE>a{0,1}</CODE>.</DL>
+
+Чтобы быть более точным, атом, сопровождаемый одним целым числом
+<CODE>i</CODE> без запятой соответствует последовательности точно
+<CODE>i</CODE> вхождений атома. Атом, сопровождаемый одним числом с запятой,
+соответствует последовательности из одного или большего числа вхождений
+<CODE>i</CODE>. Атом, сопровождаемый двумя целыми числами <CODE>i</CODE> и
+<CODE>j</CODE> соответствует последовательности, включающей от <CODE>i</CODE>
+до <CODE>j</CODE> копий атома (границы диапазона входят в число). Оба
+аргумента должны быть в диапазоне от <CODE>0</CODE> до
+<CODE>RE_DUP_MAX</CODE> (по умолчанию 255), включая границы. Если заданы два
+аргумента, второй должен быть больше или равен первому, но не меньше его.
+
+<DT><CODE>[a-dX]</CODE>
+<DD>
+<DT><CODE>[^a-dX]</CODE>
+<DD>Соответствует любому символу, который является (или не является, если
+используется ^) одним из: <CODE>a</CODE>, <CODE>b</CODE>, <CODE>c</CODE>,
+<CODE>d</CODE> или <CODE>X</CODE>. Чтобы включить литеральный символ
+<CODE>]</CODE>, он должен следовать сразу за открывающейся скобкой
+<CODE>[</CODE>. Чтобы включить символ <CODE>-</CODE>, он должен быть написан
+первым или последним. Так <CODE>[0-9]</CODE> соответствует любой десятичной
+цифре. Любой символ, который не имеет определенного значения внутри
+<CODE>[]</CODE>, не имеет никакого специального значения.
+<PRE>
+mysql&#62; select "aXbc" REGEXP "[a-dXYZ]";    -&#62; 1
+mysql&#62; select "aXbc" REGEXP "^[a-dXYZ]$";  -&#62; 0
+mysql&#62; select "aXbc" REGEXP "^[a-dXYZ]+$"; -&#62; 1
+mysql&#62; select "aXbc" REGEXP "^[^a-dXYZ]+$";   -&#62; 0
+mysql&#62; select "gheis" REGEXP "^[^a-dXYZ]+$";  -&#62; 1
+mysql&#62; select "gheisa" REGEXP "^[^a-dXYZ]+$"; -&#62; 0
+</PRE>
+
+<DT><CODE>[[.characters.]]</CODE>
+<DD>Последовательность символов. Последовательность представляет собой
+одиночный элемент из списка выражений в скобках. Выражение, содержащее
+много символов, может таким образом соответствовать больше, чем одному
+символу, например, если последовательность сопоставления включает элемент
+<CODE>ch</CODE>, то регулярное выражение <CODE>[[.ch.]]*c</CODE>
+соответствует первым пяти символам <CODE>chchcc</CODE>.
+
+<DT><CODE>[=character_class=]</CODE>
+<DD>Класс эквивалентности, состоящий из последовательностей символов, включая
+себя. Например, если <CODE>o</CODE> и <CODE>(+)</CODE> члены класса
+эквивалентности, то <CODE>[[=o=]]</CODE>, <CODE>[[=(+)=]]</CODE> и
+<CODE>[o(+)]</CODE> синонимы. Класс эквивалентности не может
+быть краем диапазона.
+
+<DT><CODE>[:character_class:]</CODE>
+<DD>В выражении в скобках имя символьного класса, включенного в
+<CODE>[:</CODE> и <CODE>:]</CODE>, представляет список всех символов,
+принадлежащих к классу. Стандартные символьные имена:
+<TABLE BORDER WIDTH="100%">
+<TR><TD>alnum</TD><TD>digit</TD><TD>punct</TD></TR>
+<TR><TD>alpha</TD><TD>graph</TD><TD>space</TD></TR>
+<TR><TD>blank</TD><TD>lower</TD><TD>upper</TD></TR>
+<TR><TD>cntrl</TD><TD>print</TD><TD>xdigit</TD></TR></TABLE>
+
+Это указано для символьных классов, определенных на man-странице
+<CODE>ctype(3)</CODE>. Регион или язык может обеспечивать другие. Символьный
+класс не может использоваться как край диапазона.
+<PRE>
+mysql&#62; select "justalnums" REGEXP "[[:alnum:]]+"; -&#62; 1
+mysql&#62; select "!!" REGEXP "[[:alnum:]]+";         -&#62; 0
+</PRE>
+
+<DT><CODE>[[:&#60;:]]</CODE>
+<DD>
+<DT><CODE>[[:&#62;:]]</CODE>
+<DD>Соответствуют нулевой (пустой) строке в начале и в конце слова
+соответственно. Слово определено как последовательность символов alnum
+(как определено в <CODE>ctype(3)</CODE>) или символов подчеркивания
+(<CODE>_</CODE>).
+<PRE>
+mysql&#62; select "a word a" REGEXP "[[:&#60;:]]word[[:&#62;:]]";  -&#62; 1
+mysql&#62; select "a xword a" REGEXP "[[:&#60;:]]word[[:&#62;:]]"; -&#62; 0
+</PRE></DL>
+
+<PRE>
+mysql&#62; select "weeknights" REGEXP "^(wee|week)(knights|nights)$"; -&#62; 1
+</PRE></P>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

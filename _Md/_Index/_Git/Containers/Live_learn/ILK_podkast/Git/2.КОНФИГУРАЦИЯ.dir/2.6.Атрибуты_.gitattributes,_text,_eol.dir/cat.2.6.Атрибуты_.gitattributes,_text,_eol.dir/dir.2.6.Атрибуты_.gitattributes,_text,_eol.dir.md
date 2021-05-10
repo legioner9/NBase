@@ -1,0 +1,4 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\2.КОНФИГУРАЦИЯ.dir\2.6.Атрибуты_.gitattributes,_text,_eol.dir\cat.2.6.Атрибуты_.gitattributes,_text,_eol.dir\dir.2.6.Атрибуты_.gitattributes,_text,_eol.dir.md">2.6.Атрибуты_.gitattributes,_text,_eol.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\2.КОНФИГУРАЦИЯ.dir\2.6.Атрибуты_.gitattributes,_text,_eol.dir\2.6.Атрибуты_.gitattributes,_text,_eol.md">2.6.Атрибуты_.gitattributes,_text,_eol.md</a>
+        - *##  proj .gitattributes
+        - *## GRNERATOR .gitattributes https://gitattributes.io/

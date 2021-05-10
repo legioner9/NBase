@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\+Учебная практика (ознакомительная практика) 1\_Контрольные мероприятия\Задание_2\cat.Задание_2\dir.Задание_2.md">Задание_2</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\+Учебная практика (ознакомительная практика) 1\_Контрольные мероприятия\Задание_2\ReadMe.md">ReadMe.md</a>
+        - *## Анализ предметной области деятельности организации

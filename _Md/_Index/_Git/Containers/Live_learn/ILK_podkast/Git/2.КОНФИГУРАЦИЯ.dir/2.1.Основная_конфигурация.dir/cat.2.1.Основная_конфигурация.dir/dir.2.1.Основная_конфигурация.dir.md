@@ -1,0 +1,4 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\2.КОНФИГУРАЦИЯ.dir\2.1.Основная_конфигурация.dir\cat.2.1.Основная_конфигурация.dir\dir.2.1.Основная_конфигурация.dir.md">2.1.Основная_конфигурация.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\2.КОНФИГУРАЦИЯ.dir\2.1.Основная_конфигурация.dir\2.1.Основная_конфигурация.md">2.1.Основная_конфигурация.md</a>
+        - *## git config
+        - *## less 

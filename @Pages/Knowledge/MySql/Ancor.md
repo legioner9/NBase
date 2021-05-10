@@ -1,0 +1,1 @@
+<a href="sqlbolt.com%2Fcontent_bolt.md#sql-lesson-3-queries-with-constraints-pt-2" target="_blank">sql-lesson-3-queries-with-constraints-pt-2</a>

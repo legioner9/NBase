@@ -1,0 +1,390 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 9. Другие темы Connector/Python</title>
+  <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-python-other"></a>
+Глава 9. Другие темы Connector/Python</h1>
+<p>Эта секция описывает дополнительные особенности Connection/Python:</p>
+
+<ul><li><p>Объединение связи:
+<a href="#connector-python-connection-pooling">раздел 9.1
+</a>.</p></li>
+
+<li><p>Django для MySQL:
+<a href="#connector-python-django-backend">раздел 9.2</a>.
+</p></li></ul>
+
+<h2><a name="connector-python-connection-pooling"></a>
+9.1. Объединение связи Connector/Python</h2>
+<p>Простое объединение связи поддерживается, у которого есть эти особенности:
+</p>
+
+<ul><li><p>Модуль <code class="literal">mysql.connector.pooling</code>
+осуществляет объединение связей.</p></li>
+<li><p>Пул открывает много связей и раблтает с потоками безопасно
+обеспечивая связи запросам.</p></li>
+
+<li><p>Размер пула связи конфигурируем во время создания.
+Это не может быть изменено после.</p></li>
+<li><p>Пул связи можно назвать во время создания. Если никакое имя не дано,
+оно произведено, используя параметры связи.</p></li>
+
+<li><p>Название пула связи может быть получено от пула связи
+или связей, полученных из него.</p></li>
+<li><p>Возможно иметь много пулов. Это позволяет запросам
+поддерживать пулы связей с различными серверами MySQL, например.</p></li>
+
+<li><p>Для каждого запроса связи пул обеспечивает следующую доступную связь.
+Никакой циклический алгоритм или другой алгоритм планирования
+не используются. Если пул исчерпан, поднято исключение
+<code class="literal">PoolError</code>.</p></li>
+
+<li><p>Возможно повторно формировать параметры связи, используемые пулом.
+Они относятся к связям, полученным из пула после этого.
+Переформирование отдельных связей, полученных из пула, вызывая метод
+<code class="literal">config()</code> не поддерживается.</p></li></ul>
+
+<p>Приложения, которые могут извлечь выгоду из
+объединения связи, включают:</p>
+<ul><li><p>Промежуточное программное обеспечение, которое поддерживает
+многократные связи с многократными серверами MySQL и требует, чтобы связи
+были легко доступны.</p></li>
+<li><p>Веб-сайты, у которых могут быть <span class="quote">постоянные</span>
+связи, открытые для сервера MySQL.</p></li></ul>
+
+<p>Пул связи может быть создан неявно или явно.</p>
+<p><span class="bold"><strong>Чтобы создать пул связи неявно: </strong>
+</span>Откройте связь и определите один или несколько связанных с пулом
+аргументов (<code class="literal">pool_name</code>,
+<code class="literal">pool_size</code>). Например:</p>
+
+<pre class="programlisting">
+dbconfig = {
+  "database": "test",
+  "user": "joe"
+}
+cnx = mysql.connector.connect(pool_name = "mypool", pool_size=3, **dbconfig)
+</pre>
+
+<p>Название пула ограничивается алфавитно-цифровыми символами и
+специальными символами <code class="literal">.</code>,
+<code class="literal">_</code>, <code class="literal">*</code>,
+<code class="literal">$</code> и <code class="literal">#</code>.
+Название пула должно быть не больше
+<code class="literal">pooling.CNX_POOL_MAXNAMESIZE</code>
+символов (по умолчанию 64).</p>
+
+<p>Размер пула должен быть больше 0 и меньше или равным
+<code class="literal">pooling.CNX_POOL_MAXSIZE</code> (по умолчанию 32).</p>
+<p>С любым <code class="literal">pool_name</code> или
+<code class="literal">pool_size</code> Connector/Python создает новый пул.
+Если <code class="literal">pool_name</code> не дан,
+<code class="literal">connect()</code> автоматически производит имя,
+составленное из аргументов соединения <code class="literal">host</code>,
+<code class="literal">port</code>, <code class="literal">user</code> и
+<code class="literal">database</code>, именно в этом порядке.
+Если <code class="literal">pool_size</code> не дан, размер
+по умолчанию 5 связей.</p>
+
+<p>Последующие вызовы <code class="literal">connect()</code>
+возвращают связи из существующего пула. Любой параметр
+<code class="literal">pool_size</code> или аргументы связи проигнорированы,
+таким образом, следующий вызов <code class="literal">connect()</code>
+эквивалентен оригинальному <code class="literal">connect()</code>:</p>
+
+<pre class="programlisting">
+cnx = mysql.connector.connect(pool_name = "mypool", pool_size = 3)
+cnx = mysql.connector.connect(pool_name = "mypool", **dbconfig)
+cnx = mysql.connector.connect(pool_name = "mypool")
+</pre>
+
+<p>Объединенные связи получены, вызывая
+<code class="literal">connect()</code> со связанным с пулом аргументом,
+имеющим класс <code class="literal">PooledMySQLConnection</code> (см.
+<a href="refer.htm#connector-python-api-pooledmysqlconnection">раздел
+10.4</a>). <code class="literal">PooledMySQLConnection</code>,
+объединяющий объекты связи, подобен объектам
+<code class="literal">MySQLConnection</code> с этими различиями:</p>
+
+<ul><li><p>Чтобы освободить объединенную связь, полученную из пула связи,
+вызовите метод <code class="literal">close()</code> так же, как для любой
+необъединенной связи. Однако для объединенной связи,
+<code class="literal">close()</code> на самом деле не закрывает связь, а
+возвращает ее в пул и делает ее доступной для последующих запросов связи.
+</p></li>
+
+<li><p>Объединенная связь не может повторно формироваться, используя метод
+<code class="literal">config()</code>. Изменения связи должны быть сделаны
+через сам объект пула, как описано ниже.</p></li>
+
+<li><p>У объединенной связи есть свойство
+<code class="literal">pool_name</code>, которое возвращает название пула.
+</p></li></ul>
+
+<p><span class="bold"><strong>Чтобы создать пул связи явно: </strong></span>
+Создайте объект <code class="literal">MySQLConnectionPool</code> (см.
+<a href="refer.htm#connector-python-api-mysqlconnectionpool">раздел 10.3
+</a>):</p>
+
+<pre class="programlisting">dbconfig = {
+  "database": "test",
+  "user": "joe"
+}
+cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "mypool",
+                                                      pool_size = 3,
+                                                      **dbconfig)
+</pre>
+
+<p>Чтобы запросить связь из пула, используйте метод
+<code class="literal">get_connection()</code>:</p>
+<pre class="programlisting">
+cnx1 = cnxpool.get_connection()
+cnx2 = cnxpool.get_connection()
+</pre>
+
+<p>Когда вы создаете пул связи явно, возможно использовать метод
+<code class="literal">set_config()</code> объекта пула, чтобы повторно
+сформировать параметры связи пула:</p>
+
+<pre class="programlisting">
+dbconfig = {
+  "database": "performance_schema",
+  "user": "admin",
+  "password": "<em class="replaceable"><code>password</code></em>"
+}
+cnxpool.set_config(**dbconfig)
+</pre>
+
+<p>Связи, полученные из пула после использования изменения конфигурации,
+имеют новые параметры. Связи, полученные перед изменением, остаются
+незатронутыми, но когда они закрываются (возвращаются в пул), будут вновь
+открыты с новыми параметрами прежде, чем будут возвращены пулом для
+последующих запросов связи.</p>
+
+<h2><a name="connector-python-django-backend"></a>9.2.
+Connector/Python и Django</h2>
+<p>Connector/Python включает модуль
+<code class="literal">mysql.connector.django</code>, который предоставляет
+Django back end для MySQL. Это поддерживает новые функции в MySQL 5.6,
+например, поддержку долей секунды для временных типов данных.</p>
+
+<h3><a name="idm45244849052944"></a>Настройка Django</h3>
+<p>Django использует конфигурационный файл, названный
+<code class="filename">settings.py</code>, который содержит переменную
+<code class="literal">DATABASES</code> (см.
+<a href="../../../https@docs.djangoproject.com/en/1.5/ref/settings/#std:setting-DATABASES"
+target="_top">https://docs.djangoproject.com/en/1.5/ref/settings/#std:setting-DATABASES
+</a>). Чтобы формировать Django, чтобы использовать Connector/Python как
+MySQL back end, пример, найденный в руководстве Django, может
+использоваться в качестве основы:</p>
+
+<pre class="programlisting">
+DATABASES = {
+  'default': {
+    'NAME': 'user_data',
+    'ENGINE': 'mysql.connector.django',
+    'USER': 'mysql_user',
+    'PASSWORD': '<em class="replaceable"><code>password</code></em>',
+    'OPTIONS': {
+      'autocommit': True,
+    },
+  }
+}
+</pre>
+<p>Возможно добавить больше параметров, используя
+<code class="literal">OPTIONS</code>.</p>
+
+<h3><a name="idm45244849047328"></a>Поддержка особенностей MySQL</h3>
+<p>Django может запустить клиентское приложение MySQL
+<span class="command"><strong>mysql</strong></span>. При этом он установит
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_sql_mode"
+target="_top"><code class="literal">sql_mode</code></a> в
+<code class="literal">TRADITIONAL</code> при запуске.</p>
+
+<p>Некоторые опции MySQL активированы в зависимости от версии сервера.
+Например, поддержка точности долей секунды
+позволена, соединяясь с сервером от MySQL 5.6.4 или выше.
+Django <code class="literal">DateTimeField</code> сохранен в столбце
+MySQL, определенном как <code class="literal">DATETIME(6)</code>,
+<code class="literal">TimeField</code> сохранен как
+<code class="literal">TIME(6)</code>.
+Для получения дополнительной информации о поддержке долей секунды см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/fractional-seconds.html"
+target="_top">Fractional Seconds in Time Values</a>.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

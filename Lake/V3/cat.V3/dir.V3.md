@@ -1,0 +1,4 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\Lake\V3\cat.V3\dir.V3.md">V3</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\Lake\V3\V3.md">V3.md</a>
+        - *## [Функциональное программирование в мире JavaScript](https://www.youtube.com/watch?v=2QAUAZ5qgJM&ab_channel=%D0%A4%D1%80%D0%BE%D0%BD%D1%82%D0%B5%D0%BD%D0%B4)
+        - *%% _WTS functionl programming

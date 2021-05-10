@@ -1,0 +1,305 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<TITLE>Доступ к XML и реляционным данным
+</TITLE>
+<META CONTENT="text/html; charset=windows-1251" http-equiv=Content-Type>
+<META NAME="Description" CONTENT="1. Введение">
+<META NAME="Keywords" CONTENT="SQL, Microsoft, Server">
+<META HTTP-EQUIV="Set-Cookie" CONTENT="cookie=set; path=/">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER="0" WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top  bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>XML Bulk Load
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="13.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+
+
+</TD>
+</TR>
+</TABLE>
+<TABLE border="0" cellpadding="2" cellspacing="2" >
+<TR>
+<TD>
+<div align=justify>
+<p>
+Большие объемы данных неэффективно "заливать" в базу чередой последовательных insert'ов. 
+Для этого применяются средства массовой загрузки. Аналогом bcp / BULK INSERT при работе 
+с XML-файлами выступает XML Bulk Load. Он не грузит весь документ целиком в память, а 
+прочитывает его по отдельным узлам, понимая на основе аннотированной схемы, когда запись 
+заканчивается и ее можно отправить SQL Server'у для вставки. Использование аннотированных 
+схем позволяет осуществлять наполнение одновременно нескольких связанных таблиц.
+XML Bulk Load не есть утилита с графическим интерфейсом, а всего лишь СОМ-компонент, 
+устанавливаемый SQLXML веб-релизами. Массовая закачка XML-документа осуществляется 
+программным путем - достаточно написать VB-скрипт из нескольких строчек. Я надеюсь, что эта 
+идея вас не пугает, потому что если вы дочитали до этого места, значит, вы, скорее, разработчики, 
+нежели пользователи или администраторы. Для работы из-под .NET Framework необходимо 
+импортировать библиотеку типов Microsoft SQLXML Bulkload 3.0 Type Library 
+(...\Program Files\Common Files\System\Ole DB\xblkld3.dll).<br>
+Объектная модель XML Bulk Load тривиальна. Она состоит из единственного объекта - 
+SQLXMLBulkLoad с единственным методом Execute, принимающим два параметра: аннотированную 
+схему и сам XML-документ. Аннотированная схема, как всегда, задает правила разноски XML-
+содержания: в какое поле какой таблицы положить тот или иной элемент или атрибут. Собственно, 
+все.<br>
+Вот XML, который требуется перенести в БД:</p>
+<p></div><div align=left><pre><tt><font color=#990000>
+<font color=blue>&lt;</font>Книги_по_XML<font color=blue>>
+    &lt;</font>Книга <font color=red>Название</font><font color=blue>="The Guru's Guide to SQL Server Stored Procedures, 
+	XML, and HTML"</font> <font color=red>ISBN</font><font color=blue>="0201700468"</font> <font color=red>Страниц</font><font color=blue>="576"&gt;
+        &lt;</font>Порядковый_номер<font color=blue>></font></font>1<font color=#990000><font color=blue>&lt;/</font>Порядковый_номер<font color=blue>>
+        &lt;</font>Издательство<font color=blue>></font></font>Wesley Professional<font color=#990000><font color=blue>&lt;/</font>Издательство<font color=blue>>
+        &lt;</font>Цена_на_Амазоне<font color=blue>></font></font>34.99<font color=#990000><font color=blue>&lt;/</font>Цена_на_Амазоне<font color=blue>>
+        &lt;</font>Дата_выхода<font color=blue>></font></font>2001-12-21<font color=#990000><font color=blue>&lt;/</font>Дата_выхода<font color=blue>>
+        &lt;</font>Авторы<font color=blue>>
+            &lt;</font>Автор <font color=red>Имя</font><font color=blue>="Ken"</font> <font color=red>Фамилия</font><font color=blue>="Henderson" />
+            &lt;</font>Автор <font color=red>Имя</font><font color=blue>="Ron"</font> <font color=red>Фамилия</font><font color=blue>="Soukup" />
+        &lt;/</font>Авторы<font color=blue>>
+    &lt;/</font>Книга<font color=blue>>
+    &lt;</font>Книга <font color=red>Название</font><font color=blue>="Programming Microsoft SQL Server 2000 With XML 
+	(Pro-Developer)"</font> <font color=red>ISBN</font><font color=blue>="0735613699"</font> <font color=red>Страниц</font><font color=blue>="400">
+        &lt;</font>Порядковый_номер<font color=blue>></font></font>2<font color=#990000><font color=blue>&lt;/</font>Порядковый_номер<font color=blue>>
+        &lt;</font>Издательство<font color=blue>></font></font>Microsoft Press<font color=#990000><font color=blue>&lt;/</font>Издательство<font color=blue>>
+        &lt;</font>Цена_на_Амазоне<font color=blue>></font></font>41.99<font color=#990000><font color=blue>&lt;/</font>Цена_на_Амазоне<font color=blue>>
+        &lt;</font>Дата_выхода<font color=blue>></font></font>2001-06-01<font color=#990000><font color=blue>&lt;/</font>Дата_выхода<font color=blue>>
+        &lt;</font>Авторы<font color=blue>>
+            &lt;</font>Автор <font color=red>Имя</font><font color=blue>="Graeme"</font> <font color=red>Фамилия</font><font color=blue>="Malcolm" />
+        &lt;/</font>Авторы<font color=blue>>
+    &lt;/</font>Книга<font color=blue>>
+...
+&lt;/</font>Книги_по_XML<font color=blue>></font></font></p></pre></tt>
+</div><div align=justify></font><p>
+Вот аннотированная схема, которую я для него определил (схема должна находиться в отдельном 
+файле, размещение ее в самом XML-документе не допускается).</p>
+<p></div><div align=left><pre><tt><font color=#990000>
+<font color=blue>&lt;?</font>xml <font color=red>version</font><font color=blue>="1.0" ?>
+&lt;</font>xs:schema xmlns<font color=red>:xs</font><font color=blue>="http://www.w3.org/2001/XMLSchema"</font> 
+xmlns<font color=red>:ms</font><font color=blue>="urn:schemas-microsoft-com:mapping-schema">
+	&lt;</font>xs:annotation<font color=blue>>
+		&lt;</font>xs:appinfo<font color=blue>>
+			&lt;</font>ms:relationship <font color=red>name</font><font color=blue>="Книга_Авторы"</font> <font color=red>parent</font><font color=blue>="Book"</font> 
+			<font color=red>parent-key</font><font color=blue>="BookID"</font> <font color=red>child</font><font color=blue>="Author"</font> <font color=red>child-key</font><font color=blue>="BookID" />
+		&lt;/</font>xs:appinfo<font color=blue>>
+	&lt;/</font>xs:annotation<font color=blue>>
+	&lt;</font>xs:element <font color=red>name</font><font color=blue>="Книга"</font> ms<font color=red>:relation</font><font color=blue>="Book">
+		&lt;</font>xs:complexType<font color=blue>>
+			&lt;</font>xs:sequence<font color=blue>>
+				&lt;</font>xs:element <font color=red>name</font><font color=blue>="Порядковый_номер"</font> 
+				ms<font color=red>:field</font><font color=blue>="BookID"</font> ms<font color=red>:datatype</font><font color=blue>="int" />
+				&lt;</font>xs:element <font color=red>name</font><font color=blue>="Издательство"</font> 
+				ms<font color=red>:field</font><font color=blue>="Publishing"</font> ms<font color=red>:datatype</font><font color=blue>="varchar(50)" />
+				&lt;</font>xs:element <font color=red>name</font><font color=blue>="Цена_на_Амазоне"</font> 
+				ms<font color=red>:field</font><font color=blue>="Price"</font> ms<font color=red>:datatype</font><font color=blue>="numeric(6,2)" />
+				&lt;</font>xs:element <font color=red>name</font><font color=blue>="Дата_выхода"</font> 
+				ms<font color=red>:field</font><font color=blue>="IssueDate"</font> ms<font color=red>:datatype</font><font color=blue>="smalldatetime" />
+				&lt;</font>xs:element <font color=red>name</font><font color=blue>="Авторы"</font> 
+				<font color=red>maxOccurs</font><font color=blue>="1"</font> ms<font color=red>:is-constant</font><font color=blue>="1">
+					&lt;</font>xs:complexType<font color=blue>>
+						&lt;</font>xs:sequence<font color=blue>>
+							&lt;</font>xs:element <font color=red>name</font><font color=blue>="Автор"</font> <font color=red>minOccurs</font><font color=blue>="0"</font> 
+							<font color=red>maxOccurs</font><font color=blue>="unbounded"</font> ms<font color=red>:relation</font><font color=blue>="Author"</font> 
+							ms<font color=red>:relationship</font><font color=blue>="Книга_Авторы">
+								&lt;</font>xs:complexType<font color=blue>>
+									&lt;</font>xs:attribute <font color=red>name</font><font color=blue>="Имя"</font> 
+									ms<font color=red>:field</font><font color=blue>="FirstName"</font> 
+									ms<font color=red>:datatype</font><font color=blue>="nvarchar(50)" />
+									&lt;</font>xs:attribute <font color=red>name</font><font color=blue>="Фамилия"</font> 
+									ms<font color=red>:field</font><font color=blue>="LastName"</font> 
+									ms<font color=red>:datatype</font><font color=blue>="nvarchar(50)" />
+								&lt;/</font>xs:complexType<font color=blue>>
+							&lt;/</font>xs:element<font color=blue>>
+						&lt;/</font>xs:sequence<font color=blue>>
+					&lt;/</font>xs:complexType<font color=blue>>
+				&lt;/</font>xs:element<font color=blue>>
+			&lt;/</font>xs:sequence<font color=blue>>
+			&lt;</font>xs:attribute <font color=red>name</font><font color=blue>="Название"</font> ms<font color=red>:field</font><font color=blue>="Title"</font> 
+			ms<font color=red>:datatype</font><font color=blue>="nvarchar(200)" />
+			&lt;</font>xs:attribute <font color=red>name</font><font color=blue>="ISBN"</font> ms<font color=red>:field</font><font color=blue>="ISBN"</font> 
+			ms<font color=red>:datatype</font><font color=blue>="char(10)" />
+			&lt;</font>xs:attribute <font color=red>name</font><font color=blue>="Страниц"</font>
+			ms<font color=red>:field</font><font color=blue>="NumPages"</font> ms<font color=red>:datatype</font><font color=blue>="smallint" />
+		&lt;/</font>xs:complexType<font color=blue>>
+	&lt;/</font>xs:element<font color=blue>>
+&lt;/</font>xs:schema<font color=blue>></font></font></p></pre></tt>
+</div><div align=justify><p>
+И вот скрипт, который осуществляет загрузку:</p>
+<p></div><div align=left><pre><tt>
+<font color=blue>class</font> BulkExample
+{
+	<font color=blue>static void</font> BulkLoad_File_SQLXML()
+	{
+		SQLXMLBULKLOADLib.SQLXMLBulkLoad3Class bl = 
+		<font color=blue>new</font> SQLXMLBULKLOADLib.SQLXMLBulkLoad3Class();
+		bl.ConnectionString = "Provider=SQLOLEDB;...";
+		bl.SchemaGen = <font color=blue>true</font>;
+		bl.SGDropTables = <font color=blue>true</font>;
+		bl.KeepNulls = <font color=blue>true</font>;
+		bl.Transaction = <font color=blue>true</font>;
+		bl.ErrorLogFile = "..\\BulkCopy\\XMLDocForBulkLoad.err";
+		bl.Execute("..\\BulkCopy\\XMLDocForBulkLoad.xsd", 
+		"..\\BulkCopy\\XMLDocForBulkLoad.xml");
+	}
+
+	[STAThread]
+	<font color=blue>static void</font> Main()
+	{
+		BulkLoad_File_SQLXML();
+	}
+}</p></pre></tt>
+<p></div><center>						
+<font color=blue><b>Скрипт 13</font></p></b></center>
+<div align=justify>
+<p>
+Следует обратить внимание на атрибут [STAThread], поскольку компонент пока работает только 
+в однопоточном режиме. Свойство SchemaGen, определяет, должны ли таблицы под загрузку 
+создаваться или вставка идет в уже имеющиеся. Чтобы просто создать структуры и не переносить 
+при этом сами данные, нужно еще поставить BulkLoad = <font color=blue>false</font>. Имена таблиц и полей, их типы и 
+прочие метаданные определяются аннотированной схемой 
+(<font color=#990000>ms</font><font color=red>:relation</font>, <font color=#990000>ms</font><font color=red>:field</font>, 
+<font color=#990000>ms</font><font color=red>:datatype</font>).<br>
+Если таблицы уже существуют, то SGDropTables = <font color=blue>true</font> заставляет их пересоздаться. Удаление 
+таблиц происходит в том порядке, в котором они упоминаются в XML-файле и может приводить 
+к конфликту с ограничениями primary key/foreign key.<br>
+Рассмотренный в п.11 ms:inverse при этом 
+не помогает. В том случае, если таблица есть и для поля определено значение по умолчанию, оно 
+будет использоваться, когда в XML-файле соответствующий элемент или атрибут пропущен, но 
+если поставить KeepNulls = <font color=blue>true</font>, то значение по умолчанию будет проигнорировано и в поле будет 
+поставлен Null. Аналогично действует свойство KeepIdentity. Если вставка идет в поле типа identity, 
+то <font color=blue>false</font> заставляет игнорировать значения для этого поля в XMLном файле и использовать 
+автоинкремент, определенный для него на сервере. CheckConstraints определяет, будут ли 
+проверяться constraints (primary key/foreign key и пр.) при загрузке данных. Свойство Transaction 
+заставляет все действия по загрузке проходить в масштабе единой транзакции, так что ежели что 
+случится, то все будет откачено. Его нельзя использовать при загрузке BLOBов. ForceTableLock 
+устанавливает табличную блокировку на таблицы, задействованные в ходе bulk load. Если в 
+аннотированной схеме поле помечено атрибутом <font color=#990000>dt</font><font color=red>:type</font><font color=blue>="id"</font>
+ (<font color=#990000>xmlns</font><font color=red>:dt</font><font color=blue>="urn:schemas-microsoft-com:xml:datatypes"</font>), 
+ то свойство SGUseID = <font color=blue>true</font> приведет к тому, 
+ что при создании таблицы на него будет создано ограничение primary key.
+ <br>Если в схеме в <font color=blue>&lt;</font><font color=#990000>xs:element</font> <font color=red>name<</font>font color=blue>="Книга"</font> 
+ <font color=#990000>ms</font><font color=red>:relation</font><font color=blue>="Book"></font> 
+ поставить атрибут, <font color=#990000>ms</font><font color=red>:key-fields</font><font color=blue>="BookID"</font>, то 
+ между таблицами Book и Author будет создано ограничение primary key/foreign key по полю 
+ <font color=blue>BookID</font>. Независимо от этого указание в схеме отношения между таблицами 
+ <font color=blue>&lt;</font><font color=#990000>ms:relationship</font> 
+ <font color=red>name</font><font color=blue>="Книга_Авторы"</font> 
+ <font color=red>parent</font><font color=blue>="Book"</font> <font color=red>parent-key</font><font color=blue>="BookID"</font> 
+ <font color=red>child</font><font color=blue>="Author"</font> <font color=red>child-key</font><font color=blue>="BookID" /></font> 
+ обеспечивает во время массовой загрузки автоматическое заполнение поля <font color=blue>BookID</font> в дочерней 
+ таблице <font color=blue>Author</font> значениями <font color=blue>BookID</font> из родительской записи 
+ таблицы <font color=blue>Book</font>, как происходит в 
+ нашем случае:</p>
+
+<table border=1 cellspacing=1 cellpadding=2>
+<tr><td  width=23 style='background:black;mso-shading:whitemso-pattern:solid black'><font color=blue><i><b>BookID</b></i></font></td>
+<td  width=101 style='background:black;mso-shading:whitemso-pattern:solid black'><font color=fuchsia><i><b>Publishing</b></i></font></td>
+<td style='background:black;mso-shading:whitemso-pattern:solid black'><font color=fuchsia><i><b>Price</b></i></font></td>
+<td  width=97 style='background:black;mso-shading:whitemso-pattern:solid black'><font color=fuchsia><i><b>IssueDate</b></i></font></td>
+<td style='background:black;mso-shading:whitemso-pattern:solid black'><font color=fuchsia><i><b>NumPages</b></i></font></td>
+<td style='background:black;mso-shading:whitemso-pattern:solid black'><font color=fuchsia><i><b>ISBN</b></i></font></td>
+<td  width=248 style='background:black;mso-shading:whitemso-pattern:solid black'><font color=fuchsia><i><b>Title</b></i></font></td></tr>
+<tr><td  width=23 style='background:teal;mso-shading:whitemso-pattern:solid black'>1.</td><td  width=101>Wesley Professional</td><td>34.99</td><td  width=97>2001-12-21 00:00:00</td><td>576</td><td>0201700468</td>
+<td  width=248>The Guru's Guide to SQL Server Stored Procedures, XML, and HTML</td></tr>
+<tr><td  width=23 style='background:teal;mso-shading:whitemso-pattern:solid black'>2.</td><td  width=101>Microsoft Press</td><td>41.99</td><td  width=97>2001-06-01 00:00:00</td><td>400</td><td>0735613699</td>
+<td  width=248>Programming Microsoft SQL Server 2000 With XML (Pro-Developer)</td></tr>
+<tr><td  width=23 style='background:teal;mso-shading:whitemso-pattern:solid black'>...</td><td  width=101>...</td><td>...</td><td  width=97>...</td><td>...</td><td>...</td><td  width=248>...</td></tr></table></p>
+<p>
+<table border=1 cellspacing=1 cellpadding=2>
+<tr><td style='background:black;mso-shading:whitemso-pattern:solid black'><font color=fuchsia><i><b>LastName</b></i></font></td>
+<td style='background:black;mso-shading:whitemso-pattern:solid black'><font color=fuchsia><i><b>FirstName</b></i></font></td>
+<td style='background:black;mso-shading:whitemso-pattern:solid black'><font color=blue><i><b>BookID</b></i></font></td></tr>
+<tr><td>Henderson</td><td>Ken</td><td style='background:teal;mso-shading:whitemso-pattern:solid black'>1</td></tr>
+<tr><td>Soukup</td><td>Ron</td><td style='background:teal;mso-shading:whitemso-pattern:solid black'>1</td></tr>
+<tr><td>Malcolm</td><td>Graeme</td><td style='background:teal;mso-shading:whitemso-pattern:solid black'>2</td></tr>
+<tr><td>Griffin</td><td>John</td><td style='background:teal;mso-shading:whitemso-pattern:solid black'>3</td></tr>
+<tr><td>Williams</td><td>Kevin</td><td style='background:teal;mso-shading:whitemso-pattern:solid black'>4</td></tr>
+<tr><td>...</td><td>...</td><td style='background:teal;mso-shading:whitemso-pattern:solid black'>...</td></tr></table></p>
+<p>
+Методу Execute можно передавать не только название XML-документа, но и ADODB.Stream:</p>
+<p></div><div align=left><pre><tt>
+...
+
+StreamReader sr = File.OpenText("..\\BulkCopy\\XMLDocForBulkLoad.xml");
+ADODB.StreamClass sc = <font color=blue>new</font> ADODB.StreamClass();
+sc.Charset = "UTF-8"; 
+sc.Open(System.Type.Missing, ADODB.ConnectModeEnum.adModeUnknown, 
+ADODB.StreamOpenOptionsEnum.adOpenStreamUnspecified, "", "");
+sc.WriteText(sr.ReadToEnd(), ADODB.StreamWriteEnum.stWriteChar);
+sc.Position = 0;
+bl.Execute("..\\BulkCopy\\XMLDocForBulkLoad.xsd", sc);
+sr.Close(); sc.Close();</p></pre></tt>
+</div><div align=justify>
+<p>
+что позволяет загружать в БД динамически сгенерированный внутри кода XML без 
+необходимости его промежуточного сохранения. Для загрузки XML-фрагмента (набора элементов 
+без корневого, не являющегося каноническим well-formed документом) необходимо использовать 
+свойство XMLFragment.</p>
+</DIV>
+<TD>
+<TR>
+</TABLE>
+<TABLE BORDER=0 WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>XML Bulk Load
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="13.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+</TD>
+</TR>
+</TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>

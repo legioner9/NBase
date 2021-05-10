@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\dmn_modeling_and_simulation\cat.dmn_modeling_and_simulation\dir.dmn_modeling_and_simulation.md">dmn_modeling_and_simulation</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\dmn_modeling_and_simulation\dmn_modeling_and_simulation.md">dmn_modeling_and_simulation.md</a>
+        - *# [DMN Modeling and Simulation](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/dmn_modeling_and_simulation.html) Моделирование и симуляция DMN

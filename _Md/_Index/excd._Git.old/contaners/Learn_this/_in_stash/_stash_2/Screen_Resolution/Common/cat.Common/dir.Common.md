@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Learn_this\_in_stash\_stash_2\Screen_Resolution\Common\cat.Common\dir.Common.md">Common</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Learn_this\_in_stash\_stash_2\Screen_Resolution\Common\_Common.md">_Common.md</a>
+        - *#[1](https://www.linuxmint.com.ru/viewtopic.php?t=4183)

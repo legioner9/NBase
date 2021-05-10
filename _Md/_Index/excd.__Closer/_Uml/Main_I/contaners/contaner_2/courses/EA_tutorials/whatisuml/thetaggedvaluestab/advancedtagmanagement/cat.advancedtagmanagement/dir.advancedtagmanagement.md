@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\thetaggedvaluestab\advancedtagmanagement\cat.advancedtagmanagement\dir.advancedtagmanagement.md">advancedtagmanagement</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\thetaggedvaluestab\advancedtagmanagement\advancedtagmanagement.md">advancedtagmanagement.md</a>
+        - *### [Advanced Tag Management](https://sparxsystems.com/enterprise_architect_user_guide/15.1/modeling/advancedtagmanagement.html) Расширенное управление тегами

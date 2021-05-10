@@ -1,0 +1,1650 @@
+<HTML>
+<HEAD>
+  <TITLE>Руководство по MyODBC 3.51.03</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1><A NAME="Developing_Applications_Using_MyODBC">
+3 Разработка прикладных программы, используя MyODBC</A></H1>
+<P>Эта глава содержит информацию относительно разработки прикладных программ,
+которые используют MyODBC как интерфейс, чтобы обратиться к серверу MySQL.
+</P>
+
+<H2><A NAME="Basic_MyODBC_application_steps">
+3.1 Базисные шаги прикладной программы MyODBC</A></H2>
+<P>В общем виде, чтобы работать с сервером MySQL из любой программы через
+ODBC/MyODBC, надо сделать следующее:
+<UL><LI>Настроить MyODBC DSN
+<LI>Подключиться к серверу MySQL
+<LI>Провести инициализацию
+<LI>Выполнить команды SQL
+<LI>Получить результаты
+<LI>Обработать транзакции
+<LI>Отсоединиться от сервера</UL></P>
+
+<P>Большинство прикладных программ использует некоторое изменение этих шагов.
+</P>
+
+<H2><A NAME="Configuring_MyODBC_DSN">3.2 Настройка MyODBC DSN</A></H2>
+<P>Источник данных идентифицирует путь для данных, который может включать
+сетевую библиотеку, сервер, базу данных и другие атрибуты. В нашем случае
+источник данных представляет собой путь к базе данных <CODE>MySQL</CODE>.
+Чтобы соединиться с источником данных, Driver Manager проверяет системный
+реестр Windows для получения специфической информации подключения.</P>
+
+<P><CODE>ODBC Driver Manager</CODE> и <CODE>MyODBC Drivers</CODE> использует
+вход системного реестра, созданный <CODE>ODBC Data Source Administrator
+</CODE>. Этот вход содержит информацию относительно каждого источника данных
+и связанного с ним драйвера. Прежде, чем Вы сможете соединяться с источником
+данных, информация о подключении должна быть добавлена к системному реестру.
+</P>
+
+<P>Чтобы добавлять и конфигурировать источники данных, используйте
+<CODE><STRONG>ODBC Data Source Administrator</CODE></STRONG>.
+<CODE><STRONG>ODBC Administrator</STRONG></CODE> модифицирует информацию о
+подключениях к источникам данных. Поскольку Вы добавляете источники данных,
+<CODE><STRONG>ODBC Administrator</STRONG></CODE> модифицирует информацию
+системного реестра для них.</P>
+
+<P><STRONG>Чтобы открыть <CODE><STRONG>ODBC Administrator</STRONG></CODE>
+из Control Panel:</STRONG></P>
+
+<UL><LI>Нажмите <CODE><STRONG>Start</STRONG></CODE>, укажите на
+<CODE><STRONG>Settings</STRONG></CODE> и щелкните <CODE><STRONG>Control Panel
+</STRONG></CODE>.
+
+<LI>На системах под Microsoft Windows 2000 дважды щелкните по
+<CODE><STRONG>Administrative Tools</STRONG></CODE>, а затем дважды щелкните
+по <CODE><STRONG>Data Sources (ODBC)</CODE></STRONG>. На компьютерах под
+предыдущими версиями Microsoft Windows дважды щелкните по <CODE><STRONG>
+32-bit ODBC</STRONG></CODE> или по <CODE><STRONG>ODBC</STRONG></CODE>.</UL>
+
+<P><STRONG>Чтобы добавить источник данных в Windows:</STRONG></P>
+<OL><LI>Откройте <CODE><STRONG>ODBC Data Source Administrator</STRONG></CODE>.
+
+<LI>В диалоговом окне <CODE><STRONG>ODBC Data Source Administrator</STRONG>
+</CODE> нажмите <CODE>Add</CODE>. Откроется диалоговое окно <CODE><STRONG>
+Create New Data Source</STRONG></CODE>.
+
+<LI>Выберите там <CODE><STRONG>MySQL ODBC 3.51 Driver</STRONG></CODE> и
+нажмите на <CODE><STRONG>Finish</STRONG></CODE>. Появится диалоговое окно
+<CODE><STRONG>MySQL ODBC 3.51 Driver - DSN Configuration</STRONG></CODE>.
+
+<LI>В окне <CODE><STRONG>Data Source Name</STRONG></CODE> впечатайте имя
+источника данных, к которому Вы хотите обращаться. Это может быть любое
+имеющее силу имя, которое понравилось.
+
+<LI>В окне <CODE><STRONG>Description</STRONG></CODE> введите описание
+необходимое для DSN.
+
+<LI>В окне <CODE><STRONG>Host or Server Name (or IP)</STRONG></CODE>
+напечатайте имя сервера MySQL, к которому Вы хотите обращаться. По умолчанию
+это local host.
+
+<LI>В окне <CODE><STRONG>Database Name</STRONG></CODE> укажите имя MySQL базы
+данных, которая будет применяться как заданная по умолчанию база данных.
+
+<LI>В окне <CODE><STRONG>User</STRONG></CODE> задайте имя пользователя базы
+данных (user ID).
+
+<LI>В окне <CODE><STRONG>Password</STRONG></CODE> надо задать пароль.
+<LI>В окне <CODE><STRONG>Port</STRONG></CODE> напечатайте номер порта, если
+это не значение по умолчанию 3306.
+
+<LI>В окне <CODE><STRONG>SQL Command</STRONG></CODE> Вы можете вводить
+факультативную команду SQL, которую серверу надлежит выполнить сразу
+после установления подключения.</OL>
+
+<P>Теперь нажмите <CODE><STRONG>OK</STRONG></CODE>, чтобы добавить этот
+источник данных. <CODE><STRONG>Обратите внимание:</STRONG></CODE> при щелчке
+на OK диалоговое окно Data Sources dialog, и <CODE><STRONG>ODBC Administrator
+</STRONG></CODE> модифицирует информацию системного реестра. Имя пользователя
+и строка подключения станут заданными по умолчанию значениями подключения для
+этого источника данных. Вы можете также проверить, достаточны ли Ваши
+параметры настройки, чтобы соединиться с сервером, используя кнопку
+<CODE><STRONG>Test Data Source</STRONG></CODE>. Эта возможность появилась
+только начиная с <CODE>MyODBC 3.51</CODE>.
+
+<P><STRONG>Driver Options</STRONG>: Вы можете также видеть кнопку
+<CODE><STRONG>Options</STRONG></CODE>, которая отобразит диалог
+дополнительных параметров, которые управляют поведением драйвера.
+
+<P><STRONG>Обратите внимание</STRONG>, что параметры <CODE>Driver Trace
+Options</CODE> будут заблокированы (нарисованы серым цветом) при
+использовании обычной версии DLL.
+
+<P><STRONG>Чтобы изменить источник данных в Windows:</STRONG></P>
+<OL><LI>Откройте окно <CODE><STRONG>ODBC Data Source Administrator</STRONG>
+</CODE>. Выберите соответствующую вкладку DSN.
+
+<LI>Выберите источник данных MySQL, который Вы хотите изменить, а затем
+нажмите <CODE><STRONG>modify</STRONG></CODE> и щелкните по <CODE><STRONG>
+Configure</STRONG></CODE>. Откроется диалоговое окно <CODE><STRONG>MySQL ODBC
+3.51 Driver - DSN Configuration</STRONG></CODE>.
+
+<LI>Измените соответствующие поля источника данных, а затем нажмите
+<CODE><STRONG>OK</STRONG></CODE>.</OL>
+
+<P>Когда Вы закончите изменять информацию в этом диалоговом окне,
+<CODE><STRONG>ODBC Administrator</STRONG></CODE> модифицирует
+информацию системного реестра.</P>
+
+<P><STRONG>Чтобы настроить источник данных в Unix:</STRONG></P>
+<P>В <CODE>Unix</CODE> Вы можете конфигурировать <CODE>DSN-входы</CODE>
+непосредственно в файле ODBC.INI. Имеется пример файла odbc.ini с myodbc как
+DSN-имя для MyODBC 2.50 и myodbc3 для MyODBC 3.51 Drivers:
+<PRE>
+  ;
+  ;  odbc.ini configuration for MyODBC and MyODBC 3.51 Drivers
+  ;
+  <STRONG>[ODBC Data Sources]</STRONG>
+  myodbc  = MySQL ODBC 2.50 Driver DSN
+  myodbc3 = MySQL ODBC 3.51 Driver DSNа
+
+  <STRONG>[myodbc]</STRONG>
+  Driver      = /usr/local/lib/libmyodbc.so
+  Description = MySQL ODBC 2.50 Driver DSN
+  SERVER      = localhost
+  PORT        =
+  USER        = root
+  Password    =
+  Database    = test
+  OPTION      = 3
+  SOCKET      =
+
+  <STRONG>[myodbc3]</STRONG>
+  Driver      = /usr/local/lib/libmyodbc3.so
+  Description = MySQL ODBC 3.51 Driver DSN
+  SERVER      = localhost
+  PORT        =
+  USER        = root
+  Password    =
+  Database    = test
+  OPTION      = 3
+  SOCKET      =
+
+  <STRONG>[Default]</STRONG>
+  Driver      = /usr/local/lib/libmyodbc3.so
+  Description = MySQL ODBC 3.51 Driver DSN
+  SERVER      = localhost
+  PORT        =
+  USER        = root
+  Password    =
+  Database    = test
+  OPTION      = 3
+  SOCKET      =
+</PRE></P>
+
+<P><STRONG>Обратите внимание</STRONG>: если Вы используете unixODBC, то Вы
+можете использовать следующие инструментальные средства чтобы настроить DSN:
+
+<UL><LI>ODBCConfig GUI tool (<a HREF="../../../www.unixodbc.org/config.html">
+HOWTO : ODBCConfig</a>)
+<LI>odbcinst</UL>
+
+<H2><A NAME="Connection_parameters">3.3 Параметры подключения</A></H2>
+<P>Можно определять следующие параметры для <STRONG>MyODBC</STRONG> или для
+<STRONG>MyODBC 3.51</STRONG> в секции <CODE>[Data Source Name]</CODE> файла
+<CODE>ODBC.INI</CODE> или через параметр <CODE>InConnectionString</CODE> в
+вызове <CODE>SQLDriverConnect()</CODE>.</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Параметр</STRONG></TD><TD><STRONG>Значение по умолчанию
+</STRONG></TD><TD><STRONG>Комментарий</STRONG></TD></TR>
+<TR><TD>user</TD><TD>ODBC (в Windows)</TD><TD>Имя пользователя для связи с
+MySQL.</TD></TR>
+<TR><TD>server</TD><TD>localhost</TD><TD>Имя сервера MySQL.</TD></TR>
+<TR><TD>database</TD><TD></TD><TD>База данных по умолчанию</TD></TR>
+<TR><TD>option</TD><TD>0</TD><TD>Целое число, которым Вы можете определять
+как должен работать <STRONG>MyODBC 3.51</STRONG>. Описано чуть ниже.</TD></TR>
+<TR><TD>port</TD><TD>3306</TD><TD>Порт TCP/IP, чтобы использовать, если
+<CODE>server</CODE> не равен <CODE>localhost</CODE>.</TD></TR>
+<TR><TD>stmt</TD><TD></TD><TD>Инструкция, которая будет выполнена, когда
+установлено подключение к <CODE>MySQL</CODE>.</TD></TR>
+<TR><TD>password</TD><TD></TD><TD>Пароль для комбинации <CODE>server</CODE>
+<CODE>user</CODE>.</TD></TR>
+<TR><TD>socket</TD><TD></TD><TD>Сокет или именованный канал Windows для связи.
+</TD></TR></TABLE>
+
+<P>Параметр <CODE>OPTION</CODE> используется, чтобы сообщить <STRONG>MyODBC
+3.51</STRONG>, что пользователь не на 100% совместим с ODBC. Следующие
+параметры перечислены в том же самом порядке, в каком они появляются в
+<STRONG>MyODBC 3.51</STRONG>:</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Бит</STRONG></TD><TD><STRONG>Описание</STRONG></TD></TR>
+<TR><TD>1</TD><TD>Пользователь не может обрабатывать ситуацию, когда
+<STRONG>MyODBC</STRONG> возвращает реальную ширину столбца.</TD></TR>
+<TR><TD>2</TD><TD>Пользователь не может обрабатывать ситуацию, когда MySQL
+возвращает истинное число обработанных строк. Если этот параметр установлен,
+MySQL вернет число найденных строк. Нужно иметь MySQL 3.21.14 или более
+новый, чтобы это работало.</TD></TR>
+<TR><TD>4</TD><TD>Создать протокол трассировки в файле <TT>c:\myodbc.log</TT>
+(<TT>/tmp/myodbc.log</TT>). Это аналогично указанию
+<CODE>MYSQL_DEBUG=d:t:O,c::\myodbc.log</CODE> в <TT>AUTOEXEC.BAT</TT>.</TD>
+</TR>
+<TR><TD>8</TD><TD>Не устанавливать ограничений пакета для результатов и
+параметров.</TD></TR>
+<TR><TD>16</TD><TD>-Не запрашивать ничего, даже если драйвер хочет запросить.
+</TD></TR>
+<TR><TD>32</TD><TD>Включить или отключить поддержку динамического курсора.
+Это не работает в MyODBC 2.50.</TD></TR>
+<TR><TD>64</TD><TD>Игнорировать использование имени базы данных в формате
+database.table.column.</TD></TR>
+<TR><TD>128</TD><TD>Использование экспериментальных курсоров ODBC manager.
+</TD></TR>
+<TR><TD>256</TD><TD>Отключить использование расширенной (экспериментальной)
+выборки.</TD></TR>
+<TR><TD>512</TD><TD>Дополнить поля типа CHAR до полной длины столбца.</TD>
+</TR>
+<TR><TD>1024</TD><TD>SQLDescribeCol() возвратит полностью квалифицированные
+имена столбцов.</TD></TR>
+<TR><TD>2048</TD><TD>Использовать сжатый протокол клиент-сервер.</TD></TR>
+<TR><TD>4096</TD><TD>Сервер должен игнорировать пробел между именем функции и
+<CODE>'('</CODE> (нужно для Power Builder). Это делает все ключевые
+слова именами функций!</TD></TR>
+<TR><TD>8192</TD><TD>Соединиться через именованный канал с сервером
+<CODE>mysqld</CODE> под NT.</TD></TR>
+<TR><TD>16384</TD><TD>Менять столбцы типа LONGLONG на столбцы INT (некоторые
+прикладные программы не могут корректно обрабатывать LONGLONG).</TD></TR>
+<TR><TD>32768</TD><TD>Вернуть user как Table_qualifier и Table_owner из
+SQLTables.</TD></TR>
+<TR><TD>65536</TD><TD>Читать параметры из групп <CODE>client</CODE> и
+<CODE>odbc</CODE> в файле <TT>my.cnf</TT></TD></TR>
+<TR><TD>131072</TD><TD>Добавить некоторые дополнительные проверки
+безопасности (вроде бы не очень и надо, но...).</TD></TR>
+<TR><TD>262144</TD><TD>Выключить использование транзакций</TD></TR>
+<TR><TD>524288</TD><TD>Включить регистрацию запросов в файле
+<TT>c:\myodbc.sql</TT> (<TT>/tmp/myodbc.sql</TT>). Доступно только в режиме
+отладки в специальной версии драйвера.</TD></TR></TABLE>
+
+<P>Если Вы хотите иметь много параметров, Вы должны сложить вышеупомянутые
+числа. Например, установка опции в 12 (4+8) дает Вам отладку без ограничений
+на размеры пакета.</P>
+
+<P>По умолчанию <TT>MYODBC3.DLL</TT> компилируется для оптимальной
+эффективности. Если Вы хотите отладить <CODE>MyODBC 3.51</CODE> (например,
+чтобы получить трассировку), используйте <CODE>MYODBCD3.DLL</CODE> вместо
+стандартного файла <CODE>MYODBC3.DLL</CODE>.</P>
+
+<H2><A NAME="Connecting_to_MySQL_server">3.4 Связь с сервером MySQL</A></H2>
+<P>Прикладная программа может быть связана с любом числом источников данных и
+драйверов. Они могут быть вариантами того же самого драйвера и ряда
+источников данных или несколькими подключениями с тем же самым драйвером и
+источником данных. Прикладная программа должна сделать следующее, чтобы
+соединиться с сервером MySQL через MyODBC:
+
+<UL><LI><CODE>Распределите дескриптор среды</CODE>
+<LI><CODE>Установите версию ODBC</CODE>
+<LI><CODE>Распределите дескриптор подключения</CODE>
+<LI><CODE>Установите факультативные атрибуты подключения перед подключением
+</CODE>
+<LI><CODE>Создайте подключение к серверу</CODE>
+<LI><CODE>Установите факультативные атрибуты подключения после подключением
+</CODE></UL></P>
+
+<H3><A NAME="Allocating_the_Environment_Handle">
+3.4.1 Распределение дескриптора среды</A></H3>
+<P>Прежде, чем прикладная программа сможет использовать любую функцию ODBC,
+надо инициализировать ODBC-связь с помощью интерфейса и сопоставить с ней
+дескриптор среды. Он обеспечивает доступ к глобальной информации типа имеющих
+силу дескрипторов подключения и активных дескрипторов подключения.</P>
+
+<P>Чтобы распределить правильный дескриптор среды, прикладная программа:</P>
+<OL><LI>Объявляет переменную типа SQLHENV. Например, прикладная программа
+могла бы использовать объявление:
+<PRE>
+SQLHENV henv;
+</PRE>
+
+<LI>Вызывает SQLAllocHandle (в MyODBC 2.50 называется SQLAllocEnv) и передает
+адрес этой переменной и опции SQL_HANDLE_ENV как:
+<PRE>
+SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &#38;henv) или
+SQLAllocEnv(&#38;henv)
+</PRE></OL>
+
+<P>Если прикладная программа связана через Driver Manager, то это обращение
+загружает Driver Manager. Он не вызывает <CODE>SQLAllocHandle</CODE> в
+драйвере потому, что пока не знает, который драйвер вызвать. Это откладывает
+вызов <CODE>SQLAllocHandle</CODE> в драйвере до получения вызовов из
+прикладной программы, чтобы соединиться с источником данных: тогда-то будет
+однозначно ясно, какой драйвер нужен.</P>
+
+<P>Если прикладная программа связана непосредственно с драйвером, то это
+обращение загружает драйвер, и уже драйвер формирует информацию среды и
+возвращает распределенную структуру обратно прикладной программе.</P>
+
+<H3><A NAME="Declaring_the_Application_ODBC_Version">
+3.4.2 Установка версии ODBC</A></H3>
+<P>Если Вы используете драйвер MyODBC 2.50, то Вы можете игнорировать этот
+раздел. Прежде, чем прикладная программа создаст соединение, необходимо
+установить атрибут SQL_ATTR_ODBC_VERSION среды, используя SQLSetEnvAttr:
+<PRE>
+SQLSetEnvAttr(henv, SQL_ATTR_ODBC_VERSION, (SQLPOINTER) SQL_OV_ODBC3, 0);
+</PRE>
+
+<P>Этот атрибут заявляет, что прикладная программа следует спецификациям ODBC
+2.x или ODBC 3.x при использовании следующих элементов:</P>
+
+<UL><LI>SQLSTATE: Много значений SQLSTATE различны в ODBC 2.x и ODBC 3.x. Для
+получения списка кодов SQLSTATE, возвращаемых драйвером MyODBC 3.51
+обратитесь к разделу "<A HREF="myodbcap.htm#MyODBC_Error_Codes">
+Коды ошибок MyODBC</A>".
+
+<LI>Типы Date, Time и Timestamp: следующая таблица показывает идентификаторы
+типов для данных date, time и timestamp в ODBC 2.x и в ODBC 3.x.
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>ODBC 2.X</STRONG></TD><TD><STRONG>ODBC 3.X</STRONG></TD></TR>
+<TR><TD>Идентификаторы типов в SQL</TD></TR>
+<TR><TD>SQL_DATE</TD><TD>SQL_TYPE_DATE</TD></TR>
+<TR><TD>SQL_TIME</TD><TD>SQL_TYPE_TIME</TD></TR>
+<TR><TD>SQL_TIMESTAMP</TD><TD>SQL_TYPE_TIMESTAMP</TD></TR>
+<TR><TD>Идентификаторы типов в C</TD></TR>
+<TR><TD>SQL_C_DATE</TD><TD>SQL_C_TYPE_DATE</TD></TR>
+<TR><TD>SQL_C_TIME</TD><TD>SQL_C_TYPE_TIME</TD></TR>
+<TR><TD>SQL_C_TIMESTAMP</TD><TD>SQL_C_TYPE_TIMESTAMP</TD></TR></TABLE></UL>
+
+<P>MyODBC 3.51 контролирует версию спецификации ODBC, для которой прикладная
+программа написана и отвечает соответственно. Например, если прикладная
+программа следует версии ODBC 2.x и вызывает SQLExecute до вызова SQLPrepare,
+драйвер вернет: SQLSTATE <STRONG>S1010</STRONG> (Function sequence error).
+Если прикладная программа поддерживает спецификацию ODBC 3.x, то это
+возвращает: SQLSTATE <STRONG>HY010</STRONG> (Function sequence error).</P>
+
+<H3><A NAME="Allocating_a_Connection_Handle">
+3.4.3 Распределение дескриптора подключения</A></H3>
+<P>Дескриптор подключения обеспечивает доступ к информации относительно того,
+является ли подключение открытым или нет, имеют ли силу операторные и
+дескрипторные маркеры на подключении, и открыта ли сейчас транзакция.</P>
+
+<P>Прежде, чем прикладная программа сможет соединиться с сервером MySQL или с
+драйвером, она должна распределить дескриптор подключения, следующим образом:
+</P>
+
+<UL><LI>Прикладная программа объявляет переменную типа SQLHDBC.
+<LI>Она затем вызывает SQLAllocHandle (или SQLAllocConnect для версии MyODBC
+2.50) и передает адрес этой переменной, дескриптор среды, чтобы распределить
+подключение, и опцию SQL_HANDLE_DBC. Например:
+<PRE>
+SQLHDBC hdbc;
+SQLAllocHandle(SQL_HANDLE_DBC, henv, &#38;hdbc); или
+SQLAllocConnect(henv, &#38;hdbc);
+</PRE></UL>
+
+<P>Если прикладная программа связана через Driver Manager, то Driver Manager
+распределяет память, чтобы сохранить информацию относительно подключения и
+возвращает дескриптор подключения прикладной программе. С другой стороны,
+если Вы непосредственно компонуете программу через библиотеку драйверов
+вместо Driver Manager, то эту работу делает уже драйвер.</P>
+
+<H3><A NAME="Setting_Connection_Attributes">
+3.4.4 Установка атрибутов соединения (подключения)</A></H3>
+<P>Атрибуты подключения представляют собой характеристики подключения.
+Например, они определяют, что транзакции происходят в уровне подключения, а
+уровень изоляции транзакции представляет собой атрибут подключения. Точно так
+же время ожидания входа в систему или число секунд, которые надо ждать при
+попытке соединиться перед тайм-аутом, тоже атрибуты подключения.</P>
+
+<P>Атрибуты подключения установлены с помощью SQLSetConnectAttr, а их текущие
+параметры настройки могут быть получены с помощью SQLGetConnectAttr. Для
+прикладных программ драйвера MyODBC 2.50 Вы можете использовать
+SQLSetConnectOption и SQLGetConnectOption.</P>
+
+<P>Атрибуты подключения могут быть установлены до или после подключения, в
+зависимости от типа атрибута. Время ожидания входа в систему
+SQL_ATTR_LOGIN_TIMEOUT применяется только при установлении связи и важно,
+только если установлено перед соединением.</P>
+
+<P>Атрибуты, которые определяют, использовать ли библиотеку курсоров ODBC
+(SQL_ATTR_ODBC_CURSORS) и сетевой размер пакета (SQL_ATTR_PACKET_SIZE),
+должны быть установлены прежде, чем соединение создано потому что, библиотека
+курсоров ODBC находится между Driver Manager и драйвером, а следовательно
+должно быть загружена перед драйвером. Подробный перечень атрибутов
+подключения, поддерживаемых драйверами MyODBC, есть в разделе
+"<A HREF="myodbc4.htm#SQLSetConnectAttr">4.5.1 SQLSetConnectAttr</A>".</P>
+
+<H3><A NAME="Establishing_a_connection_using_MyODBC">
+3.4.5 Установление подключения, использующего MyODBC</A></H3>
+<P>После распределения среды и дескрипторов подключения и установки
+факультативных атрибутов подключения, прикладная программа готова соединиться
+с сервером MySQL или драйвером MyODBC (через Driver Manager). Имеются две
+различных функции для этого:</P>
+
+<UL><LI><STRONG>SQLConnect</STRONG> и
+<LI><STRONG>SQLDriverConnect</STRONG></UL>
+
+<H4>3.4.5.1 Соединение через SQLConnect</H4>
+<P><STRONG>SQLConnect</STRONG> самая простая функция подключения. Требует имя
+источника данных и принимает факультативные user ID и пароль. Прикладная
+программа передает следующую информацию драйверу через SQLConnect:</P>
+
+<P><CODE>DSN:</CODE> имя источника данных.<BR>
+<CODE>UID:</CODE> имя пользователя для связи с сервером (опционально).<BR>
+<CODE>PWD:</CODE> соответствующий пароль (опционально).</P>
+
+<P>Обратите внимание, что, если Вы уже определили имя пользователя и пароль в
+параметрах DSN или непосредственно в файле ODBC.INI, Вы можете только
+определить имеющий силу DSN, а драйвер внутренне получает другую требуемую
+информацию из записей в DSN сам.</P>
+
+<P>Когда из прикладной программы вызван SQLConnect, Driver Manager использует
+имя источника данных, чтобы прочитать имя драйвера DLL из соответствующего
+раздела файла ODBC.INI или из системного реестра. Это затем загружает драйвер
+DLL и передает ему параметры SQLConnect. Если драйвер нуждается в
+дополнительной информации, чтобы соединиться с источником данных, он читает
+эту информацию из того же самого раздела файла ODBC.INI.</P>
+
+<P>Если прикладная программа определяет имя источника данных, которое не
+значится в файле ODBC.INI или в системном реестре, или если прикладная
+программа не определяет имя источника данных, Driver Manager ищет заданную по
+умолчанию спецификацию источника данных. Если он находит заданный по
+умолчанию источник данных, то загружает заданный по умолчанию драйвер и
+передает ему определенное прикладная программой имя источника данных. Если не
+имеется никакого заданного по умолчанию источника данных, Driver Manager
+возвращает соответствующую ошибку.</P>
+
+<P><STRONG>Пример:</STRONG> следующий пример распределяет необходимую среду,
+дескриптор подключения и соединяется с сервером MySQL, используя DSN myodbc3.
+<PRE>
+SQLHENV    henv;
+SQLHDBC    hdbc;
+SQLHSTMT   hstmt;
+SQLRETURN  retcode;
+
+/* Allocate environment handle */
+retcode = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &#38;henv);
+if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+{
+   /* Set the ODBC version environment attribute to version 3 */
+   retcode = SQLSetEnvAttr(henv, SQL_ATTR_ODBC_VERSION,
+                           (SQLPOINTER)SQL_OV_ODBC3, 0);
+   if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+   {
+      /* Allocate connection handle */
+      retcode = SQLAllocHandle(SQL_HANDLE_DBC, henv, &#38;hdbc);
+      if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+      {
+         /* Connect to data source myodbc3 */
+         retcode = SQLConnect(hdbc, (SQLCHAR*) "myodbc3", SQL_NTS,
+                              (SQLCHAR*) "myuser", SQL_NTS,
+                              (SQLCHAR*) "mypassword", SQL_NTS);
+         if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+         {
+            /* Set auto commit to ON */
+            retcode = SQLSetConnectAttr(hdbc, SQL_ATTR_AUTO_COMMIT,
+                                        SQL_AUTOCOMMIT_ON,0);
+            printf("\n autocommit returned :%d", redcode);
+            /* Allocate statement handle */
+            retcode = SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &#38;hstmt);
+            if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+            {
+               /* Process data */
+                  ;
+                  ;
+                  ;
+               /* Free stattemt handle */
+               SQLFreeHandle(SQL_HANDLE_STMT, hstmt);
+            }
+            /* Disconnect from the server */
+            SQLDisconnect(hdbc);
+         }
+         /* Close the connection handle */
+         SQLFreeHandle(SQL_HANDLE_DBC, hdbc);
+      }
+   }
+   /* Close the environment handle */
+   SQLFreeHandle(SQL_HANDLE_ENV, henv);
+</PRE></P>
+
+<H4>3.4.5.2 Связь через SQLDriverConnect</H4>
+<P><STRONG>SQLDriverConnect</STRONG> используется, чтобы соединиться с
+сервером, используя строку подключения. Можно использовать SQLDriverConnect
+вместо SQLConnect по следующим причинам:</P>
+
+<UL><LI>Позволить прикладной программе использовать специфическую для
+драйвера информацию подключения.
+<LI>Чтобы драйвер запрашивал пользователя относительно информации подключения.
+<LI>Соединяться без определения источника данных (DSN less connection).</UL>
+
+<P>Строка подключения может состоять из одного или большего количества
+параметров MyODBC подключения, отделяемых точкой с запятой (;). Если драйвер
+должен запрашивать пользователя относительно информации подключения, то он
+отображает диалог подключения.</P>
+
+<H4>3.4.5.3 Строка подключения для SQLDriverConnect</H4>
+<P>Используя myodbc3 как MySQL ODBC 3.51 DSN:
+<PRE>
+ConnectionString = "DSN=myodbc3"
+</PRE>
+
+<P>DSN Less Connection:
+<PRE>
+ConnectionString = "DRIVER={MySQL ODBC 3.51 Driver}; SERVER=localhost;\
+                    DATABASE=test; USER=monty; PASSWORD=monty;\
+                    OPTION=4;"
+</PRE>
+
+<H3><A NAME="Driver_Information">3.4.6
+Получение информации о драйвере и источнике данных</A></H3>
+<P>Как только подключение установлено, прикладная программа должна получить
+большее количество информации относительно драйвера и источника данных, с
+которым он связан. Использование следующего API поможет это устроить:</P>
+
+<UL><LI><CODE>SQLGetInfo</CODE>: возвращает общую информацию относительно
+драйвера и источника данных, связанного с подключением. Например, какие
+инструкции SQL прикладная программа выполнит? Прикладная программа использует
+скроллируемые курсоры? Транзакции? Процедуры? Длинные данные?
+
+<LI><CODE>SQLGetTypeInfo:</CODE> возвращает информацию относительно типов
+данных, поддерживаемых сервером. Драйвер возвращает информацию в форме набора
+результатов SQL. Типы данных предназначены для использования в инструкциях
+Data Definition Language (DDL).
+
+<LI><CODE>SQLGetFunctions:</CODE> возвращает информацию относительно того,
+поддерживает ли драйвер специфическую функцию ODBC. Прикладная программа
+может всегда использовать эту функцию, чтобы проверить, поддерживает ли
+драйвер некий API или нет.
+
+<P><STRONG>Пример:</STRONG> получает имя драйвера и версию, имя и версию
+сервера и соглашения SQL, поддерживаемые драйвером.
+<PRE>
+SQLHDBC     hdbc;
+SQLRETURN   retcode;
+SQLCHAR     strValue[50];
+SQLINTEGER  nValue;
+SQLSMALLINT pcbValue;
+
+/* Connect to the server */
+retcode = SQLConnect (..)
+if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+{
+   /* get the driver name */
+   retcode = SQLGetInfo(hdbc, SQL_DRIVER_NAME,
+                        strValue, 50, &#38;pcbValue);
+   if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+   {
+      printf("driver name:%s",strValue);
+   }
+   /* get the driver version */
+   retcode = SQLGetInfo(hdbc, SQL_DRIVER_VER, strValue, 50, &#38;pcbValue);
+   if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+   {
+      printf("driver version:%s",strValue);
+   }
+   /* get the server name */
+   retcode = SQLGetInfo(hdbc, SQL_DBMS_NAME, strValue, 50, &#38;pcbValue);
+   if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+   {
+      printf("server name:%s",strValue);
+   }
+   /* get the SQL conformance*/
+   retcode = SQLGetInfo(hdbc, SQL_SQL_CONFORMANCE,
+                        &#38;nValue, 0, &#38;pcbValue);
+   if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+   {
+      printf("SQL Conformance:%d",nValue);
+   }
+}
+</PRE>
+
+<H3><A NAME="Terminating_Connections">3.4.7 Прерывание соединения</A></H3>
+<P>Когда прикладная программа закончила использовать сервер MySQL, она должна
+в обязательном порядке закрыть подключение и освободить все предварительно
+распределенные дескрипторы. Чтобы завершать подключение из MyODBC нужно:</P>
+
+<UL><LI>Вызвать <CODE>SQLDisconnect</CODE>, чтобы закрыть
+подключение. Если имеются любые открытые операторные дескрипторы на этом
+подключении, то драйвер внутренне освобождает все открытые инструкции для
+этого подключения. Прикладная программа может затем использовать дескриптор
+подключения, чтобы повторно соединиться с тем же самым источником данных или
+присоединиться к другому источнику данных, если дескриптор подключения
+не был освобожден.
+
+<LI>Вызвать <CODE>SQLFreeHandle</CODE> с опцией SQL_HANDLE_DBC, чтобы
+освободить подключение и все ресурсы, связанные с дескриптором.
+
+<LI>Вызвать <CODE>SQLFreeHandle</CODE> с опцией SQL_HANDLE_ENV, чтобы
+освободить среду и все ресурсы, связанные с дескриптором.</UL>
+
+<P>Обратите внимание, если Вы используете драйвер MyODBC 2.50, Вы должны
+использовать SQLFreeConnect и SQLFreeEnv, чтобы освободить дескрипторы
+подключения и среды соответственно.</P>
+
+<H2><A NAME="Executing_SQL_Statements">3.5 Выполнение команд SQL</A></H2>
+<P>Ну ладно, подключение установлено, а дальше-то что? Надо работать с
+сервером, для этого все и затевалось. Работа эта происходит на базе обмена
+командами SQL и их результатами. Вот это самое сложное. Прикладная программа
+может представлять на рассмотрение любую инструкцию SQL, поддерживаемую
+сервером MySQL. ODBC-программы выполняют почти весь доступ к базе данных,
+выполняя инструкции SQL. Общая последовательность событий:
+<UL><LI><STRONG>Распределите операторный дескриптор</STRONG>
+<LI><STRONG>Установите факультативные операторные атрибуты</STRONG>,
+<LI><STRONG>Выполните инструкцию</STRONG>,
+<LI><STRONG>Соберите все результаты</STRONG> и наконец
+<LI><STRONG>Освободите операторный дескриптор</STRONG>.</UL>
+
+<H3><A NAME="Allocating_a_statement_handle">
+3.5.1 Распределение операторного дескриптора</A></H3>
+<P>Операторный дескриптор обеспечивает доступ к операторной информации, типа
+сообщений об ошибках, имени курсора и информации состояния для обработки
+инструкции SQL. Прежде, чем прикладная программа сможет представлять на
+рассмотрение серверу инструкцию SQL, она должна распределить операторный
+дескриптор, используя SQLAllocHandle (или SQLAllocStmt в MyODBC 2.50):
+
+<UL><LI>Прикладная программа объявляет переменную типа HSTMT. Это затем
+вызывает SQLAllocHandle и передает адрес этой переменной, дескриптор
+подключения, чтобы распределить инструкцию, и опцию SQL_HANDLE_STMT:
+<PRE>
+SQLHSTMT hstmt;
+SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &#38;hstmt) или
+SQLAllocStmt(hdbc, &#38;hstmt)
+</PRE>
+
+<LI>Driver Manager распределяет структуру, чтобы сохранить информацию
+относительно инструкции и вызывает SQLAllocHandle в драйвере с опцией
+SQL_HANDLE_STMT.
+
+<LI>Драйвер распределяет собственную структуру, чтобы сохранить информацию
+относительно инструкции и возвращает дескриптор инструкции драйвера назад в
+Driver Manager. С другой стороны, если Вы компонуете программу
+непосредственно с драйвером, то именно сам драйвер распределяет операторную
+структуру и возвращает ее адрес обратно прикладной программе.
+
+<LI>Driver Manager возвращает дескриптор инструкции прикладной программе.
+</UL>
+
+<P>Драйвер идентифицирует, которую инструкцию надо использовать при вызове
+функций ODBC через дескриптор инструкции.</P>
+
+<H3><A NAME="Setting_the_statement_attributes">
+3.5.2 Установка операторных атрибутов</A></H3>
+<P>Операторные атрибуты представляют собой характеристики инструкции.
+Например, они используются, чтобы установить имя курсора для специфической
+инструкции или задать максимальное количество строк, которые будут выбраны в
+одной инструкции выборки.</P>
+
+<P>Операторные атрибуты могут быть установлены с помощью SQLSetStmtAttr, а их
+актуальные параметры настройки можно узнать через вызов SQLGetStmtAttr
+(SQLSetStmtOption и SQLGetConnectOption соответственно для MyODBC 2.50).
+Поскольку решительно все операторные атрибуты имеют значения по умолчанию,
+прикладная программа не обязана их менять, можно оставить все как есть.</P>
+
+<H3><A NAME="Submitting_SQL_Statements">3.5.3 Передача на рассмотрение
+инструкций SQL</A></H3>
+<P>MyODBC позволяет прикладной программе представлять на рассмотрение
+инструкции SQL двумя различными способами:
+<UL><LI>Подготовленное выполнение
+<LI>Прямое выполнение</UL></P>
+
+<H4><A NAME="Prepared_Execution">3.5.3.1 Подготовленное выполнение</A></H4>
+<P>Подготовленное выполнение представляет собой эффективный способ выполнить
+инструкцию больше одного раза. Инструкция сначала компилируется в план
+доступа. План доступа затем будет выполнен столько раз, сколько понадобится.
+</P>
+
+<P>Подготовленное выполнение более предпочтительно, если прикладная программа:
+</P>
+<UL><LI>Выполняет инструкцию больше одного раза, меняя значения параметра.
+<LI>Нуждается в информации относительно инструкции SQL или набора
+результатов до выполнения.</UL>
+
+<P>Подготовленное выполнение главным образом достигнуто через MyODBC API
+SQLPrepare и SQLExecute. Подготовленная инструкция выполняется быстрее, чем
+неприготовленная инструкция или прямое выполнение потому, что драйвер
+компилирует инструкцию, строит для нее план доступа и возвращает
+идентификатор плана доступа обратно прикладной программе. Драйвер
+минимизирует затраты времени на обработку инструкции, поскольку он не должен
+каждый раз строить план доступа. Уменьшается и трафик.</P>
+
+<P><STRONG>Чтобы подготовить и выполнить инструкцию, прикладная программа:
+</STRONG>
+<UL><LI>Вызывает SQLPrepare и передает строку, содержащую инструкцию SQL.
+<LI>Устанавливает значения любых операторных параметров.
+<LI>Вызывает SQLExecute и делает любую дополнительную обработку, которая
+является необходимой, типа выборки данных.
+<LI>По мере надобности повторяет 2 и 3 шаги.
+<LI>Когда вызвана SQLPrepare, драйвер изменяет инструкцию SQL, чтобы
+использовать синтаксис MySQL без того, чтобы анализировать инструкцию. Это
+включает замену управляющих последовательностей. Но драйвер не возвращает
+никаких синтаксических и семантических ошибок.
+
+<LI>При вызове SQLExecute драйвер:
+<UL><LI>Получает текущий параметр, оценивает и преобразует его по мере
+необходимости.
+<LI>Посылает идентификатор плана доступа и преобразованные значения
+параметров на сервер MySQL.
+<LI>Возвращает любые ошибки. Это ошибки, возникшие во время выполнения
+программы, типа SQLSTATE 24000 (Invalid cursor state), а также синтаксические
+и семантические ошибки, если они есть.</UL></UL>
+
+<P><STRONG>Пример:</STRONG> этот пример объясняет, как прикладная программа
+может использовать подготовленное выполнение. Выборка готовит инструкцию
+INSERT и вставляет 100 строк данных, заменяя буферные значения.
+<PRE>
+SQLHSTMT hstmt;
+SQLRETURN retcode;
+
+retcode = SQLPrepare(hstmt, "INSERT INTO EMP(ID,NAME) VALUES(?,?)", SQL_NTS);
+if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+{
+   SQLINTEGER id;
+   SQLCHAR name[30];
+   /* do the binding for parameter 1, id */
+   retcode = SQLBindParameter(hstmt,1,SQL_PARAM_INPUT, SQL_C_LONG,
+                              SQL_INTEGER, 0,0, &#38;id, 0, NULL);
+   if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+   {
+      /* Now do the bindings for parameter 2, name */
+      retcode = SQLBindParameter(hstmt,1,SQL_PARAM_INPUT, SQL_C_CHAR,
+                                 SQL_VARCHAR, 0,0, name, sizeof(name),NULL);
+      if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+      {
+         /* Now insert data by changing id and name buffer values */
+         for (id=1; id &#60;= 100; id++)
+         {
+           /* Set name as Сmysql1Т, Сmysql2ТЕ */
+           sprintf(name,Фmysql%dФ,id);
+           retcode = SQLExecute(hstmt);
+         }
+      }
+  }
+  /* Free param buffer resources */
+  retcode = SQLFreeStmt(hstmt, SQL_REST_PARAMS);
+}
+</PRE>
+
+<H4><A NAME="Direct_Execution">3.5.3.2 Прямое выполнение</A></H4>
+<P>Прямое выполнение представляет собой самый простой способ выполнить
+инструкцию. Прямое выполнение обычно используется универсальными прикладными
+программами, которые формируют и выполняют инструкции во время выполнения.
+Например, следующий код формирует инструкцию SQL и выполняет ее один раз:
+<PRE>
+SQLCHAR *statement;
+
+// Build an SQL statement.
+printf("enter the SQL statement:");
+scanf("%s",&#38;statement);
+
+// Execute the statement.
+SQLExecDirect (hstmt, statement, SQL_NTS);
+</PRE>
+
+<P>Прикладная программа должна выполнить инструкции, используя именно
+прямое выполнение, если:
+
+<UL><LI>Инструкция нужна однократно.
+<LI>Прикладная программа не нуждается в информации относительно набора
+результатов до выполнения.</UL>
+
+<P>Основной недостаток использования прямого выполнения: инструкция SQL
+анализируется каждый раз, когда выполняется.</P>
+
+<P><STRONG>Чтобы выполнить инструкцию непосредственно, прикладная программа
+выполняет следующий набор действий:</STRONG>
+
+<UL><LI>Устанавливает значения любых параметров.
+<LI>Вызывает SQLExecDirect и передает строку, содержащую инструкцию SQL.
+<LI>При вызове SQLExecDirect драйвер:
+<UL><LI>Изменяет инструкцию SQL, чтобы использовать синтаксис MySQL без того,
+чтобы анализировать инструкцию. Это включает замену всеъ
+управляющих последовательностей языка.
+
+<LI>Получает актуальный параметр, оценивает его и изменяет инструкцию SQL,
+меняя маркеры параметра на данные с соответствующими преобразованиями.
+<LI>Посылает измененную инструкцию SQL MySQL для выполнения.
+
+<LI>Возвращает любые ошибки. Они включают диагностику выполнения, например,
+SQLSTATE 24000 (Invalid cursor state), синтаксические ошибки, типа SQLSTATE
+42000 (Syntax error or access violation) и семантические ошибки, вроде
+SQLSTATE 42S02 (Base table or view not found).</UL></UL>
+
+<P><STRONG>Пример:</STRONG><BR> этот пример объясняет, как прикладная
+программа может использовать прямое выполнение. Он создает таблицу,
+вставляет, модифицирует и удаляет некоторые строки данных, а в заключение
+удаляет всю таблицу.
+<PRE>
+SQLHSTMT hstmt;
+SQLRETURN retcode;
+
+/* create table as "my_test" with integer and text field */
+retcode = SQLExecDirect(hstmt, "CREATE TABLE my_test(id int,
+                        name text", SQL_NTS);
+if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+{
+   printf("table created successfully..");
+   /* insert 2 rows of data to the table Сmy_testТ */
+   retcode = SQLExecDirect(hstmt, "INSERT INTO my_test VALUES(10,'mysql')",
+                           SQL_NTS);
+   if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+   {
+      printf("row 1 inserted successfully..");
+   }
+   retcode = SQLExecDirect(hstmt,"INSERT INTO my_test VALUES(20,'monty')",
+                           SQL_NTS);
+   if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+   {
+      printf("row 2 inserted successfully..");
+   }
+   /* Now update the second row by changing id from 20 to 100 */
+   retcode = SQLExecDirect(hstmt, "UPDATE my_test SET id=100
+                           WHERE name='monty', SQL_NTS);
+   if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+   {
+      SQLINTEGER rowcount;
+      printf("row updated successfully..");
+      /* Get total number of rows affected by the update statement */
+      retcode=SQLRowCount(hstmt, &#38;rowcount);
+      printf("total rows affected by the updated statement:%d",rowcount);
+   }
+   /* Now delete the newly updated row */
+   retcode = SQLExecDirect(hstmt, "DELETE FROM my_test WHERE id=100",
+                           SQL_NTS);
+   if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+   {
+      SQLINTEGER rowcount;
+      printf("row deleted successfully..");
+      /* Get total number of rows affected by the delete statement */
+      retcode=SQLRowCount(hstmt, &#38;rowcount);
+      printf("total rows affected by the delete statement:%d",rowcount);
+   }
+}
+/* now drop the table Сmy_testТ */
+retcode = SQLExecDirect(hstmt,"DROP TABLE my_test", SQL_NTS);
+if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+{
+   printf(Уtable dropped successfully);
+}
+</PRE>
+
+<H4><A NAME="Statement_Parameters">3.5.3.3 Операторные параметры</A></H4>
+<P>Параметром является переменная в инструкции SQL. Инструкция SQL может
+содержать маркеры параметров ("<STRONG>?</STRONG>"), которые указывают
+значения, которые драйвер получает из прикладной программы
+во время выполнения.</P>
+
+<P>Например, прикладная программа могла бы использовать следующую инструкцию,
+чтобы вставить строку данных в таблицу EMPLOYEE:
+<PRE>
+INSERT INTO EMPLOYEE (NAME.AGE) VALUES (?,?)
+</PRE>
+
+<P>Прикладная программа может использовать маркеры параметров вместо
+литеральных или постоянных значений в инструкции SQL по следующим причинам:
+
+<UL><LI>Требуется выполнить ту же самую подготовленную инструкцию несколько
+раз с различными значениями параметра.
+<LI>Значения параметра неизвестны, когда инструкция готовится.
+<LI>Значения параметра должны быть явно преобразованы из одного
+типа данных в другой.</UL>
+
+<P>Чтобы устанавливать значение параметра, прикладная программа просто
+устанавливает значение переменной, привязанной к этому параметру, используя
+SQLBindParameter. Неважно, когда это значение установлено, пока это сделано
+прежде, чем инструкция выполнена. Прикладная программа может устанавливать
+значение в любое время и менять его столько раз, сколько потребуется.</P>
+
+<P>Когда инструкция выполнена, драйвер просто получает актуальное значение
+переменной. Это особенно полезно, когда подготовленная инструкция выполнена
+больше, чем однажды: прикладная программа устанавливает новые значения для
+некоторых или всех переменных, каждый раз, когда инструкция выполнена.</P>
+
+<P>Если буфер длин использован в вызове SQLBindParameter, он должен быть
+установлен в одно из следующих значений прежде, чем инструкция выполнена:
+<UL><LI>Длина данных в байтах в связанной переменной. Драйвер проверяет эту
+длину только, если переменная символьная или двоичная (ValueType равен
+SQL_C_CHAR или SQL_C_BINARY).
+<LI>SQL_NTS. Данные являются строкой с нулевым символом в конце.
+<LI>SQL_NULL_DATA. Значение данных равно NULL, и драйвер игнорирует
+значение связанной переменной.
+<LI>SQL_DATA_AT_EXEC или результат макрокоманды SQL_LEN_DATA_AT_EXEC.
+Значение параметра должно быть послано с SQLPutData.</UL>
+
+<P>Расположения параметров, заданные через SQLBindParameter, останутся
+привязанными к маркерам параметра до вызова SQLFreeStmt из прикладной
+программы с опцией SQL_RESET_PARAMS или SQL_DROP. Прикладная программа может
+связать новое место в памяти с маркером параметра в любое время, вызывая
+SQLBindParameter. <STRONG>Пример:</STRONG>
+<PRE>
+SQLUINTEGER   id;
+SQLINTEGER    idInd;
+
+// Prepare a statement to insert id
+SQLPrepare(hstmt, "INSERT INTO my_table VALUES(?)", SQL_NTS);
+
+// Bind id to the parameter for the id column
+SQLBindParameter(hstmt, 1, SQL_PARAM_INPUT, SQL_C_ULONG,
+                 SQL_LONG, 0, 0, &#38;id, 0, &#38;idInd);
+
+// Repeatedly execute the statement, to insert 100 rows of data
+for (id=1; id &#60;= 100; id++)
+{
+  SQLExecute(hstmt);
+}
+</PRE>
+
+<H4><A NAME="Sending_Long_or_Blob_Data">3.5.3.4 Передача данных Long или Blob
+</A></H4>
+<P>MySQL определяет данные long как любые символьные или двоичные данные,
+превышающие некий размер, обычно 254 символа. Не всегда реально сохранить в
+памяти целиком элемент длинных данных. Пример: здоровенный текстовый документ
+(например, эта книга в типографском формате PostScript) или растровая
+картинка. А поскольку такие данные не могут быть сохранены в одиночном
+буфере, прикладная программа посылает их драйверу по частям через SQLPutData,
+когда инструкция выполнена.</P>
+
+<P>Обратите внимание, что прикладная программа может фактически посылать
+любой тип данных во времени выполнения с помощью SQLPutData, хотя только
+символьные и двоичные данные могут быть представлены частями. Однако, если
+данные достаточно маленькие, чтобы разместиться в одиночном буфере, не
+имеется вообще никакой причины использовать SQLPutData. Намного проще
+позволять драйверу получать данные из буфера напрямую.</P>
+
+<P>Когда Вы должны ввести большие количества данных в столбец long varchar
+или в long varbinary, Вы можете использовать ODBC-функции SQLPutData и
+SQLParamData, чтобы ввести данные в меньших сегментах. Данные обеспечены в
+сегментах через SQLPutData, а SQLParamData используется, чтобы проверить
+требуют ли параметры данных.</P>
+
+<P><STRONG>Чтобы посылать длинные данные во время выполнения в сегментах,
+прикладная программа выполняет следующие действия:</STRONG>
+<UL><LI><CODE>Готовит SQL-инструкцию</CODE> с маркерами параметра там, где
+будут данные long или blob. Используется SQLPrepare.
+
+<LI><CODE>Устанавливает параметр pcbValue</CODE> в функции SQLBindParameter в
+значение SQL_DATA_AT_EXEC или SQL_LEN_DATA_AT_EXEC. Это позволяет драйверу
+узнать, что Вы будете обеспечивать значения для этого параметра во время
+выполнения, используя SQLPutData.
+
+<LI><CODE>Выполняет команду SQL</CODE>. Если инструкция уже подготовлена,
+выполняется подготовленная инструкция, используя SQLExecute или
+SQLExecDirect. Если имеются любые параметры, которые должны получить данные
+во времени выполнения, то драйвер возвращает SQL_NEED_DATA.
+
+<LI><CODE>Вызывает SQLParamData</CODE> в ответ на возврат значения
+SQL_NEED_DATA. Если длинные данные должны быть посланы, SQLParamData вернет
+SQL_NEED_DATA. В буфере, указанном параметром ValuePtrPtr, драйвер возвращает
+значение, которое идентифицирует параметр ожидания данных при выполнении.
+Если имеется больше, чем один такой параметр, прикладная программа должна
+использовать это значение, чтобы определить, который параметр ожидается.
+Заметьте, что данные могут быть запрошены драйвером в любом порядке.
+
+<LI><CODE>Вызывает SQLPutData:</CODE>, чтобы послать данные параметра
+драйверу. Если данные параметра не вписываются в одиночный буфер, что часто
+имеет место с длинными данными, вызовы SQLPutData из прикладной программы
+будут повторяться для передачи последующих порций данных.
+
+<LI><CODE>Вызывает SQLParamData:</CODE> если код возврата равен
+SQL_NEED_DATA, следующий параметр, который ожидает данные во время
+выполнения, готов их получить, и Вы должны вернуться к шагу 4. Если код
+возврата равен SQL_SUCCESS или хотя бы SQL_SUCCESS_WITH_INFO, все данные для
+всех параметров, ожидающих данных во время выполнения, посланы, и инструкция
+SQL завершила выполнение.</UL>
+
+<H3><A NAME="Freeing_a_Statement_Handle">3.5.4
+Освобождение операторного дескриптора</A></H3>
+<P>Перед выполнением новой инструкции SQL, прикладная программа должна
+убедиться, что текущие операторные параметры настройки соответствующие. Они
+включают операторные атрибуты, связанные параметры и наборы результатов.
+Вообще, параметры и наборы результатов для старой инструкции SQL должны быть
+освобождены (вызовом SQLFreeStmt с опцией SQL_RESET_PARAMS или SQL_UNBIND).
+</P>
+
+<P>Когда прикладная программа закончила использовать инструкцию, она вызывает
+SQLFreeHandle с опцией SQL_HANDLE_STMT или SQLFreeStmt с опцией SQL_DROP,
+чтобы освободить инструкцию. Вызов SQLDisconnect автоматически освобождает
+все инструкции для данного подключения.</P>
+
+<P>Функция SQLFreeStmt имеет четыре опции:</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Опция</STRONG></TD><TD><STRONG>Что она делает</STRONG></TD>
+</TR>
+<TR><TD>SQL_CLOSE</TD><TD>Закрывает курсор, если он существует, и отбрасывает
+ждущие обработки результаты. Прикладная программа может использовать
+операторный дескриптор позже.</TD></TR>
+<TR><TD>SQL_DROP</TD><TD>Закрывает курсор, если он существует, отбрасывает
+ждущие обработки результаты и освобождает все ресурсы,
+связанные с операторным дескриптором.</TD></TR>
+<TR><TD>SQL_UNBIND</TD><TD>Освобождает все буфера возвратов, связанные
+SQLBindCol с операторным дескриптором.</TD></TR>
+<TR><TD>SQL_RESET_PARAMS</TD><TD>Освобождает все буфера параметров,
+запрошенные SQLBindParameter для операторного дескриптора.</TD></TR></TABLE>
+
+<H2><A NAME="Retrieving_Results">3.6 Получение результатов</A></H2>
+<P>Набор результатов представляет собой набор строк, который соответствует
+некоторым критериям. Когда прикладная программа должна получить данные из
+базы данных, наиболее общий метод состоит в том, чтобы выполнить запрос,
+используя инструкции <STRONG>SELECT</STRONG> или <STRONG>SHOW</STRONG>.</P>
+
+<H3><A NAME="How_to_know_whether_the_result_set_is_created_or_not?">3.6.1
+Как узнать, создан ли набор результатов или нет?</A></H3>
+<P>В большинстве случаев, когда прикладная программа не уверена, относительно
+того, вернула ли специфическая инструкция набор результатов, она должна
+вызвать SQLNumResultCols, чтобы определить число столбцов в наборе
+результатов. Если это 0, инструкция не создала набор результатов.</P>
+
+<P>Прикладная программа может вызывать SQLNumResultCols в любой момент после
+того, как инструкция подготовлена или выполнена. Обратите внимание, что если
+Вы вызываете SQLNumResultCols на подготовленной, но не выполненной
+инструкции, прикладная программа теряет в эффективности, поскольку драйвер
+внутренне выполняет подготовленную инструкцию, чтобы вернуть информацию
+обратно прикладной программе.</P>
+
+<P>ОБРАТИТЕ ВНИМАНИЕ, для инструкций типа <STRONG>INSERT</STRONG>,
+<STRONG>UPDATE</STRONG> или <STRONG>DELETE</STRONG> вызов SQLRowCount из
+прикладной программы вернет число строк, на которые воздействует инструкция.
+Для других инструкций SQL драйвер возвращает любой набор результатов, и код
+возврата SQLExecute или SQLExecDirect обычно единственный источник информации
+относительно того, была ли инструкция успешно выполнена.</P>
+
+<H3><A NAME="Getting_Result_Set_Metadata">
+3.6.2 Получение набора результатов</A></H3>
+<P>Прикладные программы требуют метаданных для большинства операций с набором
+результатов. Например, прикладная программа использует тип данных столбца,
+чтобы определить, какую переменную связать с этим столбцом. Это использует
+байт длины символьного столбца, чтобы определить, сколько места нужно, чтобы
+отобразить данные из этого столбца. Как прикладная программа определяет
+метаданные для столбца, зависит от типа прикладной программы.</P>
+
+<P>SQLDescribeCol и SQLColAttribute (SQLColAttributes в случае MyODBC 2.50)
+используются, чтобы получить набор метаданных. Различие между этими двумя
+функциями в том, что SQLDescribeCol всегда возвращает те же самые пять частей
+информации (имя столбца, тип данных, точность, масштаб и допустимость null),
+а вот SQLColAttribute возвращает часть информации, запрошенную прикладной
+программой. Однако, SQLColAttribute может возвращать намного более богатый
+набор метаданных, включая чувствительность столбца к регистру, размер
+отображения, возможность поиска и тому подобное.</P>
+
+<H3><A NAME="Fetching_Data">3.6.3 Выборки данных</A></H3>
+<P>Чтобы получить строку данных из набора результатов, прикладная программа:
+
+<UL><LI>Вызывает SQLBindCol, чтобы связать столбцы набора результатов с
+адресами в памяти, если это еще не сделано.
+
+<LI>Вызывает SQLFetch, чтобы перейти на следующую строку в наборе результатов
+и получить данные для всех столбцов.</UL>
+
+<P>Данные, выбранные из сервера MySQL, возвращены прикладной программе
+драйвером в переменных, которые прикладная программа распределила для этой
+цели. Прежде, чем это может быть выполнено, прикладная программа должна
+связать эти переменные со столбцами набора результатов, используя SQLBindCol.
+</P>
+
+<P>Прикладные программы могут связать столько столбцов набора результатов,
+сколько сочтут нужным. Когда строка данных выбрана, драйвер возвращает данные
+для связанных столбцов прикладной программе. Данные могут быть выбраны и из
+несвязанных столбцов, вызывая SQLGetData. Это обычно делается, чтобы получить
+длинные данные, которые часто превышают длину одиночного буфера, и должны
+быть получены по частям.</P>
+
+<P>Переменная остается связанной со столбцом до тех пор, пока столбец не
+будет отвязан явно вызовом SQLBindCol с указателем null в качестве адреса
+переменной, или пока не вызвана функция SQLFreeStmt с опцией SQL_UNBIND.</P>
+
+<H2><A NAME="Cursor_Operations">3.7 Операции с курсором</A></H2>
+<P>Курсор представляет собой инструмент, который позволяет Вам построчно
+проходить через набор результатов. Прикладные программы могут выполнять много
+действий на каждой индивидуальной строке в данном наборе результатов. Курсор
+открыт на наборе результатов выполнением запроса. Курсор в наборе результатов
+указывает текущую (актуальную) позицию и то, какая строка будет возвращена.
+</P>
+
+<P>MyODBC поддерживает работу с двумя типами курсоров, а именно с
+<STRONG>блочным</STRONG> и со <STRONG>скроллируемым</STRONG>.</P>
+
+<H3><A NAME="Block_Cursor">3.7.1 Блочный курсор: выборка
+нескольких строк данных</A></H3>
+<P>Прикладная программа может выбирать много строк данных, используя одну
+инструкцию выборки через блочный курсор. Строки, возвращенные в одиночной
+выборке с блочным курсором, названы rowset. Важно не путать rowset с набором
+результатов. Набор результатов поддерживается сервером MySQL, в то время как
+rowset поддерживается драйвером в буферах прикладных программ. В то время как
+набор результатов фиксирован, rowset меняет позицию и удовлетворяет каждый
+раз новому набору строк. Прикладная программа устанавливает размер rowset,
+используя SQLSetStmtAttr с опцией SQL_ATTR_ROW_ARRAY_SIZE.</P>
+
+<H3><A NAME="Cursor_Types">3.7.2 Типы курсоров</A></H3>
+<P>MyODBC 3.51 три типа скроллируемых курсоров, используя которые прикладная
+программа может двигаться в наборе результатов:
+<UL><LI>Только вперед
+<LI>Статический
+<LI>Динамический (только для MyODBC 3.51.01 и выше)</UL>
+
+<P>Чтобы работать с динамическим курсором, надо проверить опцию "Enable
+Dynamic Cursor Type" в настройках DSN или передать в строке
+подключения параметр OPTION=32.</P>
+
+<P>Прикладная программа может устанавливать тип курсора через SQLSetStmtAttr
+(или SQLSetStmtOption в драйвере MyODBC 2.50) с опцией SQL_ATTR_CURSOR_TYPE.
+По умолчанию драйвер неявно использует курсор типа "только вперед".</P>
+
+<P>Применяя курсор типа "только вперед", прикладная программа может идти
+только вперед в наборе результатов и не может вернуться назад. В статическом
+типе курсора прикладная программа может продвигаться вперед, назад или вообще
+к любому желательному расположению в наборе результатов.</P>
+
+<H3><A NAME="Result_Set_Scrolling">3.7.3 Скроллинг набора результатов</A>
+</H3>
+<P>При использовании скроллируемых курсоров, прикладные программы вызывают
+SQLFetchScroll (или SQLExtendedFetch для MyODBC 2.50), чтобы установить
+курсор и строки выборок. SQLFetchScroll поддерживает как относительную
+(следующая строка, предыдущая строка и переход на n строк), так и абсолютную
+(первая строка, последняя строка и строка n) прокрутку (скроллинг). Параметры
+FetchOrientation и FetchOffset в вызове функции SQLFetchScroll определяют,
+который rowset выбрать.</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>FetchOrientation</STRONG></TD><TD><STRONG>Значение</STRONG>
+</TD></TR>
+<TR><TD>SQL_FETCH_NEXT</TD><TD>Вернет следующий rowset. Это эквивалентно
+вызову SQLFetch. SQLFetchScroll игнорирует значение FetchOffset.</TD></TR>
+<TR><TD>SQL_FETCH_PRIOR</TD><TD>Вернет предшествующий rowset. SQLFetchScroll
+игнорирует значение FetchOffset.</TD></TR>
+<TR><TD>SQL_FETCH_FIRST</TD><TD>Вернет первый rowset в наборе результатов.
+SQLFetchScroll игнорирует значение FetchOffset.</TD></TR>
+<TR><TD>SQL_FETCH_LAST</TD><TD>Вернет последний полный rowset в наборе
+результатов. SQLFetchScroll игнорирует значение FetchOffset.</TD></TR>
+<TR><TD>SQL_FETCH_ABSOLUTE</TD><TD>Вернет rowset, начинающийся в строке
+FetchOffset.</TD></TR>
+<TR><TD>SQL_FETCH_RELATIVE</TD><TD>Вернет FetchOffset строк от начала
+текущего rowset.</TD></TR></TABLE>
+
+<P>Обратите внимание, что при использовании типа курсора "только вперед",
+прикладная программа может только продвигаться на SQL_FETCH_NEXT в то время,
+как при использовании статических и/или динамических типов можно переходить в
+любое желательное расположение.</P>
+
+<H3><A NAME="Positioned_update_and_delete">3.7.4
+Позиционные модификации и удаление</A></H3>
+<P>Прикладные программы могут модифицировать или удалять желательные строки в
+наборе результатов, используя следующий набор обращений ODBC:</P>
+
+<UL><LI>Вызовом <CODE>SQLSetPos</CODE>
+<LI>Выполнением позиционных команд SQL, используя <CODE>SQLExecute</CODE> или
+<CODE>SQLExecDirect</CODE>.</UL>
+
+<P><STRONG>Чтобы использовать позиционное удаление или модификацию,
+прикладная программа должна:</STRONG>
+
+<UL><LI>Установить имя курсора, вызывая SQLSetCursorName. Если прикладная
+программа не установила имя курсора явно, то драйвер возвращает заданное по
+умолчанию имя курсора.
+
+<LI>Открыть набор результатов инструкцией SELECT.
+<LI>Установить курсор в строку, которую нужно модифицировать или удалить.
+Прикладная программа может делать это, вызывая SQLFetchScroll (или
+SQLExtendedFetch в случае MyODBC 2.50), чтобы получить rowset, содержащий
+требуемую строку, и вызывая SQLSetPos с SQL_POSITION, чтобы установить курсор
+в эту строку в рамках rowset.
+
+<LI>Получить имя курсора, вызывая SQLGetCursorName. Обратите внимание, что,
+если прикладная программа не устанавливает имя курсора явно перед открытием
+набора результатов в том же самом операторном дескрипторе через вызов функции
+SQLSetCursorName, драйвер возвращает заданное по умолчанию имя курсора.
+
+<LI>Прикладная программа выполняет позиционную инструкцию на другом
+операторном дескрипторе, чем тот, который используется набором результатов.
+</UL>
+
+<P>Синтаксис этих инструкций:
+<PRE>
+UPDATE table-name SET column-identifier = {expression | NULL}
+                  [, column-identifier = {expression | NULL}]...
+                  WHERE CURRENT OF cursor-name
+DELETE FROM table-name WHERE CURRENT OF cursor-name
+</PRE>
+
+<P>Здесь <CODE>cursor-name</CODE> задает имя курсора, возвращенное
+SQLGetCursorName. <STRONG>Пример:</STRONG>
+<PRE>
+HSTMT  hstmtSelect;
+HSTMT  hstmtUpdate;
+UCHAR  szLname[NAME_LEN],szFname[NAME_LEN],cursorName[10];
+SWORD  cursorLen;
+SDWORD cbName;
+
+/* Allocate the statement handles */
+retcode = SQLAllocStmt(hdbc, &#38;hstmtSelect);
+retcode = SQLAllocStmt(hdbc, &#38;hstmtUpdate);
+
+/* SELECT the result set and bind its columns to local storage  */
+retcode = SQLExecDirect(hstmtSelect, "SELECT lname,fname FROM EMP", SQL_NTS);
+retcode = SQLBindCol(hstmtSelect, 1, SQL_C_CHAR, szLname, NAME_LEN,
+                     &#38;cbLname);
+retcode = SQLBindCol(hstmtSelect, 2, SQL_C_CHAR, szFname, NAME_LEN,
+                     &#38;cbFname);
+
+/* get the cursor name */
+retcode = SQLGetCursorName(hstmtSelect, cursorName, 10, &#38;cursorLen);
+
+/* Position to third row in the result set */
+retcode = SQLFetchScroll(hstmtSelect,SQL_FETCH_ABSOLUTE, 3);
+if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO));
+
+/* Perform a positioned update */
+sprintf(updsql, "UPDATE EMP SET fname = 'monty' WHERE CURRENT OF %s",
+        cursorName);
+retcode = SQLExecDirect(hstmtUpdate, updsql, SQL_NTS);
+</PRE>
+
+<H3><A NAME="Using_SQLSetPos">3.7.5 Использование SQLSetPos</A></H3>
+<P>Прикладные программы могут модифицировать или удалять любую строку в
+текущем (актуальном) rowset, используя SQLSetPos. Это удобный вариант для
+построения и выполнения инструкции SQL.</P>
+
+<P>SQLSetPos функционирует на текущем (актуальном) rowset и может
+использоваться только после обращения к SQLFetchScroll или SQLExtendedFetch.
+Прикладная программа определяет номер строки, которую надо модифицировать,
+удалить или вставить, и драйвер получает новые данные для этой строки из
+буферов rowset. SQLSetPos может также использоваться, чтобы обозначить
+определенную строку как текущую или обновить специфическую строку в rowset
+из источника данных.</P>
+
+<P>Размер Rowset может быть установлен обращением к SQLSetStmtAttr с опцией
+SQL_ATTR_ROW_ARRAY_SIZE.</P>
+
+<P>Первая строка в rowset имеет номер 1. Параметр RowNumber в SQLSetPos
+должен идентифицировать строку в rowset. В смысле, значение должно быть в
+диапазоне между 1 и числом строк, которые были выбраны в последний раз (что
+может быть меньше, чем размер rowset). Маленькая хитрость: если RowNumber
+равен 0, операция будет применяться к каждой строке в rowset.</P>
+
+<P><STRONG>Модификация строк в rowset:</STRONG><BR>
+Операция SQLSetPos с параметром SQL_UPDATE предписыает серверу модифицировать
+одну или более выбранных строк таблицы, используя данные в буферах прикладных
+программ для каждого связанного столбца.</P>
+
+<P>Чтобы модифицировать строки с SQLSetPos, прикладная
+программа делает следующее:
+<UL><LI>Помещает новые значения данных в буфера rowset.
+<LI>Устанавливает значение в буфере длин каждого столбца по мере
+необходимости. Это байт длины данных или SQL_NTS для столбцов, связанных со
+строковыми буферами, или SQL_NULL_DATA для любых столбцов, которые
+будут установлены в NULL.
+<LI>Вызывает SQLSetPos с параметром Operation установленным в SQL_UPDATE и
+RowNumber равным числу строк для обновления. Маленькая хитрость: если
+RowNumber равен 0, операция будет применяться к каждой строке в rowset.</UL>
+
+<P>После завершения SQLSetPos текущей строкой будет модифицируемая строка.
+Прикладная программа может проверять общее количество строк, на которые
+воздействует инструкция update, вызывая SQLRowCount и статус обновления через
+атрибут SQL_ATTR_ROW_STATUS_PTR.</P>
+
+<P><STRONG>Удаление строк:</STRONG><BR>
+Параметр SQL_DELETE в SQLSetPos предписывает серверу удалить одну или
+несколько строк в таблице. Чтобы удалить строки с помощью SQLSetPos,
+программа вызывает SQLSetPos с параметром Operation, установленным в
+SQL_DELETE и RowNumber равным числу удаляемых строк. Осторожно: если
+RowNumber равен 0, будут удалены все строки.</P>
+
+<P>После завершения SQLSetPos, удаленная строка становится текущей, и
+состояние равно SQL_ROW_DELETED. Строка не может использоваться в любых
+дальнейших позиционных операциях.</P>
+
+<H2><A NAME="Catalog_Functions">3.8 Функции каталога</A></H2>
+<P>Сервер MySQL поддерживает синтаксис <STRONG>SHOW</STRONG> SQL, чтобы
+обеспечить информацию относительно баз данных, таблиц, столбцов или состояния
+сервера. Прикладные программы ODBC могут получать метаинформацию относительно
+сервера, используя следующие функции каталога:</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Функция</STRONG></TD><TD><STRONG>Описание</STRONG></TD></TR>
+<TR><TD>SQLTables</TD><TD>Возвращает список каталогов (баз данных), таблиц
+или типы таблиц.</TD></TR>
+<TR><TD>SQLColumns</TD><TD>Возвращает список столбцов в одной или нескольких
+таблицах.</TD></TR>
+<TR><TD>SQLStatistics</TD><TD>Возвращает список статистики относительно одной
+таблицы. Также возвращает список индексов, связанных с этой таблицей.</TD>
+</TR>
+<TR><TD>SQLSpecialColumns</TD><TD>Возвращает список столбцов, который
+уникально идентифицирует строку в одной таблице. Также возвращает список
+столбцов, которые автоматически модифицируются в этой таблице.</TD></TR>
+<TR><TD>SQLPrimaryKeys</TD><TD>Возвращает список столбцов, которые составляют
+первичный ключ в одной таблице.</TD></TR>
+<TR><TD>SQLForeignKeys</TD><TD>Возвращает список внешних ключей в одной
+таблице или список внешних ключей в других таблицах, которые обращаются к ней.
+</TD></TR>
+<TR><TD>SQLTablePrivileges</TD><TD>Возвращает список привилегий, связанных с
+таблицей или несколькими таблицами сразу.</TD></TR>
+<TR><TD>SQLColumnPrivileges</TD><TD>Возвращает список привилегий, связанных с
+одним или несколькими столбцами только в одной таблице.</TD></TR>
+<TR><TD>SQLGetTypeInfo</TD><TD>Возвращает список типов данных SQL,
+поддерживаемых сервером. Эти типы данных используются в командах CREATE
+TABLE и ALTER TABLE.</TD></TR></TABLE>
+
+<H2><A NAME="Transaction_Control">3.9 Управление транзакциями</A></H2>
+<P>Транзакция представляет собой последовательность инструкций SQL, которые
+формируют логический модуль. Каждая инструкция SQL в транзакции выполняет
+часть задачи, и все они необходимы для выполнения некоего задания. Только
+когда все инструкции SQL в транзакции выполнены успешно, задачу можно
+обрабатывать как завершенную. Имеется общее управление
+потоком данных в транзакции:
+<UL><LI>Звауск транзакции
+<LI>Выполнение транзакции
+<LI>Завершение или отмена транзакции</UL>
+
+<P>По умолчанию MyODBC/MySQL работает в режиме autocommit. Это означает, что
+как только Вы выполняете инструкцию SQL, MySQL сохранит данные на диске:
+механизм транзакций выключен. Если Вы используете транзакционно-безопасные
+таблицы (например, BDB или InnoDB), Вы можете перевести MySQL в режим
+не-autocommit с командой SQL:
+<PRE>
+SET AUTOCOMMIT=0
+</PRE></P>
+
+<P>Через MyODBC Вы можете устанавливать AUTOCOMMIT в ON или в OFF, используя
+SQLSetConnectAttr (или SQLSetConnectOption в MyODBC 2.50) с атрибутом
+SQL_ATTR_AUTOCOMMIT. После этого Вы должны использовать SQLEndTran (или
+SQLTransact в MyODBC 2.50) для завершения транзакции или ее отмены (если Вы
+хотите игнорировать изменения, которые Вы сделали, начиная с начала Вашей
+транзакции), используя опции SQL_COMMIT или SQL_ROLLBACK.</P>
+
+<P><STRONG>Пример:</STRONG><BR> прикладная программа делает следующий набор
+операций, чтобы показать транзакционное поведение:
+<UL><LI>Создает таблицу типа BDB или типа InnoDB.
+<LI>Выключает режим AUTOCOMMIT.
+<LI>Вставляет строку данных и завершает транзакцию.
+<LI>Вставляет вторую строку данных и отменяет эту транзакцию.
+<LI>Теперь Вы должны видеть только одну (первую) строку данных в таблице.</UL>
+
+<P>Вы можете попробовать сделать то же самое с InnoDB, меняя тип таблицы.
+<PRE>
+SQLHDBC hdbc;
+SQLHSTMT hstmt;
+
+/* Set AUTOCOMMIT to OFF */
+SQLSetConnectOption(hdbc,SQL_AUTOCOMMIT,SQL_AUTOCOMMIT_OFF);
+
+/* CREATE TABLE t_tran of TYPE BDB */
+SQLExecDirect(hstmt,"drop table if exists t_tran",SQL_NTS);
+SQLTransact(NULL,hdbc,SQL_COMMIT);
+SQLExecDirect(hstmt,"create table t_tran(col1 int, col2 varchar(30))
+              TYPE= BDB",SQL_NTS);
+SQLTransact(NULL,hdbc,SQL_COMMIT);
+
+/* INSERT A ROW OF DATA */
+SQLExecDirect(hstmt,"insert into t_tran values(10,'venu')",SQL_NTS);
+
+/* Now, commit the insert */
+SQLTransact(NULL,hdbc,SQL_COMMIT);
+
+/* Again INSERT second row of data */
+SQLExecDirect(hstmt,"insert into t_tran values(20,'mysql')",SQL_NTS);
+
+/* Rollback the previous INSERT */
+SQLTransact(NULL,hdbc,SQL_ROLLBACK);
+
+/* Now FETCH bac and check whether it has one row or not. */
+SQLFreeStmt(hstmt,SQL_CLOSE);
+SQLExecDirect(hstmt,"select * from t_tran",SQL_NTS);
+SQLFetch(hstmt);
+assert(SQLFetch(hstmt) == SQL_NO_DATA_FOUND);
+SQLFreeStmt(hstmt,SQL_CLOSE);
+</PRE>
+
+<P>Обратите внимание, что если Вы используете драйвер MyODBC 3.51, замените
+SQLSetConnectOption на SQLSetConnectAttr, а SQLTransact на SQLEndTran.</P>
+
+<H2><A NAME="Getting_Diagnostic_Information">3.10
+Получение диагностической информации</A></H2>
+<P>Все функции в MyODBC возвращают диагностическую информацию двумя
+способами. Код возврата функции указывает полный успех, сбой или другую
+релевантную информацию о функции. Если прикладная программа хочет получить
+детализированную информацию относительно функционального состояния, то
+диагностические записи это легко обеспечивают. Диагностическая информация
+используется, чтобы отследить ошибки программирования, типа недопустимых
+дескрипторов), недопустимой функциональной последовательности и ошибок
+синтаксиса в инструкциях SQL. Это также используется во время выполнения,
+чтобы перехватить ошибки во время выполнения программы и предупреждения типа
+усечения данных, нарушений прав доступа и ошибок синтаксиса в инструкциях
+SQL, введенных пользователем.</P>
+
+<P><STRONG>Коды возврата:</STRONG><BR> каждая функция в ODBC возвращает код,
+известный как код возврата. Следующее представляет собой различные коды
+возврата, возвращаемые MyODBC.</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Код возврата</STRONG></TD><TD><STRONG>Описание</STRONG></TD>
+</TR>
+<TR><TD>SQL_SUCCESS</TD><TD>Все в порядке.</TD></TR>
+<TR><TD>SQL_SUCCESS_WITH_INFO</TD><TD>Все в порядке, но некоторая информация
+возвращается в качетсве предупреждения. Прикладная программа может вызывать
+SQLGetDiagRec (или SQLError для MyODBC 2.50) или SQLGetDiagField, чтобы
+получить дополнительную информацию.</TD></TR>
+<TR><TD>SQL_ERROR</TD><TD>Ошибка: функция провалилась. Прикладная программа
+может вызывать SQLGetDiagRec (или SQLError для MyODBC 2.50) или
+SQLGetDiagField, чтобы получить дополнительную информацию.</TD></TR>
+<TR><TD>SQL_NO_DATA</TD><TD>Данные не могут быть получены (конец набора?).
+</TD></TR>
+<TR><TD>SQL_NO_DATA_FOUND</TD><TD>Это синоним для SQL_NO_DATA в случае MyODBC
+2.50.</TD></TR>
+<TR><TD>SQL_INVALID_HANDLE</TD><TD>Недопустимый дескриптор был обнаружен. Это
+указывает на ошибку программирования.</TD></TR>
+<TR><TD>SQL_NEED_DATA</TD><TD>Драйвер указывает, что прикладная программа
+должна послать значения данных в качестве параметра времени выполнения.</TD>
+</TR></TABLE>
+
+<P>Когда происходит ошибка в прикладной программе, то есть когда функция
+возвратит SQL_ERROR или SQL_SUCCESS_WITH_INFO, прикладная программа может
+запрашивать диагностическую информацию, вызывая функции SQLGetDiagRec или
+SQLGetDiagField из драйвера. В MyODBC 2.50 прикладная программа может
+использовать SQLError для выполнения этой работы. При использовании драйвера
+MyODBC 3.51, прикладная программа может запрашивать большее количество
+диагностических записей, используя SQLGetDiagField.</P>
+
+<P><STRONG>Применение SQLGetDiagRec и SQLGetDiagField:</STRONG><BR>
+Как описано в предыдущем разделе, прикладные программы вызывают SQLGetDiagRec
+или SQLGetDiagField, чтобы получить диагностическую информацию в случае
+драйвера MyODBC 3.51. Эти функции принимают среду, подключение, инструкцию
+или дескриптор и возвращают диагностику из функции, которая последней
+использовала этот дескриптор.</P>
+
+<P>Прикладные программы получают индивидуальные диагностические поля, вызывая
+SQLGetDiagField и определяя поле, которое надо получить. Некоторые поля не
+имеют никакого значения для определенных типов дескрипторов.</P>
+
+<P>Прикладные программы получают и SQLSTATE, местный код ошибки и
+диагностическое сообщение в одном обращении, вызывая SQLGetDiagRec.</P>
+
+<P><STRONG>Пример:</STRONG> рассмотрим для примера ситуацию, где пользователь
+пробует удалить несуществующую таблицу, драйвер возвращает SQL_ERROR, а
+прикладная программа может выбирать диагностическую информацию, используя
+вызов функции SQLGetDiagRec.
+<PRE>
+SQLCHAR      SqlState[6],
+SQLCHAR      ErrorMsg[SQL_MAX_MESSAGE_LENGTH];
+SQLINTEGER   NativeError;
+SQLSMALLINT  MsgLen;
+SQLRETURN    sql_return, diag_return;
+SQLHSTMT     hstmt;
+
+// Drop a non-existing table
+sql_return=SQLExecDirect(hstmt, "DROP TABLE NON_EXISTANT_TABLES^&#38;*",
+                         SQL_NTS);
+if (sql_return == SQL_SUCCESS_WITH_INFO || sql_return == SQL_ERROR)
+{
+   // Get the diag information.
+   Diag_return = SQLGetDiagRec(SQL_HANDLE_STMT, hstmt, 1, SqlState,
+                               &#38;NativeError, ErrorMsg, sizeof(ErrorMsg),
+                               &#38;MsgLen);
+   if (diag_return != SQL_NO_DATA)
+   {
+      DisplayError(SqlState,NativeError,Msg,MsgLen);
+   }
+}
+</PRE></P>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

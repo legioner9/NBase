@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Learn_this\Point_learn\gitconfig\www.atlassian.com\cat.www.atlassian.com\dir.www.atlassian.com.md">www.atlassian.com</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Learn_this\Point_learn\gitconfig\www.atlassian.com\_www.atlassian.com.md">_www.atlassian.com.md</a>
+        - *# [git config](https://www.atlassian.com/ru/git/tutorials/setting-up-a-repository/git-config)

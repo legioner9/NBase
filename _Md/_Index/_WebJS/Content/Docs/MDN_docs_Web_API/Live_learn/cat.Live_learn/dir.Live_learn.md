@@ -1,0 +1,21 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_WebJS\Content\Docs\MDN_docs_Web_API\Live_learn\cat.Live_learn\dir.Live_learn.md">Live_learn</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_WebJS\Content\Docs\MDN_docs_Web_API\Live_learn\mozilla.org_docs_learn_HTML_Введение_в_HTML\cat.mozilla.org_docs_learn_HTML_Введение_в_HTML\dir.mozilla.org_docs_learn_HTML_Введение_в_HTML.md">mozilla.org_docs_learn_HTML_Введение_в_HTML</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_WebJS\Content\Docs\MDN_docs_Web_API\Live_learn\mozilla.org_docs_learn_HTML_Введение_в_HTML\prepear_ancor_lists\cat.prepear_ancor_lists\dir.prepear_ancor_lists.md">prepear_ancor_lists</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_WebJS\Content\Docs\MDN_docs_Web_API\Live_learn\mozilla.org_docs_learn_HTML_Введение_в_HTML\prepear_ancor_lists\ancor_list_ru_1.md">ancor_list_ru_1.md</a>
+                - *## Начало работы с Вебом
+                - *## Вступление в HTML
+                - *## Мультимедиа и встраивание
+                - *## HTML tables
+                - *## CSS first steps
+                - *## CSS building blocks
+                - *## Стилизирование текста
+                - *## CSS макет
+                - *## Первые шаги в JavaScript
+                - *## Блоки в JavaScript
+                - *## Введение в объекты JavaScript
+                - *## Asynchronous JavaScript
+                - *## Client-side web APIs
+                - *## Core forms learning pathway
+                - *## Advanced forms articles
+        
+    

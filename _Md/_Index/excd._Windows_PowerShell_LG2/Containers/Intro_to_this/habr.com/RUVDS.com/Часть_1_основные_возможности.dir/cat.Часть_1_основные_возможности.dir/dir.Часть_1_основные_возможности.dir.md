@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\_Windows_PowerShell_LG2\Containers\Intro_to_this\habr.com\RUVDS.com\Часть_1_основные_возможности.dir\cat.Часть_1_основные_возможности.dir\dir.Часть_1_основные_возможности.dir.md">Часть_1_основные_возможности.dir</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\_Windows_PowerShell_LG2\Containers\Intro_to_this\habr.com\RUVDS.com\Часть_1_основные_возможности.dir\Часть_1_основные_возможности.md">Часть_1_основные_возможности.md</a>
+        - *# [Что такое Windows PowerShell и с чем его едят? Часть 1: основные возможности](https://habr.com/ru/company/ruvds/blog/487876/)

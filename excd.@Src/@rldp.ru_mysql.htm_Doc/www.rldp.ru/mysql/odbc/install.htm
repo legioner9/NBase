@@ -1,0 +1,1147 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 4. Установка Connector/ODBC</title>
+  <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-odbc-installation"></a>
+Глава 4. Установка Connector/ODBC</h1>
+<p>Этот раздел объясняет, где загрузить Connector/ODBC, как управлять
+инсталлятором, скопировать файлы вручную или построить из исходных текстов.
+</p>
+
+<h2><a name="idm139746781628656"></a>Где взять Connector/ODBC</h2>
+<p>Можно получить копию последней версии Connector/ODBC с сайта
+<a href="../../../https@dev.mysql.com/downloads/Connector/ODBC/default.htm" target="_top">
+https://dev.mysql.com/downloads/Connector/ODBC/</a>.</p>
+
+<h2><a name="idm139746781627024"></a>Выбор метода установки</h2>
+<p>Можно установить Connector/ODBC двумя различными методами:</p>
+<ul><li class="listitem"><p>
+<span class="bold"><strong>Двоичная установка</strong></span>
+является самой легкой. Вы получаете все необходимые библиотеки и другие
+предварительно построенные файлы с программой инсталлятора или скриптом
+пакетной обработки, чтобы выполнить все
+необходимое копирование и конфигурацию.</p></li>
+
+<li class="listitem"><p>
+<span class="bold"><strong>Установка из исходных текстов</strong></span>
+предназначается для платформ, где двоичный инсталляционный пакет недоступен,
+или в ситуациях, где вы хотите настроить или изменить процесс установки
+Connector/ODBC перед установкой.</p></li></ul>
+
+<p>Двоичные дистрибутивы Connector/ODBC включают файл
+<code class="filename">INFO_BIN</code>, который описывает окружающую среду и
+параметры конфигурации.  Если вы установили Connector/ODBC из двоичного
+дистрибутива, это может помочь проверить параметры настройки, которые
+использовались, чтобы построить дистрибутив на этой платформе.
+Все дистрибутивы включают файл <code class="filename">INFO_SRC</code>,
+который предоставляет информацию о версии продукта и исходном хранилище, из
+которого был произведен дистрибутив. Эта информация была
+добавлена в Connector/ODBC 8.0.14.</p>
+
+<h2><a name="idm139746781619296"></a>Поддерживаемые платформы</h2>
+<p>Connector/ODBC может использоваться на всех основных платформах,
+поддержанных MySQL, согласно
+<a href="../../../https@www.mysql.com/en/support/supportedplatforms/database.html"
+target="_top">https://www.mysql.com/en/support/supportedplatforms/database.html</a>.
+Это включает Windows, большинство подобных Unix операционных систем и macOS.
+</p>
+
+<p>На всех платформах не-Windows, кроме macOS, драйвер строится для
+<code class="literal">unixODBC</code> и ожидает 2 байта
+<code class="literal">SQLWCHAR</code>, а не 4 байта, как в
+<code class="literal">iODBC</code>. Поэтому двоичные модули совместимы
+are <span class="bold"><strong>только</strong></span> с
+<code class="literal">unixODBC</code>, повторно соберите драйвер для
+<code class="literal">iODBC</code>, чтобы использовать их вместе.
+Для получения дополнительной информации посмотрите
+<a href="general.htm#connector-odbc-driver-manager">раздел 3.2</a>.</p>
+
+<p>Для дальнейших инструкций консультируйтесь с документацией,
+соответствующей платформе, где вы устанавливаете пакет:</p>
+<table><thead><tr><th scope="col">Платформа</th>
+<th scope="col">Двоичный дистрибутив</th>
+<th scope="col">Сборка из исходных текстов</th></tr></thead>
+<tbody><tr><td scope="row">Windows</td>
+<td><a href="#connector-odbc-installation-binary-windows">
+Как поставить</a></td>
+<td><a href="#connector-odbc-installation-source-windows">
+Как собрать</a></td></tr>
+
+<tr><td scope="row">Unix/Linux</td>
+<td><a href="#connector-odbc-installation-binary-unix">
+Как поставить</a></td>
+<td><a href="#connector-odbc-installation-source-unix">
+Как собрать</a></td></tr>
+
+<tr><td scope="row">macOS</td>
+<td><a href="#connector-odbc-installation-binary-osx">
+Как поставить</a></td><td></td></tr></tbody></table>
+
+<h2><a name="connector-odbc-unicode-ansi"></a>Выбор драйвера Unicode или ANSI
+</h2>
+<p>Connector/ODBC предлагает гибкость, чтобы обработать данные, используя
+любой набор символов через <span class="bold"><strong>Unicode-драйвер
+</strong></span> или или максимальную скорость для более ограниченного
+диапазона наборов символов через <span class="bold"><strong>ANSI-драйвер
+</strong></span>. Оба вида драйверов обеспечиваются в том же самом пакете
+загрузки и оба устанавливаются на ваши системы программой установки, которая
+идет с пакетом загрузки. Пользователи, которые устанавливают Connector/ODBC и
+регистрируют его в менеджере ODBC вручную, могут установить и регистрировать
+один или оба из драйверов, они опознаются буквой <code class="literal">w
+</code> (для <span class="quote">wide characters</span>) для Unicode и
+буквой <code class="literal">a</code> для ANSI в конце названия библиотеки.
+Например, <code class="literal">myodbc8w.dll</code> против
+<code class="literal">myodbc8a.dll</code> или
+<code class="literal">libmyodbc8w.so</code> против
+<code class="literal">libmyodbc8a.so</code>.</p>
+
+<p>Ранее описанные имена файлов содержат "8", например,
+<code class="filename">myodbc8a.dll</code>, что означает, что они для
+Connector/ODBC 8.x. Имена файлов с "5", например,
+<code class="filename">myodbc5a.dll</code>, для Connector/ODBC 5.x.</p>
+
+<h2><a name="connector-odbc-installation-binary-windows"></a>
+4.1. Установка Connector/ODBC в Windows</h2>
+<p>Перед установкой Connector/ODBC в Windows:</p>
+
+<ul><li class="listitem"><p>Удостоверьтесь, что обновлен Microsoft Data
+Access Components (MDAC). Можно получить последнюю версию с сайта
+<a href="../../../support.microsoft.com/kb/110093" target="_top">Microsoft
+Data Access and Storage</a>.</p></li>
+
+<li class="listitem"><p><a name="connector-odbc-installation-visual-cpp"></a>
+Удостоверьтесь, что установлен Visual C++ Redistributable for Visual Studio.
+</p>
+<ul><li class="listitem"><p>Connector/ODBC 8.0.14 или выше:
+VC++ Runtime 2015 или VC++ Runtime 2017.</p></li>
+<li class="listitem"><p>
+Connector/ODBC 8.0.11 до 8.0.13: VC++ Runtime 2015.</p></li>
+<li class="listitem"><p>Connector/ODBC 5.3: VC++ Runtime 2013.</p></li></ul>
+
+<p>Используйте версию пакета, который соответствует системному типу вашего
+драйвера Connector/ODBC: 64-bit (помечена <span class="quote">x64</span> в
+имени файла), если вы управляете 64-битным драйвером и 32-bit (помечена
+<span class="quote">x86</span> в имени файла) для 32-битного.</p></li>
+
+<li class="listitem"><p>OpenSSL это необходимая зависимость.
+Пакет MSI включает библиотеки OpenSSL, использовавшиеся Connector/ODBC, в то
+время как Zip-архив требует, чтобы вы установили OpenSSL в системе.
+</p></li></ul>
+
+<p>Есть различные типы дистрибутивов для установки в Windows.
+Программное обеспечение, которое устанавливается, идентично в каждом случае,
+только метод установки отличается.</p>
+
+<ul><li class="listitem"><p>
+<span class="bold"><strong>MySQL Installer (рекомендуется)</strong></span>:
+MySQL Installer for Windows может установить, модернизировать, формировать и
+управлять большинством продуктов MySQL, включая Connector/ODBC. Загрузите его
+с <a href="../../../dev.mysql.com/downloads/windows/installer/default.htm" target="_top">
+http://dev.mysql.com/downloads/windows/installer/</a> и см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/mysql-installer.html"
+target="_top">MySQL Installer documentation</a>.
+Это не специальный инсталлятор для Connector/ODBC.</p></li>
+
+<li class="listitem"><p><span class="bold"><strong>MSI</strong></span>:
+Windows MSI Installer Package это мастер, который устанавливает
+Connector/ODBC. Загрузите его с
+<a href="../../../https@dev.mysql.com/downloads/connector/odbc/default.htm" target="_top">
+https://dev.mysql.com/downloads/connector/odbc/</a>. См.
+<a href="#connector-odbc-installation-binary-windows-installer">
+раздел 4.1.1</a> для деталей.</p></li>
+
+<li class="listitem"><p><span class="bold"><strong>Zip-архив</strong></span>:
+содержит файлы DLL, которые должны быть вручную установлены. Посмотрите
+<a href="#connector-odbc-installation-binary-windows-dll">
+раздел 4.1.2</a> для подробностей.</p></li></ul>
+
+<p>Драйвер OLE DB/ODBC для Windows 64-bit доступен на
+<a href="../../../www.microsoft.com/downloads/details.aspx@FamilyID=000364db-5e8b-44a8-b9be-ca44d18b059b&displaylang=en"
+target="_top">Microsoft Downloads</a>.</p>
+
+<h3><a name="connector-odbc-installation-binary-windows-installer"></a>
+4.1.1. Установка Connector/ODBC в Windows через установщик</h3>
+<p>MSI это очень простой метод для установки драйверов Connector/ODBC.
+Выполните эти шаги, чтобы закончить установку:</p>
+
+<ol type="1"><li class="listitem"><p>Дважды щелкните по автономному
+инсталлятору, который вы извлекли, или файлу MSI, который вы загрузили.
+</p></li>
+
+<li class="listitem"><p>Запустится MySQL Connector/ODBC Setup Wizard.
+Нажмите <span class="guibutton">Next</span>, чтобы начать процесс установки.
+</p>
+
+<a name="figure-myodbc-win-install-welcome"></a>
+<p><b>Рис. 4.1. Connector/ODBC Windows Installer - Welcome</b></p>
+<img src="images/myodbc-win-install-welcome.png" width="644" height="492"
+alt='The welcome page displayed after starting the installer.
+The available buttons are "Next" to continue the installation process or
+"Cancel" to quit the installer.'><br class="figure-break"></li>
+
+<li class="listitem"><p>После принятия лицензионного соглашения
+выберите тип установки. <span class="guilabel">Typical</span> обеспечивает
+стандартные файлы, чтобы соединиться с базой данных MySQL, используя ODBC.
+<span class="guilabel">Complete</span> устанавливает все доступные файлы,
+включая сервисные компоненты и отладку. Oracle рекомендует выбрать один из
+этих двух вариантов. Если вы выбираете один из этих методов, нажмите
+<span class="guibutton">Next</span> и продолжаете двигаться к шагу 5.</p>
+
+<p>Можно также выбрать <span class="guilabel">Custom</span>,
+где вы выбираете отдельные компоненты, чтобы установить. Если вы выбираете
+этот метод, нажмите <span class="guibutton">Next</span> и перейдите к шагу 4.
+</p>
+
+<a name="figure-myodbc-win-install-typical"></a>
+<p><b>Рис. 4.2. Connector/ODBC Windows Installer - выбор типа установки</b>
+</p><img src="images/myodbc-win-install-typical.png" width="641" height="490"
+alt="A list of available setup types to choose from named Typical, Complete,
+and Custom."><br class="figure-break"></li>
+
+<li class="listitem"><p>Если вы выбрали пользовательскую установку,
+используйте всплывающие окна, чтобы выбрать который компонент установить,
+затем нажмите <span class="guibutton">Next</span>.</p>
+
+<a name="figure-myodbc-win-install-custom"></a>
+<p><b>Рис. 4.3. Connector/ODBC Windows Installer - заказная установка</b>
+</p><img src="images/myodbc-win-install-custom.png" width="642" height="492"
+alt="Content is described in the surrounding text."><br class="figure-break">
+</li>
+
+<li class="listitem"><p>Если вы получаете сообщение об ошибке Error 1918
+во время установки, это означает, что у вас нет необходимого пакета
+Microsoft Visual C++ 2013 Redistributable. См. подробности
+<a href="#connector-odbc-installation-visual-cpp">здесь</a>.
+Установите пакет, прежде чем вы нажмете <span class="guibutton">Retry</span>.
+</p>
+
+<a name="figure-myodbc-win-install-visual-cpp"></a>
+<p><b>Рис. 4.4 Connector/ODBC Windows Installer - Error 1918</b></p>
+<img src="images/myodbc-win-install-visual-cpp.png" width="469" height="232"
+alt='Shows an "Error 1918" popup window containing the key phrase
+"This module cannot be found." Available buttons shown are "Abort", "Retry",
+and "Ignore".'><br class="figure-break"></li>
+
+<li class="listitem"><p>Как только файлы копируются к их заключительным
+местоположениям, драйверы регистрируются в Windows ODBC manager.
+Нажмите <span class="guibutton">Finish</span>.</p>
+
+<a name="figure-myodbc-win-install-completed"></a>
+<p><b>Рис. 4.5. Connector/ODBC Windows Installer - все!</b></p>
+<img src="images/myodbc-win-install-completed.png" width="640" height="489"
+alt="Content is described in the surrounding text."><br class="figure-break">
+</li></ol>
+<p>Теперь, когда установка завершена, сформируйте свои связи ODBC, используя
+<a href="config.htm">главу 5</a>.</p>
+
+<h3><a name="connector-odbc-installation-binary-windows-dll"></a>
+4.1.2. Установка Connector/ODBC Driver в Windows, используя пакет Zipped DLL
+</h3>
+<p>Если вы загрузили пакет zipped DLL:</p>
+<ol type="1"><li class="listitem"><p>Распакуйте файлы установки.</p></li>
+
+<li class="listitem"><p>Запустите комплектный скрипт, чтобы выполнить
+установку к местоположениям по умолчанию.</p></li>
+<li class="listitem"><p>Альтернативно, установите отдельные файлы, требуемые
+для Connector/ODBC вручную.</p></li></ol>
+
+<p>Следующие инструкции работают только на 32-битных системах Windows.
+Если у вас есть 64-битная система Windows, используйте инсталлятор MSI,
+который устанавливает 32-битные и 64-битные драйверы.</p>
+
+<p>Используйте <span class="bold"><strong>файл скрипта</strong></span>:</p>
+<ol type="1"><li class="listitem"><p>Распакуйте файлы установки.</p></li>
+<li class="listitem"><p>Откройте командную строку.</p></li>
+<li class="listitem"><p>Перейдите в каталог распаковки.</p></li>
+
+<li class="listitem"><p>Запустите <code class="literal">Install.bat</code>:
+</p>
+<pre class="programlisting">
+C:\&gt; <strong class="userinput"><code>Install.bat</code></strong>
+</pre>
+
+<p>Это копирует необходимые файлы в местоположение по умолчанию, и затем
+регистрирует драйвер Connector/ODBC в Windows ODBC manager.</p></li></ol>
+<p>Изменение или добавление нового DSN (имя источника данных) могут быть
+достигнуты, используя GUI или от командной строки, используя
+<span class="command"><strong>myodbc-installer.exe</strong></span>.</p>
+
+<p>Хотя Oracle рекомендует установить эти файлы в стандартном местоположении,
+можно также скопировать файлы вручную к альтернативному местоположению,
+например, чтобы проверить различные версии драйвера
+Connector/ODBC на той же самой машине. Чтобы
+<span class="bold"><strong>скопировать файлы</strong></span>
+к местоположению по Вашему выбору, используйте следующие шаги:</p>
+
+<ol type="1"><li class="listitem"><p>Распакуйте файлы установки.</p></li>
+<li class="listitem"><p>Откройте командную строку.</p></li>
+<li class="listitem"><p>Перейдите в каталог распаковки.</p></li>
+
+<li class="listitem"><p>Скопируйте файлы библиотеки к подходящему каталогу.
+Местоположение по умолчанию: системный каталог Windows
+<code class="literal">\Windows\System32</code>:</p>
+
+<p>Для Connector/ODBC 8.x:</p>
+<pre class="programlisting">
+C:\&gt; <strong class="userinput"><code>copy lib\myodbc8S.dll \Windows\System32</code></strong>
+C:\&gt; <strong class="userinput"><code>copy lib\myodbc8S.lib \Windows\System32</code></strong>
+
+Для Unicode-драйвера:
+C:\&gt; <strong class="userinput"><code>copy lib\myodbc8w.dll \Windows\System32</code></strong>
+C:\&gt; <strong class="userinput"><code>copy lib\myodbc8w.lib \Windows\System32</code></strong>
+
+Для ANSI-драйвера:
+C:\&gt; <strong class="userinput"><code>copy lib\myodbc8a.dll \Windows\System32</code></strong>
+C:\&gt; <strong class="userinput"><code>copy lib\myodbc8a.lib \Windows\System32</code></strong>
+</pre>
+
+<p>Для Connector/ODBC 5.x:</p>
+<pre class="programlisting">
+C:\&gt; <strong class="userinput"><code>copy lib\myodbc5S.dll \Windows\System32</code></strong>
+C:\&gt; <strong class="userinput"><code>copy lib\myodbc5S.lib \Windows\System32</code></strong>
+
+Для Unicode-драйвера:
+C:\&gt; <strong class="userinput"><code>copy lib\myodbc5w.dll \Windows\System32</code></strong>
+C:\&gt; <strong class="userinput"><code>copy lib\myodbc5w.lib \Windows\System32</code></strong>
+
+Для ANSI-драйвера:
+C:\&gt; <strong class="userinput"><code>copy lib\myodbc5a.dll \Windows\System32</code></strong>
+C:\&gt; <strong class="userinput"><code>copy lib\myodbc5a.lib \Windows\System32</code></strong>
+</pre></li>
+
+<li class="listitem"><p>Скопируйте инструменты Connector/ODBC.
+Они должны быть помещены в каталог, который находится в системной переменной
+<code class="literal">%PATH%</code>. По умолчанию они ставятся в системный
+каталог Windows <code class="literal">\Windows\System32</code>:</p>
+
+<pre class="programlisting">
+C:\&gt; <strong class="userinput"><code>copy bin\myodbc-installer.exe \Windows\System32</code></strong>
+</pre></li>
+
+<li class="listitem"><p>Произвольно, скопируйте справочные файлы. Для этих
+файлов, чтобы быть доступными через систему справочной информации, они должны
+быть установлены в системном каталоге Windows:</p>
+
+<pre class="programlisting">
+C:\&gt; <strong class="userinput"><code>copy doc\*.hlp \Windows\System32</code></strong>
+</pre></li>
+
+<li class="listitem"><p>Наконец, зарегистрируйте драйвер
+Connector/ODBC в ODBC manager:</p>
+<p>Для Connector/ODBC 8.x:</p>
+
+<pre class="programlisting">
+Для Unicode-драйвера:
+C:\&gt; <strong class="userinput"><code>myodbc-installer -a -d -t"MySQL ODBC 8.0 Driver;\
+DRIVER=myodbc8w.dll;SETUP=myodbc8S.dll"</code></strong>
+
+Для ANSI-драйвера:
+C:\&gt; <strong class="userinput"><code>myodbc-installer -a -d -t"MySQL ODBC 8.0 Driver;\
+DRIVER=myodbc8a.dll;SETUP=myodbc8S.dll"</code></strong>
+</pre>
+
+<p>Для Connector/ODBC 5.3:</p>
+<pre class="programlisting">
+Для Unicode-драйвера:
+C:\&gt; <strong class="userinput"><code>myodbc-installer -a -d -t"MySQL ODBC 5.3 Driver;\
+DRIVER=myodbc5w.dll;SETUP=myodbcS.dll"</code></strong>
+
+Для ANSI-драйвера:
+C:\&gt; <strong class="userinput"><code>myodbc-installer -a -d -t"MySQL ODBC 5.3 Driver;\
+DRIVER=myodbc5a.dll;SETUP=myodbc5S.dll"</code></strong>
+</pre>
+<p>Если вы установили эти файлы в местоположение не по умолчанию, измените
+ссылки на файлы DLL в вышеупомянутой команде.</p></li></ol>
+
+<h2><a name="connector-odbc-installation-binary-unix"></a>
+4.2. Установка Connector/ODBC в Unix-системах</h2>
+<p>Есть три метода, доступные для установки Connector/ODBC на Unix.
+Для большей части Unix вы будете использовать дистрибутив
+<span class="bold"><strong>tarball</strong></span>. Для Linux есть
+<span class="bold"><strong>RPM</strong></span> через
+<a href="../../../https@dev.mysql.com/downloads/repo/yum/default.htm" target="_top">MySQL Yum
+repository</a> (для некоторых платформ) или прямая загрузка.</p>
+
+<h3><a name="idm139746781466560"></a>Требования</h3>
+<ul><li class="listitem"><p>unixODBC 2.2.12 или выше.</p></li>
+<li class="listitem"><p>OpenSSL.</p></li></ul>
+
+<h3><a name="connector-odbc-installation-binary-yum"></a>
+4.2.1. Установка Connector/ODBC через MySQL Yum</h3>
+<p>Репозитарий MySQL Yum для Oracle Linux, Red Hat Enterprise
+Linux, CentOS и Fedora предоставляет Connector/ODBC RPM через
+<a href="../../../https@dev.mysql.com/downloads/repo/yum/default.htm" target="_top">
+MySQL Yum repository</a>. У вас должен быть MySQL Yum repository в
+списке хранилищ вашей системы (см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/linux-installation-yum-repo.html#yum-repo-setup"
+target="_top">Adding the MySQL Yum Repository</a>).
+Удостоверьтесь, что ваша установка хранилища актуальна:</p>
+
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>su root</code></strong>
+shell&gt; <strong class="userinput"><code>yum update mysql-community-release</code></strong>
+</pre>
+
+<p>Можно установить Connector/ODBC следующей командой:</p>
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>yum install mysql-connector-odbc</code></strong>
+</pre>
+<p>См. <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/linux-installation-yum-repo.html#yum-install-components"
+target="_top">Installing Additional MySQL Products and Components with Yum</a>.</p>
+
+<h3><a name="connector-odbc-installation-binary-unix-tarball"></a>
+4.2.2. Установка Connector/ODBC из двоичного архива Tarball</h3>
+<p>Чтобы поставить драйвер из файла <code class="filename">.tar.gz</code>),
+загрузите последнюю версию для вашей операционной системы и выполните эти
+шаги, заменив соответствующим файлом и именами каталогов на основе пакета,
+который вы загружаете (некоторые шаги ниже могут
+потребовать привилегий суперпользователя):</p>
+
+<ol type="1"><li class="listitem"><p>Распакуйте архив:</p>
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>gunzip mysql-connector-odbc-8.0.18-i686-pc-linux.tar.gz</code></strong>
+shell&gt; <strong class="userinput"><code>tar xvf mysql-connector-odbc-8.0.18-i686-pc-linux.tar</code></strong>
+</pre></li>
+
+<li class="listitem"><p>Дополнительный каталог содержит два подкаталога,
+<code class="filename">lib</code> и <code class="filename">bin</code>.
+Скопируйте их содержание к надлежащим местоположениям на вашей системе (мы
+используем <code class="filename">/usr/local/bin</code> и
+<code class="filename">/usr/local/lib</code> в примере,
+замените их местами назначения по Вашему выбору):</p>
+
+<pre class="programlisting">
+shell&gt; cp bin/* /usr/local/bin
+shell&gt; cp lib/* /usr/local/lib
+</pre>
+
+<p>Последняя команда копирует Connector/ODBC ANSI и Unicode из
+<code class="filename">lib</code> в
+<code class="filename">/usr/local/lib</code>.
+Если вам не нужны оба драйвера, можно просто скопировать тот, который вы
+хотите. Посмотрите подробности
+<a href="#connector-odbc-unicode-ansi">здесь</a>.</p></li>
+
+<li class="listitem"><p>Наконец, зарегистрируйте версию драйвера по Вашему
+выбору (версия ANSI, версия Unicode или обе) в менеджере ODBC вашей системы
+(например, iODBC или unixodbc) с использованием инструмента
+<span class="command"><strong>myodbc-installer</strong></span>, который был
+включен в пакет в каталоге <code class="filename">bin</code>
+(и находится теперь в <code class="filename">/usr/local/bin</code>, если
+последний шаг был выполнен), например, это регистрирует Unicode-драйвер:</p>
+
+<p>Для Connector/ODBC 8.0:</p>
+<pre class="programlisting">
+// Registers the Unicode driver:
+shell&gt; myodbc-installer -a -d -n "MySQL ODBC 8.0 Driver" -t "Driver=/usr/local/lib/libmyodbc8w.so"
+
+// Registers the ANSI driver
+shell&gt; myodbc-installer -a -d -n "MySQL ODBC 8.0" -t "Driver=/usr/local/lib/libmyodbc8a.so"
+</pre>
+
+<p>Для Connector/ODBC 5.3:</p>
+<pre class="programlisting">
+// Registers the Unicode driver:
+shell&gt; myodbc-installer -a -d -n "MySQL ODBC 5.3 Driver" -t "Driver=/usr/local/lib/libmyodbc5w.so"
+
+// Registers the ANSI driver
+shell&gt; myodbc-installer -a -d -n "MySQL ODBC 5.3" -t "Driver=/usr/local/lib/libmyodbc5a.so"
+</pre></li>
+
+<li class="listitem"><p>Проверьте, что драйвер
+устанавливается и зарегистрирован с использованием менеджера ODBC или
+утилиты <span class="command"><strong>myodbc-installer</strong></span>:</p>
+
+<pre class="programlisting">
+shell&gt; myodbc-installer -d -l
+</pre></li></ol>
+<p>Далее см. <a href="config.htm#connector-odbc-configuration-dsn-unix">
+главу 5.5</a> о том, как формировать DSN для Connector/ODBC.</p>
+
+<h3><a name="connector-odbc-installation-binary-unix-rpm"></a>
+4.2.3. Установка Connector/ODBC из RPM</h3>
+<p>Чтобы установить или модернизировать Connector/ODBC из RPM в Linux,
+просто загрузите пакет RPM последней версии Connector/ODBC и следуйте
+инструкциям ниже. Используйте
+<span class="command"><strong>su root</strong></span>, чтобы стать
+<code class="literal">root</code> и установить RPM.</p>
+
+<p>Если вы устанавливаете впервые:</p>
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>su root</code></strong>
+shell&gt; <strong class="userinput"><code>rpm -ivh mysql-connector-odbc-8.0.18.i686.rpm</code></strong>
+</pre>
+
+<p>Если драйвер существует, модернизируйте его:</p>
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>su root</code></strong>
+shell&gt; <strong class="userinput"><code>rpm -Uvh mysql-connector-odbc-8.0.18.i686.rpm</code></strong>
+</pre>
+
+<p>Если есть какая-либо ошибка зависимости для библиотеки клиента MySQL,
+<code class="literal">libmysqlclient</code>, просто проигнорируйте это,
+подставляя опцию <code class="option">--nodeps</code>
+и затем удостоверьтесь, что разделяемая библиотека клиента MySQL находится в
+пути или указана в <code class="literal">LD_LIBRARY_PATH</code>.</p>
+
+<p>Это устанавливает библиотеки и связанные документы в
+<code class="filename">/usr/local/lib</code> и
+<code class="filename">/usr/share/doc/MyODBC</code>, соответственно, см.
+<a href="config.htm#connector-odbc-configuration-dsn-unix">
+главу 5.5</a> для постинсталляционных шагов конфигурации.</p>
+
+<p>Чтобы удалить драйвер, от имени
+<code class="literal">root</code> выполните команду:</p>
+
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>su root</code></strong>
+shell&gt; <strong class="userinput"><code>rpm -e mysql-connector-odbc</code></strong>
+</pre>
+
+<h2><a name="connector-odbc-installation-binary-osx"></a>
+4.3. Установка Connector/ODBC в macOS</h2>
+<p>macOS основана на FreeBSD, и можно обычно использовать сетевой порт MySQL
+для соединения с серверами MySQL на других машинах. Установка Connector/ODBC
+позволяет вам соединиться с базами данных MySQL по любой платформе через
+интерфейс ODBC. Если ваше приложение требует интерфейса ODBC, установите
+Connector/ODBC. Приложения, которые требуют или могут использовать ODBC,
+включают ColdFusion, Filemaker Pro, 4th Dimension и много других.</p>
+
+<p><a name="connector-odbc-osx-iodbc"></a>
+В macOS ODBC Administrator основан на <code class="literal">iODBC</code>,
+предоставляет легкое управление драйверами ODBC и конфигурацией, позволяя
+обновления основного файла настроек <code class="literal">iODBC</code> через
+GUI. Инструмент включен в macOS v10.5 и ранее, пользователи более поздних
+версий macOS должны загрузить его с
+<a href="../../../www.iodbc.org/dataspace/doc/iodbc/wiki/iodbcWiki/Downloads"
+target="_top">http://www.iodbc.org/dataspace/doc/iodbc/wiki/iodbcWiki/Downloads
+</a>.</p>
+
+<p>OpenSSL требуется. Инсталляционные двоичные пакеты macOS включают
+OpenSSL, в то время как сжатые архивы требуют, чтобы вы установили OpenSSL на
+своей системе перед процессом установки.</p>
+
+<p>Есть два способа установить Connector/ODBC на macOS.
+Можно использовать пакет, обеспеченный в сжатом архиве, который вы вручную
+устанавливаете или сжатый образ диска (<code class="filename">.dmg</code>),
+который включает инсталлятор.</p>
+
+<p>Для установки с использованием сжатого архива tar (некоторые шаги ниже
+могут потребовать привилегий суперпользователя):</p>
+<ol type="1"><li class="listitem"><p>Скачайте архив tar.</p></li>
+
+<li class="listitem"><p>Распакуйте этот архив:</p>
+<pre class="programlisting">
+shell&gt; tar xvzf mysql-connector-odbc-<em class="replaceable"><code>x.y.z</code></em>-osx10.<em class="replaceable"><code>z</code></em>-x86-<em class="replaceable"><code>(32|64)</code></em>bit.tar.gz
+</pre></li>
+
+<li class="listitem"><p>Созданный каталог содержит два подкаталога,
+<code class="filename">lib</code> и <code class="filename">bin</code>.
+Скопируйте их к подходящему местоположению, например,
+<code class="filename">/usr/local</code>:</p>
+
+<pre class="programlisting">
+shell&gt; cp bin/* /usr/local/bin
+shell&gt; cp lib/* /usr/local/lib
+</pre></li>
+
+<li class="listitem"><p>Наконец, зарегистрируйте драйвер в iODBC утилитой
+<span class="command"><strong>myodbc-installer</strong></span>,
+которая включена в пакет:</p>
+
+<p>Для Connector/ODBC 8.0:</p>
+<pre class="programlisting">
+shell&gt; myodbc-installer -a -d -n "MySQL ODBC 8.0 Driver" -t "Driver=/usr/local/lib/libmyodbc8w.so"
+</pre>
+
+<p>Для Connector/ODBC 5.3:</p>
+<pre class="programlisting">
+shell&gt; myodbc-installer -a -d -n "MySQL ODBC 5.3 Driver" -t "Driver=/usr/local/lib/libmyodbc5w.so"
+</pre></li></ol>
+
+<p>Для установки, используя сжатый образ диска
+(<code class="filename">.dmg</code>):</p>
+<p>Для Connector/ODBC 5.3.7 и позже iODBC 3.52.12 или выше должен быть
+установлен на macOS-системе, прежде чем можно будет установить Connector/ODBC
+с использованием сжатого образа диска. Посмотрите
+<a href="#connector-odbc-osx-iodbc">здесь</a>.</p>
+
+<ol type="1"><li class="listitem"><p>Скачайте образ диска.</p></li>
+<li class="listitem"><p>Дважды щелкните по образу диска, чтобы открыть его.
+Вы видите инсталлятор Connector/ODBC.</p></li>
+
+<li class="listitem"><p>Дважды щелкните по инсталлятору Connector/ODBC, и вы
+будете проведены через остальную часть процесса установки. Вам нужны
+привилегии суперпользователя, чтобы закончить установку.</p></li></ol>
+
+<p>Чтобы проверить установленные драйверы, используйте ODBC Administrator или
+утилиту <span class="command"><strong>myodbc-installer</strong></span>:</p>
+<pre class="programlisting">
+shell&gt; myodbc-installer -d -l
+</pre>
+
+<h2><a name="connector-odbc-installation-source-windows"></a>
+4.4. Сборка Connector/ODBC из исходных текстов в Windows</h2>
+<p>Необходимо построить Connector/ODBC в Windows, чтобы изменить
+инсталляционное местоположение или исходные тексты. Если вы не уверены,
+установить ли из исходных текстов, пожалуйста, используйте
+двоичную установку, детализированную в
+<a href="#connector-odbc-installation-binary-windows">разделе
+4.1</a>.</p>
+
+<p>Сборка Connector/ODBC в Windows требует многих
+различных инструментов и пакетов:</p>
+<ul><li class="listitem"><p>MDAC, Microsoft Data Access SDK с
+<a href="../../../support.microsoft.com/kb/110093" target="_top">
+http://support.microsoft.com/kb/110093</a>.</p></li>
+
+<li class="listitem"><p>Подходящий компилятор C++, такой как
+Microsoft Visual C++ или компилятор C++, включенный в Microsoft Visual Studio
+2015 или выше. Для Connector/ODBC 5.3 можно использовать VS 2013.</p></li>
+
+<li class="listitem"><p>CMake.</p></li>
+<li class="listitem"><p>Библиотека клиента MySQL и включаеемые
+файлы от MySQL 8.0 или выше для Connector/ODBC 8.0 или MySQL 5.7 для
+Connector/ODBC 5.3. Это требуется, потому что Connector/ODBC использует
+требования и структуры, которые не существуют в более старых версиях
+библиотеки. Чтобы получить библиотеку клиента и файлы, посетите
+<a href="../../../https@dev.mysql.com/downloads/default.htm" target="_top">
+https://dev.mysql.com/downloads/</a>.</p></li></ul>
+
+<h3><a name="connector-odbc-installation-source-windows-5-2-building"></a>
+Сборка по шагам</h3>
+<p>Установите переменные окружения для набора инструментальных средств
+Visual Studio. Visual Studio включает пакетный файл, чтобы установить их для
+вас и устанавливает короткий путь в меню <span class="guilabel">Start</span>,
+который открывает командную строку с этими переменными.</p>
+
+<p>Установите <code class="literal">MYSQL_DIR</code> к инсталляционному пути
+сервера MySQL, используя имена файлов короткого стиля. Например:</p>
+<pre class="programlisting">
+C:\&gt; <strong class="userinput"><code>set MYSQL_DIR=C:\PROGRA~1\MySQL\MYSQLS~1.0</code></strong>
+</pre>
+
+<p>Соберите Connector/ODBC Connector/ODBC с использованием
+<span class="command"><strong>cmake</strong></span>, выполнив из исходного
+корневого каталога (в окне командной строки):</p>
+
+<pre class="programlisting">
+C:\&gt; <strong class="userinput"><code>cmake -G "Visual Studio 12 2013"</code></strong>
+</pre>
+
+<p>Это производит файл проекта, который можно открыть Visual Studio или
+построить из командной строки любой из следующих команд:</p>
+<pre class="programlisting">
+C:\&gt; <strong class="userinput"><code>devenv.com MySQL_Connector_ODBC.sln /build Release</code></strong>
+</pre>
+
+<p>Начиная с выпуска 5.3.10, собирая Connector/ODBC
+динамическая компоновка с библиотекой клиента MySQL выбрана
+по умолчанию, то есть, опция
+<code class="option">MYSQLCLIENT_STATIC_LINKING</code> в
+<span class="command"><strong>cmake</strong></span> =
+<code class="literal">FALSE</code> по умолчанию
+(однако, двоичные дистрибутивы Connector/ODBC от Oracle
+связаны статически с библиотекой клиента). Если вы хотите компоновать
+статически с библиотекой клиента MySQL, установите опцию
+<code class="option">MYSQLCLIENT_STATIC_LINKING</code> в
+<code class="literal">TRUE</code> и используйте опцию
+<code class="option">MYSQLCLIENT_LIB_NAME</code>, чтобы указать
+название библиотеки клиента статической компоновки:</p>
+
+<pre class="programlisting">
+C:\&gt; <strong class="userinput"><code>cmake -G "Visual Studio 12 2013" -DMYSQLCLIENT_STATIC_LINKING:BOOL=TRUE\
+   DMYSQLCLIENT_LIB_NAME=<em class="replaceable"><code>client_lib_name_with_extension</code></em></code></strong>
+</pre>
+
+<p>Также используйте опцию <code class="option">MYSQLCLIENT_LIB_NAME</code>,
+чтобы компоновать динамически с библиотекой клиента MySQL кроме
+<code class="filename">libmysql.dll</code>.
+<span class="command"><strong>cmake</strong></span>
+ищет библиотеку клиента под местоположением, определенным опцией
+<code class="option">MYSQL_LIB_DIR</code>, если она не задана,
+<span class="command"><strong>cmake</strong></span> ищет
+под местоположениями по умолчанию в папке, определенной
+опцией <code class="option">MYSQL_DIR</code>.</p>
+
+<p>Начиная с Connector/ODBC 8.0.11, надо использовать
+<code class="option">BUNDLE_DEPENDENCIES</code>, чтобы
+устанавливать внешние зависимости библиотеки времени выполнения, такие как
+OpenSSL. Для зависимостей, унаследованных от библиотеки клиента MySQL, это
+работает только, если эти зависимости связаны самой библиотекой клиента.</p>
+
+<p><code class="filename">INFO_SRC</code>: этот файл предоставляет информацию
+о версии продукта и исходном хранилище, из которого был произведен
+дистрибутив. Был добавлен в Connector/ODBC 8.0.14.</p>
+
+<p>Начиная с Connector/ODBC 5.3.9, можно скомпоновать Connector/ODBC
+статически (эквивалентно параметру компилятора /MT в Visual Studio)
+или динамически (эквивалентно параметру компилятора /MD в Visual Studio)
+с Visual C++ runtime. Опция по умолчанию должна компоновать динамически,
+если вы хотите компоновать статически, установите
+<code class="literal">STATIC_MSVCRT:BOOL=TRUE</code>:</p>
+
+<pre class="programlisting">
+C:\&gt; <strong class="userinput"><code>cmake -G "Visual Studio 12 2013" -DSTATIC_MSVCRT:BOOL=TRUE</code></strong>
+</pre>
+
+<p>Опции <code class="option">STATIC_MSVCRT</code> и
+<code class="option">MYSQLCLIENT_STATIC_LINKING</code>
+независимы друг от друга, то есть, можно скомпоновать Connector/ODBC
+динамически с Visual C++ runtime, но статически с библиотекой клиента MySQL
+и наоборот. Однако, если вы компонуете динамически с Visual C++ runtime,
+также необходимо компоновать с библиотекой клиента MySQL, которая
+самостоятельно скомпонована динамически с Visual C++ runtime
+и точно так же статическая компоновка Connector/ODBC с Visual C++ runtime
+требует компоновки с библиотекой клиента MySQL, которая самостоятельно
+скомпонована с Visual C++ runtime статически.</p>
+
+<p>Чтобы собрать отладочную сборку, установите тип сборки в
+<span class="command"><strong>cmake</strong></span>
+так, чтобы правильные версии библиотек клиента MySQL использовались, также,
+поскольку библиотека клиента MySQL C, построенная Oracle,
+<span class="emphasis"><em>не</em></span> строится с параметрами отладки,
+при компоновке с ней в режиме отладки, используйте опцию
+<code class="literal">WITH_NODEFAULTLIB</code>, чтобы сказать
+<span class="command"><strong>cmake</strong></span> игнорировать
+неотлаживаемый non-debug C++:</p>
+
+<pre class="programlisting">
+C:\&gt; <strong class="userinput"><code>cmake -G "Visual Studio 14 2015" -DWITH_DEBUG=1-DWITH_NODEFAULTLIB=libcmt</code></strong>
+</pre>
+
+<p>Создайте отладочную сборку этой командой:</p>
+<pre class="programlisting">
+C:\&gt; <strong class="userinput"><code>devenv.com MySQL_Connector_ODBC.sln /build Debug</code></strong>
+</pre>
+
+<p>После завершения исполняемые файлы находятся в подкаталогах
+<code class="filename">bin/</code> и <code class="filename">lib/</code>.</p>
+<p>См. <a href="#connector-odbc-installation-binary-windows-dll">
+раздел 4.1.2</a> о том, как закончить установку, копируя двоичные файлы к
+правильным местоположениям и регистрируя Connector/ODBC в менеджере ODBC.</p>
+
+<h2><a name="connector-odbc-installation-source-unix"></a>
+4.5. Сборка Connector/ODBC из исходных текстов в Unix</h2>
+<p>Вам нужны следующие инструменты, чтобы построить MySQL из
+исходных текстов в Unix:</p>
+
+<ul><li class="listitem"><p>Работающий компилятор ANSI C++. GCC 4.2.1 или
+позже, Sun Studio 12.1 или позже, как известно, работают.</p></li>
+<li class="listitem"><p>CMake.</p></li>
+<li class="listitem"><p>Библиотеки клиента MySQL и включаемые файлы.
+Чтобы получить библиотеки клиента и файлы, посетите
+<a href="../../../https@dev.mysql.com/downloads/default.htm" target="_top">
+https://dev.mysql.com/downloads/</a>.</p></li>
+
+<li class="listitem"><p>Должен быть установлен совместимый менеджер ODBC.
+Connector/ODBC, как известно, работает с <code class="literal">iODBC</code> и
+<code class="literal">unixODBC</code>, см.
+<a href="general.htm#connector-odbc-driver-manager">раздел 3.2</a>.</p></li>
+
+<li class="listitem"><p>При использовании набора символов, который не собран
+в библиотеку клиента MySQL, установите определения символов MySQL из
+подкаталога <code class="filename">charsets</code> в каталоге
+<em class="replaceable"><code>SHAREDIR</code></em> (по умолчанию это
+<code class="filename">/usr/local/mysql/share/mysql/charsets</code>).
+Они должны существовать, если вы установили сервер MySQL на той же самой
+машине. Посмотрите <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/charset.html" target="_top">
+Character Sets, Collations, Unicode</a>.</p></li></ul>
+
+<p>Как только вы имеете все необходимые файлы, распаковываете исходные файлы
+в отдельный каталог и вызываете
+<span class="command"><strong>cmake</strong></span> следующей командой:</p>
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>cmake -G "Unix Makefiles"</code></strong>
+</pre>
+
+<h3><a name="connector-odbc-installation-source-unix-cmake-options"></a>
+Типичные параметры <span class="command"><strong>cmake</strong></span></h3>
+<p>Вы, возможно, должны были бы помочь
+<span class="command"><strong>cmake</strong></span> найти заголовки MySQL и
+библиотеки, установив переменные окружения
+<code class="literal">MYSQL_INCLUDE_DIR</code>,
+<code class="literal">MYSQL_LIB_DIR</code> и
+<code class="literal">MYSQL_DIR</code>
+к соответствующим местоположениям, например:</p>
+
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>export MYSQL_INCLUDE_DIR=/usr/local/mysql/include</code></strong>
+shell&gt; <strong class="userinput"><code>export MYSQL_LIB_DIR=/usr/local/mysql/lib</code></strong>
+shell&gt; <strong class="userinput"><code>export MYSQL_DIR=/usr/local/mysql</code></strong>
+</pre>
+
+<p>Когда вы запускаете <span class="command"><strong>cmake</strong></span>,
+вы могли бы добавить опции в командной строке. Вот некоторые примеры:</p>
+<ul><li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/source-configuration-options.html#option_cmake_odbc_includes"
+target="_top"><code class="option">-DODBC_INCLUDES=<em class="replaceable">
+<code>dir_name</code></em></code></a>:
+Используйте, когда каталог включаемых файлов ODBC
+не найден в системной <code class="literal">$PATH</code>.</p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/source-configuration-options.html#option_cmake_odbc_lib_dir"
+target="_top"><code class="option">-DODBC_LIB_DIR=<em class="replaceable">
+<code>dir_name</code></em></code></a>: Используйте, когда каталог
+библиотеки ODBC не найден в системной <code class="literal">$PATH</code>.
+</p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/source-configuration-options.html#option_cmake_with_unixodbc"
+target="_top"><code class="option">-DWITH_UNIXODBC=<em class="replaceable">
+<code>1</code></em></code></a>: Включить поддержку unixODBC.
+<code class="literal">iODBC</code> библиотека ODBC по умолчанию при сборке
+Connector/ODBC в Linux. <code class="literal">unixODBC</code> может
+использоваться, устанавливая этот выбор в <span class="quote">1</span>.
+</p></li>
+
+<li class="listitem"><p>
+<code class="option">-DMYSQLCLIENT_STATIC_LINKING=<em class="replaceable">
+<code>boolean</code></em></code>: Компоновать статически с библиотекой
+клиента MySQL. Начиная с выпуска 5.3.10, собирая Connector/ODBC из
+исходных текстов, динамическая компоновка с библиотекой клиента MySQL
+выбрана по умолчанию, то есть,
+<code class="option">MYSQLCLIENT_STATIC_LINKING</code> в
+<span class="command"><strong>cmake</strong></span> =
+<code class="literal">FALSE</code> по умолчанию (однако, двоичные
+дистрибутивы Connector/ODBC от Oracle скомпонованы статически с библиотекой
+клиента). Если вы хотите компоновать статически с библиотекой клиента MySQL,
+установите опцию в <code class="literal">TRUE</code>. См. также описание для
+опции <code class="option">-DMYSQLCLIENT_LIB_NAME=<em class="replaceable">
+<code>client_lib_name_with_extension</code></em></code>.</p></li>
+
+<li class="listitem"><p>
+<code class="option">-DBUNDLE_DEPENDENCIES=<em class="replaceable"><code>
+boolean</code></em></code>: Разрешить установить внешние зависимости
+времени выполнения библиотеки, такие как OpenSSL, вместе с пакетом.
+Для зависимостей, унаследованных от библиотеки клиента MySQL, это работает
+только, если эти зависимости связаны с самой библиотекой клиента.
+Выбор добавляется в v8.0.11.</p></li>
+
+<li class="listitem"><p>
+<code class="option">-DMYSQLCLIENT_LIB_NAME=<em class="replaceable"><code>
+client_lib_name_with_extension</code></em></code>:
+Местоположение библиотеки клиента MySQL. См. описание для
+<code class="option">MYSQLCLIENT_STATIC_LINKING</code>.
+Для выпуска 5.3.10 и позже, если вы хотите компоновать статически с
+библиотекой клиента MySQL, используют эту опцию, чтобы дать название
+библиотеки клиента статической компоновки. Также используйте это, если хотите
+компоновать динамически с библиотекой клиента MySQL кроме
+<code class="filename">libmysqlclient.so</code>.
+<span class="command"><strong>cmake</strong></span>
+ищет библиотеку клиента под местоположением, определенным переменной
+окружения <code class="literal">MYSQL_LIB_DIR</code>, если переменная не
+определяется, <span class="command"><strong>cmake</strong></span>
+ищет под местоположениями по умолчанию в каталоге, определенном переменной
+окружения <code class="literal">MYSQL_DIR</code>.</p></li>
+
+<li class="listitem"><p>
+<code class="option">-DMYSQL_CONFIG_EXECUTABLE=<em class="replaceable">
+<code>/path/to/mysql_config</code></em></code>:
+Определяет местоположение утилиты
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/mysql-config.html"
+target="_top">mysql_config</a>, которая используется, чтобы получить значения
+переменных <code class="option">MYSQL_INCLUDE_DIR</code>,
+<code class="option">MYSQL_LIB_DIR</code>,
+<code class="option">MYSQL_LINK_FLAGS</code> и
+<code class="option">MYSQL_CXXFLAGS</code>. Значения из
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/mysql-config.html"
+target="_top">mysql_config</a> перекрыты значениями, предоставленными
+непосредственно как параметры <span class="command"><strong>cmake</strong>
+</span>.</p></li>
+
+<li class="listitem"><p>
+<code class="option">-DMYSQL_LINK_FLAGS</code>=<em class="replaceable">
+<code>Параметры компоновки MySQL</code></em></p></li>
+
+<li class="listitem"><p>
+<code class="option">-DMYSQL_CXXFLAGS</code>=<em class="replaceable"><code>
+Параметры компоновки MySQL C++</code></em></p></li>
+
+<li class="listitem"><p>
+<code class="option">-DMYSQL_CXX_LINKAGE</code>=<em class="replaceable">
+<code>1</code></em>: Позволяет компоновать C++ с библиотекой клиента MySQL.
+По умолчанию <code class="option">MYSQL_CXX_LINKAGE</code> включена для
+MySQL 5.6.4 или позже. Для MySQL 5.6.3 и ранее, этот выбор должен быть
+установлен явно в <em class="replaceable"><code>1</code></em>.</p></li></ul>
+
+<h3><a name="connector-odbc-installation-source-unix-building"></a>
+Сборка под Unix</h3>
+<p>Чтобы собрать библиотеки драйвера, выполните
+<span class="command"><strong>make</strong></span>:</p>
+
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>make</code></strong>
+</pre>
+
+<p>Если какие-либо ошибки происходят, исправьте их и продолжите сборку.
+Если вы не в состоянии закончить сборку, см.
+<a href="support.htm#connector-odbc-support-community">раздел 9.1</a>.</p>
+
+<h3><a name="connector-odbc-installation-source-unix-installing"></a>
+Установка библиотек драйвера</h3>
+<p>Чтобы установить библиотеки драйвера, выполните следующую команду:</p>
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>make install</code></strong>
+</pre>
+
+<p>Для получения дополнительной информации о процессе сборки обратитесь к
+файлу <code class="filename">BUILD</code>, который идет с исходными текстами.
+</p>
+
+<h3><a name="connector-odbc-installation-source-unix-testing"></a>
+Тестирование Connector/ODBC в Unix</h3>
+<p>Некоторые тесты Connector/ODBC обеспечиваются в дистрибутиве
+с библиотеками, которые вы построили. Чтобы запустить тесты:</p>
+
+<ol type="1"><li class="listitem"><p>Удостоверьтесь, что вы имеете файл
+<code class="filename">odbc.ini</code> в котором можно формировать записи
+DSN. Образец файла <code class="filename">odbc.ini</code>
+произведен процессом сборки в каталоге <code class="filename">test</code>.
+Установите переменную окружения <code class="literal">ODBCINI</code> к
+местоположению вашего файла <code class="filename">odbc.ini</code>.</p></li>
+
+<li class="listitem"><p>Настройте тестовый DSN в вашем файле
+<code class="filename">odbc.ini</code> (см.
+<a href="config.htm#connector-odbc-configuration-dsn-unix">раздел 5.5</a>).
+Типовая запись DSN, которую можно использовать для тестов, может быть найдена
+в образце файла <code class="filename">odbc.ini</code>.</p></li>
+
+<li class="listitem"><p>Установите переменную окружения
+<code class="literal">TEST_DSN</code> к названию вашего теста DSN.</p></li>
+<li class="listitem"><p>Установите переменную окружения
+<code class="literal">TEST_UID</code> и возможно также
+<code class="literal">TEST_PASSWORD</code> к имени пользователя и паролю для
+тестов, в случае необходимости. По умолчанию тесты используют
+<span class="quote">root</span> в качестве пользователя и не вводят пароль,
+если вы хотите, чтобы тесты использовали другое имя пользователя или пароль,
+надлежит соответственно установить <code class="literal">TEST_UID</code> и
+<code class="literal">TEST_PASSWORD</code>.</p></li>
+
+<li class="listitem"><p>Удостоверьтесь, что ваш сервер MySQL работает.
+</p></li>
+<li class="listitem"><p>Запустите процесс следующей командой:</p>
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>make test</code></strong>
+</pre></li></ol>
+
+<h2><a name="connector-odbc-installation-source-unix-osx"></a>
+4.6. Сборка Connector/ODBC в macOS</h2>
+<p>Чтобы собрать Connector/ODBC в macOS, следуйте инструкциям в
+<a href="#connector-odbc-installation-source-unix">разделе 4.5
+</a>. Заметьте, что <code class="literal">iODBC</code> это библиотека ODBC по
+умолчанию для сборки Connector/ODBC в macOS.
+Альтернативно, <code class="literal">unixODBC</code> может использоваться,
+устанавливая опцию <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/source-configuration-options.html#option_cmake_with_unixodbc"
+target="_top"><code class="option">-DWITH_UNIXODBC=<em class="replaceable">
+<code>1</code></em></code></a>.</p>
+
+<h2><a name="connector-odbc-installation-source-development"></a>
+4.7. Установка Connector/ODBC из дерева исходных текстов</h2>
+<p>Этот раздел только для пользователей, которые интересуются помощью нам,
+чтобы проверить наш новый код. Чтобы просто получить и поставить MySQL
+Connector/ODBC используйте стандартный выпуск.</p>
+
+<p>Репозитарий кода Connector/ODBC использует Git.
+Чтобы проверить последний исходный код, посетите GitHub:
+<a href="../../../https@github.com/mysql/mysql-connector-odbc" target="_top">
+https://github.com/mysql/mysql-connector-odbc</a>.
+Чтобы клонировать хранилище Git к вашей машине, используйте эту команду:</p>
+<pre class="programlisting">
+git clone https://github.com/mysql/mysql-connector-odbc.git
+</pre>
+
+<p>У вас должна теперь быть копия всего исходного дерева Connector/ODBC в
+каталоге <code class="filename">mysql-connector-odbc</code>.
+Чтобы построить и затем установить библиотеки из этого исходного дерева на
+Unix или Linux, используйте шаги, обрисованные в общих чертах в
+<a href="#connector-odbc-installation-source-unix">разделе 4.5
+</a>.</p>
+
+<p>В Windows используйте Windows Makefiles
+<code class="filename">WIN-Makefile</code> или
+<code class="filename">WIN-Makefile_debug</code>. См.
+<a href="#connector-odbc-installation-source-windows">раздел 4.4
+</a>.</p>
+
+<p>После начальной операции по контролю, чтобы получить исходное дерево,
+регулярно выполняйте <span class="command"><strong>git pull</strong></span>,
+чтобы обновить ваш код согласно последней версии.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

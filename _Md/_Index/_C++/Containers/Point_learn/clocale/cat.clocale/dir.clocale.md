@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_C++\Containers\Point_learn\clocale\cat.clocale\dir.clocale.md">clocale</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_C++\Containers\Point_learn\clocale\ReadMe.md">ReadMe.md</a>
+        - *# [\<clocale>](https://docs.microsoft.com/ru-ru/cpp/standard-library/clocale?view=msvc-160&viewFallbackFrom=vs-2017)

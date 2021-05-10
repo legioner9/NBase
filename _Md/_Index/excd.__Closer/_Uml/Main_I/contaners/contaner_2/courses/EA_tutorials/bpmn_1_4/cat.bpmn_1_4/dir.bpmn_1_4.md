@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\bpmn_1_4\cat.bpmn_1_4\dir.bpmn_1_4.md">bpmn_1_4</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\bpmn_1_4\bpmn_1_4.md">bpmn_1_4.md</a>
+        - *# <a href="https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/bpmn_1_4.html" target="_blank">BPMN Models</a> Модели BPMN

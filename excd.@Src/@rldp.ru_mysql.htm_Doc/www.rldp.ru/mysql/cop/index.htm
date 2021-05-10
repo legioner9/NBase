@@ -1,0 +1,780 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Руководство разработчика MySQL Connector/Python</title>
+  <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-python"></a>
+Руководство разработчика MySQL Connector/Python</h1>
+<p><b>Обзор</b></p>
+<p>Это руководство описывает, как установить и настроить MySQL
+Connector/Python, самодостаточный драйвер Python для связи с серверами MySQL,
+и как использовать его, чтобы развивать приложения базы данных.</p>
+
+<p>MySQL Connector/Python 8.0 настоятельно рекомендован для использования с
+MySQL Server 8.0, 5.7, 5.6 и 5.5. Лучше обновитесь до
+MySQL Connector/Python 8.0.</p>
+
+<p>Для примечаний, детализирующих изменения в каждом выпуске
+Connector/Python, см.
+<a href="../../../https@dev.mysql.com/doc/relnotes/connector-python/en/default.htm"
+target="_top">MySQL Connector/Python Release Notes</a>.</p>
+
+<p>Для юридической информации см.
+<a href="preface.htm#legalnotice">Legal Notices</a>.</p>
+<p>Для помощи с использованием MySQL, пожалуйста, посетите
+<a href="../../../forums.mysql.com/default.htm" target="_top">MySQL Forums</a>,
+где можно обсудить вопросы с другими пользователями MySQL.</p>
+
+<p><b>Licensing information. </b>
+This product may include third-party software, used under license.
+<a href="../../../https@downloads.mysql.com/docs/licenses/connector-python-gpl-en.pdf"
+target="_top">MySQL Connector/Python
+2.2 Community License Information User Manual</a> has information about
+licenses relating to MySQL Connector/Python community releases up to
+and including version 2.2.
+<a href="../../../https@downloads.mysql.com/docs/licenses/connector-python-com-en.pdf"
+target="_top">MySQL Connector/Python
+2.2 Commercial License Information User Manual</a> has information about
+licenses relating to MySQL Connector/Python commercial releases up to
+and including version 2.2.
+<a href="../../../https@downloads.mysql.com/docs/licenses/connector-python-8.0-gpl-en.pdf"
+target="_top">MySQL Connector/Python
+8.0 Community License Information User Manual</a> has information about
+licenses relating to MySQL Connector/Python community releases in
+the 8.0 release series.
+<a href="../../../https@downloads.mysql.com/docs/licenses/connector-python-8.0-com-en.pdf"
+target="_top">MySQL Connector/Python
+8.0 Commercial License Information User Manual</a> has information about
+licenses relating to MySQL Connector/Python commercial releases in
+the 8.0 release series.</p>
+
+<p>Document generated on:
+
+2020-01-16
+
+(revision: 64753)</p><hr>
+
+<p><b>Оглавление</b></p>
+<dl><dt><span class="preface"><a href="preface.htm">Preface and Legal Notices
+</a></span></dt>
+<dt><span class="chapter"><a href="intro.htm">
+1. Введение в MySQL Connector/Python</a></span></dt>
+<dt><span class="chapter"><a href="coding.htm">
+2. Рекомендации для разработчиков</a></span></dt>
+<dt><span class="chapter"><a href="version.htm">
+3. Версии Connector/Python</a></span></dt>
+<dt><span class="chapter"><a href="install.htm">
+4. Установка Connector/Python</a></span></dt>
+<dd><dl><dt><span class="section">
+<a href="install.htm#connector-python-obtaining">
+4.1. Получение Connector/Python</a></span></dt>
+<dt><span class="section">
+<a href="install.htm#connector-python-installation-binary">
+4.2. Установка Connector/Python из двоичного дистрибутива</a></span></dt>
+<dt><span class="section">
+<a href="install.htm#connector-python-installation-source">
+4.3. Установка Connector/Python из исходных текстов</a></span></dt>
+<dt><span class="section">
+<a href="install.htm#connector-python-verification">
+4.4. Подтверждение Вашей установки Connector/Python</a></span></dt></dl></dd>
+<dt><span class="chapter">
+<a href="example.htm">5. Примеры Connector/Python</a></span></dt>
+<dd><dl><dt><span class="section">
+<a href="example.htm#connector-python-example-connecting">
+5.1. Соединение с MySQL, используя Connector/Python</a></span></dt>
+<dt><span class="section">
+<a href="example.htm#connector-python-example-ddl">
+5.2. Создание таблиц используя Connector/Python</a></span></dt>
+<dt><span class="section">
+<a href="example.htm#connector-python-example-cursor-transaction">
+5.3. Вставка данных используя Connector/Python</a></span></dt>
+<dt><span class="section">
+<a href="example.htm#connector-python-example-cursor-select">
+5.4. Запрос данных, используя Connector/Python</a></span></dt></dl></dd>
+<dt><span class="chapter">
+<a href="tutor.htm">6. Обучающие программы Connector/Python</a></span></dt>
+<dd><dl><dt><span class="section">
+<a href="tutor.htm#connector-python-tutorial-cursorbuffered">
+6.1. Поднимите зарплату сотрудника, используя буферизированный курсор</a>
+</span></dt></dl></dd>
+<dt><span class="chapter"><a href="connect.htm">
+7. Соединения в Connector/Python</a></span></dt>
+<dd><dl><dt><span class="section">
+<a href="connect.htm#connector-python-connectargs">
+7.1. Параметры связи Connector/Python</a></span></dt>
+<dt><span class="section"><a href="connect.htm#connector-python-option-files">
+7.2. Поддержка файлов опций в Connector/Python</a></span></dt></dl></dd>
+<dt><span class="chapter"><a href="cext.htm">
+8. Расширение Connector/Python C</a></span></dt>
+<dd><dl><dt><span class="section">
+<a href="cext.htm#connector-python-cext-development">
+8.1. Разработка приложений с расширением С Connector/Python</a></span></dt>
+<dt><span class="section"><a href="cext.htm#connector-python-cext-module">
+8.2. Дополнительный модуль _mysql_connector C</a></span></dt></dl></dd>
+<dt><span class="chapter"><a href="other.htm">
+9. Другие темы Connector/Python</a></span></dt>
+<dd><dl><dt><span class="section">
+<a href="other.htm#connector-python-connection-pooling">
+9.1. Объединение связи Connector/Python</a></span></dt>
+<dt><span class="section"><a href="other.htm#connector-python-django-backend">
+9.2. Connector/Python и Django</a></span></dt></dl></dd>
+<dt><span class="chapter"><a href="refer.htm">
+10. Connector/Python API</a></span></dt>
+<dd><dl><dt><span class="section">
+<a href="refer.htm#connector-python-api-mysql-connector">
+10.1. Модуль mysql.connector</a></span></dt>
+<dd><dl><dt><span class="section">
+<a href="refer.htm#connector-python-api-mysql-connector-connect">
+10.1.1. mysql.connector.connect()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysql-connector-apilevel">
+10.1.2. mysql.connector.apilevel</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysql-connector-paramstyle">
+10.1.3. mysql.connector.paramstyle</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysql-connector-threadsafety">
+10.1.4. mysql.connector.threadsafety</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysql-connector-version">
+10.1.5. mysql.connector.__version__</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysql-connector-version-info">
+10.1.6. mysql.connector.__version_info__</a></span></dt></dl></dd>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection">
+10.2. connection.MySQLConnection</a></span></dt>
+<dd><dl><dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-constructor">
+10.2.1. Конструктор connection.MySQLConnection()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-close">
+10.2.2. MySQLConnection.close()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-commit">
+10.2.3. MySQLConnection.commit()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-config">
+10.2.4. MySQLConnection.config()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-connect">
+10.2.5. MySQLConnection.connect()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-cursor">
+10.2.6. MySQLConnection.cursor()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-cmd-change-user">
+10.2.7. MySQLConnection.cmd_change_user()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-cmd-debug">
+10.2.8. MySQLConnection.cmd_debug()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-cmd-init-db">
+10.2.9. MySQLConnection.cmd_init_db()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-cmd-ping">
+10.2.10. MySQLConnection.cmd_ping()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-cmd-process-info">
+10.2.11. MySQLConnection.cmd_process_info()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-cmd-process-kill">
+10.2.12. MySQLConnection.cmd_process_kill()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-cmd-query">
+10.2.13. MySQLConnection.cmd_query()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-cmd-query-iter">
+10.2.14. MySQLConnection.cmd_query_iter()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-cmd-quit">
+10.2.15. MySQLConnection.cmd_quit()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-cmd-refresh">
+10.2.16. MySQLConnection.cmd_refresh()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-cmd-reset-connection">
+10.2.17. MySQLConnection.cmd_reset_connection()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-cmd-shutdown">
+10.2.18. MySQLConnection.cmd_shutdown()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-cmd-statistics">
+10.2.19. MySQLConnection.cmd_statistics()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-disconnect">
+10.2.20. MySQLConnection.disconnect()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-get-row">
+10.2.21. MySQLConnection.get_row()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-get-rows">
+10.2.22. MySQLConnection.get_rows()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-get-server-info">
+10.2.23. MySQLConnection.get_server_info()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-get-server-version">
+10.2.24. MySQLConnection.get_server_version()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-is-connected">
+10.2.25. MySQLConnection.is_connected()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-isset-client-flag">
+10.2.26. MySQLConnection.isset_client_flag()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-ping">
+10.2.27. MySQLConnection.ping()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-reconnect">
+10.2.28. MySQLConnection.reconnect()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-reset-session">
+10.2.29. MySQLConnection.reset_session()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-rollback">
+10.2.30. MySQLConnection.rollback()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-set-charset-collation">
+10.2.31. MySQLConnection.set_charset_collation()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-set-client-flags">
+10.2.32. MySQLConnection.set_client_flags()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-shutdown">
+10.2.33. MySQLConnection.shutdown()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-start-transaction">
+10.2.34. MySQLConnection.start_transaction()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-autocommit">
+10.2.35. MySQLConnection.autocommit</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-unread-results">
+10.2.36. MySQLConnection.unread_results</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-can-consume-results">
+10.2.37. MySQLConnection.can_consume_results</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-charset">
+10.2.38. MySQLConnection.charset</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-collation">
+10.2.39. MySQLConnection.collation</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-connection-id">
+10.2.40. MySQLConnection.connection_id</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-database">
+10.2.41. MySQLConnection.database</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-get-warnings">
+10.2.42. MySQLConnection.get_warnings</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-in-transaction">
+10.2.43. MySQLConnection.in_transaction</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-raise-on-warnings">
+10.2.44. MySQLConnection.raise_on_warnings</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-server-host">
+10.2.45. MySQLConnection.server_host</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-server-port">
+10.2.46. MySQLConnection.server_port</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-sql-mode">
+10.2.47. MySQLConnection.sql_mode</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-time-zone">
+10.2.48. MySQLConnection.time_zone</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-unix-socket">
+10.2.49. MySQLConnection.unix_socket</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnection-user">
+10.2.50. MySQLConnection.user</a></span></dt></dl></dd>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnectionpool">
+10.3. pooling.MySQLConnectionPool</a></span></dt>
+<dd><dl><dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnectionpool-constructor">
+10.3.1. Конструктор pooling.MySQLConnectionPool</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnectionpool-add-connection">
+10.3.2. MySQLConnectionPool.add_connection()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnectionpool-get-connection">
+10.3.3. MySQLConnectionPool.get_connection()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnectionpool-set-config">
+10.3.4. MySQLConnectionPool.set_config()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlconnectionpool-pool-name">
+10.3.5. MySQLConnectionPool.pool_name</a></span></dt></dl></dd>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-pooledmysqlconnection">
+10.4. pooling.PooledMySQLConnection</a></span></dt>
+<dd><dl><dt><span class="section">
+<a href="refer.htm#connector-python-api-pooledmysqlconnection-constructor">
+10.4.1. Конструктор pooling.PooledMySQLConnection</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-pooledmysqlconnection-close">
+10.4.2. PooledMySQLConnection.close()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-pooledmysqlconnection-config">
+10.4.3. PooledMySQLConnection.config()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-pooledmysqlconnection-pool-name">
+10.4.4. PooledMySQLConnection.pool_name</a></span></dt></dl></dd>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor">
+10.5. cursor.MySQLCursor</a></span></dt>
+<dd><dl><dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor-constructor">
+10.5.1. Конструктор cursor.MySQLCursor</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor-callproc">
+10.5.2. MySQLCursor.callproc()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor-close">
+10.5.3. MySQLCursor.close()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor-execute">
+10.5.4. MySQLCursor.execute()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor-executemany">
+10.5.5. MySQLCursor.executemany()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor-fetchall">
+10.5.6. MySQLCursor.fetchall()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor-fetchmany">
+10.5.7. MySQLCursor.fetchmany()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor-fetchone">
+10.5.8. MySQLCursor.fetchone()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor-fetchwarnings">
+10.5.9. MySQLCursor.fetchwarnings()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor-stored-results">
+10.5.10. MySQLCursor.stored_results()</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor-column-names">
+10.5.11. MySQLCursor.column_names</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor-description">
+10.5.12. MySQLCursor.description</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor-lastrowid">
+10.5.13. MySQLCursor.lastrowid</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor-rowcount">
+10.5.14. MySQLCursor.rowcount</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor-statement">
+10.5.15. MySQLCursor.statement</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursor-with-rows">
+10.5.16. MySQLCursor.with_rows</a></span></dt></dl></dd>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-cursor-subclasses">
+10.6. Субклассы cursor.MySQLCursor</a></span></dt>
+<dd><dl><dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursorbuffered">
+10.6.1. cursor.MySQLCursorBuffered</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursorraw">
+10.6.2. cursor.MySQLCursorRaw</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursorbufferedraw">
+10.6.3. cursor.MySQLCursorBufferedRaw</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursordict">
+10.6.4. cursor.MySQLCursorDict</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursorbuffereddict">
+10.6.5. cursor.MySQLCursorBufferedDict</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursornamedtuple">
+10.6.6. cursor.MySQLCursorNamedTuple</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursorbufferednamedtuple">
+10.6.7. cursor.MySQLCursorBufferedNamedTuple</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-mysqlcursorprepared">
+10.6.8. cursor.MySQLCursorPrepared</a></span></dt></dl></dd>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-clientflag">
+10.7. constants.ClientFlag</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-fieldtype">
+10.8. constants.FieldType</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-sqlmode">
+10.9. constants.SQLMode</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-characterset">
+10.10. constants.CharacterSet</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-refreshoption">
+10.11. constants.RefreshOption</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-errors">
+10.12. Ошибки и исключения</a></span></dt>
+<dd><dl><dt><span class="section">
+<a href="refer.htm#connector-python-api-errorcode">
+10.12.1. Модуль errorcode</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-errors-error">
+10.12.2. errors.Error</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-errors-dataerror">
+10.12.3. errors.DataError</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-errors-databaseerror">
+10.12.4. errors.DatabaseError</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-errors-integrityerror">
+10.12.5. errors.IntegrityError</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-errors-interfaceerror">
+10.12.6. errors.InterfaceError</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-errors-internalerror">
+10.12.7. errors.InternalError</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-errors-notsupportederror">
+10.12.8. errors.NotSupportedError</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-errors-operationalerror">
+10.12.9. errors.OperationalError</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-errors-poolerror">
+10.12.10. errors.PoolError</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-errors-programmingerror">
+10.12.11. errors.ProgrammingError</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-errors-warning">
+10.12.12. errors.Warning</a></span></dt>
+<dt><span class="section">
+<a href="refer.htm#connector-python-api-errors-custom-error-exception">
+10.12.13. Функция errors.custom_error_exception()</a></span></dt></dl>
+</dd></dl></dd>
+<dt><span class="chapter">
+<a href="cextr.htm">11. Расширение Connector/Python C, функции API
+</a></span></dt>
+<dd><dl><dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-mysql-connector">
+11.1. Модуль _mysql_connector</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-mysql">
+11.2. _mysql_connector.MySQL()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-affected-rows">
+11.3. _mysql_connector.MySQL.affected_rows()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-autocommit">
+11.4. _mysql_connector.MySQL.autocommit()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-buffered">
+11.5. _mysql_connector.MySQL.buffered()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-change-user">
+11.6. _mysql_connector.MySQL.change_user()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-character-set-name">
+11.7. _mysql_connector.MySQL.character_set_name()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-close">
+11.8. _mysql_connector.MySQL.close()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-commit">
+11.9. _mysql_connector.MySQL.commit()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-connect">
+11.10. _mysql_connector.MySQL.connect()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-connected">
+11.11. _mysql_connector.MySQL.connected()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-consume-result">
+11.12. _mysql_connector.MySQL.consume_result()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-convert-to-mysql">
+11.13. _mysql_connector.MySQL.convert_to_mysql()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-escape-string">
+11.14. _mysql_connector.MySQL.escape_string()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-fetch-fields">
+11.15. _mysql_connector.MySQL.fetch_fields()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-fetch-row">
+11.16. _mysql_connector.MySQL.fetch_row()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-field-count">
+11.17. _mysql_connector.MySQL.field_count()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-free-result">
+11.18. _mysql_connector.MySQL.free_result()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-get-character-set-info">
+11.19. _mysql_connector.MySQL.get_character_set_info()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-get-client-info">
+11.20. _mysql_connector.MySQL.get_client_info()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-get-client-version">
+11.21. _mysql_connector.MySQL.get_client_version()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-get-host-info">
+11.22. _mysql_connector.MySQL.get_host_info()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-get-proto-info">
+11.23. _mysql_connector.MySQL.get_proto_info()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-get-server-info">
+11.24. _mysql_connector.MySQL.get_server_info()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-get-server-version">
+11.25. _mysql_connector.MySQL.get_server_version()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-get-ssl-cipher">
+11.26. _mysql_connector.MySQL.get_ssl_cipher()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-hex-string">
+11.27. _mysql_connector.MySQL.hex_string()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-insert-id">
+11.28. _mysql_connector.MySQL.insert_id()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-more-results">
+11.29. _mysql_connector.MySQL.more_results()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-next-result">
+11.30. _mysql_connector.MySQL.next_result()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-num-fields">
+11.31. _mysql_connector.MySQL.num_fields()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-num-rows">
+11.32. _mysql_connector.MySQL.num_rows()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-ping">
+11.33. _mysql_connector.MySQL.ping()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-query">
+11.34. _mysql_connector.MySQL.query()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-raw">
+11.35. _mysql_connector.MySQL.raw()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-refresh">
+11.36. _mysql_connector.MySQL.refresh()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-rollback">
+11.37. _mysql_connector.MySQL.rollback()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-select-db">
+11.38. _mysql_connector.MySQL.select_db()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-set-character-set">
+11.39. _mysql_connector.MySQL.set_character_set()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-shutdown">
+11.40. _mysql_connector.MySQL.shutdown()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-stat">
+11.41. _mysql_connector.MySQL.stat()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-thread-id">
+11.42. _mysql_connector.MySQL.thread_id()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-use-unicode">
+11.43. _mysql_connector.MySQL.use_unicode()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-warning-count">
+11.44. _mysql_connector.MySQL.warning_count()</a></span></dt>
+<dt><span class="section">
+<a href="cextr.htm#connector-python-api-cext-have-result-set">
+11.45. _mysql_connector.MySQL.have_result_set</a></span></dt></dl></dd>
+<dt><span class="index"><a href="ix01.htm">Index</a></span></dt></dl>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

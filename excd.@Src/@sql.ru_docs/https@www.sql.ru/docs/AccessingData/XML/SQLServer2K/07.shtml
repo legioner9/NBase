@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<TITLE>Доступ к XML и реляционным данным
+</TITLE>
+<META CONTENT="text/html; charset=windows-1251" http-equiv=Content-Type>
+<META NAME="Description" CONTENT="1. Введение">
+<META NAME="Keywords" CONTENT="SQL, Microsoft, Server">
+<META HTTP-EQUIV="Set-Cookie" CONTENT="cookie=set; path=/">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER="0" WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top  bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>XML-представление наборов данных в ADO .NET
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="08.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+
+
+</TD>
+</TR>
+</TABLE>
+<TABLE border="0" cellpadding="2" cellspacing="2" >
+<TR>
+<TD>
+<div align=justify>
+<p>
+На самом деле даже без провайдера SQLXMLOLEDB и SQLXML веб-релизов в Visual Studio .Net (точнее, 
+в ADO.Net) имеются достаточно мощные средства для представления реляционных наборов данных в виде 
+XML, и наоборот, XML в реляционном виде. Типовой сценарий работы выглядит следующим образом: 
+получить внутри объекта DataSet таблицы как результаты запросов к источнику данных (возможно, к разным), 
+связать их между собой на основе объектов DataRelation и создать XML-представление DataSet'a при помощи 
+XmlDataDocument, как показано в Скрипте 6.</p>
+<p><tt><div align=left>
+<font color=blue>using</font> System.Data;<br>
+<font color=blue>using</font> System.Data.OleDb;<br>
+<font color=blue>using</font> System.Xml;<br>
+...<br>
+<font color=blue>static void</font> Transform_ADONetDataSet_Xml()<br>
+{<br>
+&nbsp;&nbsp;&nbsp;DataSet ds = <font color=blue>new</font> DataSet("Новый набор данных на клиенте");<br>
+&nbsp;&nbsp;&nbsp;(<font color=blue>new</font> OleDbDataAdapter("SELECT CustomerID, ContactName, ContactTitle FROM Customers", ConstDeclarations.ConnectionString)).Fill(ds, "Клиентская копия табл.клиентов");<br>
+&nbsp;&nbsp;&nbsp;(<font color=blue>new</font> OleDbDataAdapter("SELECT OrderID, CustomerID, OrderDate FROM Orders", ConstDeclarations.ConnectionString)).Fill(ds, "Клиентская копия табл.заказов");<br>
+&nbsp;&nbsp;&nbsp;ds.Relations.Add("Джойн двух копий на клиенте",<br>
+&nbsp;&nbsp;&nbsp;ds.Tables["Клиентская копия табл.клиентов"].Columns["CustomerID"],<br>
+&nbsp;&nbsp;&nbsp;ds.Tables["Клиентская копия табл.заказов"].Columns["CustomerID"])<b>.Nested</b> = <font color=blue>true</font>;<br>
+&nbsp;&nbsp;&nbsp;<b>XmlDataDocument xml</b> = <font color=blue>new</font> <b>XmlDataDocument(ds)</b>;<br>
+&nbsp;&nbsp;&nbsp;FileInfo f = <font color=blue>new</font> FileInfo("..\\Results\\ADONetDataSet.xml");<br>
+&nbsp;&nbsp;&nbsp;xml.Save(f.FullName);<br>
+...	<br>
+}</p></tt>
+<p>
+<div align=justify></font><center>						
+<font color=blue><b>Скрипт 6</font></p></b></center>
+<p>
+Результирующий XML можно видеть на рис.2.</p>
+<p><tt><div align=left><font color=#990000>
+<font color=blue>&lt;</font>Новый_x0020_набор_x0020_данных_x0020_на_x0020_клиенте<font color=blue>&gt;</font><br>
+&nbsp;&nbsp;&nbsp;<font color=blue>&lt;</font>Клиентская_x0020_копия_x0020_табл.клиентов<font color=blue>&gt;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=blue>&lt;</font>CustomerID<font color=blue>&gt;</font></font>ALFKI<font color=#990000><font color=blue>&lt;</font>/CustomerID<font color=blue>&gt;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=blue>&lt;</font>ContactName<font color=blue>&gt;</font></font>Maria Anders<font color=#990000><font color=blue>&lt;</font>/ContactName<font color=blue>&gt;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=blue>&lt;</font>ContactTitle<font color=blue>&gt;</font></font>Sales Representative<font color=#990000><font color=blue>&lt;</font>/ContactTitle<font color=blue>&gt;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=blue>&lt;</font>Клиентская_x0020_копия_x0020_табл.заказов<font color=blue>&gt;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=blue>&lt;</font>OrderID<font color=blue>&gt;</font></font>10643<font color=#990000><font color=blue>&lt;</font>/OrderID<font color=blue>&gt;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=blue>&lt;</font>CustomerID<font color=blue>&gt;</font></font>ALFKI<font color=#990000><font color=blue>&lt;</font>/CustomerID<font color=blue>&gt;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=blue>&lt;</font>OrderDate<font color=blue>&gt;</font></font>1997-08-25T00:00:00.0000000+04:00<font color=#990000><font color=blue>&lt;</font>/OrderDate<font color=blue>&gt;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=blue>&lt;</font>/Клиентская_x0020_копия_x0020_табл.заказов<font color=blue>&gt;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=blue>&lt;</font>Клиентская_x0020_копия_x0020_табл.заказов<font color=blue>&gt;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=blue>&lt;</font>OrderID<font color=blue>&gt;</font></font>10692<font color=#990000><font color=blue>&lt;</font>/OrderID<font color=blue>&gt;</font><br>
+</font>...</p></tt>
+<p>
+<div align=justify><center>						
+<font color=blue><b>Рис. 2</font></p></b></center>
+<p>
+По умолчанию из DataSet будет сгенерирован документ, в котором каждой записи DataRow соответствует 
+элемент с именем DataTable. Значения полей присутствуют в виде подэлементов DataRow с названиями 
+соответствующих полей DataColumns. Поскольку DataSet предполагает отсоединенный режим работы, 
+отношения между таблицами в источнике (в БД на SQL Server) не принимаются во внимание. Так, несмотря 
+на связывание таблиц в запросе:</p>
+<p><tt>
+(new OleDbDataAdapter("SELECT c.ContactName, c.ContactTitle, o.OrderDate FROM Customers c INNER JOIN Orders o ON c.CustomerID = o.CustomerID", Connection)).Fill(ds);</tt></p> 
+<p>
+с точки зрения DataSet это плоское множество записей, потому что связи отработал сервер и прислал в DataSet 
+готовый табличный результат. Для образования иерархического XML-документа, где записи дочерней таблицы 
+являются вложенными элементами родительской, отношение между таблицами нужно указывать явно в 
+DataSet.Relations, при этом свойство .Nested объекта DataRelation должно быть выставлено в true. (Иначе записи 
+из родительской и  дочерней таблиц будут перечислены друг за другом на одном и том же уровне иерархии). 
+Класс XmlDataDocument является производным от DOMовского XmlDocument, поэтому с его помощью над 
+DataSet'ом можно выполнять все стандартные XML-операции: XPath-запросы, XSL-преобразования и т.д.</p>
+<p><tt><div align=left>
+<font color=blue>static void</font> Update_ADONetDataSet_Xml()<br>
+{<br>
+&nbsp;&nbsp;&nbsp;OleDbConnection cn = <font color=blue>new</font> OleDbConnection("Provider=SQLOLEDB;...");<br>
+&nbsp;&nbsp;&nbsp;DataSet ds = <font color=blue>new</font> DataSet();<br>
+<br>
+&nbsp;&nbsp;&nbsp;OleDbDataAdapter daCust = <font color=blue>new</font> OleDbDataAdapter("SELECT CustomerID, ContactName, ContactTitle FROM Customers", cn);<br>
+&nbsp;&nbsp;&nbsp;<font color=green>//Создаем UpdateCommand вручную</font><br>
+&nbsp;&nbsp;&nbsp;daCust.<b>UpdateCommand</b> = <font color=blue>new</font> OleDbCommand("UPDATE Customers SET ContactName = ?, ContactTitle = ? WHERE CustomerID = ?", cn);<br>
+&nbsp;&nbsp;&nbsp;daCust.UpdateCommand.Parameters.Add("@ContactName", OleDbType.VarChar, 40, "ContactName");<br>
+&nbsp;&nbsp;&nbsp;daCust.UpdateCommand.Parameters.Add("@ContactTitle", OleDbType.VarChar, 40, "ContactTitle");<br>
+&nbsp;&nbsp;&nbsp;daCust.UpdateCommand.Parameters.Add("@CustomerID", OleDbType.Char, 5, "CustomerID");<br>
+&nbsp;&nbsp;&nbsp;daCust.Fill(ds, "Cust");<br>
+<br>
+&nbsp;&nbsp;&nbsp;OleDbDataAdapter daOrds = <font color=blue>new</font> OleDbDataAdapter("SELECT OrderID, CustomerID, OrderDate FROM Orders", cn);<br>
+&nbsp;&nbsp;&nbsp;<font color=green>//Создаем UpdateCommand автоматически</font><br>
+&nbsp;&nbsp;&nbsp;<b>OleDbCommandBuilder</b> cbOrds = <font color=blue>new</font> OleDbCommandBuilder(daOrds);<br>
+&nbsp;&nbsp;&nbsp;daOrds.Fill(ds, "Ords");<br>
+<br>
+&nbsp;&nbsp;&nbsp;ds.Relations.Add("Джойн двух копий на клиенте",<br>
+&nbsp;&nbsp;&nbsp;ds.Tables["Cust"].Columns["CustomerID"],<br>
+&nbsp;&nbsp;&nbsp;ds.Tables["Ords"].Columns["CustomerID"]).Nested = <font color=blue>true</font>;<br>
+&nbsp;&nbsp;&nbsp;ds.EnforceConstraints = <font color=blue>false</font>;<br>
+<br>
+&nbsp;&nbsp;&nbsp;XmlDataDocument xml = <font color=blue>new</font> XmlDataDocument(ds);<br>
+&nbsp;&nbsp;&nbsp;<font color=green>//Эквивалентно ds.Tables["Cust"].Select("CustomerID = 'ALFKI'")[0]["ContactName"] = "Maria Anders";</font><br>
+&nbsp;&nbsp;&nbsp;xml.<b>SelectSingleNode</b>("//Cust[CustomerID='ALFKI']/ContactName").InnerText = "Maria Anders";<br>
+&nbsp;&nbsp;&nbsp;xml.<b>SelectSingleNode</b>("//Cust[CustomerID='ALFKI']/Ords[OrderID=10643]/OrderDate").InnerText = "1997-08-25T00:00:00.0000000+04:00";<br>
+&nbsp;&nbsp;&nbsp;daCust.<b>Update</b>(ds.Tables[1]); daCust.<b>Update</b>(ds.Tables[0]);<br>
+&nbsp;&nbsp;&nbsp;...<br>
+}</tt></p>
+<p>
+<div align=justify></font><center>						
+<font color=blue><b>Скрипт 7</font></p></b></center>
+<p>
+Скрипт 7 демонстрирует, что данные источника можно модифицировать не только напрямую через DataSet 
+(ds.Tables[&lt;Имя или номер таблицы в коллекции&gt;].Rows[&lt;Номер записи в коллекции&gt;][&lt;Имя или номер поля 
+в коллекции&gt;] = …), но и через его XML-представление. В примере изменяются значений некоторых 
+XPath-узлов объекта XmlDataDocument. Эти изменения отражаются в DataSet'е, над которым построен данный 
+XmlDataDocument, а поскольку у соответствующих DataAdapter'ов таблиц определены UpdateCommand'ы, то 
+они будут транслированы далее в источник данных (SQL Server). Обратное тоже верно. Т.е. в DataSet можно 
+подгрузить XML-документ, который затем читать и модифицировать реляционными операциями. В Скрипте 
+8 мы получаем схему построенного в предыдущем примере XML-файла при помощи утилиты xsd.exe, 
+входящей в состав .NET Framework, читаем ее в XmlDataDocument и загружаем туда данные из этого документа. 
+На основе XSD-схемы ADO.Net создает DataSet эквивалентной реляционной структуры, так что становится 
+возможным обращаться и модифицировать XML-документ, как если бы он был совокупностью связанных 
+таблиц.</p>
+<p><tt><div align=left>
+<font color=blue>static</font> void Update_XML_ADONetDataset()<br>
+{<br>
+&nbsp;&nbsp;&nbsp;FileInfo f = <font color=blue>new</font> FileInfo("..\\Results\\ADONetDataSet.xml");<br>
+&nbsp;&nbsp;&nbsp;Process.Start("xsd.exe", f.FullName + " /o:..\\Results");<br>
+&nbsp;&nbsp;&nbsp;XmlDataDocument xml = <font color=blue>new</font> XmlDataDocument();<br>
+&nbsp;&nbsp;&nbsp;xml.DataSet.ReadXmlSchema(Path.ChangeExtension(f.FullName, ".xsd")); <br>
+&nbsp;&nbsp;&nbsp;<b>xml.Load(f.FullName);<br>
+&nbsp;&nbsp;&nbsp;xml.DataSet.Tables["Cust"].Select("CustomerID='ALFKI'")[0]["ContactName"] = "Абра Кадабра";<br>
+&nbsp;&nbsp;&nbsp;xml.DataSet.Tables["Ords"].Select("OrderID=10643")[0]["OrderDate"] = DateTime.Now;</b><br>
+...<br>
+}</p></tt>
+<p>
+<div align=justify></font><center>						
+<font color=blue><b>Скрипт 8</font></p></b></center>
+<p>
+Неплохим иллюстративным примером было бы приложение, которое документирует пользовательские 
+библиотеки классов .Net в базе данных. Определения классов и объекты сохраняются в виде XSD-схем и 
+XML-документов (см. System.Xml.Serialization), а на их основе, в свою очередь, при помощи рассмотренного 
+соответствия реляционного и XML-представлений, которое обеспечивает ADO.Net, создается и наполняется 
+БД. В качестве самостоятельного упражнения вы можете попробовать сами написать такое приложение и 
+назвать его, скажем, Cheops.<br>
+Впрочем, я отвлекся. Чрезвычайно мощная и развитая функциональность ADO.Net по своей сути представляет 
+собой результат эволюции простой возможности сохранения ADODB.Recordset в формате XML на стороне 
+клиента, с которой начинался наш разговор (см. п.2). Вернемся, тем не менее, к основной теме - поддержке 
+XML в SQL Server.</p>
+</DIV>
+<TD>
+<TR>
+</TABLE>
+<TABLE BORDER=0 WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>XML-представление наборов данных в ADO .NET
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="08.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+</TD>
+</TR>
+</TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>

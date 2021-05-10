@@ -1,0 +1,710 @@
+<HTML>
+<HEAD>
+  <TITLE>Обзор языка MySQL</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1><A NAME="Reference">9 Обзор языка MySQL</A></H1>
+<P>MySQL имеет очень сложный, но интуитивно понятный интерфейс SQL. Эта глава
+описывает различные команды, типы и функции, которые Вы должны знать, чтобы
+использовать MySQL эффективно. Эта глава также может служить справочником по
+всем функциональным возможностям, включенным в MySQL.</P>
+
+<H2><A NAME="Basic_User_Commands">9.1 Базисные команды клиента MySQL</A></H2>
+<H3><A NAME="USE">9.1.1 Синтаксис <CODE>USE</CODE></A></H3>
+<PRE>
+USE db_name
+</PRE>
+
+<P>Команда <CODE>USE db_name</CODE> сообщает, чтобы MySQL использовал базу
+данных <CODE>db_name</CODE> как заданную по умолчанию для последующих
+запросов. База данных остается текущей до конца сеанса, или пока не будет
+выдана другая инструкция <CODE>USE</CODE>:</P>
+
+<PRE>
+mysql&#62; USE db1;
+mysql&#62; SELECT count(*) FROM mytable;      # selects from db1.mytable
+mysql&#62; USE db2;
+mysql&#62; SELECT count(*) FROM mytable;      # selects from db2.mytable
+</PRE>
+
+<P>Создание специфической базы данных посредством инструкции <CODE>USE</CODE>
+не препятствует Вам обращаться к таблицам в других базах данных. Пример ниже
+обращается к таблице <CODE>author</CODE> из базы данных <CODE>db1</CODE> и
+таблице <CODE>editor</CODE> из базы данных <CODE>db2</CODE>:</P>
+<PRE>
+mysql&#62; USE db1;
+mysql&#62; SELECT author_name,editor_name FROM author,db2.editor
+           WHERE author.editor_id = db2.editor.editor_id;
+</PRE>
+
+<P><A NAME="IDX1391"></A><A NAME="IDX1392"></A>Инструкция <CODE>USE</CODE>
+предусмотрена для совместимости с Sybase.</P>
+
+<H3><A NAME="DESCRIBE">9.1.2
+Синтаксис <CODE>DESCRIBE</CODE> (получение информации о столбцах)</A></H3>
+<PRE>
+{DESCRIBE | DESC} tbl_name {col_name | wild}
+</PRE>
+
+<P><CODE>DESCRIBE</CODE> представляет собой сокращение для вызова <CODE>SHOW
+COLUMNS FROM</CODE>. Подробности в разделе
+"<A HREF="glava04.htm#SHOW_DATABASE_INFO">4.10 Получение информации о базах
+данных, таблицах, столбцах и индексах</A>".</P>
+
+<P><CODE>DESCRIBE</CODE> обеспечивает информацию относительно столбцов
+таблицы. <CODE>col_name</CODE> может быть именем столбца или строкой,
+содержащей групповые символы SQL <SAMP>`%'</SAMP> и <SAMP>`_'</SAMP>.</P>
+
+<P>Если типы столбцов не те, которые Вы задавали в инструкции <CODE>CREATE
+TABLE</CODE>, обратите внимание, что MySQL иногда изменяет типы столбцов.
+Подробности в разделе "<A HREF="glava07.htm#Silent_column_changes">7.3.1
+Тихие изменения спецификации столбца</A>".</P>
+
+<P><A NAME="IDX1395"></A><A NAME="IDX1396"></A>Эта инструкция предусмотрена
+для совместимости с Oracle.</P>
+
+<P>Инструкция <CODE>SHOW</CODE> обеспечивает подобную информацию. Подробности
+в разделе "<A HREF="glava04.htm#SHOW">4.10 Синтаксис <CODE>SHOW</CODE></A>".
+</P>
+
+<H2><A NAME="Transactional_Commands">9.2
+Команды транзакций и блокировок в MySQL</A></H2>
+
+<H3><A NAME="COMMIT">9.2.1 Синтаксис <CODE>BEGIN/COMMIT/ROLLBACK</CODE></A>
+</H3>
+<P>По умолчанию, MySQL выполняется в режиме <CODE>autocommit</CODE>. Это
+означает, что, как только Вы сделаете модификацию, MySQL сохранит ее на диск.
+</P>
+
+<P>Если Вы используете транзакционно-безопасные таблицы (подобно
+<CODE>BDB</CODE>, <CODE>InnoDB</CODE>, Вы можете перевести MySQL в режим
+не-<CODE>autocommit</CODE> следующей командой:</P>
+<PRE>
+SET AUTOCOMMIT=0
+</PRE>
+
+<P>После того, как это сделано, Вы должны использовать <CODE>COMMIT</CODE>,
+чтобы сохранить Ваши изменения на диске, или <CODE>ROLLBACK</CODE>, если Вы
+хотите игнорировать изменения, которые сделали с начала Вашей транзакции.</P>
+
+<P>Если Вы хотите переключать режим <CODE>AUTOCOMMIT</CODE> для одного набора
+инструкций, Вы можете использовать команды обрамления <CODE>BEGIN</CODE> или
+<CODE>BEGIN WORK</CODE> так:</P>
+<PRE>
+BEGIN;
+SELECT @A:=SUM(salary) FROM table1 WHERE type=1;
+UPDATE table2 SET summmary=@A WHERE type=1;
+COMMIT;
+</PRE>
+
+<P>Обратите внимание, что, если Вы используете не транзакционно-безопасные
+таблицы, изменения будут сохранены сразу, независимо от состояния режима
+<CODE>autocommit</CODE>.</P>
+
+<P>Если Вы делаете <CODE>ROLLBACK</CODE>, когда Вы модифицировали не
+транзакционно-безопасные таблицы, Вы получите ошибку
+(<CODE>ER_WARNING_NOT_COMPLETE_ROLLBACK</CODE>) как предупреждение. Все
+транзакционно-безопасные таблицы будут восстановлены, но любая
+транзакционно-небезопасная таблица не будет изменяться.</P>
+
+<P>Если Вы используете <CODE>BEGIN</CODE> или <CODE>SET AUTOCOMMIT=0</CODE>,
+Вы должны использовать двоичный файл регистрации MySQL для резервирования
+вместо старого файла регистрации модификаций. Транзакции сохранены в двоичном
+протоколе, запись для <CODE>COMMIT</CODE> может гарантировать, что
+транзакции, которые прокручены обратно, не сохранены.</P>
+
+<P>Следующие команды автоматически заканчивают транзакцию (как будто Вы
+сделали <CODE>COMMIT</CODE> перед выполнением команды):</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><CODE>ALTER TABLE</CODE></TD><TD><CODE>BEGIN</CODE></TD><TD>
+<CODE>CREATE INDEX</CODE></TD></TR>
+<TR><TD><CODE>DROP DATABASE</CODE></TD><TD><CODE>DROP TABLE</CODE></TD><TD>
+<CODE>RENAME TABLE</CODE></TD></TR>
+<TR><TD><CODE>TRUNCATE</CODE></TD></TR></TABLE>
+
+<P>Вы можете изменять уровень изоляции для транзакций командой <CODE>SET
+TRANSACTION ISOLATION LEVEL ...</CODE>. Подробности в разделе
+"<A HREF="#SET_TRANSACTION">9.2.3 Синтаксис <CODE>SET
+TRANSACTION</CODE></A>".</P>
+
+<H3><A NAME="LOCK_TABLES">9.2.2
+Синтаксис <CODE>LOCK TABLES/UNLOCK TABLES</CODE></A></H3>
+<PRE>
+LOCK TABLES tbl_name [AS alias] {READ|[READ LOCAL]|[LOW_PRIORITY] WRITE}
+            [, tbl_name {READ | [LOW_PRIORITY] WRITE} ...]
+...
+UNLOCK TABLES
+</PRE>
+
+<P><CODE>LOCK TABLES</CODE> блокирует таблицы для текущего потока.
+<CODE>UNLOCK TABLES</CODE> снимает любые блокировки для текущего потока. Все
+таблицы, которые блокированы текущим потоком, автоматически разблокируются,
+когда поток выдает другую команду <CODE>LOCK TABLES</CODE>, или подключение к
+серверу нормально закрывается.</P>
+
+<P>Основные причины использовать <CODE>LOCK TABLES</CODE>: эмуляция
+транзакций или получение большего быстродействия при модифицировании таблиц.
+Это объясняется более подробно позже.</P>
+
+<P>Если поток получает блокировку <CODE>READ</CODE> на таблице, он (и все
+остальные) могут только читать из таблицы. Если поток получает блокировку
+<CODE>WRITE</CODE> на таблице, то только он может читать или писать таблицу.
+Другие потоки блокированы.</P>
+
+<P>Различие между <CODE>READ LOCAL</CODE> и <CODE>READ</CODE> в том, что
+<CODE>READ LOCAL</CODE> позволяет непротиворечивым инструкциям
+<CODE>INSERT</CODE> выполняться в то время, как установлена блокировка. Это
+не может использоваться, если Вы собираетесь управлять файлами базы данных
+снаружи MySQL в то время, как Вы поставили блокировку.</P>
+
+<P>Когда Вы используете <CODE>LOCK TABLES</CODE>, Вы должны блокировать все
+таблицы, которые Вы собираетесь использовать, и использовать тот же самый
+псевдоним, который собираетесь применить в Ваших запросах! Если Вы
+используете таблицу в запросе несколько раз (с псевдонимами), Вы должны
+получить блокировку для каждого псевдонима!</P>
+
+<P>Блокировки <CODE>WRITE</CODE> обычно имеют более высокий приоритет, чем
+<CODE>READ</CODE>, чтобы гарантировать, что модификации будут обработаны как
+можно скорее. Это означает, что, если один поток получает блокировку
+<CODE>READ</CODE>, и затем другой поток запрашивает блокировку
+<CODE>WRITE</CODE>, последующие запросы блокировки <CODE>READ</CODE> будут
+ждать, пока поток <CODE>WRITE</CODE> не получит блокировку и не снимет ее. Вы
+можете использовать блокировку <CODE>LOW_PRIORITY WRITE</CODE>, чтобы
+позволить другим потокам получать блокировки <CODE>READ</CODE>, в то время
+как поток ждет блокировку <CODE>WRITE</CODE>. Вы должны использовать
+блокировку <CODE>LOW_PRIORITY WRITE</CODE> только в случае, если Вы уверены,
+что будет в конечном счете такой момент, когда никакие потоки не будут иметь
+запрос на блокировку <CODE>READ</CODE>.</P>
+
+<P><CODE>LOCK TABLES</CODE> работает так:
+<OL><LI>Сортирует все таблицы, которые будут блокированы, во внутреннем
+определенном порядке (с точки зрения пользователя, порядок неопределен).
+<LI>Если таблица блокирована с помощью блокировок read и write, write всегда
+размещается перед read.
+<LI>Блокируется одна таблица за раз, пока поток не получает все блокировки.
+</OL>
+
+<P>Эта стратегия гарантирует, что блокировка таблицы свободна от тупиков.
+Имеются, однако, другие вещи, о которых надо знать:</P>
+
+<P>Если Вы используете блокировку <CODE>LOW_PRIORITY_WRITE</CODE> для
+таблицы, это означает, что MySQL будет ждать эту блокировку до тех пор, пока
+не останется потока, который просит блокировку <CODE>READ</CODE>. Когда поток
+имеет блокировку <CODE>WRITE</CODE> и ждет, чтобы получить блокировку для
+следующей таблицы в списке таблиц блокировки, все другие потоки будут ждать
+освобождения блокировки <CODE>WRITE</CODE>. Если это становится серьезной
+проблемой для Вашей прикладной программы, Вы должны рассмотреть
+преобразование некоторых из Ваших таблиц в транзакционно-безопасные.</P>
+
+<P>Вы можете безопасно уничтожать поток, который ждет блокировку таблицы, с
+помощью команды <CODE>KILL</CODE>. Подробности в разделе
+"<A HREF="glava04.htm#KILL">4.9 Синтаксис <CODE>KILL</CODE></A>".</P>
+
+<P>Обратите внимание, что Вы <STRONG>НЕ</STRONG> должны блокировать таблицы,
+которые Вы используете с <CODE>INSERT DELAYED</CODE>. Это потому, что в этом
+случае <CODE>INSERT</CODE> выполняется отдельным потоком.</P>
+
+<P>Обычно Вы не должны блокировать таблицы, поскольку все одиночные
+инструкции <CODE>UPDATE</CODE> атомные: никакой поток не может сталкиваться с
+любым другим, в настоящее время выполняющим инструкции SQL. Имеется несколько
+случаев, когда стоит блокировать таблицы:</P>
+
+<UL><LI>Если Вы собираетесь выполнять много операций на связке таблиц,
+намного быстрее блокировать таблицы, которые Вы собираетесь использовать.
+Конечно, никакой другой поток не может модифицировать блокированную на
+<CODE>READ</CODE> таблицу, и никакой поток не сможет читать блокированную на
+<CODE>WRITE</CODE> таблицу. Причина того, что некоторые вещи выполняются
+быстрее под <CODE>LOCK TABLES</CODE> в том, что MySQL не будет сбрасывать на
+диск кэш ключей для блокированных таблиц до вызова <CODE>UNLOCK TABLES</CODE>
+(обычно кэш ключей сбрасывается на диск после каждой инструкции SQL). Это
+ускоряет вставки, удаления и обновления на таблицах <CODE>MyISAM</CODE>.
+
+<LI>Если Вы используете драйвер таблицы в MySQL, который не поддерживает
+транзакции, Вы должны использовать <CODE>LOCK TABLES</CODE>, если Вы хотите
+гарантировать, что никакой другой поток не обработается между
+<CODE>SELECT</CODE> и <CODE>UPDATE</CODE>. Пример, показанный ниже, требует
+<CODE>LOCK TABLES</CODE>, чтобы выполниться безопасно:
+<PRE>
+mysql&#62; LOCK TABLES trans READ, customer WRITE;
+mysql&#62; select sum(value) from trans where customer_id= some_id;
+mysql&#62; update customer set total_value=sum_from_previous_statement
+                  where customer_id=some_id;
+mysql&#62; UNLOCK TABLES;
+</PRE>
+
+Без <CODE>LOCK TABLES</CODE> имеется возможность, что другой поток может
+вставлять новую строку в таблице <CODE>trans</CODE> между выполнением
+инструкций <CODE>SELECT</CODE> и <CODE>UPDATE</CODE>.</UL>
+
+<P>Используя инкрементные модификации (<CODE>UPDATE customer SET
+value=value+new_value</CODE>) или функцию <CODE>LAST_INSERT_ID()</CODE>, Вы
+во многих случаях можете избежать использования <CODE>LOCK TABLES</CODE>.</P>
+
+<P>Вы можете также решать некоторые проблемы, используя функции
+<CODE>GET_LOCK()</CODE> и <CODE>RELEASE_LOCK()</CODE>. Эти блокировки
+сохранены в таблице hash на сервере и выполнены через вызовы
+<CODE>pthread_mutex_lock()</CODE> и <CODE>pthread_mutex_unlock()</CODE> для
+ускорения работы. Подробности в разделе
+"<A HREF="glava06.htm#Miscellaneous_functions">6.5.2 Дополнительные функции
+</A>".</P>
+
+<P>Вы можете блокировать все таблицы во всех базах данных с блокировками
+чтения командой <CODE>FLUSH TABLES WITH READ LOCK</CODE>. Подробности в
+разделе "<A HREF="glava04.htm#FLUSH">4.8 Синтаксис <CODE>FLUSH</CODE></A>".
+Это очень удобный способ получать резервные копии, если Вы имеете файловую
+систему, подобную Veritas, которая может делать кадры состояния.</P>
+
+<P><STRONG>ОБРАТИТЕ ВНИМАНИЕ</STRONG>: <CODE>LOCK TABLES</CODE> не
+транзакционно-безопасна и автоматически завершает любые активные транзакции
+перед попыткой блокировать таблицы.</P>
+
+<H3><A NAME="SET_TRANSACTION">9.2.3 Синтаксис <CODE>SET TRANSACTION</CODE>
+</A></H3>
+<PRE>
+SET [GLOBAL|SESSION] TRANSACTION ISOLATION LEVEL
+[READ UNCOMMITTED|READ COMMITTED|REPEATABLE READ|SERIALIZABLE]
+</PRE>
+
+<P>Устанавливает уровень изоляции транзакции глобально, для целого сеанса
+или следующей транзакции.</P>
+
+<P>Заданное по умолчанию поведение должно установить уровень изоляции для
+следующей (не начатой) транзакции.</P>
+
+<P>Если Вы устанавливаете привилегию <CODE>GLOBAL</CODE>, это будет
+воздействовать на все новые созданные потоки. Вы будете нуждаться в
+привилегии <CODE>PROCESS</CODE>, чтобы сделать это.</P>
+
+<P>Установка привилегии <CODE>SESSION</CODE> будет воздействовать на
+следующую и на все будущие транзакции.</P>
+
+<H2><A NAME="HANDLER">9.3 Синтаксис <CODE>HANDLER</CODE></A></H2>
+<PRE>
+HANDLER table OPEN [AS alias]
+HANDLER table READ index {=|&#62;=|&#60;=|&#60;} (value1, value2, ...)
+                   [WHERE ...] [LIMIT ...]
+HANDLER table READ index {FIRST|NEXT|PREV|LAST} [WHERE ...] [LIMIT ...]
+HANDLER table READ {FIRST|NEXT} [WHERE ...] [LIMIT ...]
+HANDLER table CLOSE
+</PRE>
+
+<P>Команда <CODE>HANDLER</CODE> обеспечивает прямой доступ к интерфейсу
+таблиц MySQL, совершая обход SQL-оптимизатора. Таким образом, это работает
+быстрее, чем SELECT.</P>
+
+<P>Первая форма инструкции <CODE>HANDLER</CODE> открывает таблицу, делая ее
+доступной через следующий вызов <CODE>HANDLER ... READ</CODE>.</P>
+
+<P>Вторая форма выбирает одну (или определенное предложением
+<CODE>LIMIT</CODE> число) строку, где определенный индекс соответствует
+условию и определение <CODE>WHERE</CODE> выполнено. Если индекс состоит из
+нескольких частей (промежутки более, чем в несколько столбцов) значения
+должны быть определены в разделяемом запятыми списке.</P>
+
+<P>Третья форма выбирает одну (или определенное предложением
+<CODE>LIMIT</CODE> число) строку в индексном порядке, соответствуя условиям
+определения <CODE>WHERE</CODE> запроса.</P>
+
+<P>Четвертая форма (без индексной спецификации) выбирает одну (или
+определенное предложением <CODE>LIMIT</CODE> число) строку из таблицы в
+естественном порядке строк (как они сохранены в файле данных), соответствуя
+условиям определения <CODE>WHERE</CODE> запроса. Это быстрее, чем
+<CODE>HANDLER table READ index</CODE>, когда нужен полный просмотр таблицы.
+</P>
+
+<P>Последняя форма закрывает таблицу, открытую с помощью вызова
+<CODE>HANDLER ... OPEN</CODE>.</P>
+
+<P><CODE>HANDLER</CODE> это инструкция низкого уровня, например, она не
+обеспечивает непротиворечивость. Вызов <CODE>HANDLER ... OPEN</CODE>
+<STRONG>НЕ</STRONG> блокирует таблицу. Так что другие потоки могут работать с
+таблицей и менять данные.</P>
+
+<H2><A NAME="Fulltext_Search">9.4 Полнотекстовый поиск в MySQL</A></H2>
+<P>Начиная с Version 3.23.23, MySQL имеет поддержку для полнотекстовой
+индексации и поиска. Полнотекстовые индексы в MySQL представляют собой индекс
+типа <CODE>FULLTEXT</CODE>. Индекс <CODE>FULLTEXT</CODE> может быть создан из
+столбцов <CODE>VARCHAR</CODE> и <CODE>TEXT</CODE> в вызове <CODE>CREATE
+TABLE</CODE> или добавлен позже через инструкции <CODE>ALTER TABLE</CODE> или
+<CODE>CREATE INDEX</CODE>. Для больших наборов данных, добавление индекса
+<CODE>FULLTEXT</CODE> через <CODE>ALTER TABLE</CODE> (или <CODE>CREATE
+INDEX</CODE>) намного быстрее, чем вставка строк в пустую таблицу с индексом.
+</P>
+
+<P>Поиск выполняется с помощью функции <CODE>MATCH</CODE>.</P>
+<PRE>
+mysql&#62; CREATE TABLE articles (
+    -&#62;   id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    -&#62;   title VARCHAR(200),
+    -&#62;   body TEXT,
+    -&#62;   FULLTEXT (title,body)
+    -&#62; );
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&#62; INSERT INTO articles VALUES
+    -&#62; (0,'MySQL Tutorial', 'DBMS stands for DataBase Management ...'),
+    -&#62; (0,'How To Use MySQL Efficiently', 'After you went through a ...'),
+    -&#62; (0,'Optimizing MySQL','In this tutorial we will show how to ...'),
+    -&#62; (0,'1001 MySQL Trick','1. Never run mysqld as root. 2. Normalize ...'),
+    -&#62; (0,'MySQL vs. YourSQL', 'In the following database comparison we ...'),
+    -&#62; (0,'MySQL Security', 'When configured properly, MySQL could be ...');
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql&#62; SELECT * FROM articles WHERE MATCH (title,body)
+                    AGAINST ('database');
++----+-------------------+---------------------------------------------+
+| id | title             | body                                        |
++----+-------------------+---------------------------------------------+
+|  5 | MySQL vs. YourSQL | In the following database comparison we ... |
+|  1 | MySQL Tutorial    | DBMS stands for DataBase Management ...     |
++----+-------------------+---------------------------------------------+
+2 rows in set (0.00 sec)
+</PRE>
+
+<P>Функция <CODE>MATCH</CODE> соответствует запросу естественного языка для
+текстовой совокупности <CODE>AGAINST</CODE>, которая является просто набором
+столбцов, покрытых индексом <CODE>FULLTEXT</CODE>). Для каждой строки в
+таблице это возвращает релевантность: меру подобия между текстом в этой
+строке (в столбцах, которые являются частью совокупности) и запросом. Когда
+это используется в предложении <CODE>WHERE</CODE> (см. пример выше)
+возвращенные строки автоматически сортируются с уменьшением релевантности.
+Релевантность представлена неотрицательным числом с плавающей запятой.
+Нулевая релевантность означает, что нет никакого подобия.</P>
+
+<P>Вышеупомянутое представляет собой базисный пример использования функции
+<CODE>MATCH</CODE>. Строки будут возвращены с уменьшением релевантности.</P>
+
+<PRE>
+mysql&#62; SELECT id,MATCH (title,body) AGAINST ('Tutorial') FROM articles;
++----+-----------------------------------------+
+| id | MATCH (title,body) AGAINST ('Tutorial') |
++----+-----------------------------------------+
+|  1 |                        0.64840710366884 |
+|  2 |                                       0 |
+|  3 |                        0.66266459031789 |
+|  4 |                                       0 |
+|  5 |                                       0 |
+|  6 |                                       0 |
++----+-----------------------------------------+
+5 rows in set (0.00 sec)
+</PRE>
+
+<P>Этот пример показывает, как найти релевантность. Поскольку предложения
+<CODE>WHERE</CODE> или <CODE>ORDER BY</CODE> не присутствуют в запросе,
+возвращенные строки не упорядочиваются.</P>
+
+<PRE>
+mysql&#62; SELECT id, body, MATCH (title,body) AGAINST (
+    -&#62; 'Security implications of running MySQL as root') AS score
+    -&#62; FROM articles WHERE MATCH (title,body) AGAINST
+    -&#62; ('Security implications of running MySQL as root');
++----+-----------------------------------------------+-----------------+
+| id | body                                          | score           |
++----+-----------------------------------------------+-----------------+
+|  4 | 1. Never run mysqld as root. 2. Normalize ... | 1.5055546709332 |
+|  6 | When configured properly, MySQL could be ...  |   1.31140957288 |
++----+-----------------------------------------------+-----------------+
+2 rows in set (0.00 sec)
+</PRE>
+
+<P>Это более сложный пример: запрос возвращает релевантность и дополнительно
+сортирует строки с ее уменьшением. Чтобы достичь этого, нужно определить
+<CODE>MATCH</CODE> дважды. Обратите внимание, что это не вызовет никакой
+перегрузки, так как оптимизатор MySQL обратит внимание, что эти два обращения
+<CODE>MATCH</CODE> идентичны, и вызовут код поиска только однажды.</P>
+
+<P>MySQL использует очень простой синтаксический анализатор, чтобы расчленить
+текст на слова. Слово является любой последовательностью символов, чисел,
+знаков <SAMP>'</SAMP> и <SAMP>_</SAMP>. Любое слово, которое присутствует
+в списке stopword или слишком короткое (3 символа или меньше), игнорируется.
+</P>
+
+<P>Каждое правильное слово в совокупности и в запросе взвешивается, согласно
+значению в запросе или совокупности. Этим путем слово, которое присутствует
+во многих строках, будет иметь более низкий вес (и может даже иметь нулевой
+вес) потому, что оно имеет более низкое семантическое значение в этой
+специфической совокупности. Иначе, если слово редко, оно получит более
+высокий вес. Веса слов затем будут сложены, чтобы вычислить релевантность.
+</P>
+
+<P>Такая методика работает лучше всего с большими совокупностями (фактически,
+это было тщательно настроено на этот путь). Для очень маленьких таблиц
+распределение слов не отражает адекватно их семантическое значение, и эта
+модель может производить причудливые результаты.</P>
+<PRE>
+mysql&#62; SELECT * FROM articles WHERE MATCH (title,body) AGAINST ('MySQL');
+Empty set (0.00 sec)
+</PRE>
+
+<P>Поиск слова <CODE>MySQL</CODE> не производит никаких результатов в
+вышеупомянутом примере. Слово <CODE>MySQL</CODE> присутствует больше, чем в
+половине строк, и обрабатывается как stopword (то есть с семантическим
+значением, равным нулю).</P>
+
+<P>Слово, которое соответствует половине строк в таблице, менее вероятно
+определяет релевантные документы. Фактически, наиболее вероятно, что поиск по
+нему найдет множество несоответствующих документов. Все мы знаем, что это
+случается очень часто, когда мы пробуем что-то поискать в Internet... Таким
+строкам были назначены низкие семантические значения <STRONG>в этом
+специфическом наборе данных</STRONG>.</P>
+
+<H3><A NAME="Fulltext_restrictions">9.4.1 Полнотекстовые ограничения</A></H3>
+<UL><LI>Все параметры для функции <CODE>MATCH</CODE> должны быть столбцами из
+той же самой таблицы, которая является частью того же самого индекса.
+<LI>Параметром <CODE>AGAINST</CODE> должна быть строка-константа.</UL>
+
+<H3><A NAME="Fulltext_Fine-tuning">9.4.2
+Подстройка полнотекстового поиска MySQL</A></H3>
+<P>Обратите внимание, что поиск был тщательно настроен для самой лучшей
+эффективности. Изменение заданного по умолчанию поведения будет, в
+большинстве случаев, делать результаты поиска хуже. Не изменяйте исходники
+MySQL, если Вы не знаете точно, что Вы делаете!</P>
+
+<UL><LI>Минимальная длина слова, которое будет индексировано определена в
+файле <CODE>myisam/ftdefs.h</CODE> строкой
+<PRE>
+#define MIN_WORD_LEN 4
+</PRE>
+
+Измените это на значение, которое Вы предпочитаете, перекомпилируйте MySQL и
+пересоздайте индексы <CODE>FULLTEXT</CODE>.
+
+<LI>Список stopword определен в файле <CODE>myisam/ft_static.c</CODE>.
+Поменяйте его по своему вкусу, пересоберите MySQL и пересоздайте индексы
+<CODE>FULLTEXT</CODE>.
+
+<LI>Порог в 50% задан в соответствии со специфической выбранной схемой
+надбавки. Чтобы отключить это, измените следующую строку в файле
+<CODE>myisam/ftdefs.h</CODE>:
+<PRE>
+#define GWS_IN_USE GWS_PROB
+</PRE>
+на
+<PRE>
+#define GWS_IN_USE GWS_FREQ
+</PRE>
+
+После этого пересоберите MySQL. Индексы в этом случае пересоздавать не надо.
+</UL>
+
+<H3><A NAME="Fulltext_Features_to_Appear_in_MySQL_4.0">9.4.3
+Новые свойства в полнотекстовом поиске в MySQL 4.0</A></H3>
+<P>Этот раздел включает список свойств, которые уже реализованы в версии 4.0.
+Здесь также описано, что еще планируется сделать.
+
+<UL><LI><CODE>REPAIR TABLE</CODE> и <CODE>ALTER TABLE</CODE> работают с
+индексами <CODE>FULLTEXT</CODE>, а <CODE>OPTIMIZE TABLE</CODE> с индексами
+<CODE>FULLTEXT</CODE> теперь работает в 100 раз быстрее.
+
+<LI><CODE>MATCH ... AGAINST</CODE> поддерживает следующие
+<STRONG>boolean operators</STRONG>:
+
+<UL><LI><CODE>+</CODE>слово означает, что слово <STRONG>должно</STRONG>
+присутствовать в каждой возвращенной строке.
+<LI><CODE>-</CODE>слово означает, что слово <STRONG>не должно</STRONG>
+присутствовать в каждой возвращенной строке.
+<LI><CODE>&#60;</CODE> и <CODE>&#62;</CODE> могут использоваться, чтобы
+уменьшить и увеличить вес слова в запросе.
+<LI><CODE>~</CODE> может использоваться, чтобы назначить
+<STRONG>отрицательный</STRONG> вес слову.
+<LI><CODE>*</CODE> является оператором усечения.</UL>
+
+Булев поиск использует более упрощенный путь вычисления релевантности,
+который не имеет порога 50%.
+
+<LI>Поиски теперь работают в 2 раза быстрее из-за оптимизированного алгоритма.
+<LI>Утилита <CODE>ft_dump</CODE> добавлена для индексных операторов низкого
+уровня <CODE>FULLTEXT</CODE> (запросы, дампы, статистика).</UL>
+
+<H3><A NAME="Fulltext_TODO">9.9.4 Что еще надо
+сделать в полнотекстовом поиске</A></H3>
+<UL><LI>Ускорить все операции с индексами <CODE>FULLTEXT</CODE>.
+<LI>Поддержка скобок <CODE>()</CODE> в булевом поиске.
+<LI>Поиск фраз, операторы близости.
+<LI>Булев поиск может работать без индекса <CODE>FULLTEXT</CODE>
+(но <STRONG>очень</STRONG> медленно).
+<LI>Поддержка для "always-index words". Это такие строки, которые
+пользователь определяет как слова, например, "C++", "AS/400", "TCP/IP" и т.д.
+<LI>Поддержка для поиска в таблицах типа <CODE>MERGE</CODE>.
+<LI>Поддержка для многобайтных наборов символов.
+<LI>Сделать список stopword зависимым от языка данных в таблице.
+<LI>Происхождение (зависимое от языка данных, конечно).
+<LI>Универсальный обработчик пользовательских UDF (?).
+<LI>Сделать модель более гибкой (добавляя некоторые корректируемые параметры
+для <CODE>FULLTEXT</CODE> в вызов <CODE>CREATE/ALTER TABLE</CODE>).</UL>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

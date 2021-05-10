@@ -1,0 +1,7 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Arrays-master\cat.Arrays-master\dir.Arrays-master.md">Arrays-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Arrays-master\Exercises.en.md">Exercises.en.md</a>
+        - *## Working with Array methods
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Arrays-master\Exercises.ru.md">Exercises.ru.md</a>
+        - *## Работа с массивами и использование методов Array
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Arrays-master\README.md">README.md</a>
+        - *# Массивы в JavaScript (методы Array)

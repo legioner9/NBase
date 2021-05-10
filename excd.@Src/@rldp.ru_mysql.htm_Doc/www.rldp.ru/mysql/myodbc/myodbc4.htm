@@ -1,0 +1,2896 @@
+<HTML>
+<HEAD>
+  <TITLE>Руководство по MyODBC 3.51.03</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1><A NAME="MyODBC_API_Reference">4 Функции в MyODBC API</A></H1>
+<P>Эта глава руководства описывает каждую функцию (синтаксис, параметры и
+использование). Каждая функция определена как функция языка программирования
+C. Описания включают следующее:
+<UL><LI>Назначение
+<LI>Синтаксис
+<LI>Параметры
+<LI>Значения возврата
+<LI>Комментарии относительно использования</UL></P>
+
+<P><CODE>ОБРАТИТЕ ВНИМАНИЕ:</CODE> вообще все функции API возвращают
+следующие коды возврата:
+<UL><LI>SQL_SUCCESS
+<LI>SQL_SUCCESS_WITH_INFO
+<LI>SQL_ERROR
+<LI>SQL_INVALID_HANDLE</UL></P>
+
+<P>Функции работы с набором результатов, например, SQLFetch, SQLFetchScroll,
+SQLGetData также умеют возвращать значения <CODE>SQL_NO_DATA</CODE> или
+<CODE>SQL_NO_DATA_FOUND</CODE>. А функции SQLExecute, SQLExecDirect и
+SQLParamData моугт возвращать <CODE>SQL_NEED_DATA</CODE> как код возврата
+при поставке длинных данных порциями.</P>
+
+<H2><A NAME="MyODBC_Function_summary">4.1 Обзор функций MyODBC</A></H2>
+<P>Прикладная программа может вызывать функцию SQLGetInfo, чтобы получить
+информацию соответствия относительно MyODBC. Чтобы получать информацию
+относительно поддержки специфической функции в драйвере, прикладная программа
+может вызывать SQLGetFunctions. Обратите внимание, что драйвер MyODBC 3.51
+для обратной совместимости поддерживает все устаревшие функции. Имеется
+список MyODBC API, сгруппированый исходя из задач:</P>
+
+<TABLE><TR><TD><STRONG>Задача</STRONG></TD><TD><STRONG>Имя функции</STRONG>
+</TD><TD><STRONG>MyODBC</STRONG></TD><TD><STRONG>MyODBC 3.51</STRONG></TD>
+<TD><STRONG>Соответствие</STRONG></TD><TD><STRONG>Назначение</STRONG></TD>
+</TR>
+<TR><TD>Соединение с источником данных</TD><TD>SQLAllocHandle</TD><TD>Нет</TD>
+<TD>Да</TD><TD>ISO 92</TD><TD>Получает среду, подключение, инструкцию, или
+дескриптор.</TD></TR>
+<TR><TD></TD><TD>SQLConnect</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD><TD>
+Подключается к указанному драйверу, используя имя источника данных, user ID и
+password.</TD></TR>
+<TR><TD></TD><TD>SQLDriverConnect</TD><TD>Да</TD><TD>Да</TD><TD>ODBC</TD>
+<TD>Подключается к указанному драферу, используя строку подключения или
+запрос, чтобы Driver Manager отобразил диалоговое окно подключения.</TD></TR>
+<TR><TD></TD><TD>SQLAllocEnv</TD><TD>Да</TD><TD>Да</TD><TD>Устарела</TD>
+<TD>Получает дескриптор среды, распределенный из драйвера.</TD></TR>
+<TR><TD></TD><TD>SQLAllocConnect</TD><TD>Да</TD><TD>Да</TD><TD>Устарела</TD>
+<TD>Получает дескриптор подключения.</TD></TR>
+<TR><TD>Получение информации относительно драйвера и источника данных</TD>
+<TD>SQLDataSources</TD><TD>Нет</TD><TD>Нет</TD><TD>ISO 92</TD><TD>Возвращает
+список доступных источников данных, обработанных Driver Manager.</TD></TR>
+<TR><TD></TD><TD>SQLDrivers</TD><TD>Нет</TD><TD>Нет</TD><TD>ODBC</TD><TD>
+Возвращает список установленных драйверов и их атрибутов,
+обработанных Driver Manager</TD></TR>
+<TR><TD></TD><TD>SQLGetInfo</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD><TD>
+Возвращает информацию относительно специфического драйвера и источника данных.
+</TD></TR>
+<TR><TD></TD><TD>SQLGetFunctions</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD>
+<TD>Возвращает перечень функций, поддерживаемых драйвером.</TD></TR>
+<TR><TD></TD><TD>SQLGetTypeInfo</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD>
+<TD>Возвращает информацию относительно поддерживаемых типов данных.</TD></TR>
+<TR><TD>Установка и получение атрибутов драйвера.</TD><TD>SQLSetConnectAttr
+</TD><TD>Нет</TD><TD>Да</TD><TD>ISO 92</TD><TD>Устанавливает атрибуты связи.
+</TD></TR>
+<TR><TD></TD><TD>SQLGetConnectAttr</TD><TD>Нет</TD><TD>Да</TD><TD>ISO 92</TD>
+<TD>Возвращает значение атрибута подключения.</TD></TR>
+<TR><TD></TD><TD>SQLSetConnectOption</TD><TD>Да</TD><TD>Да</TD><TD>Устарела
+</TD><TD>Устанавливает опции подключения.</TD></TR>
+<TR><TD></TD><TD>SQLGetConnectOption</TD><TD>Да</TD><TD>Да</TD><TD>Устарела
+</TD><TD>Возвращает значение опции подключения.</TD></TR>
+<TR><TD></TD><TD>SQLSetEnvAttr</TD><TD>Нет</TD><TD>Да</TD><TD>ISO 92</TD><TD>
+Устанавливает атрибут среды.</TD></TR>
+<TR><TD></TD><TD>SQLGetEnvAttr</TD><TD>Нет</TD><TD>Да</TD><TD>ISO 92</TD><TD>
+Возвращает значение атрибута среды.</TD></TR>
+<TR><TD></TD><TD>SQLSetStmtAttr</TD><TD>Нет</TD><TD>Да</TD><TD>ISO 92</TD>
+<TD>Устанавливает операторный атрибут.</TD></TR>
+<TR><TD></TD><TD>SQLGetStmtAttr</TD><TD>Нет</TD><TD>Да</TD><TD>ISO 92</TD>
+<TD>Возвращает значение операторного атрибута.</TD></TR>
+<TR><TD></TD><TD>SQLSetStmtOption</TD><TD>Да</TD><TD>Да</TD><TD>Устарела</TD>
+<TD>Устанавливает операторную опцию.</TD></TR>
+<TR><TD></TD><TD>SQLGetStmtOption</TD><TD>Да</TD><TD>Да</TD><TD>Устарела</TD>
+<TD>Возвращает значение операторной опции.</TD></TR>
+<TR><TD>Подготовка SQL-запросов.</TD><TD>SQLAllocStmt</TD><TD>Да</TD><TD>Да
+</TD><TD>Устарела</TD><TD>Распределяет операторный дескриптор.</TD></TR>
+<TR><TD></TD><TD>SQLPrepare</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD><TD>
+Готовит инструкцию SQL для более позднего выполнения.</TD></TR>
+<TR><TD></TD><TD>SQLBindParameter</TD><TD>Да</TD><TD>Да</TD><TD>ODBC</TD>
+<TD>Назначает память параметру в инструкции SQL.</TD></TR>
+<TR><TD></TD><TD>SQLGetCursorName</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD>
+<TD>Возвращает имя курсора, связанное с операторным дескриптором.</TD></TR>
+<TR><TD></TD><TD>SQLSetCursorName</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD>
+<TD>Определяет имя курсора.</TD></TR>
+<TR><TD></TD><TD>SQLSetScrollOptions</TD><TD>Да</TD><TD>Да</TD><TD>ODBC</TD>
+<TD>Устанавливает параметры, управляющие поведением курсора.</TD></TR>
+<TR><TD>Передача запросов на рассмотрение</TD><TD>SQLExecute</TD><TD>Да</TD>
+<TD>Да</TD><TD>ISO 92</TD><TD>Выполняет подготовленную инструкцию.</TD></TR>
+<TR><TD></TD><TD>SQLExecDirect</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD>
+<TD>Выполняет инструкцию SQL.</TD></TR>
+<TR><TD></TD><TD>SQLNativeSql</TD><TD>Да</TD><TD>Да</TD><TD>ODBC</TD><TD>
+Возвращает текст инструкции SQL для трансляции драйверу.</TD></TR>
+<TR><TD></TD><TD>SQLDescribeParam</TD><TD>Да</TD><TD>Да</TD><TD>ODBC</TD>
+<TD>Возвращает описание для специфического параметра в инструкции.</TD></TR>
+<TR><TD></TD><TD>SQLNumParams</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD><TD>
+Возвращает число параметров в инструкции.</TD></TR>
+<TR><TD></TD><TD>SQLParamData</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD><TD>
+Использован вместе с SQLPutData, чтобы обеспечить передачу данных для
+параметров во время выполнения (полезно для длинных значений данных).</TD>
+</TR>
+<TR><TD></TD><TD>SQLPutData</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD><TD>
+Посылает часть или все данные для параметра (полезно для длинных значений
+данных).</TD></TR>
+<TR><TD>Получение результатов и информации относительно результатов.</TD><TD>
+SQLRowCount</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD><TD>Возвращает число
+строк, на которые воздействует запрос типа insert, update или delete.</TD>
+</TR>
+<TR><TD></TD><TD>SQLNumResultCols</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD>
+<TD>Возвращает число столбцов в наборе результатов.</TD></TR>
+<TR><TD></TD><TD>SQLDescribeCol</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD>
+<TD>Описывает столбец в наборе результатов.</TD></TR>
+<TR><TD></TD><TD>SQLColAttribute</TD><TD>Нет</TD><TD>Да</TD><TD>ISO 92</TD>
+<TD>Описывает атрибуты столбца в наборе результатов.</TD></TR>
+<TR><TD></TD><TD>SQLColAttributes</TD><TD>Да</TD><TD>Да</TD><TD>Устарела</TD>
+<TD>Описывает атрибуты столбца в наборе результатов.</TD></TR>
+<TR><TD></TD><TD>SQLFetch</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD><TD>
+Возвращает много строк результата.</TD></TR>
+<TR><TD></TD><TD>SQLFetchScroll</TD><TD>Нет</TD><TD>Да</TD><TD>ISO 92</TD>
+<TD>Возвращает скроллируемые строки результата.</TD></TR>
+<TR><TD></TD><TD>SQLExtendedFetch</TD><TD>Да</TD><TD>Да</TD><TD>Устарела</TD>
+<TD>Возвращает скроллируемые строки результата.</TD></TR>
+<TR><TD></TD><TD>SQLSetPos</TD><TD>Да</TD><TD>Да</TD><TD>ODBC</TD><TD>
+Устанавливает курсор внутри выбранного блока данных и позволяет прикладной
+программе обновить данные в rowset, модифицировать или удалять данные в
+наборе результатов.</TD></TR>
+<TR><TD></TD><TD>SQLBulkOperations</TD><TD>Нет</TD><TD>Да</TD><TD>ODBC</TD>
+<TD>Выполняет оптовые вставки и закладки, включая update, delete и выборку по
+закладке.</TD></TR>
+<TR><TD>Получение ошибок или диагностической информации</TD><TD>SQLError</TD>
+<TD>Да</TD><TD>Да</TD><TD>Устарела</TD><TD>Возвращает дополнительную
+информацию состояния или ошибки.</TD></TR>
+<TR><TD></TD><TD>SQLGetDiagField</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD>
+<TD>Возвращает дополнительную информацию диагностики (одиночное поле
+диагностической структуры данных).</TD></TR>
+<TR><TD></TD><TD>SQLGetDiagRec</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD>
+<TD>Возвращает дополнительную информацию диагностики (много полей
+диагностической структуры данных).</TD></TR>
+<TR><TD>Получение информации относительно системных таблиц источника данных.
+</TD><TD>SQLColumnPrivileges</TD><TD>Да</TD><TD>Да</TD><TD>ODBC</TD><TD>
+Возвращает список столбцов и связанных привилегий для одной или нескольких
+таблиц.</TD></TR>
+<TR><TD></TD><TD>SQLColumns</TD><TD>Да</TD><TD>Да</TD><TD>X/Open</TD><TD>
+Возвращает список имен столбцов в определенных таблицах.</TD></TR>
+<TR><TD></TD><TD>SQLForeignKeys</TD><TD>Да</TD><TD>Да</TD><TD>ODBC</TD><TD>
+Возвращает список имен столбцов, которые составляют внешние ключи, если они
+существуют для определенной таблицы.</TD></TR>
+<TR><TD></TD><TD>SQLPrimaryKeys</TD><TD>Да</TD><TD>Да</TD><TD>ODBC</TD><TD>
+Возвращает список имен столбцов, которые составляют первичный ключ для
+таблицы.</TD></TR>
+<TR><TD></TD><TD>SQLSpecialColumns</TD><TD>Да</TD><TD>Да</TD><TD>X/Open</TD>
+<TD>Возвращает информацию относительно оптимального набора столбцов, который
+уникально идентифицирует строку в определенной таблице, или столбцов, которые
+автоматически модифицируются, когда любое значение в строке модифицируется
+транзакцией.</TD></TR>
+<TR><TD></TD><TD>SQLStatistics</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD><TD>
+Статистика относительно одной таблицы и списка индексов, связанных с таблицей.
+</TD></TR>
+<TR><TD></TD><TD>SQLTablePrivileges</TD><TD>Да</TD><TD>Да</TD><TD>ODBC</TD>
+<TD>Возвращает список таблиц и привилегий, связанных с каждой таблицей.</TD>
+</TR>
+<TR><TD></TD><TD>SQLTables</TD><TD>Да</TD><TD>Да</TD><TD>X/Open</TD><TD>
+Возвращает список имен таблиц, сохраненных в специфическом источнике данных.
+</TD></TR>
+<TR><TD>Выполнение транзакций.</TD><TD>SQLTransact</TD><TD>Да</TD><TD>Да</TD>
+<TD>Устарела</TD><TD>Завершает или отменяет транзакцию.</TD></TR>
+<TR><TD></TD><TD>SQLEndTran</TD><TD>Нет</TD><TD>Да</TD><TD>ISO 92</TD><TD>
+Завершает или отменяет транзакцию.</TD></TR>
+<TR><TD>Прерывание команд.</TD><TD>SQLFreeStmt</TD><TD>Да</TD><TD>Да</TD><TD>
+ISO 92</TD><TD>Заканчивает обработку инструкции, отбрасывает ждущие обработки
+результаты и, факультативно, освобождает все ресурсы, связанные с операторным
+дескриптором.</TD></TR>
+<TR><TD></TD><TD>SQLCloseCursor</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD><TD>
+Закрывает курсор, который был открыт на операторном дескрипторе.</TD></TR>
+<TR><TD></TD><TD>SQLCancel</TD><TD>Да</TD><TD>Да</TD><TD>ISO 92</TD><TD>
+Отменяет инструкцию SQL.</TD></TR>
+<TR><TD>Прерывание соединения.</TD><TD>SQLDisconnect</TD><TD>Да</TD><TD>Да
+</TD><TD>ISO 92</TD><TD>Закрывает подключение.</TD></TR>
+<TR><TD></TD><TD>SQLFreeHandle</TD><TD>Нет</TD><TD>Да</TD><TD>ISO 92</TD><TD>
+Освобождает дескрипторы среды, подключения и инструкции.</TD></TR>
+<TR><TD></TD><TD>SQLFreeConnect</TD><TD>Да</TD><TD>Да</TD><TD>Устарела</TD>
+<TD>Освобождает дескриптор подключения.</TD></TR>
+<TR><TD></TD><TD>SQLFreeEnv</TD><TD>Да</TD><TD>Да</TD><TD>Устарела</TD><TD>
+Освобождает дескриптор среды.</TD></TR></TABLE>
+
+<H2><A NAME="Mappping_Deprecated_Functions">
+4.2 Отображение устаревших функций</A></H2>
+<P>Этот раздел описывает, как устаревшие функции отображены ODBC 3.x Driver
+Manager, чтобы гарантировать обратную совместимость с MyODBC 2.50. Driver
+Manager выполняет это отображение независимо от версии прикладной программы.
+Поскольку каждая функция ODBC 2.x в следующем списке отображена к
+соответствующей функции ODBC 3.x, драйвер MyODBC 3.51 не должен выполнять
+функции ODBC 2.x вообще. Но ради прикладных программ, которые работают
+напрямую с драйвером в обход Driver Manager MyODBC 3.51 поддерживает все
+функции из версий 2.x.</P>
+
+<P>Следующая таблица вносит в список все дублированные функции, которые
+представлены в драйвере MyODBC 3.51:</P>
+
+<TABLE><TR><TD><STRONG>Функция ODBC 2.x</STRONG></TD><TD><STRONG>Функция ODBC
+3.x</STRONG></TD></TR>
+<TR><TD>SQLAllocConnect</TD><TD>SQLAllocHandle с SQL_HANDLE_DBC</TD></TR>
+<TR><TD>SQLAllocEnv</TD><TD>SQLAllocHandle с SQL_HANDLE_ENV</TD></TR>
+<TR><TD>SQLAllocStmt</TD><TD>SQLAllocHandle с SQL_HANDLE_STMT</TD></TR>
+<TR><TD>SQLColAttributes</TD><TD>SQLColAttribute</TD></TR>
+<TR><TD>SQLError</TD><TD>SQLGetDiagRec</TD></TR>
+<TR><TD>SQLFreeConnect</TD><TD>SQLFreeHandle с SQL_HANDLE_DBC</TD></TR>
+<TR><TD>SQLFreeEnv</TD><TD>SQLFreeHandle с SQL_HANDLE_ENV</TD></TR>
+<TR><TD>SQLFreeStmt with SQL_DROP</TD><TD>SQLFreeHandle с SQL_HANDLE_STMT
+</TD></TR>
+<TR><TD>SQLSetConnectOption</TD><TD>SQLSetConnectAttr</TD></TR>
+<TR><TD>SQLGetConnectOption</TD><TD>SQLGetConnectAttr</TD></TR>
+<TR><TD>SQLSetStmtAttr</TD><TD>SQLSetStmtAttr</TD></TR>
+<TR><TD>SQLGetStmtAttr</TD><TD>SQLGetStmtAttr</TD></TR>
+<TR><TD>SQLParamOptions</TD><TD>SQLSetStmtAttr</TD></TR>
+<TR><TD>SQLSetScrollOption</TD><TD>SQLSetStmtAttr</TD></TR>
+<TR><TD>SQLTransact</TD><TD>SQLEndTran</TD></TR></TABLE>
+
+<H2><A NAME="Establishing_a_connection">4.3 Установление подключения</A></H2>
+<H3><A NAME="SQLAllocHandle">4.3.1 SQLAllocHandle</A></H3>
+<P><STRONG>SQLAllocHandle</STRONG> распределяет среду,
+подключение, инструкцию и дескриптор.</P>
+
+<P>Обратите внимание, что это универсальная функция для распределения
+дескрипторов, которая заменяет функции SQLAllocConnect, SQLAllocEnv и
+SQLAllocStmt из ODBC 2.0. Чтобы позволить работать прикладным программам,
+вызывающим SQLAllocHandle, вызов SQLAllocHandle отображен в Driver Manager на
+SQLAllocConnect, SQLAllocEnv или SQLAllocStmt.</P>
+
+<H4>4.3.1.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLAllocHandle(SQLSMALLINT HandleType, SQLHANDLE InputHandle,
+                         SQLHANDLE* OutputHandlePtr);
+</PRE>
+
+<H4>4.3.1.2 Параметры</H4>
+<P><CODE>HandleType[Input]</CODE> задает тип дескриптора, который будет
+распределен SQLAllocHandle. Должно быть одним из следующих значений:
+SQL_HANDLE_ENV, SQL_HANDLE_DBC, SQL_HANDLE_STMT или SQL_HANDLE_DESC
+(не поддерживается драйвером).</P>
+
+<P><CODE>InputHandle[Input]</CODE> задает в каком контексте новый дескриптор
+должен быть распределен. Если HandleType равен SQL_HANDLE_ENV, это будет
+SQL_NULL_HANDLE. Если HandleType равен SQL_HANDLE_DBC, это должен быть
+дескриптор среды, и HandleType равен SQL_HANDLE_STMT или SQL_HANDLE_DESC, это
+будет дескриптор подключения.</P>
+
+<P><CODE>OutputHandlePtr[Output]</CODE> указывает на буфер, чтобы вернуть
+дескриптор недавно распределенной структуры данных.</P>
+
+<H4>4.3.1.3 Комментарии</H4>
+<P><CODE>SQLAllocHandle</CODE> используется, чтобы распределить дескрипторы
+для сред, подключений и инструкций, как описано в следующих разделах.
+<CODE>Обратите внимание</CODE>, что MyODBC не поддерживает описатели.</P>
+
+<P>Сколько угодно дескрипторов могут быть распределены прикладной программой
+одновременно, если драйвер поддерживает многократные распределения. В MyODBC
+никакое ограничение не определено на число дескрипторов, которые могут
+быть распределены в любой момент времени.</P>
+
+<P>Если вызов с *OutputHandlePtr определяет дескриптор, который уже
+определен, он будет просто переопределен.</P>
+
+<P><CODE>Обратите внимание</CODE>, что это является неправильным ODBC
+программированием! Нельзя дважды вызывать <CODE>SQLAllocHandle</CODE> с той
+же самой переменной прикладной программы, определенной для *OutputHandlePtr
+без того, чтобы вызвать <CODE>SQLFreeHandle</CODE>, чтобы освободить
+дескриптор перед его перераспределением. Перезапись ODBC-дескриптора таким
+способом может привести к противоречивому поведению или сбою.</P>
+
+<P><CODE>SQLAllocHandle</CODE> не устанавливает атрибут среды
+SQL_ATTR_ODBC_VERSION, когда вызван, чтобы распределить дескриптор среды:
+атрибут среды должен быть установлен прикладной программой или будет
+возвращена SQLSTATE HY010 (Function sequence error), когда SQLAllocHandle
+вызвана, чтобы распределить дескриптор подключения.</P>
+
+<P><STRONG>Распределение дескриптора среды:</STRONG><BR>
+Дескриптор среды обеспечивает доступ к глобальной информации типа имеющих
+силу и активных дескрипторов подключения.</P>
+
+<P><STRONG>Распределение дескриптора подключения:</STRONG><BR>
+Дескриптор подключения обеспечивает доступ к информации типа имеющих силу
+операторных дескрипторов подключения и открытых в настоящее время транзакций.
+</P>
+
+<P><STRONG>Распределение операторного дескриптора:</STRONG><BR>
+Операторный дескриптор обеспечивает доступ к операторной информации, типа
+сообщений об ошибках, имени курсора и информации состояния для
+обработки инструкции SQL.</P>
+
+<H3><A NAME="SQLAllocEnv">4.3.2 SQLAllocEnv</A></H3>
+<P><STRONG>SQLAllocEnv</STRONG> распределяет память для дескриптора среды.
+</P>
+
+<H4>4.3.2.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLAllocEnv(HENV* EnvironmentHandle);
+</PRE>
+
+<H4>4.3.2.2 Комментарии</H4>
+<P>В ODBC 3.x SQLAllocHandle заменила функцию SQLAllocEnv из ODBC 2.x.</P>
+
+<H3><A NAME="SQLAllocConnect">4.3.3 SQLAllocConnect</A></H3>
+<P><STRONG>SQLAllocConnect</STRONG> распределяет память для дескриптора
+подключения.</P>
+
+<H4>4.3.3.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLAllocConnect(HENV EnvironmentHandle, HDBC* ConnectionHandle);
+</PRE>
+
+<H4>4.3.3.2 Комментарии</H4>
+<P>В ODBC 3.x SQLAllocHandle заменила функцию SQLAllocConnect из ODBC 2.x.
+</P>
+
+<H3><A NAME="SQLConnect">4.3.4 SQLConnect</A></H3>
+<P><STRONG>SQLConnect</STRONG> устанавливает связи с драйвером и источником
+данных. Дескриптор подключения ссылается на адрес в памяти всей информации
+относительно подключению к источнику данных, включая состояние подключения и
+транзакции, а также информацию об ошибках.</P>
+
+<H4>4.3.4.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLConnect(SQLHDBC ConnectionHandle, SQLCHAR* ServerName,
+                     SQLSMALLINT NameLength1, SQLCHAR* UserName,
+                     SQLSMALLINT NameLength2, SQLCHAR* Authentication,
+                     SQLSMALLINT NameLength3);
+</PRE>
+
+<H4>4.3.4.2 Параметры</H4>
+<P><CODE>ConnectionHandle[Input]</CODE> дескриптор подключения.</P>
+<P><CODE>ServerName[Input]</CODE> имя источника данных.</P>
+<P><CODE>NameLength1[Input]</CODE> длина *ServerName.</P>
+<P><CODE>UserName[Input]</CODE> User id.</P>
+<P><CODE>NameLength2[Input]</CODE> длина *UserName.</P>
+<P><CODE>Authentication[Input]</CODE> строка авторизации (обычно это пароль).
+</P>
+<P><CODE>NameLength3[Input]</CODE> длина *Authentication.</P>
+
+<H4>4.3.4.3 Комментарии</H4>
+<P>Подробно использование данной функции описано в разделе
+"<A HREF="myodbc3.htm#Establishing_a_connection_using_MyODBC">3.4.5
+Установление подключения, используя MyODBC</A>".</P>
+
+<H3><A NAME="SQLDriverConnect">4.3.5 SQLDriverConnect</A></H3>
+<P><STRONG>SQLDriverConnect</STRONG> является альтернативой SQLConnect.
+Это поддерживает источники данных, которые требуют большего количества
+информации подключения чем три параметра в SQLConnect, диалоговые окна, чтобы
+запросить пользователя относительно всей информации о подключении, и
+источники данных, которые не определены в информации системы.</P>
+
+<P><STRONG>SQLDriverConnect</STRONG> обеспечивает
+следующие возможности подключения:
+<UL><LI>Устанавливает подключение, использующее строку подключения, которая
+содержит имя источника данных, идентификатор пользователя, пароль и другую
+информацию, требуемую сервером.
+
+<LI>Устанавливает подключение, используя частичную строку подключения. В этом
+случае Driver Manager выдаст запрос пользователю для получения от него
+дополнительной информации о подключении.
+
+<LI>Устанавливает подключение к источнику данных, который не определен в
+информации системы. Если прикладная программа обеспечивает частичную строку
+подключения, драйвер может запрашивать пользователя относительно
+дополнительной информации для подключения.
+
+<LI>Устанавливает подключение к источнику данных, используя строку
+подключения, созданную из информации в .dsn-файле.</UL>
+
+<P>После того, как подключение установлено, <STRONG>SQLDriverConnect</STRONG>
+вернет завершенную строку подключения. Прикладная программа может
+использовать ее для выполнения последующих запросов подключения.</P>
+
+<H4>4.3.5.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLDriverConnect(SQLHDBC ConnectionHandle, SQLHWND WindowHandle,
+                           SQLCHAR* InConnectionString,
+                           SQLSMALLINT StringLength1,
+                           SQLCHAR* OutConnectionString,
+                           SQLSMALLINT BufferLength,
+                           SQLSMALLINT* StringLength2Ptr,
+                           SQLUSMALLINT DriverCompletion);
+</PRE>
+
+<H4>4.3.5.2 Параметры</H4>
+<P><CODE>ConnectionHandle [Input]</CODE> дескриптор подключения.</P>
+
+<P><CODE>WndowHandle [Input]</CODE> дескриптор окна. Прикладная программа
+может передавать дескриптор родительского окна, если оно есть, или null,
+если дескриптор окна не существует.</P>
+
+<P><CODE>InConnectionString [Input]</CODE> полное подключение, частичная
+строка подключения или пустая строка.</P>
+<P><CODE>StringLength1 [Input]</CODE> длина *InConnectionString в байтах.</P>
+
+<P><CODE>OutConnectionString [Output]</CODE> указатель на буфер для
+завершенной строки подключения. При успешном подключении к целевому источнику
+данных этот буфер содержит завершенную строку подключения. Прикладные
+программы должны распределить по крайней мере 1024 байта для этого буфера.
+</P>
+
+<P><CODE>BufferLength [Input]</CODE> длина буфера *OutConnectionString.</P>
+<P><CODE>StringLength2Ptr [Output]</CODE> указатель на буфер, предназанченный
+чтобы возвращать общее количество символов (кроме завершающего нуля) в
+*OutConnectionString. Если число символов, доступное для возврата, больше или
+равно BufferLength, завершенная строка подключения в *OutConnectionString
+будет обрезана до BufferLength.</P>
+
+<P><CODE>DriverCompletion [Input]</CODE> указывает должен ли Driver Manager
+запросить дополнительную информацию для подключения: SQL_DRIVER_PROMPT,
+SQL_DRIVER_COMPLETE, SQL_DRIVER_COMPLETE_REQUIRED или SQL_DRIVER_NOPROMPT.
+</P>
+
+<H3><A NAME="SQLBrowseConnect">4.3.6 SQLBrowseConnect</A></H3>
+<P><CODE>Не поддерживается</CODE>.</P>
+
+<H2><A NAME="Retrieving_Driver_and_Data_Source_Information">4.4
+Получение информации источника данных и драйвера</A></H2>
+
+<H3><A NAME="SQLDataSources">4.4.1 SQLDataSources</A></H3>
+<P><STRONG>SQLDataSources</STRONG> возвращает информацию относительно
+источника данных. Эта функция выполнена исключительно в Driver Manager. Для
+получения большего количества информации относительно этого API обратитесь к
+документации на соответствующий Driver Manager.</P>
+
+<H3><A NAME="SQLDrivers">4.4.2 SQLDrivers</A></H3>
+<P><STRONG>SQLDrivers</STRONG> вносит в список описания драйверов и ключевые
+слова атрибутов драйверов. Эта функция выполнена исключительно Driver
+Manager. Для получения большего количества информации относительно этого API
+обратитесь к документации на соответствующий Driver Manager.</P>
+
+<H3><A NAME="SQLGetInfo">4.4.3 SQLGetInfo</A></H3>
+<P><STRONG>SQLGetInfo</STRONG> возвращает общую информацию относительно
+драйвера и сервера, связанных с подключением.
+
+<P><STRONG>4.4.3.1 Синтаксис</STRONG></P>
+<PRE>
+SQLRETURN SQLGetInfo(SQLHDBC ConnectionHandle, SQLUSMALLINT InfoType,
+                     SQLPOINTER InfoValuePtr, SQLSMALLINT BufferLength,
+                     SQLSMALLINT* StringLengthPtr);
+</PRE>
+
+<H4>4.4.3.2 Параметры</H4>
+<P><CODE>ConnectionHandle [Input]</CODE> дескриптор подключения.</P>
+<P><CODE>InfoType [Input]</CODE> тип информации, описанной в разделе
+комментариев.</P>
+
+<P><CODE>InfoValuePtr [Output]</CODE> указатель на буфер, предназначенный
+чтобы возвращать информацию. В зависимости от запрошенного InfoType,
+возвращенная информация будет одним из следующего: символьная строка с
+нулевым символом в конце, значение SQLUSMALLINT, битовая маска SQLUINTEGER,
+флажок (параметр) SQLUINTEGER или двоичное значение SQLUINTEGER.</P>
+
+<P>Если параметр InfoType равен SQL_DRIVER_HDESC или SQL_DRIVER_HSTMT,
+параметр InfoValuePtr является вводом и выводом.</P>
+
+<P><CODE>BufferLength [Input]</CODE> длина буфера *InfoValuePtr. Если
+значение в *InfoValuePtr не является символьной строкой, или InfoValuePtr
+представляет собой null, параметр BufferLength игнорируется. Драйвер
+принимает, что размер *InfoValuePtr равен SQLUSMALLINT или SQLUINTEGER,
+исходя из InfoType. Если *InfoValuePtr является строкой в формате Unicode
+(при вызове SQLGetInfoW), параметр BufferLength должен быть четным числом,
+если это не так, будет возвращена ошибка SQLSTATE HY090 (Invalid string
+or buffer length).</P>
+
+<P><CODE>StringLengthPtr [Output]</CODE> указатель на буфер предназначенный
+для того, чтобы возвращать общее количество байт (за вычетом хвостовых нулей
+для символьных данных), доступных в *InfoValuePtr.</P>
+
+<P>Для символьных данных, если число доступных байтов больше или равно
+BufferLength, информация в *InfoValuePtr обрезается до размера BufferLength.
+</P>
+
+<P>Для всех других типов данных значение BufferLength игнорируется, и драйвер
+принимает, что размер *InfoValuePtr равен SQLUSMALLINT или SQLUINTEGER в
+зависимости от InfoType.</P>
+
+<H3><A NAME="SQLGetFunctions">4.4.4 SQLGetFunctions</A></H3>
+<P><STRONG>SQLGetFunctions</STRONG> возвращает информацию относительно того,
+поддерживает ли драйвер специфическую функцию ODBC.
+
+<P><STRONG>4.4.4.1 Синтаксис</STRONG></P>
+<PRE>
+SQLRETURN SQLGetFunctions(SQLHDBC ConnectionHandle, SQLUSMALLINT FunctionId,
+                          SQLUSMALLINT* SupportedPtr);
+</PRE>
+
+<H4>4.4.4.2 Параметры</H4>
+<P><CODE>ConnectionHandle [Input]</CODE> дескриптор подключения.</P>
+<P><CODE>FunctionId [Input]</CODE> SQL_API_ODBC3_ALL_FUNCTIONS или
+SQL_API_ALL_FUNCTIONS.</P>
+
+<P>SQL_API_ODBC3_ALL_FUNCTIONS используется прикладными программами ODBC 3.x,
+чтобы определить поддержку ODBC 3.x и более ранних функций.
+SQL_API_ALL_FUNCTIONS используется прикладными программами ODBC 2.x, чтобы
+определить поддержку ODBC 2.x. Прикладная программа может передавать
+индивидуальный функциональный идентификатор, чтобы определить поддерживает ли
+драйвер функцию или нет.</P>
+
+<P><CODE>SupportedPtr [Output]</CODE> если FunctionId идентифицирует
+одиночную функцию ODBC, SupportedPtr указывает на одиночное значение
+SQLUSMALLINT, которое является SQL_TRUE, если определенная функция поддержана
+драйвером, или SQL_FALSE в противном случае.</P>
+
+<P>Если FunctionId равно SQL_API_ODBC3_ALL_FUNCTIONS, SupportedPtr указывает
+на массив SQLSMALLINT с рядом элементов, равных
+SQL_API_ODBC3_ALL_FUNCTIONS_SIZE. Прикладная программа ODBC 3.x может
+вызывать SQLGetFunctions с SQL_API_ODBC3_ALL_FUNCTIONS.</P>
+
+<P>Если FunctionId равно SQL_API_ALL_FUNCTIONS, SupportedPtr указывает
+на массив SQLSMALLINT ровно из 100 элементов. Элемент равен SQL_TRUE, если он
+идентифицирует ODBC 2.x или более раннюю функцию, поддержанную драйвером.
+Элемент массива будет равен SQL_FALSE, если он идентифицирует функцию ODBC,
+не поддержанную драйвером, или не идентифицирует функцию ODBC вообще.</P>
+
+<P>Массивы, возвращенные в *SupportedPtr используют индексацию, начиная с 0.
+</P>
+
+<H3><A NAME="SQLGetTypeInfo">4.4.5 SQLGetTypeInfo</A></H3>
+<P><STRONG>SQLGetTypeInfo</STRONG> возвращает информацию относительно типов
+данных, поддержанных сервером. Драйвер возвращает информацию в форме набора
+результатов SQL. Типы данных предназначены для использования в инструкциях
+Data Definition Language (DDL). Прикладные программы должны использовать
+имена типов, возвращенные в столбце TYPE_NAME набора результатов
+SQLGetTypeInfo. Для команд ALTER TABLE и CREATE TABLE возможен возврат
+больше, чем одной строки с тем же самым значением в DATA_TYPE столбце.</P>
+
+<H4>4.4.5.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLGetTypeInfo(SQLHSTMT StatementHandle, SQLSMALLINT DataType);
+</PRE>
+
+<H4>4.4.5.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор
+для набора результатов.</P>
+
+<P><CODE>DataType [Input]</CODE> SQL-тип данных. SQL_ALL_TYPES определяет,
+что должна быть возвращена информация относительно всех типов данных.</P>
+
+<H2><A NAME="Setting_and_Retrieving_Driver_Attributes">4.5
+Установка и получение атрибутов драйвера</A></H2>
+<H3><A NAME="SQLSetConnectAttr">4.5.1 SQLSetConnectAttr</A></H3>
+<P><STRONG>SQLSetConnectAttr</STRONG> устанавливает атрибуты, которые
+управляют аспектами подключений.</P>
+
+<H4>4.5.1.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLSetConnectAttr(SQLHDBC ConnectionHandle, SQLINTEGER Attribute,
+                            SQLPOINTER ValuePtr, SQLINTEGER StringLength);
+</PRE>
+
+<H4>4.5.1.2 Параметры</H4>
+<P><CODE>ConnectionHandle [Input]</CODE> дескриптор подключения.</P>
+<P><CODE>Attribute [Input]</CODE> атрибут для установки.</P>
+
+<P><CODE>ValuePtr [Input]</CODE> указатель на значение, которое будет связано
+с атрибутом. В зависимости от значения атрибута, ValuePtr будет 32-разрядным
+целым числом без знака или указателем на строку символов с нулем в конце.
+Обратите внимание, что если параметр Attribute представляет собой
+специфическое для драйвера значение, то ValuePtr может быть целым
+числом со знаком.</P>
+
+<P><CODE>StringLength [Input]</CODE> если Attribute определен в ODBC и
+ValuePtr указывает на строку или на двоичный буфер, этот параметр должен
+быть длиной *ValuePtr. Если Attribute определен в ODBC и ValuePtr является
+целым числом, StringLength игнорируется.</P>
+
+<UL><LI>Если ValuePtr является указателем на строку символов, StringLength
+определяет длину строки или равно SQL_NTS.
+
+<LI>Если ValuePtr является указателем на двоичный буфер, то прикладная
+программа помещает результат макрокоманды SQL_LEN_BINARY_ATTR(length) в
+StringLength. Это помещает отрицательное значение в StringLength.
+
+<LI>Если ValuePtr является указателем на иное значение, StringLength имеет
+значение SQL_IS_POINTER.
+
+<LI>Если ValuePtr содержит значение фиксированной длины, StringLength
+является соответственно SQL_IS_INTEGER или SQL_IS_UINTEGER.</UL>
+
+<H4>4.5.1.3 Комментарии</H4>
+<P>Имеется список атрибутов подключения, которые
+поддержаны драйвером MyODBC 3.51:</P>
+
+<TABLE><TR><TD><STRONG>Атрибут</STRONG></TD><TD><STRONG>Содержимое ValuePtr
+</STRONG></TD></TR>
+<TR><TD>SQL_ATTR_ACCESS_MODE</TD><TD>Значение SQLUINTEGER, и драйвер не
+позволяет пользователю устанавливать этот атрибут во что-либо, кроме
+SQL_MODE_READ_WRITE.</TD></TR>
+<TR><TD>SQL_ATTR_ASYNC_ENABLE</TD><TD>Значение SQLUINTEGER, которое
+определяет асинхронное выполнение. Драйвер не поддерживает асинхронное
+выполнение, так что это можно устанавливать только в SQL_ASYNC_ENABLE_OFF.
+</TD></TR>
+<TR><TD>SQL_ATTR_AUTO_IPD</TD><TD>Значение SQLUINTEGER только для чтения,
+драйвер возвращает значение по умолчанию как SQL_FALSE.</TD></TR>
+<TR><TD>SQL_ATTR_AUTOCOMMIT</TD><TD>Значение SQLUINTEGER, которое определяет
+использовать ли autocommit или ручной режим:<BR>
+SQL_AUTOCOMMIT_OFF: драйвер работает в ручном режиме, и прикладная программа
+должна явно заверишть или отменить каждую транзакцию через SQLEndTran.<BR>
+SQL_AUTOCOMMIT_ON: драйвер работает в режиме autocommit. Каждая инструкция
+выполняется сразу после передачи. Это значение по умолчанию. Любые открытые
+транзакции на подключении автоматически закрываются при смене
+SQL_ATTR_AUTOCOMMIT на SQL_AUTOCOMMIT_ON.</TD></TR>
+<TR><TD>SQL_ATTR_CONNECTION_DEAD</TD><TD>Значение SQLUINTERGER, которое
+указывает состояние подключения. Если это SQL_CD_TRUE, связь прервана. Если
+это SQL_CD_FALSE, подключение все еще активно.</TD></TR>
+<TR><TD>SQL_ATTR_CONNECTION_TIMEOUT</TD><TD>Значение SQLUINTEGER,
+соответствующее числу секунд, которое надо ждать любой запрос на подключении
+перед возвратом прикладной программе. Драйвер должен возвратить SQLSTATE
+HYT00 (Timeout expired) по окончании тайм-аута. Если ValuePtr равно 0
+(значение по умолчанию), не имеется никакого времени ожидания.</TD></TR>
+<TR><TD>SQL_ATTR_CURRENT_CATALOG</TD><TD>Символьная строка, содержащая имя
+каталога, который нужно использовать как источник данных. Например, в SQL
+Server каталог является базой данных, так что драйвер посылает инструкцию
+<STRONG>USE</STRONG> источнику данных, где база данных определена в *ValuePtr.
+</TD></TR>
+<TR><TD>SQL_ATTR_LOGIN_TIMEOUT</TD><TD>Значение SQLUINTEGER, соответствующее
+числу секунд, которое надлежит ждать при входе в систему перед возвратом
+прикладной программе. Значение по умолчанию зависит от драйвера. Если
+ValuePtr равно 0, время ожидания заблокировано, и попытка подключения будет
+ждать неопределенное время. Если определенное время ожидания превышает
+максимальное время ожидания входа в систему в источнике данных, значение из
+драйвера имеет приоритет, при этом драйвер вернет SQLSTATE 01S02
+(Option value changed).</TD></TR>
+<TR><TD>SQL_ATTR_METADATA_ID</TD><TD>Значение SQLUINTEGER, которое определяет
+как обрабатываются строковые параметры каталожных функций. Драйвер пока
+поддерживает только SQL_FALSE.</TD></TR>
+<TR><TD>SQL_ATTR_ODBC_CURSORS</TD><TD>Значение SQLUINTEGER, определяющее, как
+Driver Manager использует библиотеку курсоров ODBC.</TD></TR>
+<TR><TD>SQL_ATTR_PACKET_SIZE</TD><TD>Значение SQLUINTEGER, определяющее
+сетевой размер пакета в байтах.</TD></TR>
+<TR><TD>SQL_ATTR_QUIET_MODE</TD><TD>32-битный дескриптор окна (hwnd). Если он
+представляет собой null, драйвер не отображает никакие диалоговые окна. Если
+дескриптор окна не null, это должно быть родительским дескриптором окна
+прикладной программы. Это значение по умолчанию. Драйвер использует этот
+дескриптор, чтобы отобразить диалоговые окна.</TD></TR>
+<TR><TD>SQL_ATTR_TRACE</TD><TD>Значение SQLUINTEGER, сообщающее Driver
+Manager, выполнять ли трассировку:<BR>
+SQL_OPT_TRACE_OFF: трассировка выключена (по умолчанию),<BR>
+SQL_OPT_TRACE_ON: трассировка включена.</TD></TR>
+<TR><TD>SQL_ATTR_TRACEFILE</TD><TD>Символьная строка с нулевым символом в
+конце, содержащая имя файла трассировки.</TD></TR>
+<TR><TD>SQL_ATTR_TRANSLATE_LIB</TD><TD>Символьная строка с нулевым символом в
+конце, содержащая имя библиотеки, содержащей функции
+<STRONG>SQLDriverToDataSource</STRONG> и
+<STRONG>SQLDataSourceToDriver</STRONG>, к которым драйвер обращается, чтобы
+выполнить задачи трансляции набора символов.</TD></TR>
+<TR><TD>SQL_ATTR_TRANSLATE_OPTION</TD><TD>32-битный параметр, который
+передано к трансляции DLL.</TD></TR>
+<TR><TD>SQL_ATTR_TXN_ISOLATION</TD><TD>32-битная маска, которая устанавливает
+уровень изоляции транзакции для текущего подключения. Прикладная программа
+должна вызвать SQLEndTran для завершения или отмены всех открытых транзакций
+на подключении перед вызовом SQLSetConnectAttr с этой опцией. Имеющие силу
+значения для ValuePtr могут быть определены, вызывая SQLGetInfo с InfoType
+равным SQL_TXN_ISOLATION_OPTIONS.</TD></TR></TABLE>
+
+<H3><A NAME="SQLGetConnectAttr">4.5.2 SQLGetConnectAttr</A></H3>
+<P><STRONG>SQLGetConnectAttr</STRONG> возвращает текущую установку
+некоего атрибута подключения.</P>
+
+<H4>4.5.2.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLGetConnectAttr(SQLHDBC ConnectionHandle, SQLINTEGER Attribute,
+                            SQLPOINTER ValuePtr, SQLINTEGER BufferLength,
+                            SQLINTEGER* StringLengthPtr);
+</PRE>
+
+<H4>4.5.2.2 Параметры</H4>
+<P><CODE>ConnectionHandle [Input]</CODE> дескриптор подключения.</P>
+<P><CODE>Attribute [Input]</CODE> интересующий атрибут.</P>
+<P><CODE>ValuePtr [Input]</CODE> указатель на память предназначенный, чтобы
+возвращать текущее значение атрибута.</P>
+
+<P><CODE>BufferLength [Input]</CODE>Если Attribute представляет собой
+ODBC-атрибут и ValuePtr указывает на символьную строку или двоичный буфер,
+этот параметр должен быть длиной *ValuePtr. Если же *ValuePtr не указатель, а
+целое число, BufferLength игнорируется.
+
+<UL><LI>Если *ValuePtr указатель на символьную строку, BufferLength хранит
+длину строки или SQL_NTS.
+
+<LI>Если *ValuePtr указатель на двоичный буфер, то прикладная программа
+помещает результат макрокоманды SQL_LEN_BINARY_ATTR(length) в BufferLength.
+Это помещает отрицательное значение в BufferLength.
+
+<LI>Если *ValuePtr указатель на иное значение, то BufferLength имеет значение
+SQL_IS_POINTER.
+
+<LI>Если *ValuePtr содержит тип данных фиксированной длины, то BufferLength
+является соответственно SQL_IS_INTEGER или SQL_IS_UINTEGER.</UL>
+
+<P><CODE>StringLengthPtr [Output]</CODE> указатель на буфер предназначенный,
+чтобы возвращать общее количество байт, доступных в *ValuePtr (кроме нулевых
+символов в конце). Если *ValuePtr равен null, длина не возвращена. Если
+значением атрибута является символьная строка, и число байт больше
+BufferLength, данные в *ValuePtr обрезаются до BufferLength.</P>
+
+<H3><A NAME="SQLSetConnectOption">4.5.3 SQLSetConnectOption</A></H3>
+<P>В ODBC 3.x <STRONG>SQLSetConnectAttr</STRONG> заменяет
+<STRONG>SQLSetConnectOption</STRONG>.</P>
+
+<H3><A NAME="SQLGetConnectOption">4.5.4 SQLGetConnectOption</A></H3>
+<P>В ODBC 3.x <STRONG>SQLGetConnectAttr</STRONG> заменяет
+<STRONG>SQLGetConnectOption</STRONG>.</P>
+
+<H3><A NAME="SQLSetEnvAttr">4.5.5 SQLSetEnvAttr</A></H3>
+<P><STRONG>SQLSetEnvAttr</STRONG> устанавливает атрибуты, которые
+управляют аспектами сред.</P>
+
+<H4>4.5.5.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLSetEnvAttr(SQLHENV EnvironmentHandle, SQLINTEGER Attribute,
+                        SQLPOINTER ValuePtr, SQLINTEGER StringLength);
+</PRE>
+
+<H4>4.5.5.2 Параметры</H4>
+<P><CODE>EnvironmentHandle [Input]</CODE> дескриптор среды.</P>
+<P><CODE>Attribute [Input]</CODE> атрибут для установки.</P>
+<P><CODE>ValuePtr [Input]</CODE> указатель на значение, которое будет связано
+с Attribute. В зависимости от значения Attribute, ValuePtr будет 32-битным
+целочисленным значением или указателем на символьную строку с
+нулевым символом в конце.</P>
+
+<P><CODE>StringLength [Input]</CODE>: если ValuePtr указатель на символьную
+строку с нулевым символом в конце или на двоичный буфер, здесь хранится длина
+*ValuePtr. Если ValuePtr представляет собой целое число,
+StringLength игнорируется.</P>
+
+<H4>4.5.5.3 Комментарии</H4>
+<P>Прикладная программа может вызывать SQLSetEnvAttr только, если никакой
+дескриптор подключения не распределен в текущей среде. Все атрибуты среды
+устанавливаются прикладной программой до обращения SQLFreeHandle. Следующая
+таблица вносит в список различные атрибуты среды, поддержанные драйвером:</P>
+
+<TABLE><TR><TD><STRONG>Атрибут</STRONG></TD><TD><STRONG>Содержимое ValuePtr
+</STRONG></TD></TR>
+<TR><TD>SQL_ATTR_CONNECTION_POOLING</TD><TD>32-битное значение SQLUINTEGER,
+которое включает или отключает объединение подключений.</TD></TR>
+<TR><TD>SQL_ATTR_CP_MATCH</TD><TD>32-битное значение SQLUINTEGER, которое
+определяет как подключение выбрано из объединения подключений. Обратитесь к
+документации на конкретный Driver Manager за подробностями.</TD></TR>
+<TR><TD>SQL_ATTR_ODBC_VERSION</TD><TD>32-битное целое значение, которое
+определяет проявляют ли функциональные возможности поведение ODBC 2.x или
+ODBC 3.x. Следующие значения используются, чтобы установить значение этого
+атрибута: <CODE>SQL_OV_ODBC3</CODE> и <CODE>SQL_OV_ODBC2</CODE>.</TD></TR>
+<TR><TD>SQL_ATTR_OUTPUT_NTS </TD><TD>32-битное целое значение, которое
+определяет как драйвер возвращает строчные данные. Если SQL_TRUE, драйвер
+возвращает строки с нулевым символом в конце. Если SQL_FALSE, драйвер этого
+не делает. Сейчас драйвер поддерживает только значение по умолчанию SQL_TRUE.
+</TD></TR></TABLE>
+
+<H3><A NAME="SQLGetEnvAttr">4.5.6 SQLGetEnvAttr</A></H3>
+<P><STRONG>SQLGetEnvAttr</STRONG> возвращает текущую установку атрибута среды.
+</P>
+
+<H4>4.5.6.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLGetEnvAttr(SQLHENV EnvironmentHandle, SQLINTEGER Attribute,
+                        SQLPOINTER ValuePtr, SQLINTEGER BufferLength,
+                        SQLINTEGER* StringLengthPtr);
+</PRE>
+
+<H4>4.5.6.2 Параметры</H4>
+<P><CODE>EnvironmentHandle [Input]</CODE> дескриптор среды.</P>
+<P><CODE>Attribute [Input]</CODE> атрибут, значение которого нужно получить.
+</P>
+<P><CODE>ValuePtr [Output]</CODE> указатель на буфер нужный, чтобы возвращать
+текущее значение атрибута, определенного Attribute.</P>
+
+<P><CODE>BufferLength [Input]</CODE> если ValuePtr указывает на символьную
+строку, этот параметр должен быть длиной *ValuePtr. Если *ValuePtr целое
+число, BufferLength игнорируется. Если значение атрибута не строка,
+BufferLength не применяется.</P>
+
+<P><CODE>StringLength [Output]</CODE> указатель на буфер предназначенный,
+чтобы возвращать общее количество байт, доступных в *ValuePtr (кроме нулевых
+символов в конце). Если *ValuePtr равен null, длина не возвращена. Если
+значением атрибута является символьная строка, и число байт больше
+BufferLength, данные в *ValuePtr обрезаются до BufferLength.</P>
+
+<H3><A NAME="SQLSetStmtAttr">4.5.7 SQLSetStmtAttr</A></H3>
+<P><STRONG>SQLSetStmtAttr</STRONG> устанавливает
+атрибуты, связанные с инструкцией.</P>
+
+<H4>4.5.7.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLSetStmtAttr(SQLHSTMT StatementHandle, SQLINTEGER Attribute,
+                         SQLPOINTER ValuePtr, SQLINTEGER StringLength);
+</PRE>
+
+<H4>4.5.7.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> дескриптор инструкции.</P>
+<P><CODE>Attribute [Input]</CODE> атрибут для установки.</P>
+
+<CODE>ValuePtr [Input]</CODE> указатель на значение, которое будет связано с
+Attribute, ValuePtr может быть 32-битным целым числом числа без знака или
+указателем на символьную строку с нулевым символом в конце, двоичный буфер
+или определенное драйвером значение. Если параметр Attribute представляет
+собой специфическое для драйвера значение, ValuePtr может быть целым
+числом со знаком.</P>
+
+<P><CODE>StringLength [Input]</CODE> если Attribute определен в ODBC и
+ValuePtr указывает на строку или двоичный буфер, это длина *ValuePtr. Если
+Attribute определен в ODBC и ValuePtr целое число, StringLength игнорируется.
+Если Attribute определен драйвером, прикладная программа указывает характер
+атрибута Driver Manager: устанавливая аргумент StringLength. StringLength
+может иметь следующие значения:
+
+<UL><LI>Если ValuePtr указатель на символьную строку, то StringLength длина
+строки или SQL_NTS.
+<LI>Если ValuePtr указатель на двоичный буфер, то прикладная программа
+помещает результат макроса SQL_LEN_BINARY_ATTR(length) в StringLength.
+<LI>Если ValuePtr  указатель на что-то иное, чем символьная или двоичная
+строка, StringLength имеет значение SQL_IS_POINTER.
+<LI>Если ValuePtr хранит значение фиксированной длины, StringLength равен
+соответственно SQL_IS_INTEGER или SQL_IS_UINTEGER.</UL>
+
+<H4>4.5.7.3 Комментарии</H4>
+<P>Операторные атрибуты для инструкции остаются в силе, пока они не изменены
+другим обращением SQLSetStmtAttr.</P>
+
+<TABLE><TR><TD><STRONG>Атрибут</STRONG></TD><TD><STRONG>Значение ValuePtr
+</STRONG></TD></TR>
+<TR><TD>SQL_ATTR_APP_PARAM_DESC</TD><TD>Не поддерживается</TD></TR>
+<TR><TD>SQL_ATTR_APP_ROW_DESC</TD><TD>Не поддерживается</TD></TR>
+<TR><TD>SQL_ATTR_ASYNC_ENABLE</TD><TD>Значение SQLUINTEGER, которое
+определяет выполнена ли функция асинхронно: <CODE>SQL_ASYNC_ENABLE_OFF=Off
+(значение по умолчанию), <CODE>SQL_ASYNC_ENABLE_ON=On</CODE>. Драйвер не
+поддерживает асинхронное выполнение, так что прикладная программа
+может устанавливать это только в значение по умолчанию.</TD></TR>
+<TR><TD>SQL_ATTR_CONCURRENCY</TD><TD>Значение SQLUINTEGER, которое
+определяет параллелизм курсора:<BR>
+<CODE>SQL_CONCUR_READ_ONLY:</CODE> курсор только для чтения. Никакие
+модификации не позволяются.<BR>
+<CODE>SQL_CONCUR_LOCK:</CODE> курсор использует самый низкий уровень
+блокировки, достаточный, чтобы гарантировать, что
+строка может модифицироваться.<BR>
+<CODE>SQL_CONCUR_ROWVER:</CODE> курсор использует
+оптимистическое управление параллелизма.<BR>
+<CODE>SQL_CONCUR_VALUES:</CODE> курсор использует оптимистическое управление
+параллелизма, сравнивая значения.<BR>
+Значение по умолчанию для <CODE>SQL_ATTR_CONCURRENCY</CODE> равно
+<CODE>SQL_CONCUR_READ_ONLY</CODE>. Драйвер в настоящее время поддерживает
+только <CODE>SQL_CONCUR_ROWVER</CODE>.</TD></TR>
+<TR><TD>SQL_ATTR_CURSOR_SCROLLABLE</TD><TD>Значение SQLUINTEGER, которое
+определяет уровень поддержки, который прикладная программа требует. Установка
+этого атрибута воздействует на последующие обращения к SQLExecDirect и
+SQLExecute. <CODE>SQL_NONSCROLLABLE:</CODE> скроллируемые курсоры не
+требуются на операторном дескрипторе. Если из прикладной программы вызван
+SQLFetchScroll на этом дескрипторе, единственное имеющее силу значение
+FetchOrientation: <CODE>SQL_FETCH_NEXT</CODE>. Это значение по умолчанию.
+<CODE>SQL_SCROLLABLE:</CODE> скроллируемые курсоры требуются на операторном
+дескрипторе. При вызове SQLFetchScroll прикладная программа может
+определять любое имеющее силу значение FetchOrientation, достигая
+позиционирования курсора в любом режиме.</TD></TR>
+<TR><TD>SQL_ATTR_CURSOR_SENSITIVITY</TD><TD>Значение SQLUINTEGER, которое
+определяет делают ли курсоры на операторном дескрипторе видимыми изменения,
+сделанные другим курсором. Установка этого атрибута воздействует на
+последующие обращения к SQLExecDirect и SQLExecute. Прикладная программа
+может читать значение этого атрибута, чтобы получить информацию статуса.
+<CODE>SQL_UNSPECIFIED:</CODE> не определено, чем является тип курсора, и
+делают ли курсоры на операторном дескрипторе видимыми изменения, сделанные
+другим курсором. Курсоры на операторном дескрипторе могут делать видимыми
+изменения полностью или частично. Это значение по умолчанию.
+<CODE>SQL_INSENSITIVE:</CODE> все курсоры на операторном дескрипторе
+показывают набор результатов без того, чтобы отразить любые изменения,
+сделанные любым другим курсором. Нечувствительные курсоры только для чтения.
+Это соответствует статическому курсору, который имеет параллелизм и нужен
+только для чтения. <CODE>SQL_SENSITIVE:</CODE> все курсоры на операторном
+дескрипторе делают видимыми все изменения, сделанные другим курсором. Сейчас
+драйвер поддерживает только <CODE>SQL_SENSITIVE</CODE> и
+<CODE>SQL_INSENSITIVE</CODE>.</TD></TR>
+<TR><TD>SQL_ATTR_CURSOR_TYPE</TD><TD>Значение SQLUINTEGER, которое
+определяет тип курсора: <CODE>SQL_CURSOR_FORWARD_ONLY:</CODE> курсор
+прокручивается только вперед. <CODE>SQL_CURSOR_STATIC:</CODE> данные в наборе
+результатов статические. <CODE>SQL_CURSOR_KEYSET_DRIVEN:</CODE> драйвер
+сохраняет и использует ключи для числа строк, определенных в инструкции
+<CODE>SQL_ATTR_KEYSET_SIZE</CODE>. <CODE>SQL_CURSOR_DYNAMIC:</CODE> драйвер
+сохраняет и использует только ключи для строк в rowset. Значение по
+умолчанию: <CODE>SQL_CURSOR_FORWARD_ONLY</CODE>. Этот атрибут не может быть
+определен после того, как инструкция SQL была подготовлена. Драйвер сейчас
+поддерживает только статический и "только вперед" типы курсора.</TD></TR>
+<TR><TD>SQL_ATTR_KEYSET_SIZE</TD><TD>Значение SQLUINTEGER, который определяет
+число строк в ключе для управляемого ключом курсора. Поскольку драйвер не
+поддерживает управляемые ключами курсоры, этот атрибут игнорируется.</TD>
+</TR>
+<TR><TD>SQL_ATTR_MAX_LENGTH</TD><TD>Значение SQLUINTEGER, которое определяет
+максимальное количество данных, которое драйвер возвращает из символьного или
+двоичного столбца. Если ValuePtr меньше, чем длина доступных данных, SQLFetch
+или SQLGetData усекает данные и возвращает SQL_SUCCESS. Если ValuePtr равно 0
+(значение по умолчанию), драйвер пытается возвращать все доступные данные.
+</TD></TR>
+<TR><TD>SQL_ATTR_MAX_ROWS</TD><TD>Значение SQLUINTEGER, соответствующее
+максимальному числу строк, которое вернется прикладной программе для
+инструкции SELECT. Если *ValuePtr равно 0 (значение по умолчанию), драйвер
+возвращает все строки.</TD></TR>
+<TR><TD>SQL_ATTR_METADATA_ID</TD><TD>Значение SQLUINTEGER, которое определяет
+как обрабатываются строчные параметры каталожной функции. Если
+<CODE>SQL_TRUE</CODE>, строчный параметр каталожной функции обрабатывается
+как идентификаторы. Регистр не важен. В случае <CODE>SQL_FALSE</CODE>
+параметр не обрабатывается как идентификатор. Регистр важен. Значение по
+умолчанию SQL_FALSE, и драйвер поддерживает только значение по умолчанию.
+</TD></TR>
+<TR><TD>SQL_ATTR_NOSCAN</TD><TD>Значение SQLUINTEGER, которое указывает
+должен ли драйвер просмотреть строки SQL на предмет наличия в них
+управляющих последовательностей. <CODE>SQL_NOSCAN_OFF:</CODE> драйвер
+просматривает строки SQL (значение по умолчанию). <CODE>SQL_NOSCAN_ON:</CODE>
+драйвер не просматривает строки SQL. Вместо этого драйвер посылает инструкцию
+непосредственно источнику данных.</TD></TR>
+<TR><TD>SQL_ATTR_PARAM_BIND_OFFSET_PTR</TD><TD>Значение SQLUINTEGER*, которое
+указывает на смещение, добавленное к указателям, чтобы изменить связывание
+динамических параметров. Не поддерживается драйвером.</TD></TR>
+<TR><TD>SQL_ATTR_PARAM_BIND_TYPE</TD><TD>Значение SQLUINTEGER, которое
+указывает ориентацию связывания, которую нужно использовать для динамических
+параметров. Это поле установлено в <CODE>SQL_PARAM_BIND_BY_COLUMN</CODE>
+(значение по умолчанию), чтобы выбрать поколоночное связывание. Чтобы выбрать
+строчное связывание, это поле должно быть установлено в длину структуры или в
+образец буфера, который будет привязан к набору динамических параметров. Эта
+длина должна включать место для всех связанных параметров и любого дополнения
+структуры или буфера, чтобы гарантировать, что, когда адрес связанного
+параметра будет увеличен на определенную длину, результат укажет на начало
+того же самого параметра в следующем наборе параметров.</TD></TR>
+<TR><TD>SQL_ATTR_PARAM_OPERATION_PTR</TD><TD>Значение SQLUSMALLINT*, которое
+указывает на массив значений SQLUSMALLINT используемых, чтобы игнорировать
+параметр в течение выполнения инструкции SQL. Каждое значение установлено в
+<CODE>SQL_PARAM_PROCEED</CODE> (для параметра, который будет выполнен) или в
+<CODE>SQL_PARAM_IGNORE</CODE> (для параметра, который нужно игнорировать).
+Набор параметров может игнорироваться в течение обработки, устанавливая
+значение состояния в массиве, на который указывает
+<CODE>SQL_DESC_ARRAY_STATUS_PTR</CODE> в <CODE>SQL_PARAM_IGNORE</CODE>.
+Набор параметров обработан, если значение состояния установлено в
+<CODE>SQL_PARAM_PROCEED</CODE> или если никакие элементы в массиве не
+установлены. Этот операторный атрибут может быть установлен в null, тогда
+драйвер не возвращает значения состояния параметра. Этот атрибут может быть
+установлен в любое время, но новое значение не используется до следующего
+взоыва SQLExecDirect или SQLExecute.</TD></TR>
+<TR><TD>SQL_ATTR_PARAM_STATUS_PTR</TD><TD>Значение SQLUSMALLINT*, которое
+указывает на массив значений SQLUSMALLINT содержащих информацию состояния для
+каждой строки значений параметра после обращения к SQLExecute или к
+SQLExecDirect. Это поле требуется только если <CODE>PARAMSET_SIZE</CODE>
+больше 1. Значения состояния могут содержать следующие значения:
+<CODE>SQL_PARAM_SUCCESS:</CODE> инструкция SQL была успешно выполнена для
+этого набора параметров. <CODE>SQL_PARAM_SUCCESS_WITH_INFO:</CODE> инструкция
+SQL была успешно выполнена для этого набора параметров, однако, в структуре
+данных диагностики доступно предупреждение. <CODE>SQL_PARAM_ERROR:</CODE>
+имелась ошибка в обработке этого набора параметров. Дополнительная информация
+об ошибке доступна в структуре данных диагностики. <CODE>SQL_PARAM_UNUSED:
+</CODE> набор параметров не пригодился, возможно, вследствие того, что
+некоторый предыдущий набор параметров вызвал ошибку, которая прервала
+обработку, или потому, что <CODE>SQL_PARAM_IGNORE</CODE> был установлен для
+этого набор параметров в массиве, определенном <CODE>
+SQL_ATTR_PARAM_OPERATION_PTR</CODE>. <CODE>SQL_PARAM_DIAG_UNAVAILABLE:</CODE>
+драйвер обрабатывает массивы параметров как монолитный модуль и не генерирует
+этот уровень информации ошибки. Этот операторный атрибут может быть
+установлен в null, тогда драйвер не возвращает значения состояния параметра.
+Этот атрибут может быть установлен в любое время, но новое значение не
+используется до очередного вызова SQLExecute или SQLExecDirect. Обратите
+внимание, что этот атрибут может воздействовать на поведение выходного
+параметра, выполненное драйвером.</TD></TR>
+<TR><TD>SQL_ATTR_PARAMS_PROCESSED_PTR</TD><TD>Значение SQLUINTEGER*, которое
+указывает на буфер нужный, чтобы возвратить число наборов параметров, которые
+были обработаны, включая наборы ошибок. Ничего не будет возвращено, если
+здесь задан null.</TD></TR>
+<TR><TD>SQL_ATTR_PARAMSET_SIZE</TD><TD>Значение SQLUINTEGER, которое
+определяет число значений для каждого параметра.</TD></TR>
+<TR><TD>SQL_ATTR_QUERY_TIMEOUT</TD><TD>Значение SQLUINTEGER, соответствующее
+числу секунд, которое надо ждать инструкцию SQL перед возвратом прикладной
+программе. Если ValuePtr равен 0 (значению по умолчанию), не имеется
+никакого времени ожидания.</TD></TR>
+<TR><TD>SQL_ATTR_RETRIEVE_DATA</TD><TD>Значение SQLUINTEGER:
+<CODE>SQL_RD_ON:</CODE> SQLFetchScroll и, в ODBC 3.x, SQLFetch получают
+данные после того, как устанавливают курсор в определенное расположение. Это
+значение по умолчанию. <CODE>SQL_RD_OFF:</CODE> SQLFetchScroll и, в ODBC 3.x,
+SQLFetch не получают данные после того, как устанавливают курсор. Драйвер
+поддерживает только значение по умолчанию.</TD></TR>
+<TR><TD>SQL_ATTR_ROW_ARRAY_SIZE</TD><TD>Значение SQLUINTEGER, которое
+определяет число строк, возвращенных каждым обращением к SQLFetch или к
+SQLFetchScroll. Это также задает число строк в массиве закладок, используемом
+в оптовой операции закладки в SQLBulkOperations. Значение по умолчанию 1.
+</TD></TR>
+<TR><TD>SQL_ATTR_ROW_BIND_OFFSET_PTR</TD><TD>Значение SQLUINTEGER*, которое
+указывает на смещение, добавленное к указателям, чтобы изменить
+связывание данных столбца.</TD></TR>
+<TR><TD>SQL_ATTR_ROW_BIND_TYPE</TD><TD>Значение SQLUINTEGER, которое
+устанавливает ориентацию связывания, которую нужно использовать, когда
+SQLFetch или SQLFetchScroll обращаются к связанной инструкции. Поколоночное
+связывание выбрано, устанавливая значение в <CODE>SQL_BIND_BY_COLUMN</CODE>.
+Построчное связывание будет выбрано, устанавливая значение в длину структуры
+или в образец буфера, с которым столбцы результата будут связаны.</TD></TR>
+<TR><TD>SQL_ATTR_ROW_NUMBER</TD><TD>Значение SQLUINTEGER, которое является
+номером текущей строки во всем наборе результатов. Если номер текущей строки
+не может быть определен или не имеется никакой текущей строки, драйвер
+возвращает 0. Этот атрибут может быть проверен обращением к SQLGetStmtAttr,
+но не может быть установлен через вызов SQLSetStmtAttr.</TD></TR>
+<TR><TD>SQL_ATTR_ROW_OPERATION_PTR</TD><TD>Значение SQLUSMALLINT*, которое
+указывает на массив значений SQLUSMALLINT используемых, чтобы игнорировать
+строку в течение оптовой операции, использующей SQLSetPos. Каждое значение
+установлено в <CODE>SQL_ROW_PROCEED</CODE> (для строки, которая будет
+включена в оптовую операцию) или в <CODE>SQL_ROW_IGNORE</CODE> (для строки,
+которая будет исключена из оптовой операции). Строки не могут игнорироваться,
+используя этот массив в течение обращений к SQLBulkOperations. Этот
+операторный атрибут может быть установлен в null, когда драйвер не возвращает
+значения состояния строки. Этот атрибут может быть установлен в любое время,
+но новое значение не используется до очередного вызова SQLSetPos.</TD></TR>
+<TR><TD>SQL_ATTR_ROW_STATUS_PTR</TD><TD>Значение SQLUSMALLINT*, которое
+указывает на массив значений SQLUSMALLINT, содержащих значения состояния
+строки после обращения к SQLFetch или SQLFetchScroll. Массив имеет так много
+элементов, сколько есть строк в rowset. Этот операторный атрибут может быть
+установлен в null, когда драйвер не возвращает значения состояния строки.
+Этот атрибут может быть установлен в любое время, но новое значение не
+используется до очередного вызова SQLBulkOperations, SQLFetch,
+SQLFetchScroll или SQLSetPos.</TD></TR>
+<TR><TD>SQL_ATTR_ROWS_FETCHED_PTR</TD><TD>Значение SQLUINTEGER*, которое
+указывает на буфер нужный, чтобы возвратить число строк, выбранных после
+обращения к SQLFetch или SQLFetchScroll, число строк, на которые воздействует
+оптовая операция, выполняемая обращением к SQLSetPos с параметром Operation
+выставленным в <CODE>SQL_REFRESH</CODE>, или число строк, на которые
+воздействует оптовая операция, выполняемая SQLBulkOperations.</TD></TR>
+<TR><TD>SQL_ATTR_SIMULATE_CURSOR</TD><TD>Значение SQLUINTEGER, которое
+определяет драйверы, которые моделируют позиционные модификации и удаления и
+гарантируют, что такие инструкции воздействуют только на одну строку.
+<CODE>SQL_SC_NON_UNIQUE:</CODE> драйвер не гарантирует, что моделируемая
+инструкция будет воздействовать только на одну строку.
+<CODE>SQL_SC_TRY_UNIQUE:</CODE> драйвер пытается гарантировать, что
+моделируемая инструкция будет воздействовать только на одну строку.
+<CODE>SQL_SC_UNIQUE:</CODE> драйвер гарантирует, что моделируемая инструкция
+будет воздействовать только на одну строку.</TD></TR>
+<TR><TD>SQL_ATTR_USE_BOOKMARKS</TD><TD>Закладки не поддерживаются.</TD></TR>
+</TABLE>
+
+<H3><A NAME="SQLGetStmtAttr">4.5.8 SQLGetStmtAttr</A></H3>
+<P><STRONG>SQLGetStmtAttr</STRONG> возвращает текущую
+установку операторного атрибута.</P>
+
+<H4>4.5.8.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLGetStmtAttr(SQLHSTMT StatementHandle, SQLINTEGER Attribute,
+                         SQLPOINTER ValuePtr, SQLINTEGER BufferLength,
+                         SQLINTEGER* StringLengthPtr);
+</PRE>
+
+<H4>4.5.8.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>Attribute [Input]</CODE> интересующий атрибут.</P>
+<P><CODE>ValuePtr [Output]</CODE> указатель на буфер, в который будет
+возвращено значение атрибута, определенного в Attribute.</P>
+
+<P><CODE>BufferLength [Input]</CODE> если Attribute определен в ODBC и
+ValuePtr указывает на символьную строку или двоичный буфер, этот параметр
+должен быть длиной *ValuePtr. Если Attribute определен в ODBC и *ValuePtr
+целое число, BufferLength игнорируется. BufferLength может иметь значения:
+<UL><LI>Если *ValuePtr указатель на символьную строку, то BufferLength длина
+этой строки или SQL_NTS.
+<LI>Если *ValuePtr указатель на двоичный буфер, то прикладная программа
+помещает результат макроса SQL_LEN_BINARY_ATTR(length) в BufferLength.
+<LI>Если *ValuePtr указатель на другой тип значения, BufferLength имеет
+значение SQL_IS_POINTER.
+<LI>Если *ValuePtr хранит тип данных фиксированной длины, то BufferLength
+SQL_IS_INTEGER или SQL_IS_UINTEGER, как получится.</UL>
+
+<P><CODE>StringLength [Output]</CODE> указатель на буфер, куда будет записано
+общее количество байт (кроме хвостового нуля), доступное в *ValuePtr. Если
+ValuePtr равно null, никакая длина не возвращена. Если значение атрибута
+символьная строка, и число доступных байт больше BufferLength, данные в
+*ValuePtr автоматически урезаются до размеров BufferLength.</P>
+
+<H3><A NAME="SQLSetStmtOption">4.5.9 SQLSetStmtOption</A></H3>
+<P>В ODBC 3.x <STRONG>SQLSetStmtAttr</STRONG> заменяет
+<STRONG>SQLStmtOption</STRONG>.</P>
+
+<H3><A NAME="SQLGetStmtOption">4.5.10 SQLGetStmtOption</A></H3>
+<P>В ODBC 3.x <STRONG>SQLGetStmtAttr</STRONG> заменяет
+<STRONG>SQLCetStmtOption</STRONG>.
+
+<H2><A NAME="Preparing_SQL_requests">4.6 Подготовка SQL-запросов</A></H2>
+<H3><A NAME="SQLAllocStmt">4.6.1 SQLAllocStmt</A></H3>
+<P><STRONG>SQLAllocStmt</STRONG> распределяет память для операторного
+дескриптора.</P>
+
+<H4>4.6.1.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLAllocStmt(HDBC ConnectionHandle, HSTMT* StatementHandle);
+</PRE>
+
+<H4>4.6.1.2 Комментарии</H4>
+<P>В ODBC 3.x SQLAllocHandle заменяет функцию ODBC 2.x SQLAllocStmt.</P>
+
+<H3><A NAME="SQLPrepare">4.6.2 SQLPrepare</A></H3>
+<P><STRONG>SQLPrepare</STRONG> готовит команду SQL к выполнению.</P>
+
+<H4>4.6.2.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLPrepare(SQLHSTMT StatementHandle, SQLCHAR* StatementText,
+                     SQLINTEGER TextLength);
+</PRE>
+
+<H4>4.6.2.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>StatementText [Input]</CODE> строка SQL-команды.</P>
+<P><CODE>TextLength [Input]</CODE> длина *StatementText.</P>
+
+<H3><A NAME="SQLBindParameter">4.6.3 SQLBindParameter</A></H3>
+<P><STRONG>SQLBindParameter</STRONG> привязывает буфер к маркеру параметра в
+инструкции SQL. SQLBindParameter поддерживает связывание к Unicode-C типу
+данных, даже если основной драйвер не поддерживает Unicode-данные.</P>
+
+<H4>4.6.3.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLBindParameter(SQLHSTMT StatementHandle,
+                           SQLUSMALLINT ParameterNumber,
+                           SQLSMALLINT InputOutputType,
+                           SQLSMALLINT ValueType, SQLSMALLINT ParameterType,
+                           SQLUINTEGER ColumnSize, SQLSMALLINT DecimalDigits,
+                           SQLPOINTER ParameterValuePtr,
+                           SQLINTEGER BufferLength,
+                           SQLINTEGER* StrLen_or_IndPtr);
+</PRE>
+
+<H4>4.6.3.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>ParameterNumber [Input]</CODE> номер параметра, упорядоченный
+последовательно в увеличивающемся порядке, начинающемся с 1.</P>
+
+<P><CODE>InputOutputType [Input]</CODE> тип параметра.</P>
+<P><CODE>ValueType [Input]</CODE> тип данных C для параметра.</P>
+<P><CODE>ParameterType [Input]</CODE> SQL-тип параметра.</P>
+<P><CODE>ColumnSize [Input]</CODE> размер столбца или выражения,
+соответствующего маркеру параметра.</P>
+
+<P><CODE>DecimalDigits [Input]</CODE> десятичные цифры столбца или выражения
+соответствующего маркеру параметра.</P>
+<P><CODE>ParameterValuePtr [Deferred Input]</CODE> указатель на буфер
+для данных параметра.</P>
+
+<P><CODE>BufferLength [Input/Output]</CODE> длина буфера ParameterValuePtr в
+байтах.</P>
+<P><CODE>StrLen_or_IndPtr [Deferred Input]</CODE> указатель на буфер
+для длины параметра.</P>
+
+<H3><A NAME="SQLGetCursorName">4.6.4 SQLGetCursorName</A></H3>
+<P><STRONG>SQLGetCursorName</STRONG> возвращает имя курсора,
+связанного с определенной инструкцией.</P>
+
+<H4>4.6.4.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLGetCursorName(SQLHSTMT StatementHandle, SQLCHAR* CursorName,
+                           SQLSMALLINT BufferLength,
+                           SQLSMALLINT* NameLengthPtr);
+</PRE>
+
+<H4>4.6.4.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> дескриптор подключения.</P>
+<P><CODE>CursorName [Output]</CODE> указатель на буфер для имени курсора.</P>
+<P><CODE>BufferLength [Input]</CODE> длина *CursorName в байтах.</P>
+
+<P><CODE>NameLengthPtr [Output]</CODE> указатель на память, куда будет
+записано возвращаемое значение. Если значение больше, чем BufferLength,
+*CursorName урезается до BufferLength за вычетом хвостового нуля.</P>
+
+<H3><A NAME="SQLSetCursorName">4.6.5 SQLSetCursorName</A></H3>
+<P><STRONG>SQLSetCursorName</STRONG> сопоставляет имя курсора с активной
+инструкцией. Если прикладная программа не вызывает SQLSetCursorName, драйвер
+генерирует имена курсора так, как необходимо для обработки инструкции SQL.
+</P>
+
+<P><STRONG>4.6.5.1 Синтаксис</STRONG></P>
+<PRE>
+SQLRETURN SQLSetCursorName(SQLHSTMT StatementHandle, SQLCHAR* CursorName,
+                           SQLSMALLINT NameLength);
+</PRE>
+
+<H4>4.6.5.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>CursorName [Input]</CODE> имя курсора. Для эффективной обработки имя
+курсора не должно включить никаких пробелов, а если имя курсора включает
+разграниченный идентификатор, разделитель должен быть установлен как первый
+символ в имени курсора.</P>
+<P><CODE>NameLength [Input]</CODE> длина *CursorName.</P>
+
+<H3><A NAME="SQLSetScrollOptions">4.6.6 SQLSetScrollOptions</A></H3>
+<P>В ODBC 3.x <STRONG>SQLSetSetScrollOptions</STRONG> заменен обращением к
+<A HREF="#SQLSetStmtAttr">4.5.7 SQLSetStmtAttr</A> и
+<A HREF="#SQLGetInfo">4.4.3 SQLGetInfo</A>.</P>
+
+<H2><A NAME="Executing_SQL_statements">4.7 Выполнение инструкций SQL</A></H2>
+<H3><A NAME="SQLExecute">4.7.1 SQLExecute</A></H3>
+<P><STRONG>SQLExecute</STRONG> выполняет подготовленную инструкцию, используя
+текущие (актуальные) значения переменных маркера параметра, если маркеры
+параметров существуют в инструкции.
+
+<P><STRONG>4.7.1.1 Синтаксис</STRONG></P>
+<PRE>
+SQLRETURN SQLExecute(SQLHSTMT StatementHandle);
+</PRE>
+
+<H4>4.7.1.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+
+<H4>4.7.1.3 Комментарии</H4>
+<P>SQLExecute выполняет инструкцию, подготовленную SQLPrepare.</P>
+
+<H3><A NAME="SQLExecDirect">4.7.2 SQLExecDirect</A></H3>
+<P><STRONG>SQLExecDirect</STRONG> выполняет инструкцию, используя текущие
+(актуальные) значения переменных маркера параметра, если параметры существуют
+в инструкции. SQLExecDirect представляет собой самый быстрый способ
+представить серверу на рассмотрение инструкцию SQL для одного выполнения.
+
+<P><STRONG>4.7.2.1 Синтаксис</STRONG></P>
+<PRE>
+SQLRETURN SQLExecDirect(SQLHSTMT StatementHandle, SQLCHAR* StatementText,
+                        SQLINTEGER TextLength);
+</PRE>
+
+<H4>4.7.2.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>StatementText [Input]</CODE> SQL-инструкция, которая будет выполнена.
+</P>
+<P><CODE>TextLength [Input]</CODE> длина *StatementText.</P>
+
+<H4>4.7.2.3 Комментарии</H4>
+<P>Прикладные программы вызывают SQLExecDirect, чтобы послать инструкцию SQL
+на сервер MySQL.</P>
+
+<H3><A NAME="SQLNativeSql">4.7.3 SQLNativeSql</A></H3>
+<P><STRONG>SQLNativeSql</STRONG> возвращает строку SQL, обработанную
+драйвером. SQLNativeSql не выполняет инструкцию SQL.
+
+<P><STRONG>4.7.3.1 Синтаксис</STRONG></P>
+<PRE>
+SQLRETURN SQLNativeSql(SQLHDBC ConnectionHandle, SQLCHAR* InStatementText,
+                       SQLINTEGER TextLength1, SQLCHAR* OutStatementText,
+                       SQLINTEGER BufferLength, SQLINTEGER* TextLength2Ptr);
+</PRE>
+
+<H4>4.7.3.2 Параметры</H4>
+<P><CODE>ConnectionHandle [Input]</CODE> дескриптор подключения.</P>
+<P><CODE>InStatementText [Input]</CODE> текст инструкции SQL.</P>
+<P><CODE>TextLength1 [Input]</CODE> длина строки *InStatementText.</P>
+
+<P><CODE>OutStatementText [Output]</CODE> указатель на буфер распределенный,
+чтобы возвращать строку SQL.</P>
+<P><CODE>BufferLength [Input]</CODE> длина буфера *OutStatementText.</P>
+
+<P><CODE>TextLength2Ptr [Output]</CODE> указатель на буфер выделенный, чтобы
+возвращать общее количество байт, доступное в *OutStatementText. Если число
+доступных байт больше BufferLength, *OutStatementText урезается.</P>
+
+<H3><A NAME="SQLDescribeParam">4.7.4 SQLDescribeParam</A></H3>
+<P><STRONG>SQLDescribeParam</STRONG> возвращает описание маркера параметра,
+связанного с подготовленной инструкцией SQL.</P>
+
+<H4>4.7.4.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLDescribeParam(SQLHSTMT StatementHandle,
+                           SQLUSMALLINT ParameterNumber,
+                           SQLSMALLINT* DataTypePtr,
+                           SQLUINTEGER* ParameterSizePtr,
+                           SQLSMALLINT* DecimalDigitsPtr,
+                           SQLSMALLINT* NullablePtr);
+</PRE>
+
+<H4>4.7.4.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>ParameterNumber [Input]</CODE> номер маркера, начиная с 1.</P>
+<P><CODE>DataTypePtr [Output]</CODE> указатель на буфер выделенный, чтобы
+возвращать SQL-тип данных параметра. В ODBC 3.x SQL_TYPE_DATE, SQL_TYPE_TIME,
+или SQL_TYPE_TIMESTAMP будут возвращен в *DataTypePtr для типов date, time
+или timestamp соответственно. В ODBC 2.x возвращаются SQL_DATE, SQL_TIME или
+SQL_TIMESTAMP.</P>
+
+<P><CODE>ParameterSizePtr [Output]</CODE> указатель на буфер для возврата
+размера столбца или выражения соответствующего маркера параметра.</P>
+
+<P><CODE>DecimalDigitsPtr [Output]</CODE> указатель на буфер для возврата
+количества десятичных цифр столбца или выражения соответствующего параметра
+как определено сервером.</P>
+
+<P><CODE>NullablePtr [Output]</CODE> указатель на буфер, куда будет
+возвращено значение, которое указывает позволяет ли параметр значения NULL.
+Это значение читается из поля SQL_DESC_NULLABLE в IPD. Один из следующего:
+
+<UL><LI><CODE>SQL_NO_NULLS:</CODE> параметр не позволяет значения NULL (это
+значение по умолчанию).
+<LI><CODE>SQL_NULLABLE:</CODE> параметр позволяет значения NULL.
+<LI><CODE>SQL_NULLABLE_UNKNOWN:</CODE> драйвер не может определить, позволяет
+ли параметр значения NULL.</UL>
+
+<H3><A NAME="SQLNumParams">4.7.5 SQLNumParams</A></H3>
+<P><STRONG>SQLNumParams</STRONG> возвращает число
+параметров в инструкции SQL.</P>
+
+<H4>4.7.5.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLNumParams(SQLHSTMT StatementHandle,
+                       SQLSMALLINT* ParameterCountPtr);
+</PRE>
+
+<H4>4.7.5.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>ParameterCountPtr [Output]</CODE> указатель на буфер распределенный,
+чтобы возвращать число параметров в инструкции.</P>
+
+<H3><A NAME="SQLParamData">4.7.6 SQLParamData</A></H3>
+<P><STRONG>SQLParamData</STRONG> используется вместе с SQLPutData, чтобы
+обеспечить данные для параметров во время выполнения.
+
+<P><STRONG>4.7.6.1 Синтаксис</STRONG></P>
+<PRE>
+SQLRETURN SQLParamData(SQLHSTMT StatementHandle, SQLPOINTER* ValuePtrPtr);
+</PRE>
+
+<H4>4.7.6.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>ValuePtrPtr [Output]</CODE> указатель на буфер выделенный, чтобы
+возвращать адрес буфера ParameterValuePtr, определенного в SQLBindParameter
+(для данных параметра) или адрес буфера TargetValuePtr, определенного в
+SQLBindCol (для данных столбца), как указано в поле SQL_DESC_DATA_PTR
+записи операторного дескриптора.</P>
+
+<H3><A NAME="SQLPutData">4.7.7 SQLPutData</A></H3>
+<P><STRONG>SQLPutData</STRONG> позволяет прикладной программе посылать данные
+для параметра или столбца драйверу во время выполнения. Эта функция может
+использоваться, чтобы послать символьные или двоичные значения данных частями
+к столбцу со специфическим типом данных (например, параметры типов
+SQL_LONGVARBINARY или SQL_LONGVARCHAR). SQLPutData поддерживает связывание с
+Unicode C-типом данных, даже если основной драйвер не поддерживает Unicode.
+
+<P><STRONG>4.7.7.1 Синтаксис</STRONG></P>
+<PRE>
+SQLRETURN SQLPutData(SQLHSTMT StatementHandle, SQLPOINTER DataPtr,
+                     SQLINTEGER StrLen_or_Ind);
+</PRE>
+
+<H4>4.7.7.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>DataPtr [Input]</CODE> указатель на буфер с актуальными данными для
+для параметра или столбца. Данные должны быть в C-типе данных, определенном в
+параметре ValueType функции SQLBindParameter (для данных параметра) или в
+параметре TargetType функции SQLBindCol (для данных столбца).</P>
+
+<P><CODE>StrLen_or_Ind [Input]</CODE> длина *DataPtr. Определяет количество
+данных, переданное в вызове SQLPutData. Количество данных может измениться
+для каждого вызова. StrLen_or_Ind игнорируется, если не выполняется одно
+из следующих условий:
+<UL><LI>StrLen_or_Ind равно SQL_NTS, SQL_NULL_DATA или SQL_DEFAULT_PARAM.
+<LI>C-тип данных указан в SQLBindParameter, или SQLBindCol равно SQL_C_CHAR
+или SQL_C_BINARY.
+<LI>C-тип данных SQL_C_DEFAULT, и C-тип данных по умолчанию для определенного
+SQL-типа данных равен SQL_C_CHAR или SQL_C_BINARY. Для всех других C-типов
+данных, если StrLen_or_Ind не равен SQL_NULL_DATA или SQL_DEFAULT_PARAM,
+драйвер принимает, что размер буфера *DataPtr равен размеру C-типа данных,
+определенного в ValueType или TargetType и посылает все значения.</UL>
+
+<H2><A NAME="Resultset">4.8 Получение результатов и информации о них</A></H2>
+<H3><A NAME="SQLRowCount">4.8.1 SQLRowCount</A></H3>
+<P><STRONG>SQLRowCount</STRONG> возвращает число строк, на которые
+воздействует инструкция UPDATE, INSERT или DELETE.</P>
+
+<H4>4.8.1.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLRowCount(SQLHSTMT StatementHandle, SQLINTEGER* RowCountPtr);
+</PRE>
+
+<H4>4.8.1.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> дескриптор подключения.</P>
+<P><CODE>RowCountPtr [Output]</CODE> указывает на буфер для возврата числа
+строк. Для UPDATE, INSERT и DELETE, операций SQL_ADD в SQLBulkOperations и
+SQL_UPDATE или SQL_DELETE в SQLSetPos значение, возвращенное в *RowCountPtr,
+является числом строк, на которые воздействует запрос, или -1, если число
+строк не доступно.</P>
+
+<P>При вызове SQLExecute, SQLExecDirect, SQLBulkOperations, SQLSetPos или
+SQLMoreResults поле SQL_DIAG_ROW_COUNT диагностической структуры данных
+установлено в число строк, которое кэшируется зависимым от реализации
+способом. SQLRowCount возвращает кэшируемое значение числа строк. Оно имеет
+силу, пока операторный дескриптор не перераспределен, не выполнена снова
+инструкция или не вызван SQLCloseCursor. Обратите внимание, что, если функция
+была вызвана, поле SQL_DIAG_ROW_COUNT было установлено, и значение,
+возвращенное SQLRowCount, может отличаться от значения в SQL_DIAG_ROW_COUNT,
+поскольку поле SQL_DIAG_ROW_COUNT сброшено в 0 любым обращением к функции.
+</P>
+
+<P>Для других инструкций и функций, драйвер может определять значение,
+возвращенное в *RowCountPtr. Например, некоторые источники данных могут
+возвратить число строк, возвращенных инструкцией SELECT или функцией каталога
+перед выборкой строк.</P>
+
+<P><CODE>Обратите внимание</CODE>, что много источников данных не могут
+возвращать число строк в наборе результатов перед их выборкой.</P>
+
+<H3><A NAME="SQLNumResultCols">4.8.2 SQLNumResultCols</A></H3>
+<P><STRONG>SQLNumResultCols</STRONG> возвращает число
+столбцов в наборе результатов.</P>
+
+<H4>4.8.2.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLNumResultCols(SQLHSTMT StatementHandle,
+                           SQLSMALLINT* ColumnCountPtr);
+</PRE>
+
+<H4>4.8.2.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>ColumnCountPtr [Output]</CODE> указатель на буфер, в который будет
+записано число столбцов в наборе результатов.</P>
+
+<H3><A NAME="SQLDescribeCol">4.8.3 SQLDescribeCol</A></H3>
+<P><STRONG>SQLDescribeCol</STRONG> возвращает имя дескрипторного столбца
+результата, тип, размер столбца, десятичные цифры и возможность принимать
+значение null для одного столбца в наборе результатов. Эта информация также
+доступна в полях IRD.</P>
+
+<H4>4.8.3.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLDescribeCol(SQLHSTMT StatementHandle, SQLSMALLINT ColumnNumber,
+                         SQLCHAR* ColumnName, SQLSMALLINT BufferLength,
+                         SQLSMALLINT* NameLengthPtr,
+                         SQLSMALLINT* DataTypePtr,
+                         SQLUINTEGER* ColumnSizePtr,
+                         SQLSMALLINT* DecimalDigitsPtr,
+                         SQLSMALLINT* NullablePtr);
+</PRE>
+
+<H4>4.8.3.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>ColumnNumber [Input]</CODE> номер столбца данных результата,
+упорядоченных последовательно в увеличивающемся порядке, начиная с 1.
+Параметр ColumnNumber может быть также установлен в 0, чтобы
+описать столбец закладки.</P>
+
+<P><CODE>ColumnName [Output]</CODE> указатель на буфер, в который надо
+вернуть имя столбца. Это значение читается из поля SQL_DESC_NAME в IRD. Если
+столбец не назван, или имя столбца не может быть определено, драйвер
+возвращает пустую строку.</P>
+
+<P><CODE>BufferLength [Input]</CODE> длина буфера *ColumnName в символах.</P>
+<P><CODE>NameLengthPtr [Output]</CODE> указатель на буфер, куда надо записать
+общее количество байт, доступных для возврата в *ColumnName. Хвостовые нули
+не учитываются. Если значение в *ColumnName больше BufferLength, оно
+усекается до BufferLength.</P>
+
+<P><CODE>DataTypePtr [Output]</CODE> указатель на буфер, в который надо
+вернуть SQL-тип данных столбца. Это значение читается из поля
+SQL_DESC_CONCISE_TYPE в IRD. Если тип данных не может быть определен, драйвер
+возвращает SQL_UNKNOWN_TYPE.
+
+<UL><LI>В ODBC 3.x SQL_TYPE_DATE, SQL_TYPE_TIME или SQL_TYPE_TIMESTAMP
+возвращен в *DataTypePtr для данных date, time или timestamp соответственно.
+
+<LI>В ODBC 2.x возвращаются SQL_DATE, SQL_TIME или SQL_TIMESTAMP. Driver
+Manager выполняет требуемые отображения, когда прикладная программа ODBC 2.x
+работает с драйвером ODBC 3.x.
+
+<LI>Когда ColumnNumber равен 0 (для столбца закладки), SQL_BINARY возвращен в
+*DataTypePtr для закладок переменной длины. SQL_INTEGER возвращен, если
+закладки используются прикладной программой ODBC 3.x,
+работающей с драйвером ODBC 2.x.</UL>
+
+<P><CODE>ColumnSizePtr [Output]</CODE> указатель на буфер предназначенный,
+чтобы возвращать размер столбца в источнике данных. Если размер столбца не
+может быть определен, драйвер возвращает 0.</P>
+
+<P><CODE>DecimalDigitsPtr [Output]</CODE> указатель на буфер предназначенный,
+чтобы возвращать число десятичных цифр столбца в источнике данных. Если число
+десятичных цифр не может быть определено или не применимо, драйвер вернет 0.
+</P>
+
+<P><CODE>NullablePtr [Output]</CODE> указатель на буфер предназначенный,
+чтобы возвращать значение, которое указывает, позволяет ли этот столбец
+применять в нем значения NULL. Это значение читается из поля
+SQL_DESC_NULLABLE в IRD. Значение одно из следующего:
+<UL><LI><CODE>SQL_NO_NULLS:</CODE> столбец не позволяет значения NULL.
+<LI><CODE>SQL_NULLABLE:</CODE> столбец позволяет значения NULL.
+<LI><CODE>SQL_NULLABLE_UNKNOWN:</CODE> драйвер не может определить, позволяет
+ли столбец значения NULL.</UL>
+
+<H3><A NAME="SQLColAttribute">4.8.4 SQLColAttribute</A></H3>
+<P><STRONG>SQLColAttribute</STRONG> возвращает дескрипторную информацию для
+столбца в наборе результатов. Дескрипторная информация будет возвращена как
+символьная строка, 32-разрядное дескрипторно-зависимое значение
+или целочисленное значение.</P>
+
+<H4>4.8.4.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLColAttribute(SQLHSTMT StatementHandle,
+                          SQLUSMALLINT ColumnNumber,
+                          SQLUSMALLINT FieldIdentifier,
+                          SQLPOINTER CharacterAttributePtr,
+                          SQLSMALLINT BufferLength,
+                          SQLSMALLINT* StringLengthPtr,
+                          SQLPOINTER NumericAttributePtr);
+</PRE>
+
+<H4>4.8.4.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>ColumnNumber [Input]</CODE> номер записи в IRD, из которой должно
+быть получено значение поля. Этот параметр соответствует номеру столбца
+данных результата, упорядоченных последовательно в увеличивающемся порядке,
+начиная с 1. Столбцы могут быть описаны в любом порядке. Столбец 0 может быть
+определен в этом параметре, но все параметры, за исключением SQL_DESC_TYPE и
+SQL_DESC_OCTET_LENGTH, возвратят неопределенные значения.</P>
+
+<P><CODE>FieldIdentifier [Input]</CODE> поле в строке ColumnNumber в IRD,
+которое должно быть возвращено.</P>
+
+<P><CODE>CharacterAttributePtr [Output]</CODE> указатель на буфер выделенный,
+чтобы возвращать значение в поле FieldIdentifier из строки ColumnNumber в
+IRD, если поле представляет собой символьную строку.
+Иначе поле не используется.</P>
+
+<P><CODE>BufferLength [Input]</CODE> если FieldIdentifier определен в ODBC и
+CharacterAttributePtr указывает на символьную строку или двоичный буфер, этот
+параметр должен быть длиной *CharacterAttributePtr. Если FieldIdentifier
+определен в ODBC и *CharacterAttributePtr целое число, это поле игнорируется.
+Если *CharacterAttributePtr является строкой в Unicode (при вызове
+SQLColAttributeW), параметр BufferLength должен быть четным числом.</P>
+
+<P>Если FieldIdentifier определен в драйвере, прикладная программа указывает
+характер поля для Driver Manager, устанавливая параметр BufferLength. Он
+может иметь следующие значения:
+
+<UL><LI>Если CharacterAttributePtr указатель на указатель, BufferLength
+должен иметь значение SQL_IS_POINTER.
+<LI>Если CharacterAttributePtr указатель на символьную строку, BufferLength
+определяет длину буфера.
+<LI>Если CharacterAttributePtr указатель на двоичный буфер, прикладная
+программа помещает результат макроса SQL_LEN_BINARY_ATTR(length) в
+BufferLength. Это помещает отрицательное значение в BufferLength.
+<LI>Если CharacterAttributePtr указатель на тип данных фиксированной длины,
+BufferLength должен быть одним из следующего: SQL_IS_INTEGER,
+SQL_IS_UNINTEGER, SQL_SMALLINT или SQLUSMALLINT.</UL>
+
+<P><CODE>StringLengthPtr [Output]</CODE> указатель на буфер нужный, чтобы
+возвращать общее количество байт, доступное в *CharacterAttributePtr,
+кроме хвостовых нулей.</P>
+
+<P>Для символьных данных если число доступных байт больше BufferLength,
+информация дескриптора в *CharacterAttributePtr урезается до BufferLength.
+</P>
+
+<P>Для всех других типов данных значение BufferLength игнорируется, и драйвер
+принимает, что размер *CharacterAttributePtr равен 32 битам.</P>
+
+<P><CODE>NumericAttributePtr [Output]</CODE> указатель на целочисленный
+буфер нужный, чтобы возвращать значение в поле FieldIdentifier строки
+ColumnNumber из IRD, если поле числовой дескрипторный тип, например,
+SQL_DESC_COLUMN_LENGTH. Иначе поле не используется.</P>
+
+<H3><A NAME="SQLColAttributes">4.8.5 SQLColAttributes</A></H3>
+<P>В ODBC 3.x <STRONG>SQLColAttributes</STRONG> заменена
+<STRONG>SQLColAttribute</STRONG>.</P>
+
+<H3><A NAME="SQLBindCol">4.8.6 SQLBindCol</A></H3>
+<P><STRONG>SQLBindCol</STRONG> привязывает буферы данных прикладных программ
+к столбцам в наборе результатов.</P>
+
+<H4>4.8.6.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLBindCol(SQLHSTMT StatementHandle, SQLUSMALLINT ColumnNumber,
+                     SQLSMALLINT TargetType, SQLPOINTER TargetValuePtr,
+                     SQLINTEGER BufferLength, SQLLEN* StrLen_or_Ind);
+</PRE>
+
+<H4>4.8.6.2 Параметры</H4>
+<P>
+<CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>ColumnNumber [Input]</CODE> номер столбца в наборе результатов, с
+которым надо связать буфер. Столбцы пронумерованы в увеличивающемся порядке,
+начиная с 0, где столбец с номером 0 является закладкой. Если закладки не
+используются, то есть атрибут инструкции SQL_ATTR_USE_BOOKMARKS установлен в
+SQL_UB_OFF, столбцы нумеруются, начиная с 1.</P>
+
+<P><CODE>TargetType [Input]</CODE> идентификатор C-типа данных буфера
+*TargetValuePtr. При получении данных из источника данных с помощью SQLFetch,
+SQLFetchScroll, SQLBulkOperations или SQLSetPos, драйвер преобразовывает
+данные к этому типу, а при посылке данных источнику данных с помощью
+SQLBulkOperations или SQLSetPos, драйвер преобразовывает данные из этого типа.
+</P>
+
+<P><CODE>TargetValuePtr [Deferred Input/Output]</CODE> указатель на буфер для
+связи со столбцом. SQLFetch и SQLFetchScroll возвращают данные в этом буфере.
+SQLBulkOperations получает данные из этого буфера, когда Operation равен
+SQL_ADD. SQLSetPos возвращает данные в этом буфере, когда Operation равен
+SQL_REFRESH и получает данные из этого буфера, когда Operation
+равен SQL_UPDATE.</P>
+
+<P>Если TargetValuePtr равен null, драйвер отвязывает буфер данных от
+столбца. Прикладная программа может отвязать все столбцы, вызывая SQLFreeStmt
+с опцией SQL_UNBIND. Прикладная программа может отвязать буфер данных от
+столбца, но все еще иметь буфер длин связанный со столбцом, если параметр
+TargetValuePtr в вызове SQLBindCol равен null, но аргумент StrLen_or_IndPtr
+представляет собой имеющее силу значение.</P>
+
+<P><CODE>BufferLength [Input]</CODE> длина в бвйтах *TargetValuePtr. Драйвер
+использует BufferLength, чтобы не перезаписать хвост буфера *TargetValuePtr
+при возврате данных переменной длины, типа символьных или двоичных данных.
+Обратите внимание, что драйвер учитывает хвостовой нулевой символ при
+возврате символьных данных в *TargetValuePtr. *TargetValuePtr, следовательно,
+должен содержать место для этого символа, или драйвер усечет данные.</P>
+
+<P>Когда данные фиксированной длины, типа целого числа или структуры даты,
+драйвер игнорирует BufferLength и принимают, что буфер достаточно большой,
+чтобы сохранить данные. Следовательно, для прикладной программы важно
+распределить достаточно большой буфер для данных фиксированной длины во
+избежание проблем с переполнением.</P>
+
+<P>SQLBindCol возвращает ошибку SQLSTATE HY090 (Invalid string or buffer
+length), когда BufferLength меньше 0, но не когда BufferLength равен 0.
+Однако, если TargetType определяет символьный тип, прикладная программа не
+должна устанавливать BufferLength в 0, поскольку драйверы ISO CLI в этом
+случае возвращают SQLSTATE HY090 (Invalid string or buffer length).</P>
+
+<P><CODE>StrLen_or_IndPtr [Deferred Input/Output]</CODE> указатель на буфер
+длин для свяхи со столбцом. SQLFetch и SQLFetchScroll возвращают значение в
+этом буфере. SQLBulkOperations получает значение из этого буфера, когда
+параметр Operation равен SQL_ADD. SQLSetPos возвращает значение в этом
+буфере, когда Operation равен SQL_REFRESH и получает значение из этого
+буфера, когда Operation равен SQL_UPDATE. SQLFetch, SQLFetchScroll,
+SQLBulkOperations и SQLSetPos могут возвращать следующие
+значения в буфере длин:
+<UL><LI>Длина данных, доступных для возврата,
+<LI>SQL_NO_TOTAL,
+<LI>SQL_NULL_DATA.</UL>
+
+<P>Прикладная программа может помещать следующие значения в буфер длин для
+использования с SQLBulkOperations или с SQLSetPos:
+<UL><LI>Длина данных, доступных для передачи,
+<LI>SQL_NTS,
+<LI>SQL_NULL_DATA,
+<LI>SQL_DATA_AT_EXEC,
+<LI>Результат выполнения макроса SQL_LEN_DATA_AT_EXEC,
+<LI>SQL_COLUMN_IGNORE (это не поддержано MyODBC и
+применимо только в MyODBC 3.51).</UL>
+
+<P>Если буфер индикаторов и буфер длин разделены, буфер индикаторов может
+возвращать только SQL_NULL_DATA, в то время как буфер длин может возвращать
+все остальные значения. Если StrLen_or_IndPtr равно null, значения длины или
+индикаторов не применяются.</P>
+
+<H3><A NAME="SQLFetch">4.8.7 SQLFetch</A></H3>
+<P><STRONG>SQLFetch</STRONG> выбирает следующий rowset данных из набора
+результатов и возвращает данные для всех связанных столбцов.</P>
+
+<H4>4.8.7.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLFetch(SQLHSTMT StatementHandle);
+</PRE>
+
+<H4>4.8.7.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+
+<H4>4.8.7.3 Комментарии</H4>
+<P>SQLFetch возвращает следующий rowset в наборе результатов. Это может быть
+вызвано только в то время, когда набор результатов существует, то есть после
+обращения, которое создает набор результатов и прежде, чем курсор будет
+закрыт. Если любые столбцы связаны с данными, этот вызов возвращает данные в
+этих столбцах. Если прикладная программа определила указатель на массив
+состояния или на буфер нужный, чтобы возвращать число выбранных строк,
+SQLFetch возвращает также и эту информацию. Обращение к SQLFetch может быть
+смешано с обращениями к SQLFetchScroll, но не может быть смешано с
+обращениями к SQLExtendedFetch.</P>
+
+<H3><A NAME="SQLFetchScroll">4.8.8 SQLFetchScroll</A></H3>
+<P><STRONG>SQLFetchScroll</STRONG> выбирает определенный rowset данных из
+набора результатов и возвращает данные для всех связанных столбцов. Rowset
+может быть определен в абсолютной или относительной позиции или закладкой.
+При работе с драйвером ODBC 2.x Driver Manager отображает эту функцию на
+SQLExtendedFetch.</P>
+
+<H4>4.8.8.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLFetchScroll(SQLHSTMT StatementHandle,
+                         SQLSMALLINT FetchOrientation,
+                         SQLINTEGER FetchOffset);
+</PRE>
+
+<H4>4.8.8.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>FetchOrientation [Input]</CODE> тип выборки:
+<UL><LI>SQL_FETCH_NEXT,
+<LI>SQL_FETCH_PRIOR,
+<LI>SQL_FETCH_FIRST,
+<LI>SQL_FETCH_LAST,
+<LI>SQL_FETCH_ABSOLUTE,
+<LI>SQL_FETCH_RELATIVE,
+<LI>SQL_FETCH_BOOKMARK</UL>
+
+<P><CODE>FetchOffset [Input]</CODE> номер строки для выборки. Интерпретация
+этого параметра зависит от значения параметра FetchOrientation.</P>
+
+<H4>4.8.8.3 Комментарии</H4>
+<P>Когда набор результатов создан, курсор установлен перед началом набора
+результатов. SQLFetchScroll устанавливает блочный курсор, исходя из значений
+параметров FetchOrientation и FetchOffset как показано в следующей таблице.
+</P>
+
+<TABLE><TR><TD><STRONG>FetchOritentation</STRONG></TD><TD><STRONG>Смысл
+</STRONG></TD></TR>
+<TR><TD><CODE>SQL_FETCH_NEXT</CODE></TD><TD>Вернет следующий rowset. Это
+эквивалентно вызову SQLFetch. SQLFetchScroll игнорирует значение FetchOffset.
+</TD></TR>
+<TR><TD><CODE>SQL_FETCH_PRIOR</CODE></TD><TD>Вернет предшествующий rowset.
+SQLFetchScroll игнорирует значение FetchOffset.</TD></TR>
+<TR><TD><CODE>SQL_FETCH_RELATIVE</CODE></TD><TD>Вернет FetchOffset от начала
+текущего (актуального) rowset.</TD></TR>
+<TR><TD><CODE>SQL_FETCH_ABSOLUTE</CODE></TD><TD>Вернет rowset, начинающийся в
+строке FetchOffset.</TD></TR>
+<TR><TD><CODE>SQL_FETCH_FIRST</CODE></TD><TD>Вернет первый rowset в наборе
+результатов. SQLFetchScroll игнорирует значение FetchOffset.</TD></TR>
+<TR><TD><CODE>SQL_FETCH_LAST</CODE></TD><TD>Вернет последний полный rowset в
+наборе результатов. SQLFetchScroll игнорирует значение FetchOffset.</TD></TR>
+</TABLE>
+
+<H3><A NAME="SQLExtendedFetch">4.8.9 SQLExtendedFetch</A></H3>
+<P><STRONG>SQLExtendedFetch</STRONG> выбирает определенный rowset данных из
+набора результатов и возвращает данные для всех связанных столбцов. Rowset
+может быть определен в абсолютной или относительной позиции.</P>
+
+<P><CODE>Обратите внимание</CODE> в ODBC 3.x SQLExtendedFetch заменен на
+SQLFetchScroll. Прикладные программы ODBC 3.x не должны вызвать
+SQLExtendedFetch: взамен они должны вызвать SQLFetchScroll.</P>
+
+<H4>4.8.9.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLExtendedFetch(SQLHSTMT StatementHandle,
+                           SQLUSMALLINT FetchOrientation,
+                           SQLINTEGER FetchOffset, SQLUINTEGER* RowCountPtr,
+                           SQLUSMALLINT* RowStatusArray);
+</PRE>
+
+<H4>4.8.9.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>FetchOrientation [Input]</CODE> тип выборки. Это аналогично
+FetchOrientation в SQLFetchScroll.</P>
+
+<P><CODE>FetchOffset [Input]</CODE> номер столбца для выборки. Аналогично
+FetchOffset в SQLFetchScroll.</P>
+
+<P><CODE>RowCountPtr [Output]</CODE> указатель на буфер, куда надо записать
+число фактически выбранных строк. Этот буфер используется тем же самым
+способом, что и буфер, определенный атрибутом инструкции
+SQL_ATTR_ROWS_FETCHED_PTR. Этот буфер используется только SQLExtendedFetch.
+Это не используется SQLFetch или SQLFetchScroll.</P>
+
+<P><CODE>RowStatusArray [Output]</CODE> указатель на буфер, куда надо
+записать состояние каждой строки. Этот массив используется тем же самым
+способом, что и массив, определенный атрибутом инструкции
+SQL_ATTR_ROW_STATUS_PTR.</P>
+
+<P>Однако, адрес этого массива не сохранен в поле SQL_DESC_STATUS_ARRAY_PTR
+в IRD. Кроме того, этот массив используется только SQLExtendedFetch,
+SQLBulkOperations при параметре Operation равном SQL_ADD или SQLSetPos, когда
+это вызвано после SQLExtendedFetch. SQLFetch или SQLFetchScroll не используют
+это вообще, а SQLBulkOperations или SQLSetPos не используют, когда они
+вызваны после SQLFetch или SQLFetchScroll. Это также не используется, когда
+SQLBulkOperations с параметром Operation равным SQL_ADD вызван прежде, чем
+выполнена любая функция выборки. Прикладные программы должны обеспечить
+имеющий силу указатель в параметре RowStatusArray. Если это не так,
+последствия будут непредсказуемыми.</P>
+
+<H4>4.8.9.3 Комментарии</H4>
+<P>Логика работы SQLExtendedFetch идентична SQLFetchScroll, но:
+<UL><LI>SQLExtendedFetch и SQLFetchScroll используют различные методы для
+возврата числа выбранных строк. SQLExtendedFetch возвращает число выбранных
+строк в *RowCountPtr, а SQLFetchScroll возвращает число выбранных строк
+непосредственно в буфер, указанный в SQL_ATTR_ROWS_FETCHED_PTR.
+<LI>SQLExtendedFetch и SQLFetchScroll возвращают состояние каждой строки в
+различных массивах.
+<LI>SQLExtendedFetch не поддерживает закладки переменной длины или выбор
+rowset при смещении. отличном от 0.
+<LI>SQLExtendedFetch и SQLFetchScroll используют различные размеры rowset.
+SQLExtendedFetch использует значение атрибута инструкции SQL_ROWSET_SIZE, а
+SQLFetchScroll использует значение атрибута инструкции
+SQL_ATTR_ROW_ARRAY_SIZE.
+<LI>SQLExtendedFetch имеет немного иную семантику обработки ошибок, чем
+SQLFetchScroll.
+<LI>SQLExtendedFetch не поддерживает смещения связи (атрибут инструкции
+SQL_ATTR_ROW_BIND_OFFSET_PTR.
+<LI>Вызов SQLExtendedFetch не может быть смешан с обращениями к SQLFetch или
+к SQLFetchScroll, и если SQLBulkOperations вызван прежде, чем отработана
+любая функция выборки, то SQLExtendedFetch не может быть вызван, пока курсор
+не закрыт и вновь открыт.</UL>
+
+<H3><A NAME="SQLGetData">4.8.10 SQLGetData</A></H3>
+<P><STRONG>SQLGetData</STRONG> получает данные для одиночного столбца в
+наборе результатов. Это может быть вызвано неоднократно, чтобы получить
+данные переменной длины по частям.</P>
+
+<H4>4.8.10.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLGetData(SQLHSTMT StatementHandle, SQLUSMALLINT ColumnNumber,
+                     SQLSMALLINT TargetType, SQLPOINTER TargetValuePtr,
+                     SQLINTEGER BufferLength, SQLINTEGER* StrLen_or_IndPtr);
+</PRE>
+
+<H4>4.8.10.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>ColumnNumber [Input]</CODE> номер столбца для возврата данных. Все
+столбцы в наборе результатов пронумерованы в увеличивающемся порядке, начиная
+с 1. Столбец закладки имеет номер столбца, равный 0, это может быть
+определено только, если закладки допускаются.</P>
+
+<P><CODE>TargetType [Input]</CODE> идентификатор C-типа данных буфера
+*TargetValuePtr. Если это равно SQL_C_DEFAULT, драйвер выбирает заданный по
+умолчанию C-тип данных, основываясь на SQL-типе данных источника.</P>
+
+<P><CODE>TargetValuePtr [Input]</CODE> указатель на буфер для приема данных.
+</P>
+
+<P><CODE>BufferLength [Input]</CODE> длина буфера *TargetValuePtr в байтах.
+Драйвер использует BufferLength, чтобы избежать столкновения с
+*TargetValuePtr при возврате данных переменной длины, типа символьных или
+двоичных данных. Обратите внимание, что драйвер считает хвостовой нуль.</P>
+
+<P>Когда данные имеют фиксированную длину, типа целого числа или структуры
+даты, драйвер игнорирует BufferLength и принимает, что буфер достаточно
+большой, чтобы сохранить в нем данные.</P>
+
+<P>SQLGetData вернет SQLSTATE HY090 (Invalid string or buffer length), когда
+BufferLength меньше 0, но не когда BufferLength равен 0. Если TargetValuePtr
+равен null, BufferLength игнорируется драйвером.</P>
+
+<P><CODE>StrLen_or_IndPtr [Deferred Input/Output]</CODE> указатель на буфер
+нужный, чтобы возвращать длину или значение индикатора. Если это null, не
+будет возвращено ничего. Это возвращает ошибку, когда выбираемые данные NULL.
+SQLGetData может возвращать следующие значения в буфере длин/индикатора:
+<UL><LI>Длина доступных данных,
+<LI>SQL_NO_TOTAL,
+<LI>SQL_NULL_DATA.</UL>
+
+<H3><A NAME="SQLSetPos">4.8.11 SQLSetPos</A></H3>
+<P><STRONG>SQLSetPos</STRONG> устанавливает позицию курсора в rowset и
+позволяет прикладной программе обновить данные в rowset, модифицировать или
+удалять данные в наборе результатов.</P>
+
+<H4>4.8.11.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLSetPos(SQLHSTMT StatementHandle, SQLUSMALLINT RowNumber,
+                    SQLUSMALLINT Operation, SQLUSMALLINT LockType);
+</PRE>
+
+<H4>4.8.11.2 Параметры</H4>
+<P>
+<CODE>StatementHandle [Input]]</CODE> операторный дескриптор.</P>
+
+<P><CODE>RowNumber [Input]</CODE> позиция строки в rowset над которой надо
+выполнить операцию, определенную параметром Operation. Если RowNumber равен
+0, операция применяется к каждой строке в rowset.</P>
+
+<P><CODE>Operation [Input]</CODE> операция для выполнения:
+<UL><LI>SQL_POSITION,
+<LI>SQL_REFRESH,
+<LI>SQL_UPDATE,
+<LI>SQL_DELETE.</UL>
+
+<P><CODE>LockType [Input]</CODE> определяет, как блокировать строку после
+выполнения операции, определенной в параметре Operation:
+<UL><LI>SQL_LOCK_NO_CHANGE,
+<LI>SQL_LOCK_EXCLUSIVE,
+<LI>SQL_LOCK_UNLOCK.</UL>
+
+<H4>4.8.11.3 Комментарии</H4>
+<P><STRONG>Row Number:</STRONG> параметр RowNumber определяет номер строки в
+rowset, с которой надо работать. Если RowNumber равен 0, операция применяется
+к каждой строке в rowset. RowNumber должен быть значением от 0 до
+максимального количества строк в rowset. Обратите внимание, что в языке C
+массивы отсчитываются от 0, RowNumber реально отсчитывается от 1. Например,
+чтобы модифицировать пятую строку rowset, прикладная программа изменяет буфер
+rowset в массиве с индексом 4, но определяет RowNumber=5! Все операции
+устанавливают курсор в строку, определенную RowNumber. Следующие операции
+требуют позиционирования курсора:
+<UL><LI>Позиционное удаление и обновление.
+<LI>Вызов SQLGetData.
+<LI>Вызов SQLSetPos с опциями SQL_DELETE, SQL_REFRESH и SQL_UPDATE.</UL>
+
+<P>Например, если RowNumber=2, при обращении к SQLSetPos с Operation равным
+SQL_DELETE, курсор установлен во вторую строку rowset, и эта строка будет
+удалена. Запись в массиве состояний строк (указан атрибутом инструкции
+SQL_ATTR_ROW_STATUS_PTR) для второй строки изменена на SQL_ROW_DELETED.</P>
+
+<P>Прикладная программа может определять позицию курсора, когда вызывает
+SQLSetPos. Вообще, это вызывает SQLSetPos с параметром SQL_POSITION или
+SQL_REFRESH, чтобы установить курсор перед выполнением позиционной инструкции
+или вызовом SQLGetData.
+
+<STRONG>Параметр Operation</STRONG> поддерживает следующие операции. Чтобы
+понять, какие именно параметры поддержаны источником данных, вызовите из
+прикладной программы SQLGetInfo с информационными типами
+SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES1 и SQL_STATIC_CURSOR_ATTRIBUTES1.</P>
+
+<TABLE><TR><TD><STRONG>Аргумент</STRONG></TD><TD><STRONG>Действие</STRONG>
+</TD></TR>
+<TR><TD>SQL_POSITION</TD><TD>Драйвер устанавливает курсор в строку,
+определенную RowNumber. Содержание массива состояний строк, указанного
+атрибутом инструкции SQL_ATTR_ROW_OPERATION_PTR игнорируется в SQL_POSITION.
+</TD></TR>
+<TR><TD>SQL_REFRESH</TD><TD>Драйвер устанавливает курсор в строку,
+определенную RowNumber и регенерирует данные в буферах rowset для этой
+строки. SQLSetPos с Operation равным SQL_REFRESH модифицирует состояние и
+содержание строк внутри текущего (актуального) выбранного rowset. Поскольку
+данные в буферах регенерируются, но не выбираются заново, членство в rowset
+фиксировано. Это отличается от регенерации, выполняемой обращением к
+SQLFetchScroll с FetchOrientation равным SQL_FETCH_RELATIVE и RowNumber
+равным 0, что заново выбирает rowset из набора результатов так, чтобы он мог
+показывать добавленные данные и удалить удаленные данные, если эти операции
+поддержаны драйвером и курсором.</TD></TR>
+<TR><TD>SQL_UPDATE</TD><TD>Драйвер устанавливает курсор в строку,
+определенную RowNumber и модифицирует основную строку данных значениями в
+буферах rowset (параметр TargetValuePtr в SQLBindCol).</TD></TR>
+<TR><TD>SQL_DELETE</TD><TD>Драйвер устанавливает курсор в строку,
+определенную RowNumber и удаляет основную строку данных. Это изменяет
+соответствующий элемент массива состояний строк на SQL_ROW_DELETED. После
+того, как строка была удалена, следующее не имеет силу для строки: вызов
+SQLGetData, позиционная модификация и удаление и обращение к SQLSetPos с
+любым значением параметра Operation, кроме SQL_POSITION.</TD></TR></TABLE>
+
+<H3><A NAME="SQLBulkOperations">4.8.12 SQLBulkOperations</A></H3>
+<P><STRONG>SQLBulkOperations</STRONG> выполняет оптовые вставки и операции
+закладки, включая update, delete и выборку по закладке.</P>
+
+<H4>4.8.12.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLBulkOperations(SQLHSTMT StatementHandle,
+                            SQLUSMALLINT Operation);
+</PRE>
+
+<H4>4.8.12.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>Operation [Input]</CODE> операция для выполнения:
+<CODE>SQL_ADD</CODE>. Обратите внимание: сейчас никакие операции с закладками
+драйвером не поддерживаются.</P>
+
+<H4>4.8.12.3 Комментарии</H4>
+<P><STRONG>Выполнение оптовых вставок:</STRONG></P>
+
+<P>Чтобы вставлять данные с помощью SQLBulkOperations, прикладная программа
+выполняет следующую последовательность шагов:</P>
+
+<UL><OL><LI>Выполняет запрос, который возвращает набор результатов.
+<LI>Устанавливает атрибут инструкции SQL_ATTR_ROW_ARRAY_SIZE в число строк,
+которые требуется вставить.
+
+<LI>Вызывает <CODE>SQLBindCol</CODE>, чтобы привязать данные, которые
+требуется вставлять. Данные будут привязаны к массиву с размером, равным
+значению SQL_ATTR_ROW_ARRAY_SIZE. Обратите внимание, что размер массива,
+указанного атрибутом инструкции SQL_ATTR_ROW_STATUS_PTR должен быть равен
+SQL_ATTR_ROW_ARRAY_SIZE, или SQL_ATTR_ROW_STATUS_PTR должен быть null.
+
+<LI>Вызывает <CODE>SQLBulkOperations</CODE>(StatementHandle,
+<CODE>SQL_ADD</CODE>), чтобы выполнить вставку.
+
+<LI>Если прикладная программа установила атрибут инструкции
+SQL_ATTR_ROW_STATUS_PTR, она может осматривать этот массив, чтобы
+увидеть результат операции.</OL></UL>
+
+<H2><A NAME="Diagnostic_Information">4.9
+Получение информации об ошибках и диагностике</A></H2>
+<H3><A NAME="SQLError">4.9.1 SQLError</A></H3>
+<P><STRONG>SQLError</STRONG> возвращает информацию состояния или ошибку.
+Прикладная программа обычно вызывает SQLError, когда предыдущая функция ODBC
+возвращает SQL_ERROR или SQL_SUCCESS_WITH_INFO. В ODBC 3.x SQLGetDiagRec
+заменила функцию ODBC 2.0 SQLError.</P>
+
+<H3><A NAME="SQLGetDiagField">4.9.2 SQLGetDiagField</A></H3>
+<P><STRONG>SQLGetDiagField</STRONG> возвращает текущее (актуальное) значение
+поля записи диагностической структуры данных (связанной с определенным
+дескриптором), которое содержит ошибку, предупреждение и информацию состояния.
+</P>
+
+<H4>4.9.2.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLGetDiagField(SQLSMALLINT HandleType, SQLHANDLE Handle,
+                          SQLSMALLINT RecNumber, SQLSMALLINT DiagIdentifier,
+                          SQLPOINTER DiagInfoPtr, SQLSMALLINT BufferLength,
+                          SQLSMALLINT* StringLengthPtr);
+</PRE>
+
+<H4>4.9.2.2 Параметры</H4>
+<P><CODE>HandleType [Input]</CODE> идентификатор типа дескриптора, который
+описывает тип дескриптора для которого требуется диагностика. Должен быть
+одним из следующего: SQL_HANDLE_ENV, SQL_HANDLE_DBC, SQL_HANDLE_STMT или
+SQL_HANDLE_DESC (не поддерживается).</P>
+
+<P><CODE>Handle [Input]</CODE> дескриптор для диагностической структуры
+данных. Тип обозначен в HandleType.</P>
+
+<P><CODE>RecNumber [Input]</CODE> указывает запись состояния, из которой
+прикладная программа ищет информацию. Записи состояния пронумерованы, начиная
+с 1. Если параметр DiagIdentifier указывает, любое поле диагностического
+заголовка, RecNumber игнорируется. В противном случае это
+должно быть больше 0.</P>
+
+<P><CODE>DiagIdentifier [Input]</CODE> указывает поле диагностики, чье
+значение должно быть возвращено.</P>
+
+<P><CODE>DiagInfoPtr [Output]</CODE> указатель на буфер выделенный, чтобы
+возвращать диагностическую информацию. Тип данных зависит
+от значения DiagIdentifier.</P>
+
+<P><CODE>BufferLength [Input]</CODE> если DiagIdentifier определен в ODBC и
+DiagInfoPtr указывает на строку или двоичный буфер, этот параметр должен быть
+длиной *DiagInfoPtr. Если DiagIdentifier определен в ODBC и *DiagInfoPtr
+является целым числом, BufferLength игнорируется. BufferLength может
+иметь следующие значения:
+
+<UL><LI>Если *ValuePtr указатель на символьную строку, то BufferLength задает
+длину строки или SQL_NTS.
+<LI>Если *ValuePtr указатель на двоичный буфер, то прикладная программа
+помещает результат макроса SQL_LEN_BINARY_ATTR(length) в BufferLength.
+<LI>Если *ValuePtr указатель на другое значение, то BufferLength имеет
+значение SQL_IS_POINTER.
+<LI>Если *ValuePtr содержит тип данных фиксированной длины, то BufferLength
+равен SQL_IS_INTEGER, SQL_IS_UINTEGER, SQL_IS_SMALLINT или SQL_IS_USMALLINT.
+</UL>
+
+<P><CODE>StringLengthPtr [Output]</CODE> указатель на буфер распределенный,
+чтобы возвращать общее количество байт, доступных в *DiagInfoPtr (только для
+символьных данных, хвостовые нули не считаются).</P>
+
+<H4>4.9.2.3 Комментарии</H4>
+<P><STRONG>SQLGetDiagField</STRONG> не регистрирует диагностические записи
+для себя. Это использует следующие значения возврата, чтобы сообщить
+результат собственного выполнения:
+
+<UL><LI>SQL_SUCCESS: функция успешно вернула диагностическую информацию.
+<LI>SQL_SUCCESS_WITH_INFO: *DiagInfoPtr был слишком маленький, чтобы вместить
+запрошенное диагностическое поле, так что данные в диагностическом поле были
+усечены. Чтобы определить, что усечение произошло, прикладная программа
+должна сравнить BufferLength с фактическом числом доступных байт, которое
+записано в *StringLengthPtr.
+<LI>SQL_INVALID_HANDLE: дескриптор, обозначенный HandleType и Handle, не был
+имеющим силу дескриптором.
+<LI>SQL_ERROR: одно из следующего произошло:
+<UL><LI>Параметр DiagIdentifier не был одним из имеющих силу значений.
+<LI>Параметр DiagIdentifier был SQL_DIAG_CURSOR_ROW_COUNT,
+SQL_DIAG_DYNAMIC_FUNCTION, SQL_DIAG_DYNAMIC_FUNCTION_CODE или
+SQL_DIAG_ROW_COUNT, но дескриптор не был операторным. Driver Manager
+возвращает эту диагностику.
+<LI>Параметр RecNumber был отрицательным или 0, когда DiagIdentifier указал
+поле из диагностической записи. RecNumber игнорируется для полей заголовка.
+Запрошенное значение было символьной строкой, а BufferLength меньше нуля.
+</UL>
+<LI>SQL_NO_DATA: RecNumber больше, чем число диагностических записей для
+дескриптора, определенного в Handle. Функция также возвращает SQL_NO_DATA для
+любого положительного RecNumber, если не имеется никаких диагностических
+записей для дескриптора.</UL>
+
+<P>Прикладная программа обычно вызывает SQLGetDiagField, чтобы выполнить одну
+из трех целей:
+
+<OL><LI>Получить специфическую информацию об ошибке или предупреждение, когда
+обращение к функции возвратило SQL_ERROR или SQL_SUCCESS_WITH_INFO.
+<LI>Чтобы выяснить число строк в источнике данных, на которые воздействовали
+операции insert, delete или update при вызове SQLExecute, SQLExecDirect,
+SQLBulkOperations или SQLSetPos (из поля SQL_DIAG_ROW_COUNT заголовка), или
+выяснить число строк, открытом курсоре, если драйвер способен обеспечить эту
+информацию (из поля SQL_DIAG_CURSOR_ROW_COUNT заголовка).</OL>
+
+<P><STRONG>DiagIdentifier:</STRONG> ниже приведен полный список
+диагностических идентификаторов, поддержанных драйвером.
+
+<TABLE><TR><TD><STRONG>DiagIdentifier</STRONG></TD><TD><STRONG>Тип возврата
+</STRONG></TD><TD><STRONG>Возвращаемое значение</STRONG></TD></TR>
+<TR><TD>SQL_DIAG_CURSOR_ROW_COUNT</TD><TD>SQLINTEGER</TD><TD>Это поле
+содержит число строк в курсоре.</TD></TR>
+
+<TR><TD>SQL_DIAG_NUMBER</TD><TD>SQLINTEGER</TD><TD>Число записей состояния,
+которые являются доступными для определенного дескриптора. В настоящее время
+драйвер всегда возвращает 1.</TD></TR>
+<TR><TD>SQL_DIAG_RETURNCODE</TD><TD>SQLRETURN</TD><TD>Код возврата,
+возвращенный функцией.</TD></TR>
+<TR><TD>SQL_DIAG_ROW_COUNT</TD><TD>SQLINTEGER</TD><TD>Число строк, на которые
+воздействует операция insert, delete или update, вызванная через SQLExecute,
+SQLExecDirect, SQLBulkOperations или SQLSetPos.</TD></TR>
+<TR><TD>SQL_DIAG_CLASS_ORIGIN</TD><TD>SQLCHAR*</TD><TD>Строка, которая
+указывает документ который определяет часть класса значения SQLSTATE в этой
+записи. Значение "ISO 9075" для всех SQLSTATE определено X/Open и интерфейсом
+уровня обращения ISO. Для ODBC-специфических SQLSTATE (все те, чей класс
+SQLSTATE равен "IM"), это значение равно "ODBC 3.0".</TD></TR>
+<TR><TD>SQL_DIAG_COLUMN_NUMBER</TD><TD>SQLINTEGER</TD><TD>Если поле
+SQL_DIAG_ROW_NUMBER представляет собой имеющий силу номер строки в наборе
+строк или наборе параметров, это поле содержит значение, которое представляет
+номер столбца в наборе результатов или номер параметра в наборе параметров.
+Номера столбцов всегда начинаются с 1. Если эта запись состояния относится к
+столбцу закладки, поле может быть нулевым. Номера параметров начинаются с 1.
+Это имеет значение SQL_NO_COLUMN_NUMBER, если запись состояния не связана с
+номером столбца или номером параметра. Если драйвер не может определять номер
+столбца или номер параметра, с которым эта запись связана, это поле имеет
+значение SQL_COLUMN_NUMBER_UNKNOWN. Содержимое этого поля определено только
+для операторных дескрипторов.</TD></TR>
+<TR><TD>SQL_DIAG_CONNECTION_ NAME</TD><TD>SQLCHAR*</TD><TD>Строка, которая
+указывает имя подключения, к которому относится эта диагностическая запись.
+Драйвер возвращает DSN как имя подключения, а для DSN-LESS-подключения это
+поле является строкой нулевой длины.</TD></TR>
+<TR><TD>SQL_DIAG_MESSAGE_TEXT</TD><TD>SQLCHAR*</TD><TD>Информационное
+сообщение об ошибке или текста предупреждения. Подробности ниже.</TD></TR>
+<TR><TD>SQL_DIAG_NATIVE</TD><TD>SQLINTEGER</TD><TD>Исходно-специфический
+местный код ошибки драйвера или данных. Если не имеется никакого местного
+кода ошибки, драйвер возвращает 0.</TD></TR>
+<TR><TD>SQL_DIAG_ROW_NUMBER</TD><TD>SQLINTEGER</TD><TD>Это поле содержит
+номер строки в наборе строк, или номер параметра в наборе параметров, с
+которыми запись состояния связана. Номера начинаются с 1. Это поле имеет
+значение SQL_NO_ROW_NUMBER, если эта запись состояния не связана с номером
+строки или параметра. Если драйвер не может определять номер строки или
+параметра, с которым эта запись связана, это поле имеет значение
+SQL_ROW_NUMBER_UNKNOWN. Содержимое этого поля определено только
+для операторных дескрипторов.</TD></TR>
+<TR><TD>SQL_DIAG_SERVER_NAME</TD><TD>SQLCHAR*</TD><TD>Строка, которая
+указывает имя сервера для этой диагностической записи. Это равно значению,
+возвращенному для обращения к SQLGetInfo с опцией SQL_DATA_SOURCE_NAME.</TD>
+</TR>
+<TR><TD>SQL_DIAG_SQLSTATE</TD><TD>SQLCHAR*</TD><TD>
+Код диагностики пятисимвольного SQLSTATE.</TD></TR>
+<TR><TD>SQL_DIAG_SUBCLASS_ORIGIN</TD><TD>SQLCHAR*</TD><TD>Строка с тем же
+самым форматом и имеющими силу значениями, что и SQL_DIAG_CLASS_ORIGIN,
+которая идентифицирует часть определения части подкласса кода SQLSTATE.
+ODBC-специфические SQLSTATE для ODBC 3.0 возвращаются.</TD></TR></TABLE></P>
+
+<H3><A NAME="SQLGetDiagRec">4.9.3 SQLGetDiagRec</A></H3>
+<P><STRONG>SQLGetDiagRec</STRONG> возвращает текущие значения нескольких
+полей диагностической записи, которая содержит ошибку, предупреждение и
+информацию состояния. В отличие от SQLGetDiagField, которая возвращает
+одно диагностическое поле на обращение, SQLGetDiagRec возвращает несколько
+обычно используемых полей диагностической записи, включая SQLSTATE, местный
+код ошибки и диагностический текст сообщения.</P>
+
+<H4>4.9.3.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLGetDiagRec(SQLSMALLINT HandleType, SQLHANDLE Handle,
+                        SQLSMALLINT RecNumber, SQLCHAR* Sqlstate,
+                        SQLINTEGER* NativeErrorPtr, SQLCHAR* MessageText,
+                        SQLSMALLINT BufferLength, SQLSMALLINT* TextLengthPtr);
+</PRE>
+
+<H4>4.9.3.2 Параметры</H4>
+<P><CODE>HandleType [Input]</CODE> идентификатор типа дескриптора, который
+описывает тип дескриптора, для которого диагностика требуется. Должен быть
+одним из следующего: <CODE>SQL_HANDLE_ENV</CODE>,
+<CODE> SQL_HANDLE_DBC</CODE>, <CODE>SQL_HANDLE_STMT</CODE> или
+<CODE>SQL_HANDLE_DESC</CODE> (не поддерживается).</P>
+
+<P><CODE>Handle [Input]</CODE> дескриптор для диагностической структуры
+данных. Тип задан в HandleType.</P>
+
+<P><CODE>RecNumber [Input]</CODE> указывает запись состояния, из которой
+прикладная программа получает информацию. Записи состояния пронумерованы с 1.
+</P>
+
+<P><CODE>SQLState [Output]</CODE> указатель на буфер нужный, чтобы возвращать
+код пятисимвольного SQLSTATE, имеющий отношение к диагностической
+записи RecNumber.</P>
+
+<P><CODE>NativeErrorPtr [Output]</CODE> указатель на буфер выделенный, чтобы
+возвращать местный код ошибки, специфический для источника данных. Эта
+информация содержится в диагностическом поле SQL_DIAG_NATIVE.</P>
+
+<P><CODE>MessageText [Output]</CODE> указатель на буфер выделенный, чтобы
+возвращать диагностический текст сообщения. Эта информация содержится в
+диагностическом поле SQL_DIAG_MESSAGE_TEXT.</P>
+
+<P><CODE>BufferLength [Input]</CODE> длина буфера *MessageText в символах. Не
+имеется никакой максимальной длины диагностического текста сообщения.</P>
+
+<P><CODE>TextLengthPtr [Output]</CODE> указатель на буфер для возврата общего
+количество байтов, доступных в *MessageText (кроме хвостовых нулей).</P>
+
+<H4>4.9.3.3 Комментарии</H4>
+<P>Прикладная программа обычно вызывает SQLGetDiagRec, когда предыдущее
+обращение к функции ODBC возвратило SQL_SUCCESS или SQL_SUCCESS_WITH_INFO.
+Однако, поскольку любая функция ODBC может регистрировать ноль или большее
+количество диагностических записей каждый вызов, прикладная программа может
+вызывать SQLGetDiagRec после любого обращения к функции ODBC.</P>
+
+<H2><A NAME="Meta_Data_Information">4.10 Получение метаинформации</A></H2>
+<H3><A NAME="SQLColumnPrivileges">4.10.1 SQLColumnPrivileges</A></H3>
+<P><STRONG>SQLColumnPrivileges</STRONG> возвращает список столбцов и
+связанных привилегий для определенной таблицы. Драйвер возвращает информацию
+как набор результатов на определенном StatementHandle.</P>
+
+<H4>4.10.1.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLColumnPrivileges(SQLHSTMT StatementHandle, SQLCHAR* CatalogName,
+                              SQLSMALLINT NameLength1, SQLCHAR* SchemaName,
+                              SQLSMALLINT NameLength2, SQLCHAR* TableName,
+                              SQLSMALLINT NameLength3, SQLCHAR* ColumnName,
+                              SQLSMALLINT NameLength4);
+</PRE>
+
+<H4>4.10.1.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>CatalogName [Input]</CODE> имя каталога. Если драйвер поддерживает
+имена для некоторых каталогов, но не для всех (например, при одновременной
+работе с разными СУБД), пустая строка обозначает те каталоги, которые не
+имеют имен. CatalogName не может содержать образец поиска строки!</P>
+
+<P><CODE>NameLength1 [Input]</CODE> длина *CatalogName.</P>
+<P><CODE>SchemaName [Input]</CODE> имя схемы. Если драйвер поддерживает схемы
+для некоторых каталогов, но не для всех (например, при одновременной работе с
+разными СУБД), пустая строка обозначает те схемы, которые не имеют имен.
+SchemaName не может содержать образец поиска строки!</P>
+
+<P><CODE>NameLength2 [Input]</CODE> длина *SchemaName.</P>
+<P><CODE>TableName [Input]</CODE> имя таблицы. Этот параметр не может быть
+null. TableName не может содержать образец поиска строки.</P>
+
+<P><CODE>NameLength3 [Input]</CODE> длина *TableName.</P>
+<P><CODE>ColumnName [Input]</CODE> образец поиска строки с именем столбца.</P>
+<P><CODE>NameLength4 [Input]</CODE> длина *ColumnName.</P>
+
+<H3><A NAME="SQLColumns">4.10.2 SQLColumns</A></H3>
+<P><STRONG>SQLColumns</STRONG> возвращает список имен столбцов в определенных
+таблицах. Драйвер возвращает эту информацию в наборе результатов на
+определенном StatementHandle.
+
+<P><STRONG>4.10.2.1 Синтаксис</STRONG></P>
+<PRE>
+SQLRETURN SQLColumns(SQLHSTMT StatementHandle, SQLCHAR* CatalogName,
+                     SQLSMALLINT NameLength1, SQLCHAR* SchemaName,
+                     SQLSMALLINT NameLength2, SQLCHAR* TableName,
+                     SQLSMALLINT NameLength3, SQLCHAR* ColumnName,
+                     SQLSMALLINT NameLength4);
+</PRE>
+
+<H4>4.10.2.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>CatalogName [Input]</CODE> имя каталога. Если драйвер поддерживает
+имена для некоторых каталогов, но не для всех (например, при одновременной
+работе с разными СУБД), пустая строка обозначает те каталоги, которые не
+имеют имен. CatalogName не может содержать образец поиска строки!</P>
+
+<P><CODE>NameLength1 [Input]</CODE> длина *CatalogName.</P>
+<P><CODE>SchemaName [Input]</CODE> имя схемы. Если драйвер поддерживает схемы
+для некоторых каталогов, но не для всех (например, при одновременной работе с
+разными СУБД), пустая строка обозначает те схемы, которые не имеют имен.
+SchemaName не может содержать образец поиска строки!</P>
+
+<P><CODE>NameLength2 [Input]</CODE> длина *SchemaName.</P>
+<P><CODE>TableName [Input]</CODE> имя таблицы. Этот параметр не может быть
+null. TableName не может содержать образец поиска строки.</P>
+
+<P><CODE>NameLength3 [Input]</CODE> длина *TableName.</P>
+<P><CODE>ColumnName [Input]</CODE> образец поиска строки с именем столбца.</P>
+<P><CODE>NameLength4 [Input]</CODE> длина *ColumnName.</P>
+
+<H3><A NAME="SQLForeignKeys">4.10.3 SQLForeignKeys</A></H3>
+<P><STRONG>SQLForeignKeys</STRONG> может вернуть:
+<UL><LI>Список внешних ключей в определенной таблице (столбцы в определенной
+таблице, которые обращаются к первичным ключам в других таблицах).
+<LI>Список внешних ключей в других таблицах, которые обращаются к первичному
+ключу в определенной таблице.</UL>
+
+<P>Драйвер возвращает каждый список в наборе результатов
+на определенной инструкции.</P>
+
+<H4>4.10.3.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLForeignKeys(SQLHSTMT StatementHandle, SQLCHAR* PKCatalogName,
+                         SQLSMALLINT NameLength1, SQLCHAR* PKSchemaName,
+                         SQLSMALLINT NameLength2, SQLCHAR* PKTableName,
+                         SQLSMALLINT NameLength3, SQLCHAR* FKCatalogName,
+                         SQLSMALLINT NameLength4, SQLCHAR* FKSchemaName,
+                         SQLSMALLINT NameLength5, SQLCHAR* FKTableName,
+                         SQLSMALLINT NameLength6);
+</PRE>
+
+<H4>4.10.3.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P>
+<CODE>PKCatalogName [Input]</CODE> имя каталога первичного ключа таблицы.
+Если драйвер поддерживает имена для некоторых каталогов, но не для всех
+(например, при одновременной работе с разными СУБД), пустая строка обозначает
+те каталоги, которые не имеют имен. CatalogName не может содержать
+образец поиска строки!</P>
+<P><CODE>NameLength1 [Input]</CODE> длина *PKCatalogName в байтах.</P>
+
+<P><CODE>PKSchemaName [Input]</CODE> имя схемы первичного ключа таблицы. Если
+драйвер поддерживает схемы для некоторых каталогов, но не для всех (например,
+при одновременной работе с разными СУБД), пустая строка обозначает те схемы,
+которые не имеют имен. SchemaName не может содержать образец поиска строки!
+</P>
+<P><CODE>NameLength2 [Input]</CODE> длина *PKSchemaName в байтах.</P>
+
+<P><CODE>PKTableName [Input]</CODE> имя таблицы с первичным ключом. Этот
+параметр не может быть null. TableName не может содержать
+образец поиска строки.</P>
+<P><CODE>NameLength3 [Input]</CODE> длина *PKTableName в байтах.</P>
+
+<P><CODE>PKCatalogName [Input]</CODE> имя каталога внешнего ключа таблицы.
+Если драйвер поддерживает имена для некоторых каталогов, но не для всех
+(например, при одновременной работе с разными СУБД), пустая строка обозначает
+те каталоги, которые не имеют имен. CatalogName не может содержать
+образец поиска строки!</P>
+<P><CODE>NameLength4 [Input]</CODE> длина *FKCatalogName в байтах.</P>
+
+<P><CODE>PKSchemaName [Input]</CODE> имя схемы внешнего ключа таблицы. Если
+драйвер поддерживает схемы для некоторых каталогов, но не для всех (например,
+при одновременной работе с разными СУБД), пустая строка обозначает те схемы,
+которые не имеют имен. SchemaName не может содержать образец поиска строки!
+</P>
+<P><CODE>NameLength5 [Input]</CODE> длина *FKSchemaName в байтах.</P>
+
+<P><CODE>FKTableName [Input]</CODE> имя таблицы с внешним ключом. Этот
+параметр не может быть null. TableName не может содержать
+образец поиска строки.</P>
+<P><CODE>NameLength6 [Input]</CODE> длина *FKTableName в байтах.</P>
+
+<H3><A NAME="SQLPrimaryKeys">4.10.4 SQLPrimaryKeys</A></H3>
+<P><STRONG>SQLPrimaryKeys</STRONG> возвращает имена столбцов, которые
+составляют первичный ключ для таблицы. Драйвер возвращает информацию в наборе
+результатов. Эта функция не поддерживает первичные ключи из нескольких таблиц
+сразу в одном обращении.</P>
+
+<H4>4.10.4.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLPrimaryKeys(SQLHSTMT StatementHandle, SQLCHAR* CatalogName,
+                         SQLSMALLINT NameLength1, SQLCHAR* SchemaName,
+                         SQLSMALLINT NameLength2, SQLCHAR* TableName,
+                         SQLSMALLINT NameLength3);
+</PRE>
+
+<H4>4.10.4.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>CatalogName [Input]</CODE> имя каталога. Если драйвер поддерживает
+имена для некоторых каталогов, но не для всех (например, при одновременной
+работе с разными СУБД), пустая строка обозначает те каталоги, которые не
+имеют имен. CatalogName не может содержать образец поиска строки!</P>
+<P><CODE>NameLength1 [Input]</CODE> длина *CatalogName.</P>
+
+<P><CODE>SchemaName [Input]</CODE> имя схемы. Если драйвер поддерживает схемы
+для некоторых каталогов, но не для всех (например, при одновременной работе с
+разными СУБД), пустая строка обозначает те схемы, которые не имеют имен.
+SchemaName не может содержать образец поиска строки!</P>
+<P><CODE>NameLength2 [Input]</CODE> длина *SchemaName.</P>
+
+<P><CODE>TableName [Input]</CODE> имя таблицы. Этот параметр не может быть
+null. TableName не может содержать образец поиска строки.</P>
+<P><CODE>NameLength3 [Input]</CODE> длина *TableName.</P>
+
+<H3><A NAME="SQLSpecialColumns">4.10.5 SQLSpecialColumns</A></H3>
+<P><STRONG>SQLSpecialColumns</STRONG> возвращает следующую информацию
+относительно столбцов внутри определенной таблицы:
+
+<UL><LI>Оптимальный набор столбцов, который уникально
+идентифицирует строку в таблице.
+<LI>Столбцы, которые автоматически модифицируются, когда любое значение в
+строка модифицируется транзакцией.</UL>
+
+<H4>4.10.5.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLSpecialColumns(SQLHSTMT StatementHandle,
+                            SQLSMALLINT IdentifierType, SQLCHAR* CatalogName,
+                            SQLSMALLINT NameLength1, SQLCHAR* SchemaName,
+                            SQLSMALLINT NameLength2, SQLCHAR* TableName,
+                            SQLSMALLINT NameLength3, SQLSMALLINT Scope,
+                            SQLSMALLINT Nullable);
+</PRE>
+
+<H4>4.10.5.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>IdentifierType [Input]</CODE> тип столбца для возврата. Должен быть
+одним из следующих значений:
+<UL><LI><CODE>SQL_BEST_ROWID:</CODE> возвращает оптимальный столбец или набор
+столбцов, который позволяет уникально идентифицировать любую строку в
+определенной таблице. Столбец может быть столбцом (или набором столбцов)
+любого уникального индекса для таблицы или псевдостолбцом, специально
+разработанным для этой цели.
+<LI><CODE>SQL_ROWVER:</CODE> возвращает столбец или столбцы в определенной
+таблице, которые автоматически модифицируются источником данных, когда любое
+значение в строке модифицируется транзакцией (если такие столбцы есть).</UL>
+
+<P><CODE>CatalogName [Input]</CODE> имя каталога. Если драйвер поддерживает
+имена для некоторых каталогов, но не для всех (например, при одновременной
+работе с разными СУБД), пустая строка обозначает те каталоги, которые не
+имеют имен. CatalogName не может содержать образец поиска строки!</P>
+<P><CODE>NameLength1 [Input]</CODE> длина *CatalogName.</P>
+
+<P><CODE>SchemaName [Input]</CODE> имя схемы. Если драйвер поддерживает схемы
+для некоторых каталогов, но не для всех (например, при одновременной работе с
+разными СУБД), пустая строка обозначает те схемы, которые не имеют имен.
+SchemaName не может содержать образец поиска строки!</P>
+<P><CODE>NameLength2 [Input]</CODE> длина *SchemaName.</P>
+
+<P><CODE>TableName [Input]</CODE> имя таблицы. Этот параметр не может быть
+null. TableName не может содержать образец поиска строки.</P>
+<P><CODE>NameLength3 [Input]</CODE> длина *TableName.</P>
+
+<P><CODE>Scope [Input]</CODE> минимум требуемой области rowid. Возвращенный
+rowid может иметь большую область. Должен быть одним из следующего:
+
+<UL><LI><CODE>SQL_SCOPE_CURROW:</CODE> rowid точно будет иметь силу только в
+то время, когда выполнено позиционирование в эту строку. Более поздний
+перевыбор, использующий rowid, не может возвращать строку, если строка
+модифицирована или удалена другой транзакцией.
+<LI><CODE>SQL_SCOPE_TRANSACTION:</CODE> rowid будет иметь силу
+для текущей транзакции.
+<LI><CODE>SQL_SCOPE_SESSION:</CODE> rowid будет иметь силу для текущего
+сеанса связи (игнорируя границы транзакции).</UL>
+
+<P><CODE>Nullable [Input]</CODE> определяет, возвратить ли специальные
+столбцы, которые могут иметь значение NULL. Должен быть одним из следующего:
+<UL><LI><CODE>SQL_NO_NULLS:</CODE> исключить специальные столбцы, которые
+могут иметь значения NULL. Некоторые драйверы не могут поддерживать
+SQL_NO_NULLS, и эти драйверы возвратят пустой набор результатов, если был
+определен SQL_NO_NULLS. Прикладные программы должны быть подготовлены к этому
+случаю и запрашивать SQL_NO_NULLS только, если это абсолютно необходимо.
+<LI><CODE>SQL_NULLABLE:</CODE> вернуть специальные столбцы, даже если они
+могут иметь значения NULL.</UL>
+
+<H3><A NAME="SQLStatistics">4.10.6 SQLStatistics</A></H3>
+<P><STRONG>SQLStatistics</STRONG> возвращает статистику относительно
+одной таблицы и индексов, связанных с этой таблицей. Драйвер возвращает
+информацию в наборе результатов.</P>
+
+<H4>4.10.6.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLStatistics(SQLHSTMT StatementHandle, SQLCHAR* CatalogName,
+                        SQLSMALLINT NameLength1, SQLCHAR* SchemaName,
+                        SQLSMALLINT NameLength2, SQLCHAR* TableName,
+                        SQLSMALLINT NameLength3, SQLUSMALLINT Unique,
+                        SQLUSMALLINT Reserved);
+</PRE>
+
+<H4>4.10.6.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>CatalogName [Input]</CODE> имя каталога. Если драйвер поддерживает
+имена для некоторых каталогов, но не для всех (например, при одновременной
+работе с разными СУБД), пустая строка обозначает те каталоги, которые не
+имеют имен. CatalogName не может содержать образец поиска строки!</P>
+<P><CODE>NameLength1 [Input]</CODE> длина *CatalogName.</P>
+
+<P><CODE>SchemaName [Input]</CODE> имя схемы. Если драйвер поддерживает схемы
+для некоторых каталогов, но не для всех (например, при одновременной работе с
+разными СУБД), пустая строка обозначает те схемы, которые не имеют имен.
+SchemaName не может содержать образец поиска строки!</P>
+<P><CODE>NameLength2 [Input]</CODE> длина *SchemaName.</P>
+
+<P><CODE>TableName [Input]</CODE> имя таблицы. Этот параметр не может быть
+null. TableName не может содержать образец поиска строки.</P>
+<P><CODE>NameLength3 [Input]</CODE> длина *TableName.</P>
+
+<P><CODE>Unique [Input]</CODE> тип индекса: SQL_INDEX_UNIQUE или
+SQL_INDEX_ALL.</P>
+
+<P><CODE>Reserved [Input]</CODE> указывает важность CARDINALITY в столбце
+PAGES набора результатов. Следующие параметры воздействуют на возврат только
+столбцов CARDINALITY и PAGES (индексная информация возвращена, даже если
+CARDINALITY и PAGES не возвращены):
+<UL><LI><CODE>SQL_ENSURE</CODE> требует, чтобы драйвер безоговорочно получил
+статистику. Драйверы, которые согласовываются только со стандартом X/Open и
+не поддерживают ODBC-расширения, не способны поддерживать SQL_ENSURE.
+<LI><CODE>SQL_QUICK</CODE> требует, чтобы драйвер получил CARDINALITY и PAGES
+только если они легко доступны с сервера. В этом случае драйвер не
+гарантирует, что значения актуальны. Прикладные программы, которые написаны в
+стандарте X/Open, будут всегда получать SQL_QUICK из драйверов ODBC 3.x.</UL>
+
+<H3><A NAME="SQLTablePrivileges">4.10.7 SQLTablePrivileges</A></H3>
+<P><STRONG>SQLTablePrivileges</STRONG> возвращает список таблиц и привилегий,
+связанных с каждой таблицей. Драйвер возвращает информацию в наборе
+результатов на определенной инструкции.</P>
+
+<H4>4.10.7.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLTablePrivileges(SQLHSTMT StatementHandle, SQLCHAR* CatalogName,
+                             SQLSMALLINT NameLength1, SQLCHAR* SchemaName,
+                             SQLSMALLINT NameLength2, SQLCHAR* TableName,
+                             SQLSMALLINT NameLength3);
+</PRE>
+
+<H4>4.10.7.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>CatalogName [Input]</CODE> имя каталога. Если драйвер поддерживает
+имена для некоторых каталогов, но не для всех (например, при одновременной
+работе с разными СУБД), пустая строка обозначает те каталоги, которые не
+имеют имен. CatalogName не может содержать образец поиска строки!</P>
+<P><CODE>NameLength1 [Input]</CODE> длина *CatalogName.</P>
+
+<P><CODE>SchemaName [Input]</CODE> имя схемы. Если драйвер поддерживает схемы
+для некоторых каталогов, но не для всех (например, при одновременной работе с
+разными СУБД), пустая строка обозначает те схемы, которые не имеют имен.
+SchemaName не может содержать образец поиска строки!</P>
+<P><CODE>NameLength2 [Input]</CODE> длина *SchemaName.</P>
+
+<P><CODE>TableName [Input]</CODE> имя таблицы. Этот параметр не может быть
+null. TableName не может содержать образец поиска строки.</P>
+<P><CODE>NameLength3 [Input]</CODE> длина *TableName.</P>
+
+<H3><A NAME="SQLTables">4.10.8 SQLTables</A></H3>
+<P><STRONG>SQLTables</STRONG> возвращает список имен таблиц, каталогов, схем
+и типов таблиц, сохраненных в специфическом источнике данных. Драйвер
+возвращает информацию в наборе результатов.</P>
+
+<H4>4.10.8.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLTables(SQLHSTMT StatementHandle, SQLCHAR* CatalogName,
+                    SQLSMALLINT NameLength1, SQLCHAR* SchemaName,
+                    SQLSMALLINT NameLength2, SQLCHAR* TableName,
+                    SQLSMALLINT NameLength3, SQLCHAR* TableType,
+                    SQLSMALLINT NameLength4);
+</PRE>
+
+<H4>4.10.8.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+<P><CODE>CatalogName [Input]</CODE> имя каталога. Если драйвер поддерживает
+имена для некоторых каталогов, но не для всех (например, при одновременной
+работе с разными СУБД), пустая строка обозначает те каталоги, которые не
+имеют имен. CatalogName не может содержать образец поиска строки!</P>
+<P><CODE>NameLength1 [Input]</CODE> длина *CatalogName.</P>
+
+<P><CODE>SchemaName [Input]</CODE> имя схемы. Если драйвер поддерживает схемы
+для некоторых каталогов, но не для всех (например, при одновременной работе с
+разными СУБД), пустая строка обозначает те схемы, которые не имеют имен.
+SchemaName не может содержать образец поиска строки!</P>
+<P><CODE>NameLength2 [Input]</CODE> длина *SchemaName.</P>
+
+<P><CODE>TableName [Input]</CODE> имя таблицы. Этот параметр не может быть
+null. TableName не может содержать образец поиска строки.</P>
+<P><CODE>NameLength3 [Input]</CODE> длина *TableName.</P>
+<P><CODE>Table Type [Input]</CODE> список типов таблиц.</P>
+<P><CODE>NameLength4 [Input]</CODE> длина *TableType.</P>
+
+<H2><A NAME="Performing_Transaction">4.11 Управление транзакциями</A></H2>
+<H3><A NAME="SQLTransact">4.11.1 SQLTransact</A></H3>
+<P><STRONG>SQLTransact</STRONG> запрашивает завершение или отмену для всех
+активных операций на всех инструкциях, связанных с подключением. SQLTransact
+может также запрашивать это для всех подключений, связанных со средой. В
+ODBC 3.x SQLEndTran заменил функцию ODBC 2.x SQLTransact.</P>
+
+<H3><A NAME="SQLEndTran">4.11.2 SQLEndTran</A></H3>
+<P><STRONG>SQLEndTran</STRONG> запрашивает завершение или отмену для всех
+активных операций на всех инструкциях, связанных с подключением. SQLEndTran
+может также запрашивать это для всех подключений, связанных со средой.</P>
+
+<H4>4.11.2.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLEndTran(SQLSMALLINT HandleType, SQLHANDLE Handle,
+                     SQLSMALLINT CompletionType);
+</PRE>
+
+<H4>4.11.2.2 Параметры</H4>
+<P><CODE>HandleType [Input]</CODE> идентификатор типа дескриптора. Содержит
+SQL_HANDLE_ENV (если Handle дескриптор среды) или SQL_HANDLE_DBC (если Handle
+представляет собой дескриптор подключения).</P>
+
+<P><CODE>Handle [Input]</CODE> дескриптор, тип коего задан в HandleType,
+указывает контекст транзакции.</P>
+
+<P><CODE>CompletionType [Input]</CODE> одно из следующтх двух значений:
+<UL><LI><CODE>SQL_COMMIT</CODE> или
+<LI><CODE>SQL_ROLLBACK</CODE>.</UL>
+
+<H2><A NAME="Termination">4.12 Прерыванеие команд и соединений с сервером</A>
+</H2>
+<H3><A NAME="SQLFreeStmt">4.12.1 SQLFreeStmt</A></H3>
+<P><STRONG>SQLFreeStmt</STRONG> останавливает обработку, связанную со
+специфической инструкцией, закрывает любые открытые курсоры, связанные с этой
+инструкцией, отбрасывает ждущие обработки результаты и, факультативно,
+освобождает все ресурсы, связанные с операторным дескриптором.</P>
+
+<H4>4.12.1.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLFreeStmt(SQLHSTMT StatementHandle, SQLUSMALLINT Option);
+</PRE>
+
+<H4>4.12.1.2 Параметры</H4>
+<P>
+<CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+
+<P><CODE>Option [Input]</CODE> одни из следующих параметров:</P>
+
+<TABLE><TR><TD><STRONG>Опция</STRONG></TD><TD><STRONG>Действие</STRONG></TD>
+</TR>
+<TR><TD><CODE>SQL_CLOSE</CODE></TD><TD>Закрывает курсор, связанный с
+StatementHandle (если он был определен) и отбрасывает все ждущие обработки
+результаты. Прикладная программа может вновь открыть этот курсор позже,
+выполняя инструкцию SELECT с теми же самыми или иными значениями параметра.
+Если никакой курсор не открыт, эта опция не имеет никакого эффекта для
+прикладной программы. SQLCloseCursor может также быть вызван,
+чтобы закрыть курсор.</TD></TR>
+<TR><TD><CODE>SQL_DROP</CODE></TD><TD>Освобождает операторный дескриптор:
+освобождает все ресурсы, связанных с ним, отбрасывает все ждущие обработки
+операции и закрывает курсор. Операторный дескриптор должен быть
+перераспределен для повторного использования. Эта опция устарела в MyODBC
+3.51. Вызов SQLFreeStmt с параметром Option равным <CODE>SQL_DROP</CODE>
+отображается на вызов SQLFreeHandle</A>.</TD></TR>
+<TR><TD><CODE>SQL_UNBIND</CODE></TD><TD>Освобождает все буферы столбцов,
+связанные SQLBindCol для данного операторного дескриптора.</TD></TR>
+<TR><TD><CODE>SQL_RESET_PARAMS</CODE></TD><TD>Освобождает весь набор буферов
+параметров SQLBindParameter для данного операторного дескриптора.</TD></TR>
+</TABLE>
+
+<H3><A NAME="SQLCloseCursor">4.12.2 SQLCloseCursor</A></H3>
+<P><STRONG>SQLCloseCursor</STRONG> закрывает курсор, который был открыт на
+инструкции и отбрасывает ждущие обработки результаты.</P>
+
+<H4>4.12.2.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLCloseCursor(SQLHSTMT StatementHandle);
+</PRE>
+
+<H4>4.12.2.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+
+<H3><A NAME="SQLCancel">4.12.3 SQLCancel</A></H3>
+<P><STRONG>SQLCancel</STRONG> отменяет обработку инструкции.</P>
+
+<H4>4.12.3.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLCancel(SQLHSTMT StatementHandle);
+</PRE>
+
+<H4>4.12.3.2 Параметры</H4>
+<P><CODE>StatementHandle [Input]</CODE> операторный дескриптор.</P>
+
+<H4>4.12.3.3 Комментарии</H4>
+<P>SQLCancel может отменять следующие типы обработки инструкции:
+<UL><LI>Функция, которая нуждается в данных.
+<LI>Функция из другого потгока.
+<LI>Функция выполняется асинхронно, и драйвер
+не поддерживает асинхронное выполнение.</UL>
+
+<P>В ODBC 2.x, если из прикладной программы вызвана SQLCancel, когда
+обработка не делается на инструкции, SQLCancel имеют тот же самый эффект,
+что и SQLFreeStmt с опцией SQL_CLOSE. Это поведение определено только для
+законченности реализации, и прикладные программы должны вызвать SQLFreeStmt
+или SQLCloseCursor, чтобы закрыть курсоры.</P>
+
+<H3><A NAME="SQLDisconnect">4.12.4 SQLDisconnect</A></H3>
+<P><STRONG>SQLDisconnect</STRONG> закрывает подключение, связанное со
+специфическим дескриптором подключения.</P>
+
+<H4>4.12.4.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLDisconnect(SQLHDBC ConnectionHandle);
+</PRE>
+
+<H4>4.12.4.2 Параметры</H4>
+<P><CODE>ConnectionHandle [Input]</CODE> дескриптор подключения.</P>
+
+<H4>4.12.4.3 Комментарии</H4>
+<P>Если из прикладной программы вызвана SQLDisconnect, в то время как имеется
+незавершенная транзакция, связанная с дескриптором подключения, драйвер
+возвращает SQLSTATE 25000 (Invalid transaction state) указывая, что
+транзакция является неизменяемой, и подключение открыто. Незавершенной
+транзакцией является такая, которая не была ни завершена, ни отменена с
+помощью вызова SQLEndTran.</P>
+
+<P>Если из прикладной программы вызвана SQLDisconnect прежде, чем были
+освобождены все инструкции, связанные с подключением, драйвер после того, как
+успешно завершит отсоединение от сервера, освобождает те инструкции и все
+дескрипторы, которые были явно распределены на подключении.</P>
+
+<H3><A NAME="SQLFreeHandle">4.12.5 SQLFreeHandle</A></H3>
+<P><STRONG>SQLFreeHandle</STRONG> освобождает ресурсы, связанные со
+специфической средой, подключением, инструкцией или дескриптором.</P>
+
+<P><CODE>Обратите внимание</CODE>, что это универсальная функция для
+освобождения дескрипторов. Это заменяет функции ODBC 2.0 SQLFreeConnect (для
+освобождения дескриптора подключения) и SQLFreeEnv (для освобождения
+дескриптора среды). SQLFreeConnect и SQLFreeEnv устарели в ODBC 3.x.
+SQLFreeHandle также заменяет функцию ODBC 2.0 SQLFreeStmt (с Option равным
+SQL_DROP) для освобождения операторного дескриптора.</P>
+
+<H4>4.12.5.1 Синтаксис</H4>
+<PRE>
+SQLRETURN SQLFreeHandle(SQLSMALLINT HandleType, SQLHANDLE Handle);
+</PRE>
+
+<H4>4.12.5.2 Параметры</H4>
+<P><CODE>HandleType [Input]</CODE> тип дескриптора, который будет освобожден
+SQLFreeHandle. Должен быть одним из следующих значений:
+<UL><LI><CODE>SQL_HANDLE_ENV</CODE>,
+<LI><CODE>SQL_HANDLE_DBC</CODE>,
+<LI><CODE>SQL_HANDLE_STMT</CODE> или
+<LI><CODE>SQL_HANDLE_DESC</CODE> (не поддерживается)</UL>
+
+<P>Если HandleType не одно из этих значений, SQLFreeHandle возвращает
+SQL_INVALID_HANDLE.
+<P><CODE>Handle [Input]</CODE> дескриптор, который будет освобожден.</P>
+
+<H4>4.12.5.3 Комментарии</H4>
+<P><STRONG>Освобождение дескриптора среды:</STRONG><BR>
+До вызова SQLFreeHandle с HandleType равным SQL_HANDLE_ENV прикладная
+программа должна вызвать SQLFreeHandle с HandleType равным SQL_HANDLE_DBC для
+всех подключений, распределенных средой. Иначе обращение к SQLFreeHandle
+возвращает SQL_ERROR, а среда и любое активное подключение остаются прежними.
+</P>
+
+<P><STRONG>Освобождение дескриптора подключения:</STRONG><BR>
+До вызова SQLFreeHandle с HandleType равным SQL_HANDLE_DBC прикладная
+программа должна вызвать SQLDisconnect для подключения, если имеется
+подключение на этом дескрипторе. Иначе обращение к SQLFreeHandle возвращает
+SQL_ERROR, а подключение остается прежним.</P>
+
+<P><STRONG>Освобождение операторного дескриптора:</STRONG><BR>
+Обращение к SQLFreeHandle с HandleType равным SQL_HANDLE_STMT освобождает все
+ресурсы, которые были распределены обращением SQLAllocHandle с HandleType
+равным SQL_HANDLE_STMT. Когда из прикладной программы вызывается
+SQLFreeHandle, чтобы освободить инструкцию, которая имеет ждущие обработки
+результаты, они будут автоматически удалены. Обратите внимание, что
+SQLDisconnect автоматически уничтожает любые инструкции и дескрипторы,
+открытые на подключении.</P>
+
+<H3><A NAME="SQLFreeConnect">4.12.6 SQLFreeConnect</A></H3>
+<P><STRONG>SQLFreeConnect</STRONG> освобождает дескриптор подключения и всю
+память, связанную с этим дескриптором. В ODBC 3.x SQLFreeHandle заменил собой
+функцию ODBC 2.0 SQLFreeConnect.</P>
+
+<H3><A NAME="SQLFreeEnv">4.12.7 SQLFreeEnv</A></H3>
+<P><STRONG>SQLFreeEnv</STRONG> освобождает дескриптор среды и всю память,
+связанную с дескриптором среды. В ODBC 3.x SQLFreeHandle заменил собой
+функцию ODBC 2.0 SQLFreeEnv.</P>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

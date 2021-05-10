@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlelements\umlelementsstructural\exposeinterface\cat.exposeinterface\dir.exposeinterface.md">exposeinterface</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlelements\umlelementsstructural\exposeinterface\exposeinterface.md">exposeinterface.md</a>
+        - *#### <a href="https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/exposeinterface.html" target="_blank">Expose Interface</a> Показать интерфейс

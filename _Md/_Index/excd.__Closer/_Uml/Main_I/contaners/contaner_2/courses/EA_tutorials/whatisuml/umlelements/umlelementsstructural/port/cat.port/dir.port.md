@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlelements\umlelementsstructural\port\cat.port\dir.port.md">port</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlelements\umlelementsstructural\port\port.md">port.md</a>
+        - *#### <a href="https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/port.html" target="_blank">Port</a>  порт

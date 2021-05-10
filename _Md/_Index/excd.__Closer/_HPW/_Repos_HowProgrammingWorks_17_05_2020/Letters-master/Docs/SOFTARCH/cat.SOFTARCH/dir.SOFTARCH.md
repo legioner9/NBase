@@ -1,0 +1,5 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\SOFTARCH\cat.SOFTARCH\dir.SOFTARCH.md">SOFTARCH</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\SOFTARCH\README.md">README.md</a>
+        - *## Архитектура и проектирование программного обеспечения
+        - *### Теоретические вопросы на экзамен
+        - *### Практические задания на экзамен

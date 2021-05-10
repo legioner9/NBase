@@ -1,0 +1,84 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_DB\_SQL\sql.ru_docs_sql\contaners\cat.contaners\dir.contaners.md">contaners</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_DB\_SQL\sql.ru_docs_sql\contaners\contaner_2\cat.contaner_2\dir.contaner_2.md">contaner_2</a>
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_DB\_SQL\sql.ru_docs_sql\contaners\contaner_2\AggregateFunc.md">AggregateFunc.md</a>
+            - *# Aggregate Function
+            - *## COUNT 
+            - *## SUM
+            - *## AVG
+            - *## MAX
+            - *## MIN
+            - *# Marks Agrigate
+            - *## ALL 
+            - *## GROUP BY
+            - *## HAVING
+            - *## with only WHERE
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_DB\_SQL\sql.ru_docs_sql\contaners\contaner_2\AnyAllSome.md">AnyAllSome.md</a>
+            - *# ALL from column
+            - *## < ANY 
+            - *## > ANY
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_DB\_SQL\sql.ru_docs_sql\contaners\contaner_2\CreatureTable.md">CreatureTable.md</a>
+            - *# Creature Table
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_DB\_SQL\sql.ru_docs_sql\contaners\contaner_2\InsertUpdateDelete.md">InsertUpdateDelete.md</a>
+            - *# DML
+            - *## Insert
+            - *### Directly Data insert
+            - *### insert from ResQuery
+            - *## Update
+            - *### field as a whole
+            - *### with predicate fore strings
+            - *### insert Null
+            - *## Delete
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_DB\_SQL\sql.ru_docs_sql\contaners\contaner_2\MultyTableQuery.md">MultyTableQuery.md</a>
+            - *# Predicate binding
+            - *# Integrity binding
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_DB\_SQL\sql.ru_docs_sql\contaners\contaner_2\OutputQuery.md">OutputQuery.md</a>
+            - *# Scalar Function
+            - *## math to field
+            - *## text at field
+            - *# ORDER BY (DESC)
+            - *# GROUP BY number field
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_DB\_SQL\sql.ru_docs_sql\contaners\contaner_2\QueryInsideQuery.md">QueryInsideQuery.md</a>
+            - *# SubQuery
+            - *## In predicate
+            - *### with DISTINCT
+            - *#### with Secondary Key Result Query
+            - *#### with Primary Key Result Query
+            - *### with Aggrigate Functions
+            - *## In WITH ... IN 
+            - *### differ `=` predicate
+            - *### differ SubQuery from Binding
+            - *## with HAVING predicate
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_DB\_SQL\sql.ru_docs_sql\contaners\contaner_2\RelatedSubQuery.md">RelatedSubQuery.md</a>
+            - *# Related SubQuery 
+            - *## with IN
+            - *## inspect PKey
+            - *## with HAVING
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_DB\_SQL\sql.ru_docs_sql\contaners\contaner_2\RelativeBooleanOperantors.md">RelativeBooleanOperantors.md</a>
+            - *# Capter 4
+            - *## Relativ operators
+            - *# Boolean operators
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_DB\_SQL\sql.ru_docs_sql\contaners\contaner_2\SelfUnion.md">SelfUnion.md</a>
+            - *# Eliminate redundancy
+            - *## Assimmetric predicate
+            - *## Bonding predicate
+            - *# Error checking
+            - *## SelfConsistency
+            - *# Analysis as SelfQuery
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_DB\_SQL\sql.ru_docs_sql\contaners\contaner_2\SpecialOperators.md">SpecialOperators.md</a>
+            - *# IN 
+            - *# BETWEEN AND
+            - *# LIKE
+            - *##   escape % - unknown
+            - *# NOT 
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_DB\_SQL\sql.ru_docs_sql\contaners\contaner_2\SubQueryInDML.md">SubQueryInDML.md</a>
+            - *# SubQuery in Insert
+            - *## check fiches: Insert replace to Select * 
+            - *# SubQuery in Delete
+            - *## check fiches: Delete replace to Select *
+            - *### main_fiches_1 === output result of in-between select
+            - *# SubQuery in Update
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_DB\_SQL\sql.ru_docs_sql\contaners\contaner_2\Union.md">Union.md</a>
+            - *# Union
+            - *# Union ALL
+            - *## Order By 
+    

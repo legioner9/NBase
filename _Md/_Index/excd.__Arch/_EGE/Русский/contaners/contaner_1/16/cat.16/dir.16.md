@@ -1,0 +1,4 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Arch\_EGE\Русский\contaners\contaner_1\16\cat.16\dir.16.md">16</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Arch\_EGE\Русский\contaners\contaner_1\16\100ka.md">100ka.md</a>
+        - *# Однородные члены ОЧ
+        - *# Сложносочиненные предложения

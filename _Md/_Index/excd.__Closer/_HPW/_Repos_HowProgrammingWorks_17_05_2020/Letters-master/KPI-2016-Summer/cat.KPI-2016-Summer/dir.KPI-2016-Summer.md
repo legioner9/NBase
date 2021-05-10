@@ -1,0 +1,31 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Summer\cat.KPI-2016-Summer\dir.KPI-2016-Summer.md">KPI-2016-Summer</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Summer\02-JavaScript-New-Features.md">02-JavaScript-New-Features.md</a>
+        - *# Новые возможности в JavaScript
+        - *## Property definition
+        - *## Функции объектов/хешей
+        - *## Destructuring assignment
+        - *## Константы
+        - *## Блоки видимости
+        - *## Arrow functions (толстые стрелки, fat arrow)
+        - *## Значения папаметров по умолчанию
+        - *## Прочие параметры (Spread)
+        - *## Spread для строки
+        - *## Генераторы / Generators
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Summer\Intro.md">Intro.md</a>
+        - *# Летняя школа по Node.js в КПИ
+        - *## Вступительная лекция
+        - *## Группы митапов
+        - *## КПИ и Node.js
+        - *## Планы обучения для "Программной инженерии" по треку Node.js
+        - *## Еще ссылки
+        - *## Подготовка среды
+        - *## Основные темы для летней школы
+        - *## Митапы NodeUA
+        - *##Расписание
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Summer\Meetings.md">Meetings.md</a>
+        - *## Семинары на лето 2016 года
+        - *## Расписание дня на школу
+        - *## Расписание на митапы по субботам
+        - *## 307-18
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Summer\README.md">README.md</a>
+        - *# Материалы летней школы

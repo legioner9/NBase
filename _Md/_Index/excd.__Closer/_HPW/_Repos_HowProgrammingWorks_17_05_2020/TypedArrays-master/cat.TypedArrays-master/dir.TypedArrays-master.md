@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\TypedArrays-master\cat.TypedArrays-master\dir.TypedArrays-master.md">TypedArrays-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\TypedArrays-master\README.md">README.md</a>
+        - *# TypedArrays

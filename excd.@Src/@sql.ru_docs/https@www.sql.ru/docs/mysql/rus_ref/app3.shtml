@@ -1,0 +1,198 @@
+<HTML>
+<HEAD>
+<TITLE>Портирование кода из mSQL в MySQL. [SQL.RU]</TITLE>
+<META http-equiv="Content-Type" CONTENT="text/html; charset=windows-1251">
+<META HTTP-EQUIV="Window-target" CONTENT="_top">
+<META HTTP-EQUIV="Last-Modified" CONTENT="29-03-2001">
+<META NAME="Description" CONTENT="Использование языка SQL, создание клиент-серверных систем. Конференция по MSSQL, Oracle, Interbase, MySQL. Полезные ссылки, документация, рекомендации по разработке информационных систем, сертификация, заказ книг и многое другое.">
+<META NAME="Keywords" CONTENT="SQL, конференция, Database Server, Oracle, Interbase, MySQL, документация, статьи, примеры, книги, ссылки, сертификация, работа, СУБД">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER=0 CELLSPACING=10><TR><TD>
+<CENTER>
+<H2 class="headline">Портирование кода из mSQL в MySQL</H1></CENTER>
+
+<UL><LI><B>Портирование кода из mSQL в MySQL</B></LI>
+<UL><LI><A HREF="#cliserdf">Чем отличается реализация протокола
+клиент/сервер в MySQL от своего аналога в mSQL?</A></LI>
+<LI><A HREF="#diff">Отличия между msql 2.0b7 и MySQL</A></LI></UL></UL><HR>
+
+<P>Перенос прикладных программ mSQL в MySQL относительно прост.
+
+<P>Сначала выполните скрипт msql2mysql (поставляется вместе с MySQL) над
+вашим источником. Он оттранслирует имена функций mSQL в имена функций MySQL.
+Но он не будет корректировать типы параметров или изменять число параметров в
+функциях MySQL, которые нуждаются в дополнительных параметрах.
+
+<P><B>Замечания:</B>
+<UL type=circle><LI>MySQL использует структуру данных MYSQL как тип для
+                    соединения с базой данных (mSQL использует int).</LI>
+<LI>mysql_connect получает указатель на структуру MYSQL как параметр. Вы
+    можете определять его глобально или использовать malloc, чтобы его
+    получить.</LI>
+<LI>mysql_connect получает 2 дополнительных параметра (логин и пароль
+    пользователя). По умолчанию, они установлены в NULL.
+<LI>mysql_error получает параметр типа MYSQL.</LI></UL>
+
+<P>MySQL поставляется с портированными версиями тестовых программ mSQL
+insert_test.c и select_test.c. Хорошая идея сравнить их с их mSQL
+эквивалентами. Это должно дать Вам хорошее начало для понимания, что Вы
+будете должны сделать для портирования mSQL программы в MySQL. Это также даст
+Вам некоторые мысли о том, что Вы должны делать, чтобы написать свою MySQL
+программу.
+
+<P><CENTER><H2><A NAME="cliserdf">Чем отличается реализация протокола
+клиент/сервер в MySQL от своего аналога в mSQL?</H2></CENTER>
+<P>Имеются значительные различия. Среди них:
+
+<P><UL type=circle><LI>Буфер сообщений может содержать много строк
+                       результатов.</LI>
+<LI>На стороне сервера размер буфера сообщений динамически подстраивается по
+    мере необходимости для больших запросов пользователя.</LI>
+<LI>Все пакеты пронумерованы, для синхронизации пакетов.</LI>
+<LI>Все столбцы представлены в ASCII, длина столбцов и длины строк
+    представлены с помощью двоичного кодирования (1, 2 или 3 байта).</LI>
+<LI>MySQL может читать результаты без буферизации.</LI>
+<LI>Если одна запись/чтение занимает свыше 30 секунд, сервер закрывает
+    соединение.</LI>
+<LI>Если соединение неактивно в течение 8 часов, сервер закрывает соединение.
+</LI></UL>
+
+<CENTER><H2><A NAME="diff">Отличия между msql 2.0b7 и MySQL</H2></CENTER>
+<PRE>
+- CREATE TABLE:
+  MySQL: имеет опции для поля:
+         UNSIGNED, ZEROFILL, имеет значение по умолчанию для не пустых полей.
+  mSQL:  опций не имеет.
+
+- Создание индексов:
+  MySQL:  Все индексы должны быть заданы в CREATE TABLE.
+  mSQL:   Индексы должны быть созданы отдельным оператором CREATE INDEX.
+          (msql использует новый файл ключа для каждого индекса?) Индексы
+          могут быть удалены оператором DROP INDEX
+
+- Для получения уникального идентификатора при вставке:
+  MySQL: Используйте 'auto_increment' как определение типа столбца.
+         Используемый индекс может быть получен после обновления функцией API
+         mysql_insert_id().
+  mSQL:  Создает структуру SEQUENCE для таблицы и использует функцию __seq
+         для получения уникального индекса.
+
+- Групповые функции:
+  MySQL: count(), avg(), min(), max() и sum(). min() и max() могут принимать
+         строковые аргументы. count(*) оптимизирована для возвращения
+         значения в случае одного столбца.
+  mSQL:  Нет.
+
+- Независимый от регистра поиск:
+  MySQL: LIKE обязательно не зависит от регистра. Если возможно, MySQL
+         использует индексы при условии, что подобный параметр не начинается
+         с подстановочных знаков.
+  mSQL:  Использует CLIKE.
+
+- Поиск с регулярными выражениями.
+  MySQL: Использует REGEXP or RLIKE
+  mSQL:  Использует RLIKE.
+
+- Какие различия в операторе WHERE:
+  MySQL имеет скобки, Скоро он будет иметь полную функциональную поддержку
+        оператора WHERE (это планируется для версии 3.21.X).
+
+- Имена столбцов:
+  MySQL: Если имя столбца уникально, Вы не должны использовать полное имя.
+  mSQL:  При использовании более чем одной таблицы в SELECT, Вы должны
+         использовать полное имя таблицы.
+
+- Псевдонимы:
+  MySQL: Псевдонимы для таблиц и столбцов.
+  mSQL:  Псевдонимы для таблиц.
+
+- Insert/update с вычислениями:
+  MySQL: Полная поддержка вычислений. В insert можно использовать
+         значения предшествующих полей.
+  mSQL:  Только константы в insert и update.
+
+- Какие формулы могут использоваться в инструкции select:
+  MySQL: См. руководство.
+  mSQL:  Никакие.
+
+- HAVING:
+  MySQL: Поддерживается, но может использовать вычисление только на выбранных
+         полях. Для select на расчетном значении, нужно использовать
+         псевдоним столбца.
+         ПРИМЕР: SELECT COUNT(*) AS id_count, id FROM groups GROUP BY id
+                        HAVING id_count > 10
+  mSQL:  Не поддерживается вовсе.
+
+- Импорт и экспорт данных:
+  MySQL: MySQL имеет соответствующие функциональные возможности, включая
+         сервис для импорта данных посредством оператора LOAD DATA INFILE,
+         что весьма ускоряет загрузку данных.
+  mSQL:  Внешние программы.
+</PRE>
+
+<P>В заключение хочется попросить Вас, если Вам понравилась эта страничка или
+пригодилась изложенная здесь информация,
+<A href="mailto:rldp@ftp.botik.ru?subject=Спасибо!&body=Спасибо за
+работу!">послать благодарность автору.</A> Это поможет мне
+вести статистику того, скольким людям пригодилось хоть что-то из моих трудов.
+
+<P><A href="app3.shtml">Локальное оглавление.</A>
+<P><A href="mysqlrus.shtml">На главную страничку.</A>
+
+</TD></TR></TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>
+

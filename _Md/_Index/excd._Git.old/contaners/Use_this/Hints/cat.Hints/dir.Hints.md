@@ -1,0 +1,31 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Use_this\Hints\cat.Hints\dir.Hints.md">Hints</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Use_this\Hints\Как_стать_продуктивнее _на_GitHub.md">Как_стать_продуктивнее _на_GitHub.md</a>
+        - *# [Как стать продуктивнее на GitHub](https://nuancesprog.ru/p/3111/)
+        - *## Быстрый поиск файлов в репозиториях по неточному соответствию
+        - *## Предложение правок на включение
+        - *## Навигация по дереву кода с помощью IDE
+        - *## Переход к функции при проверке кода
+        - *## Постоянная ссылка на файл
+        - *## Тепловая карта недавних изменений 
+        - *## Расширенный поиск по коду
+        - *## Сохраненные ответы 
+        - *## Заключение 
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Use_this\Hints\Репозитории_GitHub_в_помощь.md">Репозитории_GitHub_в_помощь.md</a>
+        - *# [Репозитории GitHub в помощь каждому веб-разработчику](https://nuancesprog.ru/p/7074/)
+        - *## [1.Список полезных ресурсов для фронтенд разработчиков.](https://github.com/RitikPatni/Front-End-Web-Development-Resources)
+        - *## [2. WTFJS](https://github.com/denysdovhan/wtfjs)
+        - *## [3. Awesome ](https://github.com/sindresorhus/awesome)
+        - *## [4. Список продвинутых вопросов по JavaScript](https://github.com/lydiahallie/javascript-questions)
+        - *## [5. JavaScript алгоритмы и структуры данных](https://github.com/trekhleb/javascript-algorithms)
+        - *## 7. [Free-for.dev](https://github.com/ripienaar/free-for-dev)
+        - *## [8. Список бесплатных обучающих ресурсов](https://github.com/EbookFoundation/free-programming-books)
+        - *## [9. Отличные возможности для старта](https://github.com/MunGell/awesome-for-beginners)
+        - *## [10. Ежедневный вопрос для собеседования](https://github.com/Advanced-Frontend/Daily-Interview-Question)
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Use_this\Hints\создать_сайт_на_GitHub_Pages.md">создать_сайт_на_GitHub_Pages.md</a>
+        - *# [Как создать бесплатный сайт на GitHub Pages](https://nuancesprog.ru/p/4318/)
+        - *## А зачем мне сайт?
+        - *## Начинаем!
+        - *### Начнем со второго варианта.
+        - *## Я не знаю, с чего начать!
+        - *## Чего-то не хватает
+        - *## Уже хорошо, но может быть еще лучше

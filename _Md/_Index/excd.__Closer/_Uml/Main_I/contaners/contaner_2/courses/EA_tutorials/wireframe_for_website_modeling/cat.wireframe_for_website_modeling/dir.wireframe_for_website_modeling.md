@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\wireframe_for_website_modeling\cat.wireframe_for_website_modeling\dir.wireframe_for_website_modeling.md">wireframe_for_website_modeling</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\wireframe_for_website_modeling\wireframe_for_website_modeling.md">wireframe_for_website_modeling.md</a>
+        - *# <a href="https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/wireframe_for_website_modeling.html" target="_blank">Wireframe Models</a> Каркасные модели

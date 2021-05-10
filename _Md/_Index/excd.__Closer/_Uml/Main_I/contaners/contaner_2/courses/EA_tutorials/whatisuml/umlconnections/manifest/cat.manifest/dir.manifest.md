@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\manifest\cat.manifest\dir.manifest.md">manifest</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\manifest\manifest.md">manifest.md</a>
+        - *##### [Manifest](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/manifest.html) 

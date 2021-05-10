@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\__DONE\++Архитектура_компьютеров_и_операционные_системы\8. Управление памятью\cat.8. Управление памятью\dir.8. Управление памятью.md">8. Управление памятью</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\__DONE\++Архитектура_компьютеров_и_операционные_системы\8. Управление памятью\ReadMe.md">ReadMe.md</a>
+        - *# 8. Управление памятью. Методы, алгоритмы и средства

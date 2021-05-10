@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\trace\cat.trace\dir.trace.md">trace</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\trace\trace.md">trace.md</a>
+        - *##### [Trace](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/trace.html)

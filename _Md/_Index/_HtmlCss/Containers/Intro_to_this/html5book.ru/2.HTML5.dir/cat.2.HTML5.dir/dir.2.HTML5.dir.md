@@ -1,0 +1,143 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\cat.2.HTML5.dir\dir.2.HTML5.dir.md">2.HTML5.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.1.1_.11._Семантические_элементы_HTML5.dir\cat.2.1.1_.11._Семантические_элементы_HTML5.dir\dir.2.1.1_.11._Семантические_элементы_HTML5.dir.md">2.1.1_.11._Семантические_элементы_HTML5.dir</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.1.1_.11._Семантические_элементы_HTML5.dir\2.1.1_.11._Семантические_элементы_HTML5.md">2.1.1_.11._Семантические_элементы_HTML5.md</a>
+            - *## 1.11. [Семантические элементы HTML5](https://html5book.ru/html5-semantic-elements/)
+            - *### Метаданные
+            - *### Потоковое содержимое
+            - *### Секционное содержимое
+            - *### Заголовочное содержимое
+            - *### Текстовое содержимое
+            - *### Встроенное содержимое
+            - *### Интерактивное содержимое
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.11.1_.15._HTML5-формы.dir\cat.2.11.1_.15._HTML5-формы.dir\dir.2.11.1_.15._HTML5-формы.dir.md">2.11.1_.15._HTML5-формы.dir</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.11.1_.15._HTML5-формы.dir\2.11.1_.15._HTML5-формы.md">2.11.1_.15._HTML5-формы.md</a>
+            - *## [1.15. HTML5-формы](https://html5book.ru/html5-forms/)
+            - *### 1. Элемент \<form>
+            - *#### АТРИБУТЫ ЭЛЕМЕНТА \<FORM>
+            - *### 2. Группировка элементов формы \<fieldset>
+            - *### 3. Создание полей формы \<input>
+            - *### 4. Текстовые поля ввода \<textarea>
+            - *### 5. Раскрывающийся список \<select>
+            - *### 6. Надписи к полям формы \<label>
+            - *### 7. Кнопки \<button>
+            - *### 8. Флажки и переключатели в формах
+            - *@@ html5book.ru point this learn
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.3.1_.11.2._Метаданные_документа.dir\cat.2.3.1_.11.2._Метаданные_документа.dir\dir.2.3.1_.11.2._Метаданные_документа.dir.md">2.3.1_.11.2._Метаданные_документа.dir</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.3.1_.11.2._Метаданные_документа.dir\2.3.1_.11.2._Метаданные_документа.md">2.3.1_.11.2._Метаданные_документа.md</a>
+            - *## [1.11.2. Метаданные документа](https://html5book.ru/metadannye-dokumenta)
+            - *### 3. Элемент \<base>
+            - *### АТРИБУТЫ ЭЛЕМЕНТА \<LINK>
+            - *### АТРИБУТЫ ЭЛЕМЕНТА \<META>
+            - *### АТРИБУТЫ ЭЛЕМЕНТА \<STYLE>
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.4.1_.11.3._Разделы_документа.dir\cat.2.4.1_.11.3._Разделы_документа.dir\dir.2.4.1_.11.3._Разделы_документа.dir.md">2.4.1_.11.3._Разделы_документа.dir</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.4.1_.11.3._Разделы_документа.dir\2.4.1_.11.3._Разделы_документа.md">2.4.1_.11.3._Разделы_документа.md</a>
+            - *## [1.11.3. Разделы документа](https://html5book.ru/razdely-dokumenta)
+            - *### АТРИБУТЫ ЭЛЕМЕНТА \<BODY>
+            - *### 2. Элемент \<article>
+            - *### 3. Элемент \<section>
+            - *### 4. Элемент \<nav>
+            - *### 5. Элемент \<aside>
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.5.1_.11.4._Группировка_содержимого.dir\cat.2.5.1_.11.4._Группировка_содержимого.dir\dir.2.5.1_.11.4._Группировка_содержимого.dir.md">2.5.1_.11.4._Группировка_содержимого.dir</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.5.1_.11.4._Группировка_содержимого.dir\2.5.1_.11.4._Группировка_содержимого.md">2.5.1_.11.4._Группировка_содержимого.md</a>
+            - *## [1.11.4. Группировка содержимого](https://html5book.ru/gruppirovka-soderzhimogo)
+            - *### 1. Элемент \<p>
+            - *### 2. Элемент \<address>
+            - *### 3. Элемент \<hr>
+            - *### 4. Элемент \<pre>
+            - *#### in [_src/1.html](_src/1.html)
+            - *### 5. Элемент \<blockquote>
+            - *### 6. Элемент \<ol>
+            - *#### АТРИБУТЫ ЭЛЕМЕНТА <OL
+            - *### 7. Элемент \<ul>
+            - *### 8. Элемент \<li>
+            - *### 9. Элемент \<dl>
+            - *### 10. Элемент \<dt>
+            - *### 11. Элемент \<dd>
+            - *### 12. Элемент \<figure>
+            - *### 13. Элемент \<figcaption>
+            - *### 14. Элемент \<main>
+            - *### 15. Элемент \<div>
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.6.1_.11.5._Семантика_уровня_текста.dir\cat.2.6.1_.11.5._Семантика_уровня_текста.dir\dir.2.6.1_.11.5._Семантика_уровня_текста.dir.md">2.6.1_.11.5._Семантика_уровня_текста.dir</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.6.1_.11.5._Семантика_уровня_текста.dir\2.6.1_.11.5._Семантика_уровня_текста.md">2.6.1_.11.5._Семантика_уровня_текста.md</a>
+            - *## [1.11.5. Семантика уровня текста](https://html5book.ru/semantika-urovnya-teksta/)
+            - *### 1. Элемент \<a>
+            - *#### АТРИБУТЫ ЭЛЕМЕНТА \<A>
+            - *### 2. Элемент \<em>
+            - *### 3. Элемент \<strong>
+            - *### 4. Элемент \<small>
+            - *### 5. Элемент \<s>
+            - *### 6. Элемент \<cite>
+            - *### 7. Элемент \<q>
+            - *### 8. Элемент \<dfn>
+            - *### 9. Элемент \<abbr>
+            - *### 10. Элемент \<ruby>
+            - *### 11. Элемент \<rb>
+            - *### 12. Элемент \<rt>
+            - *### 13. Элемент \<rtc>
+            - *### 14. Элемент \<rp>
+            - *### 15. Элемент \<data>
+            - *### 16. Элемент \<time>
+            - *### 17. Элемент \<code>
+            - *### 18. Элемент \<var>
+            - *### 19. Элемент \<samp>
+            - *### 20. Элемент \<kbd>
+            - *### 21. Элементы \<sub> и \<sup>
+            - *### 22. Элемент \<i>
+            - *### 23. Элемент \<b>
+            - *### 24. Элемент \<u>
+            - *### 25. Элемент \<mark>
+            - *### 26. Элемент \<bdi>
+            - *### 27. Элемент \<bdo>
+            - *### 28. Элемент \<span>
+            - *### 29. Элемент \<br>
+            - *### 30. Элемент \<wbr>
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.7.1_.11.6._Правки_документа.dir\cat.2.7.1_.11.6._Правки_документа.dir\dir.2.7.1_.11.6._Правки_документа.dir.md">2.7.1_.11.6._Правки_документа.dir</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.7.1_.11.6._Правки_документа.dir\2.7.1_.11.6._Правки_документа.md">2.7.1_.11.6._Правки_документа.md</a>
+            - *## [HTML-элементы для редактирования документа](https://html5book.ru/pravki-dokumenta/)
+            - *### 1. Элемент \<ins>
+            - *### 2. Элемент \<del>
+            - *### 3. Атрибуты, общие для элементов \<ins> и \<del 
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.8.1_.12._HTML5-аудио.dir\cat.2.8.1_.12._HTML5-аудио.dir\dir.2.8.1_.12._HTML5-аудио.dir.md">2.8.1_.12._HTML5-аудио.dir</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.8.1_.12._HTML5-аудио.dir\2.8.1_.12._HTML5-аудио.md">2.8.1_.12._HTML5-аудио.md</a>
+            - *## [1.12. HTML5-аудио](https://html5book.ru/html5-audio/)
+            - *### 1. Элемент \<audio>
+            - *#### АТРИБУТЫ ТЕГА \<AUDIO>
+            - *### 2. Аудио кодеки
+            - *### 3. Альтернативные медиа-ресурсы \<source>
+            - *#### АТРИБУТЫ ТЕГА \<SOURCE>
+            - *### 4. Добавление субтитров и заголовков \<track>
+            - *#### АТРИБУТЫ ТЕГА \<TRACK>
+            - *### [5. Стилизованный пример аудио плеера](https://codepen.io/nazarelen/pen/rrOgBw)
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.9.1_.13._HTML5-видео.dir\cat.2.9.1_.13._HTML5-видео.dir\dir.2.9.1_.13._HTML5-видео.dir.md">2.9.1_.13._HTML5-видео.dir</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.9.1_.13._HTML5-видео.dir\2.9.1_.13._HTML5-видео.md">2.9.1_.13._HTML5-видео.md</a>
+            - *## [1.13. HTML5-видео](https://html5book.ru/html5-video/)
+            - *### 1. Элемент \<video>
+            - *#### АТРИБУТЫ ТЕГА <VIDEO>
+            - *### 2. Встраиваемый интерактивный контент \<embed>
+            - *#### АТРИБУТЫ ТЕГА \<EMBED>
+            - *### 3. Видеокодеки
+            - *#### H.264 
+            - *#### Ogg Theora 
+            - *#### VP8 
+            - *### 4. Видеоконтейнеры
+            - *#### Ogg (.ogv, .oga, .ogx, .ogg) 
+            - *#### MPEG 4 (.mp4) 
+            - *#### WebM (.webm) 
+            - *#### Audio Video Interleave (.avi) 
+            - *#### Matroska (.mkv) 
+            - *#### три основных видео формата:
+            - *### 5. Альтернативные медиа-ресурсы \<source>
+            - *#### АТРИБУТЫ ТЕГА \<SOURCE>
+            - *### 6. Добавление субтитров и заголовков \<track>
+            - *#### АТРИБУТЫ ТЕГА \<TRACK>
+            - *### 7. Пример: размещаем видео на сайте
+            - *### 8. Видеоконвертеры
+    

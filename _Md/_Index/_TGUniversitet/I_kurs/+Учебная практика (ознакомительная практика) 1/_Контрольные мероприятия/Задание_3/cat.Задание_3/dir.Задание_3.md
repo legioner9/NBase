@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\+Учебная практика (ознакомительная практика) 1\_Контрольные мероприятия\Задание_3\cat.Задание_3\dir.Задание_3.md">Задание_3</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\+Учебная практика (ознакомительная практика) 1\_Контрольные мероприятия\Задание_3\ReadMe.md">ReadMe.md</a>
+        - *## Описание рабочего места и выполненных задач

@@ -1,0 +1,726 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 7. Исполнительные инструменты</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="wb-performance"></a>Глава 7. Исполнительные инструменты</h1>
+<h2><a name="wb-performance-dashboard"></a>
+7.1. Исполнительная инструментальная панель</h2>
+<p>Статистика работы сервера представления в графической инструментальной
+панели. Чтобы показать инструментальную панель, откройте вкладку запроса
+и затем нажмите <span class="guilabel">Dashboard</span> из области
+Performance боковой панели Navigator с выбранной вкладки
+<span class="guilabel">Management</span>.
+<p>Эта особенность требует MySQL Server 5.6 или выше.</p>
+
+<a name="wb-mysql-connections-navigator-performance-dashboard-figure"></a>
+<p><b>Рис. 7.1. Performance: инструментальная панель</b></p>
+<img src="images/wb-performance-dashboard.png" width="800" height="520"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h3><a name="wb-performance-dashboard-network-status"></a>Сетевой статус</h3>
+<p>Это подчеркивает статистику для сетевого трафика, посланного и полученного
+сервером MySQL по связям клиента. Точки данных включают
+<span class="guilabel">Incoming Network Traffic</span>,
+<span class="guilabel">Outgoing Network Traffic</span> и
+<span class="guilabel">Client Connections</span>.</p>
+
+<h3><a name="wb-performance-dashboard-mysql-status"></a>Статус MySQL</h3>
+<p>Это подчеркивает основную статистику деятельности и работы сервера MySQL.
+Точки данных включают <span class="guilabel">Table Open Cache</span>,
+<span class="guilabel">SQL Statements Executed</span>, количество (в секунду)
+SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER и DROP.</p>
+
+<h3><a name="wb-performance-dashboard-innodb-status"></a>Статус InnoDB</h3>
+<p>Это предоставляет обзор пула буферов InnoDB и активности диска, которая
+произведена механизмом хранения InnoDB. Точки данных разделены на три группы:
+
+<p>Наведите курсор мыши на граф, чтобы видеть дополнительную информацию,
+такую как полное количество.</p>
+<ul><li><p><span class="guilabel">Usage</span>
+<ul><li><p><span class="emphasis"><em>Read Requests</em></span>:
+количество запросов логического чтения (в секунду) InnoDB к пулу буферов.
+</li>
+
+<li><span class="emphasis"><em>Write Requests</em></span>:
+количество логических запросов записи (в секунду) InnoDB к пулу буферов.</li>
+<li><span class="emphasis"><em>Disk Reads</em></span>:
+количество логических чтений, которые InnoDB не мог удовлетворить от пула
+буферов. В результате они должны были быть прочитаны с диска.</li>
+
+<li><span class="emphasis"><em>InnoDB Buffer Pool Usage</em></span>:
+процент пула буферов InnoDB, который используется. Наведите курсор мыши на
+диаграмму, чтобы видеть дополнительную информацию, такую как
+Usage Rate и Pages Free.</p></li></ul></li>
+
+<li><p><span class="guilabel">Writes</span>
+<ul><li><p><span class="emphasis"><em>Data Written</em></span>:
+количество записей в файл журнала отката InnoDB.</li>
+
+<li><span class="emphasis"><em>Writes</em></span>: количество физических
+записей в файл журнала отката InnoDB.</li>
+<li><span class="emphasis"><em>InnoDB Disk Writes</em></span>:
+Наведите курсор мыши на динамический граф, чтобы видеть количество записей на
+диск за определенную секунду. Доступный диапазон включает прошлые 120 секунд.
+</li>
+
+<li><span class="emphasis"><em>Writing</em></span>:
+Общая сумма данных (в байтах), записанных в файлы с использованием
+механизма хранения InnoDB.</p></li></ul></li>
+
+<li><p><span class="guilabel">Reads</span>
+<ul><li><p><span class="emphasis"><em>Doublewrite Buffer Writes</em></span>:
+количество операций doublewrite, которые были выполнены.</li>
+
+<li><span class="emphasis"><em>InnoDB Disk Reads</em></span>:
+Наведите курсор мыши на динамический граф, чтобы видеть
+видеть количество чтения с диска за определенную секунду.
+Доступный диапазон включает прошлые 120 секунд.</li>
+
+<li><span class="emphasis"><em>Reading</em></span>:
+Общая сумма данных (в байтах) прочитанная в операциях с файлами
+механизмом хранения InnoDB.</p></li></ul></li></ul>
+
+<h2><a name="wb-performance-reports"></a>7.2. Отчеты о схеме Performance</h2>
+<p>Основанные на исполнительной схеме отчеты обеспечивают понимание операций
+по серверу MySQL через полезные отчеты высокого уровня. MySQL Workbench
+использует представления <span class="bold"><strong>SYS</strong></span> на
+Performance Schema, чтобы произвести более 20 отчетов и помочь
+проанализировать исполнение ваших баз данных MySQL.
+Отчеты помогают проанализировать горячие точки IO, обнаружить дорогостоящие
+SQL-операторы и изучить статистика и метрики InnoDB.
+Для получения дополнительной информации о схеме SYS см.
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/sys-schema.html"
+target="_top">MySQL sys Schema</a>.
+<p>Эта особенность требует MySQL Server 5.6 или выше.</p>
+
+<h3><a name="wb-performance-reports-setup"></a>
+Установка и конфигурация</h3>
+<p>GUI для формирования и точной настройки инструментовки Performance Schema.
+Первоначально это загружает вкладку <span class="guilabel">Easy Setup</span>,
+которая является достаточной для большинства пользователей. Чтобы позволить
+все доступные инструменты Performance Schema, наведите мышь на
+<span class="guilabel">Fully Enabled</span> и щелкните по кругу на панели.
+</p>
+
+<p>Схема SYS встроена в MySQL Server 5.7 и выше, MySQL Workbench
+использует эту версию. Однако для MySQL Server 5.6 Workbench
+устанавливает свою собственную комплектную версию схемы SYS.
+<p>Эта особенность требует MySQL Server 5.6 или выше.
+<p>Размер сохраненного запроса определяется сервером MySQL.</p>
+
+<a name="wb-connections-navigator-performance-schema-setup-easy-setup"></a>
+<p><b>Рис. 7.2. Настройка Performance Schema</b></p>
+<img src="images/wb-performance-schema-setup-easy.png" width="800"
+height="657" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Нажим <span class="guibutton">Show Advanced</span> предоставляет методы,
+чтобы точно настроить инструментовку Performance Schema.</p>
+<a name="wb-connections-navigator-performance-schema-setup-introduction"></a>
+<p><b>Рис. 7.3. Настройка Performance Schema: обзор</b></p>
+<img src="images/wb-performance-schema-setup-introduction.png" width="800"
+height="775" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="wb-performance-reports-controls"></a>
+Средства управления отчетом об исполнении</h3>
+<p>Данные отчета об исполнении могут быть просмотрены и экспортированы с
+использованием следующих средств управления:</p>
+
+<ul><li><p><span class="guibutton">Export</span>: Экспортируйте все записи и
+связанные данные (и заголовки столбцов) из текущего отчета об исполнении,
+который включает все и запросы и значения.
+Открывает диалог файла для экспорта.</li>
+
+<li><span class="guibutton">Copy Selected</span>: Копирует одну запись
+и связанные данные (и заголовки столбцов) из текущего отчета об исполнении в
+буфер обмена системы.</li>
+
+<li><span class="guibutton">Copy Query</span>:
+Копирует SQL-запрос, который произвел отчет об исполнении в
+буфер обмена системы.</li>
+<li><span class="guibutton">Refresh</span>:
+Обновляет (перезагружает) отчет об исполнении.</p></li></ul>
+
+<h3><a name="wb-performance-reports-descriptions"></a>
+Описание отчета об исполнении</h3>
+<a name="wb-connections-navigator-performance-reports-top-io-bytes"></a>
+<p><b>Рис. 7.4. Отчет об исполнении: максимум I/0 в байтах</b></p>
+<img src="images/wb-performance-reports-top-io-bytes.png" width="800"
+height="503" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Доступные отчеты об исполнении включают (это не исчерпывающий список):</p>
+<ul><li><p><span class="emphasis"><em>Top File I/O Activity Report</em>
+</span>: Покажите файлы, выполняющие большую часть IO (в байтах).</li>
+
+<li><span class="emphasis"><em>Top I/O by File by Time</em></span>:
+Покажите самое высокое использование IO файлом и время ожидания.</li>
+<li><span class="emphasis"><em>Top I/O by Event Category</em></span>:
+Покажите самое высокое использование IO данных категориями событий.</li>
+
+<li><span class="emphasis"><em>Top I/O in Time by Event Categories</em>
+</span>: Покажите самых больших потребителей времени IO
+по категориям событий.</li>
+
+<li><span class="emphasis"><em>Top I/O Time by User/Thread</em></span>:
+Покажите главных потребителей времени IO по пользователям и потокам.</li>
+<li><span class="emphasis"><em>Statement Analysis</em></span>:
+Список запросов с присоединенной статистикой.</li>
+
+<li><span class="emphasis"><em>Statements in Highest 5 Percent by Runtime
+</em></span>: Перечисляет 5% запросов с самым высоким
+временем выполнения (в микросекундах).</li>
+
+<li><span class="emphasis"><em>Using Temp Tables</em></span>:
+Перечисляют все запросы, использующие временные таблицы, сортировка по
+самому большому количеству дисковых временных таблиц.</li>
+
+<li><span class="emphasis"><em>With Sorting</em></span>:
+Перечислите все нормализованные запросы, которые сделали сортировки, и
+получали доступ к ним в следующем порядке: sort_merge_passes,
+sort_scans, sort_rows.</li>
+
+<li><span class="emphasis"><em>Full Table Scans</em></span>:
+Список запросов, которые выполнили полное сканирование таблицы.
+Производительность запросов зависит от части where
+и если никакой индекс не используется, рекомендуется добавить индексы
+для больших таблиц.</li>
+
+<li><span class="emphasis"><em>Errors or Warnings</em></span>:
+Запросы, которые подняли ошибки или предупреждения.</li>
+<li><span class="emphasis"><em>Schema Object Overview (High Overhead)</em>
+</span>: Показать счетчики типов объектов для каждой схемы. Это может занять
+много времени, чтобы выполнить на системах с большим количеством объектов.
+</li>
+
+<li><span class="emphasis"><em>Schema Index Statistics</em></span></li>
+<li><span class="emphasis"><em>Schema Table Statistics</em></span></li>
+<li><span class="emphasis"><em>Schema Table Statistics (with InnoDB buffer)
+</em></span></li>
+<li><span class="emphasis"><em>Tables with Full Table Scans</em></span>:
+Находит таблицы, к которым получает доступ полное сканирование таблицы,
+сортируя их по количеству просмотренных строк (DESC).</li>
+
+<li><span class="emphasis"><em>Unused Indexes</em></span>:
+Список индексов, которые никогда не использовались, начиная с запуска
+сервера или с начала сбора данных.</li>
+
+<li><span class="emphasis"><em>Waits by Time</em></span>:
+Перечисляет ожидания события по их полному времени, игнорируя неработающие
+(это часто содержит большие значения).</li>
+
+<li><span class="emphasis"><em>Waits by User by Time</em></span>:
+Перечисляет ожидания события по их полному времени, игнорируя неработающие
+(это часто содержит большие значения).</li>
+
+<li><span class="emphasis"><em>Wait Classes by Time</em></span>:
+Перечисляет ожидания события по их полному времени, игнорируя неработающие
+(это часто содержит большие значения).</li>
+
+<li><span class="emphasis"><em>Waits Classes by Average Time</em></span>:
+Перечисляет ожидания события по их полному времени, игнорируя неработающие
+(это часто содержит большие значения).</li>
+
+<li><span class="emphasis"><em>InnoDB Buffer Stats by Schema</em></span>:
+Суммирует вывод <code class="literal">INFORMATION_SCHEMA.INNODB_BUFFER_PAGE
+</code> по схемам.</li>
+
+<li><span class="emphasis"><em>InnoDB Buffer Stats by Table</em></span>:
+Суммирует вывод <code class="literal">INFORMATION_SCHEMA.INNODB_BUFFER_PAGE
+</code> по схемам и именам таблиц.</p></li></ul>
+
+<h2><a name="wb-performance-query-statistics"></a>7.3. Статистика запроса</h2>
+<p>Вкладка результатов <span class="guilabel">Query Stats</span> редактора
+SQL использует данные Performance Schema, чтобы собрать ключевые
+статистические данные, собранные для выполненного запроса, такие как выбор
+времени, временные таблицы, индексы, соединения и т.д.</p>
+
+<h3><a name="wb-performance-query-statistics-requirements"></a>
+Требования</h3>
+<ul><li><p>MySQL server 5.6 или выше.</li>
+<li>Включенные <span class="guimenu">Query</span>,
+<span class="guimenuitem">Collect Performance Schema Stats</span>.</li>
+<li>Включенная <code class="literal">performance_schema</code>
+с инструментовкой запросов.</p></li></ul>
+
+<a name="wb-performance-query-statistics-example"></a>
+<p><b>Рис. 7.5. SQL Editor: статистика запроса</b></p>
+<img src="images/wb-sql-editor-query-stats.png" width="800" height="580"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<a name="wb-performance-query-statistics-graph-example"></a>
+<p><b>Рис. 7.6. SQL Editor: статистика запроса с
+исполнительными графами схемы</b></p>
+<img src="images/wb-sql-editor-query-stats-graph.png" width="800"
+height="639" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h2><a name="wb-performance-explain"></a>7.4. План Visual Explain</h2>
+<p>Visual Explain производит и показывает визуальное представление MySQL
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/explain.html" target="_top">
+<code class="literal">EXPLAIN</code></a> при помощи расширенной информации,
+доступной в расширенном формате JSON.
+
+<p>Расширенный формат <code class="literal">EXPLAIN</code>
+доступен, начиная с сервера MySQL 5.6.5.</p>
+<p>MySQL Workbench обеспечивает все форматы
+<code class="literal">EXPLAIN</code> для выполненных запросов, включая
+расширенный JSON, традиционный формат и визуальный план запросов.</p>
+
+<h3><a name="wb-performance-explain-visual-conventions"></a>
+Соглашения Visual Explain</h3>
+<p>Диаграмма Visual Explain ниже показывает визуальное
+представление следующего запроса:
+<pre>
+SELECT CONCAT(customer.last_name, ', ', customer.first_name)
+       AS customer, address.phone, film.title FROM rental
+       INNER JOIN customer ON rental.customer_id = customer.customer_id
+       INNER JOIN address ON customer.address_id = address.address_id
+       INNER JOIN inventory ON rental.inventory_id = inventory.inventory_id
+       INNER JOIN film ON inventory.film_id = film.film_id
+       WHERE rental.return_date IS NULL AND
+             rental_date+INTERVAL film.rental_duration
+             DAY &lt; CURRENT_DATE() LIMIT 5;
+</pre>
+
+<a name="wb-performance-visual-explain-example-diagram"></a>
+<p><b>Рис. 7.7. Пример Visual Explain</b></p>
+<img src="images/wb-visual-explain-example-sakila.png" width="800"
+height="290" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Порядок выполнения: снизу вверх и слева направо.</p>
+
+<h4><a name="idm140523193051152"></a>Графические соглашения</h4>
+<ul><li><p>Стандартные рамки: таблицы.</li>
+<li>Округленные рамки: операции вроде GROUP и SORT.</li>
+<li>Обрамленные рамки: подзапросы.</li>
+<li>Алмазы: соединения.</p></li></ul>
+
+<h4><a name="idm140523193046736"></a>Текстовые соглашения</h4>
+<ul><li><p>Стандартный текст ниже рамки: имя (или псевдоним) таблицы.</li>
+<li>Полужирный текст ниже рамки: ключ/индекс, который использовался.</li>
+
+<li>Число справа вверху: количество строк из таблицы после фильтрации.</li>
+<li>Число слева вверху: относительная стоимость доступа к таблице
+(требует MySQL 5.7 или выше).</li>
+
+<li>Число справа от алмазов вложенного цикла: количество
+строк, произведенных JOIN.</li>
+<li>Число выше алмазов: относительная стоимость JOIN
+(требует MySQL 5.7 или выше).</li></ul>
+
+<p>Следующая таблица показывает связанные цвета и описания, используемые в
+диаграмме Visual Explain. Для получения дополнительной информации о сметах
+см. <a href="../../../dev.mysql.com/doc/refman/8.0/en/cost-model.html"
+target="_top">The Optimizer Cost Model</a>.</p>
+
+<a name="wb-performance-explain-visual-conventions-info"></a>
+<p><b>Таблица 7.1. Информация о диаграмме Visual Explain</b></p>
+<table border="1">
+<thead><tr><th scope="col">Имя системы</th><th scope="col">Цвет</th>
+<th scope="col">Текст на визуальной диаграмме</th>
+<th scope="col">Соответствующая информация подсказки</th></tr></thead>
+<tbody><tr><td scope="row">SYSTEM</td><td>Голубой</td>
+<td>Single row: system constant</td>
+<td>Очень низкая стоимость</td></tr>
+<tr><td scope="row">CONST</td><td>Голубой</td><td>Single row: constant</td>
+<td>Очень низкая стоимость</td></tr>
+<tr><td scope="row">EQ_REF</td><td>Зеленый</td>
+<td>Unique Key Lookup</td>
+<td>Низкая стоимость: оптимизатор в состоянии найти индекс, который это может
+использовать, чтобы получить необходимые записи. Это быстро, потому что поиск
+по индексу непосредственно приводит к странице со всеми данными о строке
+</td></tr>
+<tr><td scope="row">REF</td><td>Зеленый</td><td>Non-Unique Key Lookup</td>
+<td>Низкая стоимость, если количество соответствий строкам маленькое,
+растет как увеличение количества строк</td></tr>
+<tr><td scope="row">FULLTEXT</td><td>Желтый</td>
+<td>Fulltext Index Search</td><td>Специализированный полнотекстовый поиск.
+Низкая стоимость для этого специализированного поиска</td></tr>
+<tr><td scope="row">REF_OR_NULL</td><td>Зеленый</td>
+<td>Key Lookup + Fetch NULL Values</td>
+<td>Низкая стоимость, если количество соответствий строк маленькое,
+растет как увеличение количества строк</td></tr>
+<tr><td scope="row">INDEX_MERGE</td><td>Зеленый</td><td>Index Merge</td>
+<td>Средняя стоимость: ищет лучший выбор индекса в запросе,
+чтобы улучшить работу</td></tr>
+<tr><td scope="row">UNIQUE_SUBQUERY</td><td>Оранжевый</td>
+<td>Unique Key Lookup into table of subquery</td>
+<td>Низкая стоимость: используется для
+эффективной обработки подзапроса</td></tr>
+<tr><td scope="row">INDEX_SUBQUERY</td><td>Оранжевый</td>
+<td>Non-Unique Key Lookup into table of subquery</td>
+<td>Низкая стоимость: используется для
+эффективной обработки подзапроса</td></tr>
+<tr><td scope="row">RANGE</td><td>Оранжевый</td><td>Index Range Scan</td>
+<td>Средняя стоимость: частичный просмотр индекса</td></tr>
+<tr><td scope="row">INDEX</td><td>Красный</td><td>Full Index Scan</td>
+<td>Высокая стоимость: специально для больших индексов</td></tr>
+<tr><td scope="row">ALL</td><td>Красный</td><td>Full Table Scan</td>
+<td>Очень высокая стоимость: очень дорогостоящий для больших таблиц, но
+уменьшается для маленьких. Никакие применимые индексы не были найдены для
+таблицы, которая вынуждает оптимизатор искать каждую строку. Это может также
+означать, что диапазон поиска так широк, что индекс
+был бы бесполезен.</td></tr>
+<tr><td scope="row">UNKNOWN</td><td>Черный</td><td>unknown</td>
+<td>Это значение по умолчанию в случае, если соответствие
+не может быть определено</td></tr></tbody></table><br class="table-break">
+
+<h3><a name="wb-performance-explain-visual-usage"></a>
+Использование Visual Explain</h3>
+<p>Чтобы просмотреть план visual explain, выполните ваш запрос из
+редактора SQL и затем выберите подвкладку <span class="guilabel">Execution
+Plan</span> на вкладке результатов запроса. По умолчанию план выполнения
+"Visual Explain", но также имеет представление "Tabular Explain", которое
+подобно тому, что вы видели бы, выполняя
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/explain.html" target="_top">
+<code class="literal">EXPLAIN</code></a> в клиенте MySQL.</p>
+
+<h2><a name="wb-tutorial-visual-explain-dbt3"></a>
+7.5. Обучающая программа: использование Explain, чтобы
+улучшить производительность запросов</h2>
+<p>Эта обучающая программа описывает, как использовать отчеты Explain, чтобы
+определить местонахождение и зафиксировать проблематичные (медленные)
+запросы. Это использует
+<a href="../../../sourceforge.net/projects/osdldbt/files/dbt3/default.htm" target="_top">
+DBT-3 database</a> и начинается со следующего примера простого запроса.
+<pre>
+SELECT * FROM orders
+       <span class="emphasis"><em>WHERE YEAR(o_orderdate) = 1992 AND
+       MONTH(o_orderdate) = 4</em></span> AND o_clerk LIKE '%0223';
+</pre>
+
+<p>Пример вопроса был сначала выполнен в визуальном редакторе SQL.
+Затем отчет Explain был произведен при нажатии в меню на
+<span class="guimenu">Query</span> и
+<span class="guimenuitem">Explain Current Statement</span>.
+Первоначальное сообщение показывает Visual Explain с информацией, которая
+появляется, когда вы перемещаете свое указывающее устройство над таблицей
+<code class="literal">orders</code> в полном сканировании таблицы.</p>
+
+<a name="wb-visual-explain-dbt3-full-table-scan"></a>
+<p><b>Рис. 7.8. DBT-3 Explain: Visual Explain с Full Table Scan</b></p>
+<img src="images/wb-visual-explain-dbt3-full-table-scan.png" width="737"
+height="547" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Произвольно, можно переключиться на Tabular Explain.
+Используйте выпадающий список, чтобы переключиться между
+визуальными и табличными представлениями.</p>
+
+<a name="wb-visual-explain-dbt3-full-table-scan-traditional"></a>
+<p><b>Рис. 7.9. DBT-3 Explain: Tabular Explain с Full Table Scan</b></p>
+<img src="images/wb-visual-explain-dbt3-full-table-scan-traditional.png"
+width="765" height="52" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Вопросы об этом запросе:</p>
+<ul><li><p>Почему этот запрос производил полное сканирование таблицы?</li>
+<li>Почему индексируемый столбец <code class="literal">o_orderdate</code>
+не применен как возможный ключ?</li></ul>
+
+<p>Смотря более внимательно, также заметьте, что индексированный столбец
+используется в выражении <code class="literal">"WHERE YEAR(o_orderdate) =
+1992 AND MONTH(o_orderdate) = 4"</code>, таким образом, индекс не
+используется. Чтобы использовать существующий индекс, можно приспособить
+запрос следующим образом.
+<pre>
+SELECT * FROM orders
+         WHERE o_orderdate BETWEEN '1992-04-01' AND '1992-04-30' AND
+               o_clerk LIKE '%0223';
+</pre>
+
+<p>Обновленные результаты запроса в качестве примера в Visual Explain,
+в котором <code class="literal">Index Range Scan</code> заменяет
+<code class="literal">Full Table Scan</code>, произведенный
+последним примером запроса.</p>
+
+<a name="wb-visual-explain-dbt3-index-range-scan"></a>
+<p><b>Рис. 7.10. DBT-3 Explain: Visual Explain с Index Range Scan</b></p>
+<img src="images/wb-visual-explain-dbt3-index-range-scan.png" width="736"
+height="709" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<a name="wb-visual-explain-dbt3-index-range-scan-traditional"></a>
+<p><b>Рис. 7.11. DBT-3 Explain: Tabular Explain с Index Range Scan</b></p>
+<img src="images/wb-visual-explain-dbt3-index-range-scan-traditional.png"
+width="800" height="40" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Заметьте различия. Type, измененный с <code class="literal">ALL</code>
+на <code class="literal">range</code>, возможные ключи (и используемый ключ)
+изменены с <code class="literal">NULL</code> на
+<code class="literal">i_o_orderdate</code>, количество просмотренных строк
+изменено с 1.5 миллионов до приблизительно 33 тысяч. Это, конечно, та еще
+разница. Однако, просмотр 33 тысяч, возвращая всего 18, это слишком.
+Таким образом, акцент может быть перенесен на столбец
+<code class="literal">o_clerk</code>. Следующий пример запроса
+добавляет следующий индекс, который должен улучшить работу.
+<pre>
+<span class="emphasis"><em>CREATE INDEX i_o_clerk ON orders(o_clerk);</em></span>
+</pre>
+
+<a name="wb-visual-explain-dbt3-index-range-scan-traditional-noindex"></a>
+<p><b>Рис. 7.12. DBT-3 Explain: Tabular Explain с Index Range
+Scan и After Index</b></p>
+<img src="images/wb-visual-explain-dbt3-index-range-scan-traditional.png"
+width="800" height="40" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Новый индекс не рассматривают как возможный ключ, потому что запрос ищет
+суффикс <code class="literal">o_clerk</code> и индексы не работают с
+суффиксами (хотя они действительно работают с префиксами). Вместо этого этот
+простой пример мог использовать clerk ID.
+Наладка запроса следующим образом показывает лучшие результаты.
+<pre>
+SELECT * FROM orders WHERE o_orderdate BETWEEN '1992-04-01' AND '1992-04-30'
+       <span class="emphasis"><em>AND o_clerk LIKE 'Clerk#000000223';</em></span>
+</pre>
+
+<a name="wb-visual-explain-dbt3-index-range-scan-better"></a>
+<p><b>Рис. 7.13. DBT-3 Explain: Visual Explain с
+Index Range Scan и Full ID</b></p>
+<img src="images/wb-visual-explain-dbt3-index-range-scan-better.png"
+width="736" height="753" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<a name="wb-visual-explain-dbt3-index-range-scan-better-traditional"></a>
+<p><b>Рис. 7.14. DBT-3 Explain: Tabular Explain с Index
+Range Scan и Full ID</b></p>
+<img src="images/wb-visual-explain-dbt3-index-range-scan-better-traditional.png"
+width="800" height="32" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Новый индекс <code class="literal">o_clerk</code> использован, запрос
+просмотрел 1546 строк вместо 32642, выполнение запроса улучшено с 0.281 до
+0.234 секунд. Однако, <code class="literal">EXPLAIN</code> показывает,
+что этот запрос просматривает 1546 строк, чтобы возвратить 18.
+После рассмотрения запроса снова, предположим, что многостолбцовый индекс
+может удовлетворить условиям <code class="literal">WHERE</code>,
+который основан на обоих столбцах <code class="literal">o_orderdate</code> и
+<code class="literal">o_clerk</code>.
+<pre>
+<span class="emphasis"><em>CREATE INDEX io_clerk_date ON orders(o_clerk, o_orderdate)</em></span>
+</pre>
+
+<p><code class="literal">o_clerk</code> появляется как первый столбец в
+индексе, потому что <code class="literal">o_orderdate
+</code> использует диапазон.</p>
+
+<p>Теперь выполнение приспособленного запроса приводит к еще лучшим
+результатам. Приблизительно 18 строк просмотрены и возвращены, время
+выполнения примера запроса составляет 0.234 секунды.</p>
+
+<a name="wb-visual-explain-dbt3-index-range-scan-best"></a>
+<p><b>Рис. 7.15. DBT-3 Explain: Visual Explain с Multiple-Column
+Index Range Scan</b></p>
+<img src="images/wb-visual-explain-dbt3-index-range-scan-best.png"
+width="736" height="738" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<a name="wb-visual-explain-dbt3-index-range-scan-best-traditional"></a>
+<p><b>Рис. 7.16. DBT-3 Explain: Tabular Explain с
+Multiple-Column Index Range Scan</b></p>
+<img src="images/wb-visual-explain-dbt3-index-range-scan-best-traditional.png"
+width="800" height="33" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Таблица, которая следует дальше, суммирует результаты модификаций,
+сделанных во время этой обучающей программы.</p>
+<a name="wb-visual-explain-tutorial-dbt3-query-comparison"></a>
+<p><b>Таблица 7.2. Сравнение запросов в DBT-3 Explain</b></p>
+<table border="1">
+<thead><tr><th scope="col">Type</th><th scope="col">Возможные ключи</th>
+<th scope="col">Ключ</th><th scope="col">Просмотренные строки</th>
+<th scope="col">Продолжительность (секунды)</th>
+<th scope="col">Дополнительная информация</th>
+<th scope="col">Строк возвращено</th></tr></thead>
+<tbody><tr><td scope="row">Все</td><td>NULL</td><td>NULL</td><td>1.50M</td>
+<td>1.201</td><td>Используя where</td><td>18</td></tr>
+<tr><td scope="row">Диапазон</td><td>i_o_orderdate</td><td>i_o_orderdate</td>
+<td>32642</td><td>0.281</td><td>Используя условие индекса и where</td>
+<td>18</td></tr>
+<tr><td scope="row">Диапазон</td><td>i_o_orderdate, i_o_clerk</td>
+<td>i_o_clerk</td><td>1546</td><td>0.234</td>
+<td>Используя условие индекса и where</td><td>18</td></tr>
+<tr><td scope="row">Диапазон</td>
+<td>i_o_orderdate, i_o_clerk, i_o_clerk_date</td><td>i_o_clerk_date</td>
+<td>18</td><td>0.234</td><td>Используя условие индекса</td><td>18</td></tr>
+</tbody></table><br class="table-break">
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

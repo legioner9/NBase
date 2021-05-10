@@ -1,0 +1,927 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\cat.Workout_this\dir.Workout_this.md">Workout_this</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\9git\cat.9git\dir.9git.md">9git</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\9git\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+            - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+            - *## {fs} - (file) area :file:
+            - *## {ws} - (ident) area :wd::file: - label on unstage file 
+            - *## {in} - (ident) area :in::file: - label on stage file
+            - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+            - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+            - *## git init
+            - *## create mas1
+            - *##  add mas1
+            - *## commit mas1
+            - *## touch mas2
+            - *## sta1 go to {stash}
+            - *### atten! {stash} add modif {ws}
+            - *## bring inside mas3   
+            - *## bring clear_workspaced (cl_ws)
+            - *## bring clear_indexed (cl_in)
+            - *## bring modifi_indexed (mo_in)
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\cat.blobs_for_taining\dir.blobs_for_taining.md">blobs_for_taining</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\add.1\cat.add.1\dir.add.1.md">add.1</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\add.1\Git_what_trane{add-i}@1_arch\cat.Git_what_trane{add-i}@1_arch\dir.Git_what_trane{add-i}@1_arch.md">Git_what_trane{add-i}@1_arch</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\add.1\Git_what_trane{add-i}@1_arch\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\add.1\Git_what_trane{add-u}@1_{repo}_arch\cat.Git_what_trane{add-u}@1_{repo}_arch\dir.Git_what_trane{add-u}@1_{repo}_arch.md">Git_what_trane{add-u}@1_{repo}_arch</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\add.1\Git_what_trane{add-u}@1_{repo}_arch\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\add.1\Git_what_trane{add-u}@1_{repo}_arch\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\add.1\Git_what_trane{add}@1_{repo}\cat.Git_what_trane{add}@1_{repo}\dir.Git_what_trane{add}@1_{repo}.md">Git_what_trane{add}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\add.1\Git_what_trane{add}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\add.1\Git_what_trane{add}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\bash\cat.bash\dir.bash.md">bash</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\bash\Git_what_trane{bash}@1_{repo}\cat.Git_what_trane{bash}@1_{repo}\dir.Git_what_trane{bash}@1_{repo}.md">Git_what_trane{bash}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\bash\Git_what_trane{bash}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\bash\Git_what_trane{bash}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\commit.1\cat.commit.1\dir.commit.1.md">commit.1</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\commit.1\Git_what_trane{commit}@1_{repo}\cat.Git_what_trane{commit}@1_{repo}\dir.Git_what_trane{commit}@1_{repo}.md">Git_what_trane{commit}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\commit.1\Git_what_trane{commit}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\commit.1\Git_what_trane{commit}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\config\cat.config\dir.config.md">config</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\config\Git_what_trane{config}@1_{repo}\cat.Git_what_trane{config}@1_{repo}\dir.Git_what_trane{config}@1_{repo}.md">Git_what_trane{config}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\config\Git_what_trane{config}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\config\Git_what_trane{config}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\diff.1\cat.diff.1\dir.diff.1.md">diff.1</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\diff.1\Git_what_trane{diff}@1_{repo}\cat.Git_what_trane{diff}@1_{repo}\dir.Git_what_trane{diff}@1_{repo}.md">Git_what_trane{diff}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\diff.1\Git_what_trane{diff}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\diff.1\Git_what_trane{diff}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\fsck.1\cat.fsck.1\dir.fsck.1.md">fsck.1</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\fsck.1\Git_what_trane{fsck}@1_{repo}\cat.Git_what_trane{fsck}@1_{repo}\dir.Git_what_trane{fsck}@1_{repo}.md">Git_what_trane{fsck}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\fsck.1\Git_what_trane{fsck}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\fsck.1\Git_what_trane{fsck}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\git\cat.git\dir.git.md">git</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\git\Git_what_trane{git}@1_{repo}\cat.Git_what_trane{git}@1_{repo}\dir.Git_what_trane{git}@1_{repo}.md">Git_what_trane{git}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\git\Git_what_trane{git}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\git\Git_what_trane{git}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\giteveryday\cat.giteveryday\dir.giteveryday.md">giteveryday</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\giteveryday\Git_what_trane{giteveryday}@1_{repo}\cat.Git_what_trane{giteveryday}@1_{repo}\dir.Git_what_trane{giteveryday}@1_{repo}.md">Git_what_trane{giteveryday}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\giteveryday\Git_what_trane{giteveryday}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\giteveryday\Git_what_trane{giteveryday}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\gittutorial\cat.gittutorial\dir.gittutorial.md">gittutorial</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\gittutorial\Git_what_trane{gittutorial}@1_{repo}\cat.Git_what_trane{gittutorial}@1_{repo}\dir.Git_what_trane{gittutorial}@1_{repo}.md">Git_what_trane{gittutorial}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\gittutorial\Git_what_trane{gittutorial}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\gittutorial\Git_what_trane{gittutorial}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\gittutorial-2\cat.gittutorial-2\dir.gittutorial-2.md">gittutorial-2</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\gittutorial-2\Git_what_trane{gittutorial-2}@1_{repo}\cat.Git_what_trane{gittutorial-2}@1_{repo}\dir.Git_what_trane{gittutorial-2}@1_{repo}.md">Git_what_trane{gittutorial-2}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\gittutorial-2\Git_what_trane{gittutorial-2}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\gittutorial-2\Git_what_trane{gittutorial-2}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\Git_what_trane{}@1_{repo}\cat.Git_what_trane{}@1_{repo}\dir.Git_what_trane{}@1_{repo}.md">Git_what_trane{}@1_{repo}</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\Git_what_trane{}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                - *# create repo
+                - *# bind repo
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\Git_what_trane{}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                - *## {fs} - (file) area :file:
+                - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                - *## {in} - (ident) area :in::file: - label on stage file
+                - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                - *## git init
+                - *## create mas1
+                - *##  add mas1
+                - *## commit mas1
+                - *## touch mas2
+                - *## sta1 go to {stash}
+                - *### atten! {stash} add modif {ws}
+                - *## bring inside mas3   
+                - *## bring clear_workspaced (cl_ws)
+                - *## bring clear_indexed (cl_in)
+                - *## bring modifi_indexed (mo_in)
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\Git_what_trane{}@1_{repo} - копия (2)\cat.Git_what_trane{}@1_{repo} - копия (2)\dir.Git_what_trane{}@1_{repo} - копия (2).md">Git_what_trane{}@1_{repo} - копия (2)</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\Git_what_trane{}@1_{repo} - копия (2)\create_bind_repo.md">create_bind_repo.md</a>
+                - *# create repo
+                - *# bind repo
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\Git_what_trane{}@1_{repo} - копия (2)\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                - *## {fs} - (file) area :file:
+                - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                - *## {in} - (ident) area :in::file: - label on stage file
+                - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                - *## git init
+                - *## create mas1
+                - *##  add mas1
+                - *## commit mas1
+                - *## touch mas2
+                - *## sta1 go to {stash}
+                - *### atten! {stash} add modif {ws}
+                - *## bring inside mas3   
+                - *## bring clear_workspaced (cl_ws)
+                - *## bring clear_indexed (cl_in)
+                - *## bring modifi_indexed (mo_in)
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\Git_what_trane{}@1_{repo} - копия (3)\cat.Git_what_trane{}@1_{repo} - копия (3)\dir.Git_what_trane{}@1_{repo} - копия (3).md">Git_what_trane{}@1_{repo} - копия (3)</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\Git_what_trane{}@1_{repo} - копия (3)\create_bind_repo.md">create_bind_repo.md</a>
+                - *# create repo
+                - *# bind repo
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\Git_what_trane{}@1_{repo} - копия (3)\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                - *## {fs} - (file) area :file:
+                - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                - *## {in} - (ident) area :in::file: - label on stage file
+                - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                - *## git init
+                - *## create mas1
+                - *##  add mas1
+                - *## commit mas1
+                - *## touch mas2
+                - *## sta1 go to {stash}
+                - *### atten! {stash} add modif {ws}
+                - *## bring inside mas3   
+                - *## bring clear_workspaced (cl_ws)
+                - *## bring clear_indexed (cl_in)
+                - *## bring modifi_indexed (mo_in)
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\Git_what_trane{}@1_{repo} - копия (4)\cat.Git_what_trane{}@1_{repo} - копия (4)\dir.Git_what_trane{}@1_{repo} - копия (4).md">Git_what_trane{}@1_{repo} - копия (4)</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\Git_what_trane{}@1_{repo} - копия (4)\create_bind_repo.md">create_bind_repo.md</a>
+                - *# create repo
+                - *# bind repo
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\Git_what_trane{}@1_{repo} - копия (4)\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                - *## {fs} - (file) area :file:
+                - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                - *## {in} - (ident) area :in::file: - label on stage file
+                - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                - *## git init
+                - *## create mas1
+                - *##  add mas1
+                - *## commit mas1
+                - *## touch mas2
+                - *## sta1 go to {stash}
+                - *### atten! {stash} add modif {ws}
+                - *## bring inside mas3   
+                - *## bring clear_workspaced (cl_ws)
+                - *## bring clear_indexed (cl_in)
+                - *## bring modifi_indexed (mo_in)
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\Git_what_trane{}@1_{repo} - копия (5)\cat.Git_what_trane{}@1_{repo} - копия (5)\dir.Git_what_trane{}@1_{repo} - копия (5).md">Git_what_trane{}@1_{repo} - копия (5)</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\Git_what_trane{}@1_{repo} - копия (5)\create_bind_repo.md">create_bind_repo.md</a>
+                - *# create repo
+                - *# bind repo
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\Git_what_trane{}@1_{repo} - копия (5)\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                - *## {fs} - (file) area :file:
+                - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                - *## {in} - (ident) area :in::file: - label on stage file
+                - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                - *## git init
+                - *## create mas1
+                - *##  add mas1
+                - *## commit mas1
+                - *## touch mas2
+                - *## sta1 go to {stash}
+                - *### atten! {stash} add modif {ws}
+                - *## bring inside mas3   
+                - *## bring clear_workspaced (cl_ws)
+                - *## bring clear_indexed (cl_in)
+                - *## bring modifi_indexed (mo_in)
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\help.1\cat.help.1\dir.help.1.md">help.1</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\help.1\Git_what_trane{help}@1_{repo}\cat.Git_what_trane{help}@1_{repo}\dir.Git_what_trane{help}@1_{repo}.md">Git_what_trane{help}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\help.1\Git_what_trane{help}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\help.1\Git_what_trane{help}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\merge\cat.merge\dir.merge.md">merge</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\merge\Git_what_trane{marge}@1_{repo}\cat.Git_what_trane{marge}@1_{repo}\dir.Git_what_trane{marge}@1_{repo}.md">Git_what_trane{marge}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\merge\Git_what_trane{marge}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\merge\Git_what_trane{marge}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\mv.1\cat.mv.1\dir.mv.1.md">mv.1</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\mv.1\Git_what_trane{mv}@1_{repo}\cat.Git_what_trane{mv}@1_{repo}\dir.Git_what_trane{mv}@1_{repo}.md">Git_what_trane{mv}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\mv.1\Git_what_trane{mv}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\mv.1\Git_what_trane{mv}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\MyFirstContribution\cat.MyFirstContribution\dir.MyFirstContribution.md">MyFirstContribution</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\MyFirstContribution\Git_what_trane{MyFirstContribution}@1_{repo}\cat.Git_what_trane{MyFirstContribution}@1_{repo}\dir.Git_what_trane{MyFirstContribution}@1_{repo}.md">Git_what_trane{MyFirstContribution}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\MyFirstContribution\Git_what_trane{MyFirstContribution}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\MyFirstContribution\Git_what_trane{MyFirstContribution}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\MyFirstObjectWalk\cat.MyFirstObjectWalk\dir.MyFirstObjectWalk.md">MyFirstObjectWalk</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\MyFirstObjectWalk\Git_what_trane{MyFirstObjectWalk}@1_{repo}\cat.Git_what_trane{MyFirstObjectWalk}@1_{repo}\dir.Git_what_trane{MyFirstObjectWalk}@1_{repo}.md">Git_what_trane{MyFirstObjectWalk}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\MyFirstObjectWalk\Git_what_trane{MyFirstObjectWalk}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\MyFirstObjectWalk\Git_what_trane{MyFirstObjectWalk}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\reset\cat.reset\dir.reset.md">reset</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\reset\Git_what_trane{reset}@1_{repo}\cat.Git_what_trane{reset}@1_{repo}\dir.Git_what_trane{reset}@1_{repo}.md">Git_what_trane{reset}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\reset\Git_what_trane{reset}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\reset\Git_what_trane{reset}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\restore.1\cat.restore.1\dir.restore.1.md">restore.1</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\restore.1\Git_what_trane{restore--staged--source}@1_{repo}\cat.Git_what_trane{restore--staged--source}@1_{repo}\dir.Git_what_trane{restore--staged--source}@1_{repo}.md">Git_what_trane{restore--staged--source}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\restore.1\Git_what_trane{restore--staged--source}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\restore.1\Git_what_trane{restore--staged--source}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\restore.1\Git_what_trane{restore--staged}@1_{repo}\cat.Git_what_trane{restore--staged}@1_{repo}\dir.Git_what_trane{restore--staged}@1_{repo}.md">Git_what_trane{restore--staged}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\restore.1\Git_what_trane{restore--staged}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\restore.1\Git_what_trane{restore--staged}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\restore.1\Git_what_trane{restore}@1_{repo}\cat.Git_what_trane{restore}@1_{repo}\dir.Git_what_trane{restore}@1_{repo}.md">Git_what_trane{restore}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\restore.1\Git_what_trane{restore}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\restore.1\Git_what_trane{restore}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\revert\cat.revert\dir.revert.md">revert</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\revert\Git_what_trane{revert}@1_{repo}\cat.Git_what_trane{revert}@1_{repo}\dir.Git_what_trane{revert}@1_{repo}.md">Git_what_trane{revert}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\revert\Git_what_trane{revert}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\revert\Git_what_trane{revert}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\rm.1\cat.rm.1\dir.rm.1.md">rm.1</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\rm.1\Git_what_trane{rm}@1_{repo}\cat.Git_what_trane{rm}@1_{repo}\dir.Git_what_trane{rm}@1_{repo}.md">Git_what_trane{rm}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\rm.1\Git_what_trane{rm}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\rm.1\Git_what_trane{rm}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\stash\cat.stash\dir.stash.md">stash</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\stash\Git_what_trane{stash}@1_{repo}\cat.Git_what_trane{stash}@1_{repo}\dir.Git_what_trane{stash}@1_{repo}.md">Git_what_trane{stash}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\stash\Git_what_trane{stash}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\stash\Git_what_trane{stash}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\switch\cat.switch\dir.switch.md">switch</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\switch\Git_what_trane{switch}@1_{repo}\cat.Git_what_trane{switch}@1_{repo}\dir.Git_what_trane{switch}@1_{repo}.md">Git_what_trane{switch}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\switch\Git_what_trane{switch}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\switch\Git_what_trane{switch}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\tag.1\cat.tag.1\dir.tag.1.md">tag.1</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\tag.1\Git_what_trane{tag}@1_{repo}\cat.Git_what_trane{tag}@1_{repo}\dir.Git_what_trane{tag}@1_{repo}.md">Git_what_trane{tag}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\tag.1\Git_what_trane{tag}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\tag.1\Git_what_trane{tag}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\user-manual\cat.user-manual\dir.user-manual.md">user-manual</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\user-manual\Git_what_trane{user-manual}@1_{repo}\cat.Git_what_trane{user-manual}@1_{repo}\dir.Git_what_trane{user-manual}@1_{repo}.md">Git_what_trane{user-manual}@1_{repo}</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\user-manual\Git_what_trane{user-manual}@1_{repo}\create_bind_repo.md">create_bind_repo.md</a>
+                    - *# create repo
+                    - *# bind repo
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\blobs_for_taining\user-manual\Git_what_trane{user-manual}@1_{repo}\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\Git_Step_By_Step\cat.Git_Step_By_Step\dir.Git_Step_By_Step.md">Git_Step_By_Step</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\Git_Step_By_Step\Reset_flow\cat.Reset_flow\dir.Reset_flow.md">Reset_flow</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\Git_Step_By_Step\Reset_flow\Git_reset_hard_Head\cat.Git_reset_hard_Head\dir.Git_reset_hard_Head.md">Git_reset_hard_Head</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\Git_Step_By_Step\Reset_flow\Git_reset_hard_Head\ReadMe.md">ReadMe.md</a>
+                    - *## [7.7 Инструменты Git - Раскрытие тайн reset](https://git-scm.com/book/ru/v2/%D0%98%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D1%8B-Git-%D0%A0%D0%B0%D1%81%D0%BA%D1%80%D1%8B%D1%82%D0%B8%D0%B5-%D1%82%D0%B0%D0%B9%D0%BD-reset)
+                    - *## [VSCode Изменить терминал по умолчанию](https://fooobar.com/questions/560836/vscode-change-default-terminal) 
+            
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\Git_Step_By_Step\Reset_flow\Git_start\cat.Git_start\dir.Git_start.md">Git_start</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\Git_Step_By_Step\Reset_flow\Git_start\ReadMe.md">ReadMe.md</a>
+                    - *## [7.7 Инструменты Git - Раскрытие тайн reset](https://git-scm.com/book/ru/v2/%D0%98%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D1%8B-Git-%D0%A0%D0%B0%D1%81%D0%BA%D1%80%D1%8B%D1%82%D0%B8%D0%B5-%D1%82%D0%B0%D0%B9%D0%BD-reset)
+                    - *## [VSCode Изменить терминал по умолчанию](https://fooobar.com/questions/560836/vscode-change-default-terminal) 
+            
+        
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\lists_hints\cat.lists_hints\dir.lists_hints.md">lists_hints</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\lists_hints\contentim.ru_bash.md">contentim.ru_bash.md</a>
+            - *# [Шпаргалка по bash](https://github.com/cyberspacedk/BASH-Commands)
+            - *## Файловая система
+            - *### Просмотр содержимого папки
+            - *### Перемещение по файловой системе
+            - *### Создание папок и файлов
+            - *### Копирование файлов
+            - *### Удаление папок и файлов
+            - *## Алиасы
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\lists_hints\contentim.ru_git.md">contentim.ru_git.md</a>
+            - *# [Шпаргалка по консольным командам Git](https://contentim.ru/git)
+            - *## Создать новый репозиторий
+            - *## Клонирование репозитория
+            - *## Просмотр изменений
+            - *## Добавление изменений в индекс
+            - *## Удаление изменений из индекса
+            - *## Отмена изменений
+            - *## Коммиты
+            - *## Отмена коммитов и перемещение по истории
+            - *## Временно переключиться на другой коммит
+            - *## Переключиться на другой коммит и продолжить работу с него
+            - *## Восстановление изменений
+            - *## Копирование коммита (перенос коммитов)
+            - *## Удаление файла
+            - *## Перемещение/переименование файлов
+            - *## История коммитов
+            - *## Кто написал строку
+            - *## История изменений указателей (веток, HEAD)
+            - *## Ветки
+            - *## Теги
+            - *## Временное сохранение изменений без коммита
+            - *## Удалённые репозитории
+            - *## Конфликт слияния
+            - *## «Перенос» ветки
+            - *## Как отменить rebase
+            - *## Разное
+            - *## Примеры
+            - *### Начало работы
+            - *### «Внесение изменений» в коммит
+            - *### Работа с ветками
+            - *### Работа с ветками, слияние и откат к состоянию до слияния
+            - *### Работа с ветками, конфликт слияния
+            - *### Синхронизация репозитория-форка с мастер-репозиторием
+            - *### Ошибка в работе: закоммитили в мастер, но поняли, что нужно было коммитить в новую ветку
+            - *### Нужно вернуть содержимое файла к состоянию, бывшему в каком-либо коммите (известен хеш коммита)
+            - *### При любом действии с github (или другим удалённым сервисом) запрашивается логин и пароль
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\lists_hints\habr.com.201922.md">habr.com.201922.md</a>
+            - *# [Изменение коммитов в Git](https://habr.com/ru/post/201922/)
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\lists_hints\nikolaj-sarry.info.md">nikolaj-sarry.info.md</a>
+            - *# [GIT-ШПАРГАЛКА: ОСНОВНЫЕ КОМАНДЫ](https://nikolaj-sarry.info/razrabotka/git/git-shpargalka-osnovnye-komandy/)
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\Start_blob_1\cat.Start_blob_1\dir.Start_blob_1.md">Start_blob_1</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\Start_blob_1\create_start_blob_1.bak.md">create_start_blob_1.bak.md</a>
+            - *## create {shape_}
+            - *## create (change of) {wd} 
+            - *## create (change of) {in}
+            - *## first commit 
+            - *## create $ touch mas2
+            - *## add mas2
+            - *## {wd} dn {sh}
+            - *### {{in} dn {wd}}
+            - *## second commit comm2
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\Start_blob_1\create_start_blob_1.md">create_start_blob_1.md</a>
+            - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+            - *## {fs} - (file) area :file:
+            - *## {ws} - (ident) area :wd::file: - label on unstage file 
+            - *## {in} - (ident) area :in::file: - label on stage file
+            - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+            - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+            - *## git init
+            - *## create mas1
+            - *##  add mas1
+            - *## commit mas1
+            - *## touch mas2
+            - *## sta1 go to {stash}
+            - *### atten! {stash} add modif {ws}
+            - *## bring inside mas3   
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\Start_blob_1\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+            - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+            - *## {fs} - (file) area :file:
+            - *## {ws} - (ident) area :wd::file: - label on unstage file 
+            - *## {in} - (ident) area :in::file: - label on stage file
+            - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+            - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+            - *## git init
+            - *## create mas1
+            - *##  add mas1
+            - *## commit mas1
+            - *## touch mas2
+            - *## sta1 go to {stash}
+            - *### atten! {stash} add modif {ws}
+            - *## bring inside mas3   
+            - *## bring clear_workspaced (cl_ws)
+            - *## bring clear_indexed (cl_in)
+            - *## bring modifi_indexed (mo_in)
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\workchain\cat.workchain\dir.workchain.md">workchain</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\workchain\first_level\cat.first_level\dir.first_level.md">first_level</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\workchain\first_level\fixup_git.md">fixup_git.md</a>
+                - *# First level
+                - *## init project
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\workchain\first_level\gitconfig.md">gitconfig.md</a>
+                - *# [Git clone не загружает все файлы из-за ограничения длины пути к файлу windows](https://coderoad.ru/55343976/Git-clone-%D0%BD%D0%B5-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B6%D0%B0%D0%B5%D1%82-%D0%B2%D1%81%D0%B5-%D1%84%D0%B0%D0%B9%D0%BB%D1%8B-%D0%B8%D0%B7-%D0%B7%D0%B0-%D0%BE%D0%B3%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%B5%D0%BD%D0%B8%D1%8F-%D0%B4%D0%BB%D0%B8%D0%BD%D1%8B-%D0%BF%D1%83%D1%82%D0%B8-%D0%BA-%D1%84%D0%B0%D0%B9%D0%BB%D1%83-windows)
+                - *## result .gitconfig
+                - *# [merge tools config](https://www.atlassian.com/ru/git/tutorials/setting-up-a-repository/git-config)
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Workout_this\workchain\first_level\start_projects.md">start_projects.md</a>
+                - *# First level
+                - *## init project
+        
+    

@@ -1,0 +1,4 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\4.ВЕТКИ.dir\4.8.Слияние_перемоткой.dir\cat.4.8.Слияние_перемоткой.dir\dir.4.8.Слияние_перемоткой.dir.md">4.8.Слияние_перемоткой.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\4.ВЕТКИ.dir\4.8.Слияние_перемоткой.dir\4.8.Слияние_перемоткой.md">4.8.Слияние_перемоткой.md</a>
+        - *## git merge
+        - *@@ go from ILK scrincast

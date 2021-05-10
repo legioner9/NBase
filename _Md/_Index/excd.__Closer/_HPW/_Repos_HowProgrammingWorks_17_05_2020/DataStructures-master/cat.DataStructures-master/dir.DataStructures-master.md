@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\DataStructures-master\cat.DataStructures-master\dir.DataStructures-master.md">DataStructures-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\DataStructures-master\README.md">README.md</a>
+        - *# Data structures basics

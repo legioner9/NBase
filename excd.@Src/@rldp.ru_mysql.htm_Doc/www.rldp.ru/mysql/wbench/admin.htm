@@ -1,0 +1,1595 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 6. Задачи администрирования</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="wb-admin"></a>Глава 6. Задачи администрирования</h1>
+<p>MySQL Workbench обеспечивает визуальный интерфейс, чтобы управлять вашей
+средой MySQL. Доступные визуальные инструменты помогают формировать ваши
+серверы MySQL, управлять пользователями, выполнить резервную копию и
+восстановление, осмотреть контрольные данные и здоровье базы данных.</p>
+
+<h2><a name="wb-admin-server-management"></a>6.1. Управление сервером</h2>
+<p>Управляйте своими серверами MySQL с полным представлением о ваших связях
+сервера MySQL. Визуальная основанная на дереве навигация предоставляет
+подробную информацию о сервере и переменных статуса, включая количество
+потоков, объемы данных, посланные и полученные клиентами, размер
+распределений буферов и многое другое.
+
+<h3><a name="wb-mysql-connections-navigator"></a>Навигатор подключения MySQL
+</h3>
+<p>Область Navigator имеет вкладку <span class="guilabel">Administration
+</span> (ранее <span class="guilabel">Management</span>)
+с функциональностью, чтобы контролировать и формировать ваше подключение
+MySQL. На некоторых хостах не показываются Navigator и информационные метки.
+Следующие данные показывают главные элементы, которые
+относятся к управлению сервером.</p>
+
+<a name="wb-sql-editor-navigator-management-tab"></a>
+<p><b>Рис. 6.1. Вкладка Navigator Administration</b></p>
+<img src="images/wb-manage-server-administration-main.png" width="736"
+height="515" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="wb-mysql-connections-navigator-elements"></a>
+Описание элементов управления сервером</h3>
+<ol type="1"><li><p>Вкладка Connection. Каждая связь, установленная с
+сервером MySQL, представляется отдельной вкладкой связи.
+Сервер может быть активным или бездействующим, когда вкладка
+связи для него открыта. Для помощи в создании и управлении подключениями
+см. <a href="connect.htm">главу 5</a>.</li>
+
+<li>Меню Server в строке главного меню это
+один способ открыть каждую категорию вторичной вкладки управления.
+Меню включает тот же самый набор пунктов, перечисленных во вкладке
+<span class="guilabel">Administration</span> области Navigator
+плюс два дополнительных пункта: <span class="guimenuitem">Management
+Access Settings</span> и <span class="guimenuitem">Reset Saved
+Passwords for Connection</span>.</p>
+
+<p>Чтобы открыть <span class="guilabel">Administration - Users and
+Privileges</span>, нажмите <span class="guimenu">Server</span> и
+<span class="guimenuitem">Users and Privileges</span>.</li>
+
+<li>Вкладка Administration. Можно показать только одну вкладку управления
+одномоментно: последующие заменяют активную вкладку. Чтобы закрыть открытую
+вкладку, щелкните <code class="literal">x</code> на вкладке.</li>
+
+<li>Операционные вкладки. Вторичные административные вкладки
+также включают подвкладки, которые отделяют доступные операции в категории.
+Например, <span class="guilabel">Administration - Users and Privileges</span>
+имеет четыре подвкладки: <span class="guilabel">Login</span>,
+<span class="guilabel">Account Limits</span>,
+<span class="guilabel">Administrative Roles</span>
+и <span class="guilabel">Schema Privileges</span>.</li>
+
+<li>Боковая панель включает информационные области Navigator и Information.
+С выбранной вкладкой <span class="guilabel">Administration</span>
+щелкните по любому пункту в области Navigator, чтобы открыть связанную
+вкладку администрации в рабочей области. Можно скрыть или показать панель,
+используя более легкое действие на главной панели инструментов.</p>
+
+<p>Вкладка <span class="guilabel">Administration</span> разделена на
+секции MANAGEMENT, INSTANCE, PERFORMANCE и MYSQL ENTERPRISE
+(для MySQL Workbench Commercial edition).</p>
+
+<p>Область Navigator также имеет вкладку
+<span class="guilabel">Schemas</span> для управления базами данных.
+Для получения информации о вкладке <span class="guilabel">Schemas</span> см.
+<a href="dev.htm#wb-sql-editor-navigator">раздел 8.2.1</a>.</li>
+
+<li>Функциональные кнопки. Все кнопки в управляющих вкладках
+расположены в той же самой зоне рабочей области.
+Однако набор функциональных кнопок изменяется в зависимости
+от выбранной вкладки.</p></li></ol>
+
+<h3><a name="wb-mysql-connections-navigator-instance-server-logs"></a>
+6.1.1. Журналы сервера</h3>
+<p>Вкладка <span class="guilabel">Administration - Server Logs</span>
+показывает информацию о журнале для сервера MySQL, представленного каждой
+вкладкой связи. Для каждой связи вкладка
+<span class="guilabel">Administration - Server Logs</span>
+включает дополнительные вкладки для общих журналов ошибок и медленных
+журналов (при наличии).</p>
+
+<p>Можно получить доступ к информации из журнала из области Navigator
+или нажав <span class="guimenu">Server</span> и
+<span class="guimenuitem">Server Logs</span> из меню.
+
+<h4><a name="idm140523193993024"></a>Файл регистрации ошибок</h4>
+<p>Следующие данные показывают пример записей во вкладке
+<span class="guilabel">Error Log File</span>. Для получения дополнительной
+информации см. <a href="../../../dev.mysql.com/doc/refman/8.0/en/error-log.html"
+target="_top">The Error Log</a>.</p>
+
+<a name="wb-mysql-connections-navigator-server-logs-error-log"></a>
+<p><b>Рис. 6.2. Navigator Administration: Instance: Server Logs: Error Log
+</b></p>
+<img src="images/wb-navigator-server-logs-error-log.png" width="760"
+height="467" alt="Error Log File tab showing Oldest, Previous Page, Next
+Page, Most Recent, and Refresh buttons."><br class="figure-break">
+
+<h4><a name="idm140523193983216"></a>Регистрация медленных запросов</h4>
+<p>Следующие данные показывают пример записей во вкладке
+<span class="guilabel">Slow Log File</span>.
+Для получения дополнительной информации посмотрите
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/slow-query-log.html"
+target="_top">The Slow Query Log</a></p>
+
+<a name="wb-mysql-connections-navigator-server-logs-slow"></a>
+<p><b>Рис. 6.3. Navigator Management: Instance: Server Logs: Slow Log</b>
+</p><img src="images/wb-navigator-server-logs-slow.png" width="800"
+height="500" alt="Slow Log File tab showing Oldest, Previous Page, Next Page,
+Most Recent, and Refresh buttons."><br class="figure-break">
+
+<h3><a name="wb-mysql-connections-navigator-instance-startup-shutdown"></a>
+6.1.2. Сервисный контроль</h3>
+<p>Вкладка <span class="guilabel">Administration - Startup / Shutdown</span>
+позволяет вам выполнить следующие действия сервисного контроля:
+
+<ul><li><p>Смотреть <span class="guilabel">Startup Message Log</span>.</li>
+<li>Запустить и завершить сервер MySQL.</li>
+<li>Смотреть текущий статус сервера.</li></ul>
+
+<p>Можно получить доступ к действиям контроля из панели Navigator
+или при нажатии <span class="guimenu">Server</span> и
+<span class="guimenuitem">Startup/Shutdown</span> из меню.
+Следующие данные показывают пример вкладки
+<span class="guilabel">Administration - Startup / Shutdown</span>
+с управлением сервером базы данных и показанными кнопками
+<span class="guibutton">Stop Server</span> и
+<span class="guibutton">Bring Offline</span>.</p>
+
+<a name="wb-mysql-connections-navigator-startup-shutdown"></a>
+<p><b>Рис. 6.4. Navigator Administration: Instance: Startup / Shutdown</b>
+</p><img src="images/wb-navigator-startup-shutdown.png" width="760"
+height="468" alt="Administration - Startup / Shutdown tab showing the Stop
+Server, Refresh Status, Clear Messages, and Copy to Clipboard buttons.">
+<br class="figure-break">
+
+<h3><a name="wb-mysql-connections-navigator-instance-options-file"></a>
+6.1.3. Конфигурация (файл опций)</h3>
+<p>Редактор <span class="guilabel">Options File</span>
+используется, чтобы рассмотреть и отредактировать
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/option-files.html"
+target="_top">MySQL configuration file</a> (<code class="filename">my.ini
+</code> в Windows или <code class="filename">my.cnf</code> в Linux и macOS)
+выбирая опции и другие средства управления GUI и затем внося правки.
+MySQL Workbench делит файл на свои собственные группы как ряд вкладок
+(<span class="guilabel">General</span>,
+<span class="guilabel">Logging</span>,
+<span class="guilabel">InnoDB</span> и т.д.). Сделайте правки и нажмите
+<span class="guibutton">Apply</span>, чтобы передать изменения.</p>
+
+<p>Можно открыть <span class="guilabel">Administration - Options File</span>
+из области Navigator или при нажатии <span class="guimenu">Server</span> и
+<span class="guimenuitem">Options File</span> из меню.</p>
+
+<p>Редактор файлов опций включает следующие компоненты:
+<ul><li><p>Группы файла опций, разделенные на удобные
+вкладки MySQL Workbench.</li>
+
+<li>Поле поиска <span class="guilabel">Locate option</span>, чтобы искать в
+вашем конфигурационном файле.</li>
+<li>Путь <span class="guilabel">Configuration File</span>, таким образом, вы
+знаете, какой конфигурационный файл вы редактируете.</li>
+
+<li>Селектор группы опций в файле, чтобы выбрать группу опций, чтобы
+отредактировать. Поскольку та же самая опция может быть определена в
+нескольких группах, важно выбрать правильную группу, когда редактируете.
+<code class="literal">[mysqld]</code> (сервер MySQL) это наиболее
+распространенная группа. Для получения дополнительной информации о группах
+посмотрите <a href="../../../dev.mysql.com/doc/refman/8.0/en/option-files.html"
+target="_top">Using Option Files</a>.</li></ul>
+
+<p>Следующие данные показывают <span class="guilabel">Options File</span> с
+выбранной вкладкой <span class="guilabel">General</span>.</p>
+<a name="wb-mysql-connections-navigator-options-file-general"></a>
+<p><b>Рис. 6.5. Navigator Administration: Instance: Options File: General
+</b></p><img src="images/wb-navigator-options-file-general.png" width="759"
+height="583" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h2><a name="wb-mysql-connections-navigator-management-users-and-privileges">
+</a>6.2. Пользователи и привилегии</h2>
+<p>Вкладка <span class="guilabel">Administration - Users and Privileges
+</span> предоставляет список всех пользователей и привилегий, которые
+касаются активного экземпляра сервера MySQL. С этой вкладки можно добавить и
+управлять учетными записями пользователей, задать привилегии и пароли.</p>
+
+<p>Чтобы открыть вкладку <span class="guilabel">Administration - Users and
+Privileges</span>:</p>
+<ol type="1"><li><p>Установите связь с активным сервером MySQL.</li>
+<li>На вкладке связи сделайте одно из следующего:
+<ul><li><p>Нажмите <span class="guilabel">Users and Privileges</span>
+из списка <span class="guilabel">Management</span> в области Navigator.</li>
+
+<li>Нажмите <span class="guimenu">Server</span> и
+<span class="guimenuitem">Users and Privileges</span> из меню.
+</p></li></ul></li></ol>
+<p>У вкладки <span class="guilabel">Administration - Users and Privileges
+</span> есть несколько областей задач, которые описаны в следующих разделах.
+
+<h3><a name="wb-users-and-privileges-accounts"></a>User Accounts</h3>
+<p><span class="guilabel">User Accounts</span> состоит из вертикальной
+области, которая перечисляет каждую учетную запись пользователя, связанную с
+активным подключением MySQL. Список содержит каждое имя пользователя и имя
+хоста для него. Используйте кнопки <span class="guibutton">Add
+Account</span>, <span class="guibutton">Delete</span> и
+<span class="guibutton">Refresh</span>, чтобы управлять списком учетных
+записей пользователей. Выбор записи из списка показывает
+параметры, которые появляются в наборе вкладок.</p>
+
+<p>Данные, которые следуют, показывают расположение вкладки
+<span class="guilabel">Administration - Users and Privileges</span> с
+подвкладкой <span class="guilabel">Login</span>, чтобы показать пример
+общих сведений о записи.</p>
+
+<a name="wb-mysql-connections-navigator-users-privileges-login"></a>
+<p><b>Рис. 6.6. Navigator Administration: User And Privileges с
+открытой вкладкой Login</b></p>
+<img src="images/wb-navigator-users-privileges-login.png" width="748"
+height="460" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="wb-users-and-privileges-login"></a>Login</h3>
+<p>Вкладка <span class="guilabel">Login</span> предоставляет следующую
+информацию, связанную с выбранным пользователем:
+
+<ul><li><p><span class="guilabel">Login Name:</span> можно создать
+многократные записи с тем же самым именем, чтобы соединиться
+от различных хостов.</li>
+
+<li><span class="guilabel">Authentication Type:</span> для стандартного
+пароля или основанной на хосте идентификации, выберите
+<code class="literal">Standard</code>. Типы аутентификации
+<code class="literal">caching_sha2_password</code> и
+<code class="literal">SHA256_Password</code> обеспечивают более безопасное
+шифрование, чем <code class="literal">Standard</code>.</p>
+
+<p>Начиная с MySQL 8.0.4, плагин <code class="literal">caching_sha2_password
+</code> плагин идентификации по умолчанию для сервера.
+Пользователь, который подтверждает подлинность с
+<code class="literal">caching_sha2_password</code>, должен использовать
+безопасное соединение или незашифрованную связь, которая поддерживает
+передачу пароля с использованием пары ключей RSA.</li>
+
+<li><span class="guilabel">Limit to Hosts Matching:</span> символы
+<code class="literal">%</code> и <code class="literal">_</code>
+могут использоваться в качестве подстановочных знаков. Знак процента
+(<code class="literal">%</code>) соответствует 0 или больше знаков, а
+подчеркивание (<code class="literal">_</code>) соответствует
+строго отдельному символу.</li>
+
+<li><span class="guilabel">Password</span> и
+<span class="guilabel">Confirm Password:</span> чтобы изменить пароль,
+введите и затем подтвердите его. Рассмотрите использование пароля из
+восьми или больше знаков с символами разных регистров,
+числами и знаками препинания.</p>
+<p>Примените <span class="guibutton">Expire Password</span>, чтобы
+потребовать изменения пароля.</p></li></ul>
+
+<h3><a name="wb-users-and-privileges-limits"></a>Account Limits</h3>
+<p>Вкладка <span class="guilabel">Account Limits</span> определяет следующие
+ограничения на выбранного пользователя:
+
+<ul><li><p><span class="guilabel">Max. Queries:</span> количество запросов
+в течение одного часа.</li>
+<li><span class="guilabel">Max. Updates:</span> количество обновлений
+в течение одного часа.</li>
+
+<li><span class="guilabel">Max. Connections:</span> сколько раз пользователь
+может соединиться с сервером в течение часа.</li>
+<li><span class="guilabel">Concurrent Connections:</span> количество
+одновременных связей с сервером.</p></li></ul>
+
+<h3><a name="wb-users-and-privileges-admin-roles"></a>
+Вкладка Administrative Roles</h3>
+<p>Роли это быстрый способ предоставить ряд привилегий пользователю, на
+основе работы, которую пользователь должен выполнить на сервере.
+Также возможно назначить многие роли на одну учетную запись пользователя или
+назначить привилегии непосредственно пользователю без назначения ролей.</p>
+
+<p>После того, как вы выберете роль для учетной записи пользователя, вы
+будете видеть накопленные привилегии в панели <span class="guilabel">Global
+Privileges</span>. Например, если вы выбираете роль
+<code class="literal">BackupAdmin</code>, предоставленные привилегии включают
+<code class="literal">EVENT</code>, <code class="literal">LOCK TABLES</code>,
+<code class="literal">SELECT</code> и
+<code class="literal">SHOW DATABASES</code>. Для полного списка привилегий
+посмотрите <a href="../../../dev.mysql.com/doc/refman/8.0/en/privileges-provided.html"
+target="_top">Privileges Provided by MySQL</a>.</p>
+
+<p>Вкладка <span class="guilabel">Administrative Roles</span>
+включает следующие роли:
+<ul><li><p><code class="literal">DBA</code>:
+Предоставляет права выполнить все задачи.</li>
+<li><code class="literal">MaintenanceAdmin</code>: Права поддерживать сервер.
+</li>
+
+<li><code class="literal">ProcessAdmin</code>: Права оценить, контролировать
+и убить пользовательские процессы.</li>
+<li><code class="literal">UserAdmin</code>: Права создать пользовательские
+логины и изменить пароли.</li>
+
+<li><code class="literal">SecurityAdmin</code>: Права управлять логинами,
+предоставить и отменить привилегии сервера.</li>
+<li><code class="literal">MonitorAdmin</code>:
+Предоставляет минимальные права, чтобы контролировать сервер.</li>
+
+<li><code class="literal">DBManager</code>: Предоставляет полные права на
+всех базах данных.</li>
+<li><code class="literal">DBDesigner</code>:
+Права создать и перепроектировать любую схему базы данных.</li>
+
+<li><code class="literal">ReplicationAdmin</code>:
+Права настроить и управлять репликацией.</li>
+<li><code class="literal">BackupAdmin</code>: Минимальные права, требуемые,
+чтобы поддержать любую базу данных.</li>
+
+<li><code class="literal">Custom</code>: Перечисляет другие привилегии,
+которые назначены на учетную запись пользователя. Эта роль недоступна для
+всех учетных записей по умолчанию, таких как
+<code class="literal">root</code>. Если вы выбираете учетную запись
+пользователя и затем выбираете одну или более привилегий непосредственно,
+которые находятся за пределами любых выбранных ролей, роль
+<span class="guilabel">Custom</span> добавлена (и выбрана) к списку ролей.
+</li></ul>
+<p>Чтобы удалить все права, назначенные на выбранного пользователя, нажмите
+<span class="guibutton">Revoke All Privileges</span>.
+
+<h3><a name="wb-users-and-privileges-schema-privileges"></a>
+Schema Privileges</h3>
+<p>Вкладка <span class="guilabel">Schema Privileges</span>
+совершенствует способ, которым вы назначаете права доступа к одной или более
+схемам учетной записи пользователя.
+Чтобы назначить привилегии на выбранную для схемы, сделайте следующее:</p>
+
+<ol><li><p>Добавьте запись схемы (или правило), который определяет, какая
+схема или схемы применяют выбранного пользователя.
+Нажмите <span class="guibutton">Add Entry</span>, чтобы открыть диалог
+New Schema Privilege Definition.
+Диалог предоставляет следующие независимые возможности:
+
+<ul><li><p><span class="guilabel">All Schema (%)</span>:
+Это правило относится к любому названию схемы.</li>
+<li><span class="guilabel">Schemas matching pattern:</span>
+<strong class="userinput"><code><em><code>pattern</code></em></code>
+</strong>: Примените это правило к схемам, которые соответствуют имени или
+образцу. Можно использовать <code class="literal">_</code> и
+<code class="literal">%</code> как подстановочные знаки в образце, однако,
+чтобы использовать литеральное значение, необходимо экранировать каждый
+подстановочный символ наклонной чертой влево
+(<code class="literal">\</code>).</li>
+
+<li><span class="guilabel">Selected schema:</span> <em><code>schema
+name</code></em>: Примените правило к определенному названию схемы,
+выбранному из списка.</li></ul>
+
+<p>Примените <span class="guibutton">Delete Entry</span>, чтобы удалить
+запись и привилегии, связанные с ней, из списка. Когда вы нажимаете
+<span class="guibutton">Revoke All Privileges</span>, вы удаляете все
+привилегии, назначенные на выбранного пользователя.</li>
+
+<li>Выбрав запись, отметьте отдельные права доступа, которые применяются
+только к схеме или схемам, определенным в записи.
+Права доступа категоризированы как Object Rights, DDL Rights и Other Rights.
+Каждое право, которое вы выбираете, появляется в колонке
+<span class="guilabel">Privileges</span> записи схемы.</p></li></ol>
+
+<h2><a name="wb-mysql-connections-navigator-management-server-status"></a>
+6.3. Статус сервера</h2>
+<p>Получите непосредственное представление для вашей среды MySQL.
+Это включает просмотр состояния выполнения сервера (stopped/running),
+доступные особенности, основные каталоги сервера, состояние репликации и
+настройки безопасности для идентификации и SSL. Доклады также включают в себя
+информацию и графы, чтобы отследить использование памяти, связи, частоты
+успешных обращений и прочее.</p>
+
+<p>Можно получить доступ к этому окну из области Navigator или из меню
+<span class="guimenu">Server</span> и <span class="guimenuitem">Server Status
+</span>.</p>
+
+<a name="wb-mysql-connections-navigator-server-status"></a>
+<p><b>Рис. 6.7. Navigator Administration: статус сервера</b></p>
+<img src="images/wb-navigator-server-status.png" width="744" height="495"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h2><a name="wb-mysql-connections-navigator-management-status-variables"></a>
+6.4. Статус и системные переменные</h2>
+<p>Вкладка <span class="guilabel">Administration - Status and System
+Variables</span> перечисляет полный набор серверных переменных для активного
+подключения MySQL. Можно также скопировать все или выбранные переменные в
+буфер обмена системы.</p>
+
+<p>Можно открыть эту вкладку из области Navigator
+(см. MANAGEMENT) или выбрав <span class="guimenu">Server</span> и
+<span class="guimenuitem">Status and System Variables</span> из меню.
+Следующие данные показывают подвкладку <span class="guilabel">Status
+Variables</span>, выбранную со всеми переменными статуса, перечисленными по
+имени. У каждой переменной есть значение, если возможно, и описание.</p>
+
+<a name="wb-mysql-connections-navigator-variables-status"></a>
+<p><b>Рис. 6.8. Navigator Administration: переменные статуса</b></p>
+<img src="images/wb-navigator-variables-status.png" width="757" height="504"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>Следующие данные показывают подвкладку
+<span class="guilabel">System Variables</span> со всеми глобальными
+системными переменными для активного сервера, перечисленными по имени.
+Можно сократить список статуса и системных переменных, введя имя переменной в
+текстовое окно или выбрав категорию, например,
+<code class="literal">InnoDB/General</code>.</p>
+
+<a name="wb-mysql-connections-navigator-variables-system"></a>
+<p><b>Рис. 6.9. Navigator Management: системные переменные</b></p>
+<img src="images/wb-navigator-variables-system.png" width="753" height="510"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h3><a name="wb-mysql-connections-navigator-management-status-variables-persist">
+</a>Постоянные системные переменные</h3>
+<p>Начиная с MySQL Workbench 8.0.11, можно установить одну или несколько
+глобальные системных переменных, сохраняемых через перезапуски сервера.
+Чтобы сохранить переменную, выберите опцию <span class="guilabel">Persist
+</span> рядом с именем (см. предыдущий рисунок).
+Для системных переменных, которые включают значение, оно показано в
+столбце <span class="guilabel">Persisted Value</span> списка после того, как
+вы выбираете опцию. Если переменная не имеет права быть сохраненной,
+информационное диалоговое окно появляется, когда вы выбираете опцию.</p>
+
+<p>Чтобы сбросить постоянную глобальную системную переменную, отмените
+отдельную опцию и затем подтвердите действие сброса для отдельной переменной
+в диалоговом окне, которое открывается. Чтобы сбросить все постоянные
+переменные сразу, нажмите <span class="guibutton">Reset persist values</span>
+и затем подтвердите действие для всех постоянных переменных.
+
+<h3><a name="wb-mysql-connections-navigator-management-status-variables-group">
+</a>Заказная группировка переменных</h3>
+<p>Статусные и системные переменные категоризированы группами (такими как
+InnoDB или Logging), можно также создать собственные группы.
+Щелкните правой кнопкой мыши по переменной, выберите группу (или создайте
+новую), и затем добавьте переменную к вышеупомянутой группе.
+Ваши группы перечисляются наряду с существующими ранее группами.</p>
+
+<p>Следующие данные показывают пример группы
+<code class="literal">My Variables</code>, к которой добавляется переменная
+<code class="literal">Created_tmp_variables</code>.</p>
+
+<a name="wb-status-and-system-variables-custom"></a>
+<p><b>Рис. 6.10. Navigator Management: добавление переменной к группе</b></p>
+<img src="images/wb-status-and-system-variables-custom.png" width="800"
+height="695" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h2><a name="wb-admin-export-import"></a>6.5. Экспорт и импорт данных</h2>
+<p>Есть три способа экспортировать и импортировать данные в MySQL Workbench,
+каждый служащий различной цели.</p>
+
+<a name="wb-admin-export-import-methods"></a>
+<p><b>Таблица 6.1. Методы, чтобы экспортировать или импортировать
+данные в MySQL Workbench</b></p>
+<table border="1">
+<thead><tr><th scope="col">Место в GUI</th><th scope="col">Набор данных</th>
+<th scope="col">Экспортные типы</th><th scope="col">Типы импорта</th>
+<th scope="col">Дополнительные детали</th></tr></thead>
+<tbody><tr><td scope="row">Контекстное меню Object Browser</td><td>Таблицы
+</td><td>JSON, CSV</td><td>JSON, CSV</td><td>Простые операции по таблицам,
+включая контроль над типом вывода (этот метод был добавлен в версии 6.3.0)
+</td></tr>
+<tr><td scope="row">Меню Result Grid в редакторе SQL</td>
+<td>Набор результатов (после выполнения SQL-запроса)</td>
+<td>CSV, HTML, JSON, SQL, XML, Excel XML, TXT</td><td>CSV</td>
+<td>Простые операции по данным, включая небольшой контроль</td></tr>
+<tr><td scope="row">Management Navigator</td><td>Базы данных и/или таблицы
+</td><td>SQL</td><td>SQL</td><td>Подробные операции по базе данных и таблице,
+стандартное копирование/восстановление, используя команду
+<span class="command"><strong>mysqldump</strong></span> и метаданные,
+включает контроль над тем, как данные и метаданные обрабатываются</td></tr>
+<tr><td scope="row">Management Navigator</td><td>Базы данных и/или таблицы
+</td><td>SQL</td><td>SQL</td><td>Подробные операции по базе данных и таблице,
+включает контроль над тем, как данные обрабатываются, могут быть
+запланированным и инкрементным, включает метаданные, использует
+<a href="#wb-mysql-enterprise-backup">MySQL Enterprise Backup</a>
+(commercial)</td></tr></tbody></table><br class="table-break">
+
+<h3><a name="wb-admin-export-import-table"></a>
+6.5.1. Мастер экспорта и импорта данных</h3>
+<p>Этот мастер поддерживает импорт и экспорт, используя CSV и файлы JSON, и
+включает несколько параметров конфигурации (сепараторы, выбор столбца, выбор
+кодировки и т.п.). Мастер может быть выполнен для
+местных или отдаленно подключенных серверов MySQL, действие импорта включает
+таблицу, столбец и отображение типа.</p>
+
+<p>Этот мастер только экспортирует/импортирует таблицы, используя формат CSV
+или JSON. Для обзора экспорта данных и вариантов импорта в MySQL Workbench
+см. <a href="#wb-admin-export-import">раздел 6.5</a>.</p>
+
+<p>Мастер доступен из контекстного меню обозревателя объектов, щелкая правой
+кнопкой мыши по таблице и выбирая
+<span class="guimenuitem">Table Data Export Wizard</span> или
+<span class="guimenuitem">Table Data Import Wizard</span>.</p>
+
+<a name="wb-table-data-wizard-menu"></a>
+<p><b>Рис. 6.11. Мастер данных таблицы</b></p>
+<img src="images/wb-table-data-wizard-menu.png" width="458" height="562"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h4><a name="wb-admin-export-import-table-export"></a>
+Мастер экспорта данных таблицы</h4>
+<p>Данные таблицы экспортируются в файл JSON или CSV.
+Следующие данные показывают пример экспорта таблицы
+<span class="emphasis"><em>sakila.actor</em></span> в файл CSV.</p>
+
+<a name="wb-table-data-export-source"></a>
+<p><b>Рис. 6.12. Экспорт данных таблицы</b></p>
+<img src="images/wb-table-data-export-source.png" width="802" height="600"
+alt="Select data for export."><br class="figure-break">
+
+<a name="wb-table-data-export-configuration"></a>
+<p><b>Рис. 6.13. Экспорт данных таблицы: настройка CSV</b></p>
+<img src="images/wb-table-data-export-csv-configuration.png" width="803"
+height="600" alt="Select output file location."><br class="figure-break">
+
+<a name="wb-table-data-export-results"></a>
+<p><b>Рис. 6.14. Экспорт данных таблицы: результаты</b></p>
+<img src="images/wb-table-data-export-results.png" width="803" height="600"
+alt="Export data."><br class="figure-break">
+
+<h4><a name="wb-admin-export-import-table-import"></a>
+Мастер импорта данных</h4>
+<p>Вы можете импортировать данные о таблице из файла JSON или CSV.
+Следующие данные показывают пример ряда импорта таблицы
+<span class="emphasis"><em>sakila.actor</em></span> из файла CSV.</p>
+
+<a name="wb-table-data-import-csv-source"></a>
+<p><b>Рис. 6.15. Импорт данных: источник CSV </b></p>
+<img src="images/wb-table-data-import-csv-source.png" width="800"
+height="600" alt="Select file to import."><br class="figure-break">
+
+<a name="wb-table-data-import-destination"></a>
+<p><b>Рис. 6.16. Импорт данных: целевая таблица</b></p>
+<img src="images/wb-table-data-import-destination.png" width="800"
+height="600" alt="Select destination."><br class="figure-break">
+
+<a name="wb-table-data-import-csv-configuration"></a>
+<p><b>Рис. 6.17. Импорт данных: настройка CSV</b></p>
+<img src="images/wb-table-data-import-csv-configuration.png" width="800"
+height="755" alt="Configure import settings."><br class="figure-break">
+
+<p>Поле <span class="guilabel">Encoding</span> должна соответствовать
+вашему файлу CSV.</p>
+<a name="wb-table-data-import-results"></a>
+<p><b>Рис. 6.18. Импорт данных: результат</b></p>
+<img src="images/wb-table-data-import-results.png" width="800" height="755"
+alt="Import data."><br class="figure-break">
+
+<h3><a name="wb-admin-export-import-management"></a>
+6.5.2. Мастер экспорта и импорта данных SQL</h3>
+<p>Используйте этого мастера, чтобы экспортировать или импортировать SQL,
+произведенный из MySQL Workbench или
+<span class="command"><strong>mysqldump</strong></span>.</p>
+
+<p>Получите доступ к мастеру из области Navigator или выбрав из главного меню
+<span class="guimenu">Server</span>, затем
+<span class="guimenuitem">Data Import</span> или
+<span class="guimenuitem">Data Export</span>.</p>
+
+<p>Этот мастер экспортирует/импортирует только формат MySQL SQL.
+Для обзора вариантов экспорта и импорта данных в MySQL Workbench см.
+<a href="#wb-admin-export-import">раздел 6.5</a>.
+
+<h4><a name="wb-mysql-connections-navigator-management-data-export"></a>
+Экспорт данных</h4>
+<p>Вкладка позволяет вам экспортировать свои данные MySQL.
+Выберите каждую схему, которую вы хотите экспортировать, произвольно можно
+выбрать определенные объекты/таблицы схемы из каждой схемы и произведите
+экспорт. Параметры конфигурации включают экспорт в папку проекта или
+отдельный файл SQL, произвольно можно пропустить данные таблицы или
+сохранить события и хранимые подпрограммы.</p>
+
+<p>Альтернативно используйте <a href="#wb-develop-sql-editor-export">
+Export a Result Set</a>, чтобы экспортировать определенный набор результатов
+в редакторе SQL к другому формату, такому как CSV, JSON, HTML и XML.</p>
+
+<p>Выберите объекты схемы, чтобы экспортировать и затем формировать связанные
+опции. Рисунок показывает базу данных
+<code class="literal">sakila</code>, готовую к экспорту.</p>
+<p>Нажмите <span class="guibutton">Refresh</span>, чтобы
+загрузить текущие объекты.</p>
+
+<a name="wb-mysql-connections-navigator-data-export-object"></a>
+<p><b>Рис. 6.19. Navigator Administration: Data Export: Object Selection</b>
+</p><img src="images/wb-navigator-data-export-object.png" width="800"
+height="662" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Произвольно откройте вкладку
+<span class="guibutton">Advanced Options</span>, которая позволяет вам
+настроить экспортную операцию. Следующие данные показывают пример, который
+добавляет блокировки таблицы, использование replace вместо insert,
+указывает идентификаторы со знаками обратной галочки и так далее.</p>
+
+<a name="wb-mysql-connections-navigator-data-export-advanced"></a>
+<p><b>Рис. 6.20. Navigator Administration: Data Export: Advanced Options</b>
+</p><img src="images/wb-navigator-data-export-advanced.png" width="800"
+height="828" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Нажмите <span class="guibutton">Start Export</span>, чтобы начать
+экспортный процесс. Как показывает рисунок ниже, информация о статусе
+указывает, когда экспорт закончен.</p>
+
+<a name="wb-mysql-connections-navigator-data-export-progress"></a>
+<p><b>Рис. 6.21. Navigator Administration: Data Export: процесс экспорта</b>
+</p><img src="images/wb-navigator-data-export-progress.png" width="800"
+height="662" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Эта функциональность использует
+<span class="command"><strong>mysqldump</strong></span>.
+
+<h4><a name="wb-mysql-connections-navigator-management-data-import-restore">
+</a>Импорт или восстановление данных</h4>
+<p>Восстановите экспортируемые данные из операции <span class="guilabel">Data
+Export</span> или из других экспортируемых данных из команды
+<span class="command"><strong>mysqldump</strong></span>.</p>
+
+<p>Выберите папку проекта или отдельный файл SQL, выберите схему, в которую
+данные будут импортированы, или выберите <span class="guibutton">New</span>,
+чтобы определить новую схему. Следующие данные показывают пример импорта
+из папки проекта.</p>
+
+<a name="wb-mysql-connections-navigator-data-import-from-disk"></a>
+<p><b>Рис. 6.22. Navigator Administration: Data Import: импорт с диска</b>
+<img src="images/wb-navigator-data-import-from-disk.png" width="756"
+height="504" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Можно выбрать только определенные объекты данных (таблицы), чтобы
+импортировать, если операция экспорта данных использовала папки проекта
+вместо отдельного файла SQL.</p>
+
+<p>Нажмите <span class="guibutton">Start Import</span>, чтобы начать процесс
+импорта. Используйте вкладку <span class="guilabel">Import Progress</span>,
+чтобы контролировать прогресс. Информация о статусе указывает, когда импорт
+закончен и показывает журнал.</p>
+
+<h3><a name="wb-admin-export-import-results"></a>6.5.3.
+Экспорт и импорт данных результатов</h3>
+<p>Экспорт или импорт данных непосредственно из или в набор результатов.
+
+<h4><a name="wb-develop-sql-editor-export"></a>
+Экспорт набора результатов</h4>
+<p>Набор результатов в визуальном редакторе SQL может быть экспортирован в
+форматы общего файла включая CSV, JSON, HTML и XML.
+Следующий рисунок демонстрирует выбор JSON как тип экспорта из
+диалога Export Resultset.</p>
+
+<p>Этот мастер экспортирует/импортирует только данные из набора результатов.
+Для обзора вариантов экспорта и импорта данных в MySQL Workbench
+см. <a href="#wb-admin-export-import">раздел 6.5</a>.</p>
+
+<a name="wb-develop-sql-editor-table-export-results"></a>
+<p><b>Рис. 6.23. Экспорт набора результатов</b></p>
+<img src="images/wb-develop-export-results.png" width="800" height="490"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h4><a name="wb-develop-sql-editor-import"></a>Импорт в набор результатов
+</h4>
+<p>Записи из файла CSV могут быть импортированы в набор результатов
+визуального редактора SQL.</p>
+
+<p>У набора результатов должен быть уникальный идентификатор строки
+(такой как первичный ключ или уникальный индекс NOT NULL), иначе значения не
+могут быть импортированы, потому что набор результатов будет
+только для чтения.</p>
+
+<p>Альтернативно используйте <a href="#wb-admin-export-import">
+раздел 6.5</a>, чтобы экспортировать большие наборы данных, такие как
+таблицы и базы данных.</p>
+
+<h2><a name="wb-audit-inspector"></a>6.6. MySQL Audit Inspector</h2>
+<p>MySQL Workbench предлагает графический интерфейс Audit Inspector.
+По умолчанию плагин <code class="literal">audit_log</code> отсутствует.</p>
+
+<p>Чтобы активировать плагин <code class="literal">audit_log</code>:</p>
+<ol type="1"><li><p>Нажмите <span class="guilabel">Audit Inspector</span> из
+вкладки <span class="guilabel">Administration</span> в области
+Navigator, чтобы открыть вкладку
+<span class="guilabel">Administration - Audit Inspector</span>.</li>
+
+<li>На вкладке нажмите <span class="guibutton">Install audit_log</span>.
+</p></li></ol>
+<p>После того, как плагин устанавливается, начальный экран выглядит подобным
+рисунку ниже. В этом пункте не перечисляются никакие записи.</p>
+
+<a name="fig-wb-audit-inspector-initial"></a>
+<p><b>Рис. 6.24. Workbench: Audit Inspector</b></p>
+<img src="images/4.png" width="750" height="487"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>Когда вы впервые запускаете <span class="guilabel">Audit Inspector</span>,
+MySQL Workbench должен кэшировать контрольный журнал по исполнительным
+причинам. MySQL Workbench разбирает, индексирует и получает значения
+от зашифрованного кэшированного файла на вашем локальном компьютере.</p>
+
+<p>Создание файла кэша может занять много времени. Если вы нажмете
+<span class="guibutton">Abort</span> во время процесса кэширования,
+MySQL Workbench сохранит результаты, которые уже кэшированы, когда
+вы нажали <span class="guibutton">Abort</span>.
+
+<p>MySQL Workbench вызовет <span class="bold"><strong>sudo</strong></span>,
+если пользователь MySQL Workbench не будет способен прочитать
+файл журнала аудита.</p>
+
+<p>Чтобы произвести файл кэша, нажмите <span class="guibutton">Cache Selected
+Files for Browsing</span>. Пакет устанавливает пароль для зашифрованного
+файла, который будет использоваться, просматривая этот файл.
+После кэширования контрольного журнала, <span class="guilabel">
+Audit Inspector</span> отображает на экране результаты, как показано на
+следующем рисунке. Каждый запись включает ID, timestamp, тип, ID связи,
+пользователя, хост/IP, статус, класс команды и информацию.</p>
+
+<a name="fig-wb-audit-inspector-main"></a>
+<p><b>Рис. 6.25. Workbench: Audit Inspector</b></p>
+<img src="images/5.png" width="753" height="484"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>Поле поиска предлагает критерии сужения показанных событий, включая
+<span class="guimenuitem">Show events of type Fetch</span> и
+<span class="guimenuitem">Show events of type Query</span>,
+по умолчанию <span class="guimenuitem">Show all events</span>.
+Заказные фильтры также доступны.</p>
+
+<p>Нажмите <span class="guibutton">Add Files to Cache</span>
+в любое время, чтобы добавить новые файлы к кэшу, нажмите
+<span class="guibutton">Delete Cache</span>, чтобы удалить файл кэша.</p>
+<p>В следующий раз, когда вы запускаете Audit Inspector, вы будете
+запрошены о пароле, который вы устанавливаете во время начального шага.</p>
+
+<h2><a name="wb-mysql-enterprise-backup"></a>
+6.7. MySQL Enterprise Backup</h2>
+<p>Коммерческие версии MySQL Workbench включают графический интерфейс,
+который позволяет вам использовать функциональность MySQL Enterprise Backup
+(MEB), чтобы сохранить ваши данные MySQL от неожиданной потери.
+Определенные варианты могут измениться, в зависимости от версии MySQL и
+MySQL Workbench. Для получения дополнительной информации посмотрите
+<a href="#wb-mysql-enterprise-backup-general-requirements">раздел
+6.7.1</a>.</p>
+
+<p>Есть две операции резервного копирования MySQL Enterprise, доступные
+из MySQL Workbench:
+<ul><li><p><span class="guilabel">Online Backup</span>:
+Устанавливает резервный профиль, чтобы определить
+<span class="emphasis"><em>что</em></span> должно быть сохранено,
+<span class="emphasis"><em>где</em></span> резервная копия должна быть
+сохранена и <span class="emphasis"><em>когда</em></span> (частота) MySQL
+должен ее сделать. С активным открытым подключением нажмите
+<span class="guimenu">Server</span>, затем
+<span class="guimenuitem">MySQL Enterprise Backup</span>
+из меню, чтобы получить экран Online Backup.</li>
+
+<li><span class="guilabel">Restore</span>: Возвращает сервер MySQL к
+моменту вовремя, как правило, восстанавливая резервную копию, которая была
+создана <span class="guilabel">Online Backup</span> в MySQL Workbench.
+С активным открытым подключением нажмите
+<span class="guimenu">Server</span>, затем <span class="guimenuitem">Backup
+Recovery</span> из меню, чтобы получить экран Recovery.</li></ul>
+
+<p>Конфигурация MySQL Enterprise Backup расположена на сервере MySQL, а не
+локально в MySQL Workbench. Эта информация включает профили резервной копии
+конфигурации MySQL Enterprise Backup, планирование работы, операции
+резервного копирования и данные. Операции резервирования и восстановления
+могут быть намечены к выполнению с (или без) MySQL Workbench.</p>
+
+<p>Для получения информации, сравнивающей различные методы, чтобы
+импортировать и экспортировать данные с использованием MySQL Workbench, см.
+<a href="#wb-admin-export-import">раздел 6.5</a>.</p>
+
+<h3><a name="wb-mysql-enterprise-backup-general-requirements"></a>
+6.7.1. Общие требования</h3>
+<p>MySQL Enterprise Backup (MEB) это особенность MySQL Enterprise, которая
+является отдельной от MySQL Workbench. Для получения дополнительной
+информации о его функциональности см.
+<a href="../../../dev.mysql.com/doc/mysql-enterprise-backup/en" target="_top">
+MySQL Enterprise Backup documentation</a>. MySQL Workbench предоставляет
+интерфейс к MySQL Enterprise Backup, как описано в этом разделе.</p>
+
+<p>В дополнение к установке MySQL Enterprise Backup
+на целевом сервере, также применяются следующие общие требования:
+<ul><li><p>Последняя версия MySQL Enterprise Backup.
+Политика дополнительной поддержки MySQL Enterprise Backup
+состоит в том, чтобы поддержать текущую версию GA MySQL Enterprise Backup
+и основную версию перед ней. Это диктует минимальную версию MySQL Enterprise
+Backup, требуемую MySQL Workbench, которая является основной версией перед
+текущей версией GA.</li>
+
+<li>Задание пароля шифрования требуется, чтобы выполнять резервную копию и
+восстанавление на зашифрованных таблицах (см.
+<a href="#wb-mysql-enterprise-backup-online-backup-jobs-options">
+здесь</a>).</li>
+
+<li>Управление серверами MySQL доступно в Linux и macOS, управление
+локальными серверами MySQL доступно в Microsoft Windows.
+Удаленное управление использует SSH Remote Management.</li>
+
+<li>Подключение mysql с пользователем root.</li>
+<li>Путь конфигурационного файла сервера MySQL должен быть установлен
+правильно для подключения MySQL.</li>
+
+<li>Пользователь, выполняющий MySQL Workbench должен sudo-пользователем
+(Linux и macOS), который в состоянии выполнить MySQL Enterprise Backup.</li>
+<li>Пользователь <span class="command"><strong>sudo</strong></span>
+должен сохранить переменную окружения <code class="literal">HOME</code>,
+выполняя системные команды, что означает добавление следующей записи в файл
+<code class="filename">/etc/sudoers</code> безопасно при помощи команды
+<span class="command"><strong>visudo</strong></span>:</p>
+
+<pre>
+Defaults env_keep +="HOME"
+</pre></li></ul>
+
+<h4><a name="wb-mysql-enterprise-backup-general-requirements-settings"></a>
+Необходимые как условие параметры настройки</h4>
+<p>Чтобы установить следующие предпосылки, нажмите
+<span class="guibutton">Settings</span> с главного экрана
+(Online Backup или Restore):
+
+<ul><li><p>Путь к исполняемому файлу MySQL Enterprise Backup.
+MySQL Enterprise Backup доступен с eDelivery или My Oracle Support (MOS).
+MySQL Workbench пытается определить местонахождение исполняемого файла
+MySQL Enterprise Backup на основе версии сервера MySQL, так что проверьте
+путь и приспособьте его соответственно. Например:</p>
+
+<ul><li><p>Для MySQL 8.0 используйте версию MySQL Enterprise Backup
+с тем же самым номером версии, как у сервера.</li>
+<li>Для MySQL 5.7 используйте MySQL Enterprise Backup 4.1.</li>
+<li>Для MySQL 5.6 используйте MySQL Enterprise Backup 3.12.
+</p></li></ul></li>
+
+<li><p>Путь к <span class="guilabel">Backup Home Directory</span>,
+где резервные профили и данные сохранены. Это может быть создано в
+Workbench из <span class="guibutton">Settings</span>.</li>
+
+<li>Учетная запись MySQL для <span class="guilabel">Backup Process</span>.
+Доступные действия зависят от текущего состояния с вариантами, включая:</p>
+<ul><li><p><span class="guibutton">Create MEB Account</span>:
+Доступный, если пользователь не существует.</li>
+
+<li><span class="guibutton">Change Password</span>: Доступный, если
+пользователь действительно существует.</li>
+
+<li><span class="guibutton">Fix Grants for MEB</span>:
+Доступный, если привилегии пользователя недействительны, изменяет учетную
+запись пользователя, добавляя права <code class="literal">RELOAD</code>,
+<code class="literal">SUPER</code> и
+<code class="literal">REPLICATION CLIENT ON *.*</code>.
+</p></li></ul></li></ul>
+
+<p>Следующие данные показывают пример.</p>
+<a name="fig-wb-meb-online-backup-backup-settings"></a>
+<p><b>Рис. 6.26. Workbench: MySQL Enterprise Backup</b></p>
+<img src="images/wb-meb-online-backup-settings.png" width="750" height="534"
+alt="Content is described in the surrounding text."><br class="figure-break">
+<p>Если какое-либо из требований не выполнено, то ошибка будет произведена,
+пытаясь использовать MySQL Enterprise Backup.
+
+<h4><a name="wb-mysql-enterprise-backup-general-requirements-notes"></a>
+Деинсталлирование Workbench</h4>
+<p>Следующий список примечаний описывает поведение операций резервного
+копирования MySQL Enterprise после того, как вы удалите MySQL Workbench:
+
+<ul><li><p>Деинсталлирование Workbench не удаляет связанные задачи MySQL
+Enterprise Backup. Чтобы остановить запланированное резервное копирование,
+отредактируйте связанные записи "Task Scheduler" в Windows
+или удалите связанные задачи в cron для Linux и macOS.</li>
+
+<li>Деинсталлирование Workbench не удаляет связанный конфигурационный файл
+мастера MySQL Enterprise Backup, конфигурационные файлы, произведенные для
+каждого определенного профиля или резервных копий MySQL.</p></li></ul>
+
+<h3><a name="wb-mysql-enterprise-backup-online-backup"></a>
+6.7.2. Online Backup</h3>
+<p>Этот раздел описывает, как формировать резервный профиль, который
+определяет <span class="emphasis"><em>что</em></span> надо зарезервировать,
+<span class="emphasis"><em>куда</em></span> резервная копия должна быть
+сохранена и <span class="emphasis"><em>насколько часто</em></span>.
+С активным открытым подключением MySQL нажмите
+<span class="guimenu">Server</span>, затем
+<span class="guimenuitem">MySQL Enterprise Backup</span>
+из меню, чтобы получить главный экран Online Backup.</p>
+
+<p>Следующие данные показывают пример главного экрана Online Backup
+с примером полного и частичного задания резервного копирования, формируемого
+для текущего экземпляра MySQL.</p>
+
+<a name="fig-wb-meb-online-backup-backup-main"></a>
+<p><b>Рис. 6.27. Workbench: MySQL Enterprise Backup</b></p>
+<img src="images/wb-online-backup-create.png" width="748" height="530"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h4><a name="wb-mysql-enterprise-backup-online-backup-screen"></a>
+Элементы экрана Online Backup</h4>
+<p>Экран <span class="guilabel">Online Backup</span>
+разделен на три секции:
+
+<ul><li><p><span class="guilabel">Backup Jobs</span>: Используется для
+руководящих заданий резервного копирования для сервера MySQL.
+Задание резервного копирования (профиль) является конфигурационным файлом,
+используемым, чтобы хранить информацию о том, что резервировать, где
+резервная копия сохранена, и (произвольно) когда резервные
+копии будут выполнены.</p>
+
+<p>Щелчок правой кнопкой мыши на задании резервного копирования это
+альтернативный способ получить доступ к доступным действиям, тем, которые
+<span class="guimenuitem">Configure Job</span>,
+<span class="guimenuitem">Delete Job</span> и
+<span class="guimenuitem">Execute Backup</span>.
+Щелчок правой кнопкой мыши также предлагает две дополнительных опции:</p>
+
+<ul><li><p><span class="guimenu">Execute Backup to Image File</span>:
+Сохраняет резервную копию в единственный файл и спрашивает имя файла.</li>
+<li><span class="guimenu">Copy Backup Command to Clipboard</span>:
+Производит команду для выполнения резервной копии и копирует ее в буфер
+обмена. Вы могли бы выполнить эту команду в оболочке или терминале, подобно:
+</p>
+
+<pre>
+/bin/mysqlbackup --defaults-file="/var/lib/meb/foo.cnf" \
+                 --show-progress=stdout backup --with-timestamp
+</pre></li></ul></li>
+
+<li><p><span class="guilabel">Backup Job Details</span>:
+Информация о состоянии определенного (выбранного) задания резервного
+копирования. Это включает информацию от страницы
+<span class="guibutton">Settings</span> и информацию, определенную для
+выбранной резервной копии.</li>
+
+<li><span class="guilabel">Recent Activity</span>: Историческая информация об
+операциях резервного копирования, выполненных на сервере.
+Смотрите журнал резервного копирования, щелкнув правой кнопкой мыши по записи
+и выберите <code class="literal">View Backup Log</code>.</li></ul>
+<p>Диалог прогресса произведен для операции резервного копирования.
+
+<h4><a name="wb-mysql-enterprise-backup-online-backup-jobs">
+Задания резервного копирования</a></h4>
+<p>Следующая информация относится к операции
+<span class="guibutton">New Job</span>.
+<span class="guibutton">Configure Job</span>
+используется, чтобы изменить существующие задания.</p>
+
+<p><span class="guilabel">Backup Profile Name</span> и его связанное поле
+<span class="guilabel">Comments</span> используются, чтобы определить профиль
+задания резервного копирования. Каждое имя задания резервного копирования
+перечисляется на главном экране. Экран планирования
+<span class="guibutton">New Job</span>
+разделяет конфигурационную информацию на четыре группы:
+subtabs: <span class="guilabel">Schedule</span>,
+<span class="guilabel">Contents</span>,
+<span class="guilabel">Options</span> и
+<span class="guilabel">Advanced</span>.</p>
+
+<p><a name="wb-mysql-enterprise-backup-online-backup-jobs-schedule"></a>
+<b>Вкладка Schedule. </b>Подвкладка <span class="guilabel">Schedule</span>
+произвольно устанавливает расписание резервного копирования для полных и для
+инкрементных резервных копий. График использует Windows Tasks Scheduler в
+Microsoft Windows и cron в Linux и macOS. Это намечено, используя
+пользователя операционной системы, который намечает резервную копию, который,
+как правило, является пользователем MySQL.</p>
+
+<p>Полное резервное копирование медленнее, чем инкрементное, которое
+сливается с полным резервным. Общий сценарий должен установить полное
+резервное копирование еженедельно и инкрементное резервное копирование
+ежедневно. Для получения дополнительной информации посмотрите
+<a href="../../../dev.mysql.com/doc/mysql-enterprise-backup/8.0/en/backup-performance.html"
+target="_top">Optimizing Backup Performance</a>.</p>
+
+<p><a name="wb-mysql-enterprise-backup-online-backup-jobs-contents"></a>
+<b>Вкладка Contents. </b>Вкладка <span class="guilabel">Contents</span>
+определяет схемы и таблицы, чтобы резервировать
+и является ли работа полной или частичной резервной копией:
+
+<ul><li><p><code class="literal">Full backup</code>: Все схемы и таблицы
+поддерживаются (см. рисунок).</p>
+<a name="fig-wb-meb-online-backup-configure-full-contents"></a>
+<p><b>Рис. 6.28. Workbench: MySQL Enterprise Backup Configuration: Contents
+для Full Backups</b></p>
+<img src="images/wb-meb-online-backup-configure-contents-full.png"
+width="737" height="470" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li><p><code class="literal">Partial</code>: Выберите схемы и таблицы
+(объекты), которые вы хотите. Выберите <span class="guilabel">Select
+objects to included/excluded</span>, чтобы открыть включение (и исключение)
+таблиц. Для получения дополнительной информации о том, что включать,
+исключать и опциях <span class="guilabel">Transportable Tablespace</span> см.
+<a href="../../../dev.mysql.com/doc/mysql-enterprise-backup/en/backup-partial-options.html"
+target="_top">Partial Backup and Restore Options</a>.</li></ul>
+
+<p><a name="wb-mysql-enterprise-backup-online-backup-jobs-options"></a>
+<b>Вкладка Options. </b>Вкладка <span class="guilabel">Options</span>
+включает параметры настройки, чтобы изменить поведение по умолчанию
+процесса резервного копирования.
+
+<ul><li><p><span class="guilabel">Backup Storage Directory</span>:
+По умолчанию <span class="guilabel">Backup Storage Directory</span>
+сохранен в подкаталоге, используя название <span class="guilabel">Backup
+Profile Name</span> в настройке
+<code class="literal">MySQL Backup Home Directory</code>.</p>
+
+<p>Новый подкаталог создается для каждой резервной копии с ее меткой времени.
+Подкаталог в качестве примера: "2016-02-22_17-49-18", где 17:49:18 это время.
+</p>
+
+<p>Инкрементные резервные копии также сохранены в каталоге
+<span class="guilabel">Backup Storage Directory</span>, но в их собственном
+подкаталоге <code class="filename">inc/</code>. Каждое инкрементное резервное
+копирование также создает свою собственную подпапку с меткой времени в
+<code class="filename">inc/</code>.</li>
+
+<li><span class="guilabel">Compress Backup</span>: Произвольно сжать
+неинкрементные резервные копии InnoDB.</li>
+<li><span class="guilabel">Apply Log after backup</span>: После того, как
+резервная копия закончена, необходима операция
+<a href="../../../dev.mysql.com/doc/mysql-enterprise-backup/8.0/en/backup-commands-update.html#option_meb_apply-log"
+target="_top"><code>apply-log</code></a> прежде, чем она сможет быть
+закончена. Это может быть сделано после резервной копии перед
+восстановлением, или в любое другое время. Отключено по умолчанию.</li>
+
+<li><span class="guilabel">Skip Unused Pages</span>: Используйте этот выбор,
+чтобы уменьшить размер резервных копий, удаляя неиспользованные страницы,
+которые, как правило, производятся большим числом удалений.
+Отключено по умолчанию.</p>
+
+<p>Предоставление возможности этого увеличивает время восстановления, потому
+что удаленные неиспользованные страницы должны быть добавлены назад во
+время процесса восстановления.</li>
+
+<li><span class="guilabel">Incremental Backups Using Only the Redo Log
+(incremental-with-redo-log-only)</span>: Определяет, что инкрементное
+резервное копирование должно быть создано, используя только журнал отката.
+</li>
+
+<li><span class="guilabel">Encrypt Password</span>: Устанавливает пароль,
+который требуется, чтобы резервировать и
+восстанавливать зашифрованные таблицы.</li></ul>
+
+<p><a name="wb-mysql-enterprise-backup-online-backup-jobs-advanced"></a>
+<b>Вкладка Advanced. </b>Вкладка <span class="guilabel">Advanced</span>
+позволяет вам настроить дополнительные варианты MySQL Enterprise Backup.
+Эти дополнительные опции не утверждены.</p>
+
+<p>Чтобы восстановить данные из резервных копий см.
+<a href="#wb-mysql-enterprise-backup-backup-recovery">раздел
+6.7.3</a>.</p>
+
+<h3><a name="wb-mysql-enterprise-backup-backup-recovery"></a>
+6.7.3. Восстановление из резервной копии</h3>
+<p>Мастер Backup Recovery используется, чтобы восстановить резервные копии
+MySQL Enterprise Backup. Для получения дополнительной информации о создании
+резервных копий в MySQL Workbench, см.
+<a href="#wb-mysql-enterprise-backup-online-backup">раздел 6.7.2
+</a>.</p>
+
+<p>Мастер Backup Recovery позволяет вам восстановить резервные копии из
+папок, файлов образов и резервных профилей, созданных в
+<a href="#wb-mysql-enterprise-backup-online-backup">разделе 6.7.2
+</a>. Прежде чем можно будет восстановить MySQL с резервной копии на целевой
+сервер, необходимо сначала удалить все файлы в каталоге
+данных того сервера.</p>
+
+<p>С активным открытым подключением MySQL нажмите
+<span class="guimenu">Server</span> и <span class="guimenuitem">Backup
+Recovery</span> из меню, чтобы получить экран Recovery.</p>
+
+<a name="fig-wb-backup-recovery-start"></a><p><b>Рис. 6.29. Workbench:
+Backup Recovery: Start</b></p>
+<img src="images/wb-meb-backup-recovery-start.png" width="744" height="527"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<ul><li><p><span class="bold"><strong>Backup Profile</strong></span>:
+Выберите из доступных профилей MySQL Enterprise Backup
+на вашей системе.</li>
+
+<li><span class="bold"><strong>Backup Image File</strong></span>:
+Открывает файловый браузер системы, выберите файл образа резервной
+копии, чтобы восстановить.</li>
+
+<li><span class="bold"><strong>Backup Folder</strong></span>:
+Открывает файловый браузер системы, выберите резервную
+папку, чтобы восстановить.</li></ul>
+
+<p>На рисунке ниже сессия в качестве примера восстанавливает профиль полного
+резервного копирования, который был создан MySQL Workbench Online Backup.
+После выбора профиля "FullBackup", который мы создали ранее, используйте
+следующую страницу, чтобы просмотреть предстоящее восстановление.</p>
+
+<a name="fig-wb-backup-recovery-profile"></a><p><b>Рис. 6.30. Workbench:
+Backup Recovery: Профиль</b></p>
+<img src="images/wb-meb-backup-recovery-main.png" width="738" height="665"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>Произвольно, нажмите <span class="guibutton">View Backup Content</span>,
+чтобы рассмотреть содержание резервной копии для восстановления.</p>
+<a name="fig-wb-backup-recovery-table-view"></a>
+<p><b>Рис. 6.31. Workbench: Backup Recovery: просмотр содержимолго</b></p>
+<img src="images/wb-meb-backup-recovery-table-view.png" width="800"
+height="600" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p><span class="guilabel">Show System</span> переключает представление
+внутренних схем, например, performance_schema, и таблиц mysql.</p>
+<p>Нажатие <span class="guibutton">Next</span> откроет мастер
+<span class="guilabel">Restore</span>. Следующий пример использует
+<span class="guibutton">Restore</span>, чтобы выполнить процесс
+восстановления, как показано на рисунке.</p>
+
+<a name="fig-wb-backup-recovery-restore"></a>
+<p><b>Рис. 6.32. Workbench: Backup Recovery: Восстановление</b></p>
+<img src="images/6.png" width="736" height="587"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h2><a name="wb-mysql-firewall"></a>6.8. MySQL Enterprise Firewall</h2>
+<p>MySQL Workbench предоставляет графический интерфейс к MySQL Enterprise
+Firewall. Для получения дополнительной информации о MySQL Enterprise
+Firewall, см. <a href="../../../https@dev.mysql.com/doc/en/firewall.html"
+target="_top">https://dev.mysql.com/doc/en/firewall.html</a>.
+
+<h3><a name="wb-mysql-firewall-setup"></a>Установка и конфигурация</h3>
+<p>MySQL Workbench может справиться с установкой MySQL Enterprise Firewall
+и конфигурацией, установив (или деинсталлировав), включив (или отключив)
+плагин и включив (или отключив) Firewall Tracer.</p>
+
+<p>Подготовить плагин MySQL Enterprise Firewall:</p>
+<ol type="1"><li><p>Откройте связь с MySQL Enterprise Edition.</li>
+<li>Из области Navigator выберите
+<span class="guilabel">Administration</span>, нажмите
+<span class="guilabel">Firewall</span> (см. MYSQL ENTERPRISE), чтобы
+открыть <span class="guilabel">Administration - Firewall</span>.</p>
+
+<p>Если не установлен MySQL Enterprise Firewall, выберите
+<span class="guibutton">Install Firewall</span>.
+После того, как плагин устанавливается, MySQL Workbench
+показывает три средства управления:
+<span class="guilabel">Installed status</span>,
+<span class="guilabel">Enabled status</span> и
+<span class="guilabel">Tracer status</span>.</p>
+
+<a name="wb-firewall-plugin-startup-configure"></a>
+<p><b>Рис. 6.33. MySQL Enterprise Firewall</b></p>
+<img src="images/wb-firewall-plugin-startup-configure.png"
+width="739" height="513" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li><p>Нажмите <span class="guibutton">Enable Firewall</span>, чтобы сделать
+плагин полностью готовым к эксплуатации, и произвольно нажмите
+<span class="guibutton">Enable Firewall Tracer</span> для включения
+трассировки. Можно изменить средства управления следующим образом:
+
+<ul><li><p><span class="guilabel">Install</span>: Выполняет запросы, чтобы
+установить новые таблицы MySQL Enterprise Firewall и хранимые процедуры
+для переключения статуса. <span class="guilabel">Uninstall</span> полностью
+отменяет эти эффекты, а также удаляет зарегистрированные правила.</li>
+
+<li><span class="guilabel">Enable</span>: Выполняет <span class="emphasis">
+<em>SET GLOBAL mysql_firewall_mode = ON;</em></span> на подключенном сервере
+MySQL. <span class="guilabel">Disable</span> ставит OFF вместо ON.</p>
+
+<p>Это операция во время выполнения. Формируйте конфигурационный файл сервера
+MySQL, чтобы позволить MySQL Enterprise Firewall при запуске.
+Определенно выберите опцию <code class="literal">mysql_firewall_mode</code>
+в параметре конфигурации, чтобы позволить его после перезапуска.
+Можно отредактировать конфигурационный файл MySQL внешним редактором или
+использовать MySQL Workbench.</p></li></ul></li></ol>
+
+<h3><a name="wb-mysql-firewall-rules"></a>Правила брандмауэра и информация
+</h3>
+<p>Вкладка <span class="guilabel">Firewall Rules</span> перечисляет активные
+и зарегистрированные правила для данного пользователя, состояние каждого
+правила и включает варианты добавить, удалить и сохранить правила.
+Следующие данные показывают действия, доступные во вкладке
+<span class="guilabel">Firewall Rules</span>.
+
+<ul><li><p><span class="guilabel">State</span> (режим): Варианты включают
+<span class="bold"><strong>OFF</strong></span> (отключает брандмауэр),
+<span class="bold"><strong>PROTECTING</strong></span> (позволяет белый
+список), <span class="bold"><strong>RECORDING</strong></span>
+(учебный режим) и <span class="bold"><strong>RESET</strong></span>
+(удаляет правила). Для получения дополнительной информации о значении этих
+см. <a href="../../../dev.mysql.com/doc/refman/8.0/en/firewall-reference.html#firewall-routines"
+target="_top">MySQL Enterprise Firewall Procedures and Functions</a>.</li>
+
+<li>Административные действия включают <span class="guibutton">Add</span> и
+<span class="guibutton">Delete</span> для отдельных правил и
+<span class="guibutton">Clear</span>, чтобы очистить (удалить) все правила.
+<span class="guibutton">Add From File</span> запрашивает текстовый файл
+правил брандмауэра (по умолчанию расширение
+<code class="filename">.fwr</code>), который содержит одно правило на
+строку, а <span class="guibutton">Save To File</span>
+сохраняет текущие правила.</li>
+
+<li><span class="emphasis"><em>Active rules</em></span> используются в
+режиме PROTECTIVE, <span class="emphasis"><em>Rules being recorded</em>
+</span> являются записями в состоянии RECORDED. Переключение от RECORDING в
+PROTECTING копирует зарегистрированные правила в
+активное подмножество правил.</p></li></ul>
+
+<p>MySQL Workbench выполняет запросы, получает переменные и выполняет много
+проверок. Поэтому MySQL Workbench более полезен как административное средство
+для MySQL Enterprise Firewall, чем инструмент, чтобы сделать запись правил.
+Например, правила RECORDING в MySQL Workbench сделают запись фоновых
+операций, выполненных MySQL Workbench для пользователя MySQL.
+Кроме того, использование MySQL Workbench пользователем MySQL в режиме
+PROTECTING попытается выполнить операции, к которым типичный пользователь
+MySQL не имел бы доступа.</p>
+
+<a name="wb-firewall-users-firewall-rules"></a>
+<p><b>Рис. 6.34. Правила MySQL Enterprise Firewall</b></p>
+<img src="images/wb-firewall-users-firewall-rules.png" width="800"
+height="525" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h2><a name="wbcopytables"></a>6.9. Утилита wbcopytables</h2>
+<p><a href="#wbcopytables"><span class="command"><strong>
+wbcopytables</strong></span></a> это утилита командной строки, включенная в
+MySQL Workbench, которая позволяет вам скопировать данные таблицы из
+исходного сервера базы данных в MySQL. Это используется мастером
+MySQL Workbench Migration, чтобы скопировать данные после того, как схема
+будет перенесена и создаваться в целевом сервере MySQL.</p>
+
+<p><a href="#wbcopytables"><span class="command"><strong>
+wbcopytables</strong></span></a> может соединиться с исходной базой данных,
+используя ODBC, Python DBAPI или родную библиотеку клиента MySQL.</p>
+
+<p>Копия выполняет запрос <code class="literal">SELECT</code>
+на исходной базе данных и затем <code class="literal">INSERT</code>, чтобы
+вставить полученные строки в целевой сервер MySQL.</p>
+
+<a name="wbcopytables-file-location"></a>
+<p><b>Таблица 6.2. Расположение файла (по умолчанию)</b></p>
+<table>
+<thead><tr><th scope="col">Операционная система</th>
+<th scope="col">Расположение</th></tr></thead>
+<tbody><tr><td scope="row">Linux</td>
+<td scope="row"><code class="filename">/usr/bin/wbcopytables</code></td></tr>
+<tr><td scope="row">macOS</td>
+<td scope="row"><code class="filename">
+/Applications/MySQLWorkbench.app/Contents/MacOS/wbcopytables</code></td></tr>
+<tr><td scope="row">Windows</td>
+<td scope="row"><code class="filename">C:\Program Files\MySQL\MySQL Workbench
+8.0\wbcopytables.exe</code></td></tr></tbody></table><br class="table-break">
+
+<h3><a name="wbcopytables-connection-parameters"></a>Параметры связи</h3>
+<p>Опциональные параметры для входных и выходных связей:
+<ul><li><p><code>--odbc-source=</code><em><code>ODBC_connection_string</code>
+</em>: Синтаксис строки подключения ODBC использует стандартный синтаксис
+ODBC. Можно также использовать имя источника данных ODBC (DSN).</li>
+
+<li><code>--mysql-source=</code><em><code>MySQL_connection_string</code></em>:
+Используйте для источников MySQL (делая миграцию с MySQL на другой MySQL или
+копию). Это использует тот же самый синтаксис, как MySQL Utilities:
+
+<ul><li><p>Для связи по TCP/IP:
+<em><code>username[:password]</code></em>@<em><code>host:port</code></em></li>
+<li>Для местных сокетных соединений:
+<em><code>username[:password]</code></em>@::<em><code>socket_path</code></em>
+</p></li></ul></li>
+
+<li><p><code>--source-password</code>: Передает пароль для источника данных.
+</li>
+<li><code>--target=</code><em><code>MySQL_connection_string</code></em>:
+Определяет целевую связь.</li>
+<li><code>--passwords-from-stdin</code>: Передает пароли через STDIN.
+Входные и выходные пароли должны быть отделены символом табуляции.</li></ul>
+
+<p>Можно использовать определенные опции источника данных ODBC из источника
+RDBMS, чтобы определить количество строк, возвращаемых за один раз
+для запроса <code class="literal">SELECT</code>.</p>
+
+<p>Опциональные параметры для входных и выходных связей, которые поддерживают
+туннелирование SSH, чтобы скопировать данные:
+<ul><li><p><code>--source-ssh-port=</code><em><code>ssh port</code></em></li>
+<li><code>--source-ssh-host=</code><em><code>ssh host</code></em></li>
+<li><code>--source-ssh-user=</code><em><code>ssh user</code></em></li>
+<li><code>--source-ssh-password=</code><em><code>ssh password</code></em></li>
+<li><code>--target-ssh-port=</code><em><code>ssh port</code></em></li>
+<li><code>--target-ssh-host=</code><em><code>ssh host</code></em></li>
+<li><code>--target-ssh-user=</code><em><code>ssh user</code></em></li>
+<li><code>--target-ssh-password=</code><em><code>ssh password</code></em>
+</p></li></ul>
+
+<h3><a name="wbcopytables-connection-table-specs"></a>Спецификация таблицы
+</h3>
+<p>Одна или более таблиц могут быть определены в командной строке для
+операции по копированию. Есть два типа копии:
+<ul><li><p>Полная копия таблицы: <code>--table</code></li>
+<li>Копия диапазона: <code>--table-range</code></li></ul>
+
+<p>Оба типа копии требуют ряд общих аргументов:
+<ul><li><p><span class="bold"><strong>Source schema</strong></span>:
+схема или каталог, которому принадлежит таблица. Если цитирование требуется,
+оно должно быть сделано, используя синтаксис из источника RDBMS.
+Например, SQL Server использует
+<span class="emphasis"><em>[square_brackets]</em></span>.</li>
+
+<li><span class="bold"><strong>Source table</strong></span>:
+таблица, чтобы скопировать. Если источник использует название схемы в
+дополнение к каталогу, схема и таблица должны быть определены здесь и
+отделены точкой. Например, <span class="emphasis"><em>[dbo].[mytable]
+</em></span>.</li>
+
+<li><span class="bold"><strong>Target schema</strong></span>:
+название схемы MySQL. Если цитирование необходимо, оно должно использовать
+синтаксис обратной галочки MySQL. Например,
+<code class="literal">`</code>sakila<code class="literal">`</code>.</li>
+
+<li><span class="bold"><strong>Target table</strong></span>:
+название таблицы MySQL.</li>
+<li><span class="bold"><strong>Select expression</strong></span>:
+список полей для <code class="literal">SELECT</code>.
+Это будет вставлено дословно в <code class="literal">SELECT</code>.</p>
+<p>Проявите осмотрительность, поскольку это выражение
+копируется непосредственно в <code class="literal">SELECT</code>.</li></ul>
+
+<p>Для избранного выражения, если входная и выходная таблицы
+имеют те же самые поля в том же самом порядке
+и используют совместимые типы, можно просто использовать здесь
+<code class="literal">*</code>, который построит запрос как
+"<span class="emphasis"><em>SELECT * FROM [dbo].[mytable]</em></span>".
+В противном случае можно определить поля, как в
+<code class="literal">SELECT</code>, которые отделяются
+запятой (,) отделенной и с надлежащими экранировкой/цитированием,
+определенными для исходной RDBMS. Можно также определить
+преобразования данных, которые поддерживает исходная RDBMS. Например:</p>
+
+<pre>
+[<em><code>client_id</code></em>], [<em><code>name</code></em>], [<em><code>address</code></em>], AsText([<em><code>location</code></em>])
+</pre>
+
+<p>Поскольку каждый выбор должен интерпретироваться как единственный выбор
+командой <a href="#wbcopytables"><span class="command"><strong>
+wbcopytables</strong></span></a>, следует обеспечить OS-специфичное
+цитирование каждый раз, когда необходимо. Обычно цитирование ваших значений
+параметров с 'единственными' или &quot;двойными&quot; кавычками достаточно.
+Это дополнение к любому цитированию, специфичному для базы данных,
+которую вы используете.
+
+<h4><a name="wbcopytables-full-table-copy"></a>Полная копия таблицы</h4>
+<p>Этот аргумент выполняет полный <code class="literal">SELECT</code> для
+исходной таблицы, получает записи и затем вставляет их в целевую таблицу.</p>
+
+<p>Нет никаких дополнительных требуемых аргументов.</p>
+<p>Синтаксис <code>--table</code> такой:</p>
+<pre>
+--table <em><code>Source_Schema Source_Table Target_Schema Target_Table Select_Expression</code></em>
+</pre>
+
+<h4><a name="wbcopytables-range-table-copy"></a>Копия диапазона</h4>
+<p>Этот аргумент выполняет <code class="literal">SELECT</code>
+на исходной таблице для указанного диапазона. У таблицы должно быть числовой
+<code class="literal">UNIQUE NOT NULL</code> или
+<code class="literal">PRIMARY KEY</code>, который используется, чтобы создать
+выражение <code class="literal">WHERE</code> для диапазона.</p>
+
+<p>Синтаксис <code>--table-range</code> такой:</p>
+<pre>
+--table-range <em><code>Source_Schema Source_Table Target_Schema Target_Table Select_Expression Source_Key Range_Start Range_End</code></em>
+</pre>
+
+<p>Произведенное выражение выглядит примерно так:</p>
+<pre>
+<em><code>key_column</code></em> &gt;= <em><code>range_start</code></em> AND
+<em><code>key_column</code></em> &lt;= <em><code>range_end</code></em>
+</pre>
+
+<p>Если вы определяете <span class="bold"><strong>-1</strong></span>
+для Range_End, то выражение:</p>
+<pre>
+<em><code>key_column</code></em> &gt;= <em><code>range_start</code></em>
+</pre>
+
+<h3><a name="wbcopytables-other-options"></a>Другие варианты</h3>
+<ul><li><p><code>--thread-count</code>=<em><code>Number</code></em>:
+Если вы копируете больше чем одну таблицу, можно использовать этот выбор,
+чтобы разделить таблицы на несколько потоков. Нет никакой поддержки деления
+единственной таблицы на несколько потоков.</li>
+
+<li><code>--count-only</code>: Только выполняет
+<code class="literal">COUNT(*)</code> для
+<code class="literal">SELECT</code>, произведенного опцией
+<code>--table</code>. Целевая схема и таблица могут быть
+опущены в этом случае.</li>
+<li><code>--truncate-target</code>: Выполняет TRUNCATE TABLE
+на каждой целевой таблице, которая копируется.</p></li></ul>
+
+<h3><a name="wbcopytables-trigger-handling"></a>Работа с триггерами</h3>
+<p>Поскольку нет никакого способа временно отключить триггеры
+в MySQL, и они могут затронуть процесс копирования, MySQL Workbench
+сделает копию и исключит все триггеры из целевой базы данных MySQL перед
+запуском процесса копии, затем эти триггеры будут восстановлены после того,
+как копия заканчивается. Триггеры поддерживаются в целевой схеме в таблице
+<code class="literal">wb_tmp_triggers</code>.
+
+<ul><li><p><code>--disable-triggers-on</code>=<em><code>Schema_Name</code>
+</em>: Выполняет резервную копию и процесс DROP для всех
+триггеров в указанной схеме.</li>
+
+<li><code>--reenable-triggers-on</code>=<em><code>Schema_Name</code></em>:
+Восстанавливает триггеры, ранее паеремещенные в таблицу
+<code class="literal">wb_tmp_triggers</code>.</li>
+<li><code>--dont-disable-triggers</code>: Обходит шаг отключения триггеров.
+</p></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

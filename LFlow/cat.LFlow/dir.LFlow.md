@@ -1,0 +1,14 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\LFlow\cat.LFlow\dir.LFlow.md">LFlow</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\LFlow\Reade.md">Reade.md</a>
+        - *% Principle of Life
+        - *# Life Flow
+        - *## helix - спираль
+        - *## segment - сегмент
+        - *## milestone - мильный камень
+        - *## stage - стадия 
+        - *# _WTS
+        - *### WalkToSee
+        - *# _WOS
+        - *### WriteOnStone
+        - *# _BPF 
+        - *### BuildPathFuture

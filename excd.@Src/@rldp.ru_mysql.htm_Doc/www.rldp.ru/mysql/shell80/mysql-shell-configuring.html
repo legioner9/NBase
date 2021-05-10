@@ -1,0 +1,499 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 5. Настройка MySQL Shell</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="mysql-shell-configuring"></a>Глава 5. Настройка MySQL Shell</h1>
+<p>Эта секция описывает команды, которые настраивают MySQL Shell
+из интерактивного редактора кода. Для получения информации об опциях
+<a href="mysqlsh-command.html#mysqlsh"><span class="command"><strong>
+mysqlsh</strong></span></a> см. <a href="mysqlsh-command.html">Приложение A
+</a>.</p>
+
+<h2><a name="mysql-shell-commands"></a>5.1. Команды MySQL Shell</h2>
+<p>MySQL Shell обеспечивает команды, которые позволяют вам изменить
+среду выполнения редактора кода, например настроить активный язык
+программирования или связь с MySQL Server. В следующей таблице перечислены
+команды, которые доступны независимо от в настоящее время выбранного языка.
+Поскольку команды должны быть доступны независимо от
+<span class="emphasis"><em>режима выполнения</em></span>,
+они начинаются с escape-символа <code class="literal">\</code>.</p>
+
+<table>
+<thead><tr><th scope="col">Команда</th><th scope="col">Псевдоним</th>
+<th scope="col">Описание</th></tr></thead><tbody><tr>
+<td scope="row"><p><code class="literal">\help</code></p></td>
+<td><p><code class="literal">\h</code> или <code class="literal">\?</code>
+</p></td>
+<td><p>Помощь о MySQL Shell или онлайн-поиск помощи.</p></td></tr>
+<tr><td scope="row"><p><code class="literal">\quit</code></p></td>
+<td><p><code class="literal">\q</code> или <code class="literal">\exit</code>
+</p></td>
+<td><p>Выход из MySQL Shell.</p></td></tr>
+<tr><td scope="row"><p><code class="literal">\</code></p></td>
+<td></td>
+<td><p>В режиме SQL начинает многострочный режим. Код кэшируется и выполнен,
+когда пустая строка введена.</p></td></tr>
+<tr><td scope="row"><p><code class="literal">\status</code></p></td>
+<td><p><code class="literal">\s</code></p></td>
+<td><p>Покажите текущий статус MySQL Shell.</p></td></tr>
+<tr><td scope="row"><p><code class="literal">\js</code></p></td>
+<td></td><td><p>Переключить режим выполнения на JavaScript.</p></td></tr>
+<tr><td scope="row"><p><code class="literal">\py</code></p></td>
+<td></td><td><p>Переключить режим выполнения на Python.</p></td></tr>
+<tr><td scope="row"><p><code class="literal">\sql</code></p></td>
+<td></td><td><p>Переключить режим выполнения на SQL.</p></td></tr>
+<tr><td scope="row"><p><code class="literal">\connect</code></p></td>
+<td><p><code class="literal">\c</code></p></td>
+<td><p>Соединиться с MySQL Server.</p></td></tr>
+<tr><td scope="row"><p><code class="literal">\reconnect</code></p></td>
+<td></td><td><p>Пересоединиться с MySQL Server.</p></td></tr>
+<tr><td scope="row"><p><code class="literal">\use</code></p></td>
+<td><p><code class="literal">\u</code></p></td>
+<td><p>Определите схему, чтобы использовать.</p></td></tr>
+<tr><td scope="row"><p><code class="literal">\source</code></p></td>
+<td><p><code class="literal">\.</code></p></td>
+<td><p>Выполните файл скрипта, используя активный язык.</p></td></tr>
+<tr><td scope="row"><p><code class="literal">\warnings</code></p></td>
+<td><p><code class="literal">\W</code></p></td>
+<td><p>Покажите любые предупреждения, произведенные запросом.</p></td></tr>
+<tr><td scope="row"><p><code class="literal">\nowarnings</code></p></td>
+<td><p><code class="literal">\w</code></p></td>
+<td><p>Не показывать предупреждения, произведенные запросом.</p></td></tr>
+<tr><td scope="row"><p><code class="literal">\history</code></p></td>
+<td></td><td><p>Представление и история редактирования команд.</p></td></tr>
+<tr><td scope="row"><p><code class="literal">\rehash</code></p></td>
+<td></td><td><p>Вручную обновите кэш имен автоматического заполнения.</p>
+</td></tr>
+<tr><td scope="row"><p><code class="literal">\option</code></p></td>
+<td></td><td><p>Запросить и изменить параметры конфигурации MySQL Shell.
+</p></td></tr>
+<tr><td scope="row"><p><code class="literal">\show</code></p></td>
+<td></td><td><p>Управляйте указанным отчетом, используя
+предоставленные возможности и аргументы.</p></td></tr>
+<tr><td scope="row"><p><code class="literal">\watch</code></p></td>
+<td></td><td><p>Управляйте указанным отчетом, используя предоставленные
+возможности и аргументы и обновите результаты равномерно.</p></td>
+</tr></tbody></table>
+
+<h3><a name="idm140213723574800"></a>Команда Help</h3><p>
+Команда <code class="literal">\help</code> может использоваться с или без
+параметра. Когда используется без параметра, общее сообщение помощи
+печатается, включая информацию о доступных командах MySQL Shell, глобальных
+объектах и главных категориях помощи.</p>
+
+<p>Когда используется с параметром, параметр используется, чтобы искать
+доступную помощь на основе режима, в котором в настоящее время работает
+MySQL Shell. Параметр может быть словом, командой, API-функцией или частью
+SQL-оператора. Следующие категории существуют:</p>
+
+<ul><li><p><code class="literal">AdminAPI</code> глобальный объект
+<code class="literal">dba</code> InnoDB cluster AdminAPI.</li>
+<li><code class="literal">Shell Commands</code> предоставляет подробную
+информацию о доступных встроенных командах MySQL Shell.</li>
+
+<li><code class="literal">ShellAPI</code> содержит информацию о
+глобальных объектах <code class="literal">shell</code> и
+<code class="literal">util</code>, а также модуле
+<code class="literal">mysql</code>, который позволяет выполнить SQL
+на MySQL Server.</li>
+
+<li><code class="literal">SQL Syntax</code> точка входа, чтобы
+получить помощь о синтаксисе SQL-операторов.</li>
+<li><code class="literal">X DevAPI</code> детали по модулю
+<code class="literal">mysqlx</code>, а также возможности X DevAPI, которые
+позволяют работать с MySQL как с Document Store.</li></ul>
+
+<p>Чтобы искать помощь по теме, например API-функция, используют имя функции
+в качестве <em class="replaceable"><code>pattern</code></em>.
+Можно использовать подстановочные символы <code class="literal">?</code>,
+чтобы соответствовать любому отдельному символу, и
+<code class="literal">*</code>, чтобы соответствовать многократным
+знакам в поиске. Подстановочные символы могут использоваться один или
+несколько раз в образце. Следующие пространства имен могут также
+использоваться, ища помощь:</p>
+
+<ul><li><p><code class="literal">dba</code> для AdminAPI.</li>
+<li><code class="literal">mysqlx</code> для X DevAPI.</li>
+<li><code class="literal">mysql</code> для ShellAPI
+для классического протокола.</li>
+
+<li><code class="literal">shell</code> для прочих классов ShellAPI:
+<code class="literal">Shell</code>, <code class="literal">Sys</code>,
+<code class="literal">Options</code>.</li>
+
+<li><code class="literal">commands</code> для команд MySQL Shell.</li>
+<li><code class="literal">cmdline</code> командного интерфейса
+<a href="mysqlsh-command.html#mysqlsh"><span class="command"><strong>mysqlsh
+</strong></span></a>.</li></ul>
+
+<p>Например, чтобы искать помощь по теме, скомандуйте
+<code class="literal">\help <em class="replaceable"><code>pattern</code></em>
+</code> и:</p>
+
+<ul><li><p>используйте <em class="replaceable"><code>x devapi</code></em>,
+чтобы искать помощь на X DevAPI.</li>
+<li>используйте <em class="replaceable"><code>\c</code></em>,
+чтобы искать помощь по команде MySQL Shell <code class="literal">\connect
+</code>.</li>
+
+<li>используйте <em class="replaceable"><code>Cluster</code></em> или
+<em class="replaceable"><code>dba.Cluster</code></em>, чтобы искать помощь
+по AdminAPI <code class="literal">dba.Cluster()</code>.</li>
+
+<li>используйте <em class="replaceable"><code>Table</code></em> или
+<em class="replaceable"><code>mysqlx.Table</code></em>, чтобы искать помощь
+по классу X DevAPI <code class="literal">Table</code>.</li>
+
+<li>когда MySQL Shell работает в режиме JavaScript, примените
+<em class="replaceable"><code>isView</code></em>,
+<em class="replaceable"><code>Table.isView</code></em> или
+<em class="replaceable"><code>mysqlx.Table.isView</code></em>, чтобы
+искать помощь по функции <code class="literal">isView</code> объекта
+<code class="literal">Table</code>.</li>
+
+<li>когда MySQL Shell работает в режиме Python, примените
+<em class="replaceable"><code>is_view</code></em>,
+<em class="replaceable"><code>Table.is_view</code></em> или
+<em class="replaceable"><code>mysqlx.Table.is_view</code></em>, чтобы
+искать помощь по функции <code class="literal">isView</code> объекта
+<code class="literal">Table</code>.</li>
+
+<li>когда MySQL Shell работает в режиме SQL, если глобальная сессия с
+сервером MySQL существует, показана помощь по SQL. Для обзора используйте
+<em class="replaceable"><code>sql syntax</code></em> как образец поиска.
+</li></ul>
+
+<p>В зависимости от образца поиска, если один или несколько результатов
+могут быть найдены. Если только одна тема помощи содержит образец поиска в
+своем названии, эта тема помощи показана. Если многочисленные названия темы
+соответствуют образцу, но каждое имеет точное совпадение, эта тема помощи
+показывается и сопровождается списком других тем с совпадением
+образца в их названиях. Если никакое точное совпадение не определяется,
+список тем с совпадением образца в их названиях показан. Если список тем
+возвращен, можно выбрать тему, чтобы рассмотреть, из списка, войдя в команду
+снова с расширенным образцом поиска, который соответствует
+названию соответствующей темы.</p>
+
+<h3><a name="idm140213723529024"></a>Команды Connect и Reconnect</h3>
+<p>Команда <code class="literal">\connect</code> используется, чтобы
+соединиться с MySQL Server, используя строку типа URI. См.
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/connecting-using-uri-or-key-value-pairs.html#connecting-using-uri" target="_top">
+Connecting using a URI String</a>.</p>
+
+<p>Например:
+<pre>
+<strong class="userinput"><code>\connect root@localhost:3306</code></strong>
+</pre>
+<p>Если пароль требуется, сервер его запросит явно.</p>
+
+<p>Используйте опцию <code class="literal">--mysqlx</code>
+(<code class="literal">--mx</code>), чтобы создать сессию, используя
+X-протокол, чтобы соединиться с экземпляром сервера MySQL:
+<pre>
+<strong class="userinput"><code>\connect --mysqlx root@localhost:33060</code></strong>
+</pre>
+
+<p>Используйте опцию <code class="literal">--mysql</code>
+(<code class="literal">--mc</code>), чтобы создать ClassicSession,
+позволяя вам использовать протокол MySQL, чтобы выполнить
+SQL непосредственно на сервере. Например:
+<pre>
+<strong class="userinput"><code>\connect --mysql root@localhost:3306</code></strong>
+</pre>
+
+<p>Использование единственной черты с краткими опциями (то есть,
+<code class="literal">-mx</code> и <code class="literal">-mc</code>)
+устарело с версии 8.0.13 MySQL Shell.</p>
+
+<p>Команда <code class="literal">\reconnect</code> определяется без
+любых параметров или вариантов. Если связь с сервером потеряна, можно
+использовать <code class="literal">\reconnect</code>, которая заставляет
+MySQL Shell попробовать несколько попыток повторного соединения за сессию,
+используя существующие параметры связи. Если те попытки неудачны, можно
+установить новую связь, используя команду
+<code class="literal">\connect</code> и определение параметров связи.</p>
+
+<h3><a name="idm140213723513680"></a>Команда Status</h3>
+<p>Команда <code class="literal">\status</code> показывает информацию о
+текущем глобальном соединении. Это включает информацию о сервере, набор
+символов, продолжительности работы и так далее.</p>
+
+<h3><a name="idm140213723511696"></a>Команда Source</h3>
+<p>Команда <code class="literal">\source</code> используется, чтобы
+выполнить код скрипта в данном пути. Например:
+<pre>
+<strong class="userinput"><code>\source /tmp/mydata.sql</code></strong>
+</pre>
+
+<p>Можно выполнить код SQL, JavaScript или Python. Код в файле выполняется,
+используя активный язык, так чтобы обработать код SQL, MySQL Shell должен
+быть в режиме SQL. Поскольку код выполняется, используя активный язык,
+выполняя скрипт на ином языке, чем в настоящее время выбранный язык режима
+выполнения, можно получить неожиданные результаты.</p>
+
+<h3><a name="idm140213723506944"></a>Команда Use</h3>
+<p>Команда <code class="literal">\use</code> позволяет вам выбрать,
+какая схема активна, например:
+<pre>
+<strong class="userinput"><code>\use <em class="replaceable"><code>schema_name</code></em></code></strong>
+</pre>
+
+<p>Команда <code class="literal">\use</code> требует, чтобы глобальная сессия
+разработки была активна. Команда <code class="literal">\use</code> задает
+текущую схему для указанной <em class="replaceable"><code>schema_name</code>
+</em> и обновляет переменную <code class="literal">db</code>
+к объекту, который представляет выбранную схему.</p>
+
+<h3><a name="idm140213723500912"></a>Команда History</h3>
+<p>Команда <code class="literal">\history</code> показывает список команд,
+введенных ранее в MySQL Shell. <code class="literal">\history</code>
+выводит записи истории в порядке, в каком они были выполнены с их номером
+записи истории, который может использоваться с командой
+<code class="literal">\history delete
+<em class="replaceable"><code>entry_number</code></em></code>.</p>
+
+<p>Команда <code class="literal">\history</code>
+предоставляет следующие возможности:</p>
+<ul><li><p><code class="literal">\history save</code>
+сохраняет историю вручную.</li>
+
+<li><code class="literal">\history delete entrynumber</code> удалит отдельную
+запись истории с данным номером.</li>
+<li><code class="literal">\history delete
+<em class="replaceable"><code>firstnumber</code></em>-<em>
+<code>lastnumber</code></em></code> удалит записи истории в диапазоне данных
+номеров. Если <code class="literal"><em class="replaceable"><code>lastnumber
+</code></em></code> после последнего найденного номера записи истории, записи
+истории удалены до и включая последнюю.</li>
+
+<li><code class="literal">\history delete
+<em class="replaceable"><code>number</code></em>-</code>
+удалит записи истории с
+<code class="literal"><em class="replaceable"><code>number</code></em></code>
+до последней включительно.</li>
+
+<li><code class="literal">\history delete
+-<em class="replaceable"><code>number</code></em></code>
+удалит конкретное количество записей истории, начинающихся с последней и
+двигаясь назад. Например, <code class="literal">\history delete -10</code>
+удаляет последние 10 записей истории.</li>
+<li><code class="literal">\history clear</code> удалит всю историю.</li></ul>
+<p>См. <a href="mysql-shell-code-execution.html#mysql-shell-working-with-history">
+раздел 4.4</a>.</p>
+
+<h3><a name="idm140213723482656"></a>Команда Rehash</h3>
+<p>Когда вы отключите опцию кэша имен автозаполнения, используйте
+<code class="literal">\rehash</code>, чтобы вручную обновить кэш.
+Например, после того, как вы загружаете новую схему, вводя
+<code class="literal">\use <em class="replaceable"><code>schema</code></em>
+</code>, <code class="literal">\rehash</code> обновит автоматическое
+заполнение имен. После того, как это автоматическое заполнение узнает об
+именах, используемых в базе данных, можно автоматически заполнить такой
+текст, как имена таблиц и так далее. См.
+<a href="mysql-shell-code-execution.html#mysql-shell-autocompletion">раздел
+4.3</a>.</p>
+
+<h3><a name="idm140213723478432"></a>Команда Option</h3>
+<p>Команда <code class="literal">\option</code> позволяет вам запросить и
+поменять параметры MySQL Shell во всех режимах. Можно использовать
+<code class="literal">\option</code>, чтобы перечислить параметры
+конфигурации, которые были установлены, и посмотреть, как их значения
+были в последний раз изменены. Можно также использовать его, чтобы установить
+и сбросить варианты для сессии или постоянно в конфигурационном файле MySQL
+Shell. Для инструкций и списка параметров конфигурации посмотрите
+<a href="mysql-shell-customizing.html#mysql-shell-configuring-options">раздел
+8.4</a>.</p>
+
+<h3><a name="idm140213723475040"></a>Команда Pager</h3>
+<p>Можно настроить MySQL Shell, чтобы использовать внешний пейджер, чтобы
+прочитать на экране длинный вывод, например, помощь онлайн или результаты
+SQL-запросов. Посмотрите
+<a href="mysql-shell-getting-started.html#mysql-shell-using-pager">раздел
+3.5</a>.</p>
+
+<h3><a name="idm140213723473200"></a>Команды Show и Watch</h3>
+<p>Команда <code class="literal">\show</code> управляет названным отчетом,
+который может быть или встроенным отчетом о MySQL Shell или определенным
+пользователями отчетом, который был зарегистрирован в MySQL Shell. Можно
+определить стандартные возможности для команды, и любые варианты или
+дополнительные аргументы, которые отчет поддерживает.
+Команда <code class="literal">\watch</code> управляет отчетом таким же
+образом, как <code class="literal">\show</code>, но обновляет результаты
+равномерно, пока вы не отменяете использование команды с помощью
+<span class="keycap"><strong>Ctrl + C</strong></span>.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

@@ -1,0 +1,685 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r" />
+  <title>Глава 3. Конфигурация</title>
+  <meta name="generator" content="DocBook XSL Stylesheets + chunker.py v1.9.2" />
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="mysql-for-excel-config"></a>Глава 3. Конфигурация</h1>
+<p>Эта секция описывает, как формировать новые связи с местными или
+удаленными серверами MySQL из Microsoft Excel и как справиться с вашими
+существующими связями из Excel или с помощью MySQL Workbench.
+Это далее описывает, как создать и формировать новую схему (или базу
+данных) из Excel.</p>
+
+<p>MySQL for Excel имеет глобальные опции, которые относятся ко всем связям,
+запросам SQL, пространственным данным, импортированным
+таблицам и сеансам редактирования.</p>
+
+<h2><a name="mysql-for-excel-config-connections"></a>3.1.
+Подключения MySQL в Excel</h2>
+<p>MySQL for Excel предоставляет несколько возможностей создавать и уравлять
+подключениями MySQL. Необходимо открыть связь с сервером MySQL, прежде чем
+можно будет формировать глобальные опции, добавить новую схему
+или выполнить операции, которые перемещают данные между рабочими листами
+Excel и таблицами MySQL. Эта секция описывает, как добавить или
+изменить связи с MySQL.</p>
+
+<p>MySQL for Excel панели задач
+показывает действия связи по умолчанию, когда это открывается.</p>
+<a name="mysql-for-excel-connections"></a><p><b>Рис. 3.1. MySQL for
+Excel: Соединения с MySQL</b></p>
+<img src="images/mysql-for-excel-connections-annotated.png" width="703"
+height="423" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p><span class="bold"><strong>Описание элементов соединения
+MySQL for Excel</strong></span></p>
+<ol class="orderedlist" type="1"><li class="listitem"><p>
+<span class="guilabel">Open a MySQL Connection</span>
+перечисляет существующие местные и удаленные связи сервера MySQL.
+Когда вы устанавливаете MySQL для Excel, он создает местную связь
+автоматически для каждого местного сервера MySQL, который вы
+сформировали в системе. После начальной установки
+можно добавить новые связи.</p>
+
+<p>Дважды щелкните по связи из списка, чтобы открыть ее.
+Сервер MySQL, ассоциированный со связью, должен работать на местном или
+удаленном хосте прежде, чем можно будет открыть связь. Выберите схему, чтобы
+рассмотреть, затем нажмите <span class="guibutton">Next</span>. Нажмите
+<span class="guibutton">Back</span>, чтобы возвратиться к списку схем.</p>
+<p>Щелкните правой кнопкой мыши по существующей связи в списке, чтобы
+удалить, отредактировать или освежить ее.</p></li>
+
+<li class="listitem"><p><span class="guilabel">New Connection</span>
+открывает диалог связи, в котором можно определить и проверить новую связь.
+Для инструкций посмотрите
+<a href="#mysql-for-excel-config-connections-add">здесь</a>.
+</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Manage Connections</span>
+запускает MySQL Workbench, если он устанавливается на локальном хосте.</p>
+
+<p>MySQL for Excel делит свои подключения с MySQL Workbench.
+Создание и редактирование подключений MySQL в любом применении отредактирует
+информацию о подключениях MySQL для обоих приложений.</p></li></ol>
+
+<h3><a name="mysql-for-excel-config-connections-add"></a>
+Добавление новых подключений MySQL</h3>
+<p>Можно использовать MySQL for Excel или MySQL Workbench, чтобы добавить
+новые подключения. Добавление новых связей не разрешено, когда
+работает MySQL Workbench.</p>
+
+<p>Чтобы добавить новую связь, нажмите <span class="guilabel">New
+Connection</span> в панели задач MySQL for Excel, чтобы открыть диалог
+MySQL Server Connection. Имена подключений должны быть уникальными.
+Значок предупреждения (!) указывает, что значение опции обязательно.
+Данные, которые следуют, показывают диалог связи с
+выбранной вкладкой <span class="guilabel">Parameters</span>.</p>
+
+<a name="mysql-for-excel-add-new-connection-dialog"></a>
+<p><b>Рис. 3.2. Диалог Add a New MySQL Connection</b></p>
+<img src="images/mysql-for-excel-new-connection-dialog.png" width="750"
+height="450" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Для каждой связи предоставьте подробную информацию, нажмите
+<span class="guibutton">Test Connection</span>, чтобы подтвердить,
+что подключение MySQL действительно, и <span class="guibutton">OK</span>,
+чтобы сохранить новую связь. Тип связи, которую вы создаете, может измениться
+в зависимости от конфигурации сервера, хоста клиента и уровня безопасности,
+который вы хотите. MySQL для Excel поддерживает следующие типы подключения:
+</p>
+
+<p><b>Основные. </b>Основная связь не зашифрована или зашифрована (в MySQL
+8.0 SSL включен по умолчанию), и связь установлена, используя стандартный
+TCP/IP, который является методом связи по умолчанию в MySQL для Excel, чтобы
+соединиться с MySQL RDBMS. Основные связи легко формировать, особенно если
+MySQL для Excel и сервера MySQL находятся на том же самом компьютере или
+работают в той же самой локальной сети. Чтобы формировать основную связь,
+установите опцию <span class="guilabel">Connection Method</span> в
+<code class="literal">TCP/IP (standard)</code> and use the
+<span class="guilabel">Parameters</span>, чтобы сформировать связь.</p>
+
+<p><b>SSL. </b>Сервер MySQL и клиент должны быть собраны так, чтобы позволить
+шифрование SSL (см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/encrypted-connections.html"
+target="_top">Using Encrypted Connections</a>).
+Чтобы формировать этот тип связи, установите опцию
+<span class="guilabel">Connection Method</span> в
+<code class="literal">TCP/IP (standard)</code> и используйте вкладку
+<span class="guilabel">Parameters</span>, чтобы сформировать основную связь.
+Затем, выберите вкладку <span class="guilabel">SSL</span>, чтобы определить
+соответствующие файлы. Сервер MySQL использует формат PEM для сертификатов и
+закрытых ключей. В дополнение к обеспечению путей к файлам
+можно определить способ SSL, чтобы использовать для связи.
+Следующая таблица описывает каждое значение опции
+<span class="guilabel">Use SSL</span> и указывает, какие файлы требуются.</p>
+
+<a name="ssl-mode-table"></a><p><b>Таблица 3.1. Значения опции SSL</b></p>
+<table border="1">
+<thead><tr><th scope="col">Значение опции</th><th scope="col">Смысл
+</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">No</code></td>
+<td>Не использовать SSL. Файлы SSL не нужны.</td></tr>
+<tr><td scope="row"><code class="literal">If Available</code></td>
+<td>Используйте SSL, если сервер поддерживает его, но позволяет связь во всех
+случаях. Никакие файлы SSL не требуются, однако, обеспечение файла CA SSL
+является наиболее успешной практикой для связей,
+установленных с серверами MySQL 8.0.</td></tr>
+<tr><td scope="row"><code class="literal">Require</code></td>
+<td>Всегда используйте SSL и отклоняет связь, если сервер
+не поддерживает SSL. Не выполняет проверку сертификата
+сервера. Никакие файлы SSL не требуются.</td></tr>
+<tr><td scope="row"><code class="literal">Require and Verify CA</code></td>
+<td>Всегда использует SSL. Проверяет certificate authorities (CA),
+но терпит несоответствие имени. Требует файл SSL CA.</td></tr>
+<tr><td scope="row"><code class="literal">Require and Verify Identity</code>
+</td><td>Всегда использует SSL и отказывает, если имя хоста неправильно.
+Требует действительного CA SSL, SSL Cert и файлов ключей SSL.
+</td></tr></tbody></table><br class="table-break">
+
+<p><b>SSH. </b>Тоннели SSH разрешают вам соединяться с базой данных MySQL
+из-за брандмауэра, когда порт сервера MySQL заблокирован.
+Чтобы сформировать этот тип связи, установите опцию
+<span class="guilabel">Connection Method</span> в
+<code class="literal">Standard TCP/IP over SSH</code> и используйте вкладку
+<span class="guilabel">Parameters</span>, чтобы сформировать связь.</p>
+
+<p>Дополнительные соображения:</p>
+<ul><li class="listitem"><p>Сервер SSH общается с сервером MySQL в
+незашифрованном или зашифрованном режиме, на основе значения, выбранного для
+режима SSL (см. <a href="#ssl-mode-table">таблицу 3.1</a>).
+Выберите вкладку <span class="guilabel">SSL</span>, чтобы определить
+значение для опции <span class="guilabel">Use SSL</span>.</p></li>
+
+<li class="listitem"><p>Логин, который вы используете, чтобы выполнить
+MySQL for Excel, должен быть разрешен на сервере SSH заранее.
+Чтобы подтверждать подлинность вашей учетки (определенной
+<code class="literal">SSH User Name</code>),
+можно использовать одну из следующих стратегий:</p>
+
+<ul><li class="listitem"><p>
+<code class="literal">SSH User Name</code> и <code class="literal">SSH
+Password</code>.</p></li>
+
+<li class="listitem"><p>
+<code class="literal">SSH User Name</code> и <code class="literal">SSH Key
+File</code>.</p>
+
+<p>Ваш сервер SSH может потребовать также обеспечивать
+<code class="literal">SSH Passphrase</code>, используя файл ключей.
+Недействительный пароль производит исключение.</p></li>
+
+<li class="listitem"><p>
+<code class="literal">SSH User Name</code> и <code class="literal">SSH Key
+File</code> (<code class="literal">SSH Passphrase</code>) и
+<code class="literal">SSH Password</code>.</p>
+
+<p>Комбинация имени пользователя + key file (passphrase) + пароль
+может выполнить идентификацию, когда файл ключей и пароль
+действительны, но ошибка происходит на сервере. Определенно, первая попытка
+соединиться использует файл ключей, и если это терпит неудачу, следующая
+попытка соединиться использует пароль вместо этого. Если файл ключей
+SSH null или пустой, но пароль SSH обеспечивается, MySQL для Excel пытается
+соединить с использованием только пароля SSH.</p></li></ul></li></ul>
+
+<h3><a name="mysql-for-excel-config-connections-edit"></a>
+Редактирование подключений MySQL</h3>
+<p>Можно использовать MySQL для Excel или MySQL Workbench, чтобы
+отредактировать существующие подключения MySQL.</p>
+
+<ul><li class="listitem"><p>Редактирование подключений в MySQL for Excel.</p>
+<p>Чтобы отредактировать подключение щелкните правой кнопкой мыши по связи,
+которую вы хотите изменить и выберите <span class="guimenuitem">Edit
+Connection</span> из контекстного меню.</p>
+
+<p>Диалог MySQL connection edit подобен диалогу редактирования в
+MySQL Workbench. Сделайте изменения и нажмите <span class="guibutton">OK
+</span>.</p></li>
+
+<li class="listitem"><p>Редактирование соединений
+MySQL в MySQL Workbench.</p>
+<p>Альтернативно, можно отредактировать соединения MySQL for Excel через
+MySQL Workbench. Чтобы сделать это, откройте MySQL Workbench, отредактируйте
+соединение с MySQL, затем освежите список связей в MySQL for Excel.</p>
+
+<p>Подробней см. в разделе
+<a href="../../../https@dev.mysql.com/doc/workbench/en/wb-mysql-connections.html"
+target="_top">Connections in MySQL Workbench</a>.</p></li></ul>
+
+<h2><a name="mysql-for-excel-create-schema"></a>3.2.
+Создание новой схемы в Excel</h2>
+<p>Схема содержит объекты базы данных, такие как таблицы, обзоры
+и процедуры. Можно добавить новую и пустую схему MySQL непосредственно из
+панели задач MySQL for Excel и затем экспортировать данные от
+рабочего листа Excel.</p>
+
+<p><span class="bold"><strong>Добавить пустую схему MySQL:</strong></span>
+</p>
+<ol class="orderedlist" type="1"><li class="listitem"><p>Запустите
+Excel, выберите вкладку меню <span class="guimenu">Data</span> и нажмите
+<span class="guibutton">MySQL for Excel</span>, чтобы открыть панель задач
+MySQL for Excel.</p></li>
+
+<li class="listitem"><p>Из области <span class="guilabel">
+Open a MySQL Connection</span> в этой панели
+дважды щелкните по существующей связи, чтобы показать доступные
+схемы базы данных.</p></li>
+<li class="listitem"><p>Нажмите на <span class="guilabel">Create New Schema
+</span>, чтобы открыть диалог New Schema Name.</p></li></ol>
+
+<a name="mysql-for-excel-new-schema"></a><p><b>Рис. 3.3. MySQL for Excel:
+создайте новую схему</b></p>
+<img src="images/mysql-for-excel-new-schema.png" width="520" height="239"
+alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Чтобы создать новую схему:</p>
+
+<ul><li class="listitem"><p>В поле <span class="guilabel">Schema Name</span>
+введите имя новой схемы и затем выберите сопоставление из списка или
+оставьте сопоставление сервера по умолчанию.</p></li>
+<li class="listitem"><p>При нажиме <span class="guibutton">OK</span>
+новая схема появляется в списке схем.</p></li></ul>
+
+<h2><a name="mysql-for-excel-config-options"></a>3.3. Глобальные опции</h2>
+<p>У каждой операции, такой как <span class="guilabel">Import MySQL Data
+</span>, есть свой собственный набор опций.
+Эта секция описывает варианты, которые относятся ко всем связям,
+SQL-запросам, пространственным данным, сеансам редактирования и таблицам.</p>
+
+<p>Чтобы настроить глобальные опции, откройте существующую связь и затем
+нажмите <span class="guibutton">Options</span> в панели здач MySQL for Excel.
+</p>
+
+<p>Кнопки опций включают:</p>
+<ul><li class="listitem"><p>
+<span class="guibutton">Accept</span>: сохраняет опции на ваш хост
+через все сессии и будущие экземпляры Excel.</p></li>
+
+<li class="listitem"><p>
+<span class="guibutton">Reset to Defaults</span>: Сброс всех настроек
+в текущем окне к их настройкам по умолчанию. Нажмите кнопку
+<span class="guibutton">Accept</span>, чтобы сохранить изменения.
+</p></li></ul>
+<p>Ряд глобальных опций затрагивает все дополнение, как
+описано в секциях ниже.</p>
+
+<h3><a name="mysql-for-excel-global-options-connections"></a>
+Вкладка Connections</h3>
+<a name="mysql-for-excel-global-options-connections-fig"></a>
+<p><b>Рис. 3.4. Глобальные опции: соединения</b></p>
+<img src="images/mysql-for-excel-global-options-connections-2.png"
+width="550" height="326" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Опции соединения:</p>
+
+<ul><li class="listitem"><p>
+<span class="guilabel">Wait [ ] seconds for a connection to the
+server before timing out</span>. Defaults to 15.
+</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Wait [ ] seconds for a database query to
+execute before timing out</span>. Defaults to 60.
+</p></li>
+
+<li class="listitem"><p>
+Automatic connections migration delayed until:
+<em class="replaceable"><code>Migration status</code></em>
+</p>
+
+<p>
+<span class="guibutton">Migrate stored connections to
+MySQL Workbench now</span>
+</p>
+
+<p>Можно создать новые подключения MySQL в MySQL for Excel, когда не
+установлен MySQL Workbench. Как только вы устанавливаете
+MySQL Workbench, MySQL for Excel пытается мигрировать сохраненные связи,
+чтобы слить их со связями из MySQL Workbench, чтобы позволить использовать
+связь в обоих продуктах. Подключения MySQL не могут мигрировать, если
+MySQL Workbench открыт.</p>
+
+<p>MySQL for Excel спрашивает мигрировать связи автоматически, сохранив связи
+из MySQL for Excel, или подождать час, день, неделю,
+месяц или неопределенно.</p>
+
+<p>Задержание на час, день, неделю или месяц показывает запрос на миграцию
+снова после того, как то время пройдет. Если вы принимаете решение задержать
+миграцию неопределенно, можно нажать
+<span class="guibutton">Migrate stored connections to MySQL Workbench
+now</span>, чтобы мигрировать все новые связи из MySQL for Excel в
+MySQL Workbench вручную, когда MySQL Workbench установлен.</p></li></ul>
+
+<h3><a name="mysql-for-excel-global-options-sql-queries"></a>
+Вкладка SQL Queries</h3>
+<a name="mysql-for-excel-global-options-sql-queries-fig"></a>
+<p><b>Рис. 3.5. Вкладка SQL Queries.</b></p>
+<img src="images/mysql-for-excel-global-options-sql-queries.png" width="546"
+height="358" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Опции SQL Queries:
+</p>
+
+<ul><li class="listitem"><p>
+<span class="guilabel">Do not show SQL statements sent to the
+server</span>: Когда опция выбрана (по умолчанию), запросы SQL не показаны, и
+только их результаты показаны в информационном диалоге.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Preview SQL statements before they are sent to the
+server</span>: Когда опция выбрана добавляет дополнительный шаг к
+действиям Create New Schema, Export Data, Append Data и Edit Data
+перед отправкой запроса серверу. Это открывает диалог Review SQL Script,
+как показано ниже.</p>
+
+<a name="mysql-for-excel-global-options-preview"></a>
+<p><b>Рис. 3.6. Опция предпросмотра</b></p>
+<img src="images/mysql-for-excel-global-options-preview.png" width="750"
+height="417" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Отсюда можно изменить SQL-операторы прежде чем они будут выполнены, также
+есть кнопка <span class="guibutton">Original Query</span>.
+Если ее нажатьт, это вернет все модификации SQL-запроса к его оригинальной
+форме (когда диалог был открыт).</p>
+<p>Выключено по умолчанию.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Show executed SQL statements along with their
+results</span>: Когда включена, SQL-операторы сначала выполняются, а затем
+информационный диалог включает результаты и выполненные запросы.
+Это полезно, рассматривая недавно выполненные запросы и сравнивая результаты.
+Выключено по умолчанию.</p></li></ul>
+
+<h3><a name="mysql-for-excel-global-options-spatial-data"></a>
+Вкладка</h3>
+<p>Пространственный выбор данных позволяет вам выбрать формат для обработки
+данных как текста. Используйте выпадающий список, чтобы выбрать формат:</p>
+
+<ul><li class="listitem"><p>Well-Known Text (по умолчанию)</p></li>
+<li class="listitem"><p>Keyhole Markup Language</p></li>
+<li class="listitem"><p>Geography Markup Language</p></li>
+<li class="listitem"><p>GeoJSON</p></li></ul>
+
+<a name="mysql-for-excel-global-options-spatial-data-fig"></a>
+<p><b>Рис. 3.7. Пространственные данные</b></p>
+<img src="images/mysql-for-excel-global-options-spatial-data.png" width="550"
+height="328" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="mysql-for-excel-global-options-imported-tables"></a>
+Вкладка Imported Tables</h3>
+<a name="mysql-for-excel-global-options-imported-tables-fig"></a>
+<p><b>Рис. 3.8. Импорт таблиц</b></p>
+<img src="images/mysql-for-excel-global-options-imported-table.png"
+width="549" height="326" alt="Content is described in the surrounding text.">
+<br class="figure-break"><p>Опции импорта таблиц:</p>
+
+<ul><li class="listitem"><p>Восстановленеие импортированных данных
+MySQL в таблицах Excel:</p>
+<ul><li class="listitem"><p>
+<span class="guilabel">Opening an Excel workbook</span>:
+выбрано по умолчанию.
+</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Showing the Add-In's sidebar</span>:
+не выбрано по умолчанию.</p></li></ul></li>
+
+<li class="listitem"><p>
+<span class="guibutton">Manage connection information stored in the user
+settings file</span></p>
+<p>Предоставляет список сохраненных файлов Excel с информацией о
+соединениях MySQL. Нажатие этой кнопки открывает диалог
+<a href="#mysql-for-excel-manage-connection-information">
+Manage Import/Export Connection Information</a>.</p></li></ul>
+
+<h3><a name="mysql-for-excel-global-options-edit-sessions"></a>
+Вкладка Edit Sessions</h3>
+<a name="mysql-for-excel-global-options-edit-sessions-fig"></a>
+<p><b>Рис. 3.9. Edit Sessions</b></p>
+<img src="images/mysql-for-excel-global-options-edit-sessions.png"
+width="548" height="351" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Опции Edit Session:</p>
+
+<ul><li class="listitem"><p>
+<span class="guilabel">Preview MySQL table data before an Edit Data
+session is opened</span>: Выбрано по умолчанию.</p></li>
+
+<li class="listitem"><p><a name="mysql-for-excel-optimistic-updates"></a>
+<span class="guilabel">Use optimistic updates on all Edit Data
+sessions</span>. Этот выбор помогает предотвратить неумышленные изменения
+данных, а именно проверяет на внешнее редактирование прежде, чем передать
+ваши изменения. Например, между временем, когда вы загрузили данные в Excel,
+внесли изменения в Excel и сохранили данные, иной пользователь, возможно,
+отредактировал те же самые ячейки в другом месте с использованием MySQL
+Workbench или еще как-то. Эта опция проверяет на эти изменения и
+уведомляет вас соответственно.</p>
+
+<p>Оптимистические обновления могут также формироваться во времени выполнения
+для всех сеансов редактирования или для определенного сеанса, щелкая правой
+кнопкой мыши по плавающему диалогу <span class="guilabel">Edit Session</span>
+и выбирая опцию <span class="guimenuitem">Use Optimistic Update</span>,
+как показано ниже.</p>
+
+<a name="mysql-for-excel-optimistic-updates-runtime"></a>
+<p><b>Рис. 3.10. Оптимистические обновления: формирование во время выполнения
+</b></p>
+<img src="images/mysql-for-excel-optimistic-updates-runtime.png" width="420"
+height="170" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Выбрано по умолчанию.</p>
+
+<p><span class="guilabel">Tolerance for FLOAT and DOUBLE comparisons in
+WHERE clause</span>: Это обеспечивает способ отредактировать данные типа
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/floating-point-types.html"
+target="_top"><code class="literal">FLOAT</code></a> или
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/floating-point-types.html"
+target="_top"><code class="literal">DOUBLE</code></a>,
+это позволяет надлежащее соответствие строки в базе данных, когда это
+используется вместе с оптимистическими обновлениями.
+Например, <code class="literal">WHERE</code> для оптимистических обновлений
+использует конструкцию, подобную следующему, чтобы соответствовать
+строкам в базе данных:</p>
+
+<pre class="programlisting">
+??float_or_double_column?? BETWEEN
+[<em class="replaceable"><code>some_float_or_double_value</code></em>]-[<em class="replaceable"><code>epsilon_tolerance</code></em>] AND
+[<em class="replaceable"><code>some_float_or_double_value</code></em>]+[<em class="replaceable"><code>epsilon_tolerance</code></em>]
+</pre></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Restore saved Edit sessions when opening an Excel
+workbook</span>: выбрано по умолчанию.</p>
+
+<ul><li class="listitem"><p>
+<span class="guilabel">Reuse Excel worksheets matching their names
+with the session table names</span>: выбрано по умолчанию.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Create new Excel worksheets for the restored
+Edit sessions</span>: не выбрано по умолчанию.</p></li></ul></li>
+
+<li class="listitem"><p>
+<span class="guibutton">Manage connection information stored in the
+user settings file</span></p>
+
+<p>Предоставляет список сохраненных файлов Excel с информацией о
+подключениях MySQL. Нажим этой кнопки открывает диалог
+<a href="#mysql-for-excel-manage-connection-information">
+Manage Import/Export Connection Information</a>.</p></li></ul>
+
+<h3><a name="mysql-for-excel-manage-connection-information"></a>
+Импорт и правка информации о связях</h3>
+<p>Этот диалог перечисляет информацию о связях
+для рабочих листов Excel, которые известны MySQL for Excel.
+Отсюда можно рассмотреть все сохраненные таблицы, которые содержат рабочие
+листы с импортированными или отредактированными данными из таблиц
+MySQL и произвольно удалить информацию о связи.</p>
+
+<p>Список недостающей информации будет пуст в большинстве случаев, потому что
+MySQL для Excel управляет осиротевшей информацией о связи для вас.
+Если вы видите пункты в диалоге Manage Import/Edit Connections,
+это означает, что необходимо удалить информацию о связи,
+как описано в этом разделе.</p>
+
+<p>По умолчанию нажатие на <span class="guibutton">Accept</span>
+удаляет информацию о связи для недостающих рабочих листов, но это поведение
+конфигурируемо с опцией <span class="guilabel">Delete automatically
+connection information where Workbook is no longer found</span>.
+Кроме того, <span class="guilabel">Select connection information entries
+</span> выбирает (для удаления) опцию каждой книги, для которой вы не
+получили доступ <em class="replaceable"><code>n</code></em> дней, где
+<em class="replaceable"><code>n</code></em> по умолчанию 30.
+Следующие данные показывают этот диалог со связями.</p>
+
+<a name="mysql-for-excel-manage-connection-information-fig"></a>
+<p><b>Рис. 3.11. MySQL for Excel: Manage Connection Information</b></p>
+<img src="images/mysql-for-excel-manage-import-edit-connection-info.png"
+width="644" height="571" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Опция добавлена в MySQL for Excel 1.3.0.</p>
+
+<p>Варианты автоматически удалить недостающие связи или удалить связи, для
+которых не получают доступ
+<em class="replaceable"><code>n</code></em> дней, добавлены в
+MySQL for Excel 1.3.4.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</body>
+</html>

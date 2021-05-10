@@ -1,0 +1,7 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Linux\Containers\Intro_to_this\file_exeqtion_rights\cat.file_exeqtion_rights\dir.file_exeqtion_rights.md">file_exeqtion_rights</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Linux\Containers\Intro_to_this\file_exeqtion_rights\right.md">right.md</a>
+        - *## file exeqtion rights
+        - *## [Права в Linux (chown, chmod, SUID, GUID, sticky bit, ACL, umask)](https://habr.com/ru/post/469667/)
+        - *# file: media/User123
+        - *# owner: root
+        - *# group: root

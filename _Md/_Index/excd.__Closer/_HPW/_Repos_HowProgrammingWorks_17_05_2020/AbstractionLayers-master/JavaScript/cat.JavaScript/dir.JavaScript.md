@@ -1,0 +1,13 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\AbstractionLayers-master\JavaScript\cat.JavaScript\dir.JavaScript.md">JavaScript</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\AbstractionLayers-master\JavaScript\README.en.md">README.en.md</a>
+        - *## Описание
+        - *## Файлы
+        - *## Запуск
+        - *## Задания
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\AbstractionLayers-master\JavaScript\README.md">README.md</a>
+        - *## Понятия
+        - *## Типы связывания
+        - *## Описание
+        - *## Файлы
+        - *## Запуск
+        - *## Задание

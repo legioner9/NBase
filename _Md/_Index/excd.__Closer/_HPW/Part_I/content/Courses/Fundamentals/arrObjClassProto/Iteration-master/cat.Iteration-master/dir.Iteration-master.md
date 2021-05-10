@@ -1,0 +1,8 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\Part_I\content\Courses\Fundamentals\arrObjClassProto\Iteration-master\cat.Iteration-master\dir.Iteration-master.md">Iteration-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\Part_I\content\Courses\Fundamentals\arrObjClassProto\Iteration-master\Exercises.ru.md">Exercises.ru.md</a>
+        - *# Упражнения
+        - *## Итерирование циклами
+        - *## Итерирование по двумерному массиву
+        - *## Итерирование объектов-справочников
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\Part_I\content\Courses\Fundamentals\arrObjClassProto\Iteration-master\README.md">README.md</a>
+        - *# Different implementation of iterations as a code abstraction

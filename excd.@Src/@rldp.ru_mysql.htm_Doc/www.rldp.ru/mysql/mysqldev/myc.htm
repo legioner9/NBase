@@ -1,0 +1,406 @@
+<HTML>
+<HEAD>
+  <TITLE>Справочное описание MyC</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1>2.10 Справочное описание MyC</H1>
+<H2>2.10.1 Введение</H2>
+<P>MyC представляет собой набор простых подпрограмм C, предназначенных, чтобы
+сделать создание прикладных программ для использования с базой данных MySQL
+проще, особенно для тех, кто знаком с Microsoft DAO engine model
+(используемой в пакетах Microsoft Access и Microsoft Visual Basic).</P>
+
+<P>MyC использует подобную модель, чтобы обратиться к данным внутри базы
+данных: OpenDatabase, чтобы открыть базу данных, OpenRecordset, чтобы открыть
+набор результатов, Move, чтобы двигаться внутри набора результатов,
+AddNew/Edit и Update/Delete, чтобы добавлять, редактировать или удалять
+данные внутри базы данных.</P>
+
+<H2>2.10.1.1 Текущая версия</H2>
+<P>Текущей версией MyC является 0.0.1 ALPHA.</P>
+
+<H2>2.10.1.2 Ограничения</H2>
+<P>MyC не предназначен, чтобы открывать больше, чем один набор результатов за
+раз. Поддержка нескольких наборов результатов будет в следующем выпуске.</P>
+
+<P>Если набор результатов не имеет уникального ключа, связанного с каждой
+записью, то Delete() удалит только первое соответствие названной записи. Это
+отличие от модели DAO, в которой удаляется только в настоящий момент
+указанная запись, неважно первая она или нет.</P>
+
+<P>Сейчас MyC работает только под Linux, но планируется перенос на другие
+версии UNIX. Попыток переноса на платформу Windows не было.</P>
+
+<P>Никаких тестов на утечки памяти пока не проводилось для MyC.</P>
+
+<P>Пожалуйста не забудьте, что этот код ALPHA, так что он постоянно будет
+меняться. В коде почти наверняка есть ошибки, так что будьте осторожны с
+применением его в ответственных участках своих программ. У автора все
+работает должным образом, должно бы и у Вас работать, но никаких гарантий
+пока дать не могу.</P>
+
+<H2>2.10.1.3 Разработчик пакета</H2>
+<P>Автор этого пакета: Ed Carp. Связаться с ним можно по erc@pobox.com. Есть
+и веб-страница www.pobox.com/~erc. Он технический администратор и
+коммерческий программный разработчик, с обширным опытом в управлении
+проектами от начала до конца, а также в разработке программ на C и VB.</P>
+
+<H2>2.10.2 Разработка приложений</H2>
+<H2>2.10.2.1 Файлы заголовков</H2>
+<P>В настоящее время все подпрограммы MyC включены в один файл заголовков
+database.h. Имя этого файла не критическое и может быть изменено в любое
+время, чтобы удовлетворить потребности специфического проекта.
+
+<P>Этот файл должен быть включен первым, также нужно включить stdio.h и
+stdlib.h. Если директива #define MYC_DEBUG помещена перед включением
+database.h, то обширный код отладки будет записан в поток stderr.</P>
+
+<H2>2.10.2.2 Компиляция</H2>
+<P>Программы MyC компилируются аналогично любым другим программам,
+использующим MySQL C API.</P>
+
+<H2>2.10.2.3 Инициализация</H2>
+<P>При вызове OpenDatabase() с именем базы данных, которая будет открыта,
+именем хоста, именем пользователя и паролем функция инициализирует прикладную
+программу и открывает выбранную базу данных. EOF возвращен при сбое, NULL
+возвращен при успехе.</P>
+
+<P>Вызов OpenRecordset() со строкой представляющей собой корректный запрос
+SQL, открывает набор результатов, который содержит результаты запроса.
+OpenRecordset() возвращает EOF при ошибке и NULL при успехе. Число записей в
+наборе результатов может быть получено вызовом RecordCount(), который
+возвращает число записей в наборе результатов как целое число без знака.</P>
+
+<H2>2.10.2.4 Перемещение внутри набора результатов</H2>
+<P>Набор результатов может быть пройден и изучен с помощью вызовов
+MoveNext, MovePrev, MoveFirst и MoveLast, которые перемещают в следующий,
+предыдущий, первый и в последний результат в наборе результатов
+соответственно. Если набор результатов некорректен, эти подпрограммы
+возвращают значение EOF, иначе они возвращают NULL.</P>
+
+<H2>2.10.2.5 Доступ к данным</H2>
+<P>К данным в текущей строке в наборе результатов можно обращаться, вызывая
+GetField или GetFieldN. GetField вызывается с именем поля как параметр и
+возвращает символьный указатель на данные или символьный указатель на EOF в
+случае сбоя. GetFieldN работает подобным способом, за исключением того, что
+GetFieldN вызывается с номером желательного поля (отсчет начинается с 0).</P>
+
+<H2>2.10.2.6 Запись данных</H2>
+<P>Данные могут быть записаны в таблицу одним из двух путей: вызовом
+OpenRecordset() с запросом INSERT INTO или UPDATE (или любой другой имеющей
+силу в этом отношении инструкцией SQL), или использованием встроенных функций
+AddNew или Edit.</P>
+
+<P>AddNew() вызывается без параметров и устанавливает внутренние флажки так,
+что последующее обращение к Update() генерирует инструкцию SQL INSERT INTO.
+Точно так же Edit() вызывается без параметров и устанавливает внутренние
+флажки так, что последующее обращение к функции Update() сгенерирует
+инструкцию SQL UPDATE.</P>
+
+<P>Чтобы устанавливать индивидуальные поля используются SetField, SetFieldN
+или SetFieldB. SetField вызывается с двумя параметрами: именем поля, которое
+будет установлено, и значением для него. Точно так же вызывается и SetFieldN,
+но первый параметр задает номер поля, а не его имя. SetFieldB используется с
+двоичными данными, и преобразует двоичные данные и NULL в форму, которая
+может быть сохранена. Обратите внимание, что SetFieldB перезаписывает
+указанные строки. Никакого средства пока не сделано для преобразования чистых
+двоичных данных, хотя можно вызывать mysql_escape_string() и передавать
+возвращенный указатель функциям SetField или SetFieldN.</P>
+
+<P>Важно обратить внимание, что SetField и подобные подпрограммы сохраняют
+только указатель на данные, которые будут записаны, а не сами данные.</P>
+
+<P>В конце концов поля установлены, Update() вызван с именем таблицы, которую
+нужно модифицировать. Update() вернет EOF при ошибке или NULL при успехе.</P>
+
+<P>После того, как данные добавлены или модифицированы в таблице, иногда
+полезно иметь текущий (актуальный) набор записей, отражающий измененные
+данные. Вызов Refresh() заново выполнит запрос, выполненный последним
+OpenRecordset() (до 4096 байт) и эквивалентен вызову OpenRecordset(), за
+исключением того, что текущая строка та же, что и перед вызовом Refresh().</P>
+
+<H2>2.10.2.7 Удаление данных</H2>
+<P>Вызов Delete() с именем таблицы удалит текущую строку из таблицы. Если
+имеются строки с двойными данными, только первая строка будет удалена.</P>
+
+<H2>2.10.2.8 Получение информации</H2>
+<P>В настоящее время поддерживаются следующие информационные подпрограммы,
+RecordCount(), FieldCount(), AbsolutePosition() и RecordsetEOF().
+RecordCount возвращает целое число без знака, указывающее текущее число
+записей в наборе результатов. FieldCount возвращает число полей в строке
+набора результатов. FieldValue вызывается с номером поля и возвращает его
+значение, в то время как FieldName тоже вызывается с номером поля, но
+возвращает уже его имя. AbsolutePosition возвращает номер строки текущей
+строки в наборе результатов. RecordsetEOF возвращает TRUE, если не имеется
+никаких имеющих силу записей в наборе результатов, или если текущая строка в
+конце или начале набора результатов, и никаких имеющих силу записей не
+осталось, чтобы прочитать их из набора записей. MoveLast и MoveFirst
+устанавливают RecordsetEOF в TRUE.</P>
+
+<H2>2.10.2.9 Все и сразу</H2>
+<P>Прикладные программы очень просто писать с MyC. В следующих примерах
+существует таблица test в базе данных mysql, а в ней есть 5 записей
+заданных следующим образом:</P></FONT>
+<PRE>
++--------+-----+
+| name   | num |
++--------+-----+
+| item 0 |  0  |
+| item 1 |  1  |
+| item 2 |  2  |
+| item 3 |  3  |
+| item 4 |  4  |
++--------+-----+
+</PRE>
+
+<P>Предположим, например, что прикладная программа должна сделать запрос к
+базе данных и записать все данные в поток stdout:</P>
+<PRE>
+#include "database.h"
+main ()
+{
+  int i;
+
+  OpenDatabase("mysql", NULL, NULL, NULL);
+  OpenRecordset("select * from test");
+  while(RecordsetEOF () != EOF)
+  {
+    for (i = 0; i &lt; FieldCount(); i++) printf("%s\t", GetFieldN(i));
+    puts("");
+    MoveNext();
+  }
+  CloseRecordset();
+  CloseDatabase();
+  exit(0);
+}
+</PRE>
+
+<P>Немного более сложный пример иллюстрирует добавление, изменение и удаление
+данных. Этот пример будет формировать таблицу test, вносить в список все
+данные в таблице, затем просматривать таблицу, заменяя item 3 на item 5 и
+попутно удаляя item 4:</P>
+<PRE>
+#include "database.h"
+main ()
+{
+  int i;
+  char buf[10], buf2[5];
+
+  OpenDatabase("mysql", NULL, NULL, NULL);
+  OpenRecordset("delete from test");
+  CloseRecordset();
+  OpenRecordset("select * from test");
+  for (i = 0; i &lt; 5; i++)
+  {
+    AddNew();
+    sprintf(buf, "item %d", i);
+    sprintf(buf2, "%d", i);
+    SetField("name", buf);
+    SetField("num", buf2);
+    Update("test");
+  }
+  Refresh();
+  MoveFirst();
+  while (RecordsetEOF () != EOF)
+  {
+    for (i = 0; i &lt; FieldCount (); i++) printf("%s\t", GetFieldN(i));
+    puts("");
+    MoveNext();
+  }
+  MoveFirst ();
+  while (RecordsetEOF () != EOF)
+  {
+    printf ("Looking at '%s'\n", GetField ("name"));
+    if (strcmp(GetField("name"), "item 3") == 0)
+    {
+       puts("Changing data");
+       Edit();
+       SetField("name", "item 5");
+       Update("test");
+    }
+    if (strcmp(GetField("name"), "item 4") == 0)
+    {
+       puts("Deleting data");
+       Delete("test");
+    }
+    MoveNext();
+  }
+  CloseRecordset();
+  CloseDatabase();
+  exit(0);
+}
+</PRE>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

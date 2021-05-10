@@ -1,0 +1,1042 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+  <TITLE>MySQLdb: a Python interface for MySQL</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1>5. MySQLdb: Python-интерфейс для MySQL</H1>
+<P>MySQLdb представляет собой поточно-совместимый интерфейс с популярной
+СУБД MySQL, который обеспечивает Python API для баз данных. Здесь
+рассматривается его версия 0.9.1 (автор Andy Dustman, andy@dustman.net).
+Пакет распространяется по лицензии GPL и доступен для закачки с
+http://sourceforge.net/projects/mysql-python. Цели проекта:
+<UL><LI>Совместимость с Python API для баз данных (версия 2.0).
+<LI>Поточно-безопасная работа.
+<LI>Потоки теперь не будет блокировать друг друга.
+<LI>Совместимость с MySQL-3.23 и выше.</UL>
+
+<P>Требования:
+
+<P>Python 1.5.2 или выше:
+<UL><LI>http://www.python.org
+<LI>Версии ниже, чем 1.5.2, <B>НЕ РАБОТАЮТ</B>.
+<LI>Все версии, начиная с 1.5.2, работать должны. 1.6.x не тестировались.
+2.0.1, 2.1.1 и 2.2a3 были протестированы успешно.
+<LI>Если Вы имеете Red Hat Linux или подобную систему установки пакетов,
+надлежит установить бибилотеки и заголовки разработчика для Python
+(python-devel). Для версий Python-2.x это python2-devel.</UL>
+
+<P>Distutils 1.0.2 или выше:
+<UL><LI>Поставляется с Python 1.6 и выше.
+<LI>1.0.2 включена в Python version 2.1 и выше.
+<LI>http://www.python.org/sigs/distutils-sig/download.html</UL>
+
+<P>MySQL 3.22.19 или выше.
+<UL><LI>http://www.mysql.com/downloads
+<LI>Версии ниже, чем 3.22 <B>точно НЕ РАБОТАЮТ</B>.
+<LI>Версии ниже, чем 3.22.19 <B>могут не работать</B>.
+<LI>MySQL-4.0 поддерживается.
+<LI>MySQL-3.23 поддерживается.
+<LI>Если Вы имеете Red Hat Linux или подобную систему установки пакетов,
+надлежит установить бибилотеки и заголовки разработчика для MySQL. Если Вы
+используете пакеты с mysql.com, Вам нужен пакет MySQL-devel. Если Вы
+используете пакеты Red Hat, Вам нужен mysql-devel. Я предпочитаю пакеты с
+сайта www.mysql.com.</UL>
+
+<H2><A NAME="s1">5.1. Введение</A></H2>
+<P>Первое, что Вы будете делать, редактирование скрипта <B>setup.py</B>.
+Имеются некоторые переменные, которые сообщают где искать MySQL include-файлы
+и библиотеки. Значения корректны для стандартной установки MySQL в Red Hat
+Linux (6.2) RPM. Если Вы имеете другую платформу, Вы должны будете вычислить
+нужные значения самостоятельно. Вам почти никогда не придется изменять это.
+Если Вы имеете старую версию distutils (до 1.0.2), обновитесь или удалите
+параметры, относительно которых система возражает.
+
+<P>Обратите внимание, что недавние двоичные дистрибутивы с www.mysql.com
+включают два набора библиотек пользователей: <B>mysqlclient</B> и
+<B>mysqlclient_r</B>. Последний хранит поточно-безопасные библиотеки, так что
+используйте именно его, если потоки Вам нужны.
+
+<P>Если Вы имеете динамические библиотеки пользователей (в Linux .so-файлы),
+они будут использоваться по умолчанию. Если они не в Вашем стандартном пути
+загрузчика, Вы должны будете установить или откорректировать системную
+переменную <B>LD_LIBRARY_PATH</B> (в Linux) или ту, которую Ваша платформа
+требует. Иначе Вы можете скорректировать <B>setup.py</B>, чтобы компоновать
+со статической библиотекой. Если Вы используете стандартный пакет RPM, с этим
+не должно быть особых проблем.
+
+<P><B>ПРЕДУПРЕЖДЕНИЕ:</B> Если Вы используете двоичный пакет <B>Zope</B>, Вы
+нуждаетесь в выполнении скрипта <B>setup.py</B> программой <B>python</B> из
+<B>Zope</B>. Иначе <B>Zope (ZMySQLDA)</B> не может найти <B>_mysql</B>.
+
+<P>Если Вы предпочитаете RPM, Вы можете использовать команду <B>bdist_rpm</B>
+с <B>setup.py</B>. Это только формирует RPM, но не устанавливает его.
+
+<P>Этот модуль должен быть совместим с более старым интерфейсом, написанным
+Joe Skinner. Однако, старая версия:
+<UL><LI>Не поточно-совместимая (операции базы данных могли бы блокировать
+все другие потоки)
+<LI>Написан для MySQL 3.21 (не компилируется для более новых
+версий без заплаток)
+<LI>Не очень активно поддерживается</UL>
+
+<P>MySQLdb полностью новый модуль, распространяемый бесплатно согласно GNU
+Public License. Никакой код из той версии не используется в MySQLdb.
+
+<H2><A NAME="ss1.1">5.1.1 Платформы</A></H2>
+<H3>Linux/UNIX</H3>
+<P>Этот модуль разработан на RedHat Linux (в настоящее время 7.1) для Intel.
+Это должно формироваться без больших трудностей на большинстве платформ,
+используя скрипт <CODE>setup.py</CODE>. Возможно этот модуль работает и под
+MacOS X. Вы нуждаетесь в пакете Distutils, который поставляется с Python 2.0.
+Если Вы не имеете его (то есть Вы имеете Python 1.5.2), Вы можете скачать
+пакет с сайта <A HREF="../../../www.python.org/default.htm">www.python.org</A>.
+
+<H3>Windows (3.11, 95, 98, NT, 2000, CE)</H3>
+<P>Windows <EM>не</EM> поддерживаемая платформа. Однако, скрипт
+<CODE>setup.py</CODE> по сообщениям работает нормально.
+
+<H2><A NAME="ss1.2">5.1.2 Python</A></H2>
+<P>MySQLdb требует Python 1.5.2 или новее. Более ранние версии не будут
+работать потому, что MySQL нужна поддержка для C <CODE>long long</CODE>. Если
+Вы имеете более раннюю версию Python, обновитесь хотя бы до 1.5.2. Текущая
+разработка выполнена в Python 2.1, но старый Python 1.5.2 все еще будет
+поддержан в обозримом будущем.
+
+<H2><A NAME="ss1.3">5.1.3 MySQL</A></H2>
+<H3>MySQL-3.22</H3>
+<P>Гарантируется работа версии 3.22.32 и выше. Некоторые старые версии могут
+работать, если Вы имеете старшую версию, Вы должны серьезно подумать об
+апгрейде в целях исправления ошибок и дыр в защите.
+
+<P>MySQL-3.22 имеет проблему при попытке вставить значения <CODE>TIME</CODE>
+с дробными секундами. Значения, подобные 12:56:13.00, возвращены как
+344:13:00, очевидно интерпретируя первоначальный ввод как 12 дней, 56 часов,
+13 минут и 0 секунд (12 дней и 56 часов=344 часа). Чтобы избежать этой
+проблемы, используйте тип <CODE>DateTimeDelta</CODE>.
+
+<H3>MySQL-3.23</H3>
+<P>MySQLdb поддерживает транзакции, если их поддерживает <EM>сервер</EM>. Но
+не гарантирует, что транзакции будут работать. Для этого Вы должны
+использовать транзакционно-безопасную таблицу (TST). Текущие TST: BDB и
+InnoDB. Таблицы GEMINI намечены для MySQL-4.0. Обратите внимание, что MySQL
+функционирует в режиме <CODE>AUTOCOMMIT</CODE> по умолчанию, и MySQLdb
+считает, что <CODE>AUTOCOMMIT</CODE> включен. Чтобы изменить это, используйте
+инструкции SQL <CODE>SET AUTOCOMMIT=0</CODE>.
+
+<H2><A NAME="ss1.4">5.1.4 DateTime</A></H2>
+<P>Если Вы имеете установленный пакет
+<A HREF="../../../www.lemburg.com/files/python/mxDateTime.html">mx.DateTime
+</A>, MySQLdb использует его для связанных с датой объектов. Иначе они будут
+возвращены как строки. Вы можете также изменять словарь преобразования типов,
+чтобы возвратить их как другие объектные классы.
+
+<H2><A NAME="MySQLmodule"></A><A NAME="ss1.5">5.1.5 MySQLmodule</A></H2>
+<P>MySQLmodule, старый интерфейс MySQL, разработанный Joe Skinner, является
+также интерфейсом C/Python. <CODE>MySQL</CODE>, C-часть, имеет интерфейс,
+подобный perl DBI. Кроме того, имеется часть Python, <CODE>Mysqldb</CODE>,
+которая обеспечивает интерфейс DB API v1.0, написанный James Henstridge.
+MySQLdb-0.2.2 и выше включает <CODE>CompatMysqldb</CODE>, который является
+адаптацией <CODE>Mysqldb</CODE> к <CODE>_mysql</CODE>. Это должно
+рассмотреться экспериментальным решением.
+
+<P>Напротив, C-часть MySQLdb, <CODE>_mysql</CODE>, разработана в соответствии
+с MySQL C API объектно-ориентированным способом. <CODE>MySQLdb</CODE>
+обеспечивает интерфейс DB API v2.0, который имеет некоторые отличия от
+v1.0, в частности такие изменения:
+
+<TABLE BORDER><TR><TD>Действие</TD><TD>Mysqldb</TD><TD>MySQLdb</TD></TR>
+<TR><TD>Соединение</TD><TD><CODE>db=Mysqldb.Mysqldb("db@host user pass")
+</CODE></TD>
+<TD><CODE>db=MySQLdb.connect(db='db', host='host', user='user',
+passwd='pass')</CODE></TD></TR>
+<TR><TD>Неявный курсор</TD><TD><CODE>db.execute(SQL)</CODE></TD>
+<TD>Неявные курсоры удалены из DB API v2.0. Всегда используйте
+<CODE>c=db.cursor()</CODE></TD></TR>
+<TR><TD>Строка выборок как словарь</TD><TD><CODE>c.fetchDict()</CODE>,
+ключи: "<EM>table.column</EM>"</TD>
+<TD>Не стандарт: альтернативный класс <CODE>DictCursor</CODE> предоставляет
+интерфейс словаря, ключи являются "<EM>column</EM>" или "<EM>table.column
+</EM>, если имеются два столбца с одним именем. Используйте SQL-оператор
+<CODE>AS</CODE> для переименования полей.</TD></TR>
+<TR><TD>Транзакции</TD><TD><CODE>db.commit()</CODE> и
+<CODE>db.rollback()</CODE> мирно сосуществуют вместе и тихо не делают ничего
+<A HREF="MySQLdb3.htm#rollback">(опасно!)</A></TD>
+<TD><CODE>db.commit()</CODE> и <CODE>db.rollback()</CODE> работают, если
+сервер MySQL может выполнять транзакции, иначе <CODE>db.rollback()</CODE>
+всегда терпит неудачу.</TD></TR></TABLE>
+
+<H2><A NAME="ss1.6">5.1.6 Zope и ZMySQLDA</A></H2>
+<P>Был написан пакет
+<A HREF="../../../dustman.net/andy/python/ZMySQLDA">ZMySQLDA</A>
+для использования с MySQLdb. Это адаптируется из ZOracleDA Digital Creations
+разработчиков системы Zope.
+
+<H2><A NAME="ss1.8">5.1.7 FAQ</A></H2>
+<P>FAQ доступны на
+<A HREF="../../../dustman.net/andy/python/MySQLdb/faq/MySQLdb-FAQ.html">
+http://dustman.net/andy/python/MySQLdb/faq/MySQLdb-FAQ.html</A>.
+
+<H2><A NAME="_mysql"></A><A NAME="s2">5.2. Модуль _mysql</A></H2>
+<P>Если Вы хотите писать прикладные программы, которые переносимы между
+базами данных, избегайте использовать этот модуль непосредственно. Модуль
+<CODE>_mysql</CODE> обеспечивает интерфейс, который обычно осуществляет MySQL
+C API. Для получения большего количества информации обратитесь к документации
+на пакет MySQL. Документация для этого модуля преднамеренно слаба потому, что
+Вы, вероятно, должны использовать более высокий уровень (модуль MySQLdb).
+
+<H2><A NAME="ss2.1">5.2.1 Трансляция MySQL C API</A></H2>
+<P>MySQL C API был обернут объектно-ориентированным способом. Единственные
+MySQL структуры данных, которые выполнены в данном интерфейсе, это
+<CODE>MYSQL</CODE> (дескриптор подключения базы данных) и
+<CODE>MYSQL_RES</CODE> (дескриптор результата). Вообще, любая функция,
+которая берет как параметр <CODE>MYSQL *mysql</CODE>, теперь представляет
+собой метод объекта подключения, и любая функция, которая берет
+<CODE>MYSQL_RES *result</CODE>, теперь метод объекта результата. Функции, не
+требующие ни одной структуры MySQL, выполнены как функции в модуле. Функции,
+требующие какую-то из других структур данных MySQL, вообще не выполнены. Во
+всех случаях префикс <CODE>mysql_</CODE> удален из имени. Большинство
+перечисленных методов <CODE>conn</CODE> также доступно как методы объекта
+MySQLdb Connection. Их использование не переносимо между базами данных.
+
+<TABLE BORDER><TR><TD>C API</TD><TD><CODE>_mysql</CODE></TD></TR>
+<TR><TD><CODE>mysql_affected_rows()</CODE></TD>
+<TD><CODE>conn.affected_rows()</CODE></TD></TR>
+<TR><TD><CODE>mysql_close()</CODE></TD><TD><CODE>conn.close()</CODE></TD>
+</TR>
+<TR><TD><CODE>mysql_connect()</CODE></TD><TD><CODE>_mysql.connect()</CODE>
+</TD></TR>
+<TR><TD><CODE>mysql_data_seek()</CODE></TD><TD><CODE>result.data_seek()
+</CODE></TD></TR>
+<TR><TD><CODE>mysql_debug()</CODE></TD><TD><CODE>_mysql.debug()</CODE></TD>
+</TR>
+<TR><TD><CODE>mysql_dump_debug_info</CODE></TD>
+<TD><CODE>conn.dump_debug_info()</CODE></TD></TR>
+<TR><TD><CODE>mysql_escape_string()</CODE></TD>
+<TD><CODE>_mysql.escape_string()</CODE></TD></TR>
+<TR><TD><CODE>mysql_fetch_row()</CODE></TD><TD><CODE>result.fetch_row()
+</CODE></TD></TR>
+<TR><TD><CODE>mysql_get_client_info()</CODE></TD><TD>
+<CODE>_mysql.get_client_info()</CODE></TD></TR>
+<TR><TD><CODE>mysql_get_host_info()</CODE></TD>
+<TD><CODE>conn.get_host_info()</CODE></TD></TR>
+<TR><TD><CODE>mysql_get_proto_info()</CODE></TD>
+<TD><CODE>conn.get_proto_info()</CODE></TD></TR>
+<TR><TD><CODE>mysql_get_server_info()</CODE></TD>
+<TD><CODE>conn.get_server_info()</CODE></TD></TR>
+<TR><TD><CODE>mysql_info()</CODE></TD><TD><CODE>conn.info()</CODE></TD></TR>
+<TR><TD><CODE>mysql_insert_id()</CODE></TD><TD><CODE>conn.insert_id()</CODE>
+</TD></TR>
+<TR><TD><CODE>mysql_list_dbs()</CODE></TD><TD><CODE>conn.list_dbs()</CODE>
+</TD></TR>
+<TR><TD><CODE>mysql_list_fields()</CODE></TD><TD><CODE>conn.list_fields()
+</CODE></TD></TR>
+<TR><TD><CODE>mysql_list_processes()</CODE></TD><TD>
+<CODE>conn.list_processes()</CODE></TD></TR>
+<TR><TD><CODE>mysql_list_tables()</CODE></TD><TD><CODE>conn.list_tables()
+</CODE></TD></TR>
+<TR><TD><CODE>mysql_num_fields()</CODE></TD><TD><CODE>result.num_fields()
+</CODE></TD></TR>
+<TR><TD><CODE>mysql_num_rows()</CODE></TD><TD><CODE>result.num_rows()</CODE>
+</TD></TR>
+<TR><TD><CODE>mysql_options()</CODE></TD><TD><CODE>_mysql.connect()</CODE>
+</TD></TR>
+<TR><TD><CODE>mysql_ping()</CODE></TD><TD><CODE>conn.ping()</CODE></TD></TR>
+<TR><TD><CODE>mysql_query()</CODE></TD><TD><CODE>conn.query()</CODE></TD>
+</TR>
+<TR><TD><CODE>mysql_real_connect()</CODE></TD><TD><CODE>_mysql.connect()
+</CODE></TD></TR>
+<TR><TD><CODE>mysql_real_query()</CODE></TD><TD><CODE>conn.query()</CODE>
+</TD></TR>
+<TR><TD><CODE>mysql_real_escape_string()</CODE></TD><TD><CODE>
+conn.escape_string()</CODE></TD></TR>
+<TR><TD><CODE>mysql_row_seek()</CODE></TD><TD><CODE>result.row_seek()</CODE>
+</TD></TR>
+<TR><TD><CODE>mysql_row_tell()</CODE></TD><TD><CODE>result.row_tell()</CODE>
+</TD></TR>
+<TR><TD><CODE>mysql_select_db()</CODE></TD><TD><CODE>conn.select_db()</CODE>
+</TD></TR>
+<TR><TD><CODE>mysql_stat()</CODE></TD><TD><CODE>conn.stat()</CODE></TD></TR>
+<TR><TD><CODE>mysql_store_result()</CODE></TD><TD><CODE>conn.store_result()
+</CODE></TD></TR>
+<TR><TD><CODE>mysql_thread_id()</CODE></TD><TD><CODE>conn.thread_id()</CODE>
+</TD></TR>
+<TR><TD><CODE>mysql_use_result()</CODE></TD><TD><CODE>conn.use_result()
+</CODE></TD></TR>
+<TR><TD><CODE>CLIENT_*</CODE></TD><TD><CODE>MySQLdb.constants.CLIENT.*</CODE>
+</TD></TR>
+<TR><TD><CODE>CR_*</CODE></TD><TD><CODE>MySQLdb.constants.CR.*</CODE></TD>
+</TR>
+<TR><TD><CODE>ER_*</CODE></TD><TD><CODE>MySQLdb.constants.ER.*</CODE></TD>
+</TR>
+<TR><TD><CODE>FIELD_TYPE_*</CODE></TD><TD><CODE>
+MySQLdb.constants.FIELD_TYPE.*</CODE></TD></TR>
+<TR><TD><CODE>FLAG_*</CODE></TD><TD><CODE>MySQLdb.constants.FLAG.*</CODE>
+</TD></TR></TABLE>
+
+<H2><A NAME="ss2.2">5.2.2 Примеры использования _mysql</A></H2>
+<P>Допустим, что Вы хотите использовать <CODE>_mysql</CODE>.
+Имеются некоторые примеры.
+
+<P>Самое простое подключение к базе данных:
+<PRE>
+import _mysql
+db=_mysql.connect()
+</PRE>
+
+<P>Это создает подключение к серверу MySQL на локальной машине, используя
+стандартый сокет UNIX, Ваше имя входа в систему (из системной переменной
+USER), пустой пароль и не применяет команду <CODE>USE</CODE>. Возможно, это
+будет работать у Вас, если Вы установили файл конфигурации (<CODE>~/.my.cnf
+</CODE>). Но скорее всего Вы должны обеспечить большее количество информации:
+<PRE>
+db=_mysql.connect("localhost","joebob","moonpie","thangs")
+</PRE>
+
+<P>Это создает подключение к серверу MySQL на локальной машине, используя
+<EM>TCP на стандартном порте (3306)</EM>, имя пользовател joebob, пароль
+moonpie и выбирает начальную базу данных thangs.
+
+<P>Конечно, Вы должны использовать TCP, если работаете с удаленной системой.
+Здесь я не рассмотрел часть параметров <CODE>connect()</CODE>, и Вы обратите
+внимание, что, если Вы используете позиционные параметры, настроить связь по
+TCP не так-то просто. Кроме того, сокеты UNIX быстрее. Я предпочитаю
+использовать параметры ключевого слова:
+<PRE>
+db=_mysql.connect(host="localhost",user="joebob",
+                  passwd="moonpie",db="thangs")
+</PRE>
+Это делает точно то же, что делал последний пример, но проще для чтения.
+Теперь, если Вы действительно хотели использовать сокет UNIX, и Ваше имя
+входа в систему joebob, Вы могли бы сократить этот пример до:
+<PRE>
+db=_mysql.connect(passwd="moonpie",db="thangs")
+</PRE>
+Имеются некоторые другие параметры, которые Вы можете использовать, и
+большинство их не так уж и необходимо, кроме одного, о котором чуть ниже.
+Во всем остальном обратитесь к встроенной документации. Модуль Python 2.1
+<CODE>pydoc</CODE> представляет собой хороший справочник.
+
+<P>Теперь Вы имеете открытое подключение <CODE>db</CODE> и хотите сделать
+запрос. Не имеется никаких курсоров в MySQL и никакой подстановки параметров,
+так что Вы должны передать полную строку запроса <CODE>db.query()</CODE>:
+<PRE>
+db.query("""SELECT spam, eggs, sausage FROM breakfast
+         WHERE price &lt; 5""")
+</PRE>
+Не имеется никакого значения возврата, но исключительные ситуации могут быть
+вызваны. Исключительные ситуации определены в отдельном модуле,
+<CODE>_mysql_exceptions</CODE>, но <CODE>_mysql</CODE> экспортирует их.
+Читайте спецификацию DB API
+(http://www.python.org/topics/database/DatabaseAPI-2.0.html), чтобы выяснить
+то, чем они являются, или Вы можете использовать <CODE>MySQLError</CODE>.
+
+<P>В этой точке Ваш запрос был выполнен, и Вы должны получить результаты. Вы
+имеете два параметра:
+<PRE>
+r=db.store_result()
+# ...или...
+r=db.use_result()
+</PRE>
+Оба метода возвращают объект результата. В чем же разница? А в том, что
+<CODE>store_result()</CODE> возвращает весь набор результатов пользователю
+немедленно. Если Ваш набор результатов действительно большой, это станет
+проблемой. Один путь обхода этого состоит в том, чтобы добавить предложение
+<CODE>LIMIT</CODE> к Вашему запросу, чтобы ограничить число возвращенных
+строк. Но можно использовать <CODE>use_result()</CODE>, который хранит набор
+результатов на сервере и посылает его построчно, когда Вы выбираете. Это
+связывает ресурсы сервера и подключение: Вы не можете делать больше запросов,
+пока Вы не выбрали <EM>все</EM> строки. Вообще я рекомендую использовать
+<CODE>store_result()</CODE>, если Ваш набор результатов не огромен, и Вы не
+можете использовать <CODE>LIMIT</CODE>.
+
+<P>Теперь для фактического получения реальных результатов надо:
+<PRE>
+>>> r.fetch_row()
+(('3','2','0'),)
+</PRE>
+Первая вещь, которую Вы должны знать: <CODE>fetch_row()</CODE> берет
+некоторые дополнительные параметры. Первый задает, сколько строк
+(<CODE>maxrows</CODE>) должны быть возвращены. По умолчанию, это возвращает
+одну строку. Это может возвращать меньшее количество строк, чем Вы просите,
+но никогда не больше. Если Вы устанавливаете <CODE>maxrows=0</CODE>, это
+возвращает все строки набора результатов. Если Вы когда-либо получаете пустой
+набор, значит Вы исчерпали строки.
+
+<P>Второй параметр (<CODE>how</CODE>) сообщает как строка должна
+представиться. По умолчанию, это ноль, что означает вернуть как набор.
+<CODE>how=1</CODE> значит вернуть данные как словарь, где ключи представляют
+собой имена столбца или <CODE>table.column</CODE>, если имеются два столбца с
+тем же самым именем. <CODE>how=2</CODE> аналогично <CODE>how=1</CODE>, кроме
+того, что ключи <EM>всегда</EM> <CODE>table.column</CODE>, это для
+совместимости со старым модулем <CODE>Mysqldb</CODE>.
+
+<P>Другая причуда: известно, что обрабатываются числовые столбцы, почему они
+возвращены как строки? Потому, что MySQL возвращает все данные как строки
+просто по определению и ожидает, что Вы преобразуете их непосредственно. Как
+я понимаю, все данные в базе хранятся именно как строки, как бы они не
+выглядели снаружи. Это было бы реальной проблемой, но фактически
+<CODE>_mysql</CODE> может делать это для Вас. <CODE>MySQLdb</CODE> делает это
+для Вас сам. Чтобы иметь автоматическое выполненное преобразование типов, Вы
+должны создать словарь конвертера типов и передать его в
+<CODE>connect()</CODE> как параметр ключевого слова <CODE>conv</CODE>.
+
+<P>Ключи в <CODE>conv</CODE> должны быть типами столбцов MySQL, которые в C
+API являются <CODE>FIELD_TYPE_*</CODE>. Вы можете получать эти значения так:
+<PRE>
+from MySQLdb.constants import FIELD_TYPE
+</PRE>
+
+<P>По умолчанию любой тип столбца, который не может быть найден в
+<CODE>conv</CODE>, возвращен как строка, которая пригодна для самых разных
+применений. Для наших целей нужно:
+<PRE>
+my_conv = {FIELD_TYPE.LONG: int}
+</PRE>
+Это означает, если это <CODE>FIELD_TYPE_LONG</CODE>, обработать это
+встроенной <CODE>int()</CODE>. Обратите внимание, что
+<CODE>FIELD_TYPE_LONG</CODE> представляет собой столбец <CODE>INTEGER</CODE>,
+который соответствует C <CODE>long</CODE>, который является также типом,
+используемым для нормального целого числа в Python. Но остерегайтесь: если
+это столбец <CODE>UNSIGNED INTEGER</CODE>, это может вызвать переполнение. По
+этой причине <CODE>MySQLdb</CODE> фактически использует <CODE>long()</CODE>,
+чтобы сделать преобразование.
+
+<P>Затем, если Вы используете
+<CODE>db=_mysql.connect(conv=my_conv...)</CODE>, результаты возвратятся в
+виде <CODE>((3, 2, 0),)</CODE>, который является тем, что и ожидается.
+
+<H2><A NAME="MySQLdb"></A><A NAME="s3">5.3. MySQLdb: интерфейс DB API</A>
+</H2>
+<P>MySQLdb представляет собой тонкую обертку на Python вокруг
+<CODE><A HREF="MySQLdb2.htm#_mysql">_mysql</A></CODE>. MySQLdb делает его
+совместимым с интерфейсом Python DB API (version 2). В действительности код,
+который осуществляет API, находится в <CODE>_mysql</CODE> ради эффективности.
+
+<H2><A NAME="ss3.1">5.3.1 Функции и атрибуты</A></H2>
+<P>Только несколько высокопоставленных функций и атрибутов
+определены внутри MySQLdb.
+
+<DL><DT><B><A NAME="connect()"></A>connect(parameters...)</B>
+<DD>Конструктор для создания подключения. Возвращает объект подключения
+(Connection Object). Параметры те же, как и для MySQL C API. Кроме того,
+имеются несколько дополнительных ключевых слов, которые соответствуют тому,
+что Вы передали бы как <CODE>mysql_options()</CODE> перед соединением.
+Обратите внимание, что некоторые параметры должны быть определены как
+параметры ключевого слова! Значение по умолчанию для каждого параметра: NULL
+или 0, зависит от типа. Важные параметры:
+
+<DL><DT><B>host</B>
+<DD>Имя компьютера, с которым надлежит соединиться Значение по умолчанию:
+используйте локальный компьютер.
+
+<DT><B>user</B>
+<DD>Пользователь, чтобы авторизоваться на сервере. Значение по умолчанию:
+текущий эффективный пользователь.
+
+<DT><B>passwd</B>
+<DD>Пароль, чтобы авторизоваться на сервере. Значение по умолчанию: никакого
+пароля (пустой пароль).
+
+<DT><B>db</B>
+<DD>База данных, которую надо использовать. Значение по умолчанию: никакой
+заданной по умолчанию базы данных.
+
+<DT><B>port</B>
+<DD>TCP-порт сервера MySQL. Значение по умолчанию: стандартный порт (3306).
+
+<DT><B>unix_socket</B>
+<DD>Расположение сокета UNIX. Значение по умолчанию: использование TCP.
+
+<DT><B>conv</B>
+<DD>Словать преобразования типов. Значение по умолчанию: копия
+<CODE>MySQLdb.converters.conversions</CODE>.
+
+<DT><B>compress</B>
+<DD>Включить сжатие протокола. Значение по умолчанию: никакого сжатия.
+
+<DT><B>connect_timeout</B>
+<DD>Аварийное прекращение работы, если соединение не завершено в рамках
+данного числа секунд. Значение по умолчанию: нет тайм-аута.
+
+<DT><B>named_pipe</B>
+<DD>Использовать именованный канал (только под Windows). Значение по
+умолчанию: не делать этого.
+
+<DT><B>init_command</B>
+<DD>Начальная команда, которую надо выдать на сервер при подключении.
+Значение по умолчанию: нет.
+
+<DT><B>read_default_file</B>
+<DD>Файл настроек MySQL. Отсюда берутся <CODE>mysql_options()</CODE>.
+
+<DT><B>read_default_group</B>
+<DD>Заданная по умолчанию группа в файле настроек. Отсюда берутся
+<CODE>mysql_options()</CODE>.
+
+<DT><B>cursorclass</B>
+<DD>Класс курсора, который использует <CODE>cursor()</CODE>, если не
+перекрыт. Значение по умолчанию: <CODE>MySQLdb.cursors.Cursor</CODE>. Это
+должно быть <EM>параметром ключевого слова</EM>.</DL>
+
+<DT><B>apilevel</B>
+<DD>Строковая константа, задающая поддерживаемый уровень DB API: '2.0'.
+
+<DT><B>threadsafety</B>
+<DD>Константа типа Integer, устанавливающая уровень поточной безопасности,
+который поддерживает интерфейс. С MySQLdb version 0.9.0 это установлено в 1,
+что означает: потоки могут совместно использовать модуль.
+
+<P>Протокол MySQL не может обрабатывать много потоков, использующих то же
+самое подключение, сразу. Более ранние версии MySQLdb использовали
+блокировку, чтобы достигнуть threadsafety=2. Несмотря на то, что это не
+должно активно использовать стандартный класс Cursor (который используется в
+<CODE>mysql_store_result()</CODE>), это усложнено SSCursor (который
+используется в <CODE>mysql_use_result()</CODE>. Здесь Вы должны
+гарантировать, что все строки прочитались прежде, чем другой запрос сможет
+быть выполнен. Это далее усложнено добавлением транзакций, начинающихся
+когда курсор выполняет запрос, и завершающихся выполнением
+<CODE>COMMIT</CODE> или <CODE>ROLLBACK</CODE> объектом Connection. Два потока
+не могут совместно использовать подключение, в то время как транзакция
+происходит, в дополнение к неспособности совместно использовать его в течение
+выполнения запроса. К сожалению, это чрезмерно усложнило код.
+
+<P>Общий результат этого: совместно не используйте подключения разными
+потоками. Это не стоит прилагаемых усилий и в результате, вероятно, причинит
+вред эффективности, так как сервер MySQL выполняет отдельный поток для
+каждого подключения. Вы можете, конечно, делать кэширование подключений через
+специальный пул, и давать подключения с одним потоком одновременно. Если Вы
+позволяете двум потокам использовать подключение одновременно, библиотека
+пользователей MySQL, вероятно, будет сваливаться.
+
+<DT><B>paramstyle</B>
+<DD>Строковая константа, устанавливающая тип маркера параметра,
+форматирующего ожидаемое интерфейсом. Установите в 'format'=ANSI C
+printf-коды формата, например '...WHERE name=%s'. Если объект отображения
+используется для conn.execute(), то интерфейс фактически использует
+'pyformat'= расширенные форматные коды Python, например, '...WHERE
+name=%(name)s'. Однако, API теперь не позволяет спецификацию больше, чем
+одного стиля в paramstyle.
+
+<P>Примечание о совместимости: старые версии MySQLmodule используют подобную
+схему задания параметра, но требуют, чтобы кавычки были помещены вокруг
+строк формата, которые будут содержать строки, даты и подобные символьные
+данные. Это не требуется для MySQLdb. Рекомендуется, чтобы %s (но не '%s')
+использовался для всех параметров, независимо от типа. Интерфейс выполняет
+все необходимое цитирование сам.
+
+<DT><B><A NAME="conversions"></A>conv</B>
+<DD>Словарь, отображающий типы MySQL (из <CODE>FIELD_TYPE.*</CODE>) к
+вызываемым объектам Python (обычно функциям), которые преобразовываются из
+строк в нужные типы. Это инициализировано с приемлемыми значениями по
+умолчанию для большинства типов. При создании объекта Connection Вы можете
+передать Ваш собственный словарь конвертера типа как параметр ключевого
+слова. Иначе это использует копию <CODE>MySQLdb.converters.conversions</CODE>.
+Словарь включает некоторые из функций модуля <CODE>DateTime</CODE>, если это
+доступно. Несколько ненормативных типов возвращены как строки,
+
+<P>Начиная с MySQL-3.23, MySQL поддерживает различные наборы символов на
+клиенте и сервере, а также новую функцию цитирования
+<CODE>mysql_real_escape_string()</CODE>. Это требует, чтобы функция
+цитирования строки была методом, связанным с объектом connection. MySQLdb
+обрабатывает это для Вас автоматически. Однако, если Вы чувствуете
+потребность сделать что-то особое со строками, Вы должны изменить словарь
+после открытия подключения.</DL>
+
+<H2><A NAME="ss3.2">5.3.2 Объекты Connection</A></H2>
+<P>Объекты Connection возвращены функцией <CODE>connect()</CODE>.
+<DL><DT><B>commit()</B>
+<DD>Если база данных и таблица поддерживают транзакции, это передает текущую
+транзакцию, Иначе этот метод успешно не делает ничего.
+
+<DT><B><A NAME="rollback"></A>rollback()</B>
+<DD>Если база данных и таблица поддерживают транзакции, это отменяет текущую
+транзакцию, Иначе этот метод вызывает исключение
+<CODE>NotSupportedError</CODE>.
+
+<P>Примечание совместимости: старые версии
+<A HREF="MySQLdb1.htm#MySQLmodule">MySQLmodule</A> определяют этот метод, так
+что он не далет ничего. Это опасное поведение, поскольку успешная обратная
+перемотка указывает, что текущая транзакция отменена.
+
+<DT><B>cursor([cursorclass])</B>
+<DD>MySQL не поддерживает курсоры, однако, курсоры легко эмулируются. Вы
+можете обеспечивать альтернативный класс курсора как факультативный параметр.
+Если это не представлено, берется значение по умолчанию данное при создании
+объекта подключения или стандартного класса <CODE>Cursor</CODE>.
+
+<DT><B>begin()</B>
+<DD>Явно запускает транзакции. Обычно Вы не должны использовать это:
+выполнение запроса начинает новую транзакцию, если ни одной работающей нет.
+Если включен AUTOCOMMIT, Вы можете использовать <CODE>begin()</CODE> для его
+временного отключения. AUTOCOMMIT продолжит работу после следующего вызова
+<CODE>commit()</CODE> или <CODE>rollback</CODE>.</DL>
+
+<H2><A NAME="ss3.3">5.3.3 Объекты Cursor</A></H2>
+<DL><DT><B>callproc()</B>
+<DD>Не реализован.
+
+<DT><B>close()</B>
+<DD>Закрывает курсор. Будущие операции вызывают исключение
+<CODE>ProgrammingError</CODE>. Если Вы используете
+<A HREF="MySQLdb4.htm#SSCursor">курсоры стороны сервера</A>, очень важно
+закрыть курсор, когда Вы с ним закончили, но перед созданием нового курсора.
+
+<DT><B>insert_id()</B>
+<DD>Возвращает последнее значение поля <CODE>AUTO_INCREMENT</CODE>,
+вставленное в базу данных.
+
+<DT><B>info()</B>
+<DD>Возвращает некоторую информацию относительно последнего запроса. Обычно
+Вы не должны проверять это. С заданным по умолчанию курсором любое
+предупреждение MySQL вызовет исключение <CODE>Warning</CODE>. Если Вы
+используете класс курсора без предупреждений, рекомендую проверять
+<B>info()</B>. Подробности в документации MySQL на <CODE>mysql_info()</CODE>.
+
+<DT><B>setinputsizes()</B>
+<DD>Не делает ничего.
+
+<DT><B>setoutputsizes()</B>
+<DD>Не делает ничего.</DL>
+
+<H2><A NAME="ss3.4">5.3.4 Некоторые примеры использования</A></H2>
+<P>Метод <CODE>connect()</CODE> работает почти также, как и с
+<CODE>_mysql</CODE>:
+<PRE>
+import MySQLdb
+db=MySQLdb.connect(passwd="moonpie",db="thangs")
+</PRE>
+
+Чтобы выполнить запрос, Вы сначала нуждаетесь в курсоре, а затем Вы можете
+выполнять запросы на нем.
+<PRE>
+c=db.cursor()
+max_price=5
+c.execute("""SELECT spam, eggs, sausage FROM breakfast
+          WHERE price &lt; %s""", (max_price,))
+</PRE>
+
+<P>В этом примере <CODE>max_price=5</CODE>. Почему затем в строке
+использована опция <CODE>%s</CODE>? Потому, что MySQLdb преобразует это в
+литеральное значение SQL, которое является строкой '5'. Когда это закончено,
+запрос будет фактически таким: "...WHERE price &lt; 5".
+
+<P>Так, а теперь результаты:
+<PRE>
+>>> c.fetchone()
+(3L, 2L, 0L)
+</PRE>
+В отличие от примера с <CODE>_mysql</CODE>, это возвращает одиночный блок
+результатов, который является строкой, и значения правильно преобразованы.
+
+<P>Как упомянуто ранее, в то время как столбец MySQL INTEGER транслируется в
+Python integer, UNSIGNED INTEGER может вызвать переполнение, так что эти
+значения преобразованы в Python long integer. До Python 1.6 long integer
+сохраняли L, когда были преобразованы в строки с помощью
+<CODE>str()</CODE>. В 1.6 и позже <CODE>str()</CODE> не включает L. Конечно,
+L всегда выводится при использовании <CODE>repr()</CODE>.
+
+<P>Когда Вы закончили работу с транзакцией, Вы должны выполнить
+<CODE>db.commit()</CODE> или <CODE>db.rollback()</CODE>. Если сервер и
+таблицы не поддерживает транзакции, <CODE>commit()</CODE> будет работать, но
+<CODE>rollback()</CODE> вызовет исключительную ситуацию. Обратите внимание,
+что это методы <EM>connection</EM>, а не <EM>cursor</EM>, даже при том, что
+транзакция запускается через <CODE>c.execute(...)</CODE>.
+
+<P>Если Вы хотели получить большее количество строк, Вы могли бы использовать
+<CODE>c.fetchmany(n)</CODE> или <CODE>c.fetchall()</CODE>. На
+<CODE>c.fetchmany(n)</CODE> параметр <CODE>n</CODE> факультативный и имеет
+значение по умолчанию <CODE>c.arraysize</CODE> (обычно 100). Оба этих метода
+возвращают последовательность строк, или пустую последовательность, если
+строки уже кончились.
+
+<P>Обратите внимание, что в отличие от вышеупомянутого,
+<CODE>c.fetchone()</CODE> вернет <CODE>None</CODE>, когда не имеется больше
+строк для выборки.
+
+<P>Единственный другой метод, который Вы, очень вероятно, используете,
+это многострочная вставка:
+<PRE>
+c.execute("""INSERT INTO breakfast (name, spam, eggs, sausage, price)
+          VALUES (%s, %s, %s, %s, %s)""",
+          [ ("Spam and Sausage Lover's Plate", 5, 1, 8, 7.95 ),
+            ("Not So Much Spam Plate", 3, 2, 0, 3.95 ),
+            ("Don't Wany ANY SPAM! Plate", 0, 4, 3, 5.95 )])
+</PRE>
+
+<P>Здесь мы вставляем три строки по пять значений в каждой. Обратите
+внимание, что имеется смесь типов (строки, int, float), хотя все еще
+используется только <CODE>%s</CODE>. А также обратите внимание, что включили
+только строки формата для одной строки. MySQLdb выбирает и дублирует их
+для каждой строки.
+
+<H2><A NAME="usage"></A><A NAME="s4">5.4. Использование и расширение</A></H2>
+<P>Базы данных, даже SQL-базы данных, изменяются по возможностям очень сильно
+и могут иметь ненормативные свойства. DB API делает хорошую работу по
+обеспечению приемлемо переносимого интерфейса, но некоторых методов там нет.
+Специфические параметры для <CODE><A HREF="MySQLdb3.htm#connect()">connect()
+</A></CODE> полностью зависимы от реализации.
+
+<P>Если Вы полагаете, что Ваша прикладная программа должна выполниться
+на нескольких различных базах данных, автор рекомендует следующий подход,
+основанный на персональном опыте: пишите упрощенный API для Вашей прикладной
+программы, который осуществляет специфические запросы и операции, которые
+Ваша прикладная программа должна выполнить. Выполните этот API как основной
+класс, который должен иметь немного зависимостей от базы данных, а затем
+получите подкласс, который осуществляет необходимые зависимости. Таким
+образом, перенос Вашей прикладной программы к новой базе данных должен быть
+относительно простым вопросом создания нового подкласса для базы данных.
+
+<P>В качестве примера рекомендую изучить модуль SQLDict
+(http://dustman.net/andy/python), который позволяет стандартным запросам
+работать, используя объект, который напоминает словарь, а также читать и
+писать определяемые пользователем дополнительные объекты.
+
+<P>Поскольку объекты MySQLdb Connection и Cursor написаны на Python, Вы
+можете легко получать Ваши собственные подклассы. Имеются несколько классов
+Cursor в MySQLdb.cursors:
+
+<DL><DT><B>BaseCursor</B>
+<DD>Основной класс для объектов Cursor. Не вызывает Warning.
+
+<DT><B>CursorWarningMixIn</B>
+<DD>Создает исключительную ситуацию Warning на запросах,
+которые производят предупреждения.
+
+<DT><B>CursorStoreResultMixIn</B>
+<DD>Заставляет Cursor использовать функцию <CODE>mysql_store_result()</CODE>,
+чтобы получить результат запроса. Весь набор результатов сохранен
+на стороне пользователя.
+
+<DT><B><A NAME="SSCursor"></A>CursorUseResultMixIn</B>
+<DD>Заставляет курсор использовать функцию <CODE>mysql_use_result()</CODE>,
+чтобы получить результат запроса. Набор результатов сохранен на стороне
+сервера и передается построчно.
+
+<DT><B>CursorTupleRowsMixIn</B>
+<DD>Заставляет cursor возвращать строки как блоки значений столбца.
+
+<DT><B>CursorDictRowsMixIn</B>
+<DD>Заставляет cursor возвращать строки как как словарь, где ключи имена
+столбца, а значения представляют значения столбца. Обратите внимание, что,
+если имена столбца не уникальны, то есть, Вы выбираете из двух таблиц,
+которые совместно используют имена столбца, некоторые из них будут переделаны
+в <EM>table.column</EM>. Этого можно избежать, используя ключевое
+слово SQL <CODE>AS</CODE>
+
+<DT><B>Cursor</B>
+<DD>Заданный по умолчанию класс курсора. Этот класс составлен из
+<CODE>CursorWarningMixIn, CursorStoreResultMixIn,
+CursorTupleRowsMixIn</CODE> и <CODE>BaseCursor</CODE>, то есть он создает
+исключительную ситуацию <CODE>Warning</CODE>, использует
+<CODE>mysql_store_result()</CODE> и возвращает строки как блоки.
+
+<DT><B>DictCursor</B>
+<DD>Аналогичен <CODE>Cursor</CODE> за исключением того, что возвращает
+строки как словари.
+
+<DT><B>SSCursor</B>
+<DD>Серверный курсор. Похож на <CODE>Cursor</CODE>, но использует
+<CODE>CursorUseResultMixIn</CODE>. Используйте только, если Вы имеете дело с
+потенциально большими наборами результатов.
+
+<DT><B>SSDictCursor</B>
+<DD>Аналогичен <CODE>SSCursor</CODE> за исключением того, что возвращает
+строки как словари.
+
+<DT><B>XXXCursorNW</B>
+<DD>Курсоры с суффиксом NW не создают исключительную ситуацию Warning.</DL>
+
+<H2><A NAME="s5.1">5.5. MySQLdb FAQ</A></H2>
+<H2><A NAME="s1">5.5.1. Компиляция <CODE>_mysql.so</CODE></A></H2>
+<P>Имеются некоторые общие ошибки, которые случаются в ходе построения
+пакета. Этот раздел покрывает только проблемы UNIX/Linux, поскольку я не
+делаю пакетов под Windows. Файлы типа <CODE>.so</CODE> представляют собой
+динамические библиотеки в Linux и большинстве других вариантов UNIX. Windows
+использует расширение <CODE>.dll</CODE>.
+
+<H2><A NAME="ss1.1">5.5.1.1 ImportError: libmysqlclient.so.6: cannot open
+shared object file:</A> No such file or directory</H2>
+<P>Вы имеете динамические библиотеки MySQL, и по умолчанию Ваш компилятор
+линкует <CODE>_mysql.so</CODE> с ними, но они не в пути загрузчика, когда Вы
+запускаете Python. Вы имеете два базисных параметра:
+
+<OL><LI>Модифицируйте setup.py так, чтобы это компоновалось со статической
+библиотекой: уж ее-то искать не понадобится.</LI>
+<LI>Если Ваш компоновщик поддерживает переключатель пути загрузчика во время
+выполнения, Вы можете также устанавливать это в setup.py.</LI>
+<LI>Измените Вашу среду системы так, чтобы MySQL библиотеки нашлись в Вашем
+пути загрузчика. В Linux Вы можете изменять <CODE>/etc/ld.so.conf</CODE>
+или Вы можете добавить каталог к системной переменной
+<CODE>LD_LIBRARY_PATH</CODE> перед запуском Python.
+<PRE>
+LD_LIBRARY_PATH=/path/to/mysql/libs python ... # Bourne-ish shell
+</PRE></LI></OL>
+
+<H2><A NAME="ss1.2">5.5.1.2 ImportError: ./_mysql.so: undefined symbol:
+PyLong_FromUnsignedLongLong</A></H2>
+<P><CODE>PyLong_FromUnsignedLongLong()</CODE> сначала появляется в
+Python 1.5.2, так что Вы компонуете с более старой версией. Вы можете также
+иметь больше, чем одну установленную версию. Получите Python 1.5.2 (а лучше
+посвежее) с python.org.
+
+<H2><A NAME="ss1.3">5.5.1.3 ImportError: ./_mysql.so:
+undefined symbol: uncompress</A></H2>
+<P>Библиотеки пользователей MySQL-3.23 требуют libz для сжатия gzip. Скрипт
+setup.py должен бы добавить это автоматически.
+
+<H2><A NAME="ss1.4">5.5.1.4 ./_mysql.c:33: mysql.h: No such file or directory
+</A></H2>
+<P>Путь для include-файлов (-I) к Вашим MySQL include-файлам ошибочен.
+Поправьте скрипт setup.py. Другой вариант: Вы не имеете набора разработчика
+для MySQL. Если Вы используете Red Hat RPM, Вы нуждаетесь в RPM-пакете
+<CODE>MySQL-devel</CODE>, чтобы откомпилировать <CODE>_mysql.so</CODE>.
+Однако, если Вы компонуетесь со статическими библиотеками MySQL, Вы можете
+устанавливать <CODE>_mysql.so</CODE> на системе, которая не имеет библиотек
+пользователей MySQL (<CODE>libmysqlclient</CODE>).
+
+<H2><A NAME="ss1.5">5.5.1.5 Я использую только Windows...</A></H2>
+<P>А я не использую Windows. Скрипт setup.py, как предполагается, работает.
+Может также быть связь с каким-либо сторонним пакетом.
+
+<H2><A NAME="s2">5.5.2. Проблемы с ZMySQLDA</A></H2>
+<H2><A NAME="ss2.1">5.5.2.1 Я установил MySQLdb, но ZMySQLDA его не видит</A>
+</H2>
+<P>Вероятно, Вы установили двоичную версию Zope, которая приходит со своим
+собственным интерпретатором Python. Вы должны компилировать MySQLdb с той
+специфической установкой Python. Выясните, где находятся двоичные модули
+python и используйте это, чтобы выполнить setup.py.
+
+<H2><A NAME="ss2.2">5.5.2.2 Я получаю буквы L в столбцах INTEGER</A></H2>
+<P>Вообще-то они должны быть преобразованы в длинные целых числа, чтобы
+избежать переполнения на столбцах UNSIGNED INT. Решения: используйте атрибут
+<CODE>fmt=%d</CODE> на элементах <CODE>dtml-var</CODE> или поставьте
+Zope 2.4, который приходит с Python 2.1, который не добавляет L.
+
+<H2><A NAME="ss2.3">5.5.2.3 Я получаю синтаксическую ошибку SQL на
+предложениях LIMIT, но я не помещал в запрос слово LIMIT!</H2>
+<P>Z метода SQL имеют параметр <CODE>max_rows</CODE>. Если это установлено к
+значению, отличному от нуля, ZMySQLDA автоматически добавляет предложение
+LIMIT к инструкции SELECT. Это сильно повышает эффективность, особенно, если
+набор результатов мог бы быть большим. Если это сталкивается с чем-то,
+установите <CODE>max_rows</CODE> в ноль, и это не будет добавлять предложение
+LIMIT. В частности, Вы, вероятно, должны будете сделать это при вставке строк
+со столбцами AUTO_INCREMENT, поскольку обычно Вы используете
+SELECT, чтобы получить LAST_INSERT_ID(), а LIMIT может блокировать это.
+
+<H2><A NAME="s3">5.5.3. Использование MySQLdb</A></H2>
+<P>MySQLdb представляет собой модуль, соответствующий спецификации Python
+Database API 2.0
+(http://www.python.org/topics/database/DatabaseAPI-2.0.html), так что
+Вы должны быть знакомы с этой спецификацией. Здесь указаны отличия:
+http://dustman.net/andy/python/MySQLdb/doc/MySQLdb.html.
+
+<H2><A NAME="ss3.1">5.5.3.1 cursor.rollback() всегда падает!</A></H2>
+<P>MySQLdb теперь поддерживает транзакции, если сервер поддерживает
+транзакционно-безопасные таблицы (TST), и Вы используете их. Если Ваш сервер
+не поддерживает их, rollback всегда будет терпеть неудачу потому, что система
+не в состоянии выполнить Ваши инструкции. Даже если Ваш сервер поддерживает
+транзакционно-безопасные таблицы, rollback будет терпеть неудачу, если Вы
+изменили любую не-TST таблицу.
+
+<P><CODE>cursor.commit()</CODE>, который пытается завершить транзакцию
+<EM>всегда</EM> работает нормально потому, что MySQL по существу всегда в
+режиме auto-commit mode (если Вы не его не выключили).
+
+<H2><A NAME="ss3.2">5.5.3.2 Как я могу использовать некоторые из специальных
+свойств СУБД MySQL?</A></H2>
+<P>С одной стороны, никак. Не делайте этого, если Вы можете избежать этого.
+Ваша программа не будет переносима к другим базам данных.
+
+<P>Но если Вас эта переносимость не интересует, то почти все специальные
+обращения API выполнены в объекте _mysql, и объект связи в MySQLdb может
+также вызывать их.
+
+<H2><A NAME="ss3.3">5.5.3.3 Я все еще хочу использовать _mysql</A></H2>
+<P>Хорошо, это может быть необходимо в каком-то случае. ZMySQLDA делает
+это потому, что Zope-модуль ZRDB сам по себе API, а слишком много уровней API
+имеют тенденцию к разброду и шатанию. С этим поделать что-либо трудно. Кроме
+того, было фактически довольно просто сделать это именно таким способом, да и
+эффективность малость повысилась.
+
+<OL><LI>Читайте документацию на MySQL, особенно C API для краткого обзора.
+</LI>
+<LI>Читайте документацию на MySQLdb. Это показывает, как C API транслируется
+в Python. К тому же, это неплохой пример реализации.</LI>
+<LI>Читайте исходники для MySQLdb, особенно рекомендуется для изучения файл
+MySQLdb/cursors.py. Этот файл содержит большинство деталей, особенно в
+реализации методов _query.</LI></OL>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

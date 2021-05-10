@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\FactoryMethod-master\cat.FactoryMethod-master\dir.FactoryMethod-master.md">FactoryMethod-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\FactoryMethod-master\README.md">README.md</a>
+        - *# Factory method

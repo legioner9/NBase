@@ -1,0 +1,745 @@
+<HTML>
+<HEAD>
+<TITLE>MySQL. Библиотека отладчика MySQL. [SQL.RU]</TITLE>
+<META http-equiv="Content-Type" CONTENT="text/html; charset=windows-1251">
+<META HTTP-EQUIV="Window-target" CONTENT="_top">
+<META HTTP-EQUIV="Last-Modified" CONTENT="29-03-2001">
+<META NAME="Description" CONTENT="Использование языка SQL, создание клиент-серверных систем. Конференция по MSSQL, Oracle, Interbase, MySQL. Полезные ссылки, документация, рекомендации по разработке информационных систем, сертификация, заказ книг и многое другое.">
+<META NAME="Keywords" CONTENT="SQL, конференция, Database Server, Oracle, Interbase, MySQL, документация, статьи, примеры, книги, ссылки, сертификация, работа, СУБД">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER=0 CELLSPACING=10><TR><TD>
+<CENTER>
+<H2 class="headline">Библиотека отладчика MySQL</H2></CENTER>
+
+<UL><LI><B>Библиотека отладчика MySQL</B></LI>
+<LI>Функции библиотеки отладчика:</LI>
+<UL><LI><A HREF="#dbpush">_db_push_</A></LI>
+<LI><A HREF="#flags">Символы флажка отладки</A></LI>
+<LI><A HREF="#dbpop">_db_pop_</A></LI>
+<LI><A HREF="#dbenter">_db_enter_</A></LI>
+<LI><A HREF="#dbret">_db_return_</A></LI>
+<LI><A HREF="#dbpargs">_db_pargs_</A></LI>
+<LI><A HREF="#dbdoprnt">_db_doprnt_</A></LI>
+<LI><A HREF="#dbdump">_db_dump_</A></LI>
+<LI><A HREF="#ListPars">ListParse</A></LI>
+<LI><A HREF="#InList">InList</A></LI>
+<LI><A HREF="#PushStat">PushState</A></LI>
+<LI><A HREF="#DoTrace">DoTrace</A></LI>
+<LI><A HREF="#DoProf">DoProfile</A></LI>
+<LI><A HREF="#dbkey">_db_keyword</A></LI>
+<LI><A HREF="#Indent">Indent</A></LI>
+<LI><A HREF="#FreeList">FreeList</A></LI>
+<LI><A HREF="#StrDup">StrDup</A></LI>
+<LI><A HREF="#DoPrefix">DoPrefix</A></LI>
+<LI><A HREF="#OpenFile">OpenFile</A></LI>
+<LI><A HREF="#OpenProf">OpenProfile</A></LI>
+<LI><A HREF="#CloseF">CloseFile</A></LI>
+<LI><A HREF="#DbugExit">DbugExit</A></LI>
+<LI><A HREF="#DbugMall">DbugMalloc</A></LI>
+<LI><A HREF="#ststok">static_strtok</A></LI>
+<LI><A HREF="#BaseName">BaseName</A></LI>
+<LI><A HREF="#Writable">Writable</A></LI>
+<LI><A HREF="#ChgOwner">ChangeOwner</A></LI>
+<LI><A HREF="#dbset">_db_setjmp_</A></LI>
+<LI><A HREF="#dblong">_db_longjmp_</A></LI>
+<LI><A HREF="#DelayArg">DelayArg</A></LI>
+<LI><A HREF="#perror">perror</A></LI></UL></UL><HR>
+
+<P>Библиотека отладчика, используемая MySQL была первоначально написана
+Фредом Фишом (Fred Fish). Она будет очень полезна, если Вы планируете
+отлаживать и/или добавлять функциональные возможности к СУБД MySQL.
+
+<P>Автор зачем-то приводит заголовок файла dbug.c из исходников пакета
+(вместе со всеми комментариями к нему). Приведу его и я, поскольку это может
+быть продиктовано какими-либо юридическими проблемами с копирайтом. Поскольку
+я не юрист, привожу этот заголовок без какого-либо перевода (во избежание
+ошибок или искажения смысла юридического документа при переводе).
+
+<P><PRE>
+/*************************************************************************
+ *                              N O T I C E                              *
+ *                                                                       *
+ *                 Copyright Abandoned, 1987, Fred Fish                  *
+ *                                                                       *
+ *   This previously copyrighted work has been placed into the  public   *
+ *   domain  by  the  author  and  may be freely used for any purpose,   *
+ *   private or commercial.                                              *
+ *                                                                       *
+ *   Because of the number of inquiries I was receiving about the  use   *
+ *   of this product in commercially developed works I have decided to   *
+ *   simply make it public domain to further its unrestricted use.   I   *
+ *   specifically  would  be  most happy to see this material become a   *
+ *   part of the standard Unix distributions by AT&T and the  Berkeley   *
+ *   Computer  Science  Research Group, and a standard part of the GNU   *
+ *   system from the Free Software Foundation.                           *
+ *                                                                       *
+ *   I would appreciate it, as a courtesy, if this notice is  left  in   *
+ *   all copies and derivative works.  Thank you.                        *
+ *                                                                       *
+ *   The author makes no warranty of any kind  with  respect  to  this   *
+ *   product  and  explicitly disclaims any implied warranties of mer-   *
+ *   chantability or fitness for any particular purpose.                 *
+ *************************************************************************
+*/
+
+/*
+ *  FILE
+ *      dbug.c   runtime support routines for dbug package
+ *
+ *  SCCS
+ *      @(#)dbug.c      1.25    7/25/89
+ *
+ *  DESCRIPTION
+ *      These are the runtime support routines for the dbug package.
+ *      The dbug package has two main components; the user include
+ *      file containing various macro definitions, and the runtime
+ *      support routines which are called from the macro expansions.
+ *
+ *      Externally visible functions in the runtime support module
+ *      use the naming convention pattern "_db_xx...xx_", thus
+ *      they are unlikely to collide with user defined function names.
+ *
+ *  AUTHOR(S)
+ *      Fred Fish               (base code)
+ *      Enhanced Software Technologies, Tempe, AZ
+ *      asuvax!mcdphx!estinc!fnf
+ *
+ *      Binayak Banerjee        (profiling enhancements)
+ *      seismo!bpa!sjuvax!bbanerje
+ *
+ *      Michael Widenius:
+ *      DBUG_DUMP       - To dump a piece of memory.
+ *      PUSH_FLAG "O"   - To be used instead of "o" if we don't
+ *                        want flushing (for slow systems)
+ *      Check of malloc on entry/exit (option "S")
+*/
+</PRE>
+
+<CENTER><H2>Функции библиотеки отладчика</H2></CENTER>
+
+<P><B><CENTER><A NAME="dbpush">_db_push_</B></CENTER>
+<P>Поместить в стек текущее состояние отладчика, и установить новое.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  VOID _db_push_ (control)
+  char *control;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>По указателю в параметре "control" на строку управления отладкой помещает
+в стек текущее состояние отладки, анализирует строку управления и
+устанавливает новое состояние отладки.
+
+<P>Единственный атрибут нового состояния, унаследованного из предыдущего
+состояния, это текущая функция вложенного уровня. Это может быть отменено,
+используя флажок "r" в строке управления.
+
+<P>Строка управления отладкой является последовательностью полей, разделенных
+двоеточиями:
+
+<P>&lt;field_1&gt;&lt;field_2&gt;&lt;field_N&gt;
+
+<P>Каждое поле состоит из обязательного символа флажка отладки,
+сопровождаемого факультативным "," и списком параметров, разделенных
+запятыми:
+
+<P>flag[,modifier,modifier,...,modifier]
+
+<P><A NAME="flags">Символы флажка отладки:
+<P><TABLE BORDER=1>
+<TR><TD valign=top align=center>d</TD>
+<TD>Разрешает вывод из макроса DBUG_<N> для текущего состояния. Может
+сопровождаться списком ключевых слов, который разрешает вывод только для DBUG
+макрокоманд с соответствующим ключевым словом. Пустой список ключевых слов
+подразумевает вывод для всех макрокоманд.</TD></TR>
+<TR><TD valign=top align=center>D</TD>
+<TD>Ждать после каждой выведенной отладчиком строки. Аргумент задает число
+десятых долей секунды, которое нужно ждать. Например, -#D,20 задает паузу в
+2 секунды.</TD></TR>
+<TR><TD valign=top align=center>f</TD>
+<TD>Ограничивает отладку и/или трассировку списком имен функций. Обратите
+внимание, что пустой список отключит все функции. Соответствующий флажок "d"
+или "t" должен все же быть дан, поскольку этот флажок только ограничивает
+их действие, если они включены.</TD></TR>
+<TR><TD valign=top align=center>F</TD>
+<TD>Идентифицируют имя исходного файла для каждой строки отладки или
+трассирует вывод.</TD></TR>
+<TR><TD valign=top align=center>i</TD>
+<TD>Идентифицируют процесс с pid для каждой строки отладки или трассирует
+вывод.</TD></TR>
+<TR><TD valign=top align=center>g</TD>
+<TD>Включить профилирование. Создайте файл 'dbugmon.out', содержащий
+информацию, которая может использоваться, чтобы профилировать программу.
+Может сопровождаться списком ключевых слов, которые выбирают профилирование
+только для функций в этом списке. Пустой список подразумевает, что все
+функции подлежат профилированию.</TD></TR>
+<TR><TD valign=top align=center>L</TD>
+<TD>Идентифицирует номер строки исходного файла для каждой строки отладки
+или трассирует вывод.</TD></TR>
+<TR><TD valign=top align=center>n</TD>
+<TD>Выводит текущую глубину вложенности функции для каждой строки отладки или
+трассирует вывод.</TD></TR>
+<TR><TD valign=top align=center>N</TD>
+<TD>Номер каждой строки вывода отладки.</TD></TR>
+<TR><TD valign=top align=center>o</TD>
+<TD>Переназначает выходной поток отладчика в файл. По умолчанию задан
+stderr.</TD></TR>
+<TR><TD valign=top align=center>O</TD>
+<TD>То же, что и o, но файл сбрасывается между записями. То есть, после
+каждой записи файл закрывается, и снова открывается только перед следующей
+записью. Тормозит, конечно, кошмарно, но зато гарантирует сохранность данных
+в этом файле на случай слета системы. Что при отладке не бесполезно...
+</TD></TR>
+<TR><TD valign=top align=center>p</TD>
+<TD>Ограничивает действия отладчика определенными процессами. Процесс должен
+быть указан в макросе DBUG_PROCESS и совпадать с одной из записей в списке
+действий отладчика.</TD></TR>
+<TR><TD valign=top align=center>P</TD>
+<TD>Выводит имя текущего процесса для каждой строки отладки или трассирует
+вывод.</TD></TR>
+<TR><TD valign=top align=center>r</TD>
+<TD>При установке нового состояния отладки не наследует предыдущее состояние
+вложенности функции. Полезно, когда вывод должен начаться в левом поле.</TD>
+</TR>
+<TR><TD valign=top align=center>S</TD>
+<TD>Функция _sanity(_file_, _line_) для каждой отлаживаемой функции до
+_sanity() возвращает отличное от 0 значение. Обычно используется с
+safemalloc. Как задается это значение, и что оно вообще значит в документации
+не сказано (!!!), а опытным путем это установить не удалось.</TD></TR>
+<TR><TD valign=top align=center>t</TD>
+<TD>Включить функцию трассировки строк вызова и выхода (call/exit). Может
+сопровождаться списком, содержащим число номер максимального уровня
+трассировки, вне которого никакого вывода не произойдет для отладочных или
+трассировочных макрокоманд. Умолчание задается при компиляции.</TD></TR>
+</TABLE>
+
+<P>Некоторые примеры строк управления отладкой:
+<P><PRE>
+  -#d:t
+  -#d:f,main,subr1:F:L:t,20
+  -#d,input,output,files:n
+</PRE>
+
+<P><B><CENTER><A NAME="dbpop">_db_pop_</B></CENTER><P>
+<B>ОПИСАНИЕ:</B>
+<P>Извлекает из стека отладки последнее записанное туда состояние отладки и
+устанавливает в него состояние отладки. Обратите внимание, что извлечение
+будет терпеть неудачу, если оно удалит последнее имеющее силу состояние из
+стека. Это предотвращает ошибки пользователя в последовательности действий со
+стеком из отладчика.
+
+<P><B><CENTER><A NAME="dbenter">_db_enter_</B></CENTER>
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  VOID _db_enter_ (_func_, _file_, _line_, _sfunc_, _sfile_, _slevel_,
+                   _sframep_)
+  char *_func_;           points to current function name
+  char *_file_;           points to current file name
+  int _line_;             called from source line number
+  char **_sfunc_;         save previous _func_
+  char **_sfile_;         save previous _file_
+  int *_slevel_;          save previous nesting level
+  char ***_sframep_;      save previous frame pointer
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Вызывается в начале каждой функции пользователя, чтобы сообщить отладчику,
+что была введена новая функция. Обратите внимание, что указатели на
+предыдущее имя функции пользователя и предыдущее имя файла пользователя
+сохраняются в стеке вызовов (это причина того, почему макрокоманда ENTER
+должна быть первым "выполнимым" кодом в функции, так как она распределяет
+память для этой области. Предыдущий уровень вложения также сохраняется в
+стеке вызовов для внутренней самопроверки непротиворечивости.
+
+<P>Также печатает строку трассировки, если трассировка включена и увеличивает
+текущее значение глубины вложения функций.
+
+<P>Обратите внимание, что этот механизм позволяет отладчику знать, какая
+функция пользователя является текущей, без того, чтобы поддерживать
+внутренний стек для имен функции.
+
+<P><B><CENTER><A NAME="dbret">_db_return_</B></CENTER>
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  VOID _db_return_ (_line_, _sfunc_, _sfile_, _slevel_)
+  int _line_;             current source line number
+  char **_sfunc_;         where previous _func_ is to be retrieved
+  char **_sfile_;         where previous _file_ is to be retrieved
+  int *_slevel_;          where previous level was stashed
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Вызывается перед тем, как функция пользователя выполняет явный или неявный
+возврат. Выводит строку трассировки, если трассировка разрешена, уменьшает
+текущее значение глубины вложения функций и восстанавливает текущую функцию и
+имена файлов из стека более не существенной функции.
+
+<P><B><CENTER><A NAME="dbpargs">_db_pargs_</B></CENTER>
+<P>Параметры файла протокола для последующего использования _db_doprnt_().
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  VOID _db_pargs_ (_line_, keyword)
+  int _line_;
+  char *keyword;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Новая универсальная макрокоманда печати DBUG_PRINT, которая заменяет все
+формы макрокоманд DBUG_N, нуждается в двух обращениях к подпрограммам
+поддержки во время выполнения. Первая, это функция, которая запоминает
+параметры, которые используются последующим обращением для _db_doprnt_().
+
+<P><B><CENTER><A NAME="dbdoprnt">_db_doprnt_</B></CENTER>
+<P>Печать дескриптора строк отладки.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  VOID _db_doprnt_ (format, va_alist)
+  char *format;
+  va_dcl;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Когда вызывается через одну из DBUG макрокоманд, проверяет текущий набор
+ключевых слов, вызывая _db_pargs_() чтобы узнать, была ли эта макрокоманда
+выбрана для обработки через строку управления отладчика, и если так, печатает
+аргументы с помощью форматированной строки. Номер строки DBUG макрокоманды в
+источнике найден в u_line.
+
+<P>Обратите внимание, что строка формата (format) НЕ ДОЛЖНА включить
+завершение строки (\n), это делается автоматически.
+
+<P><B><CENTER><A NAME="dbdump">_db_dump_</B></CENTER>
+<P>Выполняет дамп строки, пока не найдет '\0'.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  void _db_dump_ (_line_,keyword,memory,length)
+  int _line_;               current source line number
+  char *keyword;
+  char *memory;             Memory to print
+  int length;               Bytes to print
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Выполняет дамп N символов в двоичный массив. Используется, чтобы
+исследовать разрушенную память или массивы.
+
+<P><B><CENTER><A NAME="ListPars">ListParse</B></CENTER>
+<P>Анализ списка параметров в строке контроля отладки.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static struct link *ListParse (ctlp)
+  char *ctlp;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Принимает указатель на список строк в "ctlp", разделенный запятыми,
+анализирует список, формируя список и возвращая указатель на него.
+Первоначальный список разрушается в процессе формирования связанного списка,
+таким образом, лучше иметь его дубликат, если он важен.
+
+<P>Обратите внимание что, так как каждая связь добавляется в начало списка,
+конечный список будет в обратном порядке", который не значителен для нашего
+использования здесь.
+
+<P><B><CENTER><A NAME="InList">InList</B></CENTER>
+<P>Проверите данную строку на членство в данном списке.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static BOOLEAN InList (linkp, cp)
+  struct link *linkp;
+  char *cp;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Проверяет строку, на которую указывает "cp" чтобы определить, находится ли
+эта строка в списке, на который указывает "linkp". Linkp указывает на первую
+строку в списке. Если linkp == NULL, то строка обрабатывается, как будто она
+находится в списке (все строки находятся в пустом списке). Это может казаться
+довольно странным сначала, но ведет к желательной операции, если никакой
+список не задан. Результатом является то, что все строки будут приняты, когда
+не имеется никакого списка, но когда имеется список, будут приняты только те
+строки, которые есть в списке.
+
+<P><B><CENTER><A NAME="PushStat">PushState</B></CENTER><P>
+<P>Сохраняет текущее состояние в стеке и устанавливает новое.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static VOID PushState()
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Сохраняет текущее состояние в стеке и устанавливает новое.
+Единственным параметром, унаследованным из предыдущего состояния является
+уровень вложения функции. Это можно отменить флажком  "r".
+
+<P>Стек состояния это связанный список состояний, с новым состоянием,
+добавленным в начало. Это позволяет стеку расти до самых границ памяти в
+случае необходимости.
+
+<P><B><CENTER><A NAME="DoTrace">DoTrace</B></CENTER>
+<P>Проверка разрешения на трассировку.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static BOOLEAN DoTrace (stack)
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Проверяет разрешена ли трассировка, не достигнута ли еще максимальная
+глубина трассировки, текущая функция выбрана и текущий процесс выбран.
+Возвращает TRUE, если все в порядке, и FALSE в противном случае.
+
+<P><B><CENTER><A NAME="DoProf">DoProfile</B></CENTER>
+<P>Проверяет разрешено ли профилирование.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static BOOLEAN DoProfile()
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Проверяет разрешено ли профилирование, не достигнута ли еще максимальная
+глубина трассировки, текущая функция выбрана и текущий процесс выбран.
+Возвращает TRUE, если все в порядке, и FALSE в противном случае.
+
+<P><B><CENTER><A NAME="dbkey">_db_keyword</B></CENTER>
+<P>Проверяет ключевое слово на членство в списке ключевых слов.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  BOOLEAN _db_keyword_ (keyword)
+  char *keyword;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Проверяет ключевое слово на членство в списке ключевых слов. Как и в
+случае со строками, все ключевые слова принадлежат пустому списку. Когда
+отладка не включена, никакие ключевые слова не принимаются. После того, как
+максимальный уровень трассировки превышен, никакие ключевые слова тоже не
+принимаются. Дополнительно, текущая функция и текущий процесс должны входить
+в соответствующие списки.
+
+<P>Возвращает TRUE, если ключевое слово входит в список, и FALSE в противном
+случае.
+
+<P><B><CENTER><A NAME="Indent">Indent</B></CENTER>
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static VOID Indent (indent)
+  int indent;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Выравнивает строку на заданный уровень indent. Отступ может быть задан во
+время компиляции пакета в виде количества символов на один уровень вложения.
+
+<P><B><CENTER><A NAME="FreeList">FreeList</B></CENTER>
+<P>Освободить всю память, занятую элементами списка.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static VOID FreeList (linkp)
+  struct link *linkp;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Параметр linkp указывает на первый элемент связанного списка.
+Освобождается вся память, занятая элементами списка и самим списком.
+
+<P><B><CENTER><A NAME="StrDup">StrDup</B></CENTER>
+<P>Создает копию строки в новой области памяти.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static char *StrDup (string)
+  char *string;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B><P>
+<P>Параметр string задает строку, копия которой нужна. Функция распределяет
+количество памяти, достаточное для создания копии строки и копирует строку в
+эту область памяти. Сбой при распределении памяти фатален.
+
+<P><B><CENTER><A NAME="DoPrefix">DoPrefix</B></CENTER>
+<P>Вывести префикс строки отладки.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static VOID DoPrefix (_line_)
+  int _line_;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Выводит префикс, общий для всех строк отладки. Выводит такую информацию,
+как текущее имя процесса, текущее имя исходного файла, номер строки и
+текущее значение глубины вложения.
+
+<P><B><CENTER><A NAME="OpenFile">OpenFile</B></CENTER>
+<P>Открывает новый поток вывода для вывода отладчика.
+
+<P><B>СИНТАКСИС:</B>
+<PRE>
+  static VOID OpenFile (name)
+  char *name;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Параметр name является именем нового файла (или "-" для stdout). Файл
+открывается, и в него назначается вывод отладчика.
+
+<P><B><CENTER><A NAME="OpenProf">OpenProfile</B></CENTER>
+<P>Открывает новый поток вывода для вывода профайлера.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static FILE *OpenProfile (name)
+  char *name;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Параметр name задает имя файла, который открывается и назначается в
+качестве вывода для профайлера.
+
+<P>В настоящее время неясно, должно ли открытие файла усечь любой
+существующий файл, или просто добавлять записи в него. Последний вариант был
+бы желателен для сбора хронологии во время выполнения в ходе нескольких
+разных запусков программы. Это потребует некоторых изменений в программе
+анализатора.
+
+<P><B><CENTER><A NAME="CloseF">CloseFile</B></CENTER>
+<P>Закрывает поток вывода отладчика.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static VOID CloseFile (fp)
+  FILE *fp;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Закрывает поток вывода отладчика, если это не stdout или stderr.
+
+<P><B><CENTER><A NAME="DbugExit">DbugExit</B></CENTER>
+<P>Выводит сообщение об ошибке и завершает работу.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static VOID DbugExit (why)
+  char *why;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Выводит сообщение об ошибке, используя текущее имя процесса, причина
+прерывания выполнения (обычно мало памяти), и выходит с 1 состоянием.
+Это должно быть изменено, чтобы использовать при выходе код состояния,
+определенный в отладчике пользователя. Но это будет в следующих версиях.
+
+<P><B><CENTER><A NAME="DbugMall">DbugMalloc</B></CENTER>
+<P>Выделяет память для библиотек поддержки отладчика.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static long *DbugMalloc (size)
+  int size;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Выделяет дополнительную память для библиотек поддержки отладчика. Сбой при
+распределении запрошенного число байтов фатален для текущего процесса. Это
+довольно недружелюбное поведение. Лучше просто печатать предупреждающее
+сообщение, замораживать текущее состояние отладчика, и продолжать выполнение.
+Но это в следующей версии (может быть)...
+
+<P><B><CENTER><A NAME="ststok">static_strtok</B></CENTER>
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static char *static_strtok (s1, separator)
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Аналог strtok, но 2 разделителя в строке заменены на 1 для совместимости с
+именами каталогов, принятыми в DOS.
+
+<P><B><CENTER><A NAME="BaseName">BaseName</B></CENTER>
+<P>Удаляет путь из полного имени файла.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static char *BaseName (pathname)
+  char *pathname;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Параметр pathname является указателем на полное имя файла. Функция
+размещает в памяти короткое имя файла и возвращает указатель на него.
+
+<P><B><CENTER><A NAME="Writable">Writable</B></CENTER>
+<P>Проверяет возможность записи/создания файла.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static BOOLEAN Writable (pathname)
+  char *pathname;
+</PRE>
+
+<P><B>ОПИСАНИЕ</B>
+<P>Поскольку отладчик может быть связан и с программой, которая выполняется с
+битом uid прав доступа (suid), мы должны быть внимательными относительно
+открытия заданного пользователем файла для вывода отладчика. Это состоит из
+проверки доступа к файлу на запись с реальным идентификатором пользователя,
+или проверкой каталога, где файл будет создан.
+
+<P>Вернет TRUE, если все в порядке и FALSE в противном случае.
+
+<P><B><CENTER><A NAME="ChgOwner">ChangeOwner</B></CENTER>
+<P>Меняет владельца на реального пользователя для suid программ.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static VOID ChangeOwner (pathname)
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Для Unix-систем, меняет владельца недавно созданного файла отладки
+на реального владельца. Это нужно в случаях выполнения программ, запущенных
+с правом доступа set-user-id.
+
+<P>Обратите внимание, что владелец файла уже установлен на момент выдачи этой
+команды. Так что, если она выполняется без права доступа set-user-id, то эта
+команда смысла не имеет (но безобидна).
+
+<P><B><CENTER><A NAME="dbset">_db_setjmp_</B></CENTER>
+<P>Сохранить окружение отладчика.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  VOID _db_setjmp_ ()
+</PRE>
+<P><B>ОПИСАНИЕ:</B>
+
+<P>Вызывается как часть макрокоманды пользователя DBUG_SETJMP, чтобы
+сохранить среду отладчика параллельно с сохранением среды пользователя.
+
+<P><B><CENTER><A NAME="dblong">_db_longjmp_</B></CENTER>
+<P>Восстановить предварительно сохраненное окружение отладчика.
+
+<P><B>СИНТАКСИС</B>
+<P><PRE>
+  VOID _db_longjmp_ ()
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Вызывается как часть макрокоманды пользователя DBUG_LONGJMP, чтобы
+восстановить среду отладчика параллельно с восстановлением предварительно
+сохраненной среды пользователя.
+
+<P><B><CENTER><A NAME="DelayArg">DelayArg</B></CENTER>
+<P>Преобразует параметр флажка D к системному стандарту.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static int DelayArg (value)
+  int value;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Преобразует время задержки, задаваемое в десятых долях секунды, к
+системному стандарту. Например, на Amiga, имеется системный вызов "Delay()"
+который получает параметр в импульсах таймера (50 в секунду). На Unix команда
+sleep работает с числом секунд. Таким образом, значение "10", для задержки в
+течение одной секунды, преобразуется в 50 на Amiga, и 1 на Unix. Другие
+системы будут должны использовать цикл синхронизации.
+
+<P><B><CENTER><A NAME="perror">perror</B></CENTER>
+<P>Моделирование perror для систем, которые его не имеют.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+  static VOID perror (s)
+  char *s;
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Perror выдает сообщение в стандартный поток ошибки, которое обеспечивает
+большее количество информации относительно библиотеки или ошибки системы.
+Выводится сообщение, заданное строкой s, затем ': ', сообщение об ошибке и
+перевод строки (\n).
+
+<P>Недокументированная возможность Unix perror сводится к тому, что если 's'
+является пустой строкой (но не NULL!), то не выводится ': '.
+
+<P>Эта версия выдает сообщение только о "неизвестной ошибке системы".
+
+<P>В заключение хочется попросить Вас, если Вам понравилась эта страничка или
+пригодилась изложенная здесь информация,
+<A href="mailto:rldp@ftp.botik.ru?subject=Спасибо!&body=Спасибо за
+работу!">послать благодарность автору.</A> Это поможет мне
+вести статистику того, скольким людям пригодилось хоть что-то из моих трудов.
+
+<P><A href="app2.shtml">Локальное оглавление.</A>
+<P><A href="mysqlrus.shtml">На главную страничку.</A>
+
+</PRE>
+</TD></TR></TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>
+

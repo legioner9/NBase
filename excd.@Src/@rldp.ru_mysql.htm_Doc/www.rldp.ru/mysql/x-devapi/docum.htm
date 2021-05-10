@@ -1,0 +1,512 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 5. Работа с документами</title>
+  <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="devapi-users-working-with-documents"></a>
+Глава 5. Работа с документами</h1>
+<p>Как только коллекция была создана, она может хранить документы JSON.
+Вы храните документы, передавая структуру данных JSON функции
+<code class="literal">Collection.add()</code>. У некоторых языков есть прямая
+поддержка данных JSON, у других есть эквивалентный синтаксис, чтобы
+представлять те данные. MySQL Connectors, которые осуществляют X DevAPI,
+обеспечивают поддержку всех методов, которые являются родными
+на определенном языке.</p>
+
+<p>Кроме того, в некоторых MySQL Connectors могут использоваться объекты
+<code class="literal">DbDoc</code>. Наиболее удобный способ создать их, это
+вызов <code class="literal">Collection.newDoc()</code>.
+<code class="literal">DbDoc</code> это тип данных, чтобы представлять
+документы JSON, как он осуществляется не определяется. Языки, осуществляющие
+X DevAPI, свободны следовать за объектно-ориентированным подходом
+с методами получателя и установщика или использовать стиль
+структуры C с публичными членами.</p>
+
+<p>Для строго типизированных языков возможно создать файлы класса на основе
+определения структуры документа коллекций. MySQL Shell может использоваться,
+чтобы создать эти файлы.</p>
+
+<table border="1">
+<thead><tr><th scope="col"><p>Объекты документа</p>
+</th><th scope="col"><p>Поддержанные языки</p>
+</th><th scope="col"><p>Преимущества</p></th></tr></thead>
+<tbody><tr><td scope="row"><p>Native JSON</p></td>
+<td><p>Скрипты (JavaScript, Python)</p></td>
+<td><p>Просто в использовании</p></td></tr>
+<tr><td scope="row"><p>Эквивалентный синтаксис JSON</p></td>
+<td><p>C# (Anonymous Types, ExpandoObject)</p></td>
+<td><p>Просто в использовании</p></td></tr>
+<tr><td scope="row"><p>DbDoc</p></td><td><p>Все языки вообще</p></td>
+<td><p>Не зависит от языка</p></td></tr>
+<tr><td scope="row"><p>Generated Doc Classes</p></td>
+<td><p>Строго типизированные языки (C#)</p></td>
+<td><p>Естественный в использовании</p></td></tr></tbody></table>
+<p>Следующий пример показывает различные методы
+вставки документов в коллекцию.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+// Create a new collection 'my_collection'
+var myColl = db.createCollection('my_collection');
+
+// Insert JSON data directly
+myColl.add({_id: '8901', name: 'Sakila', age: 15});
+// Inserting several docs at once
+myColl.add([ {_id: '8902', name: 'Susanne', age: 24},
+             {_id: '8903', name: 'User', age: 39} ]);
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+// Create a new collection 'my_collection'
+var myColl = db.createCollection('my_collection');
+
+// Insert JSON data directly
+myColl.add({_id: '8901', name: 'Sakila', age: 15});
+// Inserting several docs at once
+myColl.add([ {_id: '8902', name: 'Susanne', age: 24},
+             {_id: '8903', name: 'User', age: 39} ]);
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+// Create a new collection 'my_collection'
+db.createCollection('my_collection').then(function (myColl) {
+  // Add a document to insert
+  var insert = myColl.add({ name: 'Sakila', age: 15 });
+  // Add multiple documents to insert
+  insert.add([
+    { name: 'Susanne', age: 24 },
+    { name: 'User', age: 39 }
+  ]);
+  // Add one more document to insert
+  var myDoc = {};
+  myDoc.name = 'James';
+  myDoc.age = 47;
+  insert.add(myDoc);
+  // run the operation
+  return insert.execute();
+});
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+// Create a new collection "my_collection"
+var myColl = db.CreateCollection("my_collection");
+// Insert JSON data directly
+myColl.Add(new { name = "Sakila", age = 15 }).Execute();
+
+// Inserting several docs at once
+myColl.Add(new[] {new { name = "Susanne", age = 24},
+                  new { name = "User", age = 39} }).Execute();
+// Insert Documents
+var myDoc = new DbDoc();
+myDoc.SetValue("name", "James");
+myDoc.SetValue("age", 47);
+myColl.Add(myDoc).Execute();
+
+//Fetch all docs
+var docResult = myColl.Find().Execute();
+var docs = docResult.FetchAll();
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+# Create a new collection 'my_collection'
+my_coll = my_schema.create_collection('my_collection')
+
+# Insert JSON data directly
+my_coll.add({'name': 'Sakila', 'age': 15})
+# Inserting several docs at once
+my_coll.add([
+  {'name': 'Susanne', 'age': 24},
+  {'name': 'User', 'age': 39}
+])
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+// Create a new collection 'my_collection'
+Collection coll = db.createCollection("my_collection");
+
+// Insert JSON data directly
+coll.add("{\"name\":\"Sakila\", \"age\":15}");
+// Insert several documents at once
+coll.add("{\"name\":\"Susanne\", \"age\":24}",
+         "{\"name\":\"User\", \"age\":39}");
+
+// Insert Documents
+DbDoc myDoc = new coll.newDoc();
+myDoc.add("name", new JsonString().setValue("James"));
+myDoc.add("age", new JsonNumber().setValue("47"));
+coll.add(myDoc);
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+// Create a new collection 'my_collection'
+Collection myColl = db.createCollection("my_collection");
+
+// Insert JSON data directly
+myColl.add(R"({"name": "Sakila", "age": 15})").execute();
+// Inserting several docs at once
+std::list&lt;DbDoc&gt; docs = {
+  DbDoc(R"({"name": "Susanne", "age": 24})"),
+  DbDoc(R"({"name": "User", "age": 39})")
+};
+myColl.add(docs).execute();
+</pre>
+
+<h2><a name="working-with-document-ids"></a>
+5.1. Работа с Document ID</h2>
+<p>У каждого документа есть уникальный идентификатор, названный document ID,
+который может считаться эквивалентом первичного ключа таблицы.
+Значение идентификатора обычно автоматически производится сервером, когда
+документ добавляется, но может также быть вручную назначено.
+Назначенный document ID возвращен в результате операции
+<code class="literal">collection.add()</code>. См.
+<a href="#understanding-automatic-document-ids">раздел 5.1.1</a>.
+</p>
+
+<p>Следующее показано в качестве примеров, добавляющих документ в коллекцию,
+восстанавливая ID добавленного документа и проверяя, что дубликаты ID
+не могут быть добавлены.</p>
+
+<pre class="programlisting">
+<strong class="userinput"><code>mysql-js &gt; mycollection.add({test:'demo01'})</code></strong>
+Query OK, 1 item affected (0.00 sec)
+
+<strong class="userinput"><code>mysql-js &gt; mycollection.add({test:'demo02'}).add({test:'demo03'})</code></strong>
+Query OK, 2 items affected (0.00 sec)
+
+<strong class="userinput"><code>mysql-js &gt; mycollection.find()</code></strong>
+[
+  {
+    "_id": "00005a640138000000000000002c",
+    "test": "demo01"
+  },
+  {
+    "_id": "00005a640138000000000000002d",
+    "test": "demo02"
+  },
+  {
+    "_id": "00005a640138000000000000002e",
+    "test": "demo03"
+  }
+]
+3 documents in set (0.00 sec)
+
+<strong class="userinput"><code>mysql-js &gt; mycollection.add({_id:'00005a640138000000000000002f', test:'demo04'})</code></strong>
+Query OK, 1 item affected (0.00 sec)
+
+<strong class="userinput"><code>mysql-js &gt; mycollection.find()</code></strong>
+[
+  {
+    "_id": "00005a640138000000000000002c",
+    "test": "demo01"
+  },
+  {
+    "_id": "00005a640138000000000000002d",
+    "test": "demo02"
+  },
+  {
+    "_id": "00005a640138000000000000002e",
+    "test": "demo03"
+  },
+  {
+    "_id": "00005a640138000000000000002f",
+    "test": "demo04"
+  }
+]
+4 documents in set (0.00 sec)
+
+<strong class="userinput"><code>mysql-js &gt; mycollection.add({test:'demo05'})</code></strong>
+ERROR: 5116: Document contains a field value that is not unique
+but required to be
+</pre>
+
+<h3><a name="understanding-automatic-document-ids"></a>
+5.1.1. Понимание Document ID</h3>
+<p>X DevAPI полагается на базирующийся на сервере генератор document ID,
+добавленный в версии MySQL version 8.0.11, который приводит
+к последовательно увеличивающемуся document ID для всех клиентов.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/innodb-storage-engine.html"
+target="_top"><code class="literal">InnoDB</code></a> использует document ID
+в качестве первичного ключа, поэтому эти последовательные первичные ключи для
+всех клиентов применяются в эффективных расщеплениях
+страницы и перестройках дерева.</p>
+
+<h4><a name="document-id-properties"></a>Свойства Document ID</h4>
+<p>Поле <code class="literal">_id</code> документа ведет себя таким же
+образом как любая другая область документа во время запросов
+за исключением того, что его значение не может измениться после вставки в
+коллекцию. Поле <code class="literal">_id</code> используется в качестве
+первичного ключа коллекции (использующей сохраненные произведенные столбцы).
+Возможно отвергнуть автоматическую генерацию document ID
+вручную включая ID.</p>
+
+<p>При использовании ручной вставки document ID,
+необходимо гарантировать, что ID из автоматически
+произведенной сервером последовательности ID никогда не используются.
+X Plugin не знает о данных, вставленных в коллекцию, включая ID, которые вы
+используете. Таким образом в будущих вставках, если document ID, который вы
+назначили вручную, вставляя документ, использует ID, который сервер собирался
+использовать, операция вставки терпит неудачу с ошибкой из-за
+дублирования первичного ключа.</p>
+
+<p>Каждый раз, когда значение поля <code class="literal">_id</code>
+не присутствует во вставленном документе, сервер производит значение
+<code class="literal">_id</code>. Произведенное значение
+<code class="literal">_id</code>, используемое для документа, возвращено
+клиенту как часть сообщения <code class="literal">Result</code> о вставке
+документа. При использовании X DevAPI на кластере InnoDB
+автоматически произведенное <code class="literal">_id</code>
+должно быть уникальным в пределах кластера. Используйте опцию
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/x-plugin-options-system-variables.html#sysvar_mysqlx_document_id_unique_prefix"
+target="_top"><code class="literal">mysqlx_document_id_unique_prefix</code>
+</a>, чтобы гарантировать, что часть
+<code class="literal">unique_prefix</code> document ID
+уникальна для replicaset или группы.</p>
+
+<p>Поле <code class="literal">_id</code> должно быть последовательным
+(всегда увеличивающимся) для оптимальной работы вставки InnoDB (по крайней
+мере, в единственном сервере). Последовательная природа
+<code class="literal">_id</code> сохраняется через перезапуски сервера.</p>
+
+<p>В Group Replication с несколькими мастерами или на кластере InnoDB
+произведенные значения <code class="literal">_id</code> таблицы уникальны
+между экземплярами, чтобы избежать конфликтов первичного ключа и
+минимизировать операционную сертификацию.</p>
+
+<h4><a name="document-id-generation"></a>Создание Document ID</h4>
+<p>Этот раздел описывает, как document ID форматируется. Общая структура
+таблицы коллекции остается неизменной, за исключением типа произведенного
+столбца <code class="literal">_id</code>, который изменяется от
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/char.html" target="_top">
+<code class="literal">VARCHAR(32)</code></a> на
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/binary-varbinary.html"
+target="_top"><code class="literal">VARBINARY(32)</code></a>.</p>
+
+<p>Формат автоматически произведенного document ID:</p>
+<table border="1">
+<thead><tr><th scope="col">unique_prefix</th>
+<th scope="col">start_timestamp</th>
+<th scope="col">serial</th></tr></thead>
+<tbody><tr><td scope="row">4 байта</td><td>8 байт</td>
+<td>16 байт</td></tr></tbody></table>
+
+<p>Здесь: <ul><li class="listitem"><p>
+<code class="literal">serial</code> автоматически увеличенное значение
+порядкового номера экземпляра (целое число), которое является закодированным
+в 16-чном виде и имеет диапазон от 0 до 2**64-1. Начальное значение
+of <code class="literal">serial</code> установлено в системной переменной
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/replication-options-master.html#sysvar_auto_increment_offset"
+target="_top"><code class="literal">auto_increment_offset</code></a>
+и приращение задано системной переменной
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/replication-options-master.html#sysvar_auto_increment_increment"
+target="_top"><code class="literal">auto_increment_increment</code></a>.
+</p></li>
+
+<li class="listitem"><p><code class="literal">start_timestamp</code>
+метка времени запуска экзепляра в шестнадцатеричном формате.
+В маловероятном случае, что значение
+<code class="literal">serial</code> переполнится,
+<code class="literal">start_timestamp</code> увеличено на 1 и
+<code class="literal">serial</code> перезапускается с 0.</p></li>
+
+<li class="listitem"><p><code class="literal">unique_prefix</code>
+значение, назначенное кластером InnoDB экземпляру, которое используется,
+чтобы сделать document ID уникальным через все узлы этого кластера.
+Диапазон unique_prefix от 0 до 2**16-1 в шестнадцатеричном формате и по
+умолчанию 0, если не установлен кластером InnoDB или системная переменная
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/x-plugin-options-system-variables.html#sysvar_mysqlx_document_id_unique_prefix"
+target="_top"><code class="literal">mysqlx_document_id_unique_prefix</code>
+</a> не была задана.</p></li></ul>
+
+<p>Этот формат document ID гарантирует, что:</p>
+<ul><li class="listitem"><p>Значение первичного ключа монотонно увеличивается
+для вставок, происходящих из единственного экземпляра сервера, хотя интервал
+между значениями не однороден в таблице.</p></li>
+
+<li class="listitem"><p>Используя Group Replication или кластер InnoDB,
+у вставок в ту же самую таблицу от различных экземпляров нет противоречивых
+значений первичного ключа, предполагается, что экземпляры имеют правильно
+настроенные системные переменные <code class="literal">auto_increment_*
+</code>.</p></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

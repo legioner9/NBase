@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\systems_engineering_modeling\cat.systems_engineering_modeling\dir.systems_engineering_modeling.md">systems_engineering_modeling</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\systems_engineering_modeling\systems_engineering_modeling.md">systems_engineering_modeling.md</a>
+        - *# <a href="https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/systems_engineering_modeling.html" target="_blank">Model Based Systems Engineering</a>  Разработка систем на основе моделей

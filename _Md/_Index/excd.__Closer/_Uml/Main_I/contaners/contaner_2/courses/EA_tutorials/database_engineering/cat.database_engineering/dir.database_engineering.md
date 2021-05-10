@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\database_engineering\cat.database_engineering\dir.database_engineering.md">database_engineering</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\database_engineering\database_engineering.md">database_engineering.md</a>
+        - *# <a href="https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/database_engineering.html" target="_blank">Database Models </a>Модели базы данных

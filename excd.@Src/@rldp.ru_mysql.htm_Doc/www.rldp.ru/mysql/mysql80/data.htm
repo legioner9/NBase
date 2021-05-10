@@ -1,0 +1,596 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <title>Глава 15. Словарь данных MySQL</title>
+<meta name="generator" content="DocBook XSL Stylesheets + chunker.py v1.9.2" />
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="data-dictionary"></a>Глава 15. Словарь данных MySQL</h1>
+<p>MySQL Server теперь включает транзакционный словарь данных, который хранит
+информацию об объектах базы данных. В предыдущих выпусках MySQL данные о
+словаре хранились в метафайлах с данными и нетранзакционных таблицах.</p>
+
+<p>Эта глава описывает основные особенности, выгоду, различия в
+использовании и ограничения словаря данных. Для информации о других
+возможностях словаря данных, обратитесь к разделу
+<code>Data Dictionary Notes</code> ресурса
+<a href="../../../dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-0.html"
+target="_top">MySQL 8.0.0 Release Notes</a>.</p>
+
+<p><code>InnoDB</code> продолжает использовать собственный
+словарь данных в MySQL 8.0.0.</p>
+<p>Выгода словаря данных MySQL включает:</p>
+<ul><li><p>Простота централизованной схемы словаря данных, которая однородно
+хранит данные словаря. См. <a href="#data-dictionary-schema">раздел
+15.1</a>.</li>
+
+<li>Удаление основанного на файлах хранения метаданных. См.
+<a href="#data-dictionary-file-removal">раздел 15.2</a>.</li>
+<li>Транзакционное, защищенное от катастрофического отказа хранение данных в
+словаре. См.
+<a href="#data-dictionary-transactional-storage">раздел 15.3</a>.
+</li>
+
+<li>Централизованное кэширование для объектов словаря. См.
+<a href="#data-dictionary-object-cache">раздел 15.4</a>.</li>
+<li>Более простое и улучшенное выполнение для некоторых таблиц
+<a href="inform.htm"><code>INFORMATION_SCHEMA</code></a>. См.
+<a href="#data-dictionary-information-schema">раздел 15.5</a>.
+</p></li></ul>
+
+<p>Данные, включенные сервером в словарь, влекут за собой некоторые общие
+операционные различия; см.
+<a href="#data-dictionary-usage-differences">раздел 15.6</a>.
+Кроме того, для обновлений до MySQL 8.0 от MySQL 5.7, процедура обновления
+несколько отличается от предыдущего релиза и требует, чтобы Вы проверили
+готовность обновления своей установки, проверяя определенные предпосылки. Для
+получения дополнительной информации, см.
+<a href="install.htm#upgrading">раздел 2.10.1</a>.</p>
+
+<h2><a name="data-dictionary-schema"></a>15.1. Схема словаря данных</h2>
+<p>Таблицы словаря данных невидимы и доступ к ним не может быть получен
+непосредственно. Однако, доступ к данным, хранящимся в таблицах словаря
+данных, поддержан через операторы
+<a href="inform.htm"><code>INFORMATION_SCHEMA</code></a> и
+<a href="sql.htm#show"><code>SHOW</code></a>.</p>
+
+<p>Системные таблицы MySQL все еще существуют в MySQL 8.0 и могут быть
+просмотрены через <a href="sql.htm#show-tables"><code>SHOW TABLES</code></a>
+в системной базе данных <code>mysql</code>. Вообще, различие между системными
+таблицами MySQL и таблицами словаря данных в том, что системные таблицы
+содержат вспомогательные данные, такие как часовой пояс и справочная
+информация, в то время как таблицы словаря данных содержат данные, требуемые,
+чтобы выполнять запросы SQL. Системные таблицы MySQL и таблицы словаря данных
+также отличаются по тому, как они обновлены. Обновление системных таблиц
+MySQL требует выполнения <a href="programs.html#mysql-upgrade">
+<span><strong>mysql_upgrade</strong></span></a>. Обновлениями словаря данных
+управляет сервер MySQL.</p>
+
+<h2><a name="data-dictionary-file-removal"></a>15.2.
+Удаление основанного на файлах хранения метаданных</h2>
+<p>В предыдущих выпусках MySQL данные о словаре частично хранились в
+метафайлах с данными. Проблемы с основанным на файлах хранением метаданных
+включали дорогие просмотры файла, восприимчивость к связанным с файловой
+системой ошибкам, сложному коду для того, чтобы обработать репликации и
+статусы отказа, и нехватку расширяемости, которая мешала добавлять метаданные
+для новых особенностей и относительных объектов.</p>
+
+<p>Упомянутые ниже метафайлы с данными удалены из MySQL. Если не указано
+иное, данные, ранее сохраненные в метафайлах с данными, теперь хранятся в
+таблицах словаря данных.</p>
+
+<ul><li><p>Файлы <code>.frm</code>: табличные метафайлы с данными. С
+удалением файлов <code>.frm</code>:</p>
+<ul><li><p>Предел размера определения 64 КБ, наложенный структурой
+файла <code>.frm</code>, удален.</li>
+
+<li>Поле <code>VERSION</code> в <a href="inform.htm#tables-table"><code>
+INFORMATION_SCHEMA.TABLES</code></a> теперь сообщает о значении
+<code>10</code>, которое является последней версией файла <code>frm</code>,
+используемой в MySQL 5.7.</p></li></ul></li>
+
+<li>Файлы <code>.par</code>: файлы определения разделения. Файлы
+<code>.par</code> были удалены в MySQL 5.7.6 с введением нативного разделения
+для таблиц <code>InnoDB</code>.</li>
+
+<li>Файлы <code>.TRN</code>: файлы пространства имен триггеров.</li>
+<li>Файлы <code>.TRG</code>: файлы параметров триггеров.</li>
+<li>Файлы <code>.isl</code>: символические ссылки <code>InnoDB</code>,
+содержащие местоположение файлов табличного пространства, созданных за
+пределами каталога данных MySQL. Записи журнала теперь используются, чтобы
+определить местонахождение отдаленных файлов табличного пространства.</li>
+
+<li>Файлы <code>db.opt</code>: конфигурационные файлы базы данных. Эти файлы,
+по одному на каталог базы данных, содержали набор символов базы
+данных по умолчанию.</p></li></ul>
+
+<h2><a name="data-dictionary-transactional-storage"></a>15.3.
+Транзакционное хранение данных словаря</h2>
+<p>Схема словаря данных хранит данные словаря в транзакционных
+(<code>InnoDB</code>) таблицах, созданных в виде файла на таблицу. Файлы
+табличного пространства словаря данных расположены в каталоге базы данных
+<code>mysql</code> вместе с системными таблицами. Данные словаря теперь
+защищены теми же способами, которые защищают пользовательские
+данные в таблицах <code>InnoDB</code>.</p>
+
+<h2><a name="data-dictionary-object-cache"></a>15.4. Кэш объектов словаря</h2>
+<p>Кэш объектов словаря это совместно используемый глобальный кэш, который
+хранит объекты словаря данных, к которым ранее получали доступ, в памяти,
+чтобы включить повторное использование объекта и минимизировать дисковый
+ввод/вывод. Подобный другим механизмам кэша, используемым MySQL, кэш объектов
+словаря использует стратегию <a href="glossary.htm#glos_lru">LRU</a> для
+сохранения последних использованных объектов в памяти.</p>
+
+<p>Кэш объектов словаря включает разделы кэша, которое хранит различные
+типы объектов. Некоторые пределы размеров разделения кэша конфигурируемы.</p>
+<ul><li><p><span><strong>Раздел кэша определения табличного пространства
+</strong></span>: Хранит объекты определения табличного пространства.
+Опция <a href="server.htm#sysvar_tablespace_definition_cache">
+<code>tablespace_definition_cache</code></a> устанавливает предел числа
+объектов определения табличного пространства, которые могут храниться в кэше
+объектов словаря. Значение по умолчанию 256.</li>
+
+<li><span><strong>Раздел кэша определения схемы</strong></span>: Хранит
+объекты определения схемы. Опция
+<a href="server.htm#sysvar_schema_definition_cache"><code>
+schema_definition_cache</code></a> устанавливает предел числа объектов
+определения схемы, которые могут храниться в кэше объекта словаря.
+Значение по умолчанию 256.</li>
+
+<li><span><strong>Раздел кэша определения таблиц</strong></span>:
+Хранит табличные объекты определения. Предел установлен в значение
+<a href="server.htm#sysvar_max_connections"><code>max_connections</code></a>,
+у которого есть значение по умолчанию 151.</p>
+
+<p>Табличное разделение кэша определения существует параллельно с табличным
+кэшем определения, который сконфигурирован, используя параметр конфигурации
+<a href="server.htm#sysvar_table_definition_cache"><code>
+table_definition_cache</code></a>. Оба кэша хранят табличные определения, но
+служат различным частям сервера MySQL. У объектов в одном кэше нет никакой
+зависимости от существования объектов в другом.</li>
+
+<li><span><strong>Раздел кэша определения хранимых подпрограмм</strong>
+</span>: Хранит сохраненные объекты определения программы. Опция
+<a href="server.htm#sysvar_stored_program_definition_cache"><code>
+stored_program_definition_cache</code></a> устанавливает предел числа
+объектов определения программы, которые могут быть сохранены в кэше объекта
+словаря. Значение по умолчанию 256.</p>
+
+<p>Раздел кэша определения программ существует параллельно с кэшем
+хранимых процедур и функций, которые сконфигурированы, используя опцию
+<a href="server.htm#sysvar_stored_program_cache"><code>stored_program_cache
+</code></a>.</p>
+
+<p>Опция <a href="server.htm#sysvar_stored_program_cache"><code>
+stored_program_cache</code></a> устанавливает мягкий верхний предел для числа
+кэшируемых хранимых процедур или функций на соединение, предел проверяется
+каждый раз, когда соединение выполняет хранимую процедуру или функцию.
+Раздел кэша определения программы, с другой стороны, является совместно
+используемым кэшем, который хранит сохраненные объекты определения программы
+в других целях. У существования объектов в кэше определения программы нет
+никакой зависимости от существования объектов в кэше
+хранимых процедур и наоборот.</li>
+
+<li><span><strong>Раздел кэша определения набора символов</strong></span>:
+Хранит объекты определения набора символов и имеет предел объектов 256.</li>
+<li><span><strong>Раздел кэша определения сопоставления</strong></span>:
+Хранит объекты определения сопоставления и имеет предел объектов 256.
+</p></li></ul>
+
+<h2><a name="data-dictionary-information-schema"></a>15.5.
+Интеграция INFORMATION_SCHEMA и словаря данных</h2>
+<p>С введением словаря данных следующие таблицы <a href="inform.htm"><code>
+INFORMATION_SCHEMA</code></a> осуществлены как представления
+таблиц словаря данных:</p>
+
+<ul><li><p><a href="inform.htm#character-sets-table"><code>CHARACTER_SETS
+</code></a></li>
+<li><a href="inform.htm#collations-table"><code>COLLATIONS</code></a></li>
+<li><a href="inform.htm#collation-character-set-applicability-table"><code>
+COLLATION_CHARACTER_SET_APPLICABILITY</code></a></li>
+<li><a href="inform.htm#columns-table"><code>COLUMNS</code></a></li>
+<li><a href="inform.htm#key-column-usage-table"><code>KEY_COLUMN_USAGE
+</code></a></li>
+<li><a href="inform.htm#schemata-table"><code>SCHEMATA</code></a></li>
+<li><a href="inform.htm#statistics-table"><code>STATISTICS</code></a></li>
+<li><a href="inform.htm#tables-table"><code>TABLES</code></a></li>
+<li><a href="inform.htm#table-constraints-table"><code>TABLE_CONSTRAINTS
+</code></a></li>
+<li><a href="inform.htm#views-table"><code>VIEWS</code></a></p></li></ul>
+
+<p>Запросы на тех таблицах теперь более эффективны, потому что они получают
+информацию из таблиц словаря данных, а не другими, более медленными,
+средствами. В частности, для каждой таблицы
+<a href="inform.htm"><code>INFORMATION_SCHEMA</code></a>, которая является
+представлением таблицы словаря данных:</p>
+
+<ul><li><p>Больше не надо составлять временную таблицу для каждого запроса
+таблицы <a href="inform.htm"><code>INFORMATION_SCHEMA</code></a>.</li>
+<li>Когда основные таблицы словаря данных хранят информацию, ранее полученную
+просмотрами каталога или открывающими файл операциями, запросы для этих
+значений <a href="inform.htm"><code>INFORMATION_SCHEMA</code></a> теперь
+используют поиск по таблице.</li>
+<li>Индексы словаря данных позволяют создать эффективные
+планы выполнения запроса.</p></li></ul>
+
+<p>Некоторые типы значений, даже для таблиц
+<a href="inform.htm"><code>INFORMATION_SCHEMA</code></a>, которые не
+являются представлениями, получены из словаря данных. Это включает такие
+значения, как имена базы данных и таблиц, табличные
+типы и механизмы хранения.</p>
+
+<p>Предыдущие усовершенствования также относятся к запросу
+<a href="sql.htm#show"><code>SHOW</code></a>, отображающем информацию о
+таблицах. Например, <a href="sql.htm#show-databases"><code>SHOW DATABASES
+</code></a> выводит на экран ту же самую информацию, что и таблица
+<a href="inform.htm#schemata-table"><code>SCHEMATA</code></a>.</p>
+
+<p>В дополнение к введению представлений таблиц словаря данных, табличные
+метаданные, содержавшиеся в таблицах
+<a href="inform.htm#statistics-table"><code>STATISTICS</code></a> и
+<a href="inform.htm#tables-table"><code>TABLES</code></a> теперь кэшируются,
+чтобы улучшить производительность запросов
+<a href="inform.htm"><code>INFORMATION_SCHEMA</code></a>.
+Кэшированием табличных метаданных управляет параметр конфигурации
+<a href="server.htm#sysvar_information_schema_stats">
+<code>information_schema_stats</code></a>, который по умолчанию установлен в
+<code>CACHED</code>. Кэшируемые табличные метаданные обновлены командой
+<a href="sql.htm#analyze-table"><code>ANALYZE TABLE</code></a>.</p>
+
+<p><a href="server.htm#sysvar_information_schema_stats"><code>
+information_schema_stats</code></a> может быть установлен в
+<code>LATEST</code>, чтобы запросы <a href="inform.htm"><code>
+INFORMATION_SCHEMA</code></a> получали последние метаданные непосредственно
+от механизма хранения, с такой скоростью, с какой не получают
+кэшируемые табличные метаданные.</p>
+
+<h2><a name="data-dictionary-usage-differences"></a>15.6.
+Различия в использовании словаря данных</h2>
+<p>Использование данных, включенных в словарь сервером MySQL, влечет за собой
+некоторые операционные различия по сравнению с сервером, у которого
+нет словаря данных.</p>
+
+<ul><li><p>Ранее, включение системной переменной
+<a href="innodb.htm#sysvar_innodb_read_only"><code>innodb_read_only
+</code></a> блокировало создание и удаление таблиц только для
+<code>InnoDB</code>. С MySQL 8.0, включение
+<a href="innodb.htm#sysvar_innodb_read_only"><code>innodb_read_only</code>
+</a> закроет эти операции для всех механизмов хранения. Создание и удаление
+таблиц изменяют таблицы словаря данных в системной базе данных
+<code>mysql</code>, но те таблицы используют механизм хранения
+<code>InnoDB</code> и не могут быть изменены, когда включен
+<a href="innodb.htm#sysvar_innodb_read_only"><code>innodb_read_only</code>
+</a>. Тот же самый принцип относится к другим табличным операциям, которые
+требуют изменения таблиц словаря данных. Примеры:</p>
+
+<ul><li><p><a href="sql.htm#analyze-table"><code>ANALYZE TABLE</code></a>
+терпит неудачу, потому что это обновляет табличные статистические данные,
+которые сохранены в словаре данных.</li>
+
+<li><a href="sql.htm#alter-table"><code>ALTER TABLE <em><code>tbl_name
+</code></em> ENGINE=<em><code>engine_name</code></em></code></a>
+терпит неудачу, потому что это обновляет обозначение механизма хранения,
+которое сохранено в словаре данных.</p></li></ul>
+
+<p>Включение <a href="innodb.htm#sysvar_innodb_read_only"><code>
+innodb_read_only</code></a> также имеет важные значения для таблиц словаря не
+с данными в системной базе данных <code>mysql</code>. Для деталей см.
+описание <a href="innodb.htm#sysvar_innodb_read_only"><code>innodb_read_only
+</code></a> в <a href="innodb.htm#innodb-parameters">разделе 16.13
+</a>.</p></li>
+
+<li><p>Ранее таблицы в системной базе данных <code>mysql</code> были видимы
+DML и заявлениям DDL. С MySQL 8.0 таблицы словаря данных невидимы и не могут
+быть изменены или запрошены непосредственно. Однако, в большинстве случаев
+они соответствуют таблицам <code>INFORMATION_SCHEMA</code>, которые могут
+быть запрошены. Это позволяет основным таблицам словаря данных быть
+измененными, в то время как развитие сервера продолжается, поддерживая
+интерфейс <code>INFORMATION_SCHEMA</code> для использования приложениями.
+</li>
+
+<li>Таблицы <code>INFORMATION_SCHEMA</code> в MySQL 8.0 близко связаны со
+словарем данных, что приводит к нескольким различиям в использовании:</p>
+<ul><li><p>Раньше запросы для табличной статистики <code>INFORMATION_SCHEMA
+</code> в таблицах
+<a href="inform.htm#statistics-table"><code>STATISTICS</code></a> и
+<a href="inform.htm#tables-table"><code>TABLES</code></a> получали статистику
+непосредственно от механизмов хранения. С MySQL 8.0 значение по умолчанию
+должно использовать кэшируемую табличную статистику, которая более
+эффективна. Однако, когда сервер запускается, кэшируемые статистические
+данные <code>NULL</code> и не обновлены для данной таблицы до выполнения
+<a href="sql.htm#analyze-table"><code>ANALYZE TABLE</code></a>. Чтобы
+использовать последнюю табличную статистику, полученную из механизмов
+хранения (логика до версии 8.0), измените системную переменную
+<a href="server.htm#sysvar_information_schema_stats"><code>
+information_schema_stats</code></a> с
+<code>CACHED</code> на <code>LATEST</code>.</li>
+
+<li>Несколько таблиц <code>INFORMATION_SCHEMA</code> представления таблиц
+словаря данных, что позволяет оптимизатору использовать индексы основных
+таблиц. Следовательно, в зависимости от выбора оптимизатора, порядок строк
+результатов для запросов <code>INFORMATION_SCHEMA</code> может отличаться
+от предыдущих результатов. Если у результата запроса должны быть определенные
+характеристики упорядочивания строки, включайте
+предложение <code>ORDER BY</code>.</li>
+
+<li><a href="programs.html#mysqldump"><span><strong>mysqldump</strong></span>
+</a> и <a href="programs.html#mysqlpump"><span><strong>mysqlpump</strong>
+</span></a> больше не выводят базу данных <code>INFORMATION_SCHEMA</code>,
+даже если она явно названа в командной строке.</li>
+
+<li><a href="sql.htm#create-table-like"><code>CREATE TABLE <em><code>
+dst_tbl</code></em> LIKE <em><code>src_tbl</code></em></code></a> требует,
+чтобы <em><code>src_tbl</code></em> была базовой таблицей и терпит неудачу,
+если это таблица <code>INFORMATION_SCHEMA</code>, которая является
+представлением таблицы словаря данных.</li>
+
+<li>Ранее заголовки набора результатов столбцов, выбранных из таблицы
+<code>INFORMATION_SCHEMA</code> использовали написание прописными буквами,
+определенное в запросе. Этот запрос производит набор результатов с
+заголовком <code>table_name</code>:
+<pre>
+SELECT table_name FROM INFORMATION_SCHEMA.TABLES;
+</pre>
+
+С MySQL 8.0 эти заголовки приведены к верхнему регистру: предыдущий запрос
+производит набор результатов с заголовком <code>TABLE_NAME</code>. В случае
+необходимости псевдоним столбца может использоваться, чтобы достигнуть
+различного регистра символов. Например:
+<pre>
+SELECT table_name AS 'table_name' FROM INFORMATION_SCHEMA.TABLES;
+</pre></li></ul></li>
+
+<li>Каталог данных затрагивает <a href="programs.html#mysqldump"><span>
+<strong>mysqldump</strong></span></a> и <a href="programs.html#mysqlpump">
+<span><strong>mysqlpump</strong></span></a> для вывода информации из
+системной базы данных <code>mysql</code>:</p>
+
+<ul><li><p>Ранее было возможно вывести все таблицы в <code>mysql</code>.
+Теперь <a href="programs.html#mysqldump"><span><strong>mysqldump</strong>
+</span></a> и <a href="programs.html#mysqlpump"><span><strong>mysqlpump
+</strong></span></a> выводят только несловарные таблицы в этой базе данных.
+</li>
+
+<li>Ранее опции <a href="programs.html#option_mysqldump_routines"><code>
+--routines</code></a> и <a href="programs.html#option_mysqldump_events">
+<code>--events</code></a> не требовались для включения событий и сохраненных
+процедур, используя опцию
+<a href="programs.html#option_mysqldump_all-databases"><code>--all-databases
+</code></a>: дамп включал всю системную базу данных <code>mysql</code>, а
+поэтому таблицы <code>proc</code> и <code>event</code> также выводились.
+Теперь таблицы <code>event</code> и <code>proc</code> не используются.
+Определения для соответствующих объектов сохранены в таблицах словаря данных,
+но те таблицы не выведены. Включить их в дамп, изготовленный с опцией
+<a href="programs.html#option_mysqldump_all-databases"><code>
+--all-databases</code></a>, можно, применив явно опции
+<a href="programs.html#option_mysqldump_routines"><code>--routines</code></a>
+и <a href="programs.html#option_mysqldump_events">
+<code>--events</code></a>.</li>
+
+<li>Ранее опция <a href="programs.html#option_mysqldump_routines"><code>
+--routines</code></a> требовала привилегию
+<a href="security.html#priv_select"><code>SELECT</code></a> для таблицы
+<code>proc</code>. Теперь эта таблица не используется,
+<a href="programs.html#option_mysqldump_routines"><code>--routines</code></a>
+требует глобальной привилегии
+<a href="security.html#priv_select"><code>SELECT</code></a>.</li>
+
+<li>Ранее было возможно вывести сохраненные процедуры и определения событий
+вместе с временной меткой их создания и модификации, выводя таблицы
+<code>proc</code> и <code>event</code>. В MySQL 8.0 не используются эти
+таблицы, таким образом, невозможно вывести временные метки.
+</p></li></ul></li>
+<li>Ранее создание сохраненной процедуры, которая содержит недопустимые
+символы, производило предупреждение. Теперь это ошибка.</p></li></ul>
+
+<h2><a name="data-dictionary-limitations"></a>15.7.
+Ограничения словаря данных</h2>
+<p>Этот раздел описывает временные ограничения словаря данных MySQL.</p>
+
+<ul><li><p>Ручное создание каталогов базы данных в соответствии с каталогом
+данных (например, через <span><strong>mkdir</strong></span>) более не
+поддерживается. Вручную создаваемые каталоги базы данных не будут
+признаны сервером MySQL.</li>
+
+<li>Перенос данных в таблицах копированием и переносом файлов данных таблиц
+<code>MyISAM</code> более не поддерживается. Таблицы, перемещенные с
+использованием этого метода не будут обнаружены сервером.</li>
+
+<li>Простое резервное копирование и восстановление отдельных таблиц
+<code>MyISAM</code> посредством копирования файлов данных не поддерживается.
+</li>
+<li><a href="sql.htm#truncate-table"><code>TRUNCATE TABLE</code></a>,
+который отображен на <a href="sql.htm#drop-table"><code>DROP TABLE</code></a>
+и <a href="sql.htm#create-table"><code>CREATE TABLE</code></a> в MySQL 8.0,
+является временно неатомным. Выход сервера во время операции
+<a href="sql.htm#truncate-table"><code>TRUNCATE TABLE</code></a>
+может привести к повреждению таблицы. Это может также привести к неправильным
+записям внешнего ключа в таблицах словаря <code>SYS_FOREIGN</code> и
+<code>SYS_FOREIGN_COLS</code> в <code>InnoDB</code>, если таблица содержит
+ограничения внешнего ключа.</li>
+
+<li>Операции DDL занимают больше времени из-за записи в транзакционное
+хранилище вместо файлов <code>.frm</code>.</li>
+<li>Промежуток времени, в течение которого операции DDL уязвимы для выхода
+сервера, больше из-за записи в транзакционное хранилище вместо файлов
+<code>.frm</code>. Минимальный риск, введенный этим ограничением,
+главным образом, относится к операциям восстановления и другим операциям,
+которые загружают многочисленные новые таблицы.</li>
+
+<li>С удалением файлов <code>.isl</code> в MySQL 8.0 офлайновое перемещение
+табличных пространств, создаваемых за пределами каталога данных
+MySQL, не поддерживается.</li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

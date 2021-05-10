@@ -1,0 +1,325 @@
+<HTML>
+<HEAD>
+<TITLE>MySQL. Пример базы данных. [SQL.RU]</TITLE>
+<META http-equiv="Content-Type" CONTENT="text/html; charset=windows-1251">
+<META HTTP-EQUIV="Window-target" CONTENT="_top">
+<META HTTP-EQUIV="Last-Modified" CONTENT="29-03-2001">
+<META NAME="Description" CONTENT="Использование языка SQL, создание клиент-серверных систем. Конференция по MSSQL, Oracle, Interbase, MySQL. Полезные ссылки, документация, рекомендации по разработке информационных систем, сертификация, заказ книг и многое другое.">
+<META NAME="Keywords" CONTENT="SQL, конференция, Database Server, Oracle, Interbase, MySQL, документация, статьи, примеры, книги, ссылки, сертификация, работа, СУБД">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER=0 CELLSPACING=10><TR><TD>
+<CENTER>
+<H2 class="headline">Пример базы данных</H2></CENTER>
+<P>Это простой пример того, как может выглядеть вполне типичная база данных.
+
+<P>В проектировании базы данных первое дело, которое Вы должны сделать, это
+вычислить последовательность действий, необходимых Вам для решения
+поставленной задачи. В SQL это может выглядеть так:
+
+<CENTER><H2>Таблицы</H2></CENTER>
+<P><PRE>
+# The Widget table.
+#
+# Detailed information on a widget.  Linked to by Purchase_Order_Item
+# by way of the widget_id field.  Linked to Widget_Color by way of
+# the widget_color field, and to the Widget_Size table by way of the
+# widget_size field.
+CREATE TABLE Widget_Table (
+  widget_id MEDIUMINT(8) NOT NULL AUTO_INCREMENT,
+  widget_name CHAR(60) NOT NULL,
+  widget_color_id MEDIUMINT(8) NOT NULL,
+  widget_size_id MEDIUMINT(8) NOT NULL,
+  widgets_on_hand SMALLINT NOT NULL,
+  widget_price FLOAT(8,2) NOT NULL,
+  commission_percent FLOAT(2,2) NOT NULL,
+  PRIMARY KEY (widget_id),
+  KEY (widget_name),
+  KEY (widget_color_id,widget_size_id)
+);
+</PRE>
+
+<P>Первая строка сообщает СУБД MySQL, что мы определяем таблицу по имени
+Widget_Table. Следующие шесть строк определяют поля, которые таблица
+содержит, тип данных, которые входят в них, и какие атрибуты эти поля имеют.
+
+<P>Прежде, чем Вы сможете создать эту таблицу, Вы должны создать пустую
+базу данных. В MySQL это выполнено посредством программы
+<A HREF="commands.shtml#Mysqladmin">mysqladmin</A>.
+
+<P><PRE>
+
+prompt> mysqladmin create Widget-DB
+
+</PRE>
+
+<P>Одна из множества основных концепций в хорошем проекте реляционной базы
+данных это то, что Вы никогда не должны хранить избыточные данные. В случае
+Widget_Table это отражено в полях Widget_color_id и widget_size_id. Эти два
+поля могли бы быть строками. Взамен мы делаем их указателями на другие
+таблицы, которые будут содержать одну запись для каждого возможного значения,
+которое может содержать такое поле.
+
+<P>Это сделано по двум причинам:
+
+<P><UL><LI>Непротиворечивость</LI>
+<LI>Централизация сложности</LI></UL>
+
+Первая причина - фактически подслучай второй. Гораздо проще поддержать
+непротиворечивость в базе данных, если Вы используете таблицы, чтобы искать
+значения. Это будет предохранять людей от создания прикладных программ,
+которые используют все от "L" до "HUGE", чтобы обозначить, что размер
+рассматриваемого объекта большой.
+
+<P>Widget_id поле - среда (3 байт) установленное по размеру целое число. Это
+имеет специальные атрибуты NOT NULL и AUTO_INCREMENT. NOT NULL является ANSI
+SQL стандартом и определяет что, когда кто-то вводит widget информацию в эту
+таблицу, они должны дать некоторое значение для этого поля. Если не дали,
+MySQL назначит полю значение по умолчанию. Конечно, если значение по
+умолчанию было определено, то будет использоваться оно, когда не задано
+никакого значения. Если же оно не определено, то поле получит значение,
+исходя из его типа.
+
+<P>AUTO_INCREMENT специфический атрибут MySQL. Если Вы вставляете ноль в это
+поле MySQL, автоматически назначит значение, которое на единицу выше, чем
+самое высокое предыдущее значение, назначенное к этому полю в этой таблице.
+Это простой метод для производства уникальных идентификаторов для нового
+widgets, поскольку они введены в таблицу.
+
+<P>Мы также определяем несколько ключей. Когда Вы назначаете полю атрибут
+AUTO_INCREMENT, Вы должны также определить это поле как первичный ключ. Вы
+можете иметь только один первичный ключ на таблицу. Только одно поле на
+таблицу может иметь AUTO_INCREMENT атрибут.
+
+<P>Мы также создаем вторичные индексы использованием слова KEY.
+Индексирование значительно увеличивает быстродействие запросов и объединений.
+Индексы могут включать больше чем одно поле. Если Вы имеете индекс, который
+включает больше чем одно поле, Вы не нуждаетесь в создании другого индекса с
+первым полем в составном индексе.
+
+<P>Мы определили Widget_Table. Теперь надо определить путь слежения за
+заказами. Для этой цели мы определяем таблицу Purchase_Order.
+
+<P><PRE>
+# The Purchase Order table.
+#
+# customer_id links us to the Customer_Table
+# Where we can get more information about the customer.
+#
+# To allow for N items on a Purchase order we have to
+# have another table called Purchase_Order_Item that
+# we link to be way of purchase_order.
+CREATE TABLE Purchase_Order (
+  purchase_order MEDIUMINT(8) NOT NULL AUTO_INCREMENT,
+  customer_id SMALLINT NOT NULL,
+  order_date DATE NOT NULL,
+  due_date DATE NOT NULL,
+  close_date DATE NOT NULL,
+  status_code TINYINT(2) UNSIGNED NOT NULL,
+  last_action_date TIMESTAMP,
+  PRIMARY KEY (purchase_order),
+  KEY (customer_id,order_date,status_code)
+);
+</PRE>
+
+<P>Мы считаем, что заказчик собирается заказывать у нас товар более чем
+однажды. По этой причине вместо записей об адресе и имени заказчика, мы
+назначаем каждому заказчику уникальный номер идентификации, который связывает
+нас со входом в таблице, которая содержит эту информацию. Мы назовем эту
+таблицу Customer. О ней поговорим немного позже. Также обратите внимание, что
+мы не имеем никакого упоминания о widgets в этой таблице. Это потому, что
+порядок приобретения может быть разным. Мы могли бы только определить
+некоторое фиксированное число способов покупки, но это не будет очень гибко.
+Взамен этого мы определяем поле, названное purchase_order, которое будет
+содержать уникальный номер для каждого способа приобретения. Затем мы
+определяем другую таблицу, которая будет содержать один вход для каждого
+значения порядка покупки.
+
+<P>Еще одно интересное поле last_action_date. Это поле имеет тип TIMESTAMP.
+Поля этого типа автоматически модифицируются всякий раз, когда на них
+выполняется команда INSERT или UPDATE. Это показывает, когда запись была в
+последний раз изменена.
+
+<P>Таблица для Purchase_Order_Item:
+
+<P><PRE>
+# The Purchase_Order_Item table.
+#
+# Since there can be more than one item on a purchase order
+# we need a table that contains a single item.  We link back to
+# The main Purchase_Order table by use of the purchase_order field.
+#
+# We can also link back to the Widget_Table table by use of the
+# widget_id field.
+#
+# Last of all we link to the Status table by way of the status_code field.
+CREATE TABLE Purchase_Order_Item (
+  purchase_order SMALLINT NOT NULL,
+  order_sequence SMALLINT NOT NULL,
+  widget_id MEDIUMINT(8) NOT NULL,
+  quantity SMALLINT(4) UNSIGNED NOT NULL,
+  status_code TINYINT(2) UNSIGNED NOT NULL,
+  order_date DATE NOT NULL,
+  item_due_date DATE NOT NULL,
+  deliver_date DATE NOT NULL,
+  last_action_date TIMESTAMP,
+  PRIMARY KEY (purchase_order,order_sequence),
+  KEY (widget_id),
+  KEY (status_code,order_date)
+);
+</PRE>
+
+<P>В таблице Purchase_Order_Item хранится информация о всех элементах поля
+способа покупки. Здесь хранится информация о том кто, когда, что и сколько
+заказывал.
+
+<P>Таблица Customer:
+<P><PRE>
+# The Customer table.
+#
+# We need to know where to send those widgets.
+#
+# Links back to Purchase_Order by way of customer_id.
+CREATE TABLE Customer (
+  customer_id SMALLINT NOT NULL AUTO_INCREMENT,
+  customer_name VARCHAR(80) NOT NULL,
+  customer_contact VARCHAR(80) NOT NULL,
+  customer_address VARCHAR(80),
+  customer_city VARCHAR(80),
+  customer_zip VARCHAR(10),
+  customer_phone VARCHAR(20),
+  customer_fax VARCHAR(20),
+  PRIMARY KEY (customer_id),
+  KEY (customer_name)
+);
+</PRE>
+
+<P>Это и совсем просто. Здесь хранится информация о каждом заказчике: его
+имя, с кем связаться в случае проблем, адрес, телефон и факс.
+
+<P>Теперь давайте подумаем. Среди заказчиков наверняка найдутся свободные
+торговцы, которые рады продавать Ваш товар по своим ценам. Неплохо бы их
+привлечь к себе, например, небольшой скидочкой. Но для этого надо хотя бы
+примерно представлять, кто купил товар для себя, а кто на продажу. Отлично,
+накроем их колпаком.
+
+<P><PRE>
+# The Sales_droid table.
+#
+# Keep track of the people who sell the widgets.
+#
+CREATE TABLE Sales_Droid (
+  sales_droid_id SMALLINT NOT NULL AUTO_INCREMENT,
+  sales_droid_first_name VARCHAR(80) NOT NULL,
+  sales_droid_last_name VARCHAR(80) NOT NULL,
+  sales_droid_phone VARCHAR(20) NOT NULL,
+  PRIMARY KEY (sales_droid_id)
+);
+</PRE>
+
+<P>Нужны еще три простые таблицы для служебной информации:
+<P><PRE>
+# The Status table.
+#
+# Table to contain all valid status codes.
+#
+# Links to to Purchase_Order_Item and Purchase_Item by way of status_code.
+CREATE TABLE Status (
+  status_code TINYINT NOT NULL AUTO_INCREMENT,
+  status_text VARCHAR(80) NOT NULL,
+  PRIMARY KEY(status_code)
+);
+</PRE>
+
+<P>Таблица Status очень простая. Нам нужен уникальный числовой ID, который
+связан с коротким текстовым полем, которое содержит текст кода состояния.
+
+<P><PRE>
+# The Widget_Color table.
+#
+# Table to contain all valid color codes.
+CREATE TABLE Widget_Color (
+  widget_color_id TINYINT NOT NULL AUTO_INCREMENT,
+  color_text VARCHAR(80) NOT NULL,
+  PRIMARY KEY(widget_color_id)
+);
+
+# The Widget_Size table.
+#
+# Table to contain all valid color codes.
+CREATE TABLE Widget_Size (
+  widget_size_id TINYINT NOT NULL AUTO_INCREMENT,
+  size_text VARCHAR(80) NOT NULL,
+  PRIMARY KEY(widget_size_id)
+);
+</PRE>
+
+<P>Таблицы Widget_Color и Widget_Size почти идентичен таблице Status.
+Только имена изменены.
+
+<P>Все! Можно вводить данные.
+
+<P>В заключение хочется попросить Вас, если Вам понравилась эта страничка или
+пригодилась изложенная здесь информация,
+<A href="mailto:rldp@ftp.botik.ru?subject=Спасибо!&body=Спасибо за
+работу!">послать благодарность автору.</A> Это поможет мне
+вести статистику того, скольким людям пригодилось хоть что-то из моих трудов.
+
+<P><A href="mysqlrus.shtml">На главную страничку.</A>
+
+</TD></TR></TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>
+

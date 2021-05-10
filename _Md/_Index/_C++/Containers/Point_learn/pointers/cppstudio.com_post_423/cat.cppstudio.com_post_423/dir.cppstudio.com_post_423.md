@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_C++\Containers\Point_learn\pointers\cppstudio.com_post_423\cat.cppstudio.com_post_423\dir.cppstudio.com_post_423.md">cppstudio.com_post_423</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_C++\Containers\Point_learn\pointers\cppstudio.com_post_423\www_this.md">www_this.md</a>
+        - *# http://cppstudio.com/post/423/

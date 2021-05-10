@@ -1,0 +1,7 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Graph-master\JavaScript\cat.JavaScript\dir.JavaScript.md">JavaScript</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Graph-master\JavaScript\README.md">README.md</a>
+        - *## Матрица смежности - хранит связи вершин графа
+        - *## Матрица смежности в виде плоского массива
+        - *## Матрица инцидентности - связь вершин (строки) с дугами (колонки)
+        - *## Список смежности - список вершин, для каждой списк смежных вершин
+        - *## Список ребер - список с указанием ребра как пары вершин

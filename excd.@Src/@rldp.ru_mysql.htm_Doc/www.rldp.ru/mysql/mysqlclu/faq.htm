@@ -1,0 +1,377 @@
+<html>
+<head>
+  <title>MySQL Cluster FAQ</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r>
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+</head>
+
+<body>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h2>8 MySQL Cluster FAQ</h2>
+<p><strong>Q:</strong> Что такое MySQL Cluster?</p>
+<p><strong>A:</strong> MySQL Cluster объединяет наиболее популярную базу
+данных с открытыми исходными текстами и параллельные серверы в виде кластера,
+со всей устойчивостью к сбоям, вообще характерной для кластерной архитектуры.
+Вы можете выполнять критические прикладные программы базы данных с
+доступностью 99.999%. MySQL Cluster максимизирует доступность Ваших
+прикладных программ открытым и рентабельным способом. MySQL Cluster дает
+возможность организациям преодолеть традиционные барьеры к принятию решений
+кластеризации с высокой доступностью:</p>
+
+<ul><li>Уменьшение стоимости программ с доступной моделью лицензирования.
+</li>
+<li>Уменьшение аппаратных издержек.</li>
+<li>Уменьшение эксплуатационных расходов, уменьшая потребность в
+специализированных навыках администраторов.</li></ul>
+
+<p><strong>Q:</strong> Что является главными особенностями и
+выгодами в MySQL Cluster?</p>
+<ul><li><strong>Высокая доступность</strong>: доступность действительно
+составляет "пять девяток". Ведь это система, использующая параллельную
+архитектуру серверов, уж вряд ли они зависнут все сразу!</li>
+
+<li><strong>Динамическое масштабирование</strong>: Ваши прикладные программы
+растут, как и Ваши деловые потребности, используя широко доступные аппаратные
+средства. Не используется никаких специализированных дорогих систем.</li>
+
+<li><strong>Высокая эффективность</strong>: достигается эффективность,
+достаточная для 99% всех прикладных программ.</li>
+<li><strong>Низкая цена</strong>: уже упоминалось, что используется только
+широко доступная аппаратура, очень дешевая, по сравнению со
+специализированными аппаратными средствами.</li></ul>
+
+<p><strong>Q:</strong> Что является типичной метрикой эффективности
+для MySQL Cluster?</p>
+<ul><li>Доступность
+<ul><li>99.999% (&lt;5 минут простоя в год)</li></ul></li>
+
+<li>Эффективность
+<ul><li>Время отклика около 5-10 миллисекунд (с синхронной репликацией).</li>
+<li>Производительность: более 10000 реплицированных транзакций в секунду на
+кластере из двух узлов (каждый узел однопроцессорный), что является
+минимальной конфигурацией кластера.</li>
+
+<li>Более 100000 реплицированных транзакций в секунду на кластере из 4 узлов
+(каждый узел двухпроцессорный), что является конфигурацией нижнего уровня.
+</li></ul></li>
+<li>Задержки
+<ul><li>Задержки менее секунды дают возможность Вам предоставить
+обслуживание без прерывания.</li></ul></li>
+
+<li>Масштабируемость
+<ul><li>Почти линейная показана на системе, где каждый узел памяти выполнен
+на следующих аппаратных средствах:
+<table><tr><td>CPU:</td><td>2xIntel Xeon 2.8 GHz</td></tr>
+<tr><td>Память:</td><td>16 GB RAM</td></tr>
+<tr><td>HDD:</td><td>4x73 GB SCSI</td></tr>
+<tr><td></td><td>Контроллер RAID 1</td></tr>
+<tr><td></td><td>Gigabit Ethernet</td></tr></table></li>
+<li>Для рентабельного масштабирования:
+<ul><li>Добавьте большее количество узлов памяти (8, 16, 32) в кластер, или
+</li>
+<li>Добавьте CPU (4, 8, ...) или</li>
+<li>Добавьте большее количество памяти (16GB, 32GB, ...) в
+каждый узел памяти.</li></ul></li></ul></li></ul>
+
+<p><strong>Q:</strong> Для кого предназначен MySQL Cluster?</p>
+<p><strong>A:</strong> Любая организация, которая заинтересована
+универсальной надежностью на дешевых аппаратных средствах и программном
+обеспечении. Типичные заказчики включают телекоммуникационные и финансовые
+компании, которые нуждаются в значительной производительности, чтобы
+обработать большие объемы транзакций. Однако, MySQL Cluster представляет
+собой доступное решение для любой компании, требующей высокой доступности.
+Специфические пользователи и организации включают:</p>
+
+<ul><li><strong>Существующие пользователи MySQL</strong>, которые должны
+приспособить увеличивающуюся производительность их деловых критических
+прикладных программ в результате растущего числа пользователей, а также
+возрастающих объемов данных и транзакций.</li>
+
+<li><strong>Организации связи</strong>, использующие коммерческие базы данных
+типа TimesTen, но теперь находят их слишком дорогими и требующими слишком
+много времени для поддержки.</li>
+
+<li><strong>Бюджетные организации</strong>, которые ограничены бюджетом и
+вынуждены экономить деньги.</li>
+
+<li><strong>Администраторы разработки</strong>: любая организация, которая
+требует, чтобы высокая доступность уменьшила стоимость базы данных и время
+простоя для деловых критических прикладных программ типа CRM, финансовых и
+прикладных программ e-commerce.</li></ul>
+
+<p><strong>Q:</strong> Чем MySQL Cluster отличается от Oracle RAC?</p>
+<p><strong>A:</strong> MySQL Cluster и Oracle RAC сосредоточены на поставке
+решений базы данных с высокой доступностью. Однако, Oracle использует
+архитектуру распределенного хранения в то время, как MySQL Cluster использует
+архитектуру централизованной обработки.</p>
+
+<p>Oracle RAC сложная программа, которая требует значительного
+капиталовложения в аппаратные средства, программное обеспечение и разработку.
+Oracle RAC полагается на архитектуру, которая требует дополнительного
+капиталовложения в SAN (Storage Area Network, локальная сеть памяти). Это
+приводит к следующим проблемам:</p>
+
+<ul><li>Дополнительные проблемы для заказчиков, так как они должны обратиться
+к третьей стороне для решения проблем с сетевой структурой. Общедоступный
+диск может стоить $15k-20k в дополнение к лицензии на базу данных, даже
+для маленькой реализации.</li>
+
+<li>Восстановление разрушенного узла требует доступа к общему диску, что
+увеличивает время задержек до минут против долей секунды в MySQL Cluster.
+</li>
+<li>Единая точка сбоя в кластере имеется...</li></ul>
+
+<p>MySQL Cluster обеспечивает высокую доступность базы данных (99.999%) для
+массового рынка. MySQL Cluster не требует специализированных аппаратных
+средств или умений. MySQL Cluster ничего не разделяет, а значит не требует
+никаких дополнительных капиталовложений в инфраструктуру.</p>
+
+<p><strong>Q:</strong> MySQL Cluster поддерживает работу с MyISAM и InnoDB?
+</p>
+<p><strong>A:</strong> MySQL Cluster может включать способы хранения MyISAM и
+InnoDB. Но данные с высокой доступностью должны постоянно находиться именно в
+самом MySQL Cluster.</p>
+
+<p>Узел памяти MySQL Cluster сохраняет данные MySQL Cluster, сервер MySQL
+анализирует SQL и посылает запросы узлу памяти. Сервер MySQL не сохраняет
+никакие данные, принадлежащие хранилищу MySQL Cluster.</p>
+
+<p>Данные InnoDB/MyISAM все еще сохраняются на сервере MySQL и могут
+использоваться стандартным способом, но эти данные не скопируются, так что
+они невидимы с любого другого сервера MySQL в кластере.</p>
+
+<p><strong>Q:</strong> Сервер MySQL может постоянно находиться на одной
+машине, в то время как DB-узел на другой машине?</p>
+
+<p><strong>A:</strong> Да, сервер MySQL может быть на одном компьютере, а
+DB-узлы могут быть на других компьютерах.</p>
+
+<p><strong>Q:</strong> Как я могу проапгрейдить мой MySQL 3.x &amp; 4.x
+до MySQL Cluster?</p>
+
+<p><strong>A:</strong> Данные, которые должны быть высокодоступными, должны
+постоянно находиться в хранилище MySQL Cluster. Если существующие MyISAM
+и/или InnoDB данные должны быть сделаны высокодоступными, они должны быть
+перенесены в это хранилище MySQL Cluster.</p>
+
+<p>Перемещение представляет собой простое использование команды ALTER TABLE.
+В большинстве случаев, изменения кода прикладной программы или
+SQL-запроса не требуется.</p>
+
+<p><strong>Q:</strong> Какие платформы поддерживает MySQL Cluster?</p>
+<p><strong>A:</strong> MySQL Cluster доступен на наиболее
+популярных платформах, включая:</p>
+<ul><li>Linux (Red Hat, Novell/SUSE)</li>
+<li>Sun Solaris</li>
+<li>IBM AIX</li>
+<li>HP-UX</li>
+<li>Mac OS X</li></ul>
+
+<p><strong>Q:</strong> Каковы минимальные системные требования
+для MySQL Cluster?</p>
+<p><strong>A:</strong> Вы можете выполнять целый кластер
+на одиночном компьютере:
+<table><tr><td>OS:</td><td>Linux (RedHat, SUSE), Solaris, AIX,
+HP-UX, Mac OS X</td></tr>
+<tr><td>CPU:</td><td>Intel/AMD x86/x86-64</td></tr>
+<tr><td>Память:</td><td>512 MB RAM</td></tr>
+<tr><td>HDD:</td><td>3 GB</td></tr>
+<tr><td>Сеть:</td><td>От одного узла (Ethernet TCP/IP)</td></tr></table>
+
+<p><strong>Q:</strong> Какие системные требования для MySQL Cluster лучше?</p>
+<p><strong>A:</strong> Для каждого узла:</p>
+<table><tr><td>OS:</td><td>Linux (RedHat, SUSE), Solaris, AIX,
+HP-UX, Mac OS X</td></tr>
+<tr><td>CPU:</td><td>2x Intel Xeon, Intel Itanium, AMD Opteron, Sun SPARC,
+IBM PowerPC</td></tr>
+<tr><td>Память:</td><td>16 GB RAM</td></tr>
+<tr><td>HDD:</td><td>4x36 GB SCSI (RAID 1)</td></tr>
+<tr><td>Сеть:</td><td>1-8 узлов (Gigabit Ethernet) или от 8 узлов специальной
+кластерной сети, например, SCI)</td></tr></table>
+
+<p><strong>Q:</strong> MySQL Cluster доступен согласно двойной лицензии,
+обычной (коммерческой) и Open Source GPL?</p>
+<p><strong>A:</strong> Конечно, все разработки MySQL доступны согласно
+двойной лицензии. Коммерческая лицензия доступна для тех организаций, которые
+не хотят быть ограниченными условиями GPL. MySQL AB обеспечивает поддержку и
+разнообразные услуги заказчикам коммерческой лицензии.</p>
+
+<p><strong>Q:</strong> Какие инструментальные средства доступны для
+управления MySQL Cluster? Работает ли с ним MySQL Administrator?</p>
+<p>Мощный набор инструментальных средств командной строки доступен, чтобы
+управлять MySQL Cluster. Также, MySQL Administrator уже расширен, чтобы
+работать с MySQL Cluster.</p>
+
+<p><strong>Q:</strong> Могу ли я резервировать таблицы кластера без их
+закрытия (то есть, "hot online backup")?</p>
+<p><strong>A:</strong> Да, MySQL Cluster поддерживает функцию Hot Backup.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</html>

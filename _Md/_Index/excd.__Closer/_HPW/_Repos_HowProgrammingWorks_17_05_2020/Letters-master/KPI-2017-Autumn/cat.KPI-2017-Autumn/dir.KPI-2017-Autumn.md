@@ -1,0 +1,20 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Autumn\cat.KPI-2017-Autumn\dir.KPI-2017-Autumn.md">KPI-2017-Autumn</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Autumn\Lecture1.md">Lecture1.md</a>
+        - *# Лекция #1 Введение в программную инженерию
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Autumn\Lecture2.md">Lecture2.md</a>
+        - *# Лекция #2 Основы JS: переменные, типы и функции
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Autumn\Lecture3.md">Lecture3.md</a>
+        - *# Лекции #3 "Настройка среды: git, github"
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Autumn\Lecture4.md">Lecture4.md</a>
+        - *# Лекции #4 "Структуры данных, строки, композиция функций"
+        - *### Примеры кода:
+        - *### Домашнее задание:
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Autumn\Lecture5.md">Lecture5.md</a>
+        - *# Лекции #5 "JavaSctipt for Babies"
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Autumn\Lecture6.md">Lecture6.md</a>
+        - *# Лекции #6 "Композиция функций, частичное применение, обертки"
+        - *### Примеры кода
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Autumn\Lecture7.md">Lecture7.md</a>
+        - *# Лекции #7 "Введение в Node.js"
+        - *### Ссылки:
+        - *### Задание:

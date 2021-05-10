@@ -1,0 +1,940 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 11. Расширение Connector/Python C, функции API</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-python-cext-reference"></a>
+Глава 11. Расширение Connector/Python C, функции API</h1>
+<p>Эта глава содержит общественный API для расширения C Connector/Python,
+также известное как модуль
+<code class="literal">_mysql_connector</code> Python.</p>
+
+<p>Модуль <code class="literal">_mysql_connector</code> может использоваться
+непосредственно без любого другого кода Connector/Python. Одна причина
+использовать этот модуль непосредственно по причинам производительности.</p>
+
+<p>Примеры в этом руководстве используют <code class="literal">ccnx</code>,
+чтобы представлять объект соединителя, как используется с модуем
+<code class="literal">_mysql_connector</code>.
+<code class="literal">ccnx</code> это экземпляр класса
+<code class="literal">_mysql_connector.MySQL()</code>. Это отлично от
+объекта <code class="literal">cnx</code>, используемого в примерах для
+модуля <code class="literal">mysql.connector</code> Connector/Python из
+<a href="refer.htm">главы 10</a>. <code class="literal">cnx</code> это
+экземпляр объекта, возвращенного методом
+<code class="literal">connect()</code> класса
+<code class="literal">MySQLConnection</code>.</p>
+
+<p>Расширение C не часть чистой установки Python.
+Это дополнительный модуль, который должен быть установлен, используя
+двоичный дистрибутив Connector/Python, который включает его, или собран с
+использованием исходного текста, см. <a href="install.htm">главу 4</a>.</p>
+
+<h2><a name="connector-python-api-cext-mysql-connector"></a>
+11.1. Модуль _mysql_connector</h2>
+<a class="indexterm" name="idm45244847788656"></a>
+<a class="indexterm" name="idm45244847787584"></a>
+<p>Модуль <code class="literal">_mysql_connector</code> обеспечивает классы.
+</p>
+
+<h2><a name="connector-python-api-cext-mysql"></a>
+11.2. Класс _mysql_connector.MySQL()</h2>
+<a class="indexterm" name="idm45244847783792"></a>
+<a class="indexterm" name="idm45244847782704"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+ccnx = _mysql_connector.MySQL(<em class="replaceable"><code>args</code></em>)
+</pre>
+
+<p>Класс <code class="literal">MySQL</code> используется, чтобы открыть и
+управлять связью с сервером MySQL (упомянутом в другом месте в этой главе
+как <span class="quote">экземпляр <code class="literal">MySQL</code></span>).
+Это также используется, чтобы послать команды и
+SQL-операторы и прочитать результаты.</p>
+
+<p>Класс <code class="literal">MySQL</code> обертывает большинство функций,
+найденных в MySQL C Client API, и добавляет некоторую
+дополнительную удобную функциональность.</p>
+
+<pre class="programlisting">
+import _mysql_connector
+ccnx = _mysql_connector.MySQL()
+ccnx.connect(user='scott', password='<em class="replaceable"><code>password</code></em>',
+             host='127.0.0.1', database='employees')
+ccnx.close()
+</pre>
+
+<p>Разрешенные аргументы класса <code class="literal">MySQL</code>:
+<code class="literal">auth_plugin</code>,
+<code class="literal">buffered</code>,
+<code class="literal">charset_name</code>,
+<code class="literal">connection_timeout</code>,
+<code class="literal">raw</code>,
+<code class="literal">use_unicode</code>.
+Эти аргументы соответствуют аргументам для
+<code class="literal">MySQLConnection.connect()</code>, как описано в
+<a href="connect.htm#connector-python-connectargs">разделе 7.1</a>,
+за исключением того, что <code class="literal">charset_name</code>
+соответствует <code class="literal">charset</code>.</p>
+
+<h2><a name="connector-python-api-cext-affected-rows"></a>
+11.3. Метод _mysql_connector.MySQL.affected_rows()</h2>
+<a class="indexterm" name="idm45244847764416"></a>
+<a class="indexterm" name="idm45244847763312"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+count = ccnx.affected_rows()
+</pre>
+
+<p>Возвращает количество строк, измененных, вставленных или удаленных
+последним запросом <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/update.html"
+target="_top"><code class="literal">UPDATE</code></a>,
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html" target="_top">
+<code class="literal">INSERT</code></a> или
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/delete.html" target="_top">
+<code class="literal">DELETE</code></a>.</p>
+
+<h2><a name="connector-python-api-cext-autocommit"></a>
+11.4. Метод _mysql_connector.MySQL.autocommit()</h2>
+<a class="indexterm" name="idm45244847755120"></a>
+<a class="indexterm" name="idm45244847754016"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+ccnx.autocommit(<em class="replaceable"><code>bool</code></em>)
+</pre>
+
+<p>Устанавливает режим autocommit.</p>
+<p>Поднимает исключение <code class="literal">ValueError</code>, если
+<code class="literal">mode</code> не <code class="literal">True</code> или
+<code class="literal">False</code>.</p>
+
+<h2><a name="connector-python-api-cext-buffered"></a>
+11.5. Метод _mysql_connector.MySQL.buffered()</h2>
+<a class="indexterm" name="idm45244847745696"></a>
+<a class="indexterm" name="idm45244847744592"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+is_buffered = ccnx.buffered()                                 # getter
+ccnx.buffered(<em class="replaceable"><code>bool</code></em>) # setter
+</pre>
+
+<p>Без аргумента вернет <code class="literal">True</code> или
+<code class="literal">False</code>, чтобы указать буферизует ли экземпляр
+<code class="literal">MySQL</code> результаты.</p>
+
+<p>С булевым аргументом устанавливает режим буферизации экземпляра
+<code class="literal">MySQL</code>.</p>
+<p>Для синтаксиса сеттера поднимает исключение
+<code class="literal">TypeError</code>, если значение не
+<code class="literal">True</code> или <code class="literal">False</code>.</p>
+
+<h2><a name="connector-python-api-cext-change-user"></a>
+11.6. Метод _mysql_connector.MySQL.change_user()</h2>
+<a class="indexterm" name="idm45244847733536"></a>
+<a class="indexterm" name="idm45244847732432"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+ccnx.change_user(user='<em class="replaceable"><code>user_name</code></em>,
+                 password='<em class="replaceable"><code>password_val</code></em>',
+                 database='<code class="literal">db_name</code>')
+</pre>
+
+<p>Изменяет пользователя и устанавливает новую базу данных по умолчанию.
+Разрешенные аргументы <code class="literal">user</code>,
+<code class="literal">password</code> и
+<code class="literal">database</code>.</p>
+
+<h2><a name="connector-python-api-cext-character-set-name"></a>
+11.7. Метод _mysql_connector.MySQL.character_set_name()</h2>
+<a class="indexterm" name="idm45244847723968"></a>
+<a class="indexterm" name="idm45244847722864"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+charset = ccnx.character_set_name()
+</pre>
+
+<p>Возвращает название набора символов по умолчанию для текущей сессии MySQL.
+</p>
+<p>У некоторых наборов символов MySQL нет эквивалентных имен в Python.
+Когда дело обстоит так, имя, применимое Python, возвращено. Например,
+имя набора символов MySQL <code class="literal">'utf8mb4'</code>
+возвращено как <code class="literal">'utf8'</code>.</p>
+
+<h2><a name="connector-python-api-cext-close"></a>
+11.8. Метод _mysql_connector.MySQL.close()</h2>
+<a class="indexterm" name="idm45244847716208"></a>
+<a class="indexterm" name="idm45244847715120"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+ccnx.close()
+</pre>
+<p>Закрывает подключение MySQL.</p>
+
+<h2><a name="connector-python-api-cext-commit"></a>
+11.9. Метод _mysql_connector.MySQL.commit()</h2>
+<a class="indexterm" name="idm45244847710576"></a>
+<a class="indexterm" name="idm45244847709488"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+ccnx.commit()
+</pre>
+<p>Передает текущую транзакцию.</p>
+
+<h2><a name="connector-python-api-cext-connect"></a>
+11.10. Метод _mysql_connector.MySQL.connect()</h2>
+<a class="indexterm" name="idm45244847704944"></a>
+<a class="indexterm" name="idm45244847703856"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+ccnx.connect(<em class="replaceable"><code>args</code></em>)
+</pre>
+
+<p>Соединяется с сервером MySQL.</p>
+<pre class="programlisting">
+import _mysql_connector
+ccnx = _mysql_connector.MySQL()
+ccnx.connect(user='scott', password='<em class="replaceable"><code>password</code></em>',
+             host='127.0.0.1', database='employees')
+ccnx.close()
+</pre>
+
+<p>
+<code class="literal">connect()</code> понимает следующие аргументы:
+<code class="literal">host</code>, <code class="literal">user</code>,
+<code class="literal">password</code>, <code class="literal">database</code>,
+<code class="literal">port</code>, <code class="literal">unix_socket</code>,
+<code class="literal">client_flags</code>,
+<code class="literal">ssl_ca</code>, <code class="literal">ssl_cert</code>,
+<code class="literal">ssl_key</code>,
+<code class="literal">ssl_verify_cert</code>,
+<code class="literal">compress</code>. См.
+<a href="connect.htm#connector-python-connectargs">раздел 7.1</a>.</p>
+
+<p>Если <code class="literal">ccnx</code> уже связан,
+<code class="literal">connect()</code> сбрасывает любой набор результатов и
+завершает связь прежде, чем вновь ее открыть.</p>
+<p>Поднимает исключение <code class="literal">TypeError</code>,
+если какой-либо аргумент имеет неправильный тип.</p>
+
+<h2><a name="connector-python-api-cext-connected"></a>
+11.11. Метод _mysql_connector.MySQL.connected()</h2>
+<a class="indexterm" name="idm45244847683840"></a>
+<a class="indexterm" name="idm45244847682736"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+is_connected = ccnx.connected()
+</pre>
+
+<p>Вернет <code class="literal">True</code> или
+<code class="literal">False</code>, чтобы указать, подключен ли экземпляр
+<code class="literal">MySQL</code>.</p>
+
+<h2><a name="connector-python-api-cext-consume-result"></a>
+11.12. Метод _mysql_connector.MySQL.consume_result()</h2>
+<a class="indexterm" name="idm45244847676016"></a>
+<a class="indexterm" name="idm45244847674912"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+ccnx.consume_result()
+</pre>
+
+<p>Потребляет сохраненный набор результатов, если есть для этого экземпляра
+<code class="literal">MySQL</code>, получая все строки.
+Если запрос, который был выполнен, возвратил много наборов результатов, этот
+метод поглощает всех их.</p>
+
+<h2><a name="connector-python-api-cext-convert-to-mysql"></a>
+11.13. Метод _mysql_connector.MySQL.convert_to_mysql()</h2>
+<a class="indexterm" name="idm45244847669392"></a>
+<a class="indexterm" name="idm45244847668288"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+converted_obj = ccnx.convert_to_mysql(<em class="replaceable"><code>obj</code></em>))
+</pre>
+
+<p>Преобразовывает объект Python в значение MySQL на основе типа объекта
+Python. Преобразованный объект экранирован и цитирован.</p>
+<pre class="programlisting">
+ccnx.query('SELECT CURRENT_USER(), 1 + 3, NOW()')
+row = ccnx.fetch_row()
+for col in row:
+  print(ccnx.convert_to_mysql(col))
+ccnx.consume_result()
+</pre>
+<p>Поднимает исключение <code class="literal">MySQLInterfaceError</code>,
+если объект не может быть преобразован.</p>
+
+<h2><a name="connector-python-api-cext-escape-string"></a>
+11.14. Метод _mysql_connector.MySQL.escape_string()</h2>
+<a class="indexterm" name="idm45244847660752"></a>
+<a class="indexterm" name="idm45244847659648"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+str = ccnx.escape_string(<em class="replaceable"><code>str_to_escape</code></em>)
+</pre>
+
+<p>Использует C API-функцию
+Uses the <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/mysql-escape-string.html"
+target="_top"><code class="literal">mysql_escape_string()</code></a>,
+чтобы создать строку SQL, которую можно использовать в SQL-операторе.</p>
+
+<p>Поднимает исключение <code class="literal">TypeError</code>, если у
+значения нет типа <code class="literal">Unicode</code>,
+<code class="literal">bytes</code> или (для Python 2)
+<code class="literal">string</code>. Поднимает исключение
+<code class="literal">MySQLError</code>, если строку нельзя
+было бы экранировать.</p>
+
+<h2><a name="connector-python-api-cext-fetch-fields"></a>
+11.15. Метод _mysql_connector.MySQL.fetch_fields()</h2>
+<a class="indexterm" name="idm45244847649312"></a>
+<a class="indexterm" name="idm45244847648208"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+field_info = ccnx.fetch_fields()
+</pre>
+
+<p>Информация о столбце для активного набора результатов. Возвращает список
+кортежей, один кортеж для каждого столбца.</p>
+<p>Поднимает исключение <code class="literal">MySQLInterfaceError</code>,
+для любой ошибки MySQL, возвращенной сервером MySQL.</p>
+
+<pre class="programlisting">
+ccnx.query('SELECT CURRENT_USER(), 1 + 3, NOW()')
+field_info = ccnx.fetch_fields()
+for fi in field_info:
+  print(fi)
+ccnx.consume_result()
+</pre>
+
+<h2><a name="connector-python-api-cext-fetch-row"></a>
+11.16. Метод _mysql_connector.MySQL.fetch_row()</h2>
+<a class="indexterm" name="idm45244847641248"></a>
+<a class="indexterm" name="idm45244847640144"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+row = ccnx.fetch_row()
+</pre>
+
+<p>Приносит следующую строку активного набора результатов. Строка возвращена
+как кортеж, которая содержит значения, преобразованные в объекты Python, если
+не был установлен <code class="literal">raw</code>.</p>
+
+<pre class="programlisting">
+ccnx.query('SELECT CURRENT_USER(), 1 + 3, NOW()')
+row = ccnx.fetch_row()
+print(row)
+ccnx.free_result()
+</pre>
+<p>Поднимает исключение <code class="literal">MySQLInterfaceError</code>
+для любой ошибки MySQL, возвращенной сервером MySQL.</p>
+
+<h2><a name="connector-python-api-cext-field-count"></a>
+11.17. Метод _mysql_connector.MySQL.field_count()</h2>
+<a class="indexterm" name="idm45244847632496"></a>
+<a class="indexterm" name="idm45244847631392"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+count = ccnx.field_count()
+</pre>
+<p>Возвращает количество колонок в активном наборе результатов.</p>
+
+<h2><a name="connector-python-api-cext-free-result"></a>
+11.18. Метод _mysql_connector.MySQL.free_result()</h2>
+<a class="indexterm" name="idm45244847626752"></a>
+<a class="indexterm" name="idm45244847625648"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+ccnx.free_result()
+</pre>
+
+<p>Освобождает сохраненный набор результатов, если есть для этого
+экземпляра <code class="literal">MySQL</code>.
+Если запрос, который был выполнен, возвратил много наборов результатов, этот
+метод обработает все.</p>
+
+<h2><a name="connector-python-api-cext-get-character-set-info"></a>
+11.19. Метод _mysql_connector.MySQL.get_character_set_info()</h2>
+<a class="indexterm" name="idm45244847620176"></a>
+<a class="indexterm" name="idm45244847619072"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+info = ccnx.get_character_set_info()
+</pre>
+
+<p>Вернет данные о наборе символов по умолчанию для текущей сессии MySQL.
+У возвращенного словаря есть ключи
+<code class="literal">number</code>, <code class="literal">name</code>,
+<code class="literal">csname</code>, <code class="literal">comment</code>,
+<code class="literal">dir</code>, <code class="literal">mbminlen</code> и
+<code class="literal">mbmaxlen</code>.</p>
+
+<h2><a name="connector-python-api-cext-get-client-info"></a>
+11.20. Метод _mysql_connector.MySQL.get_client_info()</h2>
+<a class="indexterm" name="idm45244847609328"></a>
+<a class="indexterm" name="idm45244847608224"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+info = ccnx.get_client_info()
+</pre>
+<p>Возвращает версию библиотеки клиента MySQL как строку.</p>
+
+<h2><a name="connector-python-api-cext-get-client-version"></a>
+11.21. Метод _mysql_connector.MySQL.get_client_version()</h2>
+<a class="indexterm" name="idm45244847603520"></a>
+<a class="indexterm" name="idm45244847602416"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+info = ccnx.get_client_version()
+</pre>
+<p>Возвращает версию библиотеки клиента MySQL как кортеж.</p>
+
+<h2><a name="connector-python-api-cext-get-host-info"></a>
+11.22. Метод _mysql_connector.MySQL.get_host_info()</h2>
+<a class="indexterm" name="idm45244847597760"></a>
+<a class="indexterm" name="idm45244847596656"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+info = ccnx.get_host_info()
+</pre>
+<p>Возвращает описание типа связи как строку.</p>
+
+<h2><a name="connector-python-api-cext-get-proto-info"></a>
+11.23. Метод _mysql_connector.MySQL.get_proto_info()</h2>
+<a class="indexterm" name="idm45244847591952"></a>
+<a class="indexterm" name="idm45244847590848"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+info = ccnx.get_proto_info()
+</pre>
+<p>Возвращает версию протокола, используемую текущей сессией.</p>
+
+<h2><a name="connector-python-api-cext-get-server-info"></a>
+11.24. Метод _mysql_connector.MySQL.get_server_info()</h2>
+<a class="indexterm" name="idm45244847586160"></a>
+<a class="indexterm" name="idm45244847585056"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+info = ccnx.get_server_info()
+</pre>
+<p>Возвращает версию сервера MySQL как строку.</p>
+
+<h2><a name="connector-python-api-cext-get-server-version"></a>
+11.25. Метод _mysql_connector.MySQL.get_server_version()</h2>
+<a class="indexterm" name="idm45244847580368"></a>
+<a class="indexterm" name="idm45244847579264"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+info = ccnx.get_server_version()
+</pre>
+<p>Возвращает версию сервера MySQL как кортеж.</p>
+
+<h2><a name="connector-python-api-cext-get-ssl-cipher"></a>
+11.26. Метод _mysql_connector.MySQL.get_ssl_cipher()</h2>
+<a class="indexterm" name="idm45244847574624"></a>
+<a class="indexterm" name="idm45244847573520"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+info = ccnx.get_ssl_cipher()
+</pre>
+<p>Возвращает шифр SSL, используемый для текущей сессии, или
+<code class="literal">None</code>, если SSL не используется.</p>
+
+<h2><a name="connector-python-api-cext-hex-string"></a>
+11.27. Метод _mysql_connector.MySQL.hex_string()</h2>
+<a class="indexterm" name="idm45244847568144"></a>
+<a class="indexterm" name="idm45244847567040"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+str = ccnx.hex_string(<em class="replaceable"><code>string_to_hexify</code></em>)
+</pre>
+
+<p>Кодирует значение в шестнадцатеричном формате и обертывает его в
+<code class="literal">X''</code>. Например,
+<code class="literal">"ham"</code> становится
+<code class="literal">X'68616D'</code>.</p>
+
+<h2><a name="connector-python-api-cext-insert-id"></a>
+11.28. Метод _mysql_connector.MySQL.insert_id()</h2>
+<a class="indexterm" name="idm45244847559760"></a>
+<a class="indexterm" name="idm45244847558656"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+insert_id = ccnx.insert_id()
+</pre>
+<p>Вернет значение <code class="literal">AUTO_INCREMENT</code>, произведенное
+последним выполненным запросом, или 0, если такой нет.</p>
+
+<h2><a name="connector-python-api-cext-more-results"></a>
+11.29. Метод _mysql_connector.MySQL.more_results()</h2>
+<a class="indexterm" name="idm45244847553184"></a>
+<a class="indexterm" name="idm45244847552080"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+more = ccnx.more_results()
+</pre>
+
+<p>Вернет <code class="literal">True</code> или
+<code class="literal">False</code>, указывая, существуют ли
+еще наборы результатов.</p>
+
+<h2><a name="connector-python-api-cext-next-result"></a>
+11.30. Метод _mysql_connector.MySQL.next_result()</h2>
+<a class="indexterm" name="idm45244847546000"></a>
+<a class="indexterm" name="idm45244847544896"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+ccnx.next_result()
+</pre>
+
+<p>Начинает следующий набор результатов для последовательности запроса,
+которая произвела многократные наборы результатов.</p>
+<p>Поднимает исключение <code class="literal">MySQLInterfaceError</code>
+для любой ошибки MySQL, возвращенной сервером MySQL.</p>
+
+<h2><a name="connector-python-api-cext-num-fields"></a>
+11.31. Метод _mysql_connector.MySQL.num_fields()</h2>
+<a class="indexterm" name="idm45244847538976"></a>
+<a class="indexterm" name="idm45244847537872"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+count = ccnx.num_fields()
+</pre>
+<p>Возвращает количество колонок в активном наборе результатов.</p>
+
+<h2><a name="connector-python-api-cext-num-rows"></a>
+11.32. Метод _mysql_connector.MySQL.num_rows()</h2>
+<a class="indexterm" name="idm45244847533216"></a>
+<a class="indexterm" name="idm45244847532112"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+count = ccnx.num_rows()
+</pre>
+
+<p>Возвращает количество строк в активном наборе результатов.</p>
+<p>Поднимает исключение <code class="literal">MySQLError</code>, если нет
+никакого набора результатов.</p>
+
+<h2><a name="connector-python-api-cext-ping"></a>
+11.33. Метод _mysql_connector.MySQL.ping()</h2>
+<a class="indexterm" name="idm45244847526384"></a>
+<a class="indexterm" name="idm45244847525296"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+alive = ccnx.ping()
+</pre>
+
+<p>Вернет <code class="literal">True</code> или
+<code class="literal">False</code>, указывая, работает
+ли связь с сервером MySQL.</p>
+
+<h2><a name="connector-python-api-cext-query"></a>
+11.34. Метод _mysql_connector.MySQL.query()</h2>
+<a class="indexterm" name="idm45244847519168"></a>
+<a class="indexterm" name="idm45244847518080"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+ccnx.query(<em class="replaceable"><code>args</code></em>)
+</pre>
+
+<p>Выполняет SQL-оператор. Разрешенные аргументы:
+<code class="literal">statement</code>,
+<code class="literal">buffered</code>,
+<code class="literal">raw</code> и
+<code class="literal">raw_as_string</code>.</p>
+
+<pre class="programlisting">
+ccnx.query('DROP TABLE IF EXISTS t')
+ccnx.query('CREATE TABLE t (i INT NOT NULL AUTO_INCREMENT PRIMARY KEY)')
+ccnx.query('INSERT INTO t (i) VALUES (NULL),(NULL),(NULL)')
+ccnx.query('SELECT LAST_INSERT_ID()')
+row = ccnx.fetch_row()
+print('LAST_INSERT_ID(): ', row)
+ccnx.consume_result()
+</pre>
+
+<p><code class="literal">buffered</code> и <code class="literal">raw</code>,
+если не заданы, берут значения из экземпляра
+<code class="literal">MySQL</code>.
+<code class="literal">raw_as_string</code> специальный аргумент для Python v2
+возвращает <code class="literal">str</code> вместо
+<code class="literal">bytearray</code> (совместимый с Connector/Python v1.x).
+</p>
+
+<p>Чтобы проверить вернул ли запрос строки, проверьте свойство
+<code class="literal">have_result_set</code> экземпляра
+<code class="literal">MySQL</code>.</p>
+
+<p><code class="literal">query()</code> вернет
+<code class="literal">True</code>, если вопрос выполняется и поднимает
+исключение иначе. Это поднимает исключение
+<code class="literal">TypeError</code>, если у какого-либо аргумента есть
+неправильный тип и <code class="literal">MySQLInterfaceError</code>
+для любой ошибки MySQL, возвращенной сервером MySQL.</p>
+
+<h2><a name="connector-python-api-cext-raw"></a>
+11.35. Метод _mysql_connector.MySQL.raw()</h2>
+<a class="indexterm" name="idm45244847498944"></a>
+<a class="indexterm" name="idm45244847497856"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+is_raw = ccnx.raw()                                        # getter
+ccnx.raw(<em class="replaceable"><code>bool</code></em>)   # setter
+</pre>
+
+<p>Без аргумента вернет <code class="literal">True</code> или
+<code class="literal">False</code> указывая, что экземпляр
+<code class="literal">MySQL</code> возвращает строки как есть
+(без преобразования в объекты Python).</p>
+<p>С булевым аргументом установит режим экземпляра
+<code class="literal">MySQL</code>.</p>
+
+<h2><a name="connector-python-api-cext-refresh"></a>
+11.36. Метод _mysql_connector.MySQL.refresh()</h2>
+<a class="indexterm" name="idm45244847489424"></a>
+<a class="indexterm" name="idm45244847488336"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+ccnx.refresh(<em class="replaceable"><code>flags</code></em>)
+</pre>
+<p>Сбрасывает таблицы и кэши, указанные аргументом.
+Единственным аргументом в настоящее время является целое число.</p>
+<p>Поднимает исключение <code class="literal">TypeError</code>, если первый
+аргумент не целое число.</p>
+
+<h2><a name="connector-python-api-cext-rollback"></a>
+11.37. Метод _mysql_connector.MySQL.rollback()</h2>
+<a class="indexterm" name="idm45244847481968"></a>
+<a class="indexterm" name="idm45244847480864"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+ccnx.rollback()
+</pre>
+
+<p>Отменяет текущую транзакцию.</p>
+<p>Поднимает исключение <code class="literal">MySQLInterfaceError</code>
+на любых ошибках.</p>
+
+<h2><a name="connector-python-api-cext-select-db"></a>
+11.38. Метод _mysql_connector.MySQL.select_db()</h2>
+<a class="indexterm" name="idm45244847475040"></a>
+<a class="indexterm" name="idm45244847473936"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+ccnx.select_db(<em class="replaceable"><code>db_name</code></em>)
+</pre>
+
+<p>Устанавливает текущую базу данных для текущей сессии.</p>
+<p>Поднимает исключение <code class="literal">MySQLInterfaceError</code>
+для любой ошибки MySQL, возвращенной сервером MySQL.</p>
+
+<h2><a name="connector-python-api-cext-set-character-set"></a>
+11.39. Метод _mysql_connector.MySQL.set_character_set()</h2>
+<a class="indexterm" name="idm45244847467648"></a>
+<a class="indexterm" name="idm45244847466544"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+ccnx.set_character_set(<em class="replaceable"><code>charset_name</code></em>)
+</pre>
+
+<p>Устанавливает набор символов по умолчанию для текущей сессии.
+Единственным разрешенным аргументом является последовательность, которая
+содержит имя набора символов.</p>
+<p>Поднимает исключение <code class="literal">TypeError</code>, если аргумент
+не <code class="literal">PyString_type</code>.</p>
+
+<h2><a name="connector-python-api-cext-shutdown"></a>
+11.40. Метод _mysql_connector.MySQL.shutdown()</h2>
+<a class="indexterm" name="idm45244847459392"></a>
+<a class="indexterm" name="idm45244847458288"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+ccnx.shutdown(<em class="replaceable"><code>flags</code></em>)
+</pre>
+
+<p>Закрывает сервер MySQL. Единственным аргументом в настоящее время
+является целое число, которое описывает тип закрытия.</p>
+<p>Поднимает исключение <code class="literal">TypeError</code>, если первый
+аргумент не целое число. Поднимает исключение
+<code class="literal">MySQLErrorInterface</code>,
+если ошибка возвращена сервером MySQL.</p>
+
+<h2><a name="connector-python-api-cext-stat"></a>
+11.41. Метод _mysql_connector.MySQL.stat()</h2>
+<a class="indexterm" name="idm45244847451264"></a>
+<a class="indexterm" name="idm45244847450176"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+info = ccnx.stat()
+</pre>
+
+<p>Возвращает статус сервера как последовательность.</p>
+<p>Поднимает исключение <code class="literal">MySQLErrorInterface</code>,
+если ошибка возвращена сервером MySQL.</p>
+
+<h2><a name="connector-python-api-cext-thread-id"></a>
+11.42. Метод _mysql_connector.MySQL.thread_id()</h2>
+<a class="indexterm" name="idm45244847444336"></a>
+<a class="indexterm" name="idm45244847443232"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+thread_id = ccnx.thread_id()
+</pre>
+<p>Возвращает ID текущего потока или связи.</p>
+
+<h2><a name="connector-python-api-cext-use-unicode"></a>
+11.43. Метод _mysql_connector.MySQL.use_unicode()</h2>
+<a class="indexterm" name="idm45244847438592"></a>
+<a class="indexterm" name="idm45244847437488"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+is_unicode = ccnx.use_unicode()                                  # getter
+ccnx.use_unicode(<em class="replaceable"><code>bool</code></em>) # setter
+</pre>
+
+<p>Без аргумента вернет <code class="literal">True</code> или
+<code class="literal">False</code> указывая, возвращает ли экземпляр
+<code class="literal">MySQL</code> недвоичные строки как Unicode.</p>
+<p>С булевым аргументом устанавливает, возвращает ли экземпляр
+<code class="literal">MySQL</code> недвоичные строки как Unicode.</p>
+
+<h2><a name="connector-python-api-cext-warning-count"></a>
+11.44. Метод _mysql_connector.MySQL.warning_count()</h2>
+<a class="indexterm" name="idm45244847428880"></a>
+<a class="indexterm" name="idm45244847427776"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+count = ccnx.warning_count()
+</pre>
+<p>Возвращает количество ошибок, предупреждений и сообщений,
+произведенных предыдущим SQL-оператором.</p>
+
+<h2><a name="connector-python-api-cext-have-result-set"></a>
+11.45. _mysql_connector.MySQL.have_result_set Property</h2>
+<a class="indexterm" name="idm45244847423040"></a>
+<a class="indexterm" name="idm45244847421936"></a>
+<p>Синтаксис:</p>
+
+<pre class="programlisting">
+has_rows = ccnx.have_result_set
+</pre>
+<p>После выполнения метода <code class="literal">query()</code>
+указывает, возвращает ли запрос строки.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

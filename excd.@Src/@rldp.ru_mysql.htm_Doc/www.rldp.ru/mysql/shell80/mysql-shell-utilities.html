@@ -1,0 +1,1072 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 6. Утилиты MySQL Shell</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="mysql-shell-utilities"></a>Глава 6. Утилиты MySQL Shell</h1>
+<p>MySQL Shell включает утилиты для работы с MySQL. Чтобы получить доступ к
+утилитам из MySQL Shell, используйте глобальный объект
+<code class="literal">util</code>, который обеспечивает следующие функции:
+</p>
+
+<dl><dt><span class="term">
+<code class="literal">checkForServerUpgrade()</code></span></dt>
+<dd><p>Утилита контролера модернизации, которая позволяет вам проверить,
+готовы ли экземпляры сервера MySQL к модернизации.</p></dd>
+
+<dt><span class="term">
+<code class="literal">importJSON()</code></span></dt>
+<dd><p>Утилита, которая позволяет вам импортировать документы JSON коллекции
+или таблицы MySQL Server.</p></dd>
+
+</dl><h2><a name="mysql-shell-utilities-upgrade"></a>6.1.
+Утилита контролера модернизации</h2>
+<p>Функция <code class="literal">util.checkForServerUpgrade()</code>
+позволяет вам проверить, готовы ли экземпляры сервера MySQL к модернизации.
+С MySQL Shell 8.0.13 можно выбрать целевой выпуск MySQL Server, до которого
+вы планируете модернизировать, начиная с MySQL Server 8.0 General
+Availability (GA) release (8.0.11) до номера выпуска MySQL Server, который
+соответствует текущему номеру выпуска MySQL Shell.
+Утилита контролера модернизации выполняет автоматизированные проверки,
+которые важны для указанной целевой версии, и сообщает вам о дальнейших
+соответствующих проверках, которые необходимо осуществить вручную.</p>
+
+<p>Можно использовать утилиту, чтобы проверить экземпляры сервера MySQL 5.7
+на ошибки совместимости и проблемы для модернизации. С MySQL Shell 8.0.13
+можно также использовать это, чтобы проверить экземпляры MySQL 8.0
+при другом выпуске статуса GA в ряде выпусков MySQL 8.0. Если вы вызываете
+<code class="literal">checkForServerUpgrade()</code> не определяя экземпляр
+MySQL Server, проверяется экземпляр, в настоящее время связанный с глобальной
+сессией. Чтобы видеть, какой в настоящее время связан, используется команда
+<code class="literal">\status</code>.</p>
+
+<ol type="1"><li><p>Утилита контролера модернизации не поддерживает проверку
+MySQL Server в версии ранее 5.7.</li>
+<li>MySQL Server Сервер MySQL поддерживает модернизацию только между
+версиями GA. Модернизации от non-GA MySQL 5.7 или 8.0 не поддерживаются.
+Для получения дополнительной информации о путях поддерживаемого обновления
+посмотрите <a href="../../../dev.mysql.com/doc/refman/8.0/en/upgrade-paths.html"
+target="_top">Upgrade Paths</a>.</p></li></ol>
+
+<p>С MySQL Shell 8.0.16 утилита контролера модернизации может проверить
+конфигурационный файл (<code class="filename">my.cnf</code> или
+<code class="filename">my.ini</code>). Утилита проверяет на любые системные
+переменные, которые определяются в конфигурационном файле, но были удалены в
+целевом выпуске MySQL Server и также для любых системных переменных, которые
+не определяются в конфигурационном файле и будут иметь различное значение по
+умолчанию в целевом выпуске MySQL Server. Для этих проверок, когда вы
+вызываете <code class="literal">checkForServerUpgrade()</code>,
+необходимо обеспечить путь к конфигурационному файлу.</p>
+
+<p>Утилита контролера модернизации может работать по связи X-протокола или по
+классической связи протокола MySQL, используя TCP или сокет Unix.
+Можно создать связь заранее или определить как аргумент функции.
+Утилита всегда создает новую сессию, чтобы соединиться с сервером, таким
+образом, глобальная сессия MySQL Shell не затронута.</p>
+
+<p>Утилита может произвести свой вывод в текстовом формате по умолчанию
+или в формате JSON, который может быть более просто разобрать и обработать
+для использования в автоматизации.</p>
+
+<p>Формат вызова такой:
+<pre>
+checkForServerUpgrade (ConnectionData connectionData, Dictionary options)
+</pre>
+
+<p>Оба аргумента дополнительные. Первый обеспечивает данные о связи, если
+связь еще не существует, вторым является словарь, который можно использовать,
+чтобы определить следующие опции:</p>
+
+<dl><dt><span class="term"><code class="literal">password</code></span></dt>
+<dd><p>Пароль для учетной записи пользователя, которая используется,
+чтобы управлять утилитой контролера модернизации. Учетная запись пользователя
+с привилегиями <code class="literal">ALL</code> требуется. Можно обеспечить
+пароль, используя этот параметр словаря или как часть деталей связи. Если вы
+не обеспечиваете пароль, система спросит его, соединяясь с сервером.</p></dd>
+
+<dt><span class="term"><code class="literal">targetVersion</code></span></dt>
+<dd><p>Целевая версия сервера MySQL, до которой вы планируете
+модернизировать. В MySQL Shell 8.0.16 можно определить выпуск 8.0.11 (первый
+MySQL Server 8.0 GA), 8.0.12, 8.0.13, 8.0.14, 8.0.15 или 8.0.16.
+Если вы определяете краткую форму номера версии 8.0 или опускаете опцию
+<code class="literal">targetVersion</code>, утилита проверяет на модернизацию
+номер выпуска сервера MySQL, который соответствует текущему номеру
+выпуска MySQL Shell.</p></dd>
+
+<dt><span class="term"><code class="literal">configPath</code></span></dt>
+<dd><p>Местный путь к <code class="filename">my.cnf</code> или
+<code class="filename">my.ini</code> для сервера MySQL, который вы
+проверяете, например, <code class="filename">C:\ProgramData\MySQL\MySQL
+Server 8.0\my.ini</code>. Если вы опускаете путь к файлу, и утилита
+контролера модернизации должна осуществить проверку, которая требует
+конфигурационного файла, эта проверка терпит неудачу с ошибкой, сообщающей
+вам, что необходимо определить путь к файлу.</p></dd>
+
+<dt><span class="term"><code class="literal">outputFormat</code></span></dt>
+<dd><p>Формат, в котором возвращен вывод утилиты контролера модернизации.
+Умолчание, если вы опускаете выбор, является текстовым форматом
+(<code class="literal">TEXT</code>). Если вы определяете
+<code class="literal">JSON</code>, вывод JSON возвращен вместо
+этого, в формате, перечисленном
+<a href="#json-output-upgrade">здесь</a>.
+Альтернативно, с MySQL Shell 8.0.17, можно определить параметр командной
+строки <code class="option">--json</code>, чтобы активировать обертку
+JSON, когда вы запускаете MySQL Shell, чтобы использовать утилиту контролера
+модернизации, в этом случае вывод JSON возвращен как умолчание.
+<code class="literal">--json=raw</code> выводит сырой JSON,
+<code class="literal">--json=pretty</code> выводит красивый JSON.
+</p></dd></dl>
+
+<p>Например, следующие команды проверяют сервер MySQL, в настоящее время
+связываемый с глобальной сессией, с выводом в текстовом формате:
+<pre>
+mysqlsh&gt; <strong class="userinput"><code>\status</code></strong>
+MySQL Shell version 8.0.16
+...
+Server version: 5.7.24-log MySQL Community Server (GPL)
+...
+mysqlsh&gt; <strong class="userinput"><code>util.checkForServerUpgrade()</code></strong>
+</pre>
+
+<p>Следующая команда проверяет сервер MySQL в URI
+<code class="literal">user@example.com:3306</code>
+для модернизации первого MySQL Server 8.0 GA (8.0.11).
+Пароль пользователя и путь конфигурационного файла поставляются как часть
+словаря опций, вывод возвращен в текстовом формате по умолчанию:
+<pre>
+mysqlsh&gt; <strong class="userinput"><code>util.checkForServerUpgrade('user@example.com:3306', {"password":"password", "targetVersion":"8.0.11", "configPath":"C:\ProgramData\MySQL\MySQL Server 8.0\my.ini"})</code></strong>
+</pre>
+
+<p>Следующая команда проверяет тот же самый сервер MySQL на модернизацию
+номера выпуска MySQL Server, который соответствует текущему номеру выпуска
+MySQL Shell и возвращает вывод JSON для последующей обработки:
+<pre>
+mysqlsh&gt; <strong class="userinput"><code>util.checkForServerUpgrade('user@example.com:3306', {"password":"password", "outputFormat":"JSON", "configPath":"C:\ProgramData\MySQL\MySQL Server 8.0\my.ini"})</code></strong>
+</pre>
+
+<p>С MySQL 8.0.13 можно запустить утилиту контролера модернизации из
+командной строки, используя интерфейс команды
+<a href="mysqlsh-command.html#mysqlsh"><span class="command"><strong>
+mysqlsh</strong></span></a>. Для получения информации об этом синтаксисе
+посмотрите <a href="mysql-shell-code-execution.html#mysql-shell-command-interface">
+раздел 4.7</a>. Следующий пример проверяет сервер MySQL на модернизацию до
+выпуска 8.0.15 и возвращает JSON:
+<pre>
+<strong class="userinput"><code>mysqlsh -- util checkForServerUpgrade user@localhost:3306 --target-version=8.0.15 --output-format=JSON --config-path=/etc/mysql/my.cnf</code></strong>
+</pre>
+
+<p>Данные о связи могут также быть определены как именованные опции
+при помощи фигурных скобок, как в следующем примере, который также
+показывает, что нижний регистр и дефисы могут использоваться для имени
+метода, а не camelCase:
+<pre>
+<strong class="userinput"><code>mysqlsh -- util check-for-server-upgrade { --user=user --host=localhost --port=3306 } --target-version=8.0.15 --output-format=JSON --config-path=/etc/mysql/my.cnf</code></strong>
+</pre>
+
+<p>Следующий пример использует сокетное соединение Unix и более старый формат
+для вызова утилиты из командной строки, который все еще действителен:
+<pre>
+<strong class="userinput"><code>./bin/mysqlsh --socket=/tmp/mysql.sock --user=user -e "util.checkForServerUpgrade()"</code></strong>
+</pre>
+
+<p>Чтобы получить справку:
+<pre>
+mysqlsh&gt; <strong class="userinput"><code>util.help("checkForServerUpgrade")</code></strong>
+</pre>
+
+<p><code class="literal">util.checkForServerUpgrade()</code>
+больше не возвращает значение (до MySQL Shell 8.0.13 значение 0, 1
+или 2 было возвращено).</p>
+
+<p>Когда вы вызываете утилиту контролера модернизации, MySQL Shell
+соединяется с экземпляром сервера и проверяет параметры настройки, описанные
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/upgrade-prerequisites.html"
+target="_top">здесь</a>. Например, так:
+<pre>
+The MySQL server at example.com:3306, version
+5.7.25-enterprise-commercial-advanced - MySQL Enterprise Server - Advanced Edition (Commercial),
+will now be checked for compatibility issues for upgrade to MySQL 8.0.16...
+
+1) Usage of old temporal type
+No issues found
+
+2) Usage of db objects with names conflicting with reserved keywords in 8.0
+Warning: The following objects have names that conflict with reserved keywords that are new to 8.0.
+Ensure queries sent by your applications use `quotes` when referring to them or they will result in errors.
+More information: https://dev.mysql.com/doc/refman/en/keywords.html
+
+dbtest.System - Table name
+dbtest.System.JSON_TABLE - Column name
+dbtest.System.cube - Column name
+
+3) Usage of utf8mb3 charset
+Warning: The following objects use the utf8mb3 character set. It is recommended to convert them to use
+utf8mb4 instead, for improved Unicode support.
+  More information: https://dev.mysql.com/doc/refman/8.0/en/charset-unicode-utf8mb3.html
+
+dbtest.view1.col1 - column's default character set: utf8
+
+4) Table names in the mysql schema conflicting with new tables in 8.0
+No issues found
+
+5) Foreign key constraint names longer than 64 characters
+No issues found
+
+6) Usage of obsolete MAXDB sql_mode flag
+No issues found
+
+7) Usage of obsolete sql_mode flags
+No issues found
+
+8) ENUM/SET column definitions containing elements longer than 255 characters
+No issues found
+
+9) Usage of partitioned tables in shared tablespaces
+  Error: The following tables have partitions in shared tablespaces. Before upgrading to 8.0 they need
+to be moved to file-per-table tablespace. You can do this by running query like
+'ALTER TABLE table_name REORGANIZE PARTITION X INTO
+(PARTITION X VALUES LESS THAN (30) TABLESPACE=innodb_file_per_table);'
+  More information: https://dev.mysql.com/doc/refman/8.0/en/mysql-nutshell.html#mysql-nutshell-removals
+
+  dbtest.table1 - Partition p0 is in shared tablespace tbsp4
+  dbtest.table1 - Partition p1 is in shared tablespace tbsp4
+
+10) Usage of removed functions
+No issues found
+
+11) Usage of removed GROUP BY ASC/DESC syntax
+  Error: The following DB objects use removed GROUP BY ASC/DESC syntax. They need to be altered so that
+ASC/DESC keyword is removed from GROUP BY clause and placed in appropriate ORDER BY clause.
+  More information: https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-13.html#mysqld-8-0-13-sql-syntax
+
+  dbtest.view1 - VIEW uses removed GROUP BY DESC syntax
+  dbtest.func1 - FUNCTION uses removed GROUP BY ASC syntax
+
+12) Removed system variables for error logging to the system log configuration
+No issues found
+
+13) Removed system variables
+Error: Following system variables that were detected as being used will be
+removed. Please update your system to not rely on them before the upgrade.
+More information: https://dev.mysql.com/doc/refman/8.0/en/added-deprecated-removed.html#optvars-removed
+
+log_builtin_as_identified_by_password - is set and will be removed
+show_compatibility_56 - is set and will be removed
+
+14) System variables with new default values
+Warning: Following system variables that are not defined in your
+configuration file will have new default values. Please review if you rely on
+their current values and if so define them before performing upgrade.
+More information: https://mysqlserverteam.com/new-defaults-in-mysql-8-0/
+
+back_log - default value will change
+character_set_server - default value will change from latin1 to utf8mb4
+collation_server - default value will change from latin1_swedish_ci to
+utf8mb4_0900_ai_ci
+event_scheduler - default value will change from OFF to ON
+[...]
+
+15) Schema inconsistencies resulting from file removal or corruption
+No issues found
+
+16) Issues reported by 'check table x for upgrade' command
+No issues found
+
+17) New default authentication plugin considerations
+Warning: The new default authentication plugin 'caching_sha2_password' offers
+more secure password hashing than previously used 'mysql_native_password'
+(and consequent improved client connection authentication). However, it also
+has compatibility implications that may affect existing MySQL installations.
+If your MySQL installation must serve pre-8.0 clients and you encounter
+compatibility issues after upgrading, the simplest way to address those
+issues is to reconfigure the server to revert to the previous default
+authentication plugin (mysql_native_password). For example, use these lines
+in the server option file:
+
+[mysqld]
+default_authentication_plugin=mysql_native_password
+
+However, the setting should be viewed as temporary, not as a long term or
+permanent solution, because it causes new accounts created with the setting
+in effect to forego the improved authentication security.
+If you are using replication please take time to understand how the
+authentication plugin changes may impact you.
+
+More information:
+https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password-compatibility-issues
+https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password-replication
+
+Errors: 6
+Warnings: 32
+Notices:0
+6 errors were found. Please correct these issues before upgrading to
+avoid compatibility issues.
+</pre>
+
+<ul><li><p>В этом примере проверки, выполненные на сервере,
+возвратили некоторые ошибки для скрипта модернизации, которые были найдены на
+проверенном сервере, таким образом, изменения требуются, прежде чем
+сервер может быть модернизирован до целевого выпуска MySQL 8.0.</li>
+
+<li>Когда вы внесли необходимые изменения, необходимо также считать внесение
+дальнейших изменений, чтобы удалить предупреждения. Улучшения конфигурации
+сделали бы сервер более совместимым с целевой версией. Сервер может, однако,
+быть успешно модернизирован, не удаляя предупреждения.</li>
+
+<li>Как показано в этом примере, утилита контролера модернизации могла бы
+также предоставить консультацию и инструкции для дальнейших соответствующих
+проверок, которые не могут быть автоматизированы, и что необходимо сделать
+вручную, что оценивается как предупреждение или информационный уровень.
+</p></li></ul>
+
+<h3><a name="json-output-upgrade"></a>
+Вывод JSON утилиты контролера модернизации</h3>
+<p>Когда вы выбираете вывод JSON, используя опцию словаря
+<code class="literal">outputFormat</code>, объект JSON возвращенный
+утилитой контролера модернизации, имеет следующие пары ключ/значение:</p>
+
+<dl><dt><span class="term">serverAddress</span></dt>
+<dd><p>Имя хоста и номер порта для связи MySQL Shell с
+сервером MySQL, который был проверен.</p></dd>
+
+<dt><span class="term">serverVersion</span></dt>
+<dd><p>Обнаруженная версия MySQL сервера, который был проверен.</p></dd>
+<dt><span class="term">targetVersion</span></dt>
+<dd><p>Версия MySQL для проверок модернизации.</p></dd>
+
+<dt><span class="term">errorCount</span></dt>
+<dd><p>Количество ошибок, найденных утилитой.</p></dd>
+<dt><span class="term">warningCount</span></dt>
+<dd><p>Количество предупреждений, найденных утилитой.</p></dd>
+
+<dt><span class="term">noticeCount</span></dt>
+<dd><p>Количество уведомлений, найденных утилитой.</p></dd>
+<dt><span class="term">summary</span></dt>
+<dd><p>Текст итогового заявления, которое было бы предоставлено в конце
+текстового вывода (например, "No known compatibility errors or
+issues were found.").</p></dd>
+
+<dt><span class="term">checksPerformed</span></dt>
+<dd><p>Множество объектов JSON, один для каждой отдельной проблемы
+модернизации, которая была автоматически проверена (например, использование
+удаленных функций). У каждого объекта JSON есть следующие пары ключ/значение:
+
+<dl><dt><span class="term">id</span></dt>
+<dd><p>ID проверки, который является уникальной строкой.</p></dd>
+<dt><span class="term">title</span></dt>
+<dd><p>Краткое описание проверки.</p></dd>
+
+<dt><span class="term">status</span></dt>
+<dd><p>"OK", если проверка успешна, "ERROR" иначе.</p></dd>
+<dt><span class="term">description</span></dt>
+<dd><p>Длинное описание проверки (при наличии), включающее совет или
+сообщение об ошибке, если проверка не сработала.</p></dd>
+
+<dt><span class="term">documentationLink</span></dt>
+<dd><p>При наличии связь с документацией с дополнительной
+информацией или советом.</p></dd>
+
+<dt><span class="term">detectedProblems</span></dt>
+<dd><p>Множество (которое может быть пустым) объектов JSON, представляющих
+ошибки, предупреждения или уведомления, которые были найдены в результате
+проверки. У каждого объекта JSON есть следующие пары ключ/значение:</p>
+
+<dl><dt><span class="term">level</span></dt>
+<dd><p>Уровень сообщения: Error, Warning или Notice.</p></dd>
+<dt><span class="term">dbObject</span></dt>
+<dd><p>Последовательность, определяющая объект базы данных, к которому
+имеет отношение сообщение.</p></dd>
+
+<dt><span class="term">description</span></dt>
+<dd><p>При наличии, последовательность с дальнейшим описанием проблемы.
+</p></dd></dl></dd></dl></dd>
+
+<dt><span class="term">manualChecks</span></dt>
+<dd><p>Множество объектов JSON, один для каждой отдельной проблемы
+модернизации, которая относится к вашей процедуре обновления и должна быть
+проверена вручную (например, изменение плагина идентификации по умолчанию в
+MySQL 8.0). У каждого объекта JSON есть следующие пары ключ/значение:</p>
+
+<dl><dt><span class="term">id</span></dt>
+<dd><p>ID ручной проверки, который является уникальной строкой.</p></dd>
+<dt><span class="term">title</span></dt>
+<dd><p>Краткое описание ручной проверки.</p></dd>
+
+<dt><span class="term">level</span></dt>
+<dd><p>Уровень сообщения: Warning или Notice.</p></dd>
+<dt><span class="term">description</span></dt>
+<dd><p>Длинное описание ручной проверки с информацией и советом.</p></dd>
+
+<dt><span class="term">documentationLink</span></dt>
+<dd><p>При наличии, связь с документацией с дополнительной
+информацией или советом.</p></dd></dl></dd></dl>
+
+<h2><a name="mysql-shell-utilities-json"></a>6.2. Утилита импорта JSON</h2>
+<p>Утилита импорта JSON MySQL Shell, введенная в MySQL Shell 8.0.13,
+позволяет вам импортировать документы JSON из файла (или специального файла
+FIFO) или стандартного ввода в коллекции сервера MySQL или таблицы.
+Она проверяет, что поставляемые документы JSON правильно построены, и
+вставляет их в целевую базу данных, устраняя необходимость использовать
+многократный <a href="../../../dev.mysql.com/doc/refman/8.0/en/insert.html"
+target="_top"><code class="literal">INSERT</code></a> или писать скрипты.</p>
+
+<p>С MySQL Shell 8.0.14 утилита импорта может обработать BSON (двойной JSON)
+типы данных, которые представляются в документах JSON. Типы данных,
+используемые в документах BSON, не поддерживаются JSON, но могут быть
+представлены, используя расширения для формата JSON. Утилита импорта может
+обработать документы, которые используют расширения JSON, чтобы представлять
+типы данных BSON, преобразовать их в идентичное или совместимое представление
+MySQL и импортировать значение данных, используя это представление.
+Получающиеся переделанные значения данных могут использоваться в выражениях и
+индексах, и управляться функциями X DevAPI и SQL-операторами.</p>
+
+<p>Можно импортировать документы JSON в таблицу или коллекцию.
+Если целевая таблица или коллекция не существуют в указанной базе данных, это
+автоматически создается утилитой, используя коллекцию по умолчанию или
+структуру таблицы. Коллекция по умолчанию создается, вызывая функцию
+<code class="function">createCollection()</code> объекта
+<code class="literal">schema</code>. Таблица по умолчанию
+составлена следующим образом:
+
+<pre>
+CREATE TABLE `dbname`.`tablename` (target_column JSON,
+       id INTEGER AUTO_INCREMENT PRIMARY KEY)
+       CHARSET utf8mb4 ENGINE=InnoDB;
+</pre>
+
+<p>Имя коллекции по умолчанию или таблицы это название поставляемого файла
+импорта (без расширения файла), имя <code class="literal">target_column
+</code> по умолчанию <code class="literal">doc</code>.</p>
+
+<p>Чтобы преобразовать расширения JSON для BSON
+в типы MySQL, необходимо определить опцию
+<code class="literal">convertBsonTypes</code>, когда вы управляете
+утилитой импорта. Дополнительные опции доступны, чтобы управлять отображением
+и преобразованием для определенных типов данных BSON. Если вы импортируете
+документы с расширениями JSON для типов BSON и не используете этот выбор,
+документы импортируются таким же образом, как они представляются
+во входном файле.</p>
+
+<p>Утилита импорта JSON требует существующей связи X-протокола с сервером.
+Она не может работать по классической связи протокола MySQL.</p>
+<p>В MySQL Shell API утилита импорта JSON это функция глобального объекта
+<code class="literal">util</code>:
+<pre>
+importJSON (path, options)
+</pre>
+
+<p><code class="literal">path</code> это строка, определяющая путь к файлу
+для файла, содержащего документы JSON, которые будут импортированы. Это может
+быть файлом, написанным на диске или специальным файлом FIFO (именованный
+канал). Стандартный ввод может только быть импортирован с параметром
+командной строки <code class="literal">--import</code>.</p>
+
+<p><code class="literal">options</code> это словарь вариантов импорта,
+которые могут быть опущены, если это пусто. До MySQL 8.0.14 словарь
+требовался всегда. Следующие варианты доступны, чтобы определить, где и как
+документы JSON импортируются:</p>
+
+<dl><dt><span class="term"><code class="literal">schema:
+"<em class="replaceable"><code>db_name</code></em>"</code></span></dt>
+<dd><p>Название целевой базы данных. Если вы опускаете этот параметр,
+MySQL Shell пытается определить и использовать название схемы для текущей
+сессии, как определено в последовательность URI, команде
+<code class="literal">\use</code> или опции MySQL Shell.
+Если название схемы не определяется и не может быть определено из
+сессии, ошибка возвращена.</p></dd>
+
+<dt><span class="term"><code class="literal">collection:
+"<em class="replaceable"><code>collection_name</code></em>"</code>
+</span></dt>
+<dd><p>Название целевой коллекции. Это альтернатива определению таблицы и
+колонки. Если коллекция не существует, утилита создает ее. Если вы не
+определяете ни одну из опций
+<code class="literal">collection</code>, <code class="literal">table</code>
+или <code class="literal">tableColumn</code>, сервис по умолчанию использует
+или создает целевую коллекцию с названием поставляемого файла импорта
+(без расширения файла).</p></dd>
+
+<dt><span class="term"><code class="literal">table:
+"<em class="replaceable"><code>table_name</code></em>"</code></span></dt>
+<dd><p>Название целевой таблицы. Это альтернатива определению коллекции.
+Если таблица не существует, утилита создает ее.</p></dd>
+
+<dt><span class="term"><code class="literal">tableColumn:
+"<em class="replaceable"><code>column_name</code></em>"</code></span></dt>
+<dd><p>Название колонки в целевой таблице, куда импортируются документы JSON.
+Указанная колонка должна присутствовать в таблице, если таблица уже
+существует. Если вы определяете опцию <code class="literal">table</code>,
+но опускаете <code class="literal">tableColumn</code>, имя столбца по
+умолчанию <code class="literal">doc</code>. Если вы определяете опцию
+<code class="literal">tableColumn</code>, но опускаете
+<code class="literal">table</code>, название поставляемого файла импорта (без
+расширения файла) используется в качестве имени таблицы.</p></dd>
+
+<dt><span class="term"><code class="literal">convertBsonTypes: true</code>
+</span></dt>
+<dd><p>Признает и преобразовывает типы данных BSON, которые представляются,
+используя расширения для формата JSON. Умолчание для этой опции
+<code class="literal">false</code>. Когда вы определяете
+<code class="literal">convertBsonTypes: true</code>, каждый тип BSON
+преобразовывается в идентичное или совместимое представление MySQL, значение
+данных импортируется, используя это представление. Дополнительные опции
+доступны, чтобы управлять отображением и преобразованием для определенных
+типов данных BSON: для списка этих вариантов контроля и преобразований типов
+по умолчанию, посмотрите
+<a href="#mysql-shell-utilities-json-bson">раздел
+6.2.3</a>. Опция <code class="literal">convertBsonOid</code> должна также
+быть установлен в <code class="literal">true</code>,
+что является настройкой по умолчанию, когда вы определяете
+<code class="literal">convertBsonTypes: true</code>. Если вы импортируете
+документы с расширениями JSON для типов BSON и не используете
+<code class="literal">convertBsonTypes: true</code>, документы импортируются
+таким же образом, как они представляются во входном файле.</p></dd>
+
+<dt><span class="term">
+<code class="literal">convertBsonOid: true</code></span></dt>
+<dd><p>Признает и преобразовывает MongoDB ObjectID, которые являются
+12-байтовым типом BSON, используемым в качестве значения
+<code class="literal">_id</code> для документов, представленных в MongoDB
+Extended JSON строгого режима. Умолчание для этого: значение опции
+<code class="literal">convertBsonTypes</code>, поэтому если тот выбор
+установлен в <code class="literal">true</code>, MongoDB ObjectID
+автоматически также преобразовывается. Импортируя данные из MongoDB,
+<code class="literal">convertBsonOid</code> должен всегда устанавливаться в
+<code class="literal">true</code>, если вы не преобразовываете типы BSON,
+потому что MySQL Server требует значение <code class="literal">_id</code>,
+которое будет преобразовано в тип <code class="literal">varbinary(32)</code>.
+</p></dd>
+
+<dt><span class="term"><code class="literal">extractOidTime:
+"<em class="replaceable"><code>field_name</code></em>"</code></span></dt>
+<dd><p>Признает и извлекает метки времени, которая содержится в MongoDB
+ObjectID в поле <code class="literal">_id</code>
+для документа и помещает это в отдельное поле в импортированных данных.
+<code class="literal">extractOidTime</code> называет поле в документе,
+которое содержит метку времени. Метка времени составляет первые 4 байта
+ObjectID, которые остаются неизменными.
+<code class="literal">convertBsonOid: true</code>
+должна быть установлена, чтобы использовать этот выбор, который является
+умолчанием, когда <code class="literal">convertBsonTypes</code> = true.
+</p></dd></dl>
+
+<p>Следующие примеры импортируют документы JSON в файле
+<code class="filename">/tmp/products.json</code> в коллекцию
+<code class="literal">products</code> базы данных
+<code class="literal">mydb</code>:
+<pre>
+mysql-js&gt; util.importJson("/tmp/products.json", {schema: "mydb",
+                             collection: "products"})
+mysql-py&gt; util.import_json("/tmp/products.json", {"schema": "mydb",
+                              "collection": "products"})
+</pre>
+
+<p>У следующего примера нет определенных опций, таким образом, словарь
+опущен. <code class="literal">mydb</code> активная схема для сессии MySQL
+Shell. Утилита поэтому импортирует документы JSON в файле
+<code class="filename">/tmp/stores.json</code> в коллекцию
+<code class="literal">stores</code> базы данных
+<code class="literal">mydb</code>:
+<pre>
+mysql-js&gt; \use mydb
+mysql-js&gt; util.importJson("/tmp/stores.json")
+</pre>
+
+<p>Следующий пример импортирует документы JSON в файле
+<code class="filename">/europe/regions.json</code> в колонку
+<code class="literal">jsondata</code> таблицы
+<code class="literal">regions</code> базы данных
+<code class="literal">mydb</code>. Типы данных BSON, которые представляются в
+документах расширениями JSON, преобразовываются в представление MySQL:
+<pre>
+mysql-js&gt; util.importJson('/europe/regions.json', {schema: 'mydb',
+                             table: 'regions', tableColumn: 'jsondata',
+                             convertBsonTypes: true});
+</pre>
+
+<p>Следующий пример выполняет тот же самый импорт, но не преобразовывая
+представления JSON типов данных BSON к представлениям MySQL.
+Однако MongoDB ObjectID в документах преобразовывается как требуется MySQL, и
+их метки времени также извлечены:
+<pre>
+mysql-js&gt; util.importJson('/europe/regions.json', {schema: 'mydb',
+                             table: 'regions', tableColumn: 'jsondata',
+                             convertBsonOid: true, extractOidTime:'idTime'});
+</pre>
+
+<p>Когда импорт выполнен или если импорт остановлен пользователем с
+помощью <span class="keycap"><strong>Ctrl+C</strong></span> или из-за ошибки,
+сообщение возвращено пользователю, показывающее количество успешно
+импортированных документов JSON и любое применимое сообщение об ошибке.
+Сама функция возвращает пустоту или исключение в случае ошибки.</p>
+
+<p>Утилита импорта JSON может также быть вызвана из командной строки.
+Два альтернативных формата доступны для этого. Можно использовать интерфейс
+команды <a href="mysqlsh-command.html#mysqlsh"><span class="command"><strong>
+mysqlsh</strong></span></a>, который принимает ввод только от файла (или
+FIFO) или команду <code class="literal">--import</code>, которая принимает
+ввод от стандартного ввода или файла.</p>
+
+<h3><a name="mysql-shell-utilities-json-mysqlsh"></a>6.2.1.
+Импортирование документов JSON с командным интерфейсом mysqlsh</h3>
+<p>С командным интерфейсом <a href="mysqlsh-command.html#mysqlsh">
+<span class="command"><strong>mysqlsh</strong></span></a> вы вызываете
+утилиту импорта JSON следующим образом:
+<pre>
+mysqlsh user@host:port/mydb -- util importJson &lt;path&gt; [options]
+</pre>
+или
+<pre>
+mysqlsh user@host:port/mydb -- util import-json &lt;path&gt; [options]
+</pre>
+
+<p>Для получения информации об этом синтаксисе посмотрите
+<a href="mysql-shell-code-execution.html#mysql-shell-command-interface">
+раздел 4.7</a>. Определите параметры следующим образом:</p>
+
+<dl><dt><span class="term"><code class="literal">user</code></span></dt>
+<dd><p>Имя пользователя для учетной записи пользователя, которая
+используется, чтобы управлять утилитой импорта JSON.</p></dd>
+
+<dt><span class="term"><code class="literal">host</code></span></dt>
+<dd><p>Имя хоста для сервера MySQL.</p></dd>
+<dt><span class="term"><code class="literal">port</code></span></dt>
+<dd><p>Номер порта для связи MySQL Shell с сервером MySQL. Порт по умолчанию
+для этой связи 33060.</p></dd>
+
+<dt><span class="term"><code class="literal">mydb</code></span></dt>
+<dd><p>Название целевой базы данных. Когда вызов идет из командной строки,
+необходимо определить целевую базу данных. Можно определить ее в URI или
+использовать дополнительную опцию <code class="option">--schema</code>.
+</p></dd>
+
+<dt><span class="term"><code class="literal">path</code></span></dt>
+<dd><p>Путь к файлу (или FIFO), содержащему документы JSON,
+которые будут импортированы.</p></dd>
+
+<dt><span class="term"><code class="literal">options</code></span></dt>
+<dd><p>Опции <code class="literal">--collection</code>,
+<code class="literal">--table</code> и
+<code class="literal">--tableColumn</code>
+определяют целевую коллекцию или целевую таблицу и колонку. Отношения и
+умолчания, когда утилита импорта JSON вызвана, используя интерфейс команды
+<a href="mysqlsh-command.html#mysqlsh"><span class="command"><strong>mysqlsh
+</strong></span></a>, совпадают с теми, когда соответствующие варианты
+используются в сессии MySQL Shell. Если вы не определяете ни один из этих
+вариантов, утилита переходит к использованию или созданию целевой коллекции с
+названием поставляемого файла импорта (без расширения файла).</p>
+
+<p>Опция <code class="literal">--convertBsonTypes</code> преобразовывает типы
+данных BSON, которые представляются, используя расширения для формата JSON.
+Дополнительные возможности контроля для определенных типов данных BSON могут
+также быть определены, для списка этих вариантов контроля и преобразований
+типов по умолчанию, посмотрите
+<a href="#mysql-shell-utilities-json-bson">раздел
+6.2.3</a>. Опция <code class="literal">--convertBsonOid</code> автоматически
+установлена, когда вы определяете <code class="literal">--convertBsonTypes
+</code>. Импортируя данные MongoDB, <code class="literal">--convertBsonOid
+</code> должна быть определена, если вы не преобразовываете типы BSON, потому
+что MySQL Server требует значение <code class="literal">_id</code>, которое
+будет преобразовано в тип <code class="literal">varbinary(32)</code>.
+<code class="literal">--extractOidTime=<em class="replaceable"><code>
+field_name</code></em></code> может использоваться, чтобы извлечь метку
+времени из значения <code class="literal">_id</code> в отдельное поле.
+</p></dd></dl>
+
+<p>Следующий пример импортирует документы JSON из файла
+<code class="filename">products.json</code> в коллекцию
+<code class="literal">products</code> базы данных:
+<code class="literal">mydb</code>:
+<pre>
+mysqlsh user@localhost/mydb -- util importJson products.json --collection=products
+</pre>
+
+<h3><a name="mysql-shell-utilities-json-import-command"></a>6.2.2.
+Импортирование документов JSON с командой --import</h3>
+<p>Команда <code class="literal">--import</code> доступна как альтернатива
+интерфейсу команды <a href="mysqlsh-command.html#mysqlsh">
+<span class="command"><strong>mysqlsh</strong></span></a>.
+Эта команда обеспечивает краткий синтаксис, не используя имена опций и
+принимает документы JSON от стандартного ввода. Синтаксис следующий:
+<pre>
+mysqlsh user@host:port/mydb --import &lt;path&gt; [target] [tableColumn] [options]
+</pre>
+
+<p>Как и с <a href="mysqlsh-command.html#mysqlsh"><span class="command">
+<strong>mysqlsh</strong></span></a>, необходимо определить целевую базу
+данных в URI или с использованием дополнительной опции
+<code class="literal">--schema</code>. Первый параметр для
+<code class="literal">--import</code> путь к файлу, содержащему документы
+JSON, которые будут импортированы. Чтобы прочитать документы JSON со
+стандартного ввода, определите тире (<code class="literal">-</code>)
+вместо пути к файлу. Конец входного потока это индикатор конца файла, который
+<span class="keycap"><strong>Ctrl+D</strong></span> в Unix и
+<span class="keycap"><strong>Ctrl+Z</strong></span> в Windows.</p>
+
+<p>После определения пути (или <code class="literal">-</code>
+для стандартного ввода), следующий параметр это название целевой коллекции
+или таблицы. Если стандартный ввод используется, необходимо определить цель.
+</p>
+
+<ul><li><p>При использовании стандартного ввода, если указанная цель это
+таблица, которая существует в указанной схеме, документы импортируются в нее.
+Можно определить дальнейший параметр, дающий имя столбца, в этом случае
+указанная колонка используется для места назначения импорта. Иначе имя
+столбца по умолчанию <code class="literal">doc</code>, который должен
+присутствовать в существующей таблице. Если цель не существующая таблица,
+ищется коллекция с указанным целевым именем, и документы импортируются туда.
+Если никакая такая коллекция не найдена, утилита создает коллекцию с
+указанным целевым именем и импортирует документы в нее. Чтобы создать и
+импортировать в таблицу, необходимо также определить имя столбца как
+дальнейший параметр, в этом случае утилита создает таблицу с указанным именем
+и импортирует данные к указанному столбцу.</li>
+
+<li>Если вы определяете путь к файлу и цель, утилита ищет любую коллекцию с
+указанным целевым именем. Если она не найдена, утилита по умолчанию создает
+коллекцию с тем именем и импортирует документы в нее. Чтобы импортировать
+файл в таблицу, необходимо также определить имя столбца как дальнейший
+параметр, в этом случае утилита ищет существующую таблицу и импортирует в
+нее или составляет таблицу с указанным именем таблицы и импортирует
+данные в указанный столбец.</li>
+
+<li>Если вы определяете путь к файлу, но не определяете цель,
+утилита выполняет поиск существующей коллекции в указанной схеме, у которой
+есть название поставляемого файла импорта (без расширения файла).
+Если она найдена, документы импортируются в нее. Если никакой коллекция с
+названием поставляемого файла импорта не найдено в указанной схеме,
+утилита создает коллекцию с таким именем и импортирует документы в нее.
+</p></li></ul>
+
+<p>Если вы импортируете документы, содержащие типы данных BSON
+(двоичный JSON), можно также определить опции
+<code class="literal">--convertBsonOid</code>,
+<code class="literal">--extractOidTime=<em class="replaceable"><code>
+field_name</code></em></code>, <code class="literal">--convertBsonTypes
+</code> и опции контроля, перечисленные в
+<a href="#mysql-shell-utilities-json-bson">разделе
+6.2.3</a>.</p>
+
+<p>Следующий пример читает документы JSON со стандартного ввода и импортирует
+их к названной цели <code class="literal">territories</code> в
+базе <code class="literal">mydb</code>. Если никакой коллекции или таблицы
+<code class="literal">territories</code> нет, утилита создает коллекцию
+<code class="literal">territories</code> и импортирует документы в нее.
+Если вы хотите создать и импортировать документы в таблицу
+<code class="literal">territories</code>, необходимо определить имя столбца
+как дальнейший параметр.
+<pre>
+mysqlsh user@localhost/mydb --import - territories
+</pre>
+
+<p>Следующий пример с путем к файлу и целью импортирует документы JSON из
+файла <code class="filename">/europe/regions.json</code> в столбец
+<code class="literal">jsondata</code> таблицы
+<code class="literal">regions</code> базы <code class="literal">mydb</code>.
+Название схемы определяется, используя опцию командной строки
+<code class="literal">--schema</code> вместо URI:
+<pre>
+mysqlsh user@localhost:33062 --import /europe/regions.json regions \
+        jsondata --schema=mydb
+</pre>
+
+<p>Следующий пример с путем к файлу, но без цели, импортирует документы JSON
+из файла <code class="filename">/europe/regions.json</code>.
+Если никакой коллекции или таблицы <code class="literal">regions</code>
+(название поставляемого файла импорта без расширения), не найдено в указанной
+базе <code class="literal">mydb</code>, утилита создает названную коллекцию
+<code class="literal">regions</code> и импортирует документы в нее.
+Если уже есть названная коллекция <code class="literal">regions</code>,
+утилита импортирует документы в нее.
+<pre>
+mysqlsh user@localhost/mydb --import /europe/regions.json
+</pre>
+
+<p>MySQL Shell возвращает сообщение, подтверждающее параметры для импорта,
+например, <span class="errortext">Importing from file "/europe/regions.json"
+to table `mydb`.`regions` in MySQL Server at 127.0.0.1:33062</span>.</p>
+
+<p>Когда импорт выполнен или остановлен пользователем через
+<span class="keycap"><strong>Ctrl+C</strong></span> (или из-за ошибки),
+сообщение возвращено пользователю, показывающее количество успешно
+импортированных документов JSON и любое применимое сообщение об ошибке.
+Процесс возвращает ноль, если импорт закончен успешно,
+или код выхода отличный от нуля, если была ошибка.</p>
+
+<h3><a name="mysql-shell-utilities-json-bson"></a>6.2.3.
+Преобразования для представлений типов данных BSON</h3>
+<p>Когда вы определяете <code class="literal">convertBsonTypes: true</code>
+(<code class="literal">--convertBsonTypes</code>), чтобы преобразовать типы
+данных BSON, которые представляются расширениями JSON, по умолчанию, типы
+BSON, импортируется следующим образом:</p>
+
+<dl><dt><span class="term">Date (<span class="quote">"<span class="quote">
+date</span>"</span>)</span></dt>
+<dd><p>Простое значение, содержащее значение поля.</p></dd>
+
+<dt><span class="term">
+Timestamp (<span class="quote">"<span class="quote">timestamp</span>"</span>)
+</span></dt>
+<dd><p>MySQL timestamp, созданная с
+использованием значения <code class="literal">time_t</code>.</p></dd>
+
+<dt><span class="term">
+Decimal (<span class="quote">"<span class="quote">decimal</span>"</span>)
+</span></dt>
+<dd><p>Простое значение, содержащее строковое
+представление десятичного значения.</p></dd>
+
+<dt><span class="term">
+Integer (<span class="quote">"<span class="quote">int</span>"</span> или
+<span class="quote">"<span class="quote">long</span>"</span>)</span></dt>
+<dd><p>Значение Integer.</p></dd>
+
+<dt><span class="term">Регулярное выражение
+(<span class="quote">"<span class="quote">regex</span>"</span> и опции)
+</span></dt>
+<dd><p>Последовательность, содержащая только регулярное выражение и
+игнорирующая опции. Предупреждение печатается, если опции присутствуют.
+</p></dd>
+
+<dt><span class="term">Двоичные данные (<span class="quote">"
+<span class="quote">binData</span>"</span>)</span></dt>
+<dd><p>Строка Base64.</p></dd>
+
+<dt><span class="term">
+ObjectID (<span class="quote">"<span class="quote">objectId</span>"</span>)
+</span></dt>
+<dd><p>Простое значение, содержащее значение поля.</p></dd></dl>
+
+<p>Следующие варианты контроля могут быть определены, чтобы приспособить
+отображение и преобразование этих типов BSON.
+<code class="literal">convertBsonTypes: true</code>
+(<code class="literal">--convertBsonTypes</code>) должен быть определен,
+чтобы использовать любой из этих вариантов контроля:</p>
+
+<dl><dt><span class="term"><code class="literal">ignoreDate: true</code>
+(<code class="literal">--ignoreDate</code>)</span></dt>
+<dd><p>Отключите преобразование <span class="quote">"<span class="quote">date
+</span>"</span>. Данные импортируются как вложенный документ JSON точно как
+во входном файле.</p></dd>
+
+<dt><span class="term"><code class="literal">ignoreTimestamp: true</code>
+(<code class="literal">--ignoreTimestamp</code>)</span></dt>
+<dd><p>Отключите преобразование BSON <span class="quote">"
+<span class="quote">timestamp</span>"</span>. Данные импортируются как
+вложенный документ JSON точно как во входном файле.</p></dd>
+
+<dt><span class="term"><code class="literal">decimalAsDouble: true</code>
+(<code class="literal">--decimalAsDouble</code>)</span></dt>
+<dd><p>Преобразуйте значение BSON <span class="quote">"<span class="quote">
+decimal</span>"</span> в тип MySQL DOUBLE вместо строки.</p></dd>
+
+<dt><span class="term"><code class="literal">ignoreRegex: true</code>
+(<code class="literal">--ignoreRegex</code>)</span></dt>
+<dd><p>Отключите преобразование регулярных выражений (BSON
+<span class="quote">"<span class="quote">regex</span>"</span>).
+Данные импортируются как вложенный документ JSON точно как во входном файле.
+</p></dd>
+
+<dt><span class="term"><code class="literal">ignoreRegexOptions: false</code>
+(<code class="literal">--ignoreRegexOptions=false</code>)</span></dt>
+<dd><p>Включите опции, связанные с регулярным выражением в
+последовательности, а также само регулярное выражение (в формате
+<code class="literal">/&lt;regular expression&gt;/&lt;options&gt;</code>).
+По умолчанию опции проигнорированы (<code class="literal">ignoreRegexOptions:
+true</code>), но предупреждение печатается, если какие-либо опции
+присутствовали. <code class="literal">ignoreRegex</code> должна быть
+установлена в значение по умолчанию
+<code class="literal">false</code>, чтобы определить
+<code class="literal">ignoreRegexOptions</code>.</p></dd>
+
+<dt><span class="term"><code class="literal">ignoreBinary: true</code>
+(<code class="literal">--ignoreBinary</code>)</span></dt>
+<dd><p>Отключите преобразование BSON <span class="quote">"
+<span class="quote">binData</span>"</span>. Данные импортируются как
+вложенный документ JSON точно как во входном файле.</p></dd></dl>
+
+<p>Следующий пример импортирует документы из файла
+<code class="filename">/europe/regions.json</code> в столбец
+<code class="literal">jsondata</code> таблицы
+<code class="literal">regions</code> базы <code class="literal">mydb</code>.
+Типы данных BSON, которые представляются расширениями JSON, преобразовываются
+в представления MySQL, за исключением регулярных выражений, которые
+импортируются, как документы JSON:
+<pre>
+mysqlsh user@localhost/mydb --import /europe/regions.json regions jsondata \
+        --convertBsonTypes --ignoreRegex
+</pre>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

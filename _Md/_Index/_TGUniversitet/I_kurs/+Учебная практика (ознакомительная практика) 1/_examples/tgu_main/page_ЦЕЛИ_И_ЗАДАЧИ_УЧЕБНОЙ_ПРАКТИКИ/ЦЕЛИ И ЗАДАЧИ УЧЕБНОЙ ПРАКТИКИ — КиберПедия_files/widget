@@ -1,0 +1,47 @@
+function installEduCode() {
+    var fragmentsList = [];
+        fragmentsList.push(
+        function (callback) {
+            var script_tag = document.createElement('script');
+            script_tag.onload = function() {
+              callback();
+            };
+            script_tag.type = 'text/javascript';
+            script_tag.src = 'https://static.landbot.io/landbot-3/landbot-3.0.0.js';
+            document.getElementsByTagName('head')[0].appendChild(script_tag);
+        }
+    );    fragmentsList.push(
+        function(callback) {
+            var script_tag = document.createElement('script');
+            script_tag.type = 'text/javascript';
+            script_tag.innerHTML = JSON.parse('"\\n    var myLandbot = new Landbot.Livechat({\\n        configUrl: \\u0027https:\\/\\/chats.landbot.io\\/v3\\/H-869012-SNH86XZWXUTZ98VZ\\/index.json\\u0027,\\n        customData: {\\n            \\u0027partner_referer\\u0027: \\u002757b61e0d9273bb04\\u0027,\\n            \\u0027edugram_request_id\\u0027: \\u0027606c8df3009172.86563977\\u0027,\\n            \\u0027customer_user_agent\\u0027: \\u0027Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36\\u0027,\\n            \\u0027customer_ip\\u0027: \\u002746.166.84.101\\u0027\\n        }\\n    });\\n"');
+            document.getElementsByTagName('head')[0].appendChild(script_tag);
+            callback();
+        }
+    );    fragmentsList.push(
+        function(callback) {
+            var script_tag = document.createElement('script');
+            script_tag.type = 'text/javascript';
+            script_tag.innerHTML = JSON.parse('"\\nmyLandbot.onLoad(function () {\\n    var isChatClosed = sessionStorage.getItem(\\u0027edugram:chatwindow:closed\\u0027);\\n    if (isChatClosed !== \\u0027true\\u0027) {\\n        var delay = 5000; \\/\\/15 seconds\\n        setTimeout(function () {\\n            myLandbot.open();\\n        }, delay);\\n    }\\n});\\nmyLandbot.core.events.on(\\u0027widget_close\\u0027, function () {\\n    sessionStorage.setItem(\\u0027edugram:chatwindow:closed\\u0027, \\u0027true\\u0027);\\n});\\n"');
+            document.getElementsByTagName('head')[0].appendChild(script_tag);
+            callback();
+        }
+    );
+    var iterateFragments = function() {
+        var fragmentFunction = fragmentsList.shift();
+        if (typeof fragmentFunction != 'undefined') {
+            fragmentFunction(iterateFragments);
+        }
+    };
+    iterateFragments();
+}
+
+function checkEduCodeInstalled() {
+    if (document.readyState !== "loading") {
+        installEduCode();
+    } else {
+        setTimeout(checkEduCodeInstalled, 1);
+    }
+}
+
+checkEduCodeInstalled();

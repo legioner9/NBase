@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Learn_this\_in_stash\_stash_2\Bash\devdocs.io\cat.devdocs.io\dir.devdocs.io.md">devdocs.io</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Learn_this\_in_stash\_stash_2\Bash\devdocs.io\_devdocs.io.md">_devdocs.io.md</a>
+        - *# [Bash](https://devdocs.io/bash/)

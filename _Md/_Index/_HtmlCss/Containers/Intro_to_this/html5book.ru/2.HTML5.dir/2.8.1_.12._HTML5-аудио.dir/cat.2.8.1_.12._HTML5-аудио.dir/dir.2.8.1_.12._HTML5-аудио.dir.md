@@ -1,0 +1,11 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.8.1_.12._HTML5-аудио.dir\cat.2.8.1_.12._HTML5-аудио.dir\dir.2.8.1_.12._HTML5-аудио.dir.md">2.8.1_.12._HTML5-аудио.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.8.1_.12._HTML5-аудио.dir\2.8.1_.12._HTML5-аудио.md">2.8.1_.12._HTML5-аудио.md</a>
+        - *## [1.12. HTML5-аудио](https://html5book.ru/html5-audio/)
+        - *### 1. Элемент \<audio>
+        - *#### АТРИБУТЫ ТЕГА \<AUDIO>
+        - *### 2. Аудио кодеки
+        - *### 3. Альтернативные медиа-ресурсы \<source>
+        - *#### АТРИБУТЫ ТЕГА \<SOURCE>
+        - *### 4. Добавление субтитров и заголовков \<track>
+        - *#### АТРИБУТЫ ТЕГА \<TRACK>
+        - *### [5. Стилизованный пример аудио плеера](https://codepen.io/nazarelen/pen/rrOgBw)

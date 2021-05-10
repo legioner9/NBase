@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\Part_I\content\Courses\Fundamentals\arrObjClassProto\Prototype-master\cat.Prototype-master\dir.Prototype-master.md">Prototype-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\Part_I\content\Courses\Fundamentals\arrObjClassProto\Prototype-master\README.md">README.md</a>
+        - *# Prototype

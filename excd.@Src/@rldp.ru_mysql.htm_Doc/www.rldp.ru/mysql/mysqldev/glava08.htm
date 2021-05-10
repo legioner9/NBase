@@ -1,0 +1,870 @@
+<HTML>
+<HEAD>
+  <TITLE>MySQL Perl API</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H2><A NAME="Perl">8 MySQL Perl API</A></H2>
+<P>Этот раздел документирует интерфейс Perl <CODE>DBI</CODE>. Вышеупомянутый
+интерфейс ранее был назван <CODE>mysqlperl</CODE>. Ныне рекомендуемым
+является <CODE>DBI</CODE>/<CODE>DBD</CODE>, так что <CODE>mysqlperl</CODE>
+здесь не рассматривается.</P>
+
+<H3><A NAME="DBI_with_DBD">8.1 <CODE>DBI</CODE> с <CODE>DBD::mysql</CODE>
+</A></H3>
+<P><CODE>DBI</CODE> представляет собой универсальный интерфейс для многих баз
+данных. Это означает, что Вы можете написать скрипт, который работает с
+многими серверами баз данных без изменений. Вы нуждаетесь в драйвере базы
+данных (DBD) для каждого типа базы данных. Для MySQL этот драйвер назван
+<CODE>DBD::mysql</CODE>.</P>
+
+<P>Для получения большего количества информации относительно Perl5 DBI,
+пожалуйста, посетите Web-страницу <CODE>DBI</CODE> и прочтите документацию на
+ней по адресу <a HREF="../../../www.symbolstone.org/technology/perl/DBI/index.html">
+http://www.symbolstone.org/technology/perl/DBI/index.html</a>.</P>
+
+<P>Для получения большего количества информации относительно
+объектно-ориентированного программирования (OOП) как оно определено в Perl5,
+обратитесь по адресу
+<a HREF="../../../language.perl.com/info/documentation.html">
+http://language.perl.com/info/documentation.html</a>.</P>
+
+<P>Обратите внимание, что, если Вы хотите использовать транзакции с Perl, Вы
+должны иметь <CODE>Msql-Mysql-modules</CODE> версии 1.2216 или новее.</P>
+
+<P>Инструкции по установке поддержки MySQL Perl даны в разделе
+"<A HREF="manual.htm#Perl_support">M.2 Установка Perl</A>".</P>
+
+<H3><A NAME="Perl_DBI_Class">8.2 Интерфейс <CODE>DBI</CODE></A></H3>
+<P><STRONG>Портируемые методы DBI</STRONG></P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><CODE>connect</CODE></TD><TD>Устанавливает подключение к серверу.
+</TD></TR>
+<TR><TD><CODE>disconnect</CODE></TD><TD>Закрывает подключение к серверу.</TD>
+</TR>
+<TR><TD><CODE>prepare</CODE></TD><TD>Готовит инструкцию SQL для выполнения.
+</TD></TR>
+<TR><TD><CODE>execute</CODE></TD><TD>Выполняет подготовленные инструкции.
+</TD></TR>
+<TR><TD><CODE>do</CODE></TD><TD>Готовит и выполняет инструкцию SQL.</TD></TR>
+<TR><TD><CODE>quote</CODE></TD><TD>Цитирует строку или значения
+<CODE>BLOB</CODE>, которые будут вставлены.</TD></TR>
+<TR><TD><CODE>fetchrow_array</CODE></TD><TD>Выбирает следующую строку
+как массив полей.</TD></TR>
+<TR><TD><CODE>fetchrow_arrayref</CODE></TD><TD>Выбирает следующую строку как
+массив ссылок на поля.</TD></TR>
+<TR><TD><CODE>fetchrow_hashref</CODE></TD><TD>Выбирает следующую строку как
+ссылку на hashtable.</TD></TR>
+<TR><TD><CODE>fetchall_arrayref</CODE></TD><TD>Выбирает все данные
+как массив массивов.</TD></TR>
+<TR><TD><CODE>finish</CODE></TD><TD>Заканчивает инструкцию и позволяет
+системе освободить ресурсы.</TD></TR>
+<TR><TD><CODE>rows</CODE></TD><TD>Возвращается число строк, на которые
+воздействовал данный запрос.</TD></TR>
+<TR><TD><CODE>data_sources</CODE></TD><TD>Возвращает массив баз данных,
+доступных на localhost.</TD></TR>
+<TR><TD><CODE>ChopBlanks</CODE></TD><TD>Указывает методам
+<CODE>fetchrow_*</CODE> урезать ли пробелы.</TD></TR>
+<TR><TD><CODE>NUM_OF_PARAMS</CODE></TD><TD>Число параметров в
+подготовленной инструкции.</TD></TR>
+<TR><TD><CODE>NULLABLE</CODE></TD><TD>Которые столбцы могут быть
+<CODE>NULL</CODE>.</TD></TR>
+<TR><TD><CODE>trace</CODE></TD><TD>Выполнить трассировку для отладки.</TD>
+</TR></TABLE>
+
+<P><STRONG>MySQL-специфичные методы</STRONG></P>
+<TABLE BORDER WIDTH="100%">
+<TR><TD><CODE>insertid</CODE></TD><TD>Последнее занчение
+<CODE>AUTO_INCREMENT</CODE>.</TD></TR>
+<TR><TD><CODE>is_blob</CODE></TD><TD>Которые столбцы являются значениями
+<CODE>BLOB</CODE>.</TD></TR>
+<TR><TD><CODE>is_key</CODE></TD><TD>Которые столбцы являются ключами.</TD>
+</TR>
+<TR><TD><CODE>is_num</CODE></TD><TD>Которые столбцы являются числовыми.</TD>
+</TR>
+<TR><TD><CODE>is_pri_key</CODE></TD><TD>Которые столбцы являются первичными
+ключами в данной таблице.</TD></TR>
+<TR><TD><CODE>is_not_null</CODE></TD><TD>Которые столбцы не могут быть
+<CODE>NULL</CODE>.</TD></TR>
+<TR><TD><CODE>length</CODE></TD><TD>Максимально возможные размеры столбца.
+</TD></TR>
+<TR><TD><CODE>max_length</CODE></TD><TD>Максимальные размеры столбца,
+фактически представленные в результате.</TD></TR>
+<TR><TD><CODE>NAME</CODE></TD><TD>Имена столбцов.</TD></TR>
+<TR><TD><CODE>NUM_OF_FIELDS</CODE></TD><TD>Число возвращенных полей.</TD>
+</TR>
+<TR><TD><CODE>table</CODE></TD><TD>Имена таблицы в возвращенном наборе.</TD>
+</TR>
+<TR><TD><CODE>type</CODE></TD><TD>Все типы столбцов.</TD></TR></TABLE>
+
+<P>Методы Perl описаны более подробно в следующих разделах. Переменные,
+используемые для значений возврата метода, имеют эти значения:</P>
+
+<DL COMPACT>
+<DT><CODE>$dbh</CODE>
+<DD>Дескриптор базы данных
+
+<DT><CODE>$sth</CODE>
+<DD>Дескриптор оператора
+
+<DT><CODE>$rc</CODE>
+<DD>Код возврата (часто состояние)
+
+<DT><CODE>$rv</CODE>
+<DD>Значение возврата (часто число строк)</DL>
+
+<P><STRONG>Портируемые методы DBI</STRONG></P>
+<DL COMPACT>
+<DT><CODE>connect($data_source, $username, $password)</CODE>
+<DD><A NAME="IDX1438"></A><A NAME="IDX1439"></A>
+Используйте метод <CODE>connect</CODE>, чтобы сделать подключение к базе с
+источником данных. Значение <CODE>$data_source</CODE> должно начинаться с
+<CODE>DBI:driver_name:</CODE>. Пример <CODE>connect</CODE> с драйвером
+<CODE>DBD::mysql</CODE>:
+<PRE>
+$dbh = DBI-&#62;connect("DBI:mysql:$database", $user, $password);
+$dbh = DBI-&#62;connect("DBI:mysql:$database:$hostname",
+                    $user, $password);
+$dbh = DBI-&#62;connect("DBI:mysql:$database:$hostname:$port",
+                    $user, $password);
+</PRE>
+Если имя пользователя и/или пароль не определены, <CODE>DBI</CODE> использует
+значения системных переменных <CODE>DBI_USER</CODE> и <CODE>DBI_PASS</CODE>
+соответственно. Если Вы не определяете hostname, по умолчанию берется
+<CODE>localhost</CODE>. Если Вы не определяете номер порта, это выставляется
+в порт MySQL по умолчанию (3306). Начиная с <CODE>Msql-Mysql-modules</CODE>
+Version 1.2009, значение <CODE>$data_source</CODE> позволяет модификаторы:
+
+<DL COMPACT>
+<DT><CODE>mysql_read_default_file=file_name</CODE>
+<DD>Читать файл опций <TT>filename</TT>.
+
+<DT><CODE>mysql_read_default_group=group_name</CODE>
+<DD>Заданная по умолчанию группа при чтении файла опций, обычно это группа
+<CODE>[client]</CODE>. Если опция <CODE>mysql_read_default_group</CODE>
+определена, группой в файле опций будет <CODE>[group_name]</CODE>.
+
+<DT><CODE>mysql_compression=1</CODE>
+<DD>Использовать сжатую связь между пользователем и сервером (доступно только
+в MySQL Version 3.22.3 или позже).
+
+<DT><CODE>mysql_socket=/path/to/socket</CODE>
+<DD>Определяет имя Unix-сокета, который используется, чтобы подключиться к
+серверу (доступно только в MySQL Version 3.21.15 или позже).</DL>
+
+Может быть задано много модификаторов каждому должна предшествовать точка с
+запятой. Например, если Вы хотите избежать прямого указания имени
+пользователя и пароля в скрипте <CODE>DBI</CODE>, Вы можете брать их из
+пользовательского файла опций <TT>~/.my.cnf</TT> переделав
+<CODE>connect</CODE> следующим образом:
+<PRE>
+$dbh = DBI-&#62;connect("DBI:mysql:$database"
+                . ";mysql_read_default_file=$ENV{HOME}/.my.cnf",
+                $user, $password);
+</PRE>
+
+Это обращение будет читать параметры, определенные для группы
+<CODE>[client]</CODE> в файле опций. Если Вы хотите сделать то же самое, но
+опции брать из секции <CODE>[perl]</CODE>, Вы могли бы использовать это:
+<PRE>
+$dbh = DBI-&#62;connect("DBI:mysql:$database"
+                . ";mysql_read_default_file=$ENV{HOME}/.my.cnf"
+                . ";mysql_read_default_group=perl", $user, $password);
+</PRE>
+
+<DT><CODE>disconnect</CODE>
+<DD>Метод <CODE>disconnect</CODE> отсоединяет дескриптор базы данных от
+собственно базы данных. Это надлежит сделать перед завершением программы:
+<PRE>
+$rc = $dbh-&#62;disconnect;
+</PRE>
+
+<DT><CODE>prepare($statement)</CODE>
+<DD>Готовит инструкцию SQL для выполнения ядром базы данных и возвращает
+операторный дескриптор <CODE>($sth)</CODE>, который Вы можете использовать,
+чтобы вызвать метод <CODE>execute</CODE>. Обычно Вы обрабатываете инструкции
+<CODE>SELECT</CODE> (а также <CODE>SELECT</CODE>-подобные инструкции, вроде
+<CODE>SHOW</CODE>, <CODE>DESCRIBE</CODE> и <CODE>EXPLAIN</CODE>) посредством
+<CODE>prepare</CODE> и <CODE>execute</CODE>. Например так:
+<PRE>
+$sth = $dbh-&#62;prepare($statement) or
+     die "Can't prepare $statement: $dbh-&#62;errstr\n";
+</PRE>
+
+<DT><CODE>execute</CODE>
+<DD>Метод <CODE>execute</CODE> выполняет подготовленную инструкцию. Для
+инструкций не-<CODE>SELECT</CODE>, <CODE>execute</CODE> возвращает число
+строк, на которые воздействовал оператор. Если ни на какие строки метод не
+воздействовал, он вернет <CODE>0E0</CODE>, который Perl обрабатывает как
+ноль, но расценивает как истину. Если происходит ошибка, <CODE>execute</CODE>
+вернет <CODE>undef</CODE>. Для инструкций <CODE>SELECT</CODE>
+<CODE>execute</CODE> только запускает запрос SQL в базе данных. Вы должны
+использовать один из методов <CODE>fetch_*</CODE>, описанных ниже, чтобы
+получить сами данные. Пример:
+<PRE>
+$rv = $sth-&#62;execute
+          or die "can't execute the query: $sth-&#62;errstr;
+</PRE>
+
+<DT><CODE>do($statement)</CODE>
+<DD>Метод <CODE>do</CODE> готовит и выполняет инструкцию SQL и возвращает
+число строк , на которые воздействовал оператор. Если ни на какие строки
+метод не воздействовал, он вернет <CODE>0E0</CODE>, который Perl обрабатывает
+как ноль, но расценивает как истину. Если происходит ошибка, <CODE>do</CODE>
+вернет <CODE>undef</CODE>. Этот метод вообще используется для инструкций
+не-<CODE>SELECT</CODE>, которые не могут быть подготовлены заранее (из-за
+ограничений драйвера) или тех инструкций, которые не должны быть выполнены
+больше, чем однажды (вставки, удаления и т.п.). Например:
+<PRE>
+$rv = $dbh-&#62;do($statement)
+        or die "Can't execute $statement: $dbh- &#62;errstr\n";
+</PRE>
+
+Вообще инструкция do НАМНОГО быстрее, чем prepare/execute для инструкций,
+которые не содержат параметров.
+
+<DT><CODE>quote($string)</CODE>
+<DD>Метод <CODE>quote</CODE> используется, чтобы обойти любые специальные
+символы, содержащиеся в строке, и добавить требуемые внешние метки
+цитирования. Конкретный пример:
+<PRE>
+$sql = $dbh-&#62;quote($string)
+</PRE>
+
+<DT><CODE>fetchrow_array</CODE>
+<DD>Этот метод выбирает следующую строку данных и возвращает ее как массив
+значений полей. Пример:
+<PRE>
+while(@row = $sth-&#62;fetchrow_array) {
+   print qw($row[0]\t$row[1]\t$row[2]\n);
+}
+</PRE>
+
+<DT><CODE>fetchrow_arrayref</CODE>
+<DD>Этот метод выбирает следующую строку данных и возвращает ее как ссылку
+на массив значений полей. Пример:
+<PRE>
+while($row_ref = $sth-&#62;fetchrow_arrayref) {
+   print qw($row_ref-&#62;[0]\t$row_ref-&#62;[1]\t$row_ref-&#62;[2]\n);
+}
+</PRE>
+
+<DT><CODE>fetchrow_hashref</CODE>
+<DD>Этот метод выбирает строку данных и возвращает ссылку на хэш-таблицу,
+содержащую пары имя/значение поля. Этот метод не столь эффективен как
+использование ссылок на массив, как показывается выше. Пример:
+<PRE>
+while($hash_ref = $sth-&#62;fetchrow_hashref) {
+   print qw($hash_ref-&#62;{firstname}\t$hash_ref-&#62;{lastname}\t\
+            $hash_ref-&#62; title}\n);
+}
+</PRE>
+
+<DT><CODE>fetchall_arrayref</CODE>
+<DD>Этот метод используется, чтобы получить все данные (строки), которые
+будут возвращены из инструкции SQL. Это возвращает ссылку на массив, хранящий
+ссылки на массивы для каждой строки. Вы обращаетесь к ним или печатаете
+данные, используя вложенный цикл. Пример:
+<PRE>
+my $table = $sth-&#62;fetchall_arrayref or die "$sth-&#62;errstr\n";
+my($i, $j);
+for $i (0 .. $#{$table}) {
+  for $j (0 .. $#{$table-&#62;[$i]}) {
+    print "$table-&#62;[$i][$j]\t";
+  }
+  print "\n";
+}
+</PRE>
+
+<DT><CODE>finish</CODE>
+<DD>Указывает максимальное количество данных, которое будет выбрано из этого
+операторного дескриптора. Вы вызываете этот метод, чтобы освободить
+операторный дескриптор и любые ресурсы системы, связанные с этим. Пример:
+<PRE>
+$rc = $sth-&#62;finish;
+</PRE>
+
+<DT><CODE>rows</CODE>
+<DD>Возвращает число измененных последней командой строк (возможно,
+удаленных, а не модифицированных). Это обычно используется после того, как
+выполнена команда не-<CODE>SELECT</CODE> через <CODE>execute</CODE>. Пример:
+<PRE>
+$rv = $sth-&#62;rows;
+</PRE>
+
+<DT><CODE>NULLABLE</CODE>
+<DD>Возвращает ссылку на массив булевых значений: для каждого элемента
+массива значение TRUE указывает, что этот столбец может содержать
+значение <CODE>NULL</CODE>. Пример:
+<PRE>
+$null_possible = $sth-&#62;{NULLABLE};
+</PRE>
+
+<DT><CODE>NUM_OF_FIELDS</CODE>
+<DD>Этот атрибут указывает число полей, возвращенных инструкциями
+<CODE>SELECT</CODE> или <CODE>SHOW FIELDS</CODE>. Вы можете использовать это
+для проверки, возвратила ли инструкция результат: нулевое значение указывает
+на инструкцию не-<CODE>SELECT</CODE>, типа <CODE>INSERT</CODE>,
+<CODE>DELETE</CODE> или <CODE>UPDATE</CODE>. Например:
+<PRE>
+$nr_of_fields = $sth-&#62;{NUM_OF_FIELDS};
+</PRE>
+
+<DT><CODE>data_sources($driver_name)</CODE>
+<DD>Этот метод возвращает массив, содержащий имена баз данных, доступных
+серверу MySQL на машине <CODE>localhost</CODE>. Например:
+<PRE>
+@dbs = DBI-&#62;data_sources("mysql");
+</PRE>
+
+<DT><CODE>ChopBlanks</CODE>
+<DD>Этот атрибут определяет, уберут ли методы <CODE>fetchrow_*</CODE>
+конечные пробелы из возвращенных ими значений. Пример:
+<PRE>
+$sth-&#62;{'ChopBlanks'} =1;
+</PRE>
+
+<DT><CODE>trace($trace_level)</CODE>
+<DD>
+<DT><CODE>trace($trace_level, $trace_filename)</CODE>
+<DD>Метод <CODE>trace</CODE> включает или отключает трассировку. Когда он
+вызывается как метод класса <CODE>DBI</CODE>, это воздействует на трассировку
+для всех дескрипторов. Когда он вызывается как метод базы данных или
+инструкции, это воздействует на трассировку для данного дескриптора и любых
+будущих потомков дескриптора. Установка <CODE>$trace_level</CODE> равным 2
+обеспечивает детализированную информацию. Установка <CODE>$trace_level</CODE>
+в 0 отключает трассировку. Вывод идет на стандартный вывод ошибки по
+умолчанию. Если <CODE>$trace_filename</CODE> определен, файл будет открыт в
+режиме дополнения, и вывод для всех прослеженных дескрипторов будет записан в
+этот файл. Например:
+<PRE>
+DBI-&#62;trace(2);                # Трассировать все
+DBI-&#62;trace(2,"/tmp/dbi.out"); # Регистрировать все в /tmp/dbi.out
+$dth-&#62;trace(2);               # Трассировать этот дескриптор базы данных
+$sth-&#62;trace(2);               # Трассировать этот операторный дескриптор
+</PRE>
+
+Вы можете также допускать трассировку <CODE>DBI</CODE>, устанавливая
+системную переменную <CODE>DBI_TRACE</CODE>. Установка ее к числовому
+значению эквивалентна вызову <CODE>DBI-&#62;(value)</CODE>. Установка ее к
+имени пути эквивалентна вызову <CODE>DBI-&#62;(2,value)</CODE>.</DL>
+
+<P><STRONG>MySQL-специфичные методы</STRONG></P>
+<P>Методы, показанные ниже, MySQL-специфические, а не часть стандарта
+<CODE>DBI</CODE>. Несколько из них теперь осуждаются: <CODE>is_blob</CODE>,
+<CODE>is_key</CODE>, <CODE>is_num</CODE>, <CODE>is_pri_key</CODE>,
+<CODE>is_not_null</CODE>, <CODE>length</CODE>, <CODE>max_length</CODE> и
+<CODE>table</CODE>. Где существуют варианты в стандарте <CODE>DBI</CODE>, они
+обязательно отмечены ниже:</P>
+
+<DL COMPACT>
+<DT><CODE>insertid</CODE>
+<DD><A NAME="IDX1476"></A><A NAME="IDX1477"></A><A NAME="IDX1478"></A>
+Если Вы используете свойство MySQL <CODE>AUTO_INCREMENT</CODE>, новые
+значения будут сохранены здесь. Пример:
+<PRE>
+$new_id = $sth-&#62;{insertid};
+</PRE>
+Как вариант, Вы можете использовать <CODE>$dbh-&#62;{'mysql_insertid'}</CODE>.
+
+<DT><CODE>is_blob</CODE>
+<DD>Возвращает ссылку на массив булевых значений: для каждого элемента
+массива, значение TRUE указывает, что соответствующий столбец имеет тип
+<CODE>BLOB</CODE>. Так, например:
+<PRE>
+$keys = $sth-&#62;{is_blob};
+</PRE>
+
+<DT><CODE>is_key</CODE>
+<DD>Возвращает ссылку на массив булевых значений: для каждого элемента
+массива, значение TRUE указывает, что соответствующий столбец является ключом
+(не всегда первичным). Например:
+<PRE>
+$keys = $sth-&#62;{is_key};
+</PRE>
+
+<DT><CODE>is_num</CODE>
+<DD>Возвращает ссылку на массив булевых значений: для каждого элемента
+массива, значение TRUE указывает, что соответствующий столбец хранит только
+числовые значения. Пример:
+<PRE>
+$nums = $sth-&#62;{is_num};
+</PRE>
+
+<DT><CODE>is_pri_key</CODE>
+<DD>Возвращает ссылку на массив булевых значений: для каждого элемента
+массива, значение TRUE указывает, что соответствующий столбец является
+первичным ключом. Пример:
+<PRE>
+$pri_keys = $sth-&#62;{is_pri_key};
+</PRE>
+
+<DT><CODE>is_not_null</CODE>
+<DD>Возвращает ссылку на массив булевых значений: для каждого элемента
+массива, значение FALSE указывает, что соответствующий столбец может хранить
+(но не обязательно хранит в настоящий момент) значения <CODE>NULL</CODE>:
+<PRE>
+$not_nulls = $sth-&#62;{is_not_null};
+</PRE>
+
+Метод <CODE>is_not_null</CODE> осуждается, предпочтительно использовать
+атрибут <CODE>NULLABLE</CODE> (описанный выше) потому, что это стандарт DBI.
+
+<DT><CODE>length</CODE>
+<DD><DT><CODE>max_length</CODE>
+<DD>Каждый из этих методов возвращает ссылку на массив размеров столбца.
+Массив <CODE>length</CODE> указывает максимальные возможные размеры, которые
+каждый столбец может иметь (как объявлено в описании таблицы). Массив
+<CODE>max_length</CODE> указывает максимальные размеры, фактически
+представленные в таблице. Пример:
+<PRE>
+$lengths = $sth-&#62;{length};
+$max_lengths = $sth-&#62;{max_length};
+</PRE>
+
+<DT><CODE>NAME</CODE>
+<DD>Возвращает ссылку на массив имен столбцов. Пример:
+<PRE>
+$names = $sth-&#62;{NAME};
+</PRE>
+
+<DT><CODE>table</CODE>
+<DD>Возвращает ссылку на массив имен таблиц. Пример:
+<PRE>
+$tables = $sth-&#62;{table};
+</PRE>
+
+<DT><CODE>type</CODE>
+<DD>Возвращает ссылку на массив типов столбцов. Пример:
+<PRE>
+$types = $sth-&#62;{type};
+</PRE>
+</DL>
+
+<H3><A NAME="DBI-info">8.3 Подробности по <CODE>DBI</CODE>/<CODE>DBD</CODE>
+</A></H3>
+<P>Вы можете использовать команду <CODE>perldoc</CODE>, чтобы получить
+большее количество информации относительно <CODE>DBI</CODE>:</P>
+<PRE>
+perldoc DBI
+perldoc DBI::FAQ
+perldoc DBD::mysql
+</PRE>
+
+<P>Вы можете также использовать инструментальные средства
+<CODE>pod2man</CODE>, <CODE>pod2html</CODE> и им подобные, чтобы
+транслировать справочник к другим форматам.</P>
+
+<P>Вы можете находить последнюю информацию по <CODE>DBI</CODE> на
+Web-странице <CODE>DBI</CODE> по адресу
+<a HREF="../../../www.symbolstone.org/technology/perl/DBI/index.html">
+http://www.symbolstone.org/technology/perl/DBI/index.html</a>.
+
+<H2><A NAME="Perl_support">8.3 Установка поддержки Perl</A></H2>
+
+<H3><A NAME="Perl_installation">8.3.1 Установка Perl на Unix</A></H3>
+<P>Perl-поддержка для MySQL обеспечивается посредством интерфейса
+пользователя <CODE>DBI</CODE>/<CODE>DBD</CODE>. Подробности в разделе
+"<A HREF="manual.htm#Perl">8 MySQL Perl API</A>". Код пользователя Perl
+<CODE>DBD</CODE>/<CODE>DBI</CODE> требует Perl Version 5.004 или выше.
+Интерфейс <STRONG>не будет работать</STRONG>, если Вы имеете старую версию!
+</P>
+
+<P>MySQL Perl-поддержка также требует, чтобы Вы установили MySQL-поддержку
+программирования пользователя. Если Вы установили MySQL из файлов RPM,
+программы пользователя находятся в клиентском RPM, но поддержка
+программирования пользователя находится в RPM для разработчика.
+Удостоверьтесь, что Вы в самом деле установили последний RPM.</P>
+
+<P>Начиная с Version 3.22.8, поддержка Perl поставляется отдельно от главного
+дистрибутива MySQL. Если Вы хотите устанавливать поддержку Perl, нужные файлы
+можно найти на <a HREF="../../../www.mysql.com/Downloads/Contrib">
+http://www.mysql.com/Downloads/Contrib</a>.</P>
+
+<P>Дистрибутивы Perl поставляются как сжатые архивы в формате
+<CODE>tar</CODE> и имеют имена подобные <TT>MODULE-VERSION.tar.gz</TT>, где
+<CODE>MODULE</CODE> представляет собой имя модуля, а <CODE>VERSION</CODE>
+задает номер версии. Вы должны получить пакеты <CODE>Data-Dumper</CODE>,
+<CODE>DBI</CODE> и <CODE>Msql-Mysql-modules</CODE> и устанавливать их в этом
+порядке. Процедура установки показывается ниже. Показанный пример подходит
+для модуля <CODE>Data-Dumper</CODE>, но процедура та же самая для всех трех
+нужных Вам модулей:</P>
+
+<OL><LI>Распакуйте дистрибутив в текущий каталог:
+<PRE>
+shell&#62; gunzip &#60; Data-Dumper-VERSION.tar.gz | tar xvf -
+</PRE>
+Эта команда создаст каталог под именем <TT>Data-Dumper-VERSION</TT>.
+
+<LI>Теперь перейдите в каталог распакованного дистрибутива:
+<PRE>
+shell&#62; cd Data-Dumper-VERSION
+</PRE>
+
+<LI>Сконфигурируйте и откомпилируйте дистрибутив:
+<PRE>
+shell&#62; perl Makefile.PL
+shell&#62; make
+shell&#62; make test
+shell&#62; make install
+</PRE></OL>
+
+<P>Команда <CODE>make test</CODE> важна потому, что она проверяет что модуль
+работает. Обратите внимание, что когда Вы выполняете эту команду в течение
+установки <CODE>Msql-Mysql-modules</CODE>, чтобы проверить код интерфейса,
+сервер MySQL должен работать, или тест будет терпеть неудачу.</P>
+
+<P>Стоит пересобрать и повторно установить <CODE>Msql-Mysql-modules</CODE>
+всякий раз, когда Вы устанавливаете новый выпуск MySQL, особенно, если Вы
+обращаете внимание на нехорошие признаки типа того, что все Ваши скрипты
+<CODE>DBI</CODE> после апгрейда MySQL падают.</P>
+
+<P>Если Вы не имеете права установить модули Perl в системный каталог, или
+чтобы установить локальные модули Perl, следующая ссылка может помочь:</P>
+<PRE>
+<a HREF="../../../www.iserver.com/support/contrib/perl5/modules.html">
+http://www.iserver.com/support/contrib/perl5/modules.html</a>
+</PRE>
+
+<P>Смотрите под заголовком <CODE>Installing New Modules that Require
+Locally Installed Modules</CODE>.</P>
+
+<H3><A NAME="ActiveState_Perl">8.3.2 Установка ActiveState Perl под Windows
+</A></H3>
+<P>Чтобы установить модуль MySQL <CODE>DBD</CODE> под ActiveState Perl под
+Windows, Вы должны сделать следующее:</P>
+
+<UL><LI>Скачать ActiveState Perl с
+<a HREF="../../../www.activestate.com/Products/ActivePerl/index.html">
+http://www.activestate.com/Products/ActivePerl/index.html</a> и установить.
+<LI>Открыть DOS shell.
+<LI>Если надо, настроить переменную HTTP_proxy. Например, попробуйте так:
+<PRE>
+set HTTP_proxy=my.proxy.com:3128
+</PRE>
+
+<LI>Запустите программу PPM:
+<PRE>
+C:\&#62; c:\perl\bin\ppm.pl
+</PRE>
+
+<LI>Если этого еще не сделано, поставьте модуль <CODE>DBI</CODE>:
+<PRE>
+ppm&#62; install DBI
+</PRE>
+
+<LI>Если все в порядке, выполните команду:
+<PRE>
+install ftp://ftp.de.uu.net/pub/CPAN/authors/id/JWIED/DBD-mysql-1.2212.x86.ppd
+</PRE></UL>
+
+<P>Вышеупомянутое должно работать по крайней мере с
+ActiveState Perl Version 5.6.</P>
+
+<P>Если Вы не можете заставить это работать, Вы должны взамен установить
+драйвер MyODBC и соединяться с сервером MySQL через ODBC:
+<PRE>
+use DBI;
+$dbh=DBI-&#62;connect("DBI:ODBC:$dsn","$user","$password") ||
+     die "Got error $DBI::errstr when connecting to $dsn\n";
+</PRE></P>
+
+<H3><A NAME="Windows_Perl">8.3.3 Установка дистрибутива MySQL
+Perl под Windows</A></H3>
+<P>Дистрибутив MySQL Perl включает в себя <CODE>DBI</CODE>,
+<CODE>DBD:MySQL</CODE> и <CODE>DBD:ODBC</CODE>.</P>
+
+<UL><LI>Скачайте Perl для Windows с
+<a HREF="../../../www.mysql.com/download.html">
+http://www.mysql.com/download.html</a>.
+<LI>Распакуйте командой Unzip на диск <CODE>C:</CODE>, чтобы получился
+каталог вида <TT>C:\PERL</TT>.
+<LI>Добавьте каталог <TT>C:\PERL\BIN</TT> в переменную path.
+<LI>Добавьте туда же каталог <TT>C:\PERL\BIN\MSWIN32-x86-thread</TT> или
+<TT>C:\PERL\BIN\MSWIN32-x86</TT>.
+<LI>Протестируйте работоспособность <CODE>perl</CODE> выполнением команды
+<CODE>perl -v</CODE> в DOS shell.</UL>
+
+<H3><A NAME="Perl_support_problems">8.3.4
+Проблемы с интерфейсом Perl <CODE>DBI</CODE>/<CODE>DBD</CODE></A></H3>
+<P>Если Perl сообщает, что не может найти модуль <TT>../mysql/mysql.so</TT>,
+то проблема, вероятно, в том что Perl не может найти общедоступную библиотеку
+<TT>libmysqlclient.so</TT>.</P>
+
+<P>Вы можете исправить это любым из следующих методов:</P>
+<UL><LI>Откомпилируйте дистрибутив <CODE>Msql-Mysql-modules</CODE> командой
+<CODE>perl Makefile.PL -static -config</CODE> вместо
+<CODE>perl Makefile.PL</CODE>.
+
+<LI>Скопируйте <CODE>libmysqlclient.so</CODE> в каталог, где размещены другие
+Ваши общедоступные библиотеки (вероятно, это <TT>/usr/lib</TT> или
+<TT>/lib</TT>).
+
+<LI>Под Linux Вы можете добавлять имя пути каталога, где размещен
+<TT>libmysqlclient.so</TT> в файл <TT>/etc/ld.so.conf</TT>.
+
+<LI>Добавьте имя пути каталога, где надо искать файл
+<TT>libmysqlclient.so</TT> к системной переменной
+<CODE>LD_RUN_PATH</CODE>.</UL>
+
+<P>Если Вы получаете следующие ошибки из <CODE>DBD-mysql</CODE>, Вы,
+вероятно, используете <CODE>gcc</CODE> (или используете старый двоичный
+дистрибутив, собранный с помощью <CODE>gcc</CODE>):</P>
+<PRE>
+/usr/bin/perl: can't resolve symbol '__moddi3'
+/usr/bin/perl: can't resolve symbol '__divdi3'
+</PRE>
+
+<P>Добавьте <CODE>-L/usr/lib/gcc-lib/... -lgcc</CODE> к команде компоновки,
+когда библиотека <TT>mysql.so</TT> собрана (проверьте вывод из
+<CODE>make</CODE> для <TT>mysql.so</TT>, когда Вы компилируете клиента Perl).
+Опция <CODE>-L</CODE> должна определить имя пути каталога, где файл
+<TT>libgcc.a</TT> размещен на Вашей системе.</P>
+
+<P>Другой причиой этой проблемы может быть то, что Perl и MySQL не вместе
+компилируются <CODE>gcc</CODE>. В этом случае, Вы можете устранить
+несоответствие, компилируя оба пакета <CODE>gcc</CODE>.</P>
+
+<P>Если Вы получаете следующую ошибку из <CODE>Msql-Mysql-modules</CODE>,
+когда Вы выполняете тесты:
+<PRE>
+t/00base............install_driver(mysql) failed: Can't load
+'../blib/arch/auto/DBD/mysql/mysql.so' for module DBD::mysql:
+../blib/arch/auto/DBD/mysql/mysql.so: undefined symbol: uncompress
+at /usr/lib/perl5/5.00503/i586-linux/DynaLoader.pm line 169.
+</PRE></P>
+
+<P>Это означает, что Вы должны включить библиотеку сжатия -lz в строку
+компновки. Это может сделать следующее изменение в файле
+<TT>lib/DBD/mysql/Install.pm</TT>:
+<PRE>
+$sysliblist .= " -lm";
+надо поменять на
+$sysliblist .= " -lm -lz";
+</PRE></P>
+
+<P>После этого, Вы ДОЛЖНЫ выполнить make realclean и затем продолжить
+установку с самого начала.</P>
+
+<P>Если Вы хотите использовать Perl-модуль на системе, которая не
+поддерживает динамическую связь (подобно SCO), Вы можете сгенерировать
+статическую версию Perl, которая включает <CODE>DBI</CODE> и
+<CODE>DBD-mysql</CODE>. Соберите версию Perl с модулем <CODE>DBI</CODE> и
+установите поверх текущей версии Perl. Затем Вы используете это, чтобы
+сформировать версию Perl, которая дополнительно имеет встроенный код
+<CODE>DBD</CODE>, и вот ее-то и надо установить как окончательную.</P>
+
+<P>На SCO Вы должны иметь следующий набор системных переменных:</P>
+<PRE>
+shell&#62; LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:/usr/progressive/lib
+</PRE>
+или
+<PRE>
+shell&#62; LD_LIBRARY_PATH=/usr/lib:/lib:/usr/local/lib:/usr/ccs/lib:/usr/progressive/lib:/usr/skunk/lib
+shell&#62; LIBPATH=/usr/lib:/lib:/usr/local/lib:/usr/ccs/lib:/usr/progressive/lib:/usr/skunk/lib
+shell&#62; MANPATH=scohelp:/usr/man:/usr/local1/man:/usr/local/man:/usr/skunk/man:
+</PRE></P>
+
+<P>Сначала, создайте Perl, который включает статически связанный
+<CODE>DBI</CODE>, применяя эти команды в каталоге, где размещен Ваш
+дистрибутив пакета <CODE>DBI</CODE>:</P>
+<PRE>
+shell&#62; perl Makefile.PL -static -config
+shell&#62; make
+shell&#62; make install
+shell&#62; make perl
+</PRE>
+
+<P>Затем Вы должны установить новый Perl. Вывод из <CODE>make perl</CODE>
+укажет точную команду <CODE>make</CODE>, которую Вы должны выполнить, чтобы
+осуществить установку. На SCO это <CODE>make -f Makefile.aperl inst_perl
+MAP_TARGET=perl</CODE>.</P>
+
+<P>Затем используйте только что созданный Perl, чтобы создать другой Perl,
+который также включает и статически связанный модуль <CODE>DBD::mysql</CODE>
+этими командами в каталоге, где размещен Ваш дистрибутив
+<CODE>Msql-Mysql-modules</CODE>:</P>
+<PRE>
+shell&#62; perl Makefile.PL -static -config
+shell&#62; make
+shell&#62; make install
+shell&#62; make perl
+</PRE>
+
+<P>В заключение Вы должны установить этот новый Perl. Снова вывод из команды
+<CODE>make perl</CODE> указывает команду, которую Вам надлежит использовать
+для выполнения установки.</P>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

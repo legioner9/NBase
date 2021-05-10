@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\stereotypedlg\stereotype_visibility\cat.stereotype_visibility\dir.stereotype_visibility.md">stereotype_visibility</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\stereotypedlg\stereotype_visibility\stereotype_visibility.md">stereotype_visibility.md</a>
+        - *### [Stereotype Visibility](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/stereotype_visibility.html) Видимость стереотипов

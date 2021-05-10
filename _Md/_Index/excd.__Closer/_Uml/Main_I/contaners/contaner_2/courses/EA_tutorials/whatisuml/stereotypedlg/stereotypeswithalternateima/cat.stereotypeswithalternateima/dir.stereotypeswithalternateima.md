@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\stereotypedlg\stereotypeswithalternateima\cat.stereotypeswithalternateima\dir.stereotypeswithalternateima.md">stereotypeswithalternateima</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\stereotypedlg\stereotypeswithalternateima\stereotypeswithalternateima.md">stereotypeswithalternateima.md</a>
+        - *### [Stereotypes with Alternative Images](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/stereotypeswithalternateima.html) Стереотипы с альтернативными образами

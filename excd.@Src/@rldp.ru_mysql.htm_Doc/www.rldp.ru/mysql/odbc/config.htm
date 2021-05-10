@@ -1,0 +1,1280 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>����� 5. ��������� Connector/ODBC</title>
+  <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="�������@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: �������� ����� ���������� �"+
+" ����������� �� 24 ����' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-odbc-configuration"></a>
+����� 5. ��������� Connector/ODBC</h1>
+<p>������ ��� �� ����������� � ����� ������ MySQL, ��������� Connector/ODBC,
+�� ���������� ��� ��������� ������ ODBC (DSN). DSN ��������� ���������
+��������� ������������, ���������, ����� �������� � ����� ������.
+�� ����������� DSN, ����� �������� � ����� ������, ������ ����, �����
+���������� ��������� ��������� � ����� ����������.
+���������� � DSN ����� ���� ������������ ��� ������������, ������������ ���
+�������, ��� ������������ � ����������� �����. ����� ��������� ������ ODBC
+����������� ��-�������, � ����������� �� ����� ��������� � ODBC.</p>
+
+<h2><a name="connector-odbc-configuration-dsn"></a>
+5.1. ����� Connector/ODBC Data Source Names</h2>
+<p>Data Source Name ��������� ��������� ������������ ��� ����� � ������������
+����� ������. ������ DSN ������� �� ��������� ����������:</p>
+
+<ul><li class="listitem">Name</li>
+<li class="listitem">Host Name</li>
+<li class="listitem">Database Name</li>
+<li class="listitem">Login</li>
+<li class="listitem">Password</li></ul>
+
+<p>����� ����, ��������� ODBC, ������� Connector/ODBC, ����� �������
+�������������� ������������ ��� �������� ����� � ���������.</p>
+<p>���� ��� ���� DSN:</p>
+
+<ul><li class="listitem"><p><span class="firstterm">System DSN</span>
+���������� ����������� DSN, ������� �������� ������ ������������ ��
+���������� �������. ��������� DSN ������ ����� ������������� ������ ���������
+���������������, ��� �������������, � �������� ���� ������������ ����������,
+������� ��������� ������� System DSN.</p></li>
+
+<li class="listitem"><p><span class="firstterm">User DSN</span>
+������������ ��� ���������� ������������ � ����� ��������������, �����
+������� ���������� ���������� ���� ������, �������
+��������� ���������� ������������.</p></li>
+
+<li class="listitem"><p><span class="firstterm">File DSN</span>
+���������� ������� ����, ����� ���������� ������������ DSN. ����� DSN �����
+���� ��������� ����� �������������� � ��������, ������� ����� ���������,
+������������ ��� ����������� ���������� � DSN ��� ����� ����������
+�� ������ ������.</p></li></ul>
+<p>���������� DSN �������� � ��������� ������
+� ����������� �� ����� ��������� � ���������� �����.</p>
+
+<h2><a name="connector-odbc-configuration-connection-parameters"></a>
+5.2. ��������� ����� Connector/ODBC</h2>
+<p>����� ���������� ��������� � ��������� �������� ���
+Connector/ODBC, �������� DSN:</p>
+
+<ul><li class="listitem"><p>
+<a href="#codbc-dsn-config-options">������� 5.1</a>,</p></li>
+<li class="listitem"><p>
+<a href="#codbc-dsn-option-flags">������� 5.3</a>.</p></li></ul>
+
+<p>������������ Windows ����� ������������
+<code class="literal">ODBC Data Source Administrator</code>, �����
+������������� ��� ���������, ����������
+<a href="#connector-odbc-configuration-dsn-windows">������ 5.3</a>
+� ���, ��� ������� ��� �
+<a href="#codbc-dsn-config-options">������� 5.1</a>
+��� ��������� ���������� �� �������� � �������, ������� ����� �������������
+� ����������� ���������� ������������ <code class="literal">ODBC Data Source
+Administrator</code>. � Unix � macOS ����������� �������� ��������� �
+�������� ��� ���� ��������� �����/�������� � ������������ DSN.
+�������������, ����� ���������� ��� ��������� � ���������
+<code class="literal">InConnectionString</code> ������
+<code class="function">SQLDriverConnect()</code>.</p>
+
+<a name="codbc-dsn-config-options"></a><p><b>������� 5.1.
+��������� ������������ Connector/ODBC DSN</b></p>
+<table><thead><tr>
+<th scope="col">��������</th>
+<th scope="col">����� � GUI</th>
+<th scope="col">�������� �� ���������</th>
+<th scope="col">�����������</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">user</code></td>
+<td>User</td><td>ODBC</td>
+<td>��� ������������ ��� ���������� � MySQL.</td></tr>
+<tr><td scope="row"><code class="literal">uid</code></td>
+<td>User</td><td>ODBC</td>
+<td>������� <code class="literal">user</code>. �������� � 3.51.16.</td></tr>
+<tr><td scope="row"><code class="literal">server</code></td>
+<td>TCP/IP Server</td>
+<td><code class="literal">localhost</code></td>
+<td>��� ����� ������� MySQL.</td></tr>
+<tr><td scope="row"><code class="literal">database</code></td>
+<td>Database</td><td>-</td>
+<td>���� ������ �� ���������.</td></tr>
+<tr><td scope="row"><code class="literal">option</code></td>
+<td>-</td><td>0</td>
+<td>�����, ������� ����������, ��� Connector/ODBC ��������. ��.
+<a href="#codbc-dsn-option-flags">������� 5.3</a> �
+<a href="#codbc-dsn-option-combos">������� 5.4</a>.</td></tr>
+<tr><td scope="row"><code class="literal">port</code></td>
+<td>Port</td><td>3306</td>
+<td>���� TCP/IP, ����� ������������, ����
+<code class="literal">server</code> ��
+<code class="literal">localhost</code>.</td></tr>
+<tr><td scope="row"><code class="literal">initstmt</code></td>
+<td>Initial Statement</td><td>-</td>
+<td>�������������� ������, ����� ���������, ���������� � MySQL.
+� ������ 3.51 �������� �������� <code class="literal">stmt</code>.
+������� ������������ �������������� ������, ����������� ������
+�� ����� ��������� �����.</td></tr>
+<tr><td scope="row"><code class="literal">password</code></td>
+<td>Password</td><td>-</td>
+<td>������ ��� <code class="literal">user</code>
+�� <code class="literal">server</code>.</td></tr>
+<tr><td scope="row"><code class="literal">pwd</code></td>
+<td>Password</td><td>-</td>
+<td>������� <code class="literal">password</code>. �������� � 3.51.16.</td>
+</tr>
+<tr><td scope="row">
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_socket"
+target="_top"><code class="literal">socket</code></a></td>
+<td>-</td><td>-</td>
+<td>���� ������ Unix ��� ����������� ����� Windows, ����� �����������, ����
+<code class="literal">server</code> = <code class="literal">localhost
+</code>.</td></tr>
+<tr><td scope="row"><code class="literal">sslca</code></td>
+<td>SSL Certificate</td><td>-</td>
+<td>���� � ����� �� ������� ���������� SSL CA. �������� � 3.51.16.</td></tr>
+<tr><td scope="row"><code class="literal">sslcapath</code></td>
+<td>SSL CA Path</td><td>-</td>
+<td>���� � ��������, ������� �������� ���������� ����������� SSL CA � �������
+PEM. �������� � 3.51.16.</td></tr>
+<tr><td scope="row"><code class="literal">sslcert</code></td>
+<td>SSL Certificate</td><td>-</td>
+<td>�������� ����� ����������� SSL, ����� ������������ ��� ������������
+����������� ����������. ��������� � 3.51.16.</td></tr>
+<tr><td scope="row"><code class="literal">sslcipher</code></td>
+<td>SSL Cipher</td><td>-</td>
+<td>������ ���������� ������ ��� ���������� SSL. � ������ ����� ��� �� �����
+������, ��� � ������� <code class="literal">openssl ciphers</code>.
+�������� � 3.51.16.</td></tr>
+<tr><td scope="row"><code class="literal">sslkey</code></td>
+<td>SSL Key</td><td>-</td>
+<td>�������� ����� ������ SSL, ����� ������������ ��� ������������
+����������� ����������. ��������� � 3.51.16.</td></tr>
+<tr><td scope="row"><code class="literal">rsakey</code></td>
+<td>RSA Public Key</td><td>-</td>
+<td>������ ���� � ����� PEM, ������� �������� �������� ���� RSA ���
+������������� ������� ������������� SHA256 MySQL. ��������� � 5.3.4.</td></tr>
+<tr><td scope="row"><code class="literal">sslverify</code></td>
+<td>Verify SSL</td><td>0</td>
+<td>���� 1, ���������� SSL ����� ��������, ����� ������������ �
+������������ MySQL. ���� �� �����������, �� ��������� �� ��������� ������
+��������������� �������� ����������� SSL. ����� ��������, ������� �
+Connector/ODBC 5.3.7. ��������������� ������������
+<code class="literal">SSLMODE</code>.</p></td></tr>
+<tr><td scope="row"><code class="literal">charset</code></td>
+<td>Character Set</td><td>-</td>
+<td>����� ��������, ����� ������������ ��� �����. �������� 3.51.17.</td></tr>
+<tr><td scope="row"><code class="literal">readtimeout</code></td>
+<td>-</td><td>-</td>
+<td>������� � �������� ��� ������� ������ � �������.
+������ ������� ���������� ��� �������� � ��� ������������� ���� ����������,
+����� �������, ���������� ����������� �������� ��� ��� ���� �������� �����.
+����� ���������� �������� ���, ����� ���������� ����� ����� ���� ����������
+�����, ��� �������� TCP/IP <code class="literal">Close_Wait_Timeout</code>
+(������ 10 �����). ���� ����� �������� ������ �� ����� TCP/IP � ������ �
+Windows �� MySQL 5.1.12. ������������� �����
+<code class="literal">MYSQL_OPT_READ_TIMEOUT</code> � ����������
+MySQL Client. ��������� � 3.51.27.</td></tr>
+<tr><td scope="row"><code class="literal">writetimeout</code></td>
+<td>-</td><td>-</td>
+<td>������� � �������� ��� ������� ������ � ������.
+������ ������� ���������� ��� �������� �������� � ����
+<code class="literal">net_retry_count</code> ��������
+��� �������������, ����� �������, ���������� ����������� ��������
+�������� <code class="literal">net_retry_count</code> ��� �������� �����.
+��� �������� ������ �� ����� TCP/IP � ������ �� Windows �� MySQL 5.1.12.
+������������� ����� <code class="literal">MYSQL_OPT_WRITE_TIMEOUT</code> �
+���������� MySQL Client. ��������� � 3.51.27.</td></tr>
+<tr><td scope="row"><code class="literal">interactive</code></td>
+<td>Interactive Client</td><td>0</td>
+<td>���� 1, ����� <code class="literal">CLIENT_INTERACTIVE</code> �
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/mysql-real-connect.html"
+target="_top">mysql-real-connect()</a> ��������, ��������� � 5.1.7.</td></tr>
+<tr><td scope="row"><code class="literal">prefetch</code></td>
+<td>Prefetch from server by _ rows at a time</td><td>0</td>
+<td><p>����� ����������� � ��������� ��������
+<em class="replaceable"><code>N</code></em>, ��� ������� � ����������
+������ <em class="replaceable"><code>N</code></em> �����
+�� ���� ���, � �� ���� ����� �����������. ������� ��� �������� ��� �����
+������� ������, ��� �� ��������� �������� ����� ����� ����������� �����.
+����� ����������� ����� �����������, ��
+<em class="replaceable"><code>N</code></em> ������� �� ���� ���.</p>
+
+<p>��� �������� ������ � ����������������� ���������. ��� �� ��������, �����
+������������ �������� <code class="literal">MULTI_STATEMENTS</code>
+����������.  ��� ����� �������������� � ��������� � ������������ ����������
+<code class="literal">NO_CACHE</code>. ��� ��������� � ����������� ADO
+�� ����������. �������� � 5.1.11.</p></td></tr>
+<tr><td scope="row"><code class="literal">no_ssps</code></td>
+<td>-</td><td>0</td>
+<td><p>� Connector/ODBC 5.2 � ����� �� ��������� ��������� ���������
+���������� ��������. ����� ���� ����� ���������� � ��������� ��������,
+�������������� ������� ����������� �� ���������� �������, ��� �������� ��� ��
+����� ����������, ��� � 5.1 � 3.51. �������� � 5.2.0.</p></td></tr>
+<tr><td scope="row"><code class="literal">can_handle_exp_pwd</code></td>
+<td>Can Handle Expired Password</td><td>0</td>
+<td>���������, ��� ���������� ����� �������� � ������� � �������� ������,
+������� ������� �������� SQL <code class="literal">08004</code>
+(<span class="quote"><span class="quote">Server rejected the connection
+</span></span>), ��� ������
+<code class="literal">ER_MUST_CHANGE_PASSWORD_LOGIN</code> (1862).
+���������� ���������� � <span class="quote"><span class="quote">���������
+</span></span>, � ������ �� ����� ������� �����
+<code class="literal">SET PASSWORD</code>. ����� ���������� ����� � ����
+������, ��� ������ ������ ������������ ����� ����������
+<code class="literal">initstmt</code>, ����� ���������� ����� ������ �
+������, ��� <code class="literal">SET PASSWORD</code>
+���������� ����� ����������. ��� ������ ������ � �������� ������ �������,
+����������� �� ����� �����. ����������
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/alter-user.html"
+target="_top">ALTER USER Syntax</a>. ��������� � 5.2.4.</td></tr>
+<tr><td scope="row"><code class="literal">ENABLE_CLEARTEXT_PLUGIN</code></td>
+<td>Enable Cleartext Authentication</td><td>0</td>
+<td>���������� � <span class="emphasis"><em>1</em></span>, ����� ���������
+������������� ��������� ������. ��������� � 5.1.13 � 5.2.5.</td></tr>
+<tr><td scope="row"><code class="literal">ENABLE_LOCAL_INFILE</code></td>
+<td>Enable LOAD DATA operations</td><td>0</td>
+<td>������ �����������, DSN � ����� GUI. ���������� ENABLE_LOCAL_INFILE=1,
+����� ��������� �������� LOAD DATA. ��� �������� ����� MYSQL_OPT_LOCAL_INFILE
+� mysql_options(). ������ ����������� ��������� �������� DSN, ����
+��� �����������. ��������� � 5.3.12 � 8.0.14.</td></tr>
+<tr><td scope="row"><code class="literal">GET_SERVER_PUBLIC_KEY</code></td>
+<td>Get Server Public Key</td><td>0</td>
+
+<td><p>���������� � �������� � �������������� �������������
+<code class="literal">caching_sha2_password</code> �� ������������ �����
+(����������� TLS), Connector/ODBC ������ �������� ���� RSA, ���������, �����
+��������� ������������� �� �������. ����� ��������������, ���� ��������
+��������������, ������������ ��� �����, ���������� ��
+<code class="literal">caching_sha2_password</code>. ���� ����� �������������
+����� <code class="literal">MYSQL_OPT_GET_SERVER_PUBLIC_KEY</code> �������
+C API <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/mysql-options.html"
+target="_top"><code class="literal">mysql_options()
+</code></a>. �������� boolean.</p>
+
+<p>����� ��������� � Connector/ODBC 8.0.11 � 5.3.11.
+��� ������� Connector/ODBC, ������������, ��������� OpenSSL-�����������
+������� MySQL. ���� ���������� ������� MySQL, ����������������
+Connector/ODBC, ���� ��������� � YaSSL, ��� ����� ����� ��� �������������
+GPL Connector/ODBC 5.3, ����� �� ������������� � ���������������.
+</p></td></tr>
+
+<tr><td scope="row"><code class="literal">NO_TLS_1_0</code></td>
+<td>Disable TLS 1.0</td><td>0</td>
+<td>��������� ������������� TLS 1.0 ��� ���������� �����. ��� ������ TLS
+��������� �� ���������, � ���� ����� ��������� ������ 1.0. �������� � 5.3.7.
+</td></tr>
+
+<tr><td scope="row"><code class="literal">NO_TLS_1_1</code></td>
+<td>Disable TLS 1.1</td><td>0</td>
+<td>��������� ������������� TLS 1.1 ��� ���������� �����. ��� ������ TLS
+��������� �� ���������, � ���� ����� ��������� ������ 1.1. �������� �
+5.3.7.</td></tr>
+
+<tr><td scope="row"><code class="literal">NO_TLS_1_2</code></td>
+<td>Disable TLS 1.2</td><td>0</td>
+<td>��������� ������������� TLS 1.2 ��� ���������� �����. ��� ������ TLS
+��������� �� ���������, � ���� ����� ��������� ������ 1.2. �������� �
+5.3.7.</td></tr>
+
+<tr><td scope="row"><code class="literal">SSL_ENFORCE</code></td>
+<td>Enforce SSL</td><td>0</td>
+<td>������� ������������ SSL ��� ������ � ��������. ��.
+<a href="#ssl-options-combined">������� 5.2</a>. ��������� � 5.3.6.
+<p>����� ��������, ������� � Connector/ODBC 5.3.7 � ������� � 8.0.13.
+��������������� ������������ <code class="literal">SSLMODE</code>.
+</p></td></tr>
+
+<tr><td scope="row"><code class="literal">DISABLE_SSL_DEFAULT</code></td>
+<td>Disable default SSL</td><td>0</td>
+<td>��������� ���������� �� ��������� ������������ SSL ��� ������ � ��������.
+����� ����������� � 0 [default], Connector/ODBC �������� ����������� � SSL
+������� � ��������� � ��������������� �����, ���� ���������� ���������� �����
+SSL. ����� ����������� � 1, ����� � SSL �� �����������, � ���������������
+����� ������������, ���� <code class="literal">SSL_ENFORCE</code>
+����� ����������� � 1. ��.
+<a href="#ssl-options-combined">������� 5.2</a>. ��������� � 5.3.6.
+����� �������� � Connector/ODBC 5.3.7 � ������� � 8.0.13.
+����������� <code class="literal">SSLMODE</code>.</p></td></tr>
+
+<tr><td scope="row"><code class="literal">SSLMODE</code></td>
+<td>SSL Mode</td><td>-</td>
+<td><p>������������� ������ SSL-����� �������. ����� ����� ���� ���������� �
+����� �� ��������� ��������: <code class="literal">DISABLED</code>,
+<code class="literal">PREFERRED</code>,
+<code class="literal">REQUIRED</code>,
+<code class="literal">VERIFY_CA</code> ���
+<code class="literal">VERIFY_IDENTITY</code>. ��. �������� ��� �����
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/connection-options.html#option_general_ssl-mode"
+target="_top"><code class="option">--ssl-mode</code></a> �
+<a href="../../../https@dev.mysql.com/doc/refman/5.7/en/default.htm" target="_top">
+MySQL 5.7 Reference Manual</a>.</p>
+
+<p>���� <code class="literal">SSLMODE</code>
+���� �� �����������, ������������� <code class="literal">sslca</code> ���
+<code class="literal">sslcapath</code> �������������
+<code class="literal">SSLMODE=VERIFY_CA</code>.</p>
+
+<p>��������� � 5.3.7. ��� ����� ��������� ����������
+<code class="literal">sslverify</code> �
+<code class="literal">SSL_ENFORCE</code>.</p></td></tr>
+</tbody></table><br class="table-break">
+
+<p>��������� ������������ SSL ����� ����� ���� ������������� ��������� ��
+����� <code class="filename">my.ini</code> ���
+<code class="filename">my.cnf</code>. ��.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/option-files.html"
+target="_top">Using Option Files</a>.</p>
+
+<a name="ssl-options-combined"></a><p><b>������� 5.2. ���������� �����������
+SSL_ENFORCE � DISABLE_SSL_DEFAULT</b></p>
+<table><thead><tr>
+<th scope="col"></th>
+<th scope="col"><code class="literal">DISABLE_SSL_DEFAULT = 0</code></th>
+<th scope="col"><code class="literal">DISABLE_SSL_DEFAULT = 1</code></th>
+</tr></thead>
+<tbody><tr><td scope="row"><code class="literal">SSL_ENFORCE = 0</code></td>
+<td>(�� ���������) ����� � SSL ����������� �������, ���� ����������,
+��������� � ��������������� �����.</td>
+<td>����� � SSL �� �����������, ����������� ��������������� �����.</td></tr>
+
+<tr><td scope="row"><code class="literal">SSL_ENFORCE = 1</code></td>
+<td>����������� � SSL, ������, ���� ����� SSL �� ����� ���� �����������.</td>
+<td>����������� � SSL, ������, ���� ����� SSL �� ����� ���� �����������.
+<code class="literal">DISABLE_SSL_DEFAULT=1</code> ���������.</td></tr>
+</tbody></table><br class="table-break">
+
+<p>��������� Connector/ODBC ����� ���� ����� �������� ��� ������ �����������
+������������ ����������, ������������� �
+<a href="#codbc-dsn-option-flags">������� 5.3</a>,
+������������ � ������ ����������� ��� ����� ���������� ���� ������������
+���������� ������������. � ���� ���������� ����� ����� ���� �� �����������
+�������� ���������� ��������, ������� ����� ���� ������� ��� �����
+�������� ��� ��������� <code class="literal">option</code>
+��� ����������� ��� �����. ������ �������� ��������
+<code class="literal">option</code> � ������ ����������� ����� ������
+���������, �� �� ��������� ���������, ����������� � DSN, ������� ����� ����
+���������� ������, ��������� ������������ ���������, ��������� �� ���������
+�������� � ������ �����������.</p>
+
+<p>� �� ����� ��� ������������ ��������� �������� ���
+<code class="literal">option</code> ����� ���� ����� ��������� �����������
+���������� ������� �����, ������ ��������, ����� ���������, ���������
+�� ���������� ��������, ����� ���� �������. �� ����������� ������������
+�������� ��������� ������ ����� � ������ �����������, ������
+��� ��� ��������.</p>
+
+<a name="codbc-dsn-option-flags"></a>
+<p><b>������� 5.3. ������������ ��������� Connector/ODBC</b></p>
+<table><thead><tr>
+<th scope="col">���</th>
+<th scope="col">����� GUI</th>
+<th scope="col">���������</th>
+<th scope="col">��������</th></tr></thead><tbody><tr>
+<td scope="row"><code class="literal">FOUND_ROWS</code></td>
+<td>Return matched rows instead of affected rows</td><td>2</td>
+<td>������ �� ����� ����������, ����� MySQL ���������� �������� �����
+���������� �����. ���� ���� ���� ����������, MySQL ������
+<span class="quote">found rows</span>. � ��� ������ ���� MySQL ��� ����.
+</td></tr>
+<tr><td scope="row"><code class="literal">BIG_PACKETS</code></td>
+<td>Allow big result set</td><td>8</td>
+<td>�� �������������� ������ ������ ��� ����������� � ����������.
+��� ����� ������ �������� ���������� ����� ������� 255 �������.</td></tr>
+<tr><td scope="row"><code class="literal">NO_PROMPT</code></td>
+<td>Don't prompt when connecting</td><td>16</td>
+<td>�� �������� ��������.</td></tr>
+<tr><td scope="row"><code class="literal">DYNAMIC_CURSOR</code></td>
+<td>Enable Dynamic Cursors</td><td>32</td>
+<td>��������� ������������ �������.</td></tr>
+<tr><td scope="row"><code class="literal">NO_SCHEMA</code></td>
+<td>Ignore schema in column specifications</td><td>64</td>
+<td>��������������� ������������� ����� ���� ������ �
+<em class="replaceable"><code>db_name.tbl_name.col_name</code></em>.
+���� ����� ��� ������ � Connector/ODBC 8.0.13, ����������
+NO_CATALOG.</td></tr>
+<tr><td scope="row"><code class="literal">NO_DEFAULT_CURSOR</code></td>
+<td>Disable driver-provided cursor support</td><td>128</td>
+<td>������������� ����������������� �������� ��������� ODBC.</td></tr>
+<tr><td scope="row"><code class="literal">NO_LOCALE</code></td>
+<td>Don't use setlocale()</td><td>256</td>
+<td>��������� ������������� ������������ ���������.</td></tr>
+<tr><td scope="row"><code class="literal">PAD_SPACE</code></td>
+<td>Pad CHAR to full length with space</td><td>512</td>
+<td>��������� <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/char.html"
+target="_top"><code class="literal">CHAR</code></a>
+� ������ ����� �������.</td></tr>
+<tr><td scope="row"><code class="literal">FULL_COLUMN_NAMES</code></td>
+<td>Include table name in SQLDescribeCol()</td><td>1024</td>
+<td><code class="function">SQLDescribeCol()</code> ������ ���������
+����������������� ����� ��������.</td></tr>
+<tr><td scope="row"><code class="literal">COMPRESSED_PROTO</code></td>
+<td>Use compression</td><td>2048</td>
+<td>����������� ������ �������� ������-������.</td></tr>
+<tr><td scope="row"><code class="literal">IGNORE_SPACE</code></td>
+<td>Ignore space after function names</td><td>4096</td>
+<td>������� ������� ������������ ������������ ����� ����� ������� � �����
+<span class="quote"><code class="literal">(</code></span> (���� ���
+PowerBuilder). ��� ������ ��� �������� ����� ������� �������.</td></tr>
+<tr><td scope="row"><code class="literal">NAMED_PIPE</code></td>
+<td>Named Pipe</td><td>8192</td>
+<td>����������� � ����������� ������� �������
+<span class="command"><strong>mysqld</strong></span> ��� NT.</td></tr>
+<tr><td scope="row"><code class="literal">NO_BIGINT</code></td>
+<td>Treat BIGINT columns as INT columns</td><td>16384</td>
+<td>������� <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/integer-types.html"
+target="_top"><code class="literal">BIGINT</code></a> ��
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/integer-types.html"
+target="_top"><code class="literal">INT</code></a> (��� ���������� ��
+�������� <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/integer-types.html"
+target="_top"><code class="literal">BIGINT</code></a>).</td></tr>
+<tr><td scope="row"><code class="literal">NO_CATALOG</code></td>
+<td>Disable catalog support</td><td>32768</td>
+<td>���������� �� ������� ��������, ��������,
+<code class="literal">SQLTables</code>, ������
+<code class="literal">NULL</code>, ������� �������,
+��� �������� �� ��������������.</td></tr>
+<tr><td scope="row"><code class="literal">USE_MYCNF</code></td>
+<td>Read options from <code class="literal">my.cnf</code></td><td>65536</td>
+<td>���������� ��������� �� ����� <code class="literal">[client]</code> �
+<code class="literal">[odbc]</code> �����
+<code class="filename">my.cnf</code>.</td></tr>
+<tr><td scope="row"><code class="literal">SAFE</code></td>
+<td>Enable safe options</td><td>131072</td>
+<td>�������� ��������� �������������� �������� ������������.</td></tr>
+<tr><td scope="row"><code class="literal">NO_TRANSACTIONS</code></td>
+<td>Disable transaction support</td><td>262144</td>
+<td>��������� ����������.</td></tr>
+<tr><td scope="row"><code class="literal">LOG_QUERY</code></td>
+<td>Log queries to %TEMP%\myodbc.sql</td><td>524288</td>
+<td>�������������� ������� � ���� <code class="filename">c:\myodbc.sql</code>
+(<code class="filename">/tmp/myodbc.sql</code>)
+(������ � ������ �������).</td></tr>
+<tr><td scope="row"><code class="literal">NO_CACHE</code></td>
+<td>Don't cache results of forward-only cursors</td><td>1048576</td>
+<td>�� ���������� ���������� �������� � ��������. ������ ����� ������ �
+������� (<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/mysql-use-result.html"
+target="_top"><code class="literal">mysql_use_result()</code></a>).
+��� �������� ������ �� ���������������� �������. ���� ����� ����� ����� ����
+���� � �������� ���������, ����� �� �� ������, ����� ������� ���������
+���� ����� �����������.</td></tr>
+<tr><td scope="row"><code class="literal">FORWARD_CURSOR</code></td>
+<td>Force use of forward-only cursors</td><td>2097152</td>
+<td>�������� ������������� ���� ������� <code class="literal">Forward-only
+</code>. � ������� ��������, ��������������� �� ��������� ����������� ���
+������������ ��� ������� � ���������, ����� ������� �� �����������
+����������� ������� �����������, ���� ����� �����������
+��������� ����������������� �������.</td></tr>
+<tr><td scope="row"><code class="literal">AUTO_RECONNECT</code></td>
+<td>Enable automatic reconnect</td><td>4194304</td>
+<td>��������� ���������������� ��������������. �� ����������� ���� ����� �
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_transaction"
+target="_top">������������</a>, ��� ��� ��������� �������������� �� �����
+������������� ���������� ����� ������� ����. ���������������� ����� ��
+���������� �� �� ����� ��������� ��������� � ���������� ����� ���
+������������ �����. ��������� � 3.51.13.</td></tr>
+<tr><td scope="row"><code class="literal">AUTO_IS_NULL</code></td>
+<td>Enable SQL_AUTO_IS_NULL</td><td>8388608</td>
+<td><p>����� ����������� <code class="literal">AUTO_IS_NULL</code>, �������
+�� �������� �������� �� ���������
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_sql_auto_is_null"
+target="_top"><code class="literal">sql_auto_is_null</code></a>,
+�������� ��� � 1, ����� �������, �� ��������� �������� �� ��������� MySQL,
+� �� ����������� ��������� SQL.</p>
+
+<p>����� �� ����������� <code class="literal">AUTO_IS_NULL</code>, �������
+�������� �������� �� ��������� <code class="literal">SQL_AUTO_IS_NULL</code>
+�� 0 ����� ����������, ����� �������, �� ��������� �������� SQL, � ��
+��������� MySQL �� ���������.</p>
+
+<p>����� ������� ���������� ����� ��������� ����� ������������� � ��������
+����������� ��������� SQL.</p>
+<p>��. <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/comparison-operators.html#operator_is-null"
+target="_top"><code class="literal">IS NULL</code></a>. ��������� � 3.51.13.
+</p></td></tr>
+<tr><td scope="row"><code class="literal">ZERO_DATE_TO_MIN</code></td>
+<td>Return SQL_NULL_DATA for zero date</td><td>16777216</td>
+<td>��������� ������� ���� (<code class="literal">XXXX-00-00</code>) �
+����������� �������� ����, ������������ ODBC,
+<code class="literal">XXXX-01-01</code>. ��� ������ ������, ��� ���������
+������� �� ����� ��������, ������ ��� ������������ ���� � �����������
+�������� ���� ODBC ������������. ��������� � 3.51.17.</td></tr>
+<tr><td scope="row"><code class="literal">MIN_DATE_TO_ZERO</code></td>
+<td>Bind minimal date as zero date</td><td>33554432</td>
+<td>��������� ����������� �������� ���� ODBC
+(<code class="literal">XXXX-01-01</code>) � �������� ������� ����,
+������������� MySQL (<code class="literal">XXXX-00-00</code>).
+��� ������ ������, ��� ���������
+������� �� ����� ��������, ������ ��� ������������ ���� � �����������
+�������� ���� ODBC ������������. ��������� � 3.51.17.</td></tr>
+<tr><td scope="row"><code class="literal">NO_DATE_OVERFLOW</code></td>
+<td>Ignore data overflow error</td><td>0</td>
+<td>���������� ���������� ��������, ������ �������� ������, ���� �����
+������� �����������. ������ ������������� ���������� �������, � ���������
+���������, ���� ��� ���� ������. ��������� � 5.3.8.</td></tr>
+<tr><td scope="row"><code class="literal">MULTI_STATEMENTS</code></td>
+<td>Allow multiple statements</td><td>67108864</td>
+<td>��������� ��������� �������� ��������. ��������� � 3.51.18.</td></tr>
+<tr><td scope="row"><code class="literal">COLUMN_SIZE_S32</code></td>
+<td>Limit column size to signed 32-bit range</td><td>134217728</td>
+<td>������������ ������ ������� ���������� signed 32-bit, ����� �������������
+�������� � �������� ��������� ������� � ��������, ������� �� ������������ ��.
+���� ����� ������������� ��������, ������� � ������������ ADO. ��������� �
+3.51.22.</td></tr>
+<tr><td scope="row"><code class="literal">NO_BINARY_RESULT</code></td>
+<td>Always handle binary function results as character data</td>
+<td>268435456</td>
+<td>����� �����������, ���� ����� ��������� charset 63 ��� �������� � ������
+<code class="literal">org_table</code>. ��������� � 3.51.26.</td></tr>
+<tr><td scope="row"><code class="literal">DFLT_BIGINT_BIND_STR</code></td>
+<td>Bind BIGINT parameters as strings</td><td>536870912</td>
+<td>�������� ��������� <code class="literal">BIGINT</code>, ������� �����
+�������, ��� ������. Microsoft Access ������������
+<code class="literal">BIGINT</code> ��� ������������������ �� ���������
+��������. �������� ��������� ���������, �� ������� ��� ������������������.
+���� ����� ������������ �������������, ���� ������� ������������
+Microsoft Access. ��������� � 5.1.3.</td></tr>
+<tr><td scope="row"><code class="literal">NO_INFORMATION_SCHEMA</code></td>
+<td>Don't use INFORMATION_SCHEMA for metadata</td><td>1073741824</td>
+<td>�� ��������� ��� ����������
+<code class="literal">INFORMATION_SCHEMA</code>,
+� ������������ ���������� ���������. ���������� ����� ������ ��������
+����� �������������� ���������. �������������
+<code class="literal">INFORMATION_SCHEMA</code> ����� ���������, ��
+���������� ���������� ����� �����. ��������� � 5.1.7.</td>
+</tr></tbody></table><br class="table-break">
+
+<a name="codbc-dsn-option-combos"></a><p><b>
+������� 5.4. ������������� �������� ����� Connector/ODBC
+��� ��������� ������������</b></p>
+<table><thead><tr>
+<th scope="col">������������</th>
+<th scope="col">��������� ����������</th>
+<th scope="col">�������� �����</th></tr></thead>
+<tbody><tr><td scope="row">Microsoft Access, Visual Basic</td>
+<td>FOUND_ROWS=1;</td><td>2</td></tr>
+<tr><td scope="row">Microsoft Access (� ����������� ��������� ��������)</td>
+<td>FOUND_ROWS=1;DYNAMIC_CURSOR=1;</td><td>34</td></tr>
+<tr><td scope="row">Microsoft SQL Server</td>
+<td>COLUMN_SIZE_S32=1;</td><td>134217728</td></tr>
+<tr><td scope="row">������� ������� � �������� ������ �����</td>
+<td>COMPRESSED_PROTO=1;</td><td>2048</td></tr>
+<tr><td scope="row">Sybase PowerBuilder</td>
+<td>IGNORE_SPACE=1;FLAG_SAFE=1;</td><td>135168</td></tr>
+<tr><td scope="row">��������� ������� �������� (����� �������)</td>
+<td>LOG_QUERY=1;</td><td>524288</td></tr>
+<tr><td scope="row">������� ������� � ������������ ��� �����������</td>
+<td>NO_CACHE=1;FORWARD_CURSOR=1;</td><td>3145728</td></tr>
+<tr><td scope="row">����������, ����������� �������������� �������
+"SELECT * FROM ... ", �� �������� ������ ��������� �����
+(<em class="replaceable"><code>N</code></em>) ����� �� ����������.</td>
+<td>PREFETCH=<em class="replaceable"><code>N</code></em></td>
+<td>�����������.</td></tr></tbody></table><br class="table-break">
+
+<h2><a name="connector-odbc-configuration-dsn-windows"></a>
+5.3. ��������� Connector/ODBC DSN � Windows</h2>
+<p>����� �������� ��� ��������� Connector/ODBC 5.x ��� 8.x DSN � Windows,
+����������� <code class="literal">ODBC Data Source Administrator</code> GUI
+��� <span class="command"><strong>myodbc-installer.exe</strong></span>,
+������� ���� � Connector/ODBC.</p>
+
+<h3><a name="connector-odbc-configuration-dsn-windows-5-2"></a>
+5.3.1. ��������� Connector/ODBC DSN � Windows � ODBC Data
+Source Administrator GUI</h3>
+<p><code class="literal">ODBC Data Source Administrator</code> � Windows
+��������� ��� ������� DSN, ��������� ��������� �������� � ����������� �������
+ODBC, ����� ��� ������������ (������������ ��� �������) � ����������� �����.
+��������� ��� ���� ��� �������� � ������������ DSN �
+<code class="literal">ODBC Data Source Administrator</code>:</p>
+
+<ol type="1"><li class="listitem"><p>
+�������� <code class="literal">ODBC Data Source Administrator</code>.</p>
+<p>��������� ������� � ������ Windows ������
+<code class="literal">ODBC Data Source Administrator</code> � ������ ������.
+��� ���������� �� ��������
+<code class="literal">ODBC Data Source Administrator</code>, ��.
+������������ �� Windows,
+<a href="../../../https@docs.microsoft.com/en-us/sql/database-engine/configure-windows/open-the-odbc-data-source-administrator"
+target="_top">��� ����������</a> Microsoft �������� ��������� ������ Windows.
+���������� ������ ����, �������� ����������, ����� �� ����������
+<code class="literal">ODBC Data Source Administrator</code>:</p>
+
+<a name="figure-myodbc-win-odbcadmin-main-w7"></a>
+<p><b>���. 5.1. <code class="literal">ODBC Data Source Administrator</code>
+</b></p><img src="images/myodbc-win-odbcadmin-main-w7.png" width="400"
+height="306" alt='Shows an example ODBC Data Source Administrator dialog with
+the default "User DSN" tab open. This tab includes "Add", "Remove", and
+"Configure" options. Additional tabs are "System DSN", "File DSN", "Drivers", "
+Tracing", "Connection Pooling", and "About".'><br class="figure-break"></li>
+
+<li class="listitem"><p>����� ������� System DSN (������� ����� �������� ����
+�������������), �������� ������� <span class="guilabel">System DSN</span>.
+����� ������� ���������������� DSN, ������� ����� �������� ������ ���������
+������������, ������� ������ <span class="guibutton">Add...</span>, �����
+������� ������ "Create New Data Source".</p></li>
+
+<li class="listitem"><p>�� ������� "Create New Data Source" �������� MySQL
+ODBC 5.<em class="replaceable"><code>x</code></em> ANSI or Unicode Driver,
+������� <span class="guibutton">Finish</span>, ����� ������� ���
+������ ���������� �����.</p>
+
+<a name="figure-myodbc-win-odbcadmin-driverselect-5.3"></a>
+<p><b>���. 5.2. ������ Create New Data Source: ����� MySQL ODBC Driver</b>
+</p><img src="images/myodbc-win-odbcadmin-driverselect-5.3.png"
+width="480" height="363" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li class="listitem"><p>������ ���������� ����������� ������������ �������
+��� DSN, ������� �� ��������, ����� ������
+<code class="literal">Connection Parameters</code>.</p>
+
+<a name="figure-myodbc-win-odbcadmin-adddsn-5-3"></a>
+<p><b>���. 5.3. ������ <code class="literal">Data Source Configuration</code>
+Connection Parameters</b></p>
+<img src="images/myodbc-win-odbcadmin-adddsn-5-3.png" width="406"
+height="470" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>� ������� <span class="guilabel">Data Source Name</span>
+������� ��� ��������� ������. ��� ����� ���� ����� �������������� ���,
+������� �� ���������.</p>
+
+<p>����� ����������, ��� �� DSN ������, ��������� 32 ��� 64-������ �������,
+�������� �������, ������������ � �������������� DSN. ��� ������� ���
+���������� ���������� DSN, ����� ������������ � ������������ ����� Excel,
+������� ���������� ������ � 32-������ ���������. ��������, �� ����� ��
+�������� <code class="literal">Using32bitCODBC</code>
+� �������������� DSN ��� 32-������� ���������� �
+<code class="literal">Using64bitCODBC</code> ��� ���, �������
+���������� 64-������ �������.</p></li>
+
+<li class="listitem"><p>� ������� <span class="guilabel">Description</span>
+������� ��������� �����, ����� ������ ���������� �����.</p></li>
+<li class="listitem"><p>� ���� <span class="guilabel">Server</span> �������
+��� ������� MySQL. �� ��������� ��� <code class="literal">localhost</code>.
+</p></li>
+
+<li class="listitem"><p>� ���� <span class="guilabel">User</span> �������
+��� ������������ ��� ���� �����.</p></li>
+<li class="listitem"><p>� ���� <span class="guilabel">Password</span> �������
+��������������� ������ ��� ���� �����.</p></li>
+
+<li class="listitem"><p>���� <span class="guilabel">Database</span>
+������ ���� ������������� ��������� ������� ��� ������, � ������� �
+������������ ���� ���������� �������� ������.</p></li>
+
+<li class="listitem"><p>����� �������� �� ������� ����� TCP/IP, ��� ����
+�� ��������� (3306), ������� �������� <span class="guilabel">Port</span>.
+</p></li>
+<li class="listitem"><p>������� <span class="guibutton">OK</span>, �����
+��������� ��������� DSN.</p></li></ol>
+
+<p>����� ��������� �����, ��������� ���������, �������� ������
+<span class="guibutton">Test</span>. ���� ����� ����� ���� �����������
+�������, �� ������ ���������� ��������
+<code class="literal">Connection Successful</code>, �����
+�������� <code class="literal">Connection Failed</code>.</p>
+
+<p>����� ����������� ����� ������������ ��� ������������� DSN,
+������� ������ <span class="guibutton">Details</span>.</p>
+<a name="figure-myodbc-win-odbcadmin-options-5-3"></a>
+<p><b>���. 5.4. ������ Connector/ODBC Connect Options</b></p>
+<img src="images/myodbc-win-odbcadmin-options-5-3.png" width="506"
+height="787" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>� ������� <span class="guilabel">Details</span> ����� ���������:</p>
+<ul><li class="listitem"><p><span class="guilabel">Connections</span>,
+<span class="guilabel">Metadata</span> �
+<span class="guilabel">Cursors/Results</span> ��������� ��� �������
+�������������� ����� ��� ����� DSN. ��� ��������� �������������� ����������
+�� ���� ������ ����������
+<a href="#connector-odbc-configuration-connection-parameters">
+������ 5.2</a>.</p>
+
+<p>��� ������ Unicode Connector/ODBC ��-�� ��� ������ ��������� Unicode, ��
+�� ������ ���������� ��������� ����� ��������, ������� ����� �������������� �
+����� ������. ������ ��� ������ ANSI, ���� �� ������ ������������
+������������� ����� ��������, ����� ��� UTF-16 ��� UTF-32 �������������,
+���������� ��� � ������� <span class="guilabel">Character Set</span>,
+������, ��� �� ���������� ��� ������������� UTF-8 ��� UTF-8-MB4
+�������������, ������ ��� ��� �� �������� ����
+<code class="literal">\0</code> � ����� ������, � ������� ������� ANSI ��
+������� ������������������ ��������, ������ �����
+<code class="literal">\0</code>.</p></li>
+
+<li class="listitem"><p><span class="guilabel">Debug</span> ��������� ���
+�������� ������� ODBC, ����� ������� ������ ��������, ������� �� ����������
+����� DSN, � ���� <code class="filename">myodbc.sql</code>. ��.
+<a href="#connector-odbc-configuration-trace">������ 5.8</a>.
+</p></li>
+
+<li class="listitem"><p><span class="guilabel">SSL</span> ���������
+�������������� �����, ��������� ��� ������������� Secure Sockets Layer (SSL),
+������� � �������� MySQL.</p>
+
+<a name="figure-myodbc-win-odbcadmin-ssl-5-3"></a>
+<p><b>���. 5.5. ������ Connector/ODBC Connect Options: ����� SSL</b></p>
+<img src="images/myodbc-win-odbcadmin-ssl-5-3.png" width="391" height="297"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>���������� ����� ��������� � ��������� SSL �� ������� MySQL
+� ����������� �������������, ����� �������� ������������� ���, ��������� SSL.
+</p></li></ul>
+
+<h3><a name="connector-odbc-configuration-dsn-windows-5-2-command-line"></a>
+5.3.2. ��������� Connector/ODBC DSN � Windows, ��������� ��������� ������
+</h3>
+<p>����������� <span class="command"><strong>myodbc-installer.exe</strong>
+</span> ��� ��������� Connector/ODBC �� ��������� ������.</p>
+<p>��������� <span class="command"><strong>myodbc-installer.exe</strong>
+</span> ��� ����������, ����� ����������� ������ ��������� ����������.</p>
+
+<h3><a name="connector-odbc-configuration-dsn-windows-problems"></a>
+5.3.3. ����� �������������� � �������� ����� ODBC</h3>
+<a class="indexterm" name="idm139746780705344"></a>
+<p>���� ������ �������� �� �������, ��������� �� ������ Connector/ODBC.</p>
+
+<ul><li class="listitem"><p>
+<span class="bold"><strong>�������� Connector/ODBC DSN, ���������� ������
+<code class="literal">Could Not Load Translator or Setup Library</code>
+</strong></span></p>
+
+<p>��. <a href="../../../support.microsoft.com/default.aspx@scid=kb;EN-US;q260558"
+target="_top">MS KnowledgeBase Article(Q260558)</a>.
+����� ����, ��������������, ��� � ��� ���� ��������� ��������������
+<code class="filename">ctl3d32.dll</code> � ����� ��������� ��������.</p></li>
+
+<li class="listitem"><p>����� ������ Connector/ODBC .dll (Windows) � .so
+(Linux) ������� �� ���������� ��������:</p>
+<p><span class="bold"><strong>������ Connector/ODBC</strong></span>:
+����� � ����� ����� ��������� �� ������� ����� ������ Connector/ODBC.
+��������, ���� ��� ���������
+myodbc<span class="bold"><strong>8</strong></span>w.dll ���
+Connector/ODBC 8.x, ����� ���
+myodbc<span class="bold"><strong>5</strong></span>w.dll ���
+Connector/ODBC 5.x.</p>
+
+<p><span class="bold"><strong>Driver Type</strong></span>: ������� Unicode
+��������� ������ "w" � ������ ������, ����� �������, ��� ������� �������
+��������������. ��������,
+myodbc8<span class="bold"><strong>w</strong></span>.dll ��� ��������
+Unicode. ANSI-������� ��������� "a" ������ "w", �������
+myodbc8<span class="bold"><strong>a</strong></span>.dll.</p>
+<p><span class="bold"><strong>GUI Setup module</strong></span>:
+����� ������ ��������� GUI ��������� "S" � ������ ������.</p></li>
+
+<li class="listitem"><p><span class="bold"><strong>
+�������������� ����������� ������ �������</strong></span>:
+��� �������, ����� ������� �� ��������, ��������� �� �������� ������.
+������� ������ ���� ������ � ������� �������.</p></li></ul>
+
+<h2><a name="connector-odbc-configuration-dsn-osx"></a>
+5.4. ��������� Connector/ODBC DSN � macOS</h2>
+<p>����� ����������� DSN �� macOS, ����� ������������ ������� ���������
+������ (<span class="command"><strong>myodbc-installer</strong></span>),
+��������������� ���� <code class="filename">odbc.ini</code> � ��������
+<code class="filename">Library/ODBC</code> ��������� ��������
+������������ ��� ������������ ODBC Administrator GUI.</p>
+
+<p>ODBC Administrator ���� � OS X v10.5 � ����,
+������������ ����� ������� ������ OS X � macOS ������ ��������� �
+���������� ��� �������.</p>
+
+<p>����� ������� DSN � �������������� <span class="command"><strong>
+myodbc-installer</strong></span>, ���������� ������
+���������� ��� DSN � ������ ����������� DSN. ��������:</p>
+
+<pre class="programlisting">
+// With Connector/ODBC 8.0:
+shell&gt; myodbc-installer -a -s -t"DSN=mydb;DRIVER=MySQL ODBC 8.0 Driver;SERVER=mysql;USER=username;PASSWORD=pass"
+
+// With Connector/ODBC 5.3:
+shell&gt; myodbc-installer -a -s -t"DSN=mydb;DRIVER=MySQL ODBC 5.3 Driver;SERVER=mysql;USER=username;PASSWORD=pass"
+</pre>
+
+<p>����� ������������ ODBC Administrator:</p>
+<ul><li class="listitem"><p>��� ���������� ������ ODBC Administrator
+������������, ��� ���� <code class="filename">/Library/ODBC/odbc.ini</code>
+������ ���������� ����������� ���������� ODBC, � DSN ��������������� �������
+<code class="literal">admin</code>. ���� ���� ���� �� �������������� ����
+�������, �� ODBC Administrator ����� ��������� ������� ���, ����� ��������,
+��������, �� �� ���������� ���������� ������.</p></li>
+
+<li class="listitem"><p>��� �������� �������� � macOS ODBC Administrator
+� Connector/ODBC, ������� ����� �������������� ����, ����� �� ������� DSN,
+��������� ���� �����. � ���� ������ ����������� ��������� ������ ���
+�������������� ���� <code class="filename">odbc.ini</code> ��������.
+������������ DSN ��� ��, ������� �� ������� � �������������� �����������
+<span class="command"><strong>myodbc-installer</strong></span>, ����� ��� ���
+���� ��������� � ��������������� � �������������� ODBC Administrator.
+</p></li></ul>
+
+<ol type="1"><li class="listitem"><p>�������� ODBC Administrator �� �����
+<code class="filename">Utilities</code> �
+<code class="filename">Applications</code>.</p>
+
+<a name="figure-myodbc-osx-odbcadmin-main"></a>
+<p><b>���. 5.6. ������ <code class="literal">ODBC Administrator</code></b>
+</p><img src="images/myodbc-osx-odbcadmin-main.png" width="663" height="463"
+alt='Shows an empty ODBC Administrator dialog with the "System DSN" tab open.
+This tab includes "Add", "Remove", and "Configure" options. Additional tabs
+are "User DSN", "Drivers", "Tracing", "Connection Pooling", and "About".'>
+<br class="figure-break"></li>
+
+<li class="listitem"><p>
+�� ������� <code class="literal">ODBC Administrator</code> ��������
+<span class="guilabel">User DSN</span> ���
+<span class="guilabel">System DSN</span> � �������
+<span class="guibutton">Add</span>.</p></li>
+
+<li class="listitem"><p>�������� ������� Connector/ODBC � �������
+<span class="guibutton">OK</span>.</p></li>
+<li class="listitem"><p>��������� ������ <code class="literal">Data Source
+Name</code> (DSN). ������� <code class="literal">Data Source Name</code> �
+�������� <code class="literal">Description</code> ��� DSN.</p>
+
+<a name="figure-myodbc-osx-odbcadmin-adddsn"></a>
+<p><b>���. 5.7. ������ <code class="literal">ODBC Administrator Data Source
+Name</code></b></p><img src="images/myodbc-osx-odbcadmin-adddsn.png"
+width="664" height="463" alt="Content is described in the surrounding text.">
+<p><br class="figure-break"></p></li>
+
+<li class="listitem"><p>������� <span class="guibutton">Add</span>, �����
+�������� ����� ���� ��������� �����/�������� � ������. ���������� �� �������
+���� ������ ����, ����� ���������� ���������
+the <code class="literal">server</code>,
+<code class="literal">username</code>, <code class="literal">password</code>
+� <code class="literal">database</code>, ��.
+<a href="#connector-odbc-configuration-connection-parameters">
+������ 5.2</a>.</p></li>
+
+<li class="listitem"><p>������� <span class="guibutton">OK</span>, �����
+�������� DSN � ������ ����������� ���� ���������� ������.</p></li></ol>
+<p>����������� ������������ DSN ����� ���� ������� �� ���:</p>
+
+<a name="figure-myodbc-osx-odbcadmin-sampledsn"></a>
+<p><b>���. 5.8. ������� <code class="literal">ODBC Administrator DSN</code>
+</b></p><img src="images/myodbc-osx-odbcadmin-sampledsn.png"
+width="520" height="290" alt='Shows an example Data Source Name dialog with
+"Data Source Name" set to WorldSample and "Description" set to "Connection to
+sample World database." Also shown are the following key=value pairs:
+server=mysql, user=sakila, password=Sample, and database=test_world.'>
+<br class="figure-break">
+
+<p>����� ����������� ������ �������� ODBC � DSN, �������� ���������� ����
+��������� �����/�������� � ������������ ��������������� ��������. ����������
+<a href="#connector-odbc-configuration-connection-parameters">
+������ 5.2</a>.</p>
+
+<h2><a name="connector-odbc-configuration-dsn-unix"></a>
+5.5. ������������ Connector/ODBC DSN � Unix</h2>
+<p>� <code class="literal">Unix</code> �� ���������� ������ DSN
+��������������� � ����� <code class="filename">odbc.ini</code>.
+��� �������� ���� <code class="filename">odbc.ini</code>, ������� ���������
+<code class="literal">myodbc8w</code> (Unicode)
+<code class="literal">myodbc8a</code> (ANSI) ��� ����� DSN
+��� Connector/ODBC 8.0:</p>
+
+<pre class="programlisting">
+;
+;odbc.ini configuration for Connector/ODBC 8.0 driver
+;
+
+[ODBC Data Sources]
+myodbc8w = MyODBC 8.0 UNICODE Driver DSN
+myodbc8a = MyODBC 8.0 ANSI Driver DSN
+
+[myodbc8w]
+Driver = /usr/local/lib/libmyodbc8w.so
+Description= Connector/ODBC 8.0 UNICODE Driver DSN
+SERVER = localhost
+PORT =
+USER = root
+Password =
+Database = test
+OPTION = 3
+SOCKET =
+
+[myodbc8a]
+Driver = /usr/local/lib/libmyodbc8a.so
+Description= Connector/ODBC 8.0 ANSI Driver DSN
+SERVER = localhost
+PORT =
+USER = root
+Password =
+Database = test
+OPTION = 3
+SOCKET =
+</pre>
+
+<p>��. <a href="#connector-odbc-configuration-connection-parameters">
+������ 5.2</a> ��� ������ ���������� �����, ������� ����� �����������.</p>
+<p>���� �� ����������� <code class="literal">unixODBC</code>,
+����� ������������ ��������� �����������, ����� ��������� DSN:</p>
+
+<ul><li class="listitem"><p>
+<code class="literal">ODBCConfig</code> GUI tool
+(<a href="../../../www.unixodbc.org/config.html" target="_top">HOWTO:
+ODBCConfig</a>).</p></li>
+<li class="listitem"><p><code class="literal">odbcinst</code>.</p></li></ul>
+
+<p>� ��������� �������, ��������� <code class="literal">unixODBC</code>,
+�� ����� �� �������� ��� ������:</p>
+<pre class="programlisting">
+Data source name not found and no default driver specified
+</pre>
+
+<p>���� ��� ����������, ��������������, ��� ���������� ���������
+<code class="literal">ODBCINI</code> �
+<code class="literal">ODBCSYSINI</code> ��������� �� ����
+<code class="filename">odbc.ini</code>. ��������, ���� ��� ����
+<code class="filename">odbc.ini</code> ����� �
+<code class="filename">/usr/local/etc</code>,
+���������� ���������� ���������:</p>
+
+<pre class="programlisting">
+export ODBCINI=/usr/local/etc/odbc.ini
+export ODBCSYSINI=/usr/local/etc
+</pre>
+
+<h2><a name="connector-odbc-configuration-connection-without-dsn"></a>
+5.6. ���������� ��� ����������������� DSN</h2>
+<p>����� ����������� � �������������� ������� MySQL
+<code class="literal">SQLDriverConnect</code>, ��������� ���� �����
+<code class="literal">DRIVER</code>. ��� ������ ����������� ���
+Connector/ODBC, ������������� ���������� ��� DSN:</p>
+
+<h3><a name="idm139746780617440"></a>��� Connector/ODBC 8.0:</h3>
+<pre class="programlisting">
+ConnectionString = "DRIVER={MySQL ODBC 8.0 Driver};\
+   SERVER=localhost;\
+   DATABASE=test;\
+   USER=venu;\
+   PASSWORD=venu;\
+   OPTION=3;"
+</pre>
+
+<p>�������� <span class="quote">MySQL ODBC 8.0 Driver</span> �� ���, ���
+������� �� ���������������� ���� ������� Connector/ODBC � ��������� ���������
+ODBC, ���� ��� ����������. ���� ��� ���� ���������������� ���������������
+��������� ����� �����, �������������� ��������, � ������, ���������������
+���������� ������ ����������� ��� ������������ ������� ������ ���
+������������ ����� ������������ �������������������, ������� �� ���������
+������������� �������. ��������:</p>
+
+<pre class="programlisting">
+ConnectionString = "DRIVER={MySQL ODBC 8.0 Driver};"
+   "SERVER=localhost;"
+   "DATABASE=test;"
+   "USER=venu;"
+   "PASSWORD=venu;"
+   "OPTION=3;"
+</pre>
+
+<p>� macOS ��, ��������, ������ ���� �� ���������� ������ ���� � ����������
+�������� Connector/ODBC.</p>
+<p>��. <a href="#connector-odbc-configuration-connection-parameters">
+������ 5.2</a> ��� ������ ���������� �����, ������� ����� ��������������.</p>
+
+<h2><a name="connector-odbc-configuration-connection-pooling"></a>
+5.7. ����������� ����� ODBC</h2>
+<p>����������� ����� ��������� �������� ����� ������������ ������������ �����
+� ������ ����� ������ �� ���� ������, ������ ����, ����� ������� ����� �����
+������ ���, ����� � ���� ������ �������� ������. �������� ����������� �����,
+����� �������� ����� ������������������ ������ �������, ������� �����,
+�����������, ����� ������� ����� � ����� ������.</p>
+
+<p>��� ��������� �������������� ���������� �� ����������� ����� ��.
+<a href="../../../support.microsoft.com/default.aspx@scid=kb;EN-US;q169470"
+target="_top">http://support.microsoft.com/default.aspx?scid=kb;EN-US;q169470
+</a>.</p>
+
+<h2><a name="connector-odbc-configuration-trace"></a>
+5.8. ��������� ����� ����������� ODBC</h2>
+<p>���� �� ������������� � ����������� ��� ���������� � Connector/ODBC,
+��������� ���� ������� �� <code class="literal">ODBC Manager</code> �
+Connector/ODBC. ��� �������� <span class="firstterm">������������</span>
+� ��������� ����� �������� ODBC. ��������� ����� ���������� ��� Windows,
+macOS � Unix.</p>
+
+<h3><a name="connector-odbc-configuration-trace-windows"></a>
+5.8.1. ��������� ����������� ODBC � Windows</h3>
+<p>����� �������� ����������� � Windows:</p>
+
+<ol type="1"><li class="listitem"><p>
+������� <code class="literal">Tracing</code> ����������� ����
+ODBC Data Source Administrator ��������� ��� ����������� ������, �������
+�������������� ������ ������� ODBC.</p>
+
+<a name="figure-myodbc-win-tracing"></a>
+<p><b>���. 5.9. ������ ODBC Data Source Administrator Tracing</b></p>
+<img src="images/myodbc-win-tracing.png" width="462" height="385"
+alt='Tracing example includes the "Log File Path" and "Custom Trace DLL"
+values set, along with buttons to "Start Tracing Now" and
+"Start Visual Studio Analyzer".'><br class="figure-break"></li>
+
+<li class="listitem"><p>����� �� ����������� ������������ � �������
+<code class="literal">Tracing</code>, <code class="literal">Driver
+Manager</code> ����� ��� ������ ������� ODBC
+��� ���� ������������ ���������� ����������.</p></li>
+
+<li class="listitem"><p>������ ������� ODBC �� ����������, ����������
+����� ���������� ������������, �� ����������������. ������ ������� ODBC
+���������������� � ����� �������, ������� �� �����������.</p></li>
+
+<li class="listitem"><p>������������ ������������ ������ ����� ����, ���
+�� �������� <code class="literal">Stop Tracing Now</code>.
+�������, ���, � �� ����� ��� ������������ ����, ���� ������� ����������
+������������� � ������� � ��� ������������ ������ �� ���������� ����
+����� �������� � ODBC.</p></li></ol>
+
+<h3><a name="connector-odbc-configuration-trace-osx"></a>
+5.8.2. ��������� ����������� ODBC � macOS</h3>
+<p>����� ��������� ����������� � macOS, ����������� �������
+<code class="literal">Tracing</code> �
+<span class="application">ODBC Administrator</span>.</p>
+
+<ol type="1"><li class="listitem"><p>
+�������� <span class="application">ODBC Administrator</span>.</p></li>
+<li class="listitem"><p>�������� ������� <code class="literal">Tracing
+</code>.</p>
+
+<a name="figure-myodbc-osx-odbcadmin-tracing"></a>
+<p><b>���. 5.10. ������ ODBC Administrator Tracing</b></p>
+<img src="images/myodbc-osx-odbcadmin-tracing.png" width="665" height="464"
+alt='Shows a default Tracing dialog with options including file locations for
+the "Log File" and "Custom Trace Library", and a checkbox to enable or
+disable tracing.'><br class="figure-break"></li>
+
+<li class="listitem"><p>
+�������� ����� <code class="literal">Enable Tracing</code>.</p></li>
+<li class="listitem"><p>������� �����, ����� ��������� ������.
+����� �������� ���������� � ������������� ����� �������, ������� ������
+<span class="guibutton">Choose...</span>.</p></li></ol>
+
+<h3><a name="connector-odbc-configuration-trace-unix"></a>
+5.8.3. ��������� ����������� ODBC � Unix</h3>
+<p>����� �������� ����������� � OS X 10.2 (� �����) ��� � Unix, ��������
+����� <code class="literal">trace</code> � ������������ ODBC:</p>
+
+<ol type="1"><li class="listitem"><p>� Unix ���� ���������� �����
+<code class="literal">Trace</code> � �����
+<code class="filename">ODBC.INI</code>.</p>
+
+<p>���������� ������������ <code class="literal">ON</code> ���
+<code class="literal">OFF</code>, ��������� ���������
+<code class="literal">TraceFile</code> � <code class="literal">Trace</code> �
+<code class="filename">odbc.ini</code>:</p>
+
+<pre class="programlisting">
+TraceFile= /tmp/odbc.trace
+Trace= 1
+</pre>
+
+<p><code class="literal">TraceFile</code> ���������� ��� � ������ ���� �����
+�����������, <code class="literal">Trace</code> ��������������� �
+<code class="literal">ON</code> or <code class="literal">OFF</code>.
+����� ����� ������������ <code class="literal">1</code> ���
+<code class="literal">YES</code> ��� <code class="literal">ON</code> �
+<code class="literal">0</code> ��� <code class="literal">NO</code> ���
+<code class="literal">OFF</code>. ��� �������������
+<span class="command"><strong>ODBCConfig</strong></span> ��
+<code class="literal">unixODBC</code> �������� ����������� ��� ������������
+������� <code class="literal">unixODBC</code> �
+<a href="../../../www.unixodbc.org/config.html" target="_top">
+HOWTO-ODBCConfig</a>.</p></li></ol>
+
+<h3><a name="connector-odbc-configuration-trace-log"></a>
+5.8.4. ��������� ������� Connector/ODBC</h3>
+<p>����� ���������� ����������� Connector/ODBC, �������� ���������:</p>
+
+<ol type="1"><li class="listitem"><p>� Windows �������� �����
+<code class="literal">Trace Connector/ODBC</code> �� ������
+Connector/ODBC connect/configure. ������ ������� � ����
+<code class="filename">C:\myodbc.log</code>. ���� ����� �� ������������,
+����� �� ������������� � ��������������� ������, ��� ��������, ��� �� ��
+����������� ������� <code class="filename">myodbcd.dll</code>, ��.
+<a href="#connector-odbc-configuration-dsn-windows-problems">
+������ 5.3.3</a>.</p>
+
+<p>� macOS, Unix ��� ��� ������������� ���������� ��� DSN,
+������� <code class="literal">OPTION=4</code> � ������ ����������� ���
+��������������� ���� ��������� �����/�������� � DSN.</p></li>
+
+<li class="listitem"><p>��������� ���� ���������� � ����������� ��������� ���
+������� �������. ��������� ���� ����������� Connector/ODBC, ����� ������ ��,
+��� ����� ���� ������������.</p></li></ol>
+
+<p>���� �� ���������� � ������, ��������� ��� �� ���, ����������
+<a href="connector-odbc-support.html#connector-odbc-support-community">
+������ 9.1</a>.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // ������������� ��������
+    var begun_auto_limit            =              5;     // ����� ���������� ��������� �� ��������
+    var begun_auto_width            =            250;     // ������ ����� ����������
+    begun_auto_colors[0]            =      '#0000CC';     // ���� ������ ����������
+    begun_auto_colors[1]            =      '#000000';     // ���� ������ ����������
+    begun_auto_colors[2]            =      '#00CC00';     // ���� ������ ����������
+    begun_auto_colors[3]            =      '#FFFFFF';     // ���� ���� ����� ����������
+    begun_auto_fonts_size[0]        =          '9pt';     // �-��� ������ ������ ����������
+    begun_auto_fonts_size[1]        =          '9pt';     // �-��� ������ ������ ����������
+    begun_auto_fonts_size[2]        =          '8pt';     // �-��� ������ ������ ����������
+    begun_auto_fonts_size[3]        =          '8pt';     // �-��� ������ ��������
+    var begun_block_type            =     'Vertical';     // ��� �����
+    var begun_rambler_type          =              1;     // ���� ����� ������ �������
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>�����</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">�� �����</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">� �������</label></font></td></tr>
+<tr><td><input type="submit" value="�����" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>����� ����� ������!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>�� ������ <A HREF="mailto:alexey.v.pautov@mail.ru">
+��������� ������</A> �������������� ���� ���������, ������� �������.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\3.ОСНОВЫ.dir\3.8.Удаление_и_переименование_файлов.dir\cat.3.8.Удаление_и_переименование_файлов.dir\dir.3.8.Удаление_и_переименование_файлов.dir.md">3.8.Удаление_и_переименование_файлов.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\3.ОСНОВЫ.dir\3.8.Удаление_и_переименование_файлов.dir\3.8.Удаление_и_переименование_файлов.md">3.8.Удаление_и_переименование_файлов.md</a>
+        - *## git rm

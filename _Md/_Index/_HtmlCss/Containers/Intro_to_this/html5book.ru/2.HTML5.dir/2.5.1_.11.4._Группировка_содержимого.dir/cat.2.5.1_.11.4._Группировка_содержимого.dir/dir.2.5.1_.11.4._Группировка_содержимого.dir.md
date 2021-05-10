@@ -1,0 +1,20 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.5.1_.11.4._Группировка_содержимого.dir\cat.2.5.1_.11.4._Группировка_содержимого.dir\dir.2.5.1_.11.4._Группировка_содержимого.dir.md">2.5.1_.11.4._Группировка_содержимого.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.5.1_.11.4._Группировка_содержимого.dir\2.5.1_.11.4._Группировка_содержимого.md">2.5.1_.11.4._Группировка_содержимого.md</a>
+        - *## [1.11.4. Группировка содержимого](https://html5book.ru/gruppirovka-soderzhimogo)
+        - *### 1. Элемент \<p>
+        - *### 2. Элемент \<address>
+        - *### 3. Элемент \<hr>
+        - *### 4. Элемент \<pre>
+        - *#### in [_src/1.html](_src/1.html)
+        - *### 5. Элемент \<blockquote>
+        - *### 6. Элемент \<ol>
+        - *#### АТРИБУТЫ ЭЛЕМЕНТА <OL
+        - *### 7. Элемент \<ul>
+        - *### 8. Элемент \<li>
+        - *### 9. Элемент \<dl>
+        - *### 10. Элемент \<dt>
+        - *### 11. Элемент \<dd>
+        - *### 12. Элемент \<figure>
+        - *### 13. Элемент \<figcaption>
+        - *### 14. Элемент \<main>
+        - *### 15. Элемент \<div>

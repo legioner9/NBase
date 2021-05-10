@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\roadmap_diagram\cat.roadmap_diagram\dir.roadmap_diagram.md">roadmap_diagram</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\roadmap_diagram\roadmap_diagram.md">roadmap_diagram.md</a>
+        - *# <a href="https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/roadmap_diagram.html" target="_blank">Roadmap Diagrams</a>  Диаграммы дорожной карты

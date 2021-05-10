@@ -1,0 +1,1358 @@
+
+//****************************************************************************************
+var x_h_metka = 0;
+var x_anim = 0;
+var flak_plank = 0;
+var buffer_html = '';
+var buffer_theme = '';
+var buffer_source = '';
+var typertype = 1;
+var metko = 0;
+
+
+
+//****************************************************************************************
+
+function validEmail(item){
+	var pattern = new RegExp(/^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i);
+    if(pattern.test(item.val()))
+	{
+		item.removeClass("error");
+		return 1;
+	}
+	else
+	{
+		item.addClass("error");
+		return 0;
+	}		
+}
+
+jQuery.fn.flakrk = function () {
+	zkz = this.position().top-86;
+	return parseInt(zkz);
+}
+
+jQuery(window).scroll(function() {
+	p = 0;
+	
+/*	if($('.rk_b_otziv_list').length > 0){
+		p = $('.rk_b_otziv_list').flakrk();
+	}else if($('#pagecompanystats').length > 0){
+		p = $('#pagecompanystats').flakrk();
+	}else if($('.menu_rk_stike').length > 0){
+		p = $('.menu_rk_stike').flakrk();
+	}else if($('.rewiew_straik_rk').length > 0){
+		p = $('.rewiew_straik_rk').flakrk();
+	}else{
+		p = 0;
+	}*/
+	
+	if(p > 0){
+		if(($(window).scrollTop() > p)&&(x_h_metka == 0)&&(x_anim == 0)&&($(window).width() > 980))
+		{
+			x_h_metka = 1;
+			$('.rk_fil_base').addClass('fix');
+			$('.front.side').addClass('pt-page-moveToTopFade');
+			$('.back.side').addClass('current').addClass('pt-page-rotateUnfoldBottom');
+			setTimeout('$(".front.side").removeClass("current").removeClass("pt-page-moveToTopFade");$(".back.side").removeClass("pt-page-rotateUnfoldBottom"); x_anim = 1;', 400);
+
+		}
+		else if(($(window).scrollTop() < p)&&(x_h_metka == 1)&&(x_anim == 1)&&($(window).width() > 980))
+		{
+			x_h_metka = 0;
+			$('.rk_fil_base').removeClass('fix');
+			$('.back.side').addClass('pt-page-rotateFoldBottom');
+			$('.front.side').addClass('current').addClass('pt-page-moveFromTopFade');
+			setTimeout('$(".back.side").removeClass("current").removeClass("pt-page-rotateFoldBottom");$(".front.side").removeClass("pt-page-moveFromTopFade"); x_anim = 0;', 400);
+
+		}
+	}
+	
+	if($('.blok_mark_rk').length > 0){
+		if($(window).scrollTop() > $(".blok_mark_rk").position().top-$(window).height())
+		{
+			loadCompBlog(0);
+		}
+	}
+	
+/*	if($(window).scrollTop() >= ($('.rk_show[rels="'+flak_plank +'"]').offset().top-$(window).height()/2)){
+		$('.rk_show[rels="'+flak_plank +'"]').removeClass('rk_show').addClass('show');
+		flak_plank = flak_plank+1;
+	}*/
+	
+});
+
+function formRefresh()
+{
+	$('.rk_type_f option[rel="0"]').attr("selected", "selected");
+	$('.tema_rk').val('');
+	$('.date_rk').val('');
+	$('.phone_rk').val('');
+	$('.name_rk').val('');
+	$('.email_rk').val('');
+	$('.subject_rk').val('');
+	$('.comm_rk').val('');
+}
+
+function explode( delimiter, string ) {	
+
+	var emptyArray = { 0: '' };
+
+	if ( arguments.length != 2
+		|| typeof arguments[0] == 'undefined'
+		|| typeof arguments[1] == 'undefined' )
+	{
+		return null;
+	}
+
+	if ( delimiter === ''
+		|| delimiter === false
+		|| delimiter === null )
+	{
+		return false;
+	}
+
+	if ( typeof delimiter == 'function'
+		|| typeof delimiter == 'object'
+		|| typeof string == 'function'
+		|| typeof string == 'object' )
+	{
+		return emptyArray;
+	}
+
+	if ( delimiter === true ) {
+		delimiter = '1';
+	}
+
+	return string.toString().split ( delimiter.toString() );
+}
+
+jQuery(window).resize(function(){
+   if($('.rk_blog_block').length > 0){
+		gogoBlog(1);
+   }
+   h = $(window).height();
+   w = $(window).width();
+   
+   if(((parseInt($('#pagewrap').attr('rel'))-w) > 30 || (parseInt($('#pagewrap').attr('rel'))-w) < 30))
+   {
+		$('#pagewrap').attr('rel', w + parseInt($('#pagewrap').attr('rel4')));
+   }
+   
+    if(w < 1540){
+	   $('.rk_show_control').parent().removeClass('show');
+	}
+
+   
+   $('#pagewrap').attr('rel2', h);
+  
+   if($('#pagewrap').attr('rel5') == 1)
+   {	  
+	  $('#pagewrap').css("height", (parseInt($('#pagewrap').attr('rel2'))+parseInt($('#pagewrap').attr('rel6'))));	 
+   }
+   $('#pagewrap').css("width", parseInt($('#pagewrap').attr('rel')));
+});
+
+function gogoBlog(flak_b)
+{
+
+	var blogList = $("#content #pageblog .rk_blog_list").filter(":first");
+	var contentColumnsCount = parseInt(blogList.width() / 320);
+	var contentColumns = blogList.children("._specialCol");
+	var newBlocks = blogList.children(".rk_blog_block");
+	
+	var currIndex = 0;
+	var contentColsTotalH = [];
+	for (var i = 0; i < contentColumnsCount; i += 1)
+	{
+		contentColsTotalH.push(0);
+	}
+	
+	if (contentColumns.length != contentColumnsCount)
+	{
+		var contentBlocks = $(".rk_blog_block");
+		var firstContentBlockCols = parseInt(contentBlocks.eq(0).width() / 310);
+
+		//Главный div с контентом становится "таблицей".
+		if (blogList.attr("class").indexOf("columns") === -1)
+		{
+			blogList.attr("class", blogList.attr("class") + " columns");
+		}
+		
+		//Главный div с контентом центрирует всё содержимое.
+		if (blogList.attr("class").indexOf("center") === -1)
+		{
+			blogList.attr("class", blogList.attr("class") + " center");
+		}
+
+		//Вставка нужного кол-ва "столбцов".
+		for (var i = 1; i <= contentColumnsCount; i++)
+		{
+			if (i <= firstContentBlockCols && i != 1)
+			{
+				blogList.append("<div class='_specialCol column col4' style='margin-top: " + (contentBlocks.eq(0).height() + 40) + "px;'></div>");
+			}
+			else
+			{
+				blogList.append("<div class='_specialCol column col4'></div>");
+			}
+		}
+		
+		contentColumns = blogList.children("._specialCol");
+		
+		for (var i = 0; i < contentColsTotalH.length; i += 1)
+		{
+			contentColsTotalH[i] = parseInt(contentColumns.eq(contentColumns.length - contentColumnsCount + i).css('margin-top'))+ 
+								   parseInt(contentColumns.eq(contentColumns.length - contentColumnsCount + i).css('padding-top'));
+		}
+
+		//Размещаем блоки с контентом по "столбцам".
+		contentBlocks.each(function()
+		{
+			//Находим самый маленький столбец с контентом.
+			for (var i = 0; i < contentColsTotalH.length; i += 1)
+			{
+				if (contentColsTotalH[i] < contentColsTotalH[currIndex])
+				{
+					currIndex = i;
+				}
+			}
+			
+			contentColumns.eq(currIndex - contentColumnsCount).append($(this));
+			contentColsTotalH[currIndex] += $(this).outerHeight(true);
+			$(this).css('margin-bottom', "20px");
+		});
+		
+		//Удаление лишних column div'ов.
+		contentColumns.slice(0, contentColumns.length - contentColumnsCount).detach();
+	}
+	else if (newBlocks.length > 0)
+	{
+		var tempColumnObjects;
+		for (var i = 0; i < contentColsTotalH.length; i += 1)
+		{
+			tempColumnObjects = contentColumns.eq(i).children(".rk_blog_block");
+			contentColsTotalH[i] = parseInt(contentColumns.eq(contentColumns.length - contentColumnsCount + i).css('margin-top'))+ 
+								   parseInt(contentColumns.eq(contentColumns.length - contentColumnsCount + i).css('padding-top'));
+			for (var j = 0; j < tempColumnObjects.length; j += 1)
+			{
+				contentColsTotalH[i] += $(tempColumnObjects[j]).outerHeight(true);
+			}
+		}
+		
+		newBlocks.each(function()
+		{
+			//Находим самый маленький столбец с контентом.
+			for (var i = 0; i < contentColsTotalH.length; i += 1)
+			{
+				if (contentColsTotalH[i] < contentColsTotalH[currIndex])
+				{
+					currIndex = i;
+				}
+			}
+
+			contentColumns.eq(currIndex).append($(this));
+			contentColsTotalH[currIndex] += $(this).outerHeight(true);
+			$(this).css('margin-bottom', "20px");
+		});
+	}
+	
+	blogList.css('width', 'auto');
+	$('#pageblog').css('height', 'auto');
+	$('.invis').css('display', 'none').removeClass('invis');
+	blogList.append('<span class="blok_mark_rk" style="display: block; position: relative;"></span>');
+}
+
+
+function inwydla()
+{	
+
+	var div = document.createElement('div');      
+	div.style.overflowY = 'scroll';
+	div.style.width =  '50px';
+	div.style.height = '50px';
+	div.style.visibility = 'hidden';
+	document.body.appendChild(div);
+	var scrollWidth = div.offsetWidth - div.clientWidth;
+	document.body.removeChild(div);
+	return scrollWidth;
+}
+
+function loadModal(sd, bd, sp)
+{
+	
+	$.ajax({
+				url: ("https://www.uznai24.su/ajax/loadModal/"+sd+"/"+bd),
+				type: 'POST',
+				dataType: 'html', 
+				data: {datastr: sp},
+				success: function(data){
+					$('#pagewrap').after(data);
+					
+					mdopen(1);
+				}
+	});
+}
+
+function loadRait(sd)
+{
+	$('.rk_raiting_container').css('display', 'none');
+	$('.rk_pagin_rait').remove();
+	$.ajax({
+				url: ("/ajax/loadRait/1"),
+				type: 'POST',
+				dataType: 'html', 
+				data: {zapr: sd},
+				success: function(data){
+					$('.rk_raiting_container').html(data);					
+					$('.rk_raiting_container').fadeIn();
+				}
+	});
+}
+
+
+function mdopen(index)
+{
+	
+	//$('.rk_type_f option[rel="'+index+'"]').attr("selected", "selected");
+	$('#pagewrap').attr('rel5', 1);
+	$('#pagewrap').attr('rel6', ($(window).scrollTop()));
+	$('#pagewrap').attr('rel3', $(window).scrollTop());
+	$('#pagewrap').css("height", (parseInt($('#pagewrap').attr('rel2'))+parseInt($(window).scrollTop())));
+	$('#pagewrap').css("margin-top", -1*($(window).scrollTop()));
+	$('#pagewrap').css("width", parseInt($('#pagewrap').attr('rel')));
+	$('#pagewrap').css('overflow', 'hidden');
+	$(".modallayer .datepicker").datepicker();
+	
+	if($('.rk_file').length > 0){
+		
+		var button = $('.rk_file'), interval;
+		$.ajax_upload(button, {
+							action : '/ajax/uploadfile',
+							name : 'myfile',
+							onSubmit : function(file, ext) {
+								$(".load").css('width','50%');
+								$(this).parent().next(2);						
+								this.disable();
+							},
+							onComplete : function(file, response) {
+								$(".load").css('width','100%');	
+								obj = jQuery.parseJSON(response);
+								this.enable();
+								$('.rk_file_buf').addClass('column span12 row');
+								if(obj.error == 1)
+								{
+									$('<div data-rel="'+obj.file+'" class="file col8 column left tpdngsmall bpdngsmall smallcaption file_rk_b">'
+										+'<span class="filename">'+obj.oldname+'</span>'
+										+'<span class="del control">Удалить</span>'
+									+'</div>').appendTo('.filesbox_rk');				
+								}
+							}
+				});
+				
+	}
+}
+
+function mdclose()
+{
+	$('#pagewrap').attr('rel5', 0);
+	$('#pagewrap').css("height", '');		
+	$('#pagewrap').css("margin-top", '');
+	$('#pagewrap').css("width", parseInt($('#pagewrap').attr('rel')));
+	$('.modallayer').remove();	
+	$('#pagewrap').css('overflow', '');
+	$("body,html").animate({"scrollTop":$('#pagewrap').attr('rel3')},0);
+}
+
+jQuery.expr[":"].Contains = jQuery.expr.createPseudo(function(arg) {
+    return function( elem ) {
+        return jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+    };
+})
+
+function loadCompAlf(par)
+{
+	$.ajax({
+				url: ("/ajax/loadAlf/"+par),
+				type: 'POST',
+				dataType: 'html', 
+				data: {},
+				success: function(data_a){
+								$('.tablalf_rk').html(data_a);
+								$('.block_rk').css('display', 'none');
+								$('.block_rk[rel='+$('.selected.alf_min_rk').attr('rel')+']').fadeIn("slow");	
+							}
+	});
+}
+
+function loadCompOtziv(flak, id, page, numnum)
+{
+
+	$.ajax({
+				url: ("/ajax/loadOtzivPage/"+flak),
+				type: 'POST',
+				dataType: 'html', 
+				data: {comp: id
+						,page: page
+						,numnum: numnum},
+				success: function(data){
+								$('.rk_bd_otz').html(data);
+								$('.rk_bd_otz').css('display', 'none');
+								$('.rk_bd_otz').fadeIn("slow");	
+								$('.rk_zag_com_otz').html($('.rk_filter_go[rel="'+flak+'"]').attr('rel3')+' компании '+h1buf);																
+							}
+	});
+}
+
+window.addEventListener('popstate', function(event) { 
+	var xxg = 0;
+	if(!!event.state){
+		xxg = event.state;
+	}else
+	{
+		xxg = 1;
+	}
+	loadCompOtziv(flak_r, comp, xxg, numnum);
+},  false); 
+
+function loadCompBlog(flak_b)
+{
+	if(location.pathname !== "/search") {
+		$('.blok_mark_rk').remove();
+		$.ajax({
+					url: ("/ajax/loadBlog/"+typertype),
+					type: 'GET',
+					dataType: 'html', 
+					data: {page: pg, metkor: metko},
+					success: function(data_b){
+									if(flak_b == 0){
+										$('#pageblog .rk_blog_list').append(data_b);
+										//$('.rk_blog_block[rel="x"]').addClass('invis');
+									}
+									else if(flak_b == 1){
+										$('#pageblog .rk_blog_list').html(data_b);
+									}								
+									gogoBlog(1);
+									pg = pg + 1;
+								}
+		});
+	}
+}
+
+/**************************служеб модал окон**************/
+
+function sayError(sd){
+	$('.modallayer > .window').removeClass('shake');
+	setTimeout("$('.modallayer > .window').addClass('active').addClass('shake');", 200);
+	$('.rk_error_block').addClass('show');
+	$('.rk_error_block').html(sd);
+}
+
+function sleepError(){
+	$('.modallayer > .window').removeClass('shake');
+	$('.rk_error_block').removeClass('show');
+	$('.rk_error_block').html('<span class="hint col8 column left">Сообщение об ошибкe</span>');
+}
+
+/**************************регистрация компании**************/
+
+function regComp(sd){
+	$.ajax({
+			url: ("/ajax/regCompZapr/1"),
+			type: 'POST',
+			dataType: 'json', 
+			data: {url: $('.rk_url').val() 
+				   ,email: $('.rk_email').val()
+				   ,name: $('.rk_name').val()
+				   },
+			success: function(data){
+				stepnext(2);
+				$('.rk_finish').attr('href', '/company/'+data.result);
+			}
+	});
+}
+
+/**************************Позитивы и негативы**************/
+
+function PosNegIns(sd){
+	$.ajax({
+			url: ("/ajax/PosNegPlus/1"),
+			type: 'POST',
+			dataType: 'json', 
+			data: {idposneg: sd.attr('data-rel')
+				   },
+			success: function(data){
+				$('#tp_'+sd.attr('data-rel')).html(parseInt($('#tp_'+sd.attr('data-rel')).html())+1);
+			}
+	});
+}
+
+function PosNegGO(sd){
+	$.ajax({
+			url: ("/ajax/PosNegGo/1"),
+			type: 'POST',
+			dataType: 'json', 
+			data: {ispos: sd
+					,idcompany: $('.like').attr('rel')
+					,desc: $('.posneg[rel="'+sd+'"]').val()
+				   },
+			success: function(data){
+				str = '<div class="tr"><div class="columns"><div class="label col4 column"><span>'+$('.posneg[rel="'+sd+'"]').val()+'</span></div><div class="digit col2 column right"><span>1</span></div></div></div>';
+				$('.posneg[rel="'+sd+'"]').parent().parent().before(str);
+			}
+	});
+}
+
+/**************************сменить пароль**************/
+
+function changePas(sd){
+	$.ajax({
+			url: ("/ajax/changePswUsr/1"),
+			type: 'POST',
+			dataType: 'json', 
+			data: {oldpass: $('.modallayer .rk_old_psw').val() 
+				   ,newpass: $('.modallayer .rk_psw').val()
+				   },
+			success: function(data){
+				if(data.result == 1){
+					stepnext(2);
+				}else{
+					$('.modallayer .rk_old_psw').addClass('error');
+					sayError("<span class='hint col"+$('.modallayer').attr('rel-data')+" column left'>Неверный старый пароль</span>");
+				}
+			}
+	});
+}
+
+/**************************напишите нам**************/
+
+function sendMailUs(sd){
+	$.ajax({
+			url: ("/ajax/askUs/1"),
+			type: 'POST',
+			dataType: 'json', 
+			data: {name: $('.rk_name').val() 
+				   ,email: $('.rk_email').val()
+				   ,source: $('.rk_source').val()},
+			success: function(data){
+				stepnext(2);
+			}
+	});
+}
+
+/************************Отправка заявки****************/
+
+function sendOrder(sd, flak){
+	$.ajax({
+			url: ("https://www.uznai24.su/ajax/sendOrder/"+flak),
+			type: 'POST',
+			dataType: 'json', 
+			data: {name: $('.modallayer .rk_name').val() 
+				   ,theme: $('.modallayer .rk_theme').val()
+				   ,type: $('.modallayer .rk_type').val()
+				   ,email: $('.modallayer .rk_email').val()
+				   ,predmet: $('.modallayer .rk_predmet').val()
+				   ,date: $('.modallayer .rk_date').val()
+				   ,phone: $('.modallayer .rk_phone').val()
+				   ,idcompany: sd},
+			success: function(data){
+				stepnext(3);
+			}
+	});
+}
+
+function sendOrderBlock(){
+	$.ajax({
+			url: ("/ajax/sendOrder/3"),
+			type: 'POST',
+			dataType: 'json', 
+			data: {name: $('.rk_from_to_form .rk_name').val() 
+				   ,theme: $('.rk_from_to_form .rk_theme').val()
+				   ,type: $('.rk_from_to_form .rk_type').val()
+				   ,email: $('.rk_from_to_form .rk_email').val()
+				   ,predmet: ''
+				   ,date: ''
+				   ,phone: $('.rk_from_to_form .rk_phone').val()
+				   ,idcompany: 12344444},
+			success: function(data){
+				$('.rk_from_to_form').addClass('result');
+				setTimeout(function(){ $('.rk_from_to_form').removeClass('result');}, 5000);
+			}
+	});
+}
+
+/************************Отправка отзыва***************/
+function stepnext(sd)
+{
+	if(sd < 3){
+		$('.modallayer .rk_steps').html(sd);
+	}else{
+		$('.modallayer .rk_shag_step').parents('h2').html('Заявка успешно отправлена');
+	}
+	$('.modallayer .step').removeClass('current');
+	$('.modallayer .step[rel="'+sd+'"]').addClass('current');
+}
+
+function changeBal(sd, pr, predel)
+{
+	flak = parseInt(sd.parent().children('.rk_zn').html());
+	final_flak = 0;
+	if(pr < 0){
+		if(flak > predel){final_flak = 1;}
+	}else{
+		if(flak < predel){final_flak = 1;}
+	}
+	if(final_flak == 1){
+		sd.parent().children('.rk_zn').html(flak+pr);
+		sd.parent().children('.rk_plus').removeClass('disabled');
+		sd.parent().children('.rk_minus').removeClass('disabled');
+		if((flak+pr) > 3){
+			sd.parent().children('.rk_zn').removeClass('medium').removeClass('low').addClass('high');
+		}else if((flak+pr) > 2){
+			sd.parent().children('.rk_zn').addClass('medium').removeClass('low').removeClass('high');
+		}else if((flak+pr) > 1){
+			sd.parent().children('.rk_zn').removeClass('medium').addClass('low').removeClass('high');
+		}
+		if(flak == predel-pr){
+			sd.addClass('disabled');
+		}
+	}
+}
+
+function validOtziv(predel, element, otvet, flaker)
+{
+	schet = 0;
+	error_log = '';
+	schetg = 0;
+	
+	while(schetg < predel){
+		err_mark = 0;
+		
+		if(!!element[schetg].val()){
+			if(!!flaker[schetg]){
+				if(flaker[schetg].test(element[schetg].val()))
+				{
+					schet = schet + 1;
+				}
+				else
+				{
+					err_mark = 1;
+				}
+			}
+			else{
+				schet = schet + 1;
+			}
+		}
+		else
+		{
+			err_mark = 1;
+		}
+		
+		colspan = 10;
+		
+		if(!!$('.modallayer').attr('rel-data')){
+			colspan = $('.modallayer').attr('rel-data');
+		}
+		
+		if(err_mark == 1)
+		{			
+			element[schetg].addClass('error');
+			error_log = error_log + "<span class='hint col"+colspan+" column left'>" + otvet[schetg] + "</span>";
+		}
+		
+		schetg  = schetg  + 1;
+	}
+	
+	if(schet < predel){	
+		sayError(error_log);
+	}
+
+	return schet;
+}
+
+
+function LoadHead()
+{
+	$.ajax({
+			url: ("/ajax/loadHeadOtz"),
+			type: 'POST',
+			dataType: 'html', 
+			data: {	type: $('.rk_type').val()
+					,type_name: $('.rk_type option:selected').html()
+					,theme: $('.rk_theme').val()
+					,number: $('.rk_numberorder').val()
+			},
+			success: function(data){
+				$('.rk_head_klav').removeClass('bmrgnsmall');
+				$('.rk_add_head').before(data);
+				$('.modallayer .form').removeClass('tpdngsmall');
+				
+				$('.rk_type').val(0);
+				$('.modallayer input[type="text"]').val('');
+				
+			}
+	});
+}
+
+
+function SendOtziv(idcomp)
+{
+	typer_rk = '';
+	order_rk = '';
+	schet = 0;
+	$('.step[rel="2"] .rk_head_klav').each(function(){
+		if(schet > 0){
+			typer_rk = typer_rk + ',';
+			order_rk = order_rk + ',';
+		}else{schet = 1}
+		typer_rk = typer_rk + $(this).children('.order').children('div').children('.type').attr('rel');
+		order_rk = order_rk + $(this).children('.order').children('div').children('.number').attr('rel');
+	});
+	$.ajax({
+			url: ("/ajax/insertOtziv/1"),
+			type: 'POST',
+			dataType: 'json', 
+			data: {idcompany: idcomp
+				   ,kachestvo: $('.rk_kac .rk_zn').html()
+				   ,sroki: $('.rk_srok .rk_zn').html()
+				   ,service: $('.rk_serv .rk_zn').html()
+				   ,cena: $('.rk_price .rk_zn').html()
+				   ,originality: 5
+				   ,rework: $('.rk_dor .rk_zn').html()
+				   ,recomendacii: 'Воздержусь'
+				   ,theme: $('.rk_head_otziv_public').val()
+				   ,source: $('.rk_body_otziv_public').val()
+				   ,pos: 'Круто!'
+				   ,neg: 'Не круто!'
+				   ,typer: typer_rk
+				   ,order: order_rk
+			},
+			success: function(data){
+				if(data.result == 0)
+				{					
+					buffer_html = $('.modallayer').html();
+					buffer_theme = $('.rk_head_otziv_public').val();
+					buffer_source = $('.rk_body_otziv_public').val();
+					mdclose();
+					loadModal(3, 1);				
+					setTimeout("$('.modallayer .current').removeClass('current'); $('.reg_auth_rk').addClass('current'); $('.modallayer h2').html('Зарегистрируйтесь!');", 300);
+				}
+				else
+				{
+					location = '/company/diplomtime/review/'+data.result;
+				}
+			}
+	});
+}
+
+/************************Авторизация*******************/
+function setAuth()
+{
+	$.ajax({
+				url: ("/ajax/userAuto"),
+				type: 'POST',
+				dataType: 'json', 
+				data: {email: $('.email_log').val() 
+					   ,psw:$('.psw_log').val()},
+				success: function(data){
+					if(data.result > 0){
+						$('.rk_auth').removeClass('disabled');
+						mdclose();
+						location="/";
+					}else{
+						$('.psw_log').addClass('error');
+						if(data.result == -1){
+							sayError("<span class='hint col"+$('.modallayer').attr('rel-data')+" column left'>"+'Неверный пароль для данного email, попробуйте <span rel="reg_regen_rk" class="linktoaction rk_a_gogo">востановить пароль</span>?'+"</span>");
+						}else if(data.result == 0){
+							$('.email_log').addClass('error');
+							sayError("<span class='hint col"+$('.modallayer').attr('rel-data')+" column left'>"+'Такой пользователь не существует. Хотите <span rel="reg_auth_rk" class="linktoaction rk_a_gogo">зарегестрироваться</span>?'+"</span>");
+						}
+					}
+				}
+	});
+}
+
+function setRegAuth()
+{
+	$.ajax({
+			url: ("/ajax/UserRegZapr/1"),
+			type: 'POST',
+			dataType: 'json', 
+			data: {	name: $('.rk_name').val()
+					,email: $('.rk_email').val()
+			},
+			success: function(data){
+				if(data.result < 0){
+					sayError("<span class='hint col"+$('.modallayer').attr('rel-data')+" column left'>"+'Такой пользователь уже существует, попробуйте <span rel="reg_regen_rk" class="linktoaction rk_a_gogo">востановить пароль</span>?'+"</span>");		
+				}
+				else{
+					if(!!buffer_html){
+						$('.modallayer').css('display', 'none');
+						$('.modallayer').html(buffer_html);
+						$('.modallayer .rk_head_otziv_public').val(buffer_theme);
+						$('.modallayer .rk_body_otziv_public').val(buffer_source);
+						SendOtziv($('.like').attr('rel'));		
+					}else{
+						location = '/';
+					}					
+				}				
+			}
+	});
+}
+
+function unsetAuth()
+{
+	$.ajax({
+			url: ("/ajax/userFinito"),
+			type: 'POST',
+			dataType: 'json', 
+			data: {},
+			success: function(data){
+				location = '/';
+			}
+	});
+}
+
+jQuery(document).ready(function($){	
+	
+	// Нажатие на кнопку поиска в меню
+	$('.serch_scr').click(function() {
+		var str = $(this).parent().find('.search_scr').val();
+		if(str && str.length > 2) {
+			location = '/search?s=' + $(this).parent().find('.search_scr').val();
+		}
+	});
+
+	schet = 0;
+	/*$('.show').each(function(){
+		$(this).removeClass('show').addClass('rk_show').attr('rels', schet);
+		schet = schet + 1;
+	});*/
+   
+   $('#pagewrap').attr('rel5', 0);
+   $('#pagewrap').attr('rel4', inwydla());
+   $('#pagewrap').attr('rel', $(window).width()+2*parseInt($('#pagewrap').attr('rel4')));
+   $('#pagewrap').attr('rel2', $(window).height());
+   $('#pagewrap').css("width", parseInt($('#pagewrap').attr('rel')));
+   $('.comment_rk_pul').addClass('dsplnone');
+   $('.support_rk').removeClass('dsplnone');
+   
+	if( $(window).width() < 1540){
+	   $('.rk_show_control').parent().removeClass('show');
+	}
+   
+   	
+	$('.block_rk[rel!=1]').addClass('dsplnone');
+	
+	$('.alf_tp_rk').change(function(){
+		if($('.alf_tp_rk').prop("checked") == true){
+			setTimeout('loadCompAlf(1)', 110);
+		}else{
+			setTimeout('loadCompAlf(0)', 110);
+		}
+	})
+	
+	$('.rk_open_the_door').click(function(){
+		$('.comment_rk_pul').fadeIn("slow");
+		$('.rk_open_the_door').addClass('dsplnone');
+	})
+
+	$('.alf_min_rk').click(function(){
+		$('.alf_min_rk').removeClass('selected');
+		$('.block_rk').css('display', 'none');		
+		$(this).addClass('selected');		
+		$('.block_rk[rel='+$(this).attr('rel')+']').fadeIn("slow");
+	});
+	
+	$('.rk_finder').on('input', function(e){
+		if($('.rk_finder').val().length >= 1){
+			$('.block_rk').css('display', 'none');	
+			$('.block_rk:Contains("'+$('.rk_finder').val()+'")').fadeIn("slow");
+		}
+	});	
+
+	$('.rk_bd_otz').on('click', '.rk_gtpage', function(e){
+		page = $(this).attr('rel');
+		if(parseInt(page) > 1){ 
+			$('h2.rk_zag_com_otz').next('div').removeClass('tmrgn');
+			$('.reviewslist.tmrgn').removeClass('tmrgn');
+			$('h2.rk_zag_com_otz').remove();			
+			$('.h1_rk_com_ot').html($('.rk_filter_go[rel="'+flak_r+'"]').attr('rel3')+' компании '+h1buf);
+			$('.h1_rk_com_ot').addClass('rk_zag_com_otz');
+			$('.shinf_rk').remove();
+		}
+		$('.rk_menu_comp li').removeClass('selected');
+		$('.otziv_rk_r').addClass('selected');		
+		history.pushState($('.pagination .selected span').html(), $('.rk_zag_com_otz').html(), "/company/"+$('.like').attr('rel2')+"?page="+$('.pagination .selected span').html());
+		history.replaceState(page, $('.rk_zag_com_otz').html(), "/company/"+$('.like').attr('rel2')+"?page="+page);
+		loadCompOtziv(flak_r, comp, page, numnum);
+		$("body,html").animate({"scrollTop": ($('.rk_b_otziv_list').offset().top-85)},300);
+	});
+	
+	$('.rk_filter_go').click(function(){
+		$('div.type').removeClass('selected');
+		if(flak_r >= 1){ 
+			$('h2.rk_zag_com_otz').next('div').removeClass('tmrgn');
+			$('.reviewslist.tmrgn').removeClass('tmrgn');
+			$('h2.rk_zag_com_otz').remove();			
+			$('.h1_rk_com_ot').html($('.rk_filter_go[rel="'+flak_r+'"]').attr('rel3')+' компании '+h1buf);
+			$('.h1_rk_com_ot').addClass('rk_zag_com_otz');
+			$('.shinf_rk').remove();
+		}
+		
+		$('.rk_menu_comp li').removeClass('selected');
+		$('.otziv_rk_r').addClass('selected');
+		$(this).parent().addClass('selected');
+		$('.rk_filter_go.graytext').removeClass('graytext').addClass('linktoaction');
+		$(this).removeClass('linktoaction').addClass('graytext');
+		flak_r = $(this).attr('rel');
+		numnum = $(this).attr('rel2');
+		loadCompOtziv(flak_r, comp, 1, numnum);
+		$("body,html").animate({"scrollTop": ($('.rk_b_otziv_list').offset().top-85)},300);
+	});
+	
+	$(document).on("click",".close",function() {
+		$('.rk_auth').removeClass('disabled');
+        mdclose();
+    });
+    
+	
+	$('.rk_auth').click(function(){
+		if($('.modallayer').length == 0){
+			$(this).addClass('disabled');
+			loadModal(3, 1);
+		}
+	});
+	$('.regen_pass_rk').click(function(){
+		if($('.modallayer').length == 0){
+			loadModal(10, 1);
+		}
+	});
+	$('.rk_compreg').click(function(){
+		if($('.modallayer').length == 0){
+			loadModal(8, 1);
+		}	
+	});
+	$('.rk_userreg').click(function(){
+		if($('.modallayer').length == 0){
+			loadModal(3, 1);
+		}	
+	});
+	$('.rk_sendus').click(function(){
+		if($('.modallayer').length == 0){
+			loadModal(9, 1);
+		}	
+	});
+	$('.rk_otziv_send').click(function(){
+		if($('.modallayer').length == 0){
+			loadModal(6, 1);
+		}	
+	});
+	$('.rk_ordercomp_send').click(function(){
+		if($('.modallayer').length == 0){
+			loadModal(7, 1);
+		}	
+	});
+	
+	$('.rk_find_raiting').click(function(){
+		loadRait($('.finder_rait_rk').val());
+	});
+	
+	$('.rk_showform').click(function(){
+		$(this).parents('.shfrm_rk').addClass('showform');
+	});
+	
+	/**************кнопка лайк**************/
+	$('.like').click(function(){
+		$(this).addClass('disabled');
+		$.cookie('like'+$(this).attr('rel'), 1);
+	});
+	
+	$('.like_rk').click(function(){
+		$('.like_rk[rel="'+$(this).attr('rel')+'"]').addClass('selected');
+		$.cookie('like'+$(this).attr('rel'), 1);
+	})
+	
+	if($('.like_rk').length > 0){
+		$('.like_rk').each(function(){
+			if(!!$.cookie('like'+$(this).attr('rel'))){
+				$('.like_rk[rel="'+$(this).attr('rel')+'"]').addClass('selected');
+			}
+		});
+	}
+	if($('.like').length > 0){
+		if(!!$.cookie('like'+$('.like').attr('rel'))){
+			$('.like').addClass('disabled');
+		}
+	}
+
+	$(document).on('submit', function(e) {
+		e.preventDefault();
+	});
+	/**************напишите Нам**************/
+	$(document).on("click",".rk_send_mailus",function() {
+		var button = $('<button type="submit" class="fake" style="position:absolute;display:none;">send</button>');
+		$(this).after(button);
+		$('.fake').click();
+		button.remove();
+		var elem = new Array($('.modallayer .rk_name'), $('.modallayer .rk_email'), $('.modallayer .rk_source'));
+		var otv  = new Array("Введите имя", "Введите корректный email", "Напишите письмо");
+		var tpprov  = new Array("", RegExp(/^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i), "");
+		mett_ot = validOtziv(3, elem, otv, tpprov);
+		if(mett_ot == 3){
+			sleepError();
+			sendMailUs(34);
+		}
+		
+    });
+    //
+    /**************Регистрация компании**************/
+	$(document).on("click",".rk_reg_comp",function() {
+		var elem = new Array($('.modallayer .rk_url'), $('.modallayer .rk_name'), $('.modallayer .rk_email'));
+		var otv  = new Array("Введите URL сайта компании", "Введите название компании", "Введите корректный email");
+		var tpprov  = new Array("", "", RegExp(/^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i));
+		
+		mett_ot = validOtziv(3, elem, otv, tpprov);
+		if(mett_ot == 3){
+			sleepError();
+			regComp(1);
+		}
+		
+    });
+    /**************Отправить заявку**************/
+
+    // changed
+	$(document).on('submit', function(e) {
+		var fnd = $("input.search_scr");
+		if (fnd.is(":focus")) {
+			// специально для поля поиск
+			if(fnd.val() && fnd.val().length > 2) {
+				location = '/search?s=' + fnd.val();
+			}
+		} else {
+			e.preventDefault();
+			console.log('Send data');
+		}
+	});
+
+    $(document).on('click', '.rk_step_next_order', function(e){
+    	var button = $('<button type="submit" class="fake" style="position:absolute;display:none;">send</button>');
+		$(this).after(button);
+		$('.fake').click();
+		button.remove();
+		mtk = 0;
+		if($(this).attr('rel') == 2){
+			mtk = 1;
+			var elem = new Array($('.modallayer .rk_date'), $('.modallayer .rk_type'), $('.modallayer .rk_theme'), $('.modallayer .rk_predmet'));
+			var otv  = new Array("Установите дату", "Не выбран тип работы", "Напишите тему работы", "Укажите предмет");
+			var tpprov  = new Array("", "", "", "");
+		
+			mett_ot = validOtziv(4, elem, otv, tpprov);
+			
+			if(mett_ot == 4){
+				mtk = 0;
+				sleepError();
+				$('.rk_order_box .type').html($('.modallayer .rk_type option:selected').text());
+				$('.rk_order_box .theme').html($('.modallayer .rk_theme').val());
+			}
+		}
+		else if($(this).attr('rel') == 3){
+			mtk = 1;
+			var elem = new Array($('.modallayer .rk_name'), $('.modallayer .rk_email'), $('.modallayer .rk_phone'));
+			var otv  = new Array("Укажите ваше имя", "Введите корректный email", "Введите коректный телефон");
+			var tpprov  = new Array("", RegExp(/^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i), RegExp(/^((\d|\+\d)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/));
+			
+			mett_ot = validOtziv(3, elem, otv, tpprov);
+			
+			if(mett_ot == 3){
+				sleepError();
+				if($(this).attr('data-rel') == 1){
+					var str = ''
+					schet = 0;
+					$('.rk_company input:checked').each(function(){
+						 if(schet > 0){
+							 str=str+','
+						 }
+						 str = str + $(this).attr('data-rel');
+						 schet = 1;
+					});
+					sendOrder(str, 2);					
+				}else{
+					sendOrder($('.like').attr('rel'), 1);
+				}
+			}
+		}
+		else{
+		}
+		
+		if(mtk == 0){
+			stepnext($(this).attr('rel'));
+		}
+	});
+	
+	$(document).on('click', '.rk_sendtop5', function(e){
+		alert(1);
+		sendOrder($('.like').attr('rel'), 3);
+		mdclose();	
+	});
+	
+	$('.rk_send_top5').click(function(){
+		loadModal(7, 3);
+		p = 0;
+		
+		if(!!$(this).attr('data-rel')){
+			var p = $(this).attr('data-rel');			
+			setTimeout(function() {	
+					$('.rk_type option[value="'+p+'"]').attr("selected", "selected");			
+				}, 150);		
+		}	
+	});
+	
+	$(document).on("click", ".push_top_5", function() {
+		$(this).remove();
+		$('.rk_tp5_block').css('display', 'block');
+		$('.rk_company input').attr('checked', 'checked');
+	});
+	
+	$(document).on("click", ".modallayer .file_rk_b > .del", function() {
+		$(this).parent().remove();		
+	});
+	
+	$('.rk_forminbody').click(function(){
+		
+		mett_ot = 0;
+		
+		var elem = new Array($('.rk_from_to_form .rk_type'), $('.rk_from_to_form .rk_theme'), $('.rk_from_to_form .rk_email'), $('.rk_from_to_form .rk_phone'), $('.rk_from_to_form .rk_name'));
+		var otv  = new Array("Не выбран тип работы", "Напишите тему работы", "Укажите email", "Укажите телефон", "Укажите имя");
+		var tpprov  = new Array("", "", RegExp(/^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i), RegExp(/^((\d|\+\d)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/), "");			
+				
+		mett_ot = validOtziv(5, elem, otv, tpprov);
+				
+			if(mett_ot == 5){
+				mtk = 0;
+				sleepError();
+				sendOrderBlock();
+			}
+	});
+	
+    /**************Регистрация пользователя**************/
+	$(document).on("click",".rk_reg_user",function() {
+		var button = $('<button type="submit" class="fake" style="position:absolute;display:none;">send</button>');
+		$(this).after(button);
+		$('.fake').click();
+		button.remove();
+		var elem = new Array($('.modallayer .reg_auth_rk .rk_name'), $('.modallayer .reg_auth_rk .rk_email'));
+		var otv  = new Array("Введите имя", "Введите корректный email");
+		var tpprov  = new Array("", RegExp(/^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i));
+		
+		mett_ot = validOtziv(2, elem, otv, tpprov);
+		if(mett_ot == 2){
+			sleepError();
+			setRegAuth();
+		}
+		
+    });
+    /**************Смена пароля**************/
+	$(document).on("click",".rk_ch_usr_pw",function() {
+		
+		var elem = new Array($('.modallayer .rk_old_psw'), $('.modallayer .rk_psw'), $('.modallayer .rk_psw2'), $('.modallayer .rk_psw'));
+		var otv  = new Array("Введите старый пароль", "Введите новый пароль", "Подтвердите новый пароль", "Пароли не совпадают");
+		var tpprov  = new Array("", "", "", RegExp($('.modallayer .rk_psw2').val()));
+		
+		mett_ot = validOtziv(4, elem, otv, tpprov);
+		if(mett_ot == 4){
+			sleepError();
+			changePas(1);
+		}
+		
+    });
+    /****************Сравнить условия**********************************/
+    $(document).on('change', '.rk_check_comp', function(e){
+		if(!$(this).prop("checked")){
+			$(this).parent().children('.rk_srav_order').removeClass('linktoaction').addClass('label');
+			$(this).parent().children('input').attr('disabled', '');
+			if($('.rk_check_comp:checked').length < 2){
+				$('.rk_check_comp:checked').parent().children('.rk_srav_order').removeClass('linktoaction').addClass('label');
+				$('.rk_check_comp:checked').parent().children('input').attr('disabled', '');			
+			}			
+		}else{
+			if($('.rk_check_comp:checked').length > 1){
+				$('.rk_check_comp:checked').parent().children('.rk_srav_order').addClass('linktoaction').removeClass('label');
+				$('.rk_check_comp:checked').parent().children('input').attr('disabled', 'disabled');
+			}
+		}		
+	});
+	
+	$(document).on('click', '.rk_change_flak_opis', function(e){
+		if($(this).parent().children('input:enabled').length == 0){
+			$(this).parent().children('.rk_srav_order').removeClass('linktoaction').addClass('label');
+			$(this).parent().children('input').removeAttr("disabled");
+		}
+	});
+	
+	$(document).on('click', '.rk_srav_order.linktoaction', function(e){
+		if($('.modallayer').length == 0){	
+			str = '';
+			schet = 0;
+			$('.rk_check_comp:checked').each(function(){
+				if(schet > 0){
+					str = str + ',';
+				}
+				str = str + $(this).attr('data-rel');
+				schet = 1;
+			});		
+			loadModal(7, 2, str);
+		}
+	});
+    /**************Оставить голос за позитив или негатив**************/
+    $('.reg_pos_go').click(function(){
+		PosNegIns($(this));
+	});
+	
+	$('.set_posneg_rk').click(function(){
+		PosNegGO($(this).attr('data-rel'));
+	});
+	/**************отправка отзыва**********/	
+	$(document).on('click', '.rk_step_next', function(e){
+		mtk = 0;
+		if($(this).attr('rel') == 2){
+			mtk = 1;
+			if($('.rk_head_klav').length > 0)
+			{
+				mtk = 0;
+			}
+			else
+			{
+				
+				var elem = new Array($('.rk_numberorder'), $('.modallayer .rk_type'));
+				var otv  = new Array("Номер заказа не верный", "Не выбран тип работы");
+				var tpprov  = new Array("", "");
+				
+				mett_ot = validOtziv(2, elem, otv, tpprov);
+				
+				if(mett_ot == 2){
+					mtk = 0;
+					sleepError();
+					LoadHead();
+				}
+			}
+		}
+		else{
+
+		}
+		
+		if(mtk == 0){
+			stepnext($(this).attr('rel'));
+		}
+	});
+	
+	$(document).on('click', '.edit', function(e){
+		$('.modallayer .rk_type option[value="'+$(this).parent().children('.type').attr('rel')+'"]').attr("selected", "selected");
+		$('.modallayer .rk_numberorder').val($(this).parent().children('.number').attr('rel'));
+		$('.modallayer .rk_theme').val($(this).parent().children('.theme').attr('rel'));
+		margo = $(this).parents('.rk_head_klav').attr('rel');
+		$('.rk_head_klav[rel="'+margo+'"]').remove();
+	});
+	
+	$(document).on('click', '.rk_param_rk .rk_plus', function(e){
+		changeBal($(this), 1, 5);
+	});
+	
+	$(document).on('click', '.rk_param_rk .rk_minus', function(e){
+		changeBal($(this), -1, 1);
+	});
+	
+	$(document).on('click', '.rk_add_other_order', function(e){
+		
+		var elem = new Array($('.rk_numberorder'), $('.modallayer .rk_type'));
+		var otv  = new Array("Номер заказа не верный", "Не выбран тип работы");
+		var tpprov  = new Array("", "");
+		
+		mett_ot = validOtziv(2, elem, otv, tpprov);
+		
+		if(mett_ot == 2){
+			sleepError();
+			LoadHead();
+		}
+	});
+	
+	$(document).on('click', '.rk_send_public_otz', function(e){
+		
+		var elem = new Array($('.modallayer .rk_head_otziv_public'), $('.rk_body_otziv_public'));
+		var otv  = new Array("Введите название отзыва", "Введите текст отзыва");
+		var tpprov  = new Array("", "");
+		
+		mett_ot = validOtziv(2, elem, otv, tpprov);
+		
+		if(mett_ot == 2){
+			sleepError();
+			SendOtziv($('.like').attr('rel'));
+		}
+	});
+	/**************авторизация*************/
+	
+	$(document).on("click",".rk_a_gogo",function() {
+		$(this).parents('.current').removeClass('current');
+		var fl_auth = $('.'+$(this).attr('rel'));
+		$('.modallayer h2').html(fl_auth.attr('rel'));
+		fl_auth.addClass('current');
+    });
+    
+	$(document).on("click",".rk_auth_begin",function() {
+		var button = $('<button type="submit" class="fake" style="position:absolute;display:none;">send</button>');
+		$(this).after(button);
+		$('.fake').click();
+		button.remove();
+		var elem = new Array($('.email_log'));
+		var otv  = new Array("Введите  email");
+		var tpprov  = new Array(RegExp(/^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i));
+		
+		mett_ot = validOtziv(1, elem, otv, tpprov);
+		if(mett_ot == 1){
+			setAuth();
+		}
+		
+    });
+    
+	$(document).on('input click', 'input[type="text"]', function(e){
+		$(this).removeClass('error');
+	});
+	
+	$(document).on('input', 'textarea', function(e){
+		$(this).removeClass('error');
+	});
+	
+	$(document).on('focus', 'select', function(e){
+		$(this).removeClass('error');
+	});
+	
+	$('.rk_face_but').click(function(){
+		if($(this).attr('rel') == 1){
+			$(this).attr('rel', 2);
+			$(this).next().addClass('show');
+		}else{
+			$(this).attr('rel', 1);
+			$(this).next().removeClass('show');
+		}
+	});
+	
+	$('.rk_type_sidebar').click(function(){
+		$('.rk_menu_xf .cat').removeClass('selected');
+		$(this).parent().addClass('selected');
+	});
+	
+	$('.destroer_rk').click(function(){
+		unsetAuth();
+	});
+	
+	$('.rk_show_control').click(function(){
+		if($(this).parent().hasClass('show')){
+			$(this).parent().removeClass('show');
+		}else{
+			$(this).parent().addClass('show');
+		}
+		gogoBlog(1);
+	});
+});
+
+

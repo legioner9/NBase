@@ -1,0 +1,5 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\Part_I\content\Courses\Fundamentals\strTemplateUnicode\TimurMasters\cat.TimurMasters\dir.TimurMasters.md">TimurMasters</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\Part_I\content\Courses\Fundamentals\strTemplateUnicode\TimurMasters\String-master\cat.String-master\dir.String-master.md">String-master</a>
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\Part_I\content\Courses\Fundamentals\strTemplateUnicode\TimurMasters\String-master\README.md">README.md</a>
+            - *# String is a Sequence of Characters and Manipulation Methods
+    

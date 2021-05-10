@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Inheritance-master\cat.Inheritance-master\dir.Inheritance-master.md">Inheritance-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Inheritance-master\README.md">README.md</a>
+        - *# Inheritance in Different Paradigms

@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\2.КОНФИГУРАЦИЯ.dir\2.2.Настройка_редактора.dir\cat.2.2.Настройка_редактора.dir\dir.2.2.Настройка_редактора.dir.md">2.2.Настройка_редактора.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\2.КОНФИГУРАЦИЯ.dir\2.2.Настройка_редактора.dir\2.2.Настройка_редактора.md">2.2.Настройка_редактора.md</a>
+        - *## git editog

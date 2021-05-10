@@ -1,0 +1,2789 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+   <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+   <META NAME="Author" CONTENT="Alexey V. Pautov">
+   <title>Глава 3. Выделение разделов (Partitioning)</title>
+</head>
+
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084"
+      alink="#0000FF">
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+
+<h2><a name="partitioning"></a>Глава 3. Выделение разделов (Partitioning)
+</h2>
+<p><span class="bold"><strong>Из-за проблем с формированием двоичный
+дистрибутив MySQL 5.1.12 не содержат NDB Cluster или Partitioning.
+Пожалуйста, обновитесь до 5.1.14. Если Вы формируете пакет из исходника, Вы
+можете выполнять выбор конфигурации <span><strong>configure</strong></span> с
+параметрами <code class="option">--with-ndbcluster</code> и
+<code class="option">--with-partition</code>.</strong></span></p>
+
+<p>Эта глава обсуждает <em class="firstterm">определяемое пользователем
+выделение разделов</em>, как выполнено в MySQL 5.1.</p>
+<p>MySQL поддерживает несколько типов выделения разделов, а
+также подвыделение разделов.</p>
+
+<p>Методы добавления, удаления и изменения разделов в существующих
+разбитых на разделы таблицах рассмотрены в
+"<a href="#partitioning-management">
+3.3. Управление разделами</a>".</p>
+
+<p><span class="bold"><strong>Важно</strong></span>: разбитые на разделы
+таблицы, созданные в MySQL до версии 5.1.6, не могут читаться версией 5.1.6
+или позже. Кроме того, таблица <code>INFORMATION_SCHEMA.TABLES</code> не
+может использоваться, если такие таблицы присутствуют на сервере 5.1.6.
+Начиная с MySQL 5.1.7, подходящее предупреждающее сообщение сгенерировано
+о том, что несовместимые разбитые на разделы таблицы были найдены сервером.
+</p>
+
+<p><span class="bold"><strong>Важно</strong></span>: если Вы используете
+разбитые на разделы таблицы, которые были созданы в MySQL 5.1.5 или ранее,
+убедитесь, что изучили список изменений.</p>
+
+<p>Реализация выделения разделов в MySQL 5.1 все еще подвергается изменениям.
+Дополнительные ресурсы по теме:</p>
+<ul type="disc"><li><p>
+<a href="../../../forums.mysql.com/list.php@106" target="_top">
+MySQL Partitioning Forum</a></p>
+
+<p>Это официальный форум обсуждения для тех, кого заинтересовала технология
+MySQL выделение разделов. Это показывает объявления и модификации от MySQL
+разработчиков и других. Это контролируется членами Partitioning Development
+and Documentation Teams.</p></li>
+
+<li><p><a href="../../../mikaelronstrom.blogspot.com/default.htm" target="_top">Mikael
+Ronstrm's Blog</a></p>
+<p>MySQL Partitioning Architect and Lead Developer Mikael Ronstr├╢m
+часто регистрирует статьи относительно работы с выделением разделов
+MySQL и с кластером MySQL.</p></li>
+
+<li><p><a href="../../../www.planetmysql.org/default.htm" target="_top">PlanetMySQL</a></p>
+<p>Место новостей по MySQL, показывающее MySQL-касающиеся блоги, которые
+должны быть интересными любому, использующему MySQL.</p></li></ul>
+
+<p>Двоичная версия MySQL 5.1 теперь доступна с
+<a href="../../../dev.mysql.com/downloads/mysql/5.1.html" target="_top">
+http://dev.mysql.com/downloads/mysql/5.1.html</a>. Однако, для последнего
+исправления механизма выделения разделов и добавления свойств, Вы можете
+получать исходник из архива BitKeeper. Чтобы допускать выделению разделов, Вы
+должны компилировать сервер, используя опцию
+<code class="option">--with-partition</code>. Если Вы имеете проблемы при
+компилировании MySQL 5.1 с допускаемым выделением разделов, почитайте форум
+<a href="../../../forums.mysql.com/list.php@106" target="_top">
+http://forums.mysql.com/list.php?106</a> и поищите ответ там.</p>
+
+<h2><a name="partitioning-overview"></a>3.1. Краткий обзор выделения
+разделов в MySQL</h2>
+<p>Этот раздел обеспечивает концептуальный краткий обзор
+выделения разделов в MySQL 5.1.</p>
+
+<p>Стандарт SQL не обеспечивает многого относительно физических аспектов
+хранения данных. Язык SQL непосредственно предназначен, чтобы работать
+независимо от любых структур данных или средств, лежащих в основе схем,
+таблиц, строк или столбцов, с которыми работает. Тем не менее, наиболее
+продвинутые системы управления базами данных развили некоторые средства
+определения физического расположения, которое нужно использовать для
+сохранения специфических частей данных в терминах аппаратных средств или даже
+файловых систем. В MySQL <code>InnoDB</code> обеспечил понятие пространства
+таблиц, так что сервер MySQL даже до введения выделения разделов, мог быть
+сконфигурирован, чтобы использовать различные физические каталоги для
+сохранения различных баз данных.</p>
+
+<p><em class="firstterm">Partitioning</em> берет это понятие и продвигает на
+шаг далее, позволяя Вам распределить части индивидуальных таблиц по файловым
+системам согласно правилам, которые Вы можете устанавливать в значительной
+степени так, как необходимо. В действительности, различные части таблицы
+сохранены как отдельные таблицы в различных местах. Выбранное пользователем
+правило, которым выполнен раздел данных, известно как функция выделения
+разделов, которая в MySQL может быть модулем, простым соответствием набору
+диапазонов или списков, внутренней или линейной хэш-функцией. Функция выбрана
+согласно типу выделения разделов, определенному пользователем, и берет как
+параметр значение обеспеченного пользователем выражения. Это выражение может
+быть целочисленным значением столбца или функция, действующая на один или
+большее количество значений столбца, и возвращающая целое число. Значение
+этого выражения передано функции выделения разделов, которая возвращает
+целочисленное значение, представляющее номер раздела, в котором эта
+специфическая запись должна быть сохранена. Эта функция должна быть
+непостоянная и непроизвольная. Это не может содержать любые запросы, но может
+использовать фактически любое выражение SQL, которое является допустимым
+в MySQL, поскольку то выражение возвращает положительное целое число меньше,
+чем <code>MAXVALUE</code> (самое большое возможное положительное целое
+число). Примеры выделения разделов функций могут быть найдены в обсуждениях
+выделения разделов позже в этой главе.</p>
+
+<p>Это известно как горизонтальное выделение разделов
+(<em class="firstterm">horizontal partitioning</em>), то есть различные
+строки таблицы могут быть назначены к различным физическим разделам.
+MySQL 5.1 не поддерживает вертикальное выделение разделов
+(<em class="firstterm">vertical partitioning</em>), в котором различные
+столбцы таблицы назначены различным физическим разделам. Не имеется никаких
+планов представить вертикальное выделение разделов в MySQL 5.1.</p>
+
+<p>Выделение разделов включено в <code>-max</code> выпуски MySQL 5.1 (то есть
+двоичные версии 5.1 <code>-max</code> сформированы с
+<code class="option">--with-partition</code>). Если MySQL сформирован с
+выделением разделов, ничто далее не должно быть выполнено, чтобы допустить
+это (например, никакие специальные записи не требуются в Вашем файле
+<code>my.cnf</code>). Вы можете определять, поддерживает ли сервер выделение
+разделов посредством команды <code>SHOW VARIABLES</code> типа этого:</p>
+
+<pre>
+mysql&gt; SHOW VARIABLES LIKE '%partition%';
++-------------------+-------+
+| Variable_name     | Value |
++-------------------+-------+
+| have_partitioning | YES   |
++-------------------+-------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>Если Вы не видите, что переменная <code>have_partitioning</code> со
+значением <code>YES</code> перечислена как показано выше в выводе
+соответствующей <code>SHOW VARIABLES</code>, то Ваша версия MySQL не
+поддерживает выделение разделов.</p>
+
+<p>До MySQL 5.1.6 эта переменная была именована
+<code>have_partition_engine</code>
+(<a href="../../../bugs.mysql.com/16718" target="_top">Глюк #16718</a>).</p>
+
+<p>Для создания разбитых на разделы таблиц, Вы можете использовать
+большинство типов хранения, которые обеспечиваются сервером MySQL.
+MySQL-выделение разделов выполняется в отдельном уровне и может
+взаимодействовать с любыми из них. В MySQL 5.1 все разделы той же самой
+разбитой на разделы таблицы должны использовать тот же самый тип памяти,
+например, Вы не можете использовать <code>MyISAM</code> для одного раздела, а
+<code>InnoDB</code> для другого. Однако, не имеется ничего предотвращающего
+Вас от использования различных типов памяти для различных разбитых на разделы
+таблиц на том же самом сервере MySQL или даже в той же самой базе данных.</p>
+
+<p><span class="bold"><strong>Обратите внимание:</strong></span>: выделение
+разделов MySQL не может использоваться с типами памяти <code>MERGE</code> или
+<code>CSV</code>. До MySQL 5.1.6 также было невозможно создать разбитую на
+разделы таблицу, использующую <code>BLACKHOLE</code>
+(<a href="../../../bugs.mysql.com/14524" target="_top">Глюк #14524</a>).
+Выделение разделов <code>KEY</code> обеспечивается для использования с
+<code>NDBCluster</code>, но другие типы определяемого пользователем выделения
+разделов не обеспечиваются для таблиц Cluster в MySQL 5.1.</p>
+
+<p>Чтобы использовать специфический тип памяти для разбитой на разделы
+таблицы, необходимо только использовать опцию <code>[STORAGE] ENGINE</code>
+точно как для не разбитой на разделы таблицы. Однако, Вы должны иметь в виду,
+что <code>[STORAGE] ENGINE</code> (и другие параметры таблицы) должен быть
+перечислен прежде, чем любые параметры выделения разделов используются в
+инструкции <code>CREATE TABLE</code>. Этот пример показывает, как создать
+таблицу, которая разбита на 6 разделов по hash и использует тип
+памяти <code>InnoDB</code>:</p>
+
+<pre>
+CREATE TABLE ti (id INT, amount DECIMAL(7,2), tr_date DATE)
+       ENGINE=INNODB PARTITION BY
+       HASH(MONTH(tr_date)) PARTITIONS 6;
+</pre>
+
+<p>Обратите внимание, что каждое предложение <code>PARTITION</code> может
+включать опцию <code>[STORAGE] ENGINE</code>, но в MySQL 5.1 это не
+имеет никакого эффекта.</p>
+
+<p><span class="bold"><strong>Обратите внимание</strong></span>: выделение
+разделов применяется ко всем данным и индексам таблицы. Вы не можете выделять
+разделы только данных и не индексы или наоборот, при этом Вы не можете
+выделять разделы только части таблицы.</p>
+
+<p>Данные и индексы для каждого раздела могут быть назначены к специфическому
+каталогу, используя опции <code>DATA DIRECTORY</code> и <code>INDEX
+DIRECTORY</code> для предложения PARTITION инструкции <code>CREATE
+TABLE</code>, используемой чтобы создать разбитую на разделы таблицу. Кроме
+того, <code>MAX_ROWS</code> и <code>MIN_ROWS</code> могут использоваться,
+чтобы определить максимальные и минимальные числа строк, соответственно,
+которые могут быть сохранены в каждом разделе таблицы.</p>
+
+<p>Некоторые из преимуществ выделения разделов:</p>
+<ul type="disc"><li><p>Можно сохранять большее количество данных в одной
+таблице, чем может быть записано на одиночном диске или файловой системе.
+</p></li>
+
+<li><p>Данные, которые теряют полноценность, часто легко могут быть удалены
+из таблицы, удаляя раздел, содержащий только эти данные. Наоборот, процесс
+добавления новых данных в некоторых случаях может быть значительно облегчен,
+добавляя новый раздел специально для этих данных.</p></li>
+
+<li><p>Некоторые запросы могут быть значительно оптимизированы в том, что
+данные, удовлетворяющие предложению <code>WHERE</code> могут быть сохранены
+только на одном или большем количестве разделов, таким образом исключая любые
+остающиеся разделы из поиска. Поскольку разделы могут быть изменены после
+того, как разбитая на разделы таблица была создана, Вы можете реорганизовать
+данные, чтобы расширить частые запросы, которые, возможно, были медленными,
+когда схема выделения разделов была сначала установлена. Эта возможность,
+иногда упоминаемая как сокращение раздела (<em class="firstterm">partition
+pruning</em>), была выполнена в MySQL 5.1.6.</p></li></ul>
+
+<p>Другие выгоды, обычно связываемые с выделением разделов, включены в
+следующий список. Эти свойства в настоящее время не выполнены в MySQL
+Partitioning, но высоки в списке приоритетов.</p>
+
+<ul type="disc"><li><p>Запросы, включающие составные функции типа
+<code>SUM()</code> и <code>COUNT()</code>, легко могут быть распараллелены.
+Простым примером такого запроса мог бы быть <code>SELECT salesperson_id,
+COUNT(orders) as order_total FROM sales GROUP BY salesperson_id;</code>.
+Запрос может быть выполнен одновременно на каждом разделе, и результат
+получен просто суммируя результаты, полученные для всех разделов.</p></li>
+<li><p>Достижение большей производительности запроса благодаря разбросу
+данных по разным дискам.</p></li></ul>
+
+<h2><a name="partitioning-types"></a>3.2. Типы раздела</h2>
+<p>Этот раздел обсуждает типы выделения разделов, которые доступны в
+MySQL 5.1. Они включают:</p>
+
+<ul type="disc"><li><p><span class="bold">RANGE</code> partitioning
+</strong></span>: назначает строки разделам, основанным на значениях столбца,
+попадающих внутрь заданного диапазона.</p></li>
+
+<li><p><span class="bold">LIST</code> partitioning</strong></span>:
+подобно выделению разделов диапазоном, за исключением того, что раздел выбран
+основанным на столбцах, соответствующих одному из набора дискретных значений.
+</p></li>
+
+<li><p><span class="bold">HASH</code> partitioning</strong></span>: раздел
+выбран основанным на значении, возвращенном определяемым пользователем
+выражением, которое функционирует на значениях столбца в строках, которые
+будут вставлены в таблицу. Функция может состоять из любого выражения,
+допустимого в MySQL, которое выдает не отрицательное целочисленное значение.
+</p></li>
+
+<li><p><span class="bold">KEY</code> partitioning</strong></span>: подобно
+выделению разделов hash, за исключением того, что обеспечены только один или
+большее количество столбцов, которые будут оценены, и сервер MySQL
+обеспечивает собственную хэш-функцию. Эти столбцы могут содержать не
+целочисленные значения, так как хэш-функция, обеспеченная MySQL, гарантирует
+целочисленный результат, независимо от типа данных столбца.</p></li></ul>
+
+<p>Очень общее использование выделения разделов базы данных должно выделять
+данные по времени. Некоторые системы баз данных поддерживают явное выделение
+разделов даты, которое MySQL не выполняет в 5.1. Однако, нетрудно создать в
+MySQL схемы выделения разделов, основанные на столбцах <code>DATE</code>,
+<code>TIME</code>, <code>DATETIME</code> или на выражениях,
+использующих такие столбцы.</p>
+
+<p>При выделении разделов <code>KEY</code> или <code>LINEAR KEY</code>,
+Вы можете использовать столбец <code>DATE</code>, <code>TIME</code> или
+<code>DATETIME</code> как столбец выделения разделов без того, чтобы
+выполнить любую модификацию значения столбца. Например, эта инструкция
+создания таблицы совершенно допустима в MySQL:</p>
+
+<pre>
+CREATE TABLE members (firstname VARCHAR(25) NOT NULL,
+                      lastname VARCHAR(25) NOT NULL,
+                      username VARCHAR(16) NOT NULL,
+                      email VARCHAR(35), joined DATE NOT NULL)
+       PARTITION BY KEY(joined) PARTITIONS 6;
+</pre>
+
+<p>Другие типы выделения разделов MySQL, однако, требуют выражения выделения
+разделов, которое выдает целочисленное значение или <code>NULL</code>. Если
+Вы желаете использовать дата-основанное выделение разделов
+<code>RANGE</code>, <code>LIST</code>, <code>HASH</code> или
+<code>LINEAR HASH</code>, Вы можете просто использовать функцию, которая
+функционирует на столбце <code>DATE</code>, <code>TIME</code> или
+<code>DATETIME</code> и возвращает такое значение, как показано здесь:</p>
+
+<pre>
+CREATE TABLE members (firstname VARCHAR(25) NOT NULL,
+                      lastname VARCHAR(25) NOT NULL,
+                      username VARCHAR(16) NOT NULL,
+                      email VARCHAR(35), joined DATE NOT NULL)
+       PARTITION BY RANGE(YEAR(joined)) (
+                 PARTITION p0 VALUES LESS THAN (1960),
+                 PARTITION p1 VALUES LESS THAN (1970),
+                 PARTITION p2 VALUES LESS THAN (1980),
+                 PARTITION p3 VALUES LESS THAN (1990),
+                 PARTITION p4 VALUES LESS THAN MAXVALUE);
+</pre>
+
+<p>Выделение разделов в MySQL оптимизирован для использования с функциям.
+<code>TO_DAYS()</code> и <code>YEAR()</code>. Однако, Вы можете использовать
+другие функции даты и времени, которые возвращают целое число или
+<code>NULL</code>, типа <code>WEEKDAY()</code>,
+<code>DAYOFYEAR()</code> или <code>MONTH()</code>.</p>
+
+<p>Важно помнить, что независимо от типа выделения разделов, которое Вы
+используете, разделы всегда нумеруются автоматически и в той
+последовательности, в какой созданы, при старте с 0. Когда новая строка
+вставлена в разбитую на разделы таблицу, это числа раздела, которые
+используются в идентификации правильного раздела. Например, если Ваша таблица
+использует 4 раздела, эти разделы пронумерованы <code>0</code>,
+<code>1</code>, <code>2</code> и <code>3</code>. Для типов разделов
+<code>RANGE</code> и <code>LIST</code> необходимо гарантировать, что имеется
+раздел, определенный для каждого номера раздела. Для выделения разделов
+<code>HASH</code> использованная функция пользователя должна возвратить
+целочисленное значение большее, чем <code>0</code>. Для выделения разделов
+<code>KEY</code> об этой проблеме позаботится автоматическая хэш-функция,
+которую сервер MySQL использует внутренне.</p>
+
+<p>Имена разделов вообще следуют правилам для других MySQL-идентификаторов,
+типа тех, что применяются для таблиц и баз данных. Однако, Вы должны обратить
+внимание, что имена раздела не чувствительны к регистру. Например, следующая
+инструкция <code>CREATE TABLE</code> терпит неудачу как показано:</p>
+
+<pre>
+mysql&gt; CREATE TABLE t2 (val INT)
+    -&gt;        PARTITION BY LIST(val) (
+    -&gt;                  PARTITION mypart VALUES IN (1,3,5),
+    -&gt;                  PARTITION MyPart VALUES IN (2,4,6));
+ERROR 1488 (HY000): Duplicate partition name mypart
+</pre>
+
+<p>Сбой происходит потому, что MySQL не видит никакого различия между именами
+разделов <code>mypart</code> и <code>MyPart</code>.</p>
+<p>Когда Вы определяете число разделов для таблицы, это должно быть выражено
+как положительный ненулевой целочисленный литерал без начальных нулей, и не
+может быть выражением типа <code>0.8E+01</code> или <code>6-2</code>, даже
+если это оценивается как целое число. Начиная с MySQL 5.1.12, десятичные
+дроби больше не усечены, но взамен отвергнуты полностью.</p>
+
+<p>В разделах, которые следуют далее, мы не обязательно рассматриваем все
+возможные формы для синтаксиса, который может использоваться для создания
+каждого типа раздела.</p>
+
+<h3><a name="partitioning-range"></a>3.2.1. <code>RANGE</code> Partitioning
+</h3>
+<p>Таблица, которая разбита на разделы диапазоном, разбита на разделы таким
+способом, которым каждый раздел содержит строки, для которых значение
+выражения выделения разделов находится внутри данного диапазона. Диапазоны
+должны быть непрерывны, но не перекрываться и определены, используя оператор
+<code>VALUES LESS THAN</code>. Для следующих немногих примеров, предположите,
+что Вы создаете таблицу типа следующей, чтобы сохранить персональные записи
+для цепочки из 20 видеоклипов, пронумерованных от 1 до 20:</p>
+
+<pre>
+CREATE TABLE employees (id INT NOT NULL, fname VARCHAR(30),
+                        lname VARCHAR(30),
+                        hired DATE NOT NULL DEFAULT '1970-01-01',
+                        separated DATE NOT NULL DEFAULT '9999-12-31',
+                        job_code INT NOT NULL, store_id INT NOT NULL);
+</pre>
+
+<p>Эта таблица может быть разбита на разделы диапазоном по-разному, в
+зависимости от Ваших потребностей. Один способ состоит в том, чтобы
+использовать столбец <code>store_id</code>. Например, Вы могли бы выделять
+разделы таблицы 4 способами, добавляя предложение
+<code>PARTITION BY RANGE</code> как показано здесь:</p>
+
+<pre>
+CREATE TABLE employees (id INT NOT NULL, fname VARCHAR(30),
+                        lname VARCHAR(30),
+                        hired DATE NOT NULL DEFAULT '1970-01-01',
+                        separated DATE NOT NULL DEFAULT '9999-12-31',
+                        job_code INT NOT NULL, store_id INT NOT NULL)
+       PARTITION BY RANGE (store_id) (PARTITION p0 VALUES LESS THAN (6),
+                                      PARTITION p1 VALUES LESS THAN (11),
+                                      PARTITION p2 VALUES LESS THAN (16),
+                                      PARTITION p3 VALUES LESS THAN (21));
+</pre>
+
+<p>В этой схеме выделения разделов все строки, соответствующие записям,
+занимающим номера от 1 до 5, сохранены в разделе <code>p0</code>, от 6 до 10
+в <code>p1</code> и т. д. Обратите внимание, что каждый раздел определен
+чтобы хранить номера от самого низкого до самого высокого. Это требование
+синтаксиса <code>PARTITION BY RANGE</code>: Вы можете думать об этом как об
+аналоге переключателя <code>switch ... case</code> в C или
+Java в этом отношении.</p>
+
+<p>Просто определить, что новая строка, содержащая данные
+<code>(72, 'Michael', 'Widenius', '1998-06-25', NULL, 13)</code>, вставлена в
+раздел <code>p2</code>, но что случается, когда Ваша цепочка, добавляет 21-ю
+запись? Согласно этой схеме, не имеется никакого правила, которое покрывает
+строку, с <code>store_id</code> большим чем 20, так что результатом будет
+ошибка, потому что сервер не знает, где поместить это. Вы можете обойти сбой,
+используя предложение <code>VALUES LESS THAN</code> в инструкции <code>CREATE
+TABLE</code>, которая обеспечивает все значения большие, чем явно именованное
+самое высокое значение:</p>
+
+<pre>
+CREATE TABLE employees (id INT NOT NULL, fname VARCHAR(30),
+                        lname VARCHAR(30),
+                        hired DATE NOT NULL DEFAULT '1970-01-01',
+                        separated DATE NOT NULL DEFAULT '9999-12-31',
+                        job_code INT NOT NULL, store_id INT NOT NULL)
+       PARTITION BY RANGE (store_id) (PARTITION p0 VALUES LESS THAN (6),
+                                      PARTITION p1 VALUES LESS THAN (11),
+                                      PARTITION p2 VALUES LESS THAN (16),
+                                      PARTITION p3 VALUES LESS THAN MAXVALUE);
+</pre>
+
+<p><code>MAXVALUE</code> представляет самое большое возможное целочисленное
+значение. Теперь, любые строки, чье значение столбца <code>store_id</code>
+является большим или равным 16 (самое высокое определенное значение),
+сохранены в разделе <code>p3</code>. В некоторой точке в будущем, когда число
+записей увеличится до 25, 30 или больше, Вы можете использовать инструкцию
+<code>ALTER TABLE</code>, чтобы добавить новые разделы для диапазонов 21-25,
+26-30 и т. д.</p>
+
+<p>В аналогичном режиме Вы могли бы выделять разделы таблицы, основанные на
+кодах работы служащего, то есть на диапазонах значений столбца
+<code>job_code</code>. Например, приняв, что коды работы с двумя цифрами
+используются для регулярных (in-store) рабочих, коды с тремя цифрами
+используются для ведомства и персонала поддержки, а четырехразрядные коды
+для позиций управления, Вы могли бы создать разбитую на
+разделы таблицу, используя:</p>
+
+<pre>
+CREATE TABLE employees (id INT NOT NULL, fname VARCHAR(30),
+                        lname VARCHAR(30),
+                        hired DATE NOT NULL DEFAULT '1970-01-01',
+                        separated DATE NOT NULL DEFAULT '9999-12-31',
+                        job_code INT NOT NULL, store_id INT NOT NULL)
+       PARTITION BY RANGE (job_code) (
+                 PARTITION p0 VALUES LESS THAN (100),
+                 PARTITION p1 VALUES LESS THAN (1000),
+                 PARTITION p2 VALUES LESS THAN (10000));
+</pre>
+
+<p>В этом образце все строки в отношении рабочих in-store были бы сохранены в
+разделе <code>p0</code>, строки для ведомства и персонала поддержки в
+<code>p1</code>, а администраторы в разделе <code>p2</code>.</p>
+
+<p>Также возможно использовать выражение в предложениях <code>VALUES LESS
+THAN</code>. Однако, MySQL должен быть способен оценить возвращаемое значение
+выражения как часть сравнения <code>LESS THAN</code> (<code>&lt;</code>).</p>
+
+<p>Вы можете использовать выражение, основанное на одном из двух столбцов
+<code>DATE</code>. Например, предположим, что Вы желаете выделить разделы
+основанные на годе, в котором каждый служащий оставил компанию, то есть
+значение <code>YEAR(separated)</code>. Пример инструкции <code>CREATE
+TABLE</code>, которая осуществляет такую схему выделения
+разделов, показывается здесь:</p>
+
+<pre>
+CREATE TABLE employees (id INT NOT NULL, fname VARCHAR(30),
+                        lname VARCHAR(30),
+                        hired DATE NOT NULL DEFAULT '1970-01-01',
+                        separated DATE NOT NULL DEFAULT '9999-12-31',
+                        job_code INT, store_id INT)
+       PARTITION BY RANGE (YEAR(separated)) (
+                 PARTITION p0 VALUES LESS THAN (1991),
+                 PARTITION p1 VALUES LESS THAN (1996),
+                 PARTITION p2 VALUES LESS THAN (2001),
+                 PARTITION p3 VALUES LESS THAN MAXVALUE);
+</pre>
+
+<p>В этой схеме для всех служащих, кто оставил работу до 1991, строки
+сохранены в разделе <code>p0</code>, для периода 1991-1995 в <code>p1</code>,
+для 1996-2000 в <code>p2</code>, а для любых рабочих, кто оставил фирму после
+2000 года в <code>p3</code>.</p>
+
+<p>Выделение разделов по диапазону особенно полезно когда:</p>
+<ul type="disc"><li><p>Вы хотите удалить <span class="quote">старые</span>
+данные. Если Вы используете схему выделения разделов, показанную выше, Вы
+можете просто использовать <code>ALTER TABLE employees DROP PARTITION p0;
+</code>, чтобы удалять все строки в отношении служащих, оставивших работу до
+1991. Для таблицы с очень многими строками, это может быть намного более
+эффективно, чем выполнение запроса <code>DELETE</code>, например,
+<code>DELETE FROM employees WHERE YEAR(separated) &lt;=1990;</code>.</p></li>
+
+<li><p>Вы хотите использовать столбец, содержащий значения даты, времени или
+значения, являющиеся результатом некоторого другого ряда.</p></li>
+<li><p>Вы часто выполняете запросы, которые зависят непосредственно от
+столбца, используемого для выделения разделов таблицы. Например, при
+выполнении запроса типа <code>SELECT COUNT(*) FROM employees WHERE
+YEAR(separated) = 2000 GROUP BY store_id;</code>, MySQL может быстро
+определять, что только раздел <code>p2</code> должен быть просмотрен, потому
+что остающиеся разделы не могут содержать записи, удовлетворяющие предложению
+<code>WHERE</code>.</p></li></ul>
+
+<h3><a name="partitioning-list"></a>3.2.2. <code>LIST</code> Partitioning
+</h3>
+<p>Как в выделении разделов <code>RANGE</code>, каждый раздел должен быть
+явно определен. Главное различие в том, что в выделении разделов списка,
+каждый раздел определен и выбран основываясь на членстве значения столбца в
+одном наборе значений списков, а не непрерывных диапазонов значений. Это
+выполнено, используя <code>PARTITION BY LIST(<em><code>expr</code></em>)
+</code>, где <em><code>expr</code></em> значение столбца или выражение,
+основанное на значении столбца и возврате целочисленного значения, а затем
+определение каждого раздела посредством
+<code>VALUES IN (<em><code>value_list</code></em>)</code>, где
+<em><code>value_list</code></em> разделяемый запятыми список целых чисел.</p>
+
+<p><span class="bold"><strong>Обратите внимание</strong></span>: В MySQL 5.1
+возможно соответствовать только списку целых чисел (и возможно
+<code>NULL</code>) при выделении разделов <code>LIST</code>.</p>
+
+<p>В отличие от случая с разделами, определенными диапазоном, разделы списка
+не должны быть объявлены в любом специфическом порядке.</p>
+<p>Для примеров ниже будем считать, что базисное определение таблицы, которая
+будет разбита на разделы обеспечивается инструкцией <code>CREATE
+TABLE</code>, показанной здесь:</p>
+
+<pre>
+CREATE TABLE employees (id INT NOT NULL, fname VARCHAR(30),
+                        lname VARCHAR(30),
+                        hired DATE NOT NULL DEFAULT '1970-01-01',
+                        separated DATE NOT NULL DEFAULT '9999-12-31',
+                        job_code INT, store_id INT);
+</pre>
+
+<p>Предположите, что имеются 20 видеоклипов, распределенных среди 4
+привилегий, как показано в следующей таблице:</p>
+<table border="1"><tbody><tr><td><span class="bold"><strong>Область</strong>
+</span></td><td><span class="bold"><strong>Store ID Numbers</strong>
+</span></td></tr>
+<tr><td>Север</td><td>3, 5, 6, 9, 17</td></tr>
+<tr><td>Восток</td><td>1, 2, 10, 11, 19, 20</td></tr>
+<tr><td>Запад</td><td>4, 12, 13, 14, 18</td></tr>
+<tr><td>Центр</td><td>7, 8, 15, 16</td></tr></tbody></table>
+
+<p>Чтобы выделять разделы таблицы таким способом, чтобы строки для клипов,
+принадлежащих к той же самой области, были сохранены в том же самом разделе,
+Вы могли бы использовать инструкцию <code>CREATE
+TABLE</code>, показанную здесь:</p>
+
+<pre>
+CREATE TABLE employees (id INT NOT NULL, fname VARCHAR(30),
+                        lname VARCHAR(30),
+                        hired DATE NOT NULL DEFAULT '1970-01-01',
+                        separated DATE NOT NULL DEFAULT '9999-12-31',
+                        job_code INT, store_id INT)
+       PARTITION BY LIST(store_id) (
+                 PARTITION pNorth VALUES IN (3,5,6,9,17),
+                 PARTITION pEast VALUES IN (1,2,10,11,19,20),
+                 PARTITION pWest VALUES IN (4,12,13,14,18),
+                 PARTITION pCentral VALUES IN (7,8,15,16));
+</pre>
+
+<p>Это облегчает добавление или удаление записи в отношении специфических
+областей. Например, предположите, что все клипы в западной области проданы
+другой компании. Все строки в их отношении могут быть удалены запросом
+<code>ALTER TABLE employees DROP PARTITION pWest;</code>, который может быть
+выполнен намного более эффективно, чем эквивалентная инструкция
+<code>DELETE FROM employees WHERE store_id IN (4,12,13,14,18);</code>.</p>
+
+<p>Как с <code>RANGE</code> и <code>HASH</code> partitioning, если Вы желаете
+выделить разделы таблицы столбцом, чье значение не целое число или
+<code>NULL</code>, Вы должны использовать выражение выделения разделов,
+основанное на том столбце, который возвращает такое значение. Например,
+предположите, что таблица, содержащая данные определена, как показано здесь:
+</p>
+
+<pre>
+CREATE TABLE employees (id INT NOT NULL, fname VARCHAR(30),
+                        lname VARCHAR(30),
+                        hired DATE NOT NULL DEFAULT '1970-01-01',
+                        separated DATE NOT NULL DEFAULT '9999-12-31',
+                        job_code CHAR(1), store_id INT);
+</pre>
+
+<p>В этой версии таблицы <code>employees</code> код работы является символом,
+а не числом. Каждый символ соответствует специфической работе, и мы желаем
+выделить разделы таблицы таким способом, чтобы записи для служащих, имеющих
+подобные работы, или работающих в том же самом отделе, были сгруппированы в
+том же самом разделе, согласно следующей схеме:</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong>Категория работы
+или отдел</strong></span></td><td><span class="bold"><strong>Коды работы
+</strong></span></td></tr>
+<tr><td>Management</td><td>D, M, O, P</td></tr>
+<tr><td>Sales</td><td>B, L, S</td></tr>
+<tr><td>Technical</td><td>A, E, G, I, T</td></tr>
+<tr><td>Clerical</td><td>K, N, Y</td></tr>
+<tr><td>Support</td><td>C, F, J, R, V</td></tr>
+<tr><td>Unassigned</td><td>Empty</td></tr></tbody></table>
+
+<p>Так как мы не можем использовать символьные значения в списках, мы должны
+преобразовать их в целых числа или <code>NULL</code>. Для этой цели мы можем
+использовать функцию <code>ASCII()</code> на значении столбца. Кроме того,
+из-за использования различных прикладных программ в разное время коды могут
+быть верхнего или нижнего регистра, значение <span class="quote">empty</span>
+означает "<span class="quote">сейчас не назначен</span>", представлением
+чего могут быть <code>NULL</code>, пустая строка или пробел. Разбитая на
+разделы таблица, которая осуществляет эту схему, показывается здесь:</p>
+
+<pre>
+CREATE TABLE employees (id INT NOT NULL, fname VARCHAR(30),
+                        lname VARCHAR(30),
+                        hired DATE NOT NULL DEFAULT '1970-01-01',
+                        separated DATE NOT NULL DEFAULT '9999-12-31',
+                        job_code CHAR(1), store_id INT)
+       PARTITION BY LIST(ASCII(UCASE(job_code))) (
+                 PARTITION management VALUES IN(68, 77, 79, 80),
+                 PARTITION sales VALUES IN(66, 76, 83),
+                 PARTITION technical VALUES IN(65, 69, 71, 73, 84),
+                 PARTITION clerical VALUES IN(75, 78, 89),
+                 PARTITION support VALUES IN(67, 70, 74, 82, 86),
+                 PARTITION unassigned VALUES IN(NULL, 0, 32));
+</pre>
+
+<p>Так как выражения не разрешаются в списках значения раздела, Вы должны
+внести в список коды ASCII для символов, которые должны быть согласованы.
+Обратите внимание, что <code>ASCII(NULL)</code> вернет <code>NULL</code>.</p>
+
+<p><span class="bold"><strong>Важно</strong></span>: если Вы пробуете
+вставлять строку так, что значение столбца (или возвращаемое значение
+выражения выделения разделов) не найдено в любом из списков значения
+выделения разделов, запрос <code>INSERT</code> будет терпеть неудачу с
+ошибкой. Например, этот запрос будет терпеть неудачу:</p>
+
+<pre>
+INSERT INTO employees VALUES
+       (224, 'Linus', 'Torvalds', '2002-05-01', '2004-10-12', 'Q', 21);
+</pre>
+
+<p>Сбой происходит, потому что 81 (код ASCII для прописной буквы
+<code>'Q'</code>) не найден в любом из списков значения используемых, чтобы
+определить любой из разделов. Не имеется никаких перехватчиков
+<span class="quote">catch-all</span> для list partitions</em></span>,
+аналогичных <code>VALUES LESS THAN(MAXVALUE)</code>, который приспосабливает
+значения, не найденные в любом из списков значения. Другими словами, любое
+значение, которое должно быть согласовано, должно быть найдено в одном
+из списков значений.</p>
+
+<p>Как с выделением разделов <code>RANGE</code>, возможно объединить
+выделение разделов <code>LIST</code>, чтобы произвести составное выделение
+разделов (подвыделение разделов).</p>
+
+<h3><a name="partitioning-hash"></a>3.2.3. <code>HASH</code> Partitioning
+</h3>
+<p>Выделение разделов <code>HASH</code> используется прежде всего, чтобы
+гарантировать четкое распределение данных среди предопределенного числа
+разделов. С диапазоном или выделением разделов списка, Вы должны определить
+явно, в который раздел данное значение столбца или набор значений столбца
+должно быть сохранено, с выделением разделов hash MySQL заботится об этом для
+Вас, и Вы должны только определить значение столбца или выражение, основанное
+на значении столбца для хэширования и число разделов, на которые должна быть
+разделена разбитая на разделы таблица.</p>
+
+<p>Чтобы выделять разделы таблицы, использующей выделение разделов
+<code>HASH</code>, необходимо конкатенировать к инструкции
+<code>CREATE TABLE</code> предложение <code>PARTITION BY HASH
+(<em><code>expr</code></em>)</code>, где <em><code>expr</code></em>
+выражение, которое возвращает целое число. Это может быть просто имя столбца,
+чей тип является одним из целочисленных типов MySQL. Кроме того, Вы будете,
+наиболее вероятно, пользоваться предложением <code>PARTITIONS
+<em><code>num</code></em></code>, где <em><code>num</code></em>
+неотрицательное целое число, представляющее число разделов, на которые
+таблица должна быть разделена.</p>
+
+<p>Например, следующая инструкция создает таблицу, которая использует
+хэширование на столбце <code>store_id</code> и разделена на 4 раздела:</p>
+<pre>
+CREATE TABLE employees (id INT NOT NULL, fname VARCHAR(30),
+                        lname VARCHAR(30),
+                        hired DATE NOT NULL DEFAULT '1970-01-01',
+                        separated DATE NOT NULL DEFAULT '9999-12-31',
+                        job_code INT, store_id INT)
+       PARTITION BY HASH(store_id) PARTITIONS 4;
+</pre>
+
+<p>Если Вы не включаете предложение <code>PARTITIONS</code>, числом разделов
+по умолчанию будет <code>1</code>. Использование ключевого слова
+<code>PARTITIONS</code> без числа после него приводит к синтаксической ошибке.
+</p>
+
+<p>Вы можете также использовать выражение SQL, которое возвращает целое число
+для <em><code>expr</code></em>. Например, Вы могли бы выделять разделы,
+основываясь на годе, в котором служащий был нанят. Это может быть выполнено
+как показано здесь:</p>
+
+<pre>
+CREATE TABLE employees (id INT NOT NULL, fname VARCHAR(30),
+                        lname VARCHAR(30),
+                        hired DATE NOT NULL DEFAULT '1970-01-01',
+                        separated DATE NOT NULL DEFAULT '9999-12-31',
+                        job_code INT, store_id INT)
+       PARTITION BY HASH(YEAR(hired)) PARTITIONS 4;
+</pre>
+
+<p>Вы можете использовать любое функциональное или другое выражение для
+<em><code>expr</code></em>, которое является допустимым в MySQL, пока это
+возвращает непостоянное, непроизвольное целочисленное значение. Другими
+словами, это должно изменяться, но детерминировано. Однако, Вы должны иметь в
+виду, что это выражение оценено каждый раз, когда строка вставлена или
+модифицируется (или возможно удалена). Это означает, что очень сложные
+выражения могут вызывать проблемы эффективности, особенно при выполнении
+операций (типа пакетных вставок), которые воздействуют на очень многие
+строки в одно время.</p>
+
+<p>Наиболее эффективная хэш-функция та, которая функционирует на одиночном
+столбце таблицы, и чье значение увеличивается или уменьшается последовательно
+со значением столбца, поскольку это учитывает
+<span class="quote">сокращение (pruning)</span> на диапазонах разделов. То
+есть, выражение изменяется со значением столбца, на котором основано.</p>
+
+<p>Например, если столбец <code>date_col</code> типа <code>DATE</code>, то
+выражение <code>TO_DAYS(date_col)</code> изменяется непосредственно со
+значением <code>date_col</code>, потому что для каждого изменения в значении
+<code>date_col</code> значение выражения изменяется непротиворечивым
+способом. Дисперсия выражения <code>YEAR(date_col)</code> относительно
+<code>date_col</code> не так пряма, как <code>TO_DAYS(date_col)</code>,
+потому что не каждое возможное изменение в <code>date_col</code> производит
+эквивалентное изменение в <code>YEAR(date_col)</code>. Даже в этом случае
+<code>YEAR(date_col)</code> хороший кандидат на хэш-функцию, потому что это
+изменяется непосредственно с частью <code>date_col</code>, и не имеется
+никакого возможного изменения в <code>date_col</code>, которое производит
+непропорциональное изменение в <code>YEAR(date_col)</code>.</p>
+
+<p>Посредством контраста, предположите, что Вы имеете столбец
+<code>int_col</code> типа <code>INT</code>. Теперь рассмотрите выражение
+<code>POW(5-int_col,3)+6</code>. Это было бы плохим выбором для хэш-функции,
+потому что изменение в значении <code>int_col</code> не произведет
+пропорциональное изменение в значении выражения. Изменение значения
+<code>int_col</code> может производить очень разные изменения в значении
+выражения. Например, изменение <code>int_col</code> с <code>5</code> на
+<code>6</code> производит изменение в значении выражения <code>-1</code>, но
+при изменении значения <code>int_col</code> с <code>6</code> на
+<code>7</code> это будет уже <code>-7</code>.</p>
+
+<p>Другими словами, граф значения столбца против значения выражения более
+близко следует за прямой строкой по уравнению
+<code>y=<em><code>n</code></em>x</code>, где <em><code>n</code></em>
+некоторая константа, отличная от нуля. Такое выражение лучше подходит для
+хэширования. Более нелинейный выражение произведет более неравное
+распределение данных среди разделов.</p>
+
+<p>В теории сокращение также возможно для выражений включающих значение
+больше, чем одного столбца, но определение того, которые из таких выражений
+являются подходящими, может быть крайне трудным и отнимающим много времени.
+По этой причине использование выражений хэширования, включающих много
+столбцов, не особенно рекомендуется.</p>
+
+<p>Когда используется <code>PARTITION BY HASH</code>, MySQL определяет
+который раздел <em><code>num</code></em> использовать, основываясь на модуле
+результата функции пользователя. Другими словами, для выражения
+<em><code>expr</code></em> раздел, в котором запись сохранена, представляет
+собой номер раздела <em><code>N</code></em>, где
+<code><em><code>N</code></em>=MOD(<em><code>expr</code></em>,
+<em><code>num</code></em>)</code>. Например, предположите, что таблица
+<code>t1</code> определена следующим образом, чтобы имела 4 раздела:</p>
+
+<pre>
+CREATE TABLE t1 (col1 INT, col2 CHAR(5), col3 DATE)
+       PARTITION BY HASH(YEAR(col3)) PARTITIONS 4;
+</pre>
+
+<p>Если Вы вставляете в <code>t1</code> запись с <code>'2005-09-15'</code> в
+<code>col3</code>, то раздел, в котором это будет сохранено,
+определен следующим образом:</p>
+<pre>
+MOD(YEAR('2005-09-01'),4)=MOD(2005,4)=1
+</pre>
+
+<p>MySQL 5.1 также поддерживает вариант <code>HASH</code> partitioning
+известного как <em class="firstterm">linear hashing (линейное хэширование)
+</em>, которое использует более сложный алгоритм для определения размещения
+новых строк, вставленных в разбитую на разделы таблицу.</p>
+
+<p>Функция пользователя оценена каждый раз, когда запись вставлена или
+модифицируется. Это может также быть в зависимости от обстоятельств,
+когда записи удалены.</p>
+
+<p><span class="bold"><strong>Обратите внимание</strong></span>: если
+таблица, которая будет разбита на разделы, имеет ключ <code>UNIQUE</code>,
+то любые столбцы, обеспеченные как параметры к <code>HASH</code> функции
+пользователя или на <code>KEY</code> <em><code>column_list</code></em>,
+должны быть частью того ключа. Исключительная ситуация: это ограничение не
+относится к таблицам, использующим <code>NDBCluster</code>.</p>
+
+<h4><a name="partitioning-linear-hash"></a>3.2.3.1.
+<code>LINEAR HASH</code> Partitioning</h4>
+<p>MySQL также поддерживает линейное хэширование, которое отличается от
+регулярного хэширования тем, что линейное хэширование использует линейный
+алгоритм степени двух в то время, как регулярное хэширование использует
+модуль значения хэш-функции.</p>
+
+<p>Синтаксически единственное различие между выделением разделов линейного
+хэширования и регулярным хэшированием: добавление ключевого слова
+<code>LINEAR</code> в предложение <code>PARTITION BY</code>,
+как показано здесь:</p>
+
+<pre>
+CREATE TABLE employees (id INT NOT NULL, fname VARCHAR(30),
+                        lname VARCHAR(30),
+                        hired DATE NOT NULL DEFAULT '1970-01-01',
+                        separated DATE NOT NULL DEFAULT '9999-12-31',
+                        job_code INT, store_id INT)
+       PARTITION BY LINEAR HASH(YEAR(hired)) PARTITIONS 4;
+</pre>
+
+<p>Данный выражением <em><code>expr</code></em> раздел, в котором запись
+сохранена, когда линейное хэширование используется, представляет собой
+номер раздела <em><code>N</code></em> из числа разделов
+<em><code>num</code></em>, где <em><code>N</code></em> получен
+согласно следующему алгоритму:</p>
+
+<ol type="1"><li><p>Находят следующую степень 2 большую, чем
+<em><code>num</code></em>. Назовем это значение <em><code>V</code></em>, это
+может быть вычислено как:</p>
+<pre>
+<em><code>V</code></em>=POWER(2, CEILING(LOG(2, <em><code>num</code></em>)))
+</pre>
+
+<p>Например, предположите, что <em><code>num</code></em>=13. Тогда
+<code>LOG(2,13)</code>=3.7004397181411.
+<code>CEILING(3.7004397181411)</code> 4, а
+<em><code>V</code></em> = <code>POWER(2,4)</code> = 3.</p></li>
+
+<li><p>Берется <em><code>N</code></em> =
+<em><code>F</code></em>(<em><code>column_list</code></em>)
+&amp; (<em><code>V</code></em> - 1).</p></li>
+
+<li><p>Пока <em><code>N</code></em> &gt;= <em><code>num</code></em>:</p>
+<ul type="disc"><li><p>
+Берется <em><code>V</code></em>=CEIL(<em><code>V</code></em>/2)</p></li>
+<li><p>Берется <em><code>N</code></em> = <em><code>N</code></em> &amp;
+(<em><code>V</code></em> - 1)</p></li></ul></li></ol>
+
+<p>Например, предположите, что таблица <code>t1</code> применяет линейное
+выделение разделов, имеет 6 разделов и создана, используя эту инструкцию:</p>
+<pre>
+CREATE TABLE t1 (col1 INT, col2 CHAR(5), col3 DATE)
+       PARTITION BY LINEAR HASH(YEAR(col3)) PARTITIONS 6;
+</pre>
+
+<p>Теперь примите, что Вы хотите вставлять две записи в
+<code>t1</code>: у одной значение столбца <code>col3</code> равно
+<code>'2003-04-14'</code>, а у другой составляет <code>'1998-10-19'</code>.
+Номер раздела для первой из них определен следующим образом:</p>
+
+<pre>
+<em><code>V</code></em> = POWER(2, CEILING( LOG(2,7) )) = 8
+<em><code>N</code></em> = YEAR('2003-04-14') &amp; (8-1) = 2003 &amp; 7 = 3
+(<span class="emphasis"><em>3 &gt;= 6 FALSE: запись сохранена в разделе #3
+</em></span>)
+</pre>
+
+<p>Номер раздела, где сохранена вторая запись, вычислен как показано здесь:
+</p>
+<pre>
+<em><code>V</code></em> = 8
+<em><code>N</code></em> = YEAR('1998-10-19') &amp; (8-1) = 1998 &amp; 7 = 6
+(<span class="emphasis"><em>6 &gt;= 6 TRUE: нужен дополнительный шаг</em>
+</span>)
+<em><code>N</code></em> = 6 &amp; CEILING(5 / 2) = 6 &amp; 3 = 2
+(<span class="emphasis"><em>2 &gt;= 6 FALSE: запись сохранена в разделе #2
+</em></span>)
+</pre>
+
+<p>Преимущество в выделении разделов линейным хэшем в том, что добавление,
+удаление, объединение и разбиение разделов сделано намного быстрее, что может
+быть полезно, когда имеешь дело с таблицами, содержащими чрезвычайно большие
+количества данных. Недостаток в том, что менее вероятно, что данные будут
+равномерно распределены между разделами по сравнению с распределением,
+полученным используя регулярное выделение разделов hash partitioning.</p>
+
+<h3><a name="partitioning-key"></a>3.2.4. <code>KEY</code> Partitioning</h3>
+<p>Выделение разделов ключом подобно выделению разделов хэшем за исключением
+того, что выделение разделов хэшем использует определяемое пользователем
+выражение, а хэш-функция для выделения разделов ключом обеспечена MySQL.
+Здесь MySQL Cluster использует для этой цели <code>MD5()</code>, а для
+таблиц, использующих другие типы памяти, сервер применяет собственную
+внутреннюю хэш-функцию, которая основана на том же самом
+алгоритме, что и <code>PASSWORD()</code>.</p>
+
+<p>Правила синтаксиса для <code>CREATE TABLE ... PARTITION BY KEY</code>
+подобен правилам для создания таблицы, которая разбита на разделы хэшем.
+Главные различия состоят в том что:</p>
+
+<ul type="disc"><li><p><code>KEY</code> используется вместо
+<code>HASH</code>.</p></li>
+<li><p><code>KEY</code> берет только список из одного или большего количества
+имен столбцов. Начиная с MySQL 5.1.5, если таблица имеет первичный ключ,
+столбцы, по которым происходит выделение разделов, должны включать хотя бы
+его часть (или весь ключ).</p>
+
+<p>Начиная с MySQL 5.1.6, <code>KEY</code> берет список из нуля или большего
+количества имен столбца. Если никакое имя столбца не определено как ключ
+выделения разделов, используется первичный ключ таблицы, если он имеется.
+Например, следующая инструкция <code>CREATE TABLE</code> допустима в
+MySQL 5.1.6 или позже:</p>
+
+<pre>
+CREATE TABLE k1 (id INT NOT NULL PRIMARY KEY, name VARCHAR(20))
+       PARTITION BY KEY() PARTITIONS 2;
+</pre>
+
+<p>Если не имеется никакого первичногоключа, но имеется уникальный ключ, то
+именно уникальный ключ используется для выделения разделов:</p>
+<pre>
+CREATE TABLE k1 (id INT NOT NULL, name VARCHAR(20),
+                 UNIQUE KEY (id))
+       PARTITION BY KEY() PARTITIONS 2;
+</pre>
+<p>Однако, если уникальный столбец ключа не был определен как
+<code>NOT NULL</code>, то предыдущая инструкция будет терпеть неудачу.</p>
+
+<p>В обоих из этих случаев ключом выделения разделов является столбец
+<code>id</code>, даже при том, что это не показывается в выводе
+<code>SHOW CREATE TABLE</code> или в столбце
+<code>PARTITION_EXPRESSION</code> таблицы
+<code>INFORMATION_SCHEMA.PARTITIONS</code>.</p>
+
+<p>В отличие от случая с другими типами выделения разделов, столбцы,
+используемые для выделения разделов <code>KEY</code>, не ограничены
+значениями <code>NULL</code> или целым числом. Например, следующая инструкция
+<code>CREATE TABLE</code> допустима:</p>
+<pre>
+CREATE TABLE tm1 (s1 CHAR(32) PRIMARY KEY)
+       PARTITION BY KEY(s1) PARTITIONS 10;
+</pre>
+
+<p>Предшествующая инструкция не была бы допустима для любого другого типа
+выделения разделов. <span class="bold"><strong>Примечание</strong></span>: в
+этом случае, простое использование <code>PARTITION BY KEY()</code> было бы
+также допустимо и имело бы тот же самый эффект. что и <code>PARTITION BY
+KEY(s1)</code>, поскольку <code>s1</code> является первичным ключом таблицы.
+</p>
+
+<p><span class="bold"><strong>Обратите внимание</strong></span>: также
+начиная с MySQL 5.1.6, таблицы, использующие <code>NDB Cluster</code> неявно
+разбиты на разделы <code>KEY</code>, используя первичный ключ таблицы как
+ключ выделения разделов. Когда таблица кластера не имеет никакого явного
+первичного ключа, применяется скрытый первичный ключ, сгенерированный
+<code>NDB</code> для каждой таблицы кластера.</p>
+
+<p><span class="bold"><strong>Важно</strong></span>: для таблицы с
+разделением по ключу, использующей любой тип памяти MySQL, кроме <code>NDB
+Cluster</code>, Вы не можете выполнять <code>ALTER TABLE DROP PRIMARY
+KEY</code>, так как это сгенерирует ошибку <span>ERROR 1466 (HY000): Field in
+list of fields for partition function not found in table</span>. Это не
+проблема для таблиц MySQL Cluster, которые разбиты на разделы
+<code>KEY</code>: в таких случаях, таблица реорганизована, используя скрытый
+первичный ключ для выделения разделов этой таблицы.</p></li></ul>
+
+<p>Также возможно выделить разделы таблицы линейным ключом.
+Имеется простой пример:</p>
+<pre>
+CREATE TABLE tk (col1 INT NOT NULL, col2 CHAR(5), col3 DATE)
+       PARTITION BY LINEAR KEY (col1) PARTITIONS 3;
+</pre>
+
+<p>Использование <code>LINEAR</code> имеет тот же самый эффект на
+<code>KEY</code>, как на выделении разделов <code>HASH</code> с номером
+раздела, получаемым использованием алгоритма степени двух, а
+не арифметикой модуля.</p>
+
+<h3><a name="partitioning-subpartitions"></a>3.2.5.
+Подвыделение разделов (Subpartitioning)</h3>
+<p>Subpartitioning также известно как <em class="firstterm">составное
+выделение разделов (composite partitioning)</em>, что является дальнейшим
+делением каждого раздела в разбитой на разделы таблице. Например, рассмотрите
+следующую инструкцию <code>CREATE TABLE</code>:</p>
+
+<pre>
+CREATE TABLE ts (id INT, purchased DATE)
+       PARTITION BY RANGE(YEAR(purchased))
+       SUBPARTITION BY HASH(TO_DAYS(purchased))
+       SUBPARTITIONS 2 (PARTITION p0 VALUES LESS THAN (1990),
+                        PARTITION p1 VALUES LESS THAN (2000),
+                        PARTITION p2 VALUES LESS THAN MAXVALUE);
+</pre>
+
+<p>Таблица <code>ts</code> имеет 3 раздела <code>RANGE</code>. Каждый из этих
+разделов <code>p0</code>, <code>p1</code> и <code>p2</code> далее разделен на
+2 подраздела. В действительности вся таблица разделена на <code>3*2=6</code>
+разделов. Однако, из-за действия предложения <code>PARTITION BY RANGE</code>
+первые 2 хранят только записи со значением меньше,
+чем 1990 в столбце <code>purchased</code>.</p>
+
+<p>В MySQL 5.1 возможно подвыделить разделы таблиц, которые разбиты на
+разделы <code>RANGE</code> или <code>LIST</code>. Подразделы могут
+использовать выделение разделов <code>HASH</code> или <code>KEY</code>. Это
+также известно как <em class="firstterm">составное выделение разделов</em>.
+</p>
+
+<p>Также возможно определить подразделы, явно использующие предложения
+<code>SUBPARTITION</code>, чтобы определить параметры для индивидуальных
+подразделов. Например, более подробный режим создания той же самой таблицы
+<code>ts</code>, как показано в предыдущем примере был бы:</p>
+
+<pre>
+CREATE TABLE ts (id INT, purchased DATE)
+       PARTITION BY RANGE( YEAR(purchased) )
+                 SUBPARTITION BY HASH( TO_DAYS(purchased) ) (
+       PARTITION p0 VALUES LESS THAN (1990) (
+                 SUBPARTITION s0, SUBPARTITION s1),
+       PARTITION p1 VALUES LESS THAN (2000) (
+                 SUBPARTITION s2, SUBPARTITION s3),
+       PARTITION p2 VALUES LESS THAN MAXVALUE (
+                 SUBPARTITION s4, SUBPARTITION s5));
+</pre>
+
+<p>Некоторые синтаксические элементы:</p>
+<ul type="disc"><li><p>Каждый раздел должен иметь то же
+самое число подразделов.</p></li>
+
+<li><p>Если Вы явно определяете любые подразделы, использующие
+<code>SUBPARTITION</code> на любом разделе разбитой на разделы таблицы, Вы
+должны определить их все. Другими словами, следующая инструкция
+будет терпеть неудачу:</p>
+
+<pre>
+CREATE TABLE ts (id INT, purchased DATE)
+       PARTITION BY RANGE(YEAR(purchased))
+                 SUBPARTITION BY HASH(TO_DAYS(purchased)) (
+       PARTITION p0 VALUES LESS THAN (1990) (
+                 SUBPARTITION s0, SUBPARTITION s1),
+       PARTITION p1 VALUES LESS THAN (2000),
+       PARTITION p2 VALUES LESS THAN MAXVALUE (
+                 SUBPARTITION s2, SUBPARTITION s3));
+</pre>
+<p>Эта инструкция свалится даже если добавить предложение
+<code>SUBPARTITIONS 2</code>.</p></li>
+
+<li><p>Каждое предложение <code>SUBPARTITION</code> должно включить (как
+минимум) имя для подраздела. Иначе Вы можете устанавливать любую желательную
+опцию для подраздела или позволить принимать настройку по умолчанию
+для этой опции.</p></li>
+
+<li><p>В MySQL 5.1.7 и ранее имена подразделов должны быть уникальны внутри
+каждого раздела, но не должны быть уникальны внутри таблицы в целом. Начиная
+с MySQL 5.1.8, имена подразделов должны быть уникальны для всей таблицы.
+Например, следующая инструкция <code>CREATE TABLE</code>
+допустима в MySQL 5.1.8 и позже:</p>
+
+<pre>
+CREATE TABLE ts (id INT, purchased DATE)
+       PARTITION BY RANGE(YEAR(purchased))
+                 SUBPARTITION BY HASH(TO_DAYS(purchased)) (
+       PARTITION p0 VALUES LESS THAN (1990) (
+                 SUBPARTITION s0, SUBPARTITION s1),
+       PARTITION p1 VALUES LESS THAN (2000) (
+                 SUBPARTITION s2, SUBPARTITION s3),
+       PARTITION p2 VALUES LESS THAN MAXVALUE (
+                 SUBPARTITION s4, SUBPARTITION s5));
+</pre>
+<p>Предыдущая инструкция также допустима для версий MySQL до 5.1.8.
+</p></li></ul>
+
+<p>Подразделы могут использоваться с особенно большими таблицами, чтобы
+распределить данные и индексы на много дисков. Предположите, что Вы имеете 6
+дисков, установленные как <code>/disk0</code>, <code>/disk1</code>,
+<code>/disk2</code> и т. д. Теперь рассмотрите следующий пример:</p>
+
+<pre>
+CREATE TABLE ts (id INT, purchased DATE) PARTITION BY RANGE(YEAR(purchased))
+       SUBPARTITION BY HASH(TO_DAYS(purchased)) (
+       PARTITION p0 VALUES LESS THAN (1990) (
+       SUBPARTITION s0 DATA DIRECTORY = '/disk0/data'
+                       INDEX DIRECTORY = '/disk0/idx',
+       SUBPARTITION s1 DATA DIRECTORY = '/disk1/data'
+                       INDEX DIRECTORY = '/disk1/idx'),
+       PARTITION p1 VALUES LESS THAN (2000) (
+       SUBPARTITION s2 DATA DIRECTORY = '/disk2/data'
+                       INDEX DIRECTORY = '/disk2/idx',
+       SUBPARTITION s3 DATA DIRECTORY = '/disk3/data'
+                       INDEX DIRECTORY = '/disk3/idx'),
+       PARTITION p2 VALUES LESS THAN MAXVALUE (SUBPARTITION s4
+                    DATA DIRECTORY = '/disk4/data'
+                    INDEX DIRECTORY = '/disk4/idx',
+       SUBPARTITION s5 DATA DIRECTORY = '/disk5/data'
+                    INDEX DIRECTORY = '/disk5/idx'));
+</pre>
+
+<p>В этом случае отдельный диск используется для данных и индексов каждого
+<code>RANGE</code>. Много других разновидностей возможны, другой пример мог
+бы быть таким:</p>
+
+<pre>
+CREATE TABLE ts (id INT, purchased DATE) PARTITION BY RANGE(YEAR(purchased))
+       SUBPARTITION BY HASH(TO_DAYS(purchased)) (
+       PARTITION p0 VALUES LESS THAN (1990) (
+       SUBPARTITION s0a DATA DIRECTORY = '/disk0' INDEX DIRECTORY='/disk1',
+       SUBPARTITION s0b DATA DIRECTORY = '/disk2' INDEX DIRECTORY='/disk3'),
+       PARTITION p1 VALUES LESS THAN (2000) (
+       SUBPARTITION s1a DATA DIRECTORY = '/disk4/data'
+                        INDEX DIRECTORY = '/disk4/idx',
+       SUBPARTITION s1b DATA DIRECTORY = '/disk5/data'
+                        INDEX DIRECTORY = '/disk5/idx'),
+       PARTITION p2 VALUES LESS THAN MAXVALUE (
+                    SUBPARTITION s2a, SUBPARTITION s2b));
+</pre>
+
+<p>Здесь хранение следующее:</p>
+<ul type="disc"><li><p>Строки с датами <code>purchased</code> до 1990
+занимают обширное количество места, поэтому поделены 4 путями: с отдельным
+диском, специализированным для данных, и с дополнительным диском для индексов
+для каждого из двух подразделов (<code>s0a</code> и <code>s0b</code>),
+входящих в раздел <code>p0</code>. Другими словами:</p>
+
+<ul type="circle"><li><p>Данные для подраздела <code>s0a</code> сохранены на
+<code>/disk0</code>.</p></li>
+<li><p>Индексы для подраздела <code>s0a</code> сохранены на
+<code>/disk1</code>.</p></li>
+
+<li><p>Данные для подраздела <code>s0b</code> сохранены на
+<code>/disk2</code>.</p></li>
+<li><p>Индексы для подраздела <code>s0b</code> сохранены на
+<code>/disk3</code>.</p></li></ul></li>
+
+<li><p>Строки, содержащие даты в пределах от 1990 до 1999 (раздел
+<code>p1</code>) не требуют так много памяти, как даты до 1990. Они размазаны
+между 2 дисками (<code>/disk4</code> и <code>/disk5</code>):</p>
+
+<ul type="circle"><li><p>Данные и индексы, принадлежащие первому подразделу
+(<code>s1a</code>) раздела <code>p1</code>, сохранены на
+<code>/disk4</code>: данные в <code>/disk4/data</code>, а индексы в
+<code>/disk4/idx</code>.</p></li>
+
+<li><p>Данные и индексы, принадлежащие второму подразделу
+(<code>s1b</code>) раздела <code>p1</code>, сохранены на
+<code>/disk5</code>: данные в <code>/disk5/data</code>, а индексы в
+<code>/disk5/idx</code>.</p></li></ul></li>
+
+<li><p>Строки, отражающие даты с года 2000 до текущей (раздел
+<code>p2</code>), не занимают так много места, как любой из двух предыдущих
+диапазонов. В настоящее время достаточно сохранить всех их в заданном
+по умолчанию расположении.</p>
+
+<p>В будущем, когда число purchases в течение десятилетия, начинающегося
+годом 2000, вырастет до отметки, где заданное по умолчанию расположение
+больше не обеспечивает достаточного места, соответствующие строки могут
+перемещаться, используя <code>ALTER TABLE ... REORGANIZE PARTITION</code>.
+</p></li></ul>
+
+<h3><a name="partitioning-handling-nulls"></a>3.2.6. Как выделитель разделов
+в MySQL обрабатывает значения <code>NULL</code></h3>
+<p>Выделение разделов в MySQL не делает ничего, чтобы отвергнуть
+<code>NULL</code> как значение выражения выделения разделов независимо от
+того, является ли это значением столбца или обеспеченного пользователем
+выражения. Даже разрешается использовать <code>NULL</code> как значение
+выражения, которое должно выдать целое число, но важно иметь в виду, что
+<code>NULL</code> числом не является. Начиная с версии 5.1.8, MySQL
+обрабатывает <code>NULL</code> как будто он меньше, чем любое не нулевое
+значение, точно как делает <code>ORDER BY</code>.</p>
+
+<p>Из-за этого эта обработка <code>NULL</code> изменяется при выделении
+разделов различных типов, и может производить поведение, которое Вы не
+ожидаете. Если Вы вставляете строку в таблицу, разбитую на разделы
+<code>RANGE</code> так, что значение столбца, используемое, чтобы определить
+раздел, является <code>NULL</code>, строка вставлена в самый нижний раздел.
+Например, рассмотрите эти две таблицы, созданные и
+заполняемые следующим образом:</p>
+
+<pre>
+mysql&gt; CREATE TABLE t1 (c1 INT, c2 VARCHAR(20))
+    -&gt;        PARTITION BY RANGE(c1) (
+    -&gt;                  PARTITION p0 VALUES LESS THAN (0),
+    -&gt;                  PARTITION p1 VALUES LESS THAN (10),
+    -&gt;                  PARTITION p2 VALUES LESS THAN MAXVALUE);
+Query OK, 0 rows affected (0.09 sec)
+
+mysql&gt; CREATE TABLE t1 (c1 INT, c2 VARCHAR(20))
+    -&gt;        PARTITION BY RANGE(c1) (
+    -&gt;                  PARTITION p0 VALUES LESS THAN (-5),
+    -&gt;                  PARTITION p1 VALUES LESS THAN (0),
+    -&gt;                  PARTITION p1 VALUES LESS THAN (10),
+    -&gt;                  PARTITION p2 VALUES LESS THAN MAXVALUE);
+Query OK, 0 rows affected (0.09 sec)
+mysql&gt; INSERT INTO t1 VALUES (NULL, 'mothra');
+Query OK, 1 row affected (0.00 sec)
+mysql&gt; INSERT INTO t2 VALUES (NULL, 'mothra');
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; SELECT * FROM t1;
++------+--------+
+| id   | name   |
++------+--------+
+| NULL | mothra |
++------+--------+
+1 row in set (0.00 sec)
+
+mysql&gt; SELECT * FROM t2;
++------+--------+
+| id   | name   |
++------+--------+
+| NULL | mothra |
++------+--------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>Вы можете видеть, в который раздел строки сохранены, осматривая файловую
+систему и сравнивая размеры <code>.MYD</code>-файлов:</p>
+<pre>
+/var/lib/mysql/test&gt; ls -l *.MYD
+<span class="bold"><strong>-rw-rw---- 1 mysql mysql 20 2006-03-10 03:27 t1#P#p0.MYD</strong></span>
+-rw-rw---- 1 mysql mysql 0 2006-03-10 03:17 t1#P#p1.MYD
+-rw-rw---- 1 mysql mysql 0 2006-03-10 03:17 t1#P#p2.MYD
+<span class="bold"><strong>-rw-rw---- 1 mysql mysql 20 2006-03-10 03:27 t2#P#p0.MYD</strong></span>
+-rw-rw---- 1 mysql mysql 0 2006-03-10 03:17 t2#P#p1.MYD
+-rw-rw---- 1 mysql mysql 0 2006-03-10 03:17 t2#P#p2.MYD
+-rw-rw---- 1 mysql mysql 0 2006-03-10 03:17 t2#P#p3.MYD
+</pre>
+
+<p>Файлы разделов именованы согласно формату
+<code><em><code>table_name</code></em>#P#<em><code>partition_name</code>
+</em>.<em><code>extension</code></em></code> так, чтобы
+<code>t1#P#p0.MYD</code> был файлом, в котором сохранены данные,
+принадлежащие к разделу <code>p0</code> таблицы <code>t1</code>.
+<span class="bold"><strong>Обратите внимание</strong></span>: до MySQL 5.1.5,
+эти файлы были бы именованы соответственно <code>t1_p0.MYD</code> и
+<code>t2_p0.MYD</code>.</p>
+
+<p>Вы можете также показывать, что эти строки были сохранены в самом низком
+разделе каждой таблицы, удаляя эти разделы, а затем делая повторный
+запуск инструкций <code>SELECT</code>:</p>
+
+<pre>
+mysql&gt; ALTER TABLE t1 DROP PARTITION p0;
+Query OK, 0 rows affected (0.16 sec)
+mysql&gt; ALTER TABLE t2 DROP PARTITION p0;
+Query OK, 0 rows affected (0.16 sec)
+mysql&gt; SELECT * FROM t1;
+Empty set (0.00 sec)
+mysql&gt; SELECT * FROM t2;
+Empty set (0.00 sec)
+</pre>
+
+<p>Такая обработка также верна для выделения разделов с помощью выражений
+через использование функций SQL. Предположите, что мы имеем таблицу:</p>
+<pre>
+CREATE TABLE tndate (id INT, dt DATE) PARTITION BY RANGE(YEAR(dt)) (
+       PARTITION p0 VALUES LESS THAN (1990),
+       PARTITION p1 VALUES LESS THAN (2000),
+       PARTITION p2 VALUES LESS THAN MAXVALUE);
+</pre>
+
+<p>Как с другими функциями MySQL, <code>YEAR(NULL)</code> вернет
+<code>NULL</code>. Строка со значением <code>NULL</code> столбца
+<code>dt</code> обрабатывается, как если бы выражение выделения разделов
+было оценено к значению меньше, чем любое другое значение, и
+так вставлено в раздел <code>p0</code>.</p>
+
+<p>Таблица, которая разбита на разделы <code>LIST</code> допускает значения
+<code>NULL</code> если (и только если!) один из разделов определен, используя
+список значений, который содержит <code>NULL</code>. Таблица, разбитая на
+разделы <code>LIST</code>, которая явно не использует <code>NULL</code>
+в списке значений, отклоняет строки, приводящие к значению <code>NULL</code>
+для выражения выделения разделов, как показано в этом примере:</p>
+
+<pre>
+mysql&gt; CREATE TABLE ts1 (c1 INT, c2 VARCHAR(20))
+    -&gt;        PARTITION BY LIST(c1) (
+    -&gt;                  PARTITION p0 VALUES IN (0, 3, 6),
+    -&gt;                  PARTITION p1 VALUES IN (1, 4, 7),
+    -&gt;                  PARTITION p2 VALUES IN (2, 5, 8));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql&gt; INSERT INTO ts1 VALUES (9, 'mothra');
+<span>ERROR 1504 (HY000): Table has no partition for value 9</span>
+mysql&gt; INSERT INTO ts1 VALUES (NULL, 'mothra');
+<span>ERROR 1504 (HY000): Table has no partition for value NULL</span>
+</pre>
+
+<p>Только строки, имеющие значение <code>c1</code> между <code>0</code> и
+<code>8</code> включительно, могут быть вставлены в <code>ts1</code>.
+<code>NULL</code> выходит за пределы этого диапазона точно так же, как число
+<code>9</code>. Мы можем создавать таблицы <code>ts2</code> и
+<code>ts3</code> и списки значений, содержащие <code>NULL</code>,
+как показано здесь:</p>
+
+<pre>
+mysql&gt; CREATE TABLE ts2 (c1 INT, c2 VARCHAR(20))
+    -&gt;        PARTITION BY LIST(c1) (
+    -&gt;                  PARTITION p0 VALUES IN (0, 3, 6),
+    -&gt;                  PARTITION p1 VALUES IN (1, 4, 7),
+    -&gt;                  PARTITION p2 VALUES IN (2, 5, 8),
+    -&gt;                  PARTITION p3 VALUES IN (NULL));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql&gt; CREATE TABLE ts3 (c1 INT, c2 VARCHAR(20))
+    -&gt;        PARTITION BY LIST(c1) (
+    -&gt;                  PARTITION p0 VALUES IN (0, 3, 6),
+    -&gt;                  PARTITION p1 VALUES IN (1, 4, 7, NULL),
+    -&gt;                  PARTITION p2 VALUES IN (2, 5, 8));
+Query OK, 0 rows affected (0.01 sec)
+</pre>
+
+<p>При определении значения для выделения разделов, Вы можете обрабатывать
+<code>NULL</code> точно как любое другое значение, и допустимы
+<code>VALUES IN (NULL)</code> и <code>VALUES IN (1, 4, 7, NULL)</code>
+(равно как и <code>VALUES IN (1, NULL, 4, 7)</code>, <code>VALUES IN
+(NULL, 1, 4, 7)</code> и тому подобное). Вы можете вставлять строку, имеющую
+<code>NULL</code> для столбца <code>c1</code> в каждую из таблиц
+<code>ts2</code> и <code>ts3</code>:</p>
+
+<pre>
+mysql&gt; INSERT INTO ts2 VALUES (NULL, 'mothra');
+Query OK, 1 row affected (0.00 sec)
+mysql&gt; INSERT INTO ts3 VALUES (NULL, 'mothra');
+Query OK, 1 row affected (0.00 sec)
+</pre>
+
+<p>Осматривая файловую систему, Вы можете проверить, что первая из этих
+инструкций вставила новую строку в раздел <code>p3</code> таблицы
+<code>ts2</code>, а вторая инструкция вставила новую строку в раздел
+<code>p1</code> таблицы <code>ts3</code>:</p>
+
+<pre>
+/var/lib/mysql/test&gt; ls -l ts2*.MYD
+-rw-rw---- 1 mysql mysql 0 2006-03-10 10:35 ts2#P#p0.MYD
+-rw-rw---- 1 mysql mysql 0 2006-03-10 10:35 ts2#P#p1.MYD
+-rw-rw---- 1 mysql mysql 0 2006-03-10 10:35 ts2#P#p2.MYD
+<span class="bold"><strong>-rw-rw---- 1 mysql mysql 20 2006-03-10 10:35 ts2#P#p3.MYD</strong></span>
+
+/var/lib/mysql/test&gt; ls -l ts3*.MYD
+-rw-rw---- 1 mysql mysql 0 2006-03-10 10:36 ts3#P#p0.MYD
+<span class="bold"><strong>-rw-rw---- 1 mysql mysql 20 2006-03-10 10:36 ts3#P#p1.MYD</strong></span>
+-rw-rw---- 1 mysql mysql 0 2006-03-10 10:36 ts3#P#p2.MYD
+</pre>
+
+<p>Как в более ранних примерах, мы принимаем использование оболочки
+<span><strong>bash</strong></span> в операционной системе для Unix для
+списка файлов. Например, если Вы используете оболочку DOS в операционной
+системе Windows эквивалент последнего вывода мог быть получен, выполняя
+команду <code>dir ts3*.MYD</code> в каталоге
+<code>C:\Program Files\MySQL\MySQL Server 5.1\data\test</code>.</p>
+
+<p>Как показано ранее в этом разделе, Вы можете также проверять, которые
+разделы использовались для сохранения значений удаляя их, а
+затем выполняя <code>SELECT</code>.</p>
+
+<p><code>NULL</code> обработан несколько по-другому для таблиц, разбитых на
+разделы <code>HASH</code> или <code>KEY</code>. В этих случаях любое
+выражение раздела, которое выдает значение <code>NULL</code>, обрабатывается,
+как если бы возвращаемое значение было нулевым. Мы можем проверять это
+поведение,  исследуя эффекты в файловой системе от создания таблицы, разбитой
+на разделы <code>HASH</code> и начальной загрузкой с записью, содержащей
+соответствующие значения. Предположите, что Вы имеете таблицу
+<code>th</code>, созданную в базе данных <code>test</code>,
+используя эту инструкцию:</p>
+
+<pre>
+mysql&gt; CREATE TABLE th (c1 INT, c2 VARCHAR(20))
+    -&gt;        PARTITION BY HASH(c1) PARTITIONS 2;
+Query OK, 0 rows affected (0.00 sec)
+</pre>
+
+<p>При принятии установки RPM MySQL под Linux, эта инструкция создает два
+<code>.MYD</code>-файла в <code>/var/lib/mysql/test</code>, которые могут
+просматриваться в оболочке <strong>bash</strong> следующим образом:</p>
+
+<pre>
+/var/lib/mysql/test&gt; ls th*.MYD -l
+-rw-rw---- 1 mysql mysql 0 2005-11-04 18:41 th#P#p0.MYD
+-rw-rw---- 1 mysql mysql 0 2005-11-04 18:41 th#P#p1.MYD
+</pre>
+
+<p>Обратите внимание, что размер каждого файла 0 байтов. Теперь вставьте
+в <code>th</code> строку, чей столбец <code>c1</code> является
+<code>NULL</code>, и проверьте, что эта строка была вставлена:</p>
+
+<pre>
+mysql&gt; INSERT INTO th VALUES (NULL, 'mothra');
+Query OK, 1 row affected (0.00 sec)
+mysql&gt; SELECT * FROM th;
++------+---------+
+| c1   | c2      |
++------+---------+
+| NULL | mothra  |
++------+---------+
+1 row in set (0.01 sec)
+</pre>
+
+<p>Заметьте, что для любого целого числа <em><code>N</code></em> значение
+<code>NULL MOD <em><code>N</code></em></code> всегда <code>NULL</code>. Для
+таблиц, которые разбиты на разделы <code>HASH</code> илм <code>KEY</code>,
+этот результат обрабатывается для определения правильного раздела как
+<code>0</code>. При возврате к оболочке системы, мы можем видеть, что
+значение было вставлено в первый раздел (по умолчанию <code>p0</code>),
+выводя файлы данных еще раз:</p>
+
+<pre>
+var/lib/mysql/test&gt; ls *.MYD -l
+-rw-rw---- 1 mysql mysql 20 2005-11-04 18:44 th#P#p0.MYD
+-rw-rw---- 1 mysql mysql  0 2005-11-04 18:41 th#P#p1.MYD
+</pre>
+
+<p>Вы можете видеть, что инструкция <code>INSERT</code> изменила только файл
+<code>th#P#p0.MYD</code> (увеличение размера на диске) без того, чтобы
+воздействовать на другой файл данных.</p>
+
+<p><span class="bold"><strong>Важно</strong></span>: до MySQL 5.1.8
+выделение разделов по <code>RANGE</code> значение выражения выделения
+разделов <code>NULL</code> работало как 0 (единственный способ обходить это
+должен был разработать таблицы так, чтобы не позволить пустые указатели,
+обычно объявляя столбцы <code>NOT NULL</code>). Если Вы имеете схему
+выделения разделов <code>RANGE</code>, которая зависит от этого более раннего
+поведения, Вы будете должны заново выполнить это при обновлении до
+MySQL 5.1.8 или позже.</p>
+
+<h2><a name="partitioning-management"></a>3.3. Управление разделами</h2>
+<p>MySQL 5.1 обеспечивает ряд способов изменить разбитые на разделы таблицы.
+Возможно добавлять, удалять, переопределять, объединять или расчленять
+существующие разделы. Все эти действия могут быть выполнены, используя
+расширения выделения разделов к команде <code>ALTER TABLE</code>. Имеются
+также способы получить информацию относительно разбитых на
+разделы таблиц и разделов.</p>
+
+<p><code>Обратите внимание</code>: в MySQL 5.1 все разделы разбитой на
+разделы таблицы должны иметь то же самое число подразделов, и невозможно
+изменить подвыделение разделов, если только таблица была создана.</p>
+
+<p>Инструкция <code>ALTER TABLE ... PARTITION BY ...</code> доступна с
+MySQL 5.1.6, предварительно, в MySQL 5.1, это было принято как
+допустимый синтаксис, но инструкция не делала ничего.</p>
+
+<p>Чтобы изменять схему выделения разделов таблицы, необходимо использовать
+команду <code>ALTER TABLE</code> с предложением
+<em><code>partition_options</code></em>. Это предложение имеет тот же самый
+синтаксис, как то, что используется с <code>CREATE TABLE</code> для создания
+разбитой на разделы таблицы, и всегда начинается с ключевых слов
+<code>PARTITION BY</code>. Например, предположите, что Вы имеете таблицу,
+разбитую на разделы диапазоном, использующим следующую
+инструкцию <code>CREATE TABLE</code>:</p>
+
+<pre>
+CREATE TABLE trb3 (id INT, name VARCHAR(50), purchased DATE)
+       PARTITION BY RANGE(YEAR(purchased)) (
+                 PARTITION p0 VALUES LESS THAN (1990),
+                 PARTITION p1 VALUES LESS THAN (1995),
+                 PARTITION p2 VALUES LESS THAN (2000),
+                 PARTITION p3 VALUES LESS THAN (2005));
+</pre>
+
+<p>Чтобы заново выделять разделы этой таблицы так, чтобы это было разбито на
+разделы ключом на два раздела, использующие значение столбца <code>id</code>
+как основание для ключа, Вы можете использовать эту инструкцию:</p>
+<pre>
+ALTER TABLE trb3 PARTITION BY KEY(id) PARTITIONS 2;
+</pre>
+
+<p>Это имеет тот же самый эффект на структуре таблицы как удаление таблицы и
+создания ее вновь, используя <code>CREATE TABLE trb3
+PARTITION BY KEY(id) PARTITIONS 2;</code>.</p>
+
+<p><span class="bold"><strong>Важно</strong></span>: в MySQL 5.1.7 и ранее
+<code>ALTER TABLE ... ENGINE = ...</code> удаляет все выделение разделов из
+обрабатываемой таблицы. Начиная с MySQL 5.1.8, этот оператор меняет только
+тип памяти, используемый таблицей, и оставляет схему выделения разделов
+таблицы неповрежденной. С MySQL 5.1.8 применяйте <code>ALTER TABLE ... REMOVE
+PARTITIONING</code>, чтобы удалить выделение разделов таблицы.</p>
+
+<h3><a name="partitioning-management-range-list"></a>3.3.1.
+Управление разделами <code>RANGE</code> и <code>LIST</code></h3>
+<p>Разделы диапазона и списка очень похожи относительно того, как обработано
+добавление и удаление разделов. По этой причине мы обсуждаем здесь управление
+обеими сортами выделения разделов.</p>
+
+<p>Удаление раздела из таблицы, которая разбита на разделы <code>RANGE</code>
+или <code>LIST</code> может быть выполнено, используя инструкцию <code>ALTER
+TABLE</code> с предложением <code>DROP PARTITION</code>. Имеется базисный
+пример, который предполагает, что Вы уже создали таблицу, которая разбита на
+разделы диапазоном и затем заполняется 10 записями, использующими следующие
+инструкции <code>CREATE TABLE</code> и <code>INSERT</code>:</p>
+
+<pre>
+mysql&gt; CREATE TABLE tr (id INT, name VARCHAR(50), purchased DATE)
+    -&gt;        PARTITION BY RANGE(YEAR(purchased)) (
+    -&gt;                  PARTITION p0 VALUES LESS THAN (1990),
+    -&gt;                  PARTITION p1 VALUES LESS THAN (1995),
+    -&gt;                  PARTITION p2 VALUES LESS THAN (2000),
+    -&gt;                  PARTITION p3 VALUES LESS THAN (2005));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql&gt; INSERT INTO tr VALUES
+    -&gt;        (1, 'desk organiser', '2003-10-15'),
+    -&gt;        (2, 'CD player', '1993-11-05'),
+    -&gt;        (3, 'TV set', '1996-03-10'),
+    -&gt;        (4, 'bookcase', '1982-01-10'),
+    -&gt;        (5, 'exercise bike', '2004-05-09'),
+    -&gt;        (6, 'sofa', '1987-06-05'),
+    -&gt;        (7, 'popcorn maker', '2001-11-22'),
+    -&gt;        (8, 'aquarium', '1992-08-04'),
+    -&gt;        (9, 'study desk', '1984-09-16'),
+    -&gt;        (10, 'lava lamp', '1998-12-25');
+Query OK, 10 rows affected (0.01 sec)
+</pre>
+
+<p>Вы можете видеть, которые элементы должны быть вставлены в раздел
+<code>p2</code> как показано здесь:</p>
+<pre>
+mysql&gt; SELECT * FROM tr
+    -&gt;          WHERE purchased BETWEEN '1995-01-01' AND
+    -&gt;          '1999-12-31';
++----+-----------+------------+
+| id | name      | purchased  |
++----+-----------+------------+
+|  3 | TV set    | 1996-03-10 |
+| 10 | lava lamp | 1998-12-25 |
++----+-----------+------------+
+2 rows in set (0.00 sec)
+</pre>
+
+<p>Чтобы удалить раздел <code>p2</code>, выполните следующую команду:</p>
+<pre>
+mysql&gt; ALTER TABLE tr DROP PARTITION p2;
+Query OK, 0 rows affected (0.03 sec)
+</pre>
+
+<p>Обратите внимание: в MySQL 5.1 <code>NDB Cluster</code> не поддерживает
+<code>ALTER TABLE ... DROP PARTITION</code>. Это, однако, поддерживает другие
+связанные с выделением разделов расширения <code>ALTER TABLE</code>, которые
+описаны в этой главе.</p>
+
+<p>Очень важно не забыть, что, когда Вы удаляете раздел, Вы также удаляете
+все данные, которые был сохранены в этом разделе. Вы можете видеть, что дело
+обстоит именно так, делая повторный запуск
+предыдущего запроса <code>SELECT</code>:</p>
+<pre>
+mysql&gt; SELECT * FROM tr WHERE purchased
+    -&gt;          BETWEEN '1995-01-01' AND '1999-12-31';
+Empty set (0.00 sec)
+</pre>
+
+<p>Из-за этого в MySQL 5.1.10 было добавлено требование, что Вы имеете
+привилегию <code>DROP</code> для таблицы прежде, чем Вы сможете выполнять
+<code>ALTER TABLE ... DROP PARTITION</code> на этой таблице.</p>
+
+<p>Если Вы желаете удалить все данные из всех разделов при сохранении
+определения таблицы и схемы выделения разделов, используйте
+команду <code>TRUNCATE TABLE</code>.</p>
+
+<p>Если Вы предполагаете изменять выделение разделов таблицы без потерь
+данных, используйте вместо этого
+<code>ALTER TABLE ... REORGANIZE PARTITION</code>.</p>
+
+<p>Если Вы теперь выполняете команду <code>SHOW CREATE TABLE</code>, Вы
+можете видеть, как выделение разделов таблицы было изменено:</p>
+<pre>
+mysql&gt; SHOW CREATE TABLE tr\G
+*************************** 1. row ***************************
+Table: tr
+Create Table: CREATE TABLE `tr` (`id` int(11) default NULL,
+                                 `name` varchar(50) default NULL,
+                                 `purchased` date default NULL)
+                                 ENGINE=MyISAM DEFAULT CHARSET=latin1
+       PARTITION BY RANGE (YEAR(purchased)) (
+                 PARTITION p0 VALUES LESS THAN (1990) ENGINE = MyISAM,
+                 PARTITION p1 VALUES LESS THAN (1995) ENGINE = MyISAM,
+                 PARTITION p3 VALUES LESS THAN (2005) ENGINE = MyISAM)
+1 row in set (0.01 sec)
+</pre>
+
+<p>Когда Вы вставляете новые строки в измененную таблицу со значениями
+столбца <code>purchased</code> между <code>'1995-01-01'</code> и
+<code>'2004-12-31'</code> включительно, те строки будут сохранены в разделе
+<code>p3</code>. Вы можете проверять этот факт следующим образом:</p>
+
+<pre>
+mysql&gt; INSERT INTO tr VALUES (11, 'pencil holder', '1995-07-12');
+Query OK, 1 row affected (0.00 sec)
+mysql&gt; SELECT * FROM tr WHERE purchased
+    -&gt;          BETWEEN '1995-01-01' AND '2004-12-31';
++----+----------------+------------+
+| id | name           | purchased  |
++----+----------------+------------+
+| 11 | pencil holder  | 1995-07-12 |
+|  1 | desk organiser | 2003-10-15 |
+|  5 | exercise bike  | 2004-05-09 |
+|  7 | popcorn maker  | 2001-11-22 |
++----+----------------+------------+
+4 rows in set (0.00 sec)
+
+mysql&gt; ALTER TABLE tr DROP PARTITION p3;
+Query OK, 0 rows affected (0.03 sec)
+mysql&gt; SELECT * FROM tr WHERE purchased
+    -&gt;          BETWEEN '1995-01-01' AND '2004-12-31';
+Empty set (0.00 sec)
+</pre>
+
+<p>Обратите внимание, что число строк, удаленных из таблицы в результате
+<code>ALTER TABLE ... DROP PARTITION</code> не сообщено сервером, поскольку
+это было бы эквивалентом запроса <code>DELETE</code>.</p>
+
+<p>Удаление разделов <code>LIST</code> использует такой же синтаксис
+same <code>ALTER TABLE ... DROP PARTITION</code>, как и для
+<code>RANGE</code>. Однако, имеется одно важное различие в эффекте, который
+это имеет на вашем использовании таблицы позже: Вы больше не можете вставлять
+в таблицу никакие строки, имеющие любое из значений, которые были включены в
+список значения, определяющие удаленный раздел.</p>
+
+<p>Чтобы добавлять новый диапазон или раздел списка к предварительно разбитой
+на разделы таблице, используйте инструкцию <code>ALTER TABLE ... ADD
+PARTITION</code>. Для таблиц, которые разбиты на разделы <code>RANGE</code>,
+это может использоваться, чтобы добавить новый диапазон к концу списка
+существующих разделов. Например, предположите, что Вы имеете разбитую на
+разделы таблицу, содержащую данные членства для Вашей организации, которая
+определена следующим образом:</p>
+
+<pre>
+CREATE TABLE members (id INT, fname VARCHAR(25), lname VARCHAR(25), dob DATE)
+       PARTITION BY RANGE(YEAR(dob)) (PARTITION p0 VALUES LESS THAN (1970),
+                                      PARTITION p1 VALUES LESS THAN (1980),
+                                      PARTITION p2 VALUES LESS THAN (1990));
+</pre>
+
+<p>Предположите далее, что минимальный возраст для элементов 3. Поскольку
+календарь приближается к концу 2005, Вы понимаете, что Вы будете скоро
+допускать элементы, которые были рождены в 1990 (и позже в последующих
+годах). Вы можете изменять таблицу элементов, чтобыразместить новые элементы
+<code>members</code>, рожденные в годах 1990-1999 как показано здесь:</p>
+<pre>
+ALTER TABLE ADD PARTITION (PARTITION p3 VALUES LESS THAN (2000));
+</pre>
+
+<p><span class="bold"><strong>Важно</strong></span>: с таблицами, которые
+разбиты на разделы диапазоном, Вы можете использовать <code>ADD
+PARTITION</code>, чтобы добавить новые разделы только к верхнему концу списка
+разделов. Попытки добавлять новый раздел этим способом между или прежде, чем
+существующие разделы, приведут к ошибке, как показано здесь:</p>
+
+<pre>
+mysql&gt; ALTER TABLE members
+    -&gt;       ADD PARTITION (PARTITION p3 VALUES LESS THAN (1960));
+ERROR 1463 (HY000): VALUES LESS THAN value must be strictly
+           increasing for each partition
+</pre>
+
+<p>В подобном режиме Вы можете добавлять новые разделы к таблице, которая
+разбита на разделы <code>LIST</code>. Например, данная таблица
+определена подобно этому:</p>
+
+<pre>
+CREATE TABLE tt (id INT, data INT)
+       PARTITION BY LIST(data) (PARTITION p0 VALUES IN (5, 10, 15),
+                                PARTITION p1 VALUES IN (6, 12, 18));
+</pre>
+
+<p>Вы можете добавлять новый раздел, чтобы сохранить строки, имеющие значения
+столбца <code>data</code> <code>7</code>, <code>14</code> и <code>21</code>
+как показано здесь:</p>
+<pre>
+ALTER TABLE tt ADD PARTITION (PARTITION p2 VALUES IN (7, 14, 21));
+</pre>
+
+<p>Обратите внимание, что Вы не можете добавлять новый раздел
+<code>LIST</code>, включающий любые значения, которые уже включены в список
+значений существующего раздела (сервер не поймет, в какой именно раздел ему
+дописывать данные). Если Вы пытаетесь сделать так, выйдет ошибка:</p>
+
+<pre>
+mysql&gt; ALTER TABLE tt ADD PARTITION
+    -&gt; (PARTITION np VALUES IN (4, 8, 12));
+ERROR 1465 (HY000): Multiple definition of same constant ┬╗
+in list partitioning
+</pre>
+
+<p>Потому что любые строки со значением столбца <code>data</code>
+<code>12</code> уже были назначены в раздел <code>p1</code>, Вы не можете
+создавать новый раздел в таблице <code>tt</code>, который включает
+<code>12</code> в список значения. Чтобы выполнять это, Вы могли бы удалить
+<code>p1</code>, добавить <code>np</code>, а затем новый <code>p1</code> с
+изменяемым определением. Однако, как сказано ранее, это привело бы к потере
+всех данных, сохраненных в <code>p1</code>, и это часто имеет место. Другое
+решение: сделать копию таблицы с новым выделением разделов и скопировать
+данные в нее, используя <code>CREATE TABLE ... SELECT ...</code>, затем
+удалить старую таблицу и переименовать новую, но это могло бы быть очень
+долго, когда имеешь дело с большими количествами данных. Это также не может
+быть возможно в ситуациях, где высокая доступность является требованием.</p>
+
+<p>Начиная с MySQL 5.1.6, Вы можете добавлять много разделов в одиночной
+команде <code>ALTER TABLE ... ADD PARTITION</code>, как показано здесь:</p>
+<pre>
+CREATE TABLE employees (id INT NOT NULL, fname VARCHAR(50) NOT NULL,
+                        lname VARCHAR(50) NOT NULL, hired DATE NOT NULL)
+       PARTITION BY RANGE(YEAR(hired)) (
+                 PARTITION p1 VALUES LESS THAN (1991),
+                 PARTITION p2 VALUES LESS THAN (1996),
+                 PARTITION p3 VALUES LESS THAN (2001),
+                 PARTITION p4 VALUES LESS THAN (2005));
+ALTER TABLE employees ADD PARTITION (PARTITION p5 VALUES LESS THAN (2010),
+                                     PARTITION p6 VALUES LESS THAN MAXVALUE);
+</pre>
+
+<p>Реализация выделения разделов в MySQL обеспечивает способы переопределить
+разделы без потерь данных. Выберите таблицу элементов <code>members</code>,
+которая теперь определена как показано здесь:</p>
+
+<pre>
+mysql&gt; SHOW CREATE TABLE members\G
+*************************** 1. row ***************************
+Table: members
+Create Table: CREATE TABLE `members` (`id` int(11) default NULL,
+                                      `fname` varchar(25) default NULL,
+                                      `lname` varchar(25) default NULL,
+                                      `dob` date default NULL)
+                                      ENGINE=MyISAM DEFAULT CHARSET=latin1
+       PARTITION BY RANGE (YEAR(dob)) (
+                 PARTITION p0 VALUES LESS THAN (1970) ENGINE = MyISAM,
+                 PARTITION p1 VALUES LESS THAN (1980) ENGINE = MyISAM,
+                 PARTITION p2 VALUES LESS THAN (1990) ENGINE = MyISAM.
+                 PARTITION p3 VALUES LESS THAN (2000) ENGINE = MyISAM)
+</pre>
+
+<p>Предположите, что Вы хотели бы переместить все строки, представляющие
+элементы, рожденные перед 1960 в отдельный раздел. Мы уже видели, что это не
+может быть выполнено, используя <code>ALTER TABLE ... ADD PARTITION</code>.
+Однако, Вы можете использовать другое связанное с разделом расширение
+<code>ALTER TABLE</code>, чтобы выполнить это:</p>
+
+<pre>
+ALTER TABLE members REORGANIZE PARTITION p0 INTO (
+      PARTITION s0 VALUES LESS THAN (1960),
+      PARTITION s1 VALUES LESS THAN (1970));
+</pre>
+
+<p>В действительности эти команды разделяют раздел <code>p0</code> на два
+новых раздела <code>s0</code> и <code>s1</code>. Это также перемещает данные,
+которые были сохранены в <code>p0</code>, в новые разделы согласно правилам,
+воплощенным в двух предложениях <code>PARTITION ... VALUES ...</code>, так,
+чтобы <code>s0</code> содержал только те записи, для которых
+<code>YEAR(dob)</code> меньше, чем 1960 и <code>s1</code> хранил те строки, в
+которых <code>YEAR(dob)</code> является большим чем или равным 1960,
+но меньше чем 1970.</p>
+
+<p>Предложение <code>REORGANIZE PARTITION</code> может также использоваться
+для объединения смежных разделов. Вы можете возвращать таблицу элементов
+<code>members</code> к предыдущему выделению разделов, как показано здесь:
+</p>
+
+<pre>
+ALTER TABLE members REORGANIZE PARTITION s0,s1 INTO (
+      PARTITION p0 VALUES LESS THAN (1970));
+</pre>
+
+<p>Никакие данные не потеряны при разбиении или объединении разделов,
+использующих <code>REORGANIZE PARTITION</code>. При выполнении вышеупомянутой
+инструкции MySQL перемещает все записи, которые были сохранены в разделах
+<code>s0</code> и <code>s1</code> в раздел <code>p0</code>.</p>
+
+<p>Общий синтаксис для <code>REORGANIZE PARTITION</code>:</p>
+<pre>
+ALTER TABLE <em><code>tbl_name</code></em>
+      REORGANIZE PARTITION <em><code>partition_list</code></em>
+      INTO (<em><code>partition_definitions</code></em>);
+</pre>
+
+<p>Здесь <em><code>tbl_name</code></em> имя разбитой на разделы таблицы,
+<em><code>partition_list</code></em> разделяемый запятыми список имен одного
+или большего количества существующих разделов, которые будут изменены.
+<em><code>partition_definitions</code></em> разделяемый запятыми список новых
+определений разделов, которые следуют тем же самым правилам, что касаются
+списка <em><code>partition_definitions</code></em>, используемого в
+<code>CREATE TABLE</code>. Должно быть отмечено, что Вы не ограничены
+объединением нескольких разделов в один или разбиением одного раздела на
+много, когда используете <code>REORGANIZE PARTITION</code>. Например, Вы
+можете реорганизовать все четыре раздела таблицы элементов
+<code>members</code> в два следующим образом:</p>
+
+<pre>
+ALTER TABLE members REORGANIZE PARTITION p0,p1,p2,p3 INTO (
+      PARTITION m0 VALUES LESS THAN (1980),
+      PARTITION m1 VALUES LESS THAN (2000));
+</p>
+
+<pre>
+
+Вы можете также использовать <code>REORGANIZE PARTITION</code> с таблицами,
+которые разбиты на разделы <code>LIST</code>. Вернемся к проблеме добавления
+нового раздела к разбитой на разделы списком таблице <code>tt</code> и тому,
+что новый раздел имел значение, которое было уже представлено в списке
+значений одного из существующих разделов. Мы можем обрабатывать это, добавляя
+раздел, который содержит только не находящиеся в противоречии значения, а
+затем реорганизуя новый и существующий разделы так, чтобы значение, которое
+было сохранено в существующем, переместилось в новый:</p>
+
+<pre>
+ALTER TABLE tt ADD PARTITION (PARTITION np VALUES IN (4, 8));
+ALTER TABLE tt REORGANIZE PARTITION p1,np INTO (
+      PARTITION p1 VALUES IN (6, 18),
+      PARTITION np VALUES in (4, 8, 12));
+</pre>
+
+<p>Имеются некоторые ключевые точки, которые следует иметь в виду, когда
+используете <code>ALTER TABLE ... REORGANIZE PARTITION</code>, чтобы заново
+выделить разделы таблиц, которые разбиты на разделы
+<code>RANGE</code> или <code>LIST</code>:</p>
+
+<ul type="disc"><li><p>Предложения <code>PARTITION</code> используемые, чтобы
+определить новую схему выделения разделов, подчинены тем же самым правилам,
+какие использовали с инструкцией <code>CREATE TABLE</code>.</p>
+
+<p>Наиболее важно, Вы должны не забыть, что новая схема выделения разделов не
+может иметь любые диапазоны перекрывания (применяется к таблицам, разбитым на
+разделы <code>RANGE</code>) или наборов значений (при реорганизации таблиц,
+разбитых на разделы <code>LIST</code>).</p>
+
+<p><span class="bold"><strong>Обратите внимание</strong></span>: до MySQL
+5.1.4 Вы не могли бы многократно использовать имена существующих разделов в
+предложении <code>INTO</code>, даже когда те разделы удалялись
+удалялись или переопределялись.</p></li>
+
+<li><p>Комбинация разделов в списке
+<em><code>partition_definitions</code></em> должна объявить тот же самый
+диапазон или полный набор значений, что и объединенные разделы, именованные в
+<em><code>partition_list</code></em>.</p>
+
+<p>Например, в таблице элементов <code>members</code>, используемой в этом
+разделе, выделяются разделы <code>p1</code> и <code>p2</code>, которые
+вместе покрывают годы с 1980 по 1999. Следовательно, любая реорганизация этих
+двух разделов должна покрыть тот же самый диапазон полных лет.</p></li>
+
+<li><p>Для таблиц, разбитых на разделы <code>RANGE</code> Вы можете
+реорганизовать только смежные разделы. Вы не можете перескакивать
+над разделами диапазона.</p>
+
+<p>Например, Вы не могли бы реорганизовать таблицу элементов
+<code>members</code>, используемую в этом разделе, используя инструкцию,
+начинающуюся <code>ALTER TABLE members REORGANIZE PARTITION p0, p2
+INTO ...</code>, поскольку <code>p0</code> покрывает годы до 1970, а
+<code>p2</code> годы с 1990 по 1999 включительно, и таким образом это
+не смежные разделы.</p></li>
+
+<li><p>Вы не можете использовать <code>REORGANIZE PARTITION</code>, чтобы
+изменить тип выделения разделов таблицы, то есть Вы не можете (например)
+изменять разделы <code>RANGE</code> на <code>HASH</code> или наоборот. Вы
+также не можете использовать эту команду, чтобы изменить выражение выделения
+разделов или столбец. Чтобы выполнять любую из этих задач без того, чтобы
+удалить и вновь создать таблицу, Вы можете использовать
+<code>ALTER TABLE ... PARTITION BY ...</code>. Например:</p>
+<pre>
+ALTER TABLE members PARTITION BY HASH(YEAR(dob)) PARTITIONS 8;
+</pre></li></ul>
+
+<h3><a name="partitioning-management-hash-key"></a>3.3.2.
+Управление разделами <code>KEY</code> и <code>HASH</code></h3>
+<p>Таблицы, которые разбиты на разделы hash или key очень похожи друг на
+друга относительно создания изменений в установке выделений разделов, и оба
+типа отличаются от таблиц, которые были разбиты на разделы
+диапазоном или списком.</p>
+
+<p>Вы не можете удалять разделы из таблиц, которые разбиты на разделы
+<code>HASH</code> или <code>KEY</code> таким же образом, каким Вы можете
+удалять их из таблиц, которые разбиты на разделы <code>RANGE</code> или
+<code>LIST</code>. Однако, Вы можете объединять разделы <code>HASH</code> или
+<code>KEY</code>, используя команду <code>ALTER TABLE ... COALESCE PARTITION
+</code>. Например, предположите, что Вы имеете таблицу, содержащую данные
+относительно клиентуры, которая разделена на двенадцать разделов. Таблица
+<code>clients</code> определена как показано здесь:</p>
+
+<pre>
+CREATE TABLE clients (id INT, fname VARCHAR(30),
+                      lname VARCHAR(30), signed DATE)
+       PARTITION BY HASH(MONTH(signed)) PARTITIONS 12;
+</pre>
+
+<p>Чтобы уменьшить число разделов с двенадцати до восьми, выполните следующую
+команду <code>ALTER TABLE</code>:</p>
+<pre>
+mysql&gt; ALTER TABLE clients COALESCE PARTITION 4;
+Query OK, 0 rows affected (0.02 sec)
+</pre>
+
+<p><code>COALESCE</code> работает одинаково хорошо с таблицами, которые
+разбиты на разделы <code>HASH</code>, <code>KEY</code>, <code>LINEAR
+HASH</code> или <code>LINEAR KEY</code>. Имеется пример, подобный
+предыдущему, отличаясь только тем, что таблица разбита на
+разделы <code>LINEAR KEY</code>:</p>
+
+<pre>
+mysql&gt; CREATE TABLE clients_lk (id INT, fname VARCHAR(30),
+    -&gt;                          lname VARCHAR(30), signed DATE)
+    -&gt;        PARTITION BY LINEAR KEY(signed) PARTITIONS 12;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql&gt; ALTER TABLE clients_lk COALESCE PARTITION 4;
+Query OK, 0 rows affected (0.06 sec)
+Records: 0 Duplicates: 0 Warnings: 0
+</pre>
+<p>Обратите внимание, что число, следующее за <code>COALESCE PARTITION</code>
+являются числом разделов, которое надлежит удалить из таблицы.</p>
+
+<p>Если Вы пытаетесь удалить большее количество разделов, чем таблица имеет,
+результатом будет ошибка:</p>
+<pre>
+mysql&gt; ALTER TABLE clients COALESCE PARTITION 18;
+ERROR 1478 (HY000): Cannot remove all partitions, use DROP TABLE instead
+</pre>
+
+<p>Чтобы увеличить число разделов для таблицы <code>clients</code> с 12 до
+18, скомандуйте <code>ALTER TABLE ... ADD PARTITION</code>:</p>
+<pre>
+ALTER TABLE clients ADD PARTITION PARTITIONS 6;
+</pre>
+
+<h3><a name="partitioning-maintenance"></a>3.3.3. Сопровождение разделов
+</h3>
+<p>Ряд задач сопровождения выделения разделов может быть выполнен в MySQL
+5.1. MySQL не поддерживает команды <code>CHECK TABLE</code>, <code>OPTIMIZE
+TABLE</code>, <code>ANALYZE TABLE</code> или <code>REPAIR TABLE</code> для
+разбитых на разделы таблиц. Вместо этого Вы можете использовать ряд
+расширений <code>ALTER TABLE</code>, которые были выполнены в MySQL 5.1.5.
+Они могут использоваться для выполнения операций этого типа на одном или
+большем количестве разделов непосредственно, как описано в следующем списке:
+</p>
+
+<ul type="disc"><li><p><span class="bold"><strong>Rebuilding partitions
+</strong></span>: восстанавливает раздел: это имеет тот же самый эффект, что
+и удаление всех записей, сохраненных в разделе, с последующей перевставкой
+их. Это может быть полезно с целью дефрагментации. Пример:</p>
+<pre>
+ALTER TABLE t1 REBUILD PARTITION p0, p1;
+</pre></li>
+
+<li><p><span class="bold"><strong>Optimizing partitions</strong></span>: если
+Вы удалили большое количество строк из раздела или сделали много изменений
+для разбитой на разделы таблицы со строками переменной длины (то есть, имея
+столбцы <code>VARCHAR</code>, <code>BLOB</code> или <code>TEXT</code>),
+Вы можете использовать <code>ALTER TABLE ... OPTIMIZE PARTITION</code>, чтобы
+восстановить неиспользуемое место и дефрагментировать файл данных раздела:
+</p>
+<pre>
+ALTER TABLE t1 OPTIMIZE PARTITION p0, p1;
+</pre>
+
+<p>Использование <code>OPTIMIZE PARTITION</code> на данном разделе
+эквивалентно выполнению <code>CHECK PARTITION</code>, <code>ANALYZE
+PARTITION</code> и <code>REPAIR PARTITION</code>.</p></li>
+
+<li><p><span class="bold"><strong>Analyzing partitions</strong></span>:
+читает и сохраняет распределения ключа для разделов. Пример:</p>
+<pre>
+ALTER TABLE t1 ANALYZE PARTITION p3;
+</pre></li>
+
+<li><p><span class="bold"><strong>Repairing partitions</strong></span>: это
+восстанавливает разрушенные разделы. Пример:</p>
+<pre>
+ALTER TABLE t1 REPAIR PARTITION p0,p1;
+</pre></li>
+
+<li><p><span class="bold"><strong>Checking partitions</strong></span>: Вы
+можете проверять раздел на ошибки способом, которым Вы можете использовать
+<code>CHECK TABLE</code> с не разбитыми на разделы таблицами:</p>
+<pre>
+ALTER TABLE trb3 CHECK PARTITION p1;
+</pre>
+
+<p>Эта команда сообщит Вам, если данные или индексы в разделе <code>p1</code>
+таблицы <code>t1</code> разрушены. Если дело обстоит так, используйте <code>
+ALTER TABLE ... REPAIR PARTITION</code> для ремонта раздела.</p></li></ul>
+
+<p>Вы можете также использовать утилиту <span><strong>mysqlcheck</strong>
+</span> или <span><strong>myisamchk</strong></span>, чтобы выполнить эти
+задачи, действуя на отдельных <code>.MYI</code>-файлах, сгенерированных,
+выделяя разделы таблицы.</p>
+
+<h3><a name="partitioning-info"></a>3.3.4.
+Получение информации относительно разделов</h3>
+<p>Этот раздел обсуждает получение информации относительно существующих
+разделов, что может быть выполнено несколькими способами. Они включают:</p>
+
+<ul type="disc"><li><p>Использование инструкции <code>SHOW CREATE
+TABLE</code>, чтобы просмотреть предложения выделения разделов, используемые
+в создании разбитой на разделы таблицы.</p></li>
+
+<li><p>Использование инструкции <code>SHOW TABLE STATUS</code>, чтобы
+определить, разбита ли таблица на разделы вообще.</p></li>
+<li><p>Запрос таблицы <code>INFORMATION_SCHEMA.PARTITIONS</code>.</p></li>
+
+<li><p>Использование инструкции <code>EXPLAIN PARTITIONS SELECT</code>, чтобы
+видеть, которые разделы используются данным <code>SELECT</code>.
+</p></li></ul>
+
+<p><code>SHOW CREATE TABLE</code> включает в вывод предложение
+<code>PARTITION BY</code>, используемое, чтобы создать разбитую на
+разделы таблицу. Например:</p>
+
+<pre>
+mysql&gt; SHOW CREATE TABLE trb3\G
+*************************** 1. row ***************************
+Table: trb3
+Create Table: CREATE TABLE `trb3` (`id` int(11) default NULL,
+                                   `name` varchar(50) default NULL,
+                                   `purchased` date default NULL)
+                                   ENGINE=MyISAM DEFAULT CHARSET=latin1
+PARTITION BY RANGE (YEAR(purchased)) (
+PARTITION p0 VALUES LESS THAN (1990) ENGINE = MyISAM,
+PARTITION p1 VALUES LESS THAN (1995) ENGINE = MyISAM,
+PARTITION p2 VALUES LESS THAN (2000) ENGINE = MyISAM,
+PARTITION p3 VALUES LESS THAN (2005) ENGINE = MyISAM)
+1 row in set (0.00 sec)
+</pre>
+
+<p><span class="bold"><strong>Обратите внимание</strong></span>: в ранних
+версиях MySQL 5.1 предложение <code>PARTITIONS</code> не показывалось для
+таблиц, разбитых на разделы <code>HASH</code> или <code>KEY</code>. Эта
+проблема была отфиксирована в MySQL 5.1.6.</p>
+
+<p><code>SHOW TABLE STATUS</code> работает с разбитыми на разделы таблицами.
+Начиная с MySQL 5.1.9, вывод такой же, как для не разбитых на разделы таблиц
+за исключением того, что столбец <code>Create_options</code> содержит строку
+<code>partitioned</code>. В MySQL 5.1.8 и ранее столбец <code>Engine</code>
+всегда содержал значение <code>PARTITION</code>. Начиная с MySQL 5.1.9, этот
+столбец содержит имя типа памяти, используемого всеми разделами таблицы.</p>
+
+<p>Вы можете также получать информацию относительно разделов из
+<code>INFORMATION_SCHEMA</code>, которая
+содержит таблицу <code>PARTITIONS</code>.</p>
+
+<p>Начиная с MySQL 5.1.5, можно определить, которые разделы разбитой на
+разделы таблицы включаются в данном запросе <code>SELECT</code>, применяя
+<code>EXPLAIN PARTITIONS</code>. Ключевое слово <code>PARTITIONS</code>
+добавляет столбец <code>partitions</code> к выводу <code>EXPLAIN</code>,
+перечисляющего столбцы, из которых записи соответствуют запросу.</p>
+
+<p>Предположите, что Вы имеете таблицу <code>trb1</code> определенную и
+заполняемую следующим образом:</p>
+<pre>
+CREATE TABLE trb1 (id INT, name VARCHAR(50), purchased DATE)
+       PARTITION BY RANGE(id) (PARTITION p0 VALUES LESS THAN (3),
+                               PARTITION p1 VALUES LESS THAN (7),
+                               PARTITION p2 VALUES LESS THAN (9),
+                               PARTITION p3 VALUES LESS THAN (11));
+INSERT INTO trb1 VALUES (1, 'desk organiser', '2003-10-15'),
+                        (2, 'CD player', '1993-11-05'),
+                        (3, 'TV set', '1996-03-10'),
+                        (4, 'bookcase', '1982-01-10'),
+                        (5, 'exercise bike', '2004-05-09'),
+                        (6, 'sofa', '1987-06-05'),
+                        (7, 'popcorn maker', '2001-11-22'),
+                        (8, 'aquarium', '1992-08-04'),
+                        (9, 'study desk', '1984-09-16'),
+                        (10, 'lava lamp', '1998-12-25');
+</pre>
+
+<p>Вы можете видеть, которые разделы используются в запросе типа
+<code>SELECT * FROM trb1;</code>, как показано здесь:</p>
+<pre>
+mysql&gt; EXPLAIN PARTITIONS SELECT * FROM trb1\G
+*************************** 1. row ***************************
+id: 1
+select_type: SIMPLE
+table: trb1
+partitions: p0,p1,p2,p3
+type: ALL
+possible_keys: NULL
+key: NULL
+key_len: NULL
+ref: NULL
+rows: 10
+Extra: Using filesort
+</pre>
+
+<p>В этом случае все четыре раздела задействованы. Однако, когда условие
+ограничено, используя ключ, выделение разделов добавлено к запросу. Вы можете
+видеть, что просмотрены только те разделы, которые содержат соответствующие
+значения, как показано здесь:</p>
+
+<pre>
+mysql&gt; EXPLAIN PARTITIONS SELECT * FROM trb1 WHERE id &lt; 5\G
+*************************** 1. row ***************************
+id: 1
+select_type: SIMPLE
+table: trb1
+partitions: p0, p1
+type: ALL
+possible_keys: NULL
+key: NULL
+key_len: NULL
+ref: NULL
+rows: 10
+Extra: Using where
+</pre>
+
+<p><code>EXPLAIN PARTITIONS</code> обеспечивают информацию относительно
+используемых и возможных ключей, точно как со стандартной
+инструкцией <code>EXPLAIN SELECT</code>:</p>
+
+<pre>
+mysql&gt; ALTER TABLE trb1 ADD PRIMARY KEY (id);
+Query OK, 10 rows affected (0.03 sec)
+Records: 10 Duplicates: 0 Warnings: 0
+
+mysql&gt; EXPLAIN PARTITIONS SELECT * FROM trb1 WHERE id &lt; 5\G
+*************************** 1. row ***************************
+id: 1
+select_type: SIMPLE
+table: trb1
+partitions: p0, p1
+type: range
+possible_keys: PRIMARY
+key: PRIMARY
+key_len: 4
+ref: NULL
+rows: 7
+Extra: Using where
+</pre>
+
+<p>Вы должны принять во внимание следующие ограничения
+на <code>EXPLAIN PARTITIONS</code>:</p>
+<ul type="disc"><li><p>Вы не можете использовать ключевые слова
+<code>PARTITIONS</code> и <code>EXTENDED</code> вместе в том же самом запросе
+<code>EXPLAIN ... SELECT</code>. Попытка сделать так
+производит синтаксическую ошибку.</p></li>
+
+<li><p>Если <code>EXPLAIN PARTITIONS</code> используется, чтобы исследовать
+запрос для не разбитой на разделы таблицы, никакая ошибка не будет
+произведена, но значение столбца
+<code>partitions</code> всегда <code>NULL</code>.</p></li></ul>
+
+<h2><a name="partitioning-pruning"></a>3.4. Сокращение раздела</h2>
+<p>Этот раздел обсуждает сокращение раздела (<em class="firstterm">partition
+pruning</em>), оптимизацию, которая была выполнена для разбитых на разделы
+таблиц в MySQL 5.1.6.</p>
+
+<p>Основное понятие сокращения раздела относительно просто, и может быть
+описано как "не просматриваются разделы, где не может иметься никаких
+значений соответствия". Например, предположите, что Вы имеете разбитую на
+разделы таблицу <code>t1</code>, определенную этой инструкцией:</p>
+
+<pre>
+CREATE TABLE t1 (fname VARCHAR(50) NOT NULL, lname VARCHAR(50) NOT NULL,
+                 region_code TINYINT UNSIGNED NOT NULL, dob DATE NOT NULL)
+       PARTITION BY RANGE(region_code) (
+                 PARTITION p0 VALUES LESS THAN (64),
+                 PARTITION p1 VALUES LESS THAN (128),
+                 PARTITION p2 VALUES LESS THAN (192)
+                 PARTITION p3 VALUES LESS THAN MAXVALUE);
+</pre>
+
+<p>Рассмотрите случай, где Вы желаете получить результат запроса типа этого:
+</p>
+<pre>
+SELECT fname, lname, postcode, dob FROM t1
+       WHERE region_code &gt; 125 AND
+       region_code &lt; 130;
+</pre>
+
+<p>Просто видеть, что ни одна из строк, которые должны быть возвращены, не
+будет в разделе <code>p0</code> или <code>p3</code>. То есть, мы должны
+искать данные только в разделах <code>p1</code> и <code>p2</code>, чтобы
+найти строки соответствий. Делая так, можно расходовать намного меньше
+времени и усилий в нахождении строк соответствий, чем при просмотре всех
+разделов в таблице. Это и известно как сокращение (<em class="firstterm">
+pruning</em>). Когда оптимизатор может использовать сокращение раздела,
+выполнение запроса может быть на порядок быстрее, чем тот же самый запрос на
+не разбитой на разделы таблицы, содержащей те же самые
+определения столбца и данные.</p>
+
+<p>Оптимизатор запроса может выполнять сокращение всякий раз, когда условие
+<code>WHERE</code> может быть уменьшено до любого одного из следующего:</p>
+<ul type="disc"><li><p>
+<code><em><code>partition_column</code></em> =
+<em><code>constant</code></em></code></p></li>
+
+<li><p>
+<code><em><code>partition_column</code></em> IN
+(<em><code>constant1</code></em>, <em><code>constant2</code></em>, ...,
+<em><code>constantN</code></em>)</code>
+</p></li></ul>
+
+<p>В первом случае, оптимизатор просто оценивает выражение выделения разделов
+для данного значения, определяет, который раздел содержит то значение, и
+просматривает только этот раздел. Во втором случае оптимизатор оценивает
+выражение выделения разделов для каждого значения в списке, создает список
+соответствия разделов, а затем просматривает только разделы в этом списке.
+</p>
+
+<p>Сокращение может также применяться к коротким диапазонам, которые
+оптимизатор может преобразовывать в эквивалентные списки значений. Например,
+в предыдущем примере, предложение <code>WHERE</code> может быть преобразовано
+в <code>WHERE region_code IN (125, 126, 127, 128, 129, 130)</code>. Затем
+оптимизатор может определять, что первые три значения в списке найдены в
+разделе <code>p1</code>, следующие три значения в разделе <code>p2</code> и
+что другие разделы не содержат никаких релевантных значений.</p>
+
+<p>Этот тип оптимизации может применяться всякий раз, когда выражение
+выделения разделов состоит из равенства или диапазона, который может быть
+уменьшен до набора равенств, или же когда выражение выделения разделов
+представляет связь уменьшения или увеличение. Сокращение может также быть
+применено для таблиц, разбитых на разделы на основании столбцов
+<code>DATE</code> или <code>DATETIME</code>, когда выражение выделения
+разделов использует функцию <code>YEAR()</code> или <code>TO_DAYS()</code>.
+<span class="bold"><strong>Обратите внимание</strong></span>: в будущих
+версиях MySQL планируется добавлять поддержку сокращения для дополнительных
+функций, которые действуют на значения <code>DATE</code> или
+<code>DATETIME</code>, возвращают целое число и увеличиваются или
+уменьшаются. Например, предположите, что таблица <code>t2</code>,
+определенная как показано здесь, разбита на разделы
+на столбце <code>DATE</code>:</p>
+
+<pre>
+CREATE TABLE t2 (fname VARCHAR(50) NOT NULL, lname VARCHAR(50) NOT NULL,
+                 region_code TINYINT UNSIGNED NOT NULL,
+                 dob DATE NOT NULL)
+       PARTITION BY RANGE(YEAR(dob)) (
+                 PARTITION d0 VALUES LESS THAN (1970),
+                 PARTITION d1 VALUES LESS THAN (1975),
+                 PARTITION d2 VALUES LESS THAN (1980),
+                 PARTITION d3 VALUES LESS THAN (1985),
+                 PARTITION d4 VALUES LESS THAN (1990),
+                 PARTITION d5 VALUES LESS THAN (2000),
+                 PARTITION d6 VALUES LESS THAN (2005),
+                 PARTITION d7 VALUES LESS THAN MAXVALUE);
+</pre>
+
+<p>Следующие запросы к <code>t2</code> могут использовать сокращение:</p>
+<pre>
+SELECT * FROM t2 WHERE dob = '1982-06-23';
+SELECT * FROM t2 WHERE dob BETWEEN '1991-02-15' AND '1997-04-25';
+SELECT * FROM t2 WHERE YEAR(dob) IN (1979, 1980, 1983, 1985, 1986, 1988);
+SELECT * FROM t2 WHERE dob &gt;= '1984-06-21' AND dob &lt;= '1999-06-21'
+</pre>
+
+<p>В случае последнего запроса оптимизатор может также
+действовать следующим образом:</p>
+<ol type="1"><li><p><span class="emphasis"><em>Найти раздел, содержащий
+нижний конец диапазона.</em></span>.</p>
+
+<p><code>YEAR('1984-06-21')</code> выдает значение <code>1984</code>,
+которое найдено в разделе <code>d3</code>.</p></li>
+
+<li><p><span class="emphasis"><em>Найти раздел, содержащий
+верхний конец диапазона.</em></span>.</p>
+<p><code>YEAR('1999-06-21')</code> оценивается к <code>1999</code>,
+которое найдено в разделе <code>d5</code>.</p></li>
+
+<li><p><span class="emphasis"><em>Просмотреть только эти два раздела и любые
+разделы, которые могут находиться между ними.</em></span></p>
+<p>В этом случае, это означает, что просмотрены только разделы
+<code>d3</code>, <code>d4</code> и <code>d5</code>. Остающиеся разделы могут
+безопасно игнорироваться (и игнорируются).</p></li></ol>
+
+<p>Пока мы смотрели только на примеры, использующие выделение разделов
+<code>RANGE</code>, но сокращение может применяться также и с другими
+типами выделения разделов.</p>
+
+<p>Рассмотрите таблицу, которая разбита на разделы <code>LIST</code>, где
+выражение выделения разделов увеличивается или уменьшается, типа таблицы
+<code>t3</code>, показанной здесь. В этом примере мы принимаем для краткости,
+что столбец <code>region_code</code> ограничен значениями от 1 до 10.</p>
+
+<pre>
+CREATE TABLE t3 (fname VARCHAR(50) NOT NULL, lname VARCHAR(50) NOT NULL,
+                 region_code TINYINT UNSIGNED NOT NULL,
+                 dob DATE NOT NULL)
+       PARTITION BY LIST(region_code) (
+                    PARTITION r0 VALUES IN (1, 3),
+                    PARTITION r1 VALUES IN (2, 5, 8),
+                    PARTITION r2 VALUES IN (4, 9),
+                    PARTITION r3 VALUES IN (6, 7, 10));
+</pre>
+
+<p>Для запроса типа <code>SELECT * FROM t3 WHERE region_code
+BETWEEN 1 AND 3</code> оптимизатор определяет, в которых разделах значения 1,
+2 и 3 найдены (<code>r0</code> и <code>r1</code>) и пропускает остающиеся
+(<code>r2</code> и <code>r3</code>).</p>
+
+<p>Для таблиц, которые разбиты на разделы <code>HASH</code> или
+<code>KEY</code>, сокращение раздела также возможно в случаях, в которых
+предложение <code>WHERE</code> использует простое отношение <code>=</code>
+против столбца, используемого в выражении выделения разделов. Рассмотрите
+таблицу, созданную подобно этому:</p>
+
+<pre>
+CREATE TABLE t4 (fname VARCHAR(50) NOT NULL, lname VARCHAR(50) NOT NULL,
+                 region_code TINYINT UNSIGNED NOT NULL,
+                 dob DATE NOT NULL)
+       PARTITION BY KEY(region_code) PARTITIONS 8;
+</pre>
+
+<p>Любой запрос типа этого может быть сокращен:</p>
+<pre>
+SELECT * FROM t4 WHERE region_code = 7;
+</pre>
+
+<p>Сокращение также может быть использовано для коротких диапазонов, потому
+что оптимизатор может направлять такие условия в отношениях <code>IN</code>.
+Например, при использовании той же самой таблицы <code>t4</code> как
+определено ранее, запросы типа этих могут быть сокращены:</p>
+
+<pre>
+SELECT * FROM t4 WHERE region_code &gt; 2 AND region_code &lt; 6;
+SELECT * FROM t4 WHERE region_code BETWEEN 3 AND 5;
+</pre>
+
+<p>В обеих случаях, предложения <code>WHERE</code> преобразованы
+оптимизатором в <code>WHERE region_code IN (3, 4, 5)</code>.
+<span class="bold"><strong>Важно</strong></span>: эта оптимизация
+используется только, если размер диапазона меньший, чем число разделов.
+Рассмотрите этот запрос:</p>
+<pre>
+SELECT * FROM t4 WHERE region_code BETWEEN 4 AND 8;
+</pre>
+
+<p>Диапазон в предложении <code>WHERE</code> покрывает 5 значений (4, 5, 6,
+7, 8), но <code>t4</code> имеет только 4 раздела. Это означает, что
+предыдущий запрос никак не может быть сокращен.</p>
+
+<p>Сокращение может использоваться только на целочисленных столбцах таблиц,
+разбитых на разделы <code>HASH</code> или <code>KEY</code>. Например, этот
+запрос на таблице <code>t4</code> не может использовать сокращение, потому
+что <code>dob</code> столбец типа <code>DATE</code>:</p>
+<pre>
+SELECT * FROM t4 WHERE dob &gt;=- '2001-04-14' AND dob &lt;= '2005-10-15';
+</pre>
+
+<p>Однако, если таблица сохраняет значения года в столбце типа
+<code>INT</code>, то запрос <code>WHERE year_col &gt;= 2001 AND
+year_col &lt;= 2005</code> может быть сокращен.</p>
+
+<h2><a name="partitioning-limitations"></a>3.5.
+Ограничения выделения разделов</h2>
+<p>Этот раздел обсуждает текущие ограничения поддержки
+выделения разделов MySQL:</p>
+
+<ul type="disc"><li><p>Начиная с MySQL 5.1.12, следующие конструкции не
+разрешаются в выражениях выделения разделов:</p>
+<ul type="circle"><li><p>Вложенные обращения к функциям (то есть, конструкции
+типа <code><em><code>func1</code></em>(<em><code>func2</code></em>(<em>
+<code>col_name</code></em>))</code>).</p></li>
+<li><p>Сохраненные процедуры, функции, UDF или plugins.</p></li>
+<li><p>Объявленные переменные или переменные пользователя.</p></li></ul></li>
+
+<li><p><a name="partitioning-limitations-disallowed-functions"></a>Начиная с
+MySQL 5.1.12, следующие функции MySQL специально не позволяются в
+выражениях выделения разделов:</p>
+
+<ul type="circle"><li><p><code>GREATEST()</code></p></li>
+<li><p><code>ISNULL()</code></p></li>
+<li><p><code>LEAST()</code></p></li>
+<li><p><code>CASE()</code></p></li>
+<li><p><code>IFNULL()</code></p></li>
+<li><p><code>NULLIF()</code></p></li>
+<li><p><code>BIT_LENGTH()</code></p></li>
+<li><p><code>CHAR_LENGTH()</code></p></li>
+<li><p><code>CHARACTER_LENGTH()</code></p></li>
+<li><p><code>FIND_IN_SET()</code></p></li>
+<li><p><code>INSTR()</code></p></li>
+<li><p><code>LENGTH()</code></p></li>
+<li><p><code>LOCATE()</code></p></li>
+<li><p><code>OCTET_LENGTH()</code></p></li>
+<li><p><code>POSITION()</code></p></li>
+<li><p><code>STRCMP()</code></p></li>
+<li><p><code>CRC32()</code></p></li>
+<li><p><code>ROUND()</code></p></li>
+<li><p><code>SIGN()</code></p></li>
+<li><p><code>DATEDIFF()</code></p></li>
+<li><p><code>PERIOD_ADD()</code></p></li>
+<li><p><code>PERIOD_DIFF()</code></p></li>
+<li><p><code>TIMESTAMPDIFF()</code></p></li>
+<li><p><code>UNIX_TIMESTAMP()</code></p></li>
+<li><p><code>WEEK()</code></p></li>
+<li><p><code>CAST()</code></p></li>
+<li><p><code>CONVERT()</code></p></li>
+<li><p><code>BIT_COUNT()</code></p></li>
+<li><p><code>INET_ATON()</code></p></li></ul></li>
+
+<li><p>Использование арифметических операторов <code>+</code>,
+<code>-</code>, <code>*</code> и <code>/</code> разрешается в выражениях
+выделения разделов. Однако, результат должен быть целочисленным значением или
+<code>NULL</code> (за исключением <code>[LINEAR] KEY</code>).</p>
+
+<p>Начиная с MySQL 5.1.12, разрядные операторы <code>|</code>,
+<code>&amp;</code>, <code>^</code>, <code>&lt;&lt;</code>,
+<code>&gt;&gt;</code> и <code>~</code>
+не разрешаются в выражениях выделения разделов.</p></li>
+
+<li><p>Начиная с MySQL 5.1.12, только следующие функции MySQL поддерживаются
+в выражениях выделения разделов:</p>
+<ul type="circle"><li><p><code>ABS()</code></p></li>
+<li><p><code>ASCII()</code></p></li>
+<li><p><code>CEILING()</code></p></li>
+<li><p><code>DAY()</code></p></li>
+<li><p><code>DAYOFMONTH()</code></p></li>
+<li><p><code>DAYOFWEEK()</code></p></li>
+<li><p><code>DAYOFYEAR()</code></p></li>
+<li><p><code>EXTRACT()</code></p></li>
+<li><p><code>FLOOR()</code></p></li>
+<li><p><code>HOUR()</code></p></li>
+<li><p><code>MICROSECOND()</code></p></li>
+<li><p><code>MINUTE()</code></p></li>
+<li><p><code>MOD()</code></p></li>
+<li><p><code>MONTH()</code></p></li>
+<li><p><code>ORD()</code></p></li>
+<li><p><code>QUARTER()</code></p></li>
+<li><p><code>SECOND()</code></p></li>
+<li><p><code>TIME_TO_SEC()</code></p></li>
+<li><p><code>TO_DAYS()</code></p></li>
+<li><p><code>WEEKDAY()</code></p></li>
+<li><p><code>WEEKOFYEAR()</code></p></li>
+<li><p><code>YEAR()</code></p></li>
+<li><p><code>YEARWEEK()</code></p></li></ul></li>
+
+<li><p><span class="bold"><strong>Важно</strong></span>: Вы должны иметь в
+виду, что результаты многих функций MySQL и операторов могут изменять
+SQL-режим сервера. По этой причине нежелательно изменять этот режим после
+создания разбитых на разделы таблиц.</p></li>
+
+<li><p>Использование функций <code>ASCII()</code> или <code>ORD()</code>,
+чтобы преобразовать строковое значение (столбца типа <code>CHAR</code> или
+<code>VARCHAR</code>) к целому числу работает только, когда строка использует
+8-разрядный набор символов. Объединение, используемое для строки, может быть
+любым объединением для связанного набора символов. Однако, объединения
+<code>latin1_german2_ci</code>, <code>latin2_czech_cs</code> и
+<code>cp1250_czech_cs</code> не могут использоваться, вследствие того, что
+эти объединения требуют символьных преобразований "один ко многим".</p></li>
+
+<li><p>Если при создании таблиц с очень большим количеством разделов Вы
+сталкиваетесь с сообщением об ошибках типа <span>Got error 24 from storage
+engine</span>, Вы должны увеличить значение переменной системы
+<code>open_files_limit</code>.</p></li>
+
+<li><p>Разбитые на разделы таблицы не поддерживают внешние ключи. Это
+включает разбитые на разделы таблицы, использующие тип
+памяти <code>InnoDB</code>.</p></li>
+
+<li><p>Разбитые на разделы таблицы не поддерживают индексы
+<code>FULLTEXT</code>. Это включает разбитые на разделы таблицы, использующие
+тип памяти <code>MyISAM</code>.</p></li>
+<li><p>Разбитые на разделы таблицы
+не поддерживают столбцы <code>GEOMETRY</code>.</p></li>
+
+<li><p>Начиная с MySQL 5.1.8, временные таблицы не могут быть разбиты на
+разделы (<a href="../../../bugs.mysql.com/17497" target="_top">Глюк #17497
+</a>).</p></li>
+<li><p>Таблицы, использующие тип памяти <code>MERGE</code>, не могут быть
+разбиты на разделы.</p>
+
+<p>Разбитые на разделы таблицы, использующие тип памяти <code>CSV</code>,
+не обеспечиваются. Начиная с MySQL 5.1.12, невозможно создать разбитые на
+разделы таблицы <code>CSV</code> вообще.</p>
+
+<p>До MySQL 5.1.6 таблицы, использующие тип памяти <code>BLACKHOLE</code>,
+также не могли быть разбиты на разделы.</p>
+<p>Выделение разделов <code>KEY</code> (или <code>LINEAR KEY</code>)
+представляет собой единственный тип выделения разделов обеспечиваемого для
+типа памяти <code>NDB</code>. Начиная с MySQL 5.1.12, невозможно создать
+таблицу Cluster, использующую любое выделение разделов, кроме [<code>LINEAR
+</code>] <code>KEY</code>, а попытка это сделать вызывает ошибку.</p></li>
+
+<li><p>При выполнении обновления, таблицы, использующие любой тип памяти
+(кроме <code>NDBCLUSTER</code>), которые разбиты на разделы <code>KEY</code>,
+должны разгрузиться и перезагрузиться.</p></li>
+
+<li><p>Все разделы таблицы и подразделы (если имеется любой из последних)
+должны использовать тот же самый тип памяти.</p></li>
+<li><p>Ключ выделения разделов должен быть целочисленным столбцом или
+выражением, которое решается к целому числу. Столбец или значение выражения
+может также быть <code>NULL</code>.</p>
+
+<p>Одна исключительная ситуация к этому ограничению происходит при выделении
+разделов [<code>LINEAR</code>] <code>KEY</code>, где возможно использовать
+столбцы других типов как ключи выделения разделов потому, что MySQL с помощью
+хэш-функции производит внутренний ключ правильного типа данных из этих типов.
+Например, следующая инструкция <code>CREATE TABLE</code> допустима:</p>
+<pre>
+CREATE TABLE tkc (c1 CHAR) PARTITION BY KEY(c1) PARTITIONS 4;
+</pre>
+
+<p>Эта исключительная ситуация не относится к типам столбцов
+<code>BLOB</code> или <code>TEXT</code>.</p></li>
+<li><p>Ключ выделения разделов не может быть подзапросом, даже если этот
+подзапрос решается к целочисленному значению или <code>NULL</code>.</p></li>
+
+<li><p><a name="partitioning-limitations-partitioning-keys-unique-keys"></a>
+Все столбцы, используемые в выражении выделения разделов для разбитой на
+разделы таблицы, должны быть частью каждого уникального ключа, который
+таблица может иметь. Другими словами, каждый уникальный ключ на таблице
+должен использовать каждый столбец в выражении выделения разделов таблиц.
+Например, каждая из следующих инструкций создания таблицы недопустима:</p>
+
+<pre>
+CREATE TABLE t1 (col1 INT NOT NULL, col2 DATE NOT NULL,
+                 col3 INT NOT NULL, col4 INT NOT NULL,
+                 UNIQUE KEY (col1, col2))
+       PARTITION BY HASH(col3) PARTITIONS 4;
+CREATE TABLE t2 (col1 INT NOT NULL, col2 DATE NOT NULL,
+                 col3 INT NOT NULL, col4 INT NOT NULL,
+                 UNIQUE KEY (col1), UNIQUE KEY (col3))
+       PARTITION BY HASH(col1 + col3) PARTITIONS 4;
+CREATE TABLE t3 (col1 INT NOT NULL, col2 DATE NOT NULL,
+                 col3 INT NOT NULL, col4 INT NOT NULL,
+                 UNIQUE KEY (col1, col2), UNIQUE KEY (col3))
+       PARTITION BY HASH(col1 + col3) PARTITIONS 4;
+</pre>
+
+<p>В каждом случае, предложенная таблица имела бы по крайней мере один
+уникальный ключ, который не включает все столбцы, используемые в
+выражении выделения разделов.</p>
+
+<p>Каждая из следующих инструкций допустима и представляет один способ,
+которым соответствующая недопустимая инструкция создания таблицы могла бы
+быть сделана рабочей:</p>
+
+<pre>
+CREATE TABLE t1 (col1 INT NOT NULL, col2 DATE NOT NULL,
+                 col3 INT NOT NULL, col4 INT NOT NULL,
+                 UNIQUE KEY (col1, col2, col3))
+       PARTITION BY HASH(col3) PARTITIONS 4;
+CREATE TABLE t2 (col1 INT NOT NULL, col2 DATE NOT NULL,
+                 col3 INT NOT NULL, col4 INT NOT NULL,
+                 UNIQUE KEY (col1, col3))
+       PARTITION BY HASH(col1 + col3) PARTITIONS 4;
+CREATE TABLE t3 (col1 INT NOT NULL, col2 DATE NOT NULL,
+                 col3 INT NOT NULL, col4 INT NOT NULL,
+                 UNIQUE KEY (col1, col2, col3), UNIQUE KEY (col3))
+       PARTITION BY HASH(col3) PARTITIONS 4;
+</pre>
+
+<p>Так как каждый первичный ключ по определению уникальный ключ, это
+ограничение также включает первичный ключ таблицы, если он есть. Например,
+следующие две инструкции недопустимы:</p>
+
+<pre>
+CREATE TABLE t4 (col1 INT NOT NULL, col2 DATE NOT NULL,
+                 col3 INT NOT NULL, col4 INT NOT NULL,
+                 PRIMARY KEY(col1, col2))
+       PARTITION BY HASH(col3) PARTITIONS 4;
+CREATE TABLE t5 (col1 INT NOT NULL, col2 DATE NOT NULL,
+                 col3 INT NOT NULL, col4 INT NOT NULL,
+                 PRIMARY KEY(col1, col3), UNIQUE KEY(col2))
+       PARTITION BY HASH(YEAR(col2)) PARTITIONS 4;
+</pre>
+
+<p>В обоих случаях первичный ключ не включает все столбцы, названные в
+выражении выделения разделов. Однако, обе из следующих
+двух инструкций допустимы:</p>
+
+<pre>
+CREATE TABLE t6 (col1 INT NOT NULL, col2 DATE NOT NULL,
+                 col3 INT NOT NULL, col4 INT NOT NULL,
+                 PRIMARY KEY(col1, col2))
+       PARTITION BY HASH(col1 + YEAR(col2)) PARTITIONS 4;
+CREATE TABLE t7 (col1 INT NOT NULL, col2 DATE NOT NULL,
+                 col3 INT NOT NULL, col4 INT NOT NULL,
+                 PRIMARY KEY(col1, col2, col4), UNIQUE KEY(col2, col1))
+       PARTITION BY HASH(col1 + YEAR(col2)) PARTITIONS 4;
+</pre>
+
+<p>Если таблица не имеет никакого уникального или первичного ключа, то это
+ограничение не применяется, и Вы можете использовать любой столбец или
+столбцы в выражении выделения разделов, пока тип столбца совместим с
+типом выделения разделов.</p>
+
+<p>По той же самой причине Вы не можете позже добавлять уникальный ключ к
+разбитой на разделы таблице, если этот ключ не включает все столбцы,
+используемые выражением выделения разделов таблицы. Рассмотрите разбитую на
+разделы таблицу, определенную так, как показано здесь:</p>
+
+<pre>
+CREATE TABLE t_no_pk (c1 INT, c2 INT)
+       PARTITION BY RANGE(c1) (PARTITION p0 VALUES LESS THAN (10),
+                 PARTITION p1 VALUES LESS THAN (20),
+                 PARTITION p2 VALUES LESS THAN (30),
+                 PARTITION p3 VALUES LESS THAN (40));
+</pre>
+
+<p>Возможно добавить первичный ключ к <code>t_no_pk</code>, используя любую
+из этих инструкций <code>ALTER TABLE</code>:</p>
+<pre>
+# possible PK
+ALTER TABLE t_no_pk ADD PRIMARY KEY(c1);
+# also a possible PK
+ALTER TABLE t_no_pk ADD PRIMARY KEY(c1, c2);
+</pre>
+
+<p>Однако, следующие операторы свалятся потому, что <code>c1</code>
+представляет собой часть ключа выделения разделов, но не часть
+предложенного первичного ключа:</p>
+
+<pre>
+# fails with ERROR 1482
+ALTER TABLE t_no_pk ADD PRIMARY KEY(c2);
+</pre>
+
+<p>С тех пор как <code>t_no_pk</code> имеет только <code>c1</code> в
+выражении выделения разделов, попытка добавления уникального ключа на
+<code>c2</code> всегда провалится. Однако, Вы можете добавлять уникальный
+ключ, который использует <code>c1</code> и <code>c2</code>.</p>
+
+<p>Эти правила также относятся к существующим не разбитым на разделы
+таблицам, в которых Вы желаете выделить разделы используя <code>ALTER TABLE
+... PARTITION BY</code>. Рассмотрите таблицу <code>np_pk</code>:
+</p>
+<pre>
+CREATE TABLE np_pk (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(50),
+                    added DATE, PRIMARY KEY (id));
+</pre>
+
+<p>Следующяя инструкция <code>ALTER TABLE</code> потерпит неудачу с ошибкой,
+потому что столбец <code>added</code> не является частью любого
+уникального ключа в таблице:</p>
+<pre>
+ALTER TABLE np_pk PARTITION BY HASH(TO_DAYS(added)) PARTITIONS 4;
+</pre>
+
+<p>Эта инструкция, однако, была бы полностью допустима:</p>
+<pre>
+ALTER TABLE np_pk PARTITION BY HASH(id) PARTITIONS 4;
+</pre>
+
+<p>В случае <code>np_pk</code> единственный столбец, который может
+использоваться как часть выражения выделения разделов, <code>id</code>. Если
+Вы желаете выделить разделы этой таблицы, использующие любой другой столбец
+или столбцы в выражении выделения разделов, Вы должны сначала изменить
+таблицу, добавляя желательный столбец или столбцы на первичный ключ или
+удаляя первичный ключ в целом.</p></li>
+
+<li><p>Подразделы ограничены выделением разделов <code>HASH</code> или
+<code>KEY</code>. Разделы <code>HASH</code> и <code>KEY</code> не могут быть
+подразбиты на разделы.</p></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</html>

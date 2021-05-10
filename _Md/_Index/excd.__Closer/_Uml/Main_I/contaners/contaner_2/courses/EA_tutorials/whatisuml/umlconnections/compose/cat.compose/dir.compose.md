@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\compose\cat.compose\dir.compose.md">compose</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\compose\compose.md">compose.md</a>
+        - *##### [Composition](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/compose.html)

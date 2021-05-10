@@ -1,0 +1,1694 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 8. Разработка базы данных</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="wb-develop"></a>Глава 8. Разработка базы данных</h1>
+<p>Ряд визуальных инструментов, чтобы создать, отредактировать и управлять
+SQL-запросы, соединения с базой данных и объекты.</p>
+
+<h2><a name="wb-sql-editor"></a>8.1. Визуальный редактор SQL</h2>
+<p>Визуальный редактор SQL состоит из ряда специализированных редакторов
+(запрос, схема, таблица и так далее) и трех панелей: боковая, вторая боковая
+и зона вывода. Каждый редактор открывается в отдельной вторичной вкладке
+в активной вкладке подключения MySQL. Каждая панель может быть скрыта или
+показана. Вместе редакторы и панели позволяют вам:</p>
+
+<ul><li><p>Построить, отредактировать и выполнить запросы.</li>
+<li>Создать и отредактировать данные.</li>
+<li>Смотреть и экспортировать результаты.</li>
+<li>Выполнить основные задачи администрирования RDBMS.</li></ul>
+
+<p>Цветная подсветка синтаксиса, помощь контекста и завершение кода помогают
+вам в написании и отладке SQL-операторов. Интегрированные планы EXPLAIN
+обеспечивают данные, чтобы помочь оптимизировать ваши запросы.
+Следующие данные показывают главные элементы визуального редактора.</p>
+
+<a name="wb-sql-editor-gui-screenshot"></a>
+<p><b>Рис. 8.1. Visual SQL Editor</b></p>
+<img src="images/wb-visual-sql-editor.png" width="729" height="434"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h3><a name="wb-sql-editor-elements"></a>
+Описание визуальных элементов редактора SQL</h3>
+<ol type="1"><li><p>Вкладка домашнего экрана. Обеспечивает быстрый доступ к
+связям, моделям и мастеру MySQL Migration. В отличие от других вкладок, не
+закрывается. Для получения дополнительной информации см. <a href="home.htm">
+главу 4</a>.</li>
+
+<li>Вкладка Connection. Каждая связь, установленная с сервером MySQL,
+представляется отдельной вкладкой связи. Сервер может быть активным или
+бездействующим, когда вкладка связи для него открыта. Для помощи в создании и
+управлении подключениями MySQL см. <a href="connect.htm">главу 5</a>.</li>
+
+<li>Вкладка SQL-запроса. Это вторичная вкладка, которая открывается по
+умолчанию, когда вы устанавливаете связь с сервером MySQL. Каждая вкладка
+запроса однозначно определяется увеличивающимся числом:
+<code class="literal">query 1</code>, <code class="literal">query 2</code>
+и т.д. Для более близкого взгляда на редактирование запроса в MySQL Workbench
+см. <a href="#wb-sql-editor-query-panel">раздел 8.1.1</a>.
+Все вкладки SQL-запросов обеспечивают область, чтобы отредактировать запросы.
+Можно открыть другие специализированные редакторы в той же области.
+Например, можно отредактировать схемы, таблицы, столбцы и так далее.
+Вкладки администрации также открываются в этой области.</li>
+
+<li>Главное меню. У строки меню есть следующие подменю:
+<span class="guimenu">File</span>, <span class="guimenu">Edit</span>,
+<span class="guimenu">View</span>, <span class="guimenu">Query</span>,
+<span class="guimenu">Database</span>, <span class="guimenu">Server</span>,
+<span class="guimenu">Tools</span>, <span class="guimenu">Scripting</span> и
+<span class="guimenu">Help</span>. Действия, доступные вам, зависят от
+выбранной вкладки. Для описания часто используемых меню посмотрите
+<a href="#wb-sql-editor-main-menu">раздел 8.1.3</a>.</li>
+
+<li>Главная панель инструментов. Быстрые действия на этой панели
+инструментов (слева направо):</p>
+<ul><li><p>Создайте новую вкладку SQL для выполнения запросов.</li>
+<li>Откройте файл скрипта SQL в новой вкладке запроса.</li>
+<li>Откройте инспектор для выбранного объекта.</li>
+<li>Создайте новую схему в подключенном сервере.</li>
+<li>Составьте новую таблицу в активной схеме в подключенном сервере.</li>
+<li>Создайте новое представление в активной схеме в подключенном сервере.</li>
+<li>Создайте новую хранимую процедуру в активной
+схеме в подключенном сервере.</li>
+<li>Создайте новую функцию в активной схеме в подключенном сервере.</li>
+<li>Данные о таблице для поиска текста в объектах выбраны в дереве схемы.
+</li>
+<li>Снова соединитесь с DBMS.</p></li></ul></li>
+
+<li>Более легкие действия. Обеспечивают следующие короткие пути:</p>
+<ul><li><p>Показать диалог настройки (см.
+<a href="conf.htm#wb-preferences">раздел 3.2</a>).</li>
+<li>Скрыть или показать боковую панель.</li>
+<li>Скрыть или показать панель области вывода.</li>
+<li>Скрыть или показать вторую боковую панель.</p></li></ul></li>
+<li>Боковая панель имеет две основных метки: Navigator и Information.
+Они опущены на некоторых хостах. Navigator имеет две подвкладки:
+<span class="guilabel">Administration</span> (ранее
+<span class="guilabel">Management</span>) и
+<span class="guilabel">Schemas</span>. Можно слить (или отделить) содержание
+этих двух вкладок в единственный список, щелкнув по значку
+<span class="inlinemediaobject">
+<img src="images/wb-icon-navigator-merge.png" align="middle" width="18"
+height="18"></span>. Область Information обеспечивает подвкладки
+<span class="guilabel">Object Info</span> и
+<span class="guilabel">Session</span>, которые включают информацию только для
+чтения о выбранном объекте и об активной связи.</li>
+
+<li>Вторичная боковая панель (SQL Additions)
+обеспечивает следующие подвкладки:</p>
+<ul><li><p><span class="guilabel">Context Help</span> (см.
+<a href="#wb-develop-sql-editor-help">раздел 8.1.6</a>).</li>
+
+<li><span class="guilabel">Snippets</span> (см.
+<a href="#wb-sql-editor-snippets">раздел 8.1.5</a>).
+</p></li></ul></li>
+
+<li>Панель области вывода может показать резюме выполненных запросов в
+следующих формах: Action Output, Text Output или History Output.
+См. <a href="#wb-develop-sql-editor-history">раздел 8.1.7</a>.
+</p></li></ol>
+<p>Следующие секции описывают, как использовать визуальный редактор SQL.</p>
+
+<h3><a name="wb-sql-editor-query-panel"></a>8.1.1. Вкладка SQL Query</h3>
+<p>Вкладка SQL query открывается по умолчанию, когда вы устанавливаете связь
+с сервером с домашнего экрана. Это включает область редактора запросов и
+панель инструментов. Можно ввести SQL-операторы непосредственно в область
+редактора запросов. Введенные запросы могут быть сохранены в файл или отрывок
+для более позднего использования. В любом пункте можно также выполнить
+введенные запросы. Чтобы сохранить отрывок кода в редакторе запросов, нажмите
+<span class="guilabel">Save SQL to Snippets List</span>
+(<span class="inlinemediaobject"><img src="images/1.png" align="middle"
+width="18" height="18"></span>) из панели инструментов SQL-запроса, введите
+имя (дополнительно) и нажмите <span class="guibutton">OK</span>.</p>
+
+<a name="wb-sql-editor-statements-panel-screenshot"></a>
+<p><b>Рис. 8.2. SQL Editor: SQL Query Tab</b></p>
+<img src="images/wb-sql-editor-statements-panel-screenshot.png" width="800"
+height="665" alt="Query elements include: Execute statement icon, SQL query
+panel, hide/show options, output (results) grid, output style bar, output
+log, visual explain (Execution Plan style), and object information.">
+<br class="figure-break">
+
+<p>Выполнение запроса <code class="literal">SELECT</code>
+покажет связанный набор результатов в панели SQL View непосредственно ниже
+панели SQL Query. Эти ячейки редактируемые, если MySQL Workbench
+в состоянии определить, как. Что касается примера, они редактируемые, если
+первичный или уникальный ключ существует в наборе результатов.
+В противном случае MySQL Workbench покажет метку "read-only"
+в нижнем правом углу панели SQL View, и наведение курсора мыши на
+этот символ обеспечит намек относительно того, почему не редактируемое.</p>
+
+<p>Чтобы быстро ввести имя таблицы, представления или столбца, дважды
+щелкните по пункту в палитре Schema. Название будет вставлено в
+панель SQL-запроса.</p>
+<p>У редактора SQL есть несколько конфигурируемых панелей
+и вкладок, как показано на предыдущем рисунке.</p>
+
+<h3><a name="wb-sql-editor-toolbar"></a>8.1.2. Панель инструментов SQL Query
+</h3>
+<p>Панель инструментов SQL Query обеспечивает действия, которые позволяют вам
+создать и управлять запросами. Следующие данные показывают кнопки набора на
+панели инструментов, расположенной на вкладке SQL-запроса.</p>
+
+<a name="wb-sql-editor-toolbar-screenshot"></a>
+<p><b>Рис. 8.3. Панель инструментов SQL Query</b></p>
+<img src="images/wb-sql-editor-toolbar-screenshot.png" width="584"
+height="30" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Кнопки SQL-запроса (слева направо) включают:</p>
+
+<ul><li><p><span class="bold"><strong>Open a Script File in this Editor
+</strong></span>: Загрузить контент из сохраненного скрипта SQL в редактор.
+</li>
+
+<li><span class="bold"><strong>Save SQL Script to File</strong></span>:
+Сохранить содержание редактора SQL в файл.</li>
+<li><span class="bold"><strong>Execute SQL Script</strong></span>:
+Выполняет выбранную часть запроса или весь запрос, если ничто не выбрано.
+</li>
+
+<li><span class="bold"><strong>Execute Current SQL script</strong></span>:
+Выполните запрос под курсором клавиатуры.</li>
+<li><span class="bold"><strong>Explain (All or Selection)</strong></span>:
+Выполните команду <code class="literal">EXPLAIN</code>
+на запросе под курсором клавиатуры. Вкладка сетки результата также показана,
+выполняя запрос EXPLAIN. Нажатие на нее выполнит тот же самый запрос, как
+будто выбрано <span class="guilabel">Execute SQL Script</span>.
+Альтернативно Visual Explain уже доступен для всех выполненных запросов.
+Выберите <span class="guilabel">Execution Plan</span> из вкладки результатов,
+чтобы рассмотреть его.</li>
+
+<li><span class="bold"><strong>Stop the query being executed</strong></span>:
+Прервать выполнение актуального скрипта SQL.</p>
+<p>Соединение с базой данных не будет перезапущено, открытые
+транзакции останутся открытыми.</li>
+
+<li><span class="bold"><strong>Toggle whether execution of SQL script
+should continue after failed statements</strong></span>: Если красный круг
+<span class="quote"><span class="quote">breakpoint</span></span>
+показан, скрипт заканчивается на запросе, который терпит неудачу.
+Если вы нажимаете кнопку так, чтобы зеленая стрелка была показана, выполнение
+продолжается мимо неудавшегося кода, возможно производя дополнительные наборы
+результатов. В любом случае, любая ошибка, произведенная от попытки выполнить
+дефектный запрос, зарегистрирована на вкладке Output. Это поведение может
+также быть установлено в панели пользовательских настроек
+<span class="guilabel">SQL Execution</span>.</li>
+
+<li><span class="bold"><strong>Commit</strong></span>:
+Передает текущую транзакцию.</p>
+<p>Все вкладки запроса в той же самой связи разделяют те же самые транзакции.
+Чтобы иметь независимые транзакции, новая связь должна быть открыта.</li>
+
+<li><span class="bold"><strong>Rollback</strong></span>:
+Откатывает текущую транзакцию.</p>
+<p>Все вкладки запроса в той же самой связи разделяют те же самые транзакции.
+Чтобы иметь независимые транзакции, новая связь должна быть открыта.</li>
+
+<li><span class="bold"><strong>Toggle Auto-Commit Mode</strong></span>:
+Если выбрано, каждый запрос будет передан независимо.</p>
+<p>Все вкладки запроса в той же самой связи разделяют те же самые транзакции.
+Чтобы иметь независимые транзакции, новая связь должна быть открыта.</p>
+
+<p>Auto-commit включен по умолчанию, это поведение по умолчанию может быть
+изменено (отключено) из панели <span class="guilabel">SQL Execution</span>.
+</li>
+
+<li><span class="bold"><strong>Set Limit for Executed
+Queries</strong></span>: Значение по умолчанию 1000, которое дописывает
+"LIMIT 0, 1000" к запросам SELECT. Значение (1000) может быть изменено в
+панели <span class="guilabel">SQL Execution</span>.</li>
+
+<li><span class="bold"><strong>Save Snippet</strong></span>:
+Сохранить текущий запрос или выбор к активному списку отрывков.</li>
+<li><span class="bold"><strong>Beautify SQL</strong></span>:
+Переформатировать скрипт SQL. По умолчанию ключевые слова SQL изменяются на
+UPPER CASE. Эта функциональность может быть изменена из окна пользовательских
+настроек <span class="guilabel">SQL Editor</span>.</li>
+
+<li><span class="bold"><strong>Find panel</strong></span>: Показать панель
+Find для редактора.</li>
+<li><span class="bold"><strong>Invisible characters</strong></span>:
+Показ невидимых символов, таких как новые строки, табуляции, пробелы.
+Новая строка представляется как
+<span class="bold"><strong>[LF]</strong></span>,
+пробел как единственная точка (.) и вкладка как стрелка вправо.</li>
+<li><span class="bold"><strong>Wrapping</strong></span>:
+Перенос длинных строк в редакторе SQL.</p></li></ul>
+
+<h3><a name="wb-sql-editor-main-menu"></a>8.1.3. Меню Query и Edit</h3>
+<p>Когда вкладка SQL-запроса выбрана, самые важные пункты в строке главного
+меню, это <span class="guimenu">Query</span> и
+<span class="guimenu">Edit</span>.</p>
+
+<h4><a name="wb-sql-editor-query-menu"></a>Меню SQL Query</h4>
+<p>Меню <span class="guimenu">Query</span>:</p>
+<ul><li><p><span class="guimenuitem">Execute (All or Selection)</span>:
+Выполняет все запросы в области SQL-запроса или только выбранные.</li>
+
+<li><span class="guimenuitem">Execute (All or Selection) to Text</span>:
+Выполняет все запросы в области SQL-запроса или только выбранные
+и показывает их в простом тексте как стандартная консоль MySQL.</li>
+
+<li><span class="guimenuitem">Execute Current Statement</span>:
+Выполняет текущий SQL-оператор.</li>
+<li><span class="guimenuitem">Execute Current Statement (Vertical Text
+Output)</span>: Выполняет все запросы в области SQL-запроса или только
+выбранные и показывает их в простом тексте как консоль MySQL вертикально
+(\G).</li>
+
+<li><span class="guimenuitem">Explain Current Statement</span>:
+Описывает текущий запрос при помощи запроса MySQL EXPLAIN.</li>
+<li><span class="guimenuitem">Visual Explain Current Statement</span>:
+Визуально описывает текущий запрос на основе информации EXPLAIN,
+предоставленной MySQL Server 5.6 и выше. MySQL Workbench разбирает вывод
+EXPLAIN (JSON) из MySQL server 5.6+ и производит визуальное представление.
+Для дополнительной информации о Visual Explain см. разделы
+<a href="perf.htm#wb-performance-explain">7.4</a> и
+<a href="perf.htm#wb-tutorial-visual-explain-dbt3">7.5</a>.</li>
+
+<li><span class="guimenuitem">Stop</span>:
+Остановить выполняющийся в настоящее время скрипт.</li>
+<li><span class="guimenuitem">Stop Script Execution On Errors</span>:
+Если включено, MySQL Workbench прекращает выполнять запрос, если ошибки
+найдены. Это может быть позволено/отключено из этого меню.</li>
+
+<li><span class="guimenuitem">Limit Rows</span>:
+По умолчанию количество возвращенных строк (LIMIT) 1000.
+Значения, определенные здесь, затрагивают последующие запросы.
+Диапазоны числа от 10 до 50000 и "Don't Limit".</li>
+
+<li><span class="guimenuitem">Collect Performance Schema Stats</span>:
+Предоставляет данные набора результатов <span class="guilabel">Query
+Stats</span>, который включает определенную для запроса информацию о
+Timing, Rows processed, Temporary tables, Joins per type,
+Sorting и Index usage.</li>
+
+<li><span class="guimenuitem">Collect Resultset Field Metadata</span>:
+Предоставляет данные наборов результатов
+<span class="guilabel">Form Editor</span> и
+<span class="guilabel">Field Types</span>.</li>
+
+<li><span class="guimenuitem">Reconnect to Server</span>:
+Снова соединяется с сервером MySQL.</li>
+<li><span class="guimenuitem">New Tab to Current Server</span>:
+Создает дубликат текущей вкладки SQL Editor.</li>
+
+<li><span class="guimenuitem">Auto-Commit Transactions</span>:
+Включает auto-commit для транзакций.</li>
+<li><span class="guimenuitem">Commit Transaction</span>:
+Передает транзакцию базы данных.</li>
+
+<li><span class="guimenuitem">Rollback Transaction</span>:
+Откатывает транзакцию базы данных.</li>
+<li><span class="guimenuitem">Commit Result Edits</span>:
+Передает любые изменения, которые вы внесли в сервер.</li>
+
+<li><span class="guimenuitem">Discard Result Edits</span>:
+Отменяет любые изменения, которые вы сделали.</li>
+<li><span class="guimenuitem">Export Results</span>:
+Экспортирует наборы результатов в файлу. Это показывает диалог
+<span class="guilabel">Export Query Results to File</span>.
+Диалог позволяет вам выбрать, какой набор результатов вы хотите
+экспортировать, формат файла (CSV, HTML, XML), название и местоположение
+выходного файла. Нажмите <span class="guibutton">Export</span>,
+чтобы экспортировать данные.</p></li></ul>
+
+<h4><a name="wb-sql-editor-edit-menu"></a>Меню Edit</h4>
+<p>Меню <span class="guimenu">Edit</span> обеспечивает подменю
+<span class="guisubmenu">Format</span>:</p>
+
+<ul><li><p><span class="guimenuitem">Beautify Query</span>:
+Переформатирует запрос, выбранный на вкладке запроса, и выкладывает его
+приятно зазубренным способом.</li>
+
+<li><span class="guimenuitem">UPCASE Keywords</span>:
+Преобразует ключевые слова к верхнему регистру в запросе, в настоящее время
+выбранном, на вкладке запроса.</li>
+
+<li><span class="guimenuitem">lowercase Keywords</span>:
+Преобразует ключевые слова к нижнему регистру в запросе, в настоящее время
+выбранном, на вкладке запроса.</li>
+
+<li><span class="guimenuitem">Un/Comment Selection</span>:
+Комментируют строки, в настоящее время выбираемые во вкладке запроса.
+Если строки уже прокомментированы, эта операция удаляет комментарии.</li>
+
+<li><span class="guimenuitem">Auto-complete</span>:
+Вызывает мастера автозавершения. Это позволено по умолчанию и может быть
+отключено через <span class="guimenu">Preferences</span>,
+<span class="guimenu">SQL Editor</span>,
+<span class="guilabel">Automatically Start Code Completion</span>.
+Автозавершение перечислит функции, ключевые слова, названия схем, имена
+таблиц и имена столбцов.</p></li></ul>
+
+<h3><a name="wb-develop-sql-editor-results"></a>8.1.4. Сетка результата</h3>
+<p>Область результатов экрана показывает следствия выполненных запросов.
+Если скрипт будет содержать многочисленные запросы, подвкладка результата
+будет произведен для каждого запроса, который возвратил результаты.
+Следующие данные показывают единственную подвкладку и подчеркивают главные
+особенности сетки результата.</p>
+
+<p>MySQL Workbench цитирует и экранирует строки, вводимые в
+сетку результата, таким образом добавление кавычек и
+экранировка здесь дополнительны.</p>
+
+<p>Возможно ввести функцию или другое выражение в поле.
+Используйте префикс <code class="literal">\func</code>, чтобы
+препятствовать тому, чтобы MySQL Workbench экранировал маркеры цитаты.
+Например, для выражения <code class="literal">md5('fred')</code> MySQL
+Workbench обычно производил бы код
+<code class="literal">md5(\'fred\')</code>.
+Чтобы предотвратить это, введите выражение как
+<code class="literal">\func md5('fred')</code>,
+чтобы гарантировать, что цитирования не экранируются.</p>
+
+<a name="wb-develop-sql-editor-results-screenshot"></a>
+<p><b>Рис. 8.4. SQL Editor: сетка результата</b></p>
+<img src="images/wb-develop-sql-editor-results-window.png" width="800"
+height="613" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h4><a name="wb-sql-editor-resultgrid-toolbar"></a>
+Панель инструментов сетки результата</h4>
+<p>Элементы панели инструментов сетки результата включают:</p>
+
+<ul><li><p><span class="guilabel">Reset</span>:
+Сбросить все сортированные столбцы.</li>
+<li><span class="guilabel">Refresh</span>:
+ОРсвежить все данные, повторно выполняя оригинальный запрос.</li>
+
+<li><span class="guilabel">Filter Rows</span>: Выполняет поиск без учета
+регистра всех ячеек. Это автоматически освежает, и есть также кнопка
+refresh, чтобы выполнить это действие вручную.</li>
+
+<li><span class="guilabel">Edit Current Row</span>:
+Отредактируйте текущую строку.</li>
+<li><span class="guilabel">Add New Row</span>:
+Добавляет новую пустую строку и подчеркивает ее в режиме редактирования.
+Нажмите <span class="guibutton">Apply</span>, чтобы выполнить
+запрос вставки строки.</li>
+
+<li><span class="guilabel">Delete Selected Rows</span>:
+Удаляет выбранные строки. Нажмите <span class="guibutton">Apply</span>,
+чтобы выполнить запрос на удаление.</li>
+
+<li><span class="guilabel">Export</span>: Пишет набор результатов в файл
+CSV, HTML, JSON, SQL INSERT, Excel, XML, или разделенный Tab.</p>
+<p>Это экспортирует набор результатов. Чтобы экспортировать всю таблицу или
+схему, посмотрите <a href="admin.htm#wb-mysql-connections-navigator-management-data-export">
+Data Export</a>.</li>
+
+<li><span class="guilabel">Import</span>: Импорт записей из
+внешнего файла CSV.</li>
+<li><span class="guilabel">Wrap Cell Content</span>:
+Если содержание ячейки превысит ширину ячеек, то данные будут обрезаны.
+Этот выбор вместо этого перенесет содержание в ячейке
+и приспособит ширину ячеек соответственно.</p>
+
+<p>Кнопка "Refresh" автоматически регулирует ширину столбца, чтобы
+соответствовать самой длинной последовательности.
+Можно также вручную приспособить ширину столбца.</p></li></ul>
+
+<h4><a name="wb-sql-editor-resultgrid-tab-menu"></a>Меню вкладки Result Grid
+</h4>
+<p>Щелкните правой кнопкой мыши по подвкладке
+сетки результата, чтобы открыть контекстное меню.</p>
+
+<a name="wb-develop-sql-editor-results-tab-context-screenshot"></a>
+<p><b>Рис. 8.5. SQL Editor: контекстное меню сетки результата</b></p>
+<img src="images/wb-develop-sql-editor-results-window-tab-context.png"
+width="776" height="234" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Контекстное меню сетки результата включает:</p>
+
+<ul><li><p><span class="guimenuitem">Rename Tab</span>:
+Настройте имя (название) этой вкладки.</li>
+<li><span class="guimenuitem">Pin Tab</span>:
+Прикрепите вкладку результатов к сетке результата.
+Выполнение дополнительных SQL-операторов создаст новые
+вкладки сетки результата.</li>
+
+<li><span class="guimenuitem">Close Tab</span>: Закройте эту вкладку.</li>
+<li><span class="guimenuitem">Close Other Tabs</span>:
+Закройте все вкладки, кроме этой.</p></li></ul>
+
+<h4><a name="wb-sql-editor-resultgrid-field-menu"></a>
+Меню поля сетки результата</h4>
+<p>Щелкните правой кнопкой мыши по любой области в сетке результата, чтобы
+открыть контекстное меню для того типа поля.</p>
+
+<a name="wb-develop-sql-editor-results-field-context-screenshot"></a>
+<p><b>Рис. 8.6. SQL Editor: меню поля сетки результата</b></p>
+<img src="images/wb-develop-sql-editor-results-field-context.png" width="800"
+height="495" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Полевое контекстное меню сетки результата включает:</p>
+
+<ul><li><p><span class="guimenuitem">Open Value in Editor</span>:
+Открывает новое окно редактора, которое специализируется на редактировании
+Binary и JSON, но может отредактировать текст.</li>
+
+<li><span class="guimenuitem">Show point in browser</span>:
+Оценивает, является ли область пунктом геометрии и затем открывает пункт с
+использованием браузера и <code class="literal">openstreetmap.org</code> по
+умолчанию. Альтернативный онлайн-сервис может формироваться (см.
+<a href="conf.htm#wb-preferences-others">раздел 3.2.7</a>).
+Этот выбор доступен для столбцов только с типами местоположения.</li>
+
+<li><span class="guimenuitem">Set Field to NULL</span>:
+Устанавливает значение поля к NULL.</li>
+<li><span class="guimenuitem">Mark Field Value as a Function/Literal</span>:
+Отмечает как функцию, предварительно добавив \func.</li>
+<li><span class="guimenuitem">Delete Row(s)</span>: Удаляет всю строку.</li>
+
+<li><span class="guimenuitem">Load Value from File</span>:
+Открывает диалог, чтобы вставить значение из файла.
+Все содержание файла вставляется в поле.</li>
+
+<li><span class="guimenuitem">Save Value to File</span>:
+Пишет значение поля в файл.</li>
+<li><span class="guimenuitem">Copy Row</span>: Копирует строку
+строка в экранировнном формате CSV в виде 'a', 'b','c'.
+Альтернативно есть <span class="guimenuitem">Copy Row (tab separated)</span>,
+чтобы использовать табуляции вместо запятых как сепаратор, и
+<span class="guimenuitem">Copy Row (unquoted)</span>, чтобы
+не экранировать значения.</li>
+
+<li><span class="guimenuitem">Copy Row (with names)</span>:
+Скопировать экранированную строку аналогично "Copy Row", но
+также добавляет #comment, содержащий имена столбцов. Альтернативно, есть
+<span class="guimenuitem">Copy Row (with names, unquoted)</span>.</li>
+
+<li><span class="guimenuitem">Copy Field</span>:
+Копирует имя поля, такое как 'a', или использует
+<span class="guimenuitem">Copy Field (unquoted)</span>, чтобы
+не использовать одинарные кавычки.</li>
+
+<li><span class="guimenuitem">Paste Row</span>:
+Вставляет строку поверх выбранной.</li>
+<li><span class="guimenuitem">Capitalize Text</span>:
+Переводит текст в текущей строке в режим "каждое слово с Большой Буквы".</li>
+
+<li><span class="guimenuitem">lowercase Text</span>:
+Переводит в нижний регистр текст в текущей строке.</li>
+<li><span class="guimenuitem">UPPERCASE Text</span>:
+Переводит в верхний регистр текст в текущей строке.</p></li></ul>
+
+<h3><a name="wb-sql-editor-snippets"></a>8.1.5.
+Дополнения SQL: вкладка отрывков</h3>
+<p>Вторичная вкладка Snippets включает встроенные, местные и разделенные
+отрывки. Опция <span class="guilabel">My Snippets</span> хранит
+отрывки в файле в соответствии с каталогом конфигурации пользователя
+MySQL Workbench. Выберите возможность <span class="guilabel">Shared</span>
+для общих отрывков.</p>
+
+<h4><a name="wb-sql-editor-snippets-using"></a>Применение отрывков</h4>
+<p>Отрывки могут быть вставлены в редактор SQL или буфер обмена системы.
+Чтобы вставить отрывок, используют символ отрывка или щелкают правой кнопкой
+мыши по желаемому отрывку и выбирают Insert.</p>
+
+<a name="wb-sql-editor-snippets-screenshot"></a>
+<p><b>Рис. 8.7. SQL Snippets: использование</b></p>
+<img src="images/wb-sql-editor-snippets-usage.png" width="800" height="563"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h4><a name="idm140523192584480"></a>Местные отрывки (мои отрывки)</h4>
+<p>Местные отрывки сохранены в каталоге MySQL Workbench. По умолчанию
+<code class="literal">My Snippets</code> сохранены, как
+обозначено в следующей таблице.</p>
+
+<a name="wb-sql-editor-snippets-local-paths"></a>
+<p><b>Таблица 8.1. Местное расположение файла отрывк по умолчанию</b></p>
+<table border="1">
+<thead><tr><th scope="col">Операционная система</th>
+<th scope="col">Путьт к файлу</th></tr></thead>
+<tbody><tr><td scope="row">Windows</td>
+<td>%AppData%\MySQL\Workbench\User Snippets.txt</td></tr>
+<tr><td scope="row">macOS</td>
+<td>~username/Library/Application Support/MySQL/Workbench/snippets/User
+Snippets.txt</td></tr>
+<tr><td scope="row">Linux</td><td>~username/.mysql/workbench/snippets/User
+Snippets.txt</td></tr></tbody></table><br class="table-break">
+
+<p>Редактирование (или добавление) отрывка к
+<code class="literal">My Snippets</code> в MySQL Workbench
+этот файл простого текста. Можно отредактировать этот файл за пределами
+MySQL Workbench или создать новые файлы, которые будут также перечислены при
+отборе отрывков. Например, добавление файла, названного "More Snippets.txt"
+добавит секцию "More Snippets" к выбору отрывков.</p>
+
+<h4><a name="idm140523192570720"></a>Общие отрывки</h4>
+<p>Отрывки <span class="guilabel">Shared</span> хранятся в схеме
+<code class="literal">.mysqlworkbench</code> на подключенном сервере MySQL.
+Выбор "Shared" впервые, будет просить разрешение для MySQL Workbench
+создать эту схему. Пользователям, связанным с этим сервером MySQL, разрешают
+создать, отредактировать и использовать эти общие отрывки.</p>
+
+<p>Общие отрывки были добавлены в MySQL Workbench 6.2.0.</p>
+<p>Схема <code class="literal">.mysqlworkbench</code> скрыта в MySQL
+Workbench, поскольку это считают внутренней схемой, которая не должна быть
+замечена или отредактирована.</p>
+
+<h4><a name="idm140523192564656"></a>Встроенные отрывки</h4>
+<p>Несколько встроенных отрывков SQL связаны с MySQL Workbench
+и как правило показывают синтаксис SQL для операций MySQL.
+Они разделены на следующие категории.</p>
+
+<ul><li><p><span class="guilabel">DB Mgmt</span> (Database Management):
+использование синтаксиса в качестве примера <code class="literal">SHOW</code>
+во многих формах, чтобы предоставить информацию о базах данных, таблицах,
+столбцах или информации о статусе сервера MySQL.</li>
+
+<li><span class="guilabel">SQL DDL</span> (SQL Data Definition Language):
+примеры синтаксиса включают создание, изменение и удаление таблиц, индексов,
+представлений и процедур.</li>
+
+<li><span class="guilabel">SQL DML</span> (SQL Data Manipulation Language):
+примеры синтаксиса для таких операций, как SELECT, INSERT и REPLACE.
+</li></ul>
+<p>Встроенные операции сохранены в текстовых файлах в том же самом
+каталоге, где обычные файлы отрывка.</p>
+
+<h4><a name="wb-sql-editor-snippets-saving"></a>
+Сохранение и редактирование отрывков</h4>
+<p>Чтобы сохранить отрывок, выберите символ Snippets Insert
+(<span class="inlinemediaobject"><img src="images/1.png" align="middle"
+width="18" height="18"></span>) или щелкните правой кнопкой мыши в окне
+отрывка и выберите <span class="guimenuitem">Add Snippet from Editor
+Content</span> из контекстного меню. Дважды щелкните по отрывку, чтобы
+открыть его и выбрать редактор отрывка, чтобы отредактировать его
+тело или название.</p>
+
+<a name="wb-sql-editor-snippets-editing"></a>
+<p><b>Рис. 8.8. Отрывки SQL: редактор</b></p>
+<img src="images/wb-sql-editor-snippets-editing.png" width="732" height="604"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h3><a name="wb-develop-sql-editor-help"></a>
+8.1.6. Дополнения SQL: вкладка помощи контекста</h3>
+<p>В визуальном редакторе SQL можно выбрать ключевое слово или функцию в
+запросе, чтобы открыть тему помощи, описывающую ее синтаксис и использование.
+Уровень информации эквивалентен <strong class="userinput"><code>help
+<em class="replaceable"><code>keyword</code></em></code></strong> в консоли
+<span class="command"><strong>mysql</strong></span> и содержание специфично
+для версии (5.6, 5.7 или 8.0) текущего подключения MySQL.
+Помощь контекста требует, чтобы никакое подключение MySQL
+не использовалось, потому что помощь контекста сохранена локально.
+Чтобы просмотреть помощь контекста, сначала откройте панель
+<span class="guilabel">SQL Additions</span> нажав
+<span class="guimenu">View</span>,
+<span class="guisubmenu">Panels</span>, <span class="guimenuitem">Show
+Secondary Sidebar</span> из меню. Альтернативно, можно щелкнуть по символу
+(<span class="inlinemediaobject">
+<img src="images/wb-develop-sql-editor-help-panel-button.png" align="middle"
+width="18" height="18"></span>) в панели инструментов. У этой панели есть две
+нижних вкладки, выберите <span class="guilabel">Context Help</span>.
+У вас есть несколько возможностей для показа помощи контекста:
+автоматический, ручной и самый частый список. Первоначально автоматическая
+помощь контекста отключена.
+
+<p><b>Автоматическая помощь контекста. </b>
+Чтобы позволить автоматическую помощь контекста, нажмите кнопку
+button (<span class="inlinemediaobject">
+<img src="images/wb-develop-sql-editor-automatic-button.png" align="middle"
+width="18" height="18"></span>) в панели инструментов SQL Additions.
+При нажатии на различные ключевые слова SQL и функции в редакторе,
+вы будете получать контекстную помощь на определенную тему.
+
+<p><b>Ручная помощь контекста. </b>
+Ручная помощь контекста доступна, когда автоматическая помощь контекста
+отключена. Нажмите на ключевое слово SQL в редакторе и затем нажмите кнопку
+(<span class="inlinemediaobject">
+<img src="images/wb-develop-sql-editor-manual-button.png" align="middle"
+width="18" height="18"></span>) в панели инструментов SQL Additions, чтобы
+просмотреть каждую новую тему.
+
+<p><b>Самый частый список. </b>
+Используйте выпадающий список, чтобы выбрать тему помощи для показа.
+Набор ключевых слов SQL в этом списке предопределен. Большинство частых
+ключевых слов, выбранных в редакторе SQL, также показываются в поле списка.
+Панель инструментов SQL Additions также включает стрелки вперед и назад,
+которые позволяют вам смотреть недавно прочитанные темы помощи.
+Обратите внимание на то, что, когда автоматическая помощь контекста
+позволена, ручная кнопка контекста отключена.</p>
+
+<a name="wb-develop-sql-editor-help-window"></a>
+<p><b>Рис. 8.9. SQL Editor: помощь контекста</b></p>
+<img src="images/wb-develop-sql-editor-help.png" width="754" height="415"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h3><a name="wb-develop-sql-editor-history"></a>8.1.7. Панель вывода</h3>
+<p>Панель <span class="guilabel">Output</span> расположена внизу MySQL
+Workbench. Это включает опции <code class="literal">Action Output</code>,
+<code class="literal">History Output</code> и
+<code class="literal">Text Output</code>.
+
+<p>Панель <span class="guilabel">Action Output</span>
+показывает резюме связи между активным подключением MySQL в
+MySQL Workbench и сервером MySQL, и может обратиться к ошибкам или общей
+информации. Каждое сообщение показывает время, действие и ответ сервера.</p>
+
+<a name="wb-develop-sql-editor-output-action"></a>
+<p><b>Рис. 8.10. SQL Editor: Output: Action Output</b></p>
+<img src="images/wb-develop-sql-editor-output-action.png" width="800"
+height="600" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Панель <span class="guilabel">History Output</span> обеспечивает историю
+операций SQL, выполненных в MySQL Workbench для активного подключения MySQL.
+Время и код SQL для каждой операции зарегистрированы. Чтобы рассмотреть
+выполненный SQL-оператор, щелкните по времени, и выполненный код SQL будет
+показан в колонке <span class="guilabel">SQL</span>.</p>
+
+<a name="wb-develop-sql-editor-output-history"></a>
+<p><b>Рис. 8.11. SQL Editor: History Output</b></p>
+<img src="images/wb-develop-sql-editor-output-history.png" width="800"
+height="600" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="wb-develop-sql-editor-table-search"></a>
+8.1.8. Вкладка поиска данных таблицы</h3>
+<p>Найдите данные через подключение MySQL при помощи текстовой функции поиска
+на любом количестве таблиц и схем. От дерева схемы выберите таблицы, схемы
+или то и другое, затем щелкните правой кнопкой мыши по подчеркнутым пунктам и
+нажмите <span class="guimenuitem">Search Data Table</span>
+из контекстного меню.</p>
+
+<a name="wb-develop-sql-editor-table-search-tables"></a>
+<p><b>Рис. 8.12. Пример поиска: многочисленные таблицы и схемы</b></p>
+<img src="images/wb-develop-table-search-selected.png" width="800"
+height="718" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Параметры поиска включают:</p>
+
+<ul><li><p><span class="guilabel">Search for table fields that</span>:
+"CONTAINS", "Search using =", "Search using LIKE", "Search using REGEXP".
+Эти параметры поиска нечувствительны к регистру.</li>
+
+<li><span class="guilabel">Max. matches per table</span>:
+[<em class="replaceable"><code>100</code></em>]</li>
+<li><span class="guilabel">Max. total matches</span>:
+[<em class="replaceable"><code>1000</code></em>]</li>
+
+<li><span class="guilabel">Search columns of all types</span>:
+Если включено, столбцы нетекстового типа конвертированы в CHAR, чтобы
+выполнить соответствие, иначе просматриваются только текстовые типы
+(CHAR, VARCHAR и TEXT). Это выключено по умолчанию.</p></li></ul>
+
+<h3><a name="wb-develop-sql-editor-table-export-import"></a>
+8.1.9. Экспорт или импорт таблицы</h3>
+<p>Экспортируйте или импортируйте таблицы, используя мастера,
+чтобы помочь вам.</p>
+<p>Эти мастера были добавлены в MySQL Workbench 6.3.</p>
+
+<h4><a name="wb-develop-sql-editor-table-export"></a>Экспорт таблицы</h4>
+<p>Альтернативно, используйте <a href="admin.htm#wb-admin-export-import">
+раздел 6.5</a>, чтобы экспортировать большие наборы данных, такие как все
+таблицы и базы данных.</p>
+
+<h4><a name="wb-develop-sql-editor-table-import"></a>Импорт таблицы</h4>
+<p>Альтернативно, используйте <a href="admin.htm#wb-admin-export-import">
+раздел 6.5</a>, чтобы импортировать большие наборы данных, такие как все
+таблицы и базы данных.</p>
+
+<h3><a name="wb-table-editor"></a>8.1.10. MySQL Table Editor</h3>
+<p>MySQL Table Editor нужен, чтобы создать и изменить таблицы.
+Можно добавить или изменить столбцы или индексы таблицы, изменить механизм
+хранения, добавить внешние ключи или изменить имя таблицы.
+Чтобы получить доступ к MySQL Table Editor,
+щелкните правой кнопкой мыши по имени таблицы в области Navigator боковой
+панели с выбранной вторичной вкладкой <span class="guilabel">Schemas</span>
+и нажмите <span class="guimenuitem">Alter Table</span>.
+Это действие открывает новую вторичную вкладку в главном окне
+<span class="guilabel">SQL Editor</span>.
+Можно также получить доступ к MySQL Table Editor из EER Diagram
+дважды щелкнув по объекту таблицы.</p>
+
+<h4><a name="wb-table-editor-main-window"></a>
+8.1.10.1. Главное окно редактора</h4>
+<p>Любое количество таблиц может быть отредактировано в редакторе таблиц
+MySQL в любой момент. Добавление другой таблицы создает новую вторичную
+вкладку наверху редактора.</p>
+
+<a name="wb-table-editor-overview-figure"></a>
+<p><b>Рис. 8.13. Редактор таблиц</b></p>
+<img src="images/wb-table-editor-overview.png" width="800" height="696"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>MySQL Table Editor обеспечивает рабочую область, которая использует
+подвкладки, чтобы выполнить эти действия:</p>
+<ul><li><p><a href="#wb-table-editor-columns-tab">Columns</a>:
+Добавьте или измените столбцы.</li>
+
+<li><a href="#wb-table-editor-indexes-tab">Indexes</a>:
+Добавьте или измените индексы.</li>
+<li><a href="#wb-table-editor-foreign-keys-tab">Foreign Keys</a>:
+Добавьте или измените внешние ключи.</li>
+
+<li><a href="#wb-table-editor-triggers-tab">Triggers</a>:
+Добавьте или измените триггеры.</li>
+<li><a href="#wb-table-editor-partitioning-tab">Partitioning</a>:
+Управление разделением таблицы.</li>
+
+<li><a href="#wb-table-editor-options-tab">Options</a>:
+Добавьте или измените другие варианты, разделенные на категории.
+</p></li></ul>
+
+<h4><a name="wb-table-editor-columns-tab"></a>8.1.10.2. Вкладка Columns</h4>
+<p>Используйте подвкладку <span class="guilabel">Columns</span>, чтобы
+показать и отредактировать всю информацию о столбце для таблицы.
+С этой подвкладкой можно добавить, удалить и изменить столбцы.
+Можно также использовать подвкладку <span class="guilabel">Columns</span>,
+чтобы изменить такие свойства столбца, как имя, тип данных и
+значение по умолчанию.</p>
+
+<a name="wb-table-editor-columns-figure"></a>
+<p><b>Рис. 8.14. Вкладка Columns</b></p>
+<img src="images/wb-table-editor-columns-tab.png" width="800" height="555"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>Щелкните правой кнопкой мыши по строке под
+<code class="literal">Column Name</code>, чтобы открыть всплывающее меню
+со следующими пунктами:</p>
+
+<ul><li><p><span class="guimenuitem">Move Up</span>:
+Переместите выбранный столбец вверх.</li>
+<li><span class="guimenuitem">Move Down</span>:
+Переместите выбранный столбец вниз.</li>
+
+<li><span class="guimenuitem">Copy</span>: Копирует столбец для модели.</li>
+<li><span class="guimenuitem">Cut</span>: Копии и затем удаляют
+столбец для модели.</li>
+
+<li><span class="guimenuitem">Paste</span>: Вставляет столбец.
+Если столбец с тем же самым именем уже существует, то
+<code class="literal">_copy1</code> добавлено к имени столбца.</li>
+
+<li><span class="guimenuitem">Delete Selected Columns</span>:
+Выберите многочисленные смежные столбцы, щелкнув правой кнопкой мыши и нажав
+<span class="keycap"><strong>Shift</strong></span>. Используйте
+<span class="keycap"><strong>Control</strong></span>, чтобы
+выбрать отдельные столбцы.</li>
+
+<li><span class="guimenuitem">Refresh</span>: Обновить всю информацию в
+подвкладке <span class="guilabel">Columns</span>.</li>
+<li><span class="guimenuitem">Clear Default</span>:
+Очистить назначенное значение по умолчанию.</li>
+
+<li><span class="guimenuitem">Default NULL</span>: Установить значение по
+умолчанию столбца в <code class="literal">NULL</code>.</li>
+<li><span class="guimenuitem">Default 0</span>: Установить значение по
+умолчанию столбца в <code class="literal">0</code>.</li>
+
+<li><span class="guimenuitem">Default CURRENT_TIMESTAMP</span>:
+Доступно для типа <code class="literal">TIMESTAMP</code>.</li>
+<li><span class="guimenuitem">Default CURRENT_TIMESTAMP ON UPDATE
+CURRENT_TIMESTAMP</span>: Доступно для типа
+<code class="literal">TIMESTAMP</code>.</li></ul>
+
+<p>Чтобы добавить столбец, щелкните поле
+<code class="literal">Column Name</code> в пустой строке и введите
+соответствующее значение. Выберите тип данных из списка
+<span class="guilabel">Datatype</span>. Выберите опции свойства столбца как
+требуется согласно списку свойств столбца. Для описания каждого пункта
+посмотрите <a href="../../../dev.mysql.com/doc/refman/8.0/en/create-table.html"
+target="_top">CREATE TABLE</a>.</p>
+
+<ul><li><p><span class="guilabel">PK</span>: PRIMARY KEY</li>
+<li><span class="guilabel">NN</span>: NOT NULL</li>
+<li><span class="guilabel">UQ</span>: UNIQUE INDEX</li>
+<li><span class="guilabel">BIN</span>: BINARY</li>
+<li><span class="guilabel">UN</span>: UNSIGNED</li>
+<li><span class="guilabel">ZF</span>: ZEROFILL</li>
+<li><span class="guilabel">AI</span>: AUTO_INCREMENT</li>
+<li><span class="guilabel">G</span>: Произведенный столбец.
+Этот выбор доступен с MySQL Server 5.7.</li></ul>
+
+<p>Чтобы изменить название, тип данных, значение по умолчанию или комментарий
+столбца, дважды щелкните по значению, чтобы отредактировать его.
+Можно также добавить комментарии столбца к полю <code class="literal">Column
+Comment</code>. Также возможно установить сопоставление столбца, используя
+список в панели <span class="guilabel">Column Details</span>.
+Слева от имени столбца есть символ, который указывает, является ли столбец
+членом первичного ключа. Если символ маленький ключ, то столбец принадлежит
+первичному ключу, иначе символ синий или белый алмаз.
+Синий алмаз указывает, что у столбца установлен
+<span class="guilabel">NN</span>. Чтобы добавить или удалить столбец из
+первичного ключа, дважды щелкните по символу. Можно также добавить первичный
+ключ, отметив опцию <code class="literal">PRIMARY KEY</code> в секции
+<code class="literal">Column Details</code> редактора таблиц. Если вы хотите
+создать сложный первичный ключ, можно выбрать многочисленные столбцы и
+установить флажок PK. Однако есть дополнительный шаг, который требуется:
+необходимо щелкнуть по вкладке индексов, затем в панели столбцов индекса
+необходимо установить желаемый порядок первичных ключей.</p>
+
+<p>Вводя значения по умолчанию, в случае <code class="literal">CHAR</code> и
+<code class="literal">VARCHAR</code> MySQL Workbench
+попытается автоматически добавить кавычки, если пользователь не начнет ввод
+с любой кавычки. Для других типов данных пользователь должен управлять
+цитированием при необходимости, поскольку оно не будет обработано
+автоматически MySQL Workbench.</p>
+
+<p>Необходимо соблюдать осторожность, вводя значение по умолчанию для
+столбцов <code class="literal">ENUM</code>, потому что нечисловоое
+умолчание не будет автоматически указано. Необходимо вручную добавить знаки
+одинарной кавычки для значения по умолчанию. Обратите внимание на то, что
+MySQL Workbench <span class="bold"><strong>не</strong></span>
+будет препятствовать тому, чтобы вы ввели значение по умолчанию без
+кавычек. Если нечисловое значение по умолчанию будет введено без кавычек, это
+приведет к ошибкам. Например, если модель будет перепроектирована, скрипт
+будет содержать значения по умолчанию без кавычек для столбцов
+<code class="literal">ENUM</code> и потерпит неудачу, если будет предпринята
+попытка выполнить скрипт на сервере.</p>
+<p>ENUM, BIT и SET должны содержать по крайней мере одно значение, вводя эти
+типы данных в MySQL Workbench.</p>
+
+<h4><a name="wb-table-editor-indexes-tab"></a>8.1.10.3. Вкладка Indexes</h4>
+<p>Вкладка <span class="guilabel">Indexes</span> содержит всю информацию об
+индексе для вашей таблицы. Используйте этот подвкладка, чтобы добавить,
+удалить и изменить индексы.</p>
+
+<a name="wb-table-editor-indexes-tab-figure"></a>
+<p><b>Рис. 8.15. Вкладка Indexes</b></p>
+<img src="images/wb-table-editor-indexes-tab.png" width="760" height="467"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>Все индексы для таблицы перечисляются по имени индекса.
+Щелкните по имени индекса, чтобы показать секцию
+<span class="guilabel">Index Columns</span> с информацией о выбранном
+индексе. Кроме того, можно формировать тип хранения, ключевой размер блока,
+анализатор и видимость индекса. Комментарий индекса, когда добавлен,
+относится только к выбранному индексу. Действия, доступные от
+этой подвкладки, включают:</p>
+
+<ul><li><p>Чтобы добавить индекс, щелкните по последней строке в списке
+индексов. Введите имя для индекса и выберите тип индекса из списка.
+Выберите столбец или столбцы, которые вы хотите индексировать, отмечая имя
+столбца в списке <span class="guilabel">Index Columns</span>.
+Можно удалить столбец из индекса, удалив галочку из соответствующего столбца.
+</li>
+
+<li>Чтобы определить сортировку столбцов в индексе, надо выбрать
+<code class="literal">ASC</code> или <code class="literal">DESC</code>
+из столбца <span class="guilabel">Order</span>.
+Создайте префикс индекса, определив числовое значение в столбце
+<code class="literal">Length</code>. Вы не можете ввести значение префикса
+для полей, у которых есть тип данных, который не поддерживает префиксы.</li>
+
+<li>Чтобы сделать вторичный индекс (индекс кроме первичного ключа или
+уникального столбца) невидимым для оптимизатора, откдючите опцию
+<span class="guilabel">Visible</span>. По умолчанию все индексы видимы.
+Эта функция должна поддерживаться активным сервером, иначе флажок
+<span class="guilabel">Visible</span> серый. Для описания образцов
+использования этого выбора посмотрите
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/invisible-indexes.html">
+Invisible Indexes</a>.</li>
+
+<li>Чтобы удалить индекс, щелкните правой кнопкой мыши по имени индекса и
+затем щелкните <span class="guimenuitem">Delete Selected</span>.
+</p></li></ul>
+
+<h4><a name="wb-table-editor-foreign-keys-tab"></a>8.1.10.4.
+Вкладка Foreign Keys</h4>
+<p>Вкладка <span class="guilabel">Foreign Keys</span>
+организована почти таким же способом, как подвкладка
+<span class="guilabel">Indexes</span>, добавление или редактирование внешнего
+ключа подобно добавлению или редактированию индекса.</p>
+
+<a name="wb-table-editor-foreign-keys-tab-figure"></a>
+<p><b>Рис. 8.16. Вкладка Foreign Keys</b></p>
+<img src="images/wb-table-editor-foreign-keys-tab.png" width="800"
+height="555" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Чтобы добавить внешний ключ, щелкните по последней строке в списке
+<code class="literal">Foreign Key Name</code>. Введите имя для внешнего ключа
+и выберите столбец или столбцы, которые вы хотите внести в индекс, отметив
+имя столбца в списке <span class="guilabel">Column</span>.
+Можно удалить столбец из индекса, удалив галочку соответствующего столбца.
+Под <span class="guilabel">Foreign Key Options</span>
+выберите действие для событий обновления и удаления. Варианты:</p>
+
+<ul><li><p><span class="guimenuitem">RESTRICT</span></li>
+<li><span class="guimenuitem">CASCADE</span></li>
+<li><span class="guimenuitem">SET NULL</span></li>
+<li><span class="guimenuitem">NO ACTION</span></li></ul>
+
+<p>Чтобы удалить внешний ключ, щелкните правой кнопкой мыши по строке,
+которую вы хотите удалить, затем выберите <span class="guimenuitem">
+Delete Selected FKs</span>. Чтобы изменить свойства внешнего ключа, выберите
+его и внесите желаемые изменения.</p>
+
+<h4><a name="wb-table-editor-triggers-tab"></a>8.1.10.5. Вкладка Triggers</h4>
+<p>Вкладка <span class="guilabel">Triggers</span>
+открывает рабочую область, которая позволяет вам создать новые триггеры
+или отредактировать существующие. Все триггеры организованы в древовидной
+структуре, такой как <span class="guilabel">BEFORE INSERT</span> и
+<span class="guilabel">AFTER INSERT</span>. Чтобы добавить новый триггер,
+щелкните <span class="bold"><strong>[+]</strong></span> рядом с секцией
+триггера. Чтобы удалить триггер, щелкните по связанному значку
+<span class="bold"><strong>[-]</strong></span>.
+Нажмите <span class="guibutton">Apply</span>, чтобы передать ваши изменения.
+</p>
+
+<a name="wb-table-editor-triggers-tab-figure"></a>
+<p><b>Рис. 8.17. Вкладка Triggers</b></p>
+<img src="images/wb-table-editor-triggers-tab.png" width="800" height="547"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h4><a name="wb-table-editor-partitioning-tab"></a>8.1.10.6.
+Вкладка Partitioning</h4>
+<p>Чтобы позволить разделы для вашего таблицы, проверьте флажок
+<span class="guilabel">Enable Partitioning</span>.
+Это позволяет варианты разделения.</p>
+
+<a name="wb-table-editor-partitioning-tab-figure"></a>
+<p><b>Рис. 8.18. Вкладка Partitioning</b></p>
+<img src="images/wb-table-editor-partitioning-tab.png" width="800"
+height="547" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Меню <span class="guimenu">Partition By</span>
+показывает типы разделения, которые можно создать:</p>
+<ul><li><p><span class="guimenuitem">HASH</span></li>
+<li><span class="guimenuitem">LINEAR HASH</span></li>
+<li><span class="guimenuitem">KEY</span></li>
+<li><span class="guimenuitem">LINEAR KEY</span></li>
+<li><span class="guimenuitem">RANGE</span></li>
+<li><span class="guimenuitem">LIST</span></li></ul>
+
+<p>Используйте область <span class="guilabel">Parameters</span>, чтобы
+определить любые параметры, которые будут поставляться функции разделения,
+такие как значение столбца целого числа. Выберите количество разделов из
+списка <span class="guilabel">Partition Count</span>.
+Чтобы вручную формировать ваше разделение, включите флажок
+<span class="guilabel">Manual</span>. Это позволяет ввод значений
+в таблицу конфигурации разделения. Записи в этом таблице:</p>
+
+<ul><li><p><code class="literal">Partition</code></li>
+<li><code class="literal">Values</code></li>
+<li><code class="literal">Data Directory</code></li>
+<li><code class="literal">Index Directory</code></li>
+<li><code class="literal">Min Rows</code></li>
+<li><code class="literal">Max Rows</code></li>
+<li><code class="literal">Comment</code></li></ul>
+
+<p>Подразделение также доступно. Для получения дополнительной информации о
+разделении посмотрите<a href="../../../dev.mysql.com/doc/refman/8.0/en/partitioning.html"
+target="_top">Partitioning</a>.</p>
+
+<h4><a name="wb-table-editor-options-tab"></a>8.1.10.7. Вкладка Options</h4>
+<p>Вкладка <span class="guilabel">Options</span> позволяет вам установить
+несколько типов вариантов.</p>
+
+<a name="wb-table-editor-options-tab-figure"></a>
+<p><b>Рис. 8.19. Вкладка Options</b></p>
+<img src="images/wb-table-editor-options-tab.png" width="800" height="622"
+alt="Content is described in the surrounding text."><br class="figure-break">
+<p>Опции таблицы сгруппированы в следующие разделы:</p>
+
+<ul><li><p><span class="guilabel">General Options</span></li>
+<li><span class="guilabel">Row Options</span></li>
+<li><span class="guilabel">Storage Options</span></li>
+<li><span class="guilabel">Merge Table Options</span></li></ul>
+
+<h5><a name="idm140523192255568"></a>General Options</h5>
+<p>В секции <span class="guilabel">General Options</span>
+выберите опцию упаковки ключей. Варианты
+<code class="literal">Default</code>, <code class="literal">Pack None</code>
+и <code class="literal">Pack All</code>. Можно также зашифровать определение
+таблицы. <code class="literal">AUTO_INCREMENT</code> и отложенные ключевые
+обновления применяются только к таблицам <code class="literal">MyISAM</code>.
+</p>
+
+<h5><a name="idm140523192250016"></a>Row Options</h5>
+<p>Чтобы установить формат строки, выберите желаемый формат строки из списка.
+Для получения дополнительной информации о различных форматах строки, которые
+доступны, посмотрите <a href="../../../dev.mysql.com/doc/refman/8.0/en/myisam-table-formats.html"
+target="_top">MyISAM Table Storage Formats</a>. Эти варианты:</p>
+
+<ul><li><p>Default</li>
+<li>Dynamic</li>
+<li>Fixed</li>
+<li>Compressed</li>
+<li>Redundant</li>
+<li>Compact</li></ul>
+
+<p>Когда вы будете ожидать, что таблица будет особенно большой, используйте
+опции <span class="guilabel">Avg. Row</span>,
+<span class="guilabel">Min. Rows</span> и
+<span class="guilabel">Max. Rows</span>, чтобы позволить серверу MySQL лучше
+приспособить ваши данные. Посмотрите
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/create-table.html"
+target="_top">CREATE TABLE Syntax</a>.</p>
+
+<h5><a name="idm140523192238848"></a>Storage Options</h5>
+<p>Секция <code class="literal">Storage Options</code> доступна только для
+таблиц <code class="literal">MyISAM</code>. Используйте ее, чтобы
+формировать путь к местам хранения таблицы и файлам данных. Это может помочь
+улучшить работу сервера, определив местонахождение различных таблиц на
+различных жестких дисках.</p>
+
+<h5><a name="idm140523192236112"></a>Merge Table Options</h5>
+<p>Используйте <code class="literal">Merge Table Options</code>, чтобы
+формировать таблицы <code class="literal">MERGE</code>. Чтобы создать таблицу
+<code class="literal">MERGE</code>, выберите
+<code class="literal">MERGE</code> как ваш механизм хранения и затем
+определите таблицы <code class="literal">MyISAM</code>, которые вы хотите
+слить, в диалоге <span class="guilabel">Union Tables</span>.
+Можно определить меры, которые должен принять сервер, когда пользователи
+пытаются применить <code class="literal">INSERT</code> к такой таблице.
+Можно также выбрать <code class="literal">Merge Method</code>
+выбирая из списка. Для получения дополнительной информации о таблицах
+<code class="literal">MERGE</code> см.
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/merge-storage-engine.html"
+target="_top">The MERGE Storage Engine</a>.</p>
+
+<h3><a name="wb-generating"></a>8.1.11. Обзор генерации кода</h3>
+<p>Этот документ обеспечивает быстрое практическое введение в использование
+MySQL Workbench, чтобы произвести код для более позднего использования или
+за пределами MySQL Workbench.</p>
+
+<h4><a name="wb-generating-sql"></a>8.1.11.1. Создание SQL-операторов</h4>
+<p>MySQL Workbench может использоваться, чтобы произвести SQL, как правило,
+<code class="literal">INSERT</code> или <code class="literal">SELECT</code>.
+Следующие методики обычны для создания SQL-операторов в MySQL Workbench.</p>
+
+<p>Все опции экспорта в MySQL Workbench включают выбор
+"экспортировать как SQL".</p>
+<p>Варианты контекстного меню после щелчка правой кнопкой мыши по
+<code class="literal">schema</code> в представлении схемы, используя
+столбец <code class="literal">sakila</code> как пример.
+
+<p><span class="guimenuitem">Create Statement</span>
+<pre>
+CREATE DATABASE `sakila` /*!40100 DEFAULT CHARACTER SET latin1 */;
+</pre>
+
+<p><span class="guimenuitem">Name</span>
+<pre>
+`sakila`
+</pre>
+
+<p>Варианты контекстного меню после щелчка правой кнопкой мыши по
+<code class="literal">table</code> в представлении схемы, используя столбец
+<code class="literal">sakila.actor</code> как пример:
+
+<p><span class="guimenuitem">Name (Short)</span>
+<pre>
+`actor`
+</pre>
+
+<p><span class="guimenuitem">Name (Long)</span>
+<pre>
+`sakila`.`actor`
+</pre>
+
+<p><span class="guimenuitem">Select All Statement</span>
+<pre>
+SELECT `actor`.`actor_id`, `actor`.`first_name`, `actor`.`last_name`,
+       `actor`.`last_update`
+       FROM `sakila`.`actor`;
+</pre>
+
+<p><span class="guimenuitem">Select with References</span>
+<pre>
+SET @actor_id_to_select = &lt;{row_id}&gt;;
+SELECT film_actor.* FROM film_actor, actor
+       WHERE `actor`.`actor_id` = `film_actor`.`actor_id` AND
+       actor.actor_id = @actor_id_to_select;
+SELECT actor.* FROM actor WHERE actor.actor_id = @actor_id_to_select;
+</pre>
+
+<p><span class="guimenuitem">Insert Statement</span>
+<pre>
+INSERT INTO `sakila`.`actor` (`actor_id`, `first_name`, `last_name`,
+       `last_update`) VALUES (&lt;{actor_id: }&gt;, &lt;{first_name: }&gt;,
+       &lt;{last_name: }&gt;, &lt;{last_update: CURRENT_TIMESTAMP}&gt;);
+</pre>
+
+<p><span class="guimenuitem">Update Statement</span>
+<pre>
+UPDATE `sakila`.`actor` SET `actor_id` = &lt;{actor_id: }&gt;,
+       `first_name` = &lt;{first_name: }&gt;,
+       `last_name` = &lt;{last_name: }&gt;,
+       `last_update` = &lt;{last_update: CURRENT_TIMESTAMP}&gt;
+       WHERE `actor_id` = &lt;{expr}&gt;;
+</pre>
+
+<p><span class="guimenuitem">Delete Statement</span>
+<pre>
+DELETE FROM `sakila`.`actor` WHERE &lt;{where_expression}&gt;;
+</pre>
+
+<p><span class="guimenuitem">Delete with References</span>
+<pre>
+-- All objects that reference that row (directly or indirectly)
+-- will be deleted when this snippet is executed.
+-- To preview the rows to be deleted, use Select Row Dependencies
+START TRANSACTION;
+-- Provide the values of the primary key of the row to delete.
+SET @actor_id_to_delete = &lt;{row_id}&gt;;
+
+DELETE FROM film_actor USING film_actor, actor
+       WHERE `actor`.`actor_id` = `film_actor`.`actor_id` AND
+       actor.actor_id = @actor_id_to_delete;
+DELETE FROM actor USING actor WHERE actor.actor_id = @actor_id_to_delete;
+COMMIT;
+</pre>
+
+<p><span class="guimenuitem">Create Statement</span>
+<pre>
+CREATE TABLE `actor` (
+       `actor_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+       `first_name` varchar(45) NOT NULL,
+       `last_name` varchar(45) NOT NULL,
+       `last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+       ON UPDATE CURRENT_TIMESTAMP, PRIMARY KEY (`actor_id`),
+       KEY `idx_actor_last_name` (`last_name`)) ENGINE=InnoDB
+       AUTO_INCREMENT=201 DEFAULT CHARSET=utf8;
+</pre>
+
+<p>Варианты контекстного меню после щелчка правой кнопкой мыши по
+<code class="literal">column</code> в представлении схемы, используя столбец
+<code class="literal">sakila.actor.first_name</code> как пример:
+
+<p><span class="guimenuitem">Name (short)</span>
+<pre>
+`first_name`
+</pre>
+
+<p><span class="guimenuitem">Name (long)</span>
+<pre>
+`actor`.`first_name`
+</pre>
+
+<p><span class="guimenuitem">Select Columns Statement</span>
+<pre>
+SELECT `first_name` FROM `sakila`.`actor`;
+</pre>
+
+<p><span class="guimenuitem">Insert Statement</span>
+<pre>
+INSERT INTO `sakila`.`actor` (`first_name`)
+       VALUES (&lt;{first_name}&gt;);
+</pre>
+
+<p><span class="guimenuitem">Update Statement</span>
+<pre>
+UPDATE `sakila`.`actor` SET `first_name` = &lt;{first_name}&gt;
+       WHERE &lt;{where_expression}&gt;;
+</pre>
+
+<p>Варианты контекстного меню после щелчка правой кнопкой мыши по
+<code class="literal">field</code> в представлении результатов, используя
+запись #1 в таблице <code class="literal">sakila.actor</code> как пример:
+
+<p><span class="guimenuitem">Copy Rows (with names)</span>
+<pre>
+# actor_id, first_name, last_name, last_update
+'1', 'PENELOPE', 'GUINESS', '2006-02-15 04:34:33'
+</pre>
+
+<p><span class="guimenuitem">Copy Rows (with names, unquoted)</span>
+<pre>
+# actor_id, first_name, last_name, last_update
+1, PENELOPE, GUINESS, 2006-02-15 04:34:33
+</pre>
+
+<p><span class="guimenuitem">Copy Row (tab separated)</span>
+<pre>
+1 PENELOPE GUINESS 2006-02-15 04:34:33
+</pre>
+
+<p><span class="guimenuitem">Copy Field</span>
+<pre>
+'GUINESS'
+</pre>
+
+<h4><a name="wb-generating-php"></a>8.1.11.2. Создание кода PHP</h4>
+<p>MySQL Workbench может использоваться, чтобы произвести код PHP со
+связанным плагином PHP, при помощи меню <span class="guimenu">Tools</span>,
+<span class="guimenu">Utilities</span>, <span class="guimenu">Copy as
+PHP Code</span>. Скрипт в качестве примера демонстрирует, как создать код
+PHP. Это запрос <code class="literal">SELECT</code> и произвольно использует
+<code class="literal">SET</code>, чтобы установить переменные. SQL @variables
+производят переменные PHP в коде, которые затем связывают с
+запросом перед выполнением.</p>
+
+<ol type="1"><li><p>Произведите или введите желаемый SQL-запрос в редакторе
+SQL. Этот пример будет использовать базу данных
+<code class="literal">sakila</code> с запросом:
+<pre>
+SET @last_update = '2006-02-14';
+SELECT actor_id, first_name, last_name, last_update FROM actor
+       WHERE last_update &gt; @last_update;
+</pre></li>
+
+<li>В редакторе SQL выберите из главного меню
+<span class="guimenu">Tools</span>, <span class="guimenu">Utilities</span>,
+<span class="guimenu">Copy as PHP Code (Iterate SELECT Results)</span>.
+Это скопирует код PHP в буфер обмена.</li>
+<li>Вставьте код куда вам надо.</p></li></ol>
+
+<p>Кроме того, код PHP, который соединяется с базой данных MySQL, может также
+быть произведен, выбрав <span class="guimenu">Tools</span>,
+<span class="guimenu">Utilities</span>, <span class="guimenu">
+Copy as PHP Code (Connect to Server)</span>. После объединения этих двух
+команд, произведенный код PHP будет похож на это:
+<pre>
+&lt;?php
+
+$host = "localhost";
+$port = 3306;
+$socket = "";
+$user = "nobody";
+$password = "";
+$dbname = "sakila";
+
+$con = new mysqli($host, $user, $password, $dbname, $port, $socket)
+or die ('Could not connect to the database server' . mysqli_connect_error());
+
+// $con-&gt;close();
+$query = "SELECT actor_id, first_name, last_name, last_update
+FROM actor
+WHERElast_update &gt; ?";
+$last_update = '';
+$stmt-&gt;bind_param('s', $last_update);
+
+if ($stmt = $con-&gt;prepare($query)) {
+   $stmt-&gt;execute();
+   $stmt-&gt;bind_result($actor_id, $first_name, $last_name, $last_update);
+   while ($stmt-&gt;fetch()) {
+     // printf("%s, %s, %s, %s\n",
+     // $actor_id, $first_name, $last_name, $last_update);
+   }
+   $stmt-&gt;close();
+}
+?&gt;
+</pre>
+
+<p>Произведенный код PHP использует расширение PHP
+<code class="literal">mysqli</code> для MySQL.
+Это расширение должно быть позволено в вашем дистрибутиве PHP для работы
+этого кода. Для дополнительных деталей об этом расширении PHP посмотрите
+<a href="../../../dev.mysql.com/doc/apis-php/en/apis-php-mysqli.html"
+target="_top">MySQL Improved Extension</a>.</p>
+
+<h2><a name="wb-develop-object-management"></a>8.2. Управление объектами</h2>
+<p>Object Browser позволяет вам изучать схемы базы данных и объекты.
+Отсюда можно выполнить общие задачи, такие как отбор таблиц и полей для
+запроса, отредактировать таблицы, создать новую или удалить имеющуюся таблицу
+и базу данных, выполнить поиск и многое другое.</p>
+
+<h3><a name="wb-sql-editor-navigator"></a>
+8.2.1. Object Browser и Navigator</h3>
+<p>Область Navigator боковой панели содержит варианты управления активным
+подключением MySQL. Это также перечисляет схемы на сервере для той связи.
+Чтобы получить доступ к области Navigator, откройте существующую связь (или
+создайте новую связь) с домашнего экрана. Если панель не видима, нажмите
+<span class="guimenu">View</span>, <span class="guisubmenu">Panels</span>,
+<span class="guimenuitem">Show Sidebar</span>.</p>
+
+<h4><a name="idm140523192141808"></a>Вкладка Navigator Schemas</h4>
+<p>Список Schemas показывает доступную схему на подключенном в настоящее
+время сервере. Эти пункты могут быть исследованы, чтобы показать таблицы,
+представления и подпрограммы в рамках схемы.</p>
+
+<p>Внутренние схемы, такие как "performance_schema",
+"information"schema", "sys" и "mysql", скрыты по умолчанию. Включите
+опцию <span class="guilabel">Show Metadata and Internal Schemas</span>,
+чтобы перечислить их в обозревателе объектов. Схемы, начинающиеся с ".",
+также управляются этой опцией.</p>
+
+<a name="wb-sql-editor-navigator-schemas-tab"></a>
+<p><b>Рис. 8.20. SQL Editor: вкладка Navigator Schemas</b></p>
+<img src="images/wb-sql-editor-navigator-schemas.png" width="449"
+height="723" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Возможно установить схему как схему по умолчанию, щелкая правой кнопкой
+мыши по схеме и выбирая <span class="guimenuitem">Set As Default Schema
+</span>. Это выполняет <code class="literal">USE <em class="replaceable">
+<code>schema_name</code></em></code>, чтобы последующие запросы без
+определителей схемы были выполнены для этой схемы. Это применяется только к
+сессии запроса. Чтобы установить схему по умолчанию для разных сессий MySQL
+Workbench, необходимо установить схему по умолчанию для сохраненной связи.
+С домашнего экрана щелкните правой кнопкой мыши по подключению MySQL,
+выберите <span class="guimenuitem">Edit Connection</span> и установите
+желаемую схему по умолчанию в поле
+<span class="guilabel">Default Schema</span>.</p>
+
+<p>Выбранная схема выделена <code class="literal">жирным шрифтом
+</code> в навигаторе Schema.</p>
+<p>Двойной щелчок по таблице, представлению или имени столбца в исследователе
+схемы вставляет имя в область SQL-запроса. Это значительно уменьшает ввод.
+Schema Navigator также показывает контекстное меню, которое может быть
+показано, щелкнув правой кнопкой мыши по объекту. Например, щелчок правой
+кнопкой мыши по таблице показывает следующие пункты меню:</p>
+
+<ul><li><p><span class="guimenuitem">Select Rows - Limit 1000</span>:
+Получает до 1000 строк данных таблицы из живого сервера во вкладку Results и
+позволяет редактировать. Данные могут быть сохранены
+непосредственно на сервере.</li>
+
+<li><span class="guimenuitem">Table Inspector</span>:
+Информация о таблице аналогично <code class="literal">Schema
+Inspector</code>. Это также упрощает интерфейс для анализа и создания
+индексов для таблиц.</li>
+
+<li><span class="guimenuitem">Table Data Export</span>:
+Открывает мастер экспорта таблиц, чтобы экспортировать данные таблицы
+в JSON или CSV.</li>
+
+<li><span class="guimenuitem">Table Data Import</span>:
+Открывает мастер импорта таблиц, чтобы импортировать данные таблицы в
+JSON или CSV.</li>
+
+<li><span class="guimenuitem">Copy to Clipboard</span>:
+Различные подменю, каждое из которых копирует информацию в буфер обмена:</p>
+<ul><li><p>Name (short): Копирует имя таблицы.</li>
+
+<li>Name (long): Копирует полное имя таблицы в форме
+<code class="literal">`schema`.`table`</code>.</li>
+<li>Select All Statement: Копирует запрос, чтобы выбрать все
+столбцы в этой форме:
+<pre>
+SELECT `table`.`column1`,
+       `table`.`column2`,
+       ...
+       FROM `schema`.`table`;
+</pre></li>
+
+<li>Insert Statement: Копирует запрос <code class="literal">INSERT</code>,
+чтобы вставить все столбцы.</li>
+<li>Update Statement: Копирует запрос <code class="literal">UPDATE</code>,
+чтобы обновить все столбцы.</li>
+
+<li>Delete Statement: Копирует запрос <code class="literal">DELETE</code>
+в форме <code class="literal">DELETE FROM
+`world`.`country` WHERE &lt;{where_condition}&gt;;</code>.</li>
+
+<li>Delete with References: Копирует запрос
+<code class="literal">DELETE</code> в форме транзакции, которая удаляет все
+объекты, которые ссылаются на строку (прямо или косвенно). Используйте
+<span class="guimenuitem">Select with References</span>
+сначала, чтобы предварительно просмотреть эту операцию.</li>
+
+<li>Select with References: Копирует запрос
+<code class="literal">SELECT</code>, который выбирает все объекты, которые
+ссылаются на строку (прямо или косвенно). Используйте
+<span class="guimenuitem">Delete with References</span>, чтобы произвести
+оператор DELETE для этой операции.</p></li></ul></li>
+
+<li><span class="guimenuitem">Send to SQL Editor</span>:
+Обеспечивает функциональность, подобную Copy to Clipboard.
+Однако этот пункт вставляет код SQL непосредственно в панель SQL Query,
+где это может быть отредактировано далее как требуется.</li>
+
+<li><span class="guimenuitem">Create Table</span>:
+Начинает диалог, чтобы позволить вам составить новую таблицу.</li>
+<li><span class="guimenuitem">Create Table Like...</span>:
+Начинает диалог, чтобы позволить вам составить новую таблицу, а также
+применить предопределенные шаблоны. Для получения дополнительной информации
+посмотрите <a href="data.htm#wb-design-table-templates">раздел 9.6</a>.</li>
+
+<li><span class="guimenuitem">Alter Table...</span>:
+Показывает редактор таблиц, загруженный деталями таблицы.</li>
+<li><span class="guimenuitem">Table Maintenance</span>:
+Открывает новую вкладку для выполнения операций по обслуживанию таблицы.
+Операции включают "Analyze Table", "Optimize Table", "Check Table" и
+"Checksum Table". Дополнительная информация о таблице может также быть
+рассмотрена в этой вкладке. Для получения дополнительной информации
+посмотрите <a href="#wb-develop-object-management-schema-inspector">
+здесь</a>.</li>
+
+<li><span class="guimenuitem">Drop Table...</span>: Удаляет таблицу.
+Все данные в таблице будут потеряны, если эта операция будет выполнена.</li>
+<li><span class="guimenuitem">Truncate Table...</span>: Усекает таблицу.</li>
+
+<li><span class="guimenuitem">Search Table Data...</span>:
+Открывает новую вкладку для выполнения поиска в таблице. Это выполняет поиск
+на всех столбцах и предлагает дополнительные опции, чтобы ограничить поиск.
+</li>
+<li><span class="guimenuitem">Refresh All</span>: Освежает все схемы в
+исследователе, повторно синхронизируя с сервером.</li></ul>
+
+<p>Щелчок правой кнопкой мыши по схеме предоставляет подобные возможности в
+контекстном меню таблиц, описанном выше, но операции обращаются к схеме.
+Например, <span class="guilabel">Table Maintenance</span> в контекстном меню
+таблиц выбирает таблицу в <span class="guilabel">Schema Inspector</span>,
+которая является выбором контекстного меню схемы.</p>
+
+<h3><a name="wb-sql-editor-connection-information-panel"></a>
+8.2.2. Сессия и панель информации об объекте</h3>
+<p>Вкладка <span class="guilabel">Session</span> информационной панели
+суммирует текущую связь с сервером.</p>
+
+<a name="wb-sql-editor-connection-information-palette-screenshot"></a>
+<p><b>Рис. 8.21. SQL Editor: палитра информации о связи</b></p>
+<img src="images/wb-sql-editor-connection-information-palette-screenshot.png"
+width="207" height="292" alt="Connection: Name, Host, Port, Server, Version,
+Login User, Current User, and SSL."><br class="figure-break">
+
+<p>Вкладка <span class="guilabel">Object Info</span>
+информационной группы суммирует информацию о конкретном объекте,
+таком как таблица.</p>
+
+<a name="wb-sql-editor-object-info-screenshot"></a>
+<p><b>Рис. 8.22. SQL Editor: информация объекта</b></p>
+<img src="images/wb-sql-editor-connection-object-info-screenshot.png"
+width="230" height="360" alt="Information for an example table object
+shows the columns of the selected table."><br class="figure-break">
+
+<h3><a name="wb-develop-object-management-inspector"></a>
+8.2.3. Схема и инспектор таблицы</h3>
+<p>Schema и Table Inspector включают способность проанализировать и
+восстановить таблицы, а также рассмотреть метрики таблицы.</p>
+
+<h4><a name="wb-develop-object-management-schema-inspector"></a>
+Schema Inspector</h4>
+<p>Используйте Schema Inspector, чтобы просмотреть общую информацию от
+объектов схемы. Это позволяет вам выполнять задачи обслуживания на
+таблицах, такие как ANALYZE, OPTIMIZE, CHECK и CHECKSUM TABLE.
+Чтобы получить доступ к инспектору, щелкните правой кнопкой мыши по схеме и
+выберите <span class="guilabel">Schema Inspector</span>.</p>
+
+<a name="wb-schema-inspector-tables"></a><p><b>Рис. 8.23. Schema Inspector
+</b></p><img src="images/wb-schema-inspector-tables.png" width="800"
+height="495" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Каждая вкладка перечисляет информацию на тему, такую как "Tables",
+"Indexes" и "Triggers". На вкладке <span class="guilabel">Tables</span>
+нажмите <span class="guibutton">Inspect Table</span>, чтобы открыть
+<a href="#wb-develop-object-management-table-inspector">Table
+Inspector</a> или <span class="guibutton">Maintenance</span>, чтобы открыть
+инструменты обслуживания таблицы.</p>
+
+<a name="wb-schema-inspector-tables-maintenance"></a>
+<p><b>Рис. 8.24. Schema Inspector: обслуживание таблицы</b></p>
+<img src="images/wb-schema-inspector-tables-maintenance.png" width="800"
+height="564" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h4><a name="wb-develop-object-management-table-inspector"></a>
+Table Inspector</h4>
+<p>Можно использовать Table Inspector, чтобы рассмотреть информацию о
+таблице, которая подобна Schema Inspector. Table Inspector включает простой в
+использовании интерфейс для анализа и создания индексов для ваших таблиц.
+Чтобы открыть, щелкните правой кнопкой мыши таблицу в обозревателе объектов
+панели Navigator и выберите <span class="guimenuitem">Table Inspector</span>
+из контекстного меню.</p>
+
+<a name="wb-schema-inspector-table-inspector-context-menu"></a>
+<p><b>Рис. 8.25. Table Inspector</b></p>
+<img src="images/wb-schema-inspector-table-inspector-context-menu.png"
+width="510" height="588" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p><span class="guilabel">Table Inspector</span> показывает информацию,
+связанную с таблицей. Следующие данные показывают пример, используя таблицу
+<code class="literal">sakila.actor</code>.</p>
+
+<a name="wb-schema-inspector-table-inspector-info"></a>
+<p><b>Рис. 8.26. Table Inspector: Вкладка Info</b></p>
+<img src="images/wb-schema-inspector-table-inspector-info.png" width="799"
+height="544" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

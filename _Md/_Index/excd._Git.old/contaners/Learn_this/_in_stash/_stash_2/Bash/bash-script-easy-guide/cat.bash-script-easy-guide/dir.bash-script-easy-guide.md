@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Learn_this\_in_stash\_stash_2\Bash\bash-script-easy-guide\cat.bash-script-easy-guide\dir.bash-script-easy-guide.md">bash-script-easy-guide</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Learn_this\_in_stash\_stash_2\Bash\bash-script-easy-guide\_bash-script-easy-guide.md">_bash-script-easy-guide.md</a>
+        - *# [Bash-скрипты: начало](https://habr.com/ru/company/ruvds/blog/325522/)

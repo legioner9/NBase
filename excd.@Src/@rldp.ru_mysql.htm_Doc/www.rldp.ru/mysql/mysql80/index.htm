@@ -1,0 +1,2388 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <title>MySQL 8.0. Полное руководство</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="refman-8-0"></a>MySQL 8.0. Полное руководство</h1>
+<p><b>Обзор</b></p>
+<p>Это полное руководство для MySQL 8.0.</p>
+<p><b>Статус MySQL 8.0.</b>
+MySQL 8.0 предназначен, главным образом, для разработчиков.</p>
+
+<p>MySQL Cluster сейчас не поддерживается в MySQL 8.0. См.
+<a href="../../../dev.mysql.com/doc/refman/5.7/en/mysql-cluster.html"
+target="_top">MySQL Cluster NDB 7.5</a>.</p>
+
+<p><b>Врзможности MySQL 8.0.</b>
+Это руководство описывает функции, которые не включены в каждый выпуск MySQL
+8.0; такие функции не могут быть включены в выпуск MySQL 8.0, лицензируемого
+для вас. При наличии каких-либо вопросов о функциях, включенных в ваш выпуск
+MySQL 8.0, обратитесь к своему лицензионному соглашению MySQL 8.0 или
+свяжитесь со своим торговым представителем Oracle.</p>
+
+<p>Для примечаний, детализирующих изменения в каждом выпуске, см.
+<a href="../../../dev.mysql.com/doc/relnotes/mysql/8.0/en/default.htm" target="_top">MySQL
+8.0 Release Notes</a>.</p>
+
+<p>Для юридической информации см.
+<a href="preface.htm#legalnotice">Legal Notices</a>.</p>
+<p>Для помощи по использованию MySQL, пожалуйста, посетите
+<a href="../../../forums.mysql.com/default.htm" target="_top">MySQL Forums</a> или
+<a href="../../../lists.mysql.com/default.htm" target="_top">MySQL Mailing Lists</a>,
+где можно обсудить проблемы с другими пользователями MySQL.</p>
+
+<p>Для дополнительной документации по продуктам MySQL, включая переводы
+документации на другие языки и загружаемые версии в разнообразии форматов,
+включая HTML и форматы PDF, посмотрите <a href="../../../dev.mysql.com/doc"
+target="_top">MySQL Documentation Library</a>.</p>
+
+<p><b>Лицензирование MySQL 8.0.</b>
+Этот продукт может включать стороннее программное обеспечение, используемое в
+соответствии с лицензией. При использовании выпуска <span><em>Community</em>
+</span> MySQL 8.0, см.
+<a href="../../../downloads.mysql.com/docs/licenses/mysqld-8.0-gpl-en.pdf"
+target="_top">сюда</a> для лицензионной информации, включая лицензирование,
+касающееся стороннего программного обеспечения, которое может быть включено в
+этот выпуск Community.</p>
+
+<hr><p><b>Оглавление</b></p>
+<dl><dt><span><a href="preface.htm">Предисловие и официальные уведомления
+</a></span></dt>
+<dt><span><a href="intro.htm">1. Общая информация</a></span></dt>
+<dd><dl><dt><span><a href="intro.htm#manual-info">1.1. Об этом руководстве
+</a></span></dt>
+<dt><span><a href="intro.htm#manual-conventions">1.2. Соглашения о синтаксисе
+в руководстве</a></span></dt>
+<dt><span><a href="intro.htm#what-is">1.3. Краткий обзор СУБД MySQL
+</a></span></dt>
+<dd><dl><dt><span><a href="intro.htm#what-is-mysql">1.3.1. Что такое MySQL?
+</a></span></dt>
+<dt><span><a href="intro.htm#features">1.3.2. Основные особенности MySQL</a>
+</span></dt>
+<dt><span><a href="intro.htm#history">1.3.3. История MySQL</a></span>
+</dt></dl></dd>
+<dt><span><a href="intro.htm#mysql-nutshell">1.4. Что нового в MySQL 8.0
+</a></span></dt>
+<dt><span><a href="intro.htm#added-removed-variables-options">1.5.
+Переменные состояния и опции, добавленные, устаревшие или удаленные в MySQL
+8.0</a></span></dt>
+<dt><span><a href="intro.htm#information-sources">1.6.
+Источники информации MySQL</a></span></dt>
+<dd><dl><dt><span><a href="intro.htm#mailing-lists">1.6.1.
+Списки рассылки MySQL</a></span></dt>
+<dt><span><a href="intro.htm#forums">1.6.2.
+Общественная поддержка MySQL на форумах</a></span></dt>
+<dt><span><a href="intro.htm#irc">1.6.3. Общественная поддержка MySQL в
+Internet Relay Chat (IRC)</a></span></dt>
+<dt><span><a href="intro.htm#mysql-enterprise-information">1.6.4.
+MySQL Enterprise</a></span></dt></dl></dd>
+<dt><span><a href="intro.htm#bug-reports">1.7.
+Как сообщить об ошибках или проблемах</a></span></dt>
+<dt><span><a href="intro.htm#compatibility">1.8.
+Соответствие стандартам MySQL</a></span></dt>
+<dd><dl><dt><span><a href="intro.htm#extensions-to-ansi">1.8.1.
+Расширения MySQL к стандартному SQL</a></span></dt>
+<dt><span><a href="intro.htm#differences-from-ansi">1.8.2.
+Отличия MySQL от стандартного SQL</a></span></dt>
+<dt><span><a href="intro.htm#constraints">1.8.3.
+Соглашения MySQL с ограничениями</a></span></dt></dl></dd>
+<dt><span><a href="intro.htm#credits">1.9. Благодарности</a></span></dt>
+<dd><dl><dt><span><a href="intro.htm#contributors">1.9.1. Спонсоры MySQL</a>
+</span></dt>
+<dt><span><a href="intro.htm#documenters-translators">1.9.2.
+Documenters и переводчики</a></span></dt>
+<dt><span><a href="intro.htm#packages">1.9.3.
+Пакеты и поддержка MySQL</a></span></dt>
+<dt><span><a href="intro.htm#tools-used-to-create-mysql">1.9.4.
+Утилиты, которыми создавался MySQL</a></span></dt>
+<dt><span><a href="intro.htm#supporters">1.9.5. Поддержка MySQL</a></span>
+</dt></dl></dd></dl></dd>
+<dt><span><a href="install.htm">2. Установка и обновление MySQL</a></span>
+</dt>
+<dd><dl><dt><span><a href="install.htm#general-installation-issues">2.1.
+Общее руководство по установке</a></span></dt>
+<dd><dl><dt><span><a href="install.htm#which-version">2.1.1.
+Какую версию MySQL и дистрибутив установить</a></span></dt>
+<dt><span><a href="install.htm#getting-mysql">2.1.2. Как получить MySQL
+</a></span></dt>
+<dt><span><a href="install.htm#verifying-package-integrity">2.1.3.
+Подтверждение целостности пакета, используя контрольные суммы MD5 или GnuPG
+</a></span></dt>
+<dt><span><a href="install.htm#installation-layouts">2.1.4.
+Типы установки</a></span></dt>
+<dt><span><a href="install.htm#compiler-characteristics">2.1.5.
+Определенные для компилятора характеристики</a></span></dt></dl></dd>
+<dt><span><a href="install.htm#binary-installation">2.2.
+Установка MySQL на Unix/Linux, используя двоичные файлы</a></span></dt>
+<dt><span><a href="install.htm#windows-installation">2.3.
+Установка MySQL на Microsoft Windows</a></span></dt>
+<dd><dl><dt><span><a href="install.htm#windows-installation-layout">2.3.1.
+Расположение установки MySQL на Microsoft Windows</a></span></dt>
+<dt><span><a href="install.htm#windows-choosing-package">2.3.2.
+Выбор пакета установки</a></span></dt>
+<dt><span><a href="install.htm#mysql-installer">2.3.3.
+Установка MySQL на Microsoft Windows с помощью MySQL Installer
+</a></span></dt>
+<dt><span><a href="install.htm#windows-notifier">2.3.4. MySQL Notifier</a></span></dt>
+<dt><span><a href="install.htm#windows-install-archive">2.3.5.
+Установка MySQL в Microsoft Windows, используя архив noinstall Zip
+</a></span></dt>
+<dt><span><a href="install.htm#windows-troubleshooting">2.3.6.
+Поиск неисправностей в Microsoft Windows MySQL Server</a></span></dt>
+<dt><span><a href="install.htm#windows-postinstallation">2.3.7.
+Постпроцессы установки в Windows</a></span></dt>
+<dt><span><a href="install.htm#windows-upgrading">2.3.8.
+Обновление MySQL в Windows</a></span></dt></dl></dd>
+<dt><span><a href="install.htm#osx-installation">2.4.
+Установка MySQL под OS X</a></span></dt>
+<dd><dl><dt><span><a href="install.htm#osx-installation-notes">2.4.1.
+Общие сведения об установке MySQL под OS X</a></span></dt>
+<dt><span><a href="install.htm#osx-installation-pkg">2.4.2.
+Установка MySQL под OS X, используя родные пакеты</a></span></dt>
+<dt><span><a href="install.htm#osx-installation-launchd">2.4.3.
+Установка демона запуска MySQL</a></span></dt>
+<dt><span><a href="install.htm#osx-installation-prefpane">2.4.4.
+Установка и использование MySQL Preference Pane</a></span></dt></dl></dd>
+<dt><span><a href="install.htm#linux-installation">2.5.
+Установка MySQL в Linux</a></span></dt>
+<dd><dl><dt><span><a href="install.htm#linux-installation-yum-repo">2.5.1.
+Установка MySQL в Linux, используя репозитарий Yum</a></span></dt>
+<dt><span><a href="install.htm#linux-installation-apt-repo">2.5.2.
+Установка MySQL на Linux, используя MySQL репозитарий APT</a></span></dt>
+<dt><span><a href="install.htm#linux-installation-sles-repo">2.5.3.
+Установка MySQL на Linux, используя MySQL репозитарий SLES</a></span></dt>
+<dt><span><a href="install.htm#linux-installation-rpm">2.5.4.
+Установка MySQL на Linux, используя RPM-пакеты Oracle</a></span></dt>
+<dt><span><a href="install.htm#linux-installation-debian">2.5.5.
+Установка MySQL на Linux, используя пакеты Debian от Oracle</a></span></dt>
+<dt><span><a href="install.htm#linux-installation-native">2.5.6.
+Установка MySQL на Linux из родных репозитариев программного обеспечения
+</a></span></dt>
+<dt><span><a href="install.htm#linux-installation-docker">2.5.7.
+Установка MySQL на Linux с docker</a></span></dt>
+<dt><span><a href="install.htm#linux-installation-juju">2.5.8.
+Установка MySQL на Linux с juju</a></span></dt>
+<dt><span><a href="install.htm#using-systemd">2.5.9.
+Управление сервером MySQL с systemd</a></span></dt></dl></dd>
+<dt><span><a href="install.htm#solaris-installation">2.6.
+Установка MySQL на Solaris и OpenSolaris</a></span></dt>
+<dd><dl><dt><span><a href="install.htm#solaris-installation-pkg">2.6.1.
+Установка MySQL на Solaris, применяя Solaris PKG</a></span></dt>
+<dt><span><a href="install.htm#solaris-installation-opensolaris">2.6.2.
+Установка MySQL на OpenSolaris через IPS</a></span></dt></dl></dd>
+<dt><span><a href="install.htm#freebsd-installation">2.7.
+Установка MySQL на FreeBSD</a></span></dt>
+<dt><span><a href="install.htm#source-installation">2.8.
+Установка MySQL из исходных текстов</a></span></dt>
+<dd><dl><dt><span><a href="install.htm#source-installation-layout">2.8.1.
+Расположение MySQL для исходной установки</a></span></dt>
+<dt><span><a href="install.htm#installing-source-distribution">2.8.2.
+Установка MySQL, используя стандартные исходные тексты</a></span></dt>
+<dt><span><a href="install.htm#installing-development-tree">2.8.3.
+Установка MySQL, используя дерево развития</a></span></dt>
+<dt><span><a href="install.htm#source-configuration-options">2.8.4.
+Исходные параметры конфигурации MySQL</a></span></dt>
+<dt><span><a href="install.htm#compilation-problems">2.8.5.
+Проблемы сборки MySQL</a></span></dt>
+<dt><span><a href="install.htm#source-configuration-third-party">2.8.6.
+Конфигурация MySQL и имеющие отношение к третьей стороне инструменты
+</a></span></dt>
+<dt><span><a href="install.htm#source-installation-doxygen">2.8.7.
+Производство документации MySQL Doxygen</a></span></dt></dl></dd>
+<dt><span><a href="install.htm#postinstallation">2.9.
+Постустановка и тестирование</a></span></dt>
+<dd><dl><dt><span><a href="install.htm#data-directory-initialization">2.9.1.
+Инициализация каталога данных</a></span></dt>
+<dt><span><a href="install.htm#starting-server">2.9.2. Запуск сервера
+</a></span></dt>
+<dt><span><a href="install.htm#testing-server">2.9.3. Тестирование сервера
+</a></span></dt>
+<dt><span><a href="install.htm#default-privileges">2.9.4.
+Обеспечение безопасности MySQL</a></span></dt>
+<dt><span><a href="install.htm#automatic-start">2.9.5.
+Запуск и остановка MySQL автоматически</a></span></dt></dl></dd>
+<dt><span><a href="install.htm#upgrading-downgrading">2.10.
+Обновления или откат MySQL</a></span></dt>
+<dd><dl><dt><span><a href="install.htm#upgrading">2.10.1. Обновление MySQL
+</a></span></dt>
+<dt><span><a href="install.htm#downgrading">2.10.2. Откат MySQL</a></span>
+</dt>
+<dt><span><a href="install.htm#checking-table-incompatibilities">2.10.3.
+Проверка, какие таблицы или индексы должны быть восстановлены</a></span></dt>
+<dt><span><a href="install.htm#rebuilding-tables">2.10.4.
+Восстановление таблиц или индексов</a></span></dt>
+<dt><span><a href="install.htm#copying-databases">2.10.5.
+Копирование баз данных MySQL к другой машине</a></span></dt></dl></dd>
+<dt><span><a href="install.htm#perl-support">2.11.
+Замечания по установке Perl</a></span></dt>
+<dd><dl><dt><span><a href="install.htm#perl-installation">2.11.1.
+Установка Perl в Unix</a></span></dt>
+<dt><span><a href="install.htm#activestate-perl">2.11.2.
+Установка ActiveState Perl в Windows</a></span></dt>
+<dt><span><a href="install.htm#perl-support-problems">2.11.3.
+Проблемы при использовании интерфейса Perl DBI/DBD
+</a></span></dt></dl></dd></dl></dd>
+<dt><span><a href="docum.htm">3. Использование MySQL как хранилища документов
+</a></span></dt>
+<dd><dl><dt><span><a href="docum.htm#document-store-legalnotice">
+3.1. Состояние подготовки (официальное уведомление)</a></span></dt>
+<dt><span><a href="docum.htm#document-store-concepts">3.2. Ключевые понятия
+</a></span></dt>
+<dt><span><a href="docum.htm#document-store-setting-up">3.3.
+Установка MySQL как хранилища документов</a></span></dt>
+<dd><dl><dt><span><a href="docum.htm#document-store-shell-install">
+3.3.1. Установка MySQL Shell</a></span></dt>
+<dt><span><a href="docum.htm#installing-mysql-shell-starting">3.3.2.
+Запуск MySQL Shell</a></span></dt></dl></dd>
+<dt><span><a href="docum.htm#mysql-shell-tutorial-javascript">3.4. MySQL
+Shell для Java</a></span></dt>
+<dd><dl><dt><span><a href="docum.htm#mysql-shell-tutorial-javascript-introduction">
+3.4.1. Введение</a></span></dt>
+<dt><span><a href="docum.htm#mysql-shell-tutorial-javascript-download">3.4.2.
+Образец базы данных</a></span></dt>
+<dt><span><a href="docum.htm#mysql-shell-tutorial-javascript-shell">3.4.3.
+MySQL Shell</a></span></dt>
+<dt><span><a href="docum.htm#mysql-shell-tutorial-javascript-documents-collections">
+3.4.4. Документы и наборы</a></span></dt>
+<dt><span><a href="docum.htm#mysql-shell-tutorial-javascript-relational-tables">
+3.4.5. Реляционные таблицы</a></span></dt>
+<dt><span><a href="docum.htm#mysql-shell-tutorial-javascript-documents-in-tables">
+3.4.6. Документы в таблицах</a></span></dt></dl></dd>
+<dt><span><a href="docum.htm#mysql-shell-tutorial-python">3.5.
+MySQL Shell для Python</a></span></dt>
+<dd><dl><dt><span><a href="docum.htm#mysql-shell-tutorial-python-introduction">
+3.5.1. Введение</a></span></dt>
+<dt><span><a href="docum.htm#mysql-shell-tutorial-python-download">3.5.2.
+Образец базы данных</a></span></dt>
+<dt><span><a href="docum.htm#mysql-shell-tutorial-python-shell">3.5.3.
+MySQL Shell</a></span></dt></dl></dd>
+<dt><span><a href="docum.htm#mysql-shell-visual-studio">3.6.
+MySQL для Visual Studio</a></span></dt>
+<dt><span><a href="docum.htm#x-plugin">3.7. X Plugin</a></span></dt>
+<dd><dl><dt><span><a href="docum.htm#x-plugin-ssl-connections">3.7.1.
+Использование безопасного соединения с X Plugin</a></span></dt>
+<dt><span><a href="docum.htm#x-plugin-options-variables">3.7.2.
+Опции и переменные X Plugin</a></span></dt>
+<dt><span><a href="docum.htm#x-plugin-system-monitoring">3.7.3.
+Контроль X Plugin</a></span></dt></dl></dd>
+<dt><span><a href="docum.htm#mysql-shell">3.8.
+Руководство пользователя MySQL Shell</a></span></dt>
+<dd><dl><dt><span><a href="docum.htm#mysql-shell-features">3.8.1.
+Особенности MySQL Shell</a></span></dt>
+<dt><span><a href="docum.htm#mysql-shell-getting-started">3.8.2.
+Работа с MySQL Shell</a></span></dt>
+<dt><span><a href="docum.htm#mysql-shell-code-execution">3.8.3.
+Выполнение кода в MySQL Shell</a></span></dt>
+<dt><span><a href="docum.htm#mysql-shell-configuring">3.8.4.
+Конфигурирование MySQL Shell</a></span></dt>
+<dt><span><a href="docum.htm#mysql-shell-stored-sessions">3.8.5.
+Сохраненные сеансы</a></span></dt>
+<dt><span><a href="docum.htm#mysql-shell-application-log">3.8.6.
+Журнал приложения MySQL Shell</a></span></dt>
+<dt><span><a href="docum.htm#mysql-shell-customizing">3.8.7.
+Настройка MySQL Shell</a></span></dt></dl></dd></dl></dd>
+<dt><span><a href="tutorial.htm">4. Учебник</a></span></dt>
+<dd><dl><dt><span><a href="tutorial.htm#connecting-disconnecting">4.1.
+Соединение с и отсоединение от сервера</a></span></dt>
+<dt><span><a href="tutorial.htm#entering-queries">4.2.
+Ввод запросов</a></span></dt>
+<dt><span><a href="tutorial.htm#database-use">4.3.
+Создание и использование базы данных</a></span></dt>
+<dd><dl><dt><span><a href="tutorial.htm#creating-database">4.3.1.
+Создание и выбор базы данных</a></span></dt>
+<dt><span><a href="tutorial.htm#creating-tables">4.3.2.
+Составление таблицы</a></span></dt>
+<dt><span><a href="tutorial.htm#loading-tables">4.3.3.
+Загрузка данных в таблицу</a></span></dt>
+<dt><span><a href="tutorial.htm#retrieving-data">4.3.4.
+Получение информации от таблицы</a></span></dt></dl></dd>
+<dt><span><a href="tutorial.htm#getting-information">4.4.
+Получение информации о базах данных и таблицах</a></span></dt>
+<dt><span><a href="tutorial.htm#batch-mode">4.5.
+Используя mysql в пакетном режиме</a></span></dt>
+<dt><span><a href="tutorial.htm#examples">4.6.
+Примеры общих запросов</a></span></dt>
+<dd><dl><dt><span><a href="tutorial.htm#example-maximum-column">4.6.1.
+Максимальное значение для столбца</a></span></dt>
+<dt><span><a href="tutorial.htm#example-maximum-row">4.6.2.
+Строка, содержащая максимум для определенного столбца</a></span></dt>
+<dt><span><a href="tutorial.htm#example-maximum-column-group">4.6.3.
+Максимум столбца на группу</a></span></dt>
+<dt><span><a href="tutorial.htm#example-maximum-column-group-row">4.6.4.
+Строки, содержащие максимум определенного столбца в группе</a></span></dt>
+<dt><span><a href="tutorial.htm#example-user-variables">4.6.5.
+Используя определяемые пользователем переменные</a></span></dt>
+<dt><span><a href="tutorial.htm#example-foreign-keys">4.6.6.
+Используя внешние ключи</a></span></dt>
+<dt><span><a href="tutorial.htm#searching-on-two-keys">4.6.7.
+Поиск на двух ключах</a></span></dt>
+<dt><span><a href="tutorial.htm#calculating-days">4.6.8.
+Вычисление посещений в день</a></span></dt>
+<dt><span><a href="tutorial.htm#example-auto-increment">4.6.9.
+Использование AUTO_INCREMENT</a></span></dt></dl></dd>
+<dt><span><a href="tutorial.htm#apache">4.7.
+Применение MySQL и Apache</a></span></dt></dl></dd>
+
+<dt><span><a href="programs.htm">5. Программы MySQL</a></span></dt>
+<dd><dl><dt><span><a href="programs.htm#programs-overview">5.1.
+Обзор программ MySQL</a></span></dt>
+<dt><span><a href="programs.htm#programs-using">5.2.
+Использование программ MySQL</a></span></dt>
+<dd><dl><dt><span><a href="programs.htm#invoking-programs">5.2.1.
+Вызов программ MySQL</a></span></dt>
+<dt><span><a href="programs.htm#connecting">5.2.2.
+Соединение с сервером MySQL</a></span></dt>
+<dt><span><a href="programs.htm#program-options">5.2.3.
+Определение опций программы</a></span></dt>
+<dt><span><a href="programs.htm#command-line-options">5.2.4.
+Использование опций в командной строке</a></span></dt>
+<dt><span><a href="programs.htm#option-modifiers">5.2.5.
+Модификаторы опции программы</a></span></dt>
+<dt><span><a href="programs.htm#option-files">5.2.6.
+Использование файлов опций</a></span></dt>
+<dt><span><a href="programs.htm#option-file-options">5.2.7.
+Параметры командной строки и обработка файла опции</a></span></dt>
+<dt><span><a href="programs.htm#program-variables">5.2.8.
+Использование опций, чтобы установить переменные программы</a></span></dt>
+<dt><span><a href="programs.htm#option-defaults-equals">5.2.9.
+Значения по умолчанию опции, опции, ожидаемые значения и знак =
+Option Defaults, Options Expecting Values, and the = Sign</a></span></dt>
+<dt><span><a href="programs.htm#setting-environment-variables">5.2.10.
+Установка переменных окружения</a></span></dt></dl></dd>
+<dt><span><a href="programs.htm#programs-server">5.3.
+Сервер MySQL и программы запуска сервера</a></span></dt>
+<dd><dl><dt><span><a href="programs.htm#mysqld">5.3.1.
+<span><strong>mysqld</strong></span>, собственно сервер MySQL</a></span></dt>
+<dt><span><a href="programs.htm#mysqld-safe">5.3.2.
+<span><strong>mysqld_safe</strong></span> скрипт запуска MySQL
+</a></span></dt>
+<dt><span><a href="programs.htm#mysql-server">5.3.3. Скрипт запуска сервера
+<span><strong>mysql.server</strong></span></a></span></dt>
+<dt><span><a href="programs.htm#mysqld-multi">5.3.4.
+<span><strong>mysqld_multi</strong></span>, управление
+несколькими серверами MySQL</a></span></dt></dl></dd>
+<dt><span><a href="programs.htm#programs-installation">5.4.
+Связанные с установкой программы MySQL</a></span></dt>
+<dd><dl><dt><span><a href="programs.htm#comp-err">5.4.1.
+<span><strong>comp_err</strong></span>
+Компиляция файла сообщений об ошибке MySQL</a></span></dt>
+<dt><span><a href="programs.htm#mysql-secure-installation">5.4.2.
+<span><strong>mysql_secure_installation</strong></span>
+улучшение безопасности установки MySQL</a></span></dt>
+<dt><span><a href="programs.htm#mysql-ssl-rsa-setup">5.4.3.
+<span><strong>mysql_ssl_rsa_setup</strong></span> создание файлов SSL/RSA
+</a></span></dt>
+<dt><span><a href="programs.htm#mysql-tzinfo-to-sql">5.4.4.
+<span><strong>mysql_tzinfo_to_sql</strong></span>
+Загрузка таблицы часового пояса</a></span></dt>
+<dt><span><a href="programs.htm#mysql-upgrade">5.4.5.
+<span><strong>mysql_upgrade</strong>
+</span> проверка и обновление таблицы MySQL</a></span></dt></dl></dd>
+<dt><span><a href="programs.htm#programs-client">5.5.
+Программы клиента MySQL</a></span></dt>
+<dd><dl><dt><span><a href="programs.htm#mysql">5.5.1.
+Клиент <span><strong>mysql</strong></span></a></span></dt>
+<dt><span><a href="programs.htm#mysqladmin">5.5.2.
+<span><strong>mysqladmin</strong></span>
+Клиент для управления сервером MySQL</a></span></dt>
+<dt><span><a href="programs.htm#mysqlcheck">5.5.3.
+<span><strong>mysqlcheck</strong></span> табличная программа обслуживания
+</a></span></dt>
+<dt><span><a href="programs.htm#mysqldump">5.5.4.
+<span><strong>mysqldump</strong></span> Резервная программа базы данных
+</a></span></dt>
+<dt><span><a href="programs.htm#mysqlimport">5.5.5.
+<span><strong>mysqlimport</strong></span> программа импорта данных
+</a></span></dt>
+<dt><span><a href="programs.htm#mysqlpump">5.5.6.
+<span><strong>mysqlpump</strong></span>
+программа резервирования базы данных</a></span></dt>
+<dt><span><a href="programs.htm#mysqlshow">5.5.7.
+<span><strong>mysqlshow</strong></span>
+Показ информации о базе данных, таблице и столбце</a></span></dt>
+<dt><span><a href="programs.htm#mysqlslap">5.5.8.
+<span><strong>mysqlslap</strong></span> клиент эмуляции загрузки
+</a></span></dt></dl></dd>
+<dt><span><a href="programs.htm#programs-admin-utils">5.6.
+Административные утилиты MySQL</a></span></dt>
+<dd><dl><dt><span><a href="programs.htm#ibd2sdi">5.6.1.
+<span><strong>ibd2sdi</strong></span>
+Утилита извлечения SDI табличного пространства InnoDB</a></span></dt>
+<dt><span><a href="programs.htm#innochecksum">5.6.2.
+<span><strong>innochecksum</strong></span>
+офлайновая утилита контрольной суммы файла InnoDB</a></span></dt>
+<dt><span><a href="programs.htm#myisam-ftdump">5.6.3.
+<span><strong>myisam_ftdump</strong></span> отображение
+информации полнотекстового индекса</a></span></dt>
+<dt><span><a href="programs.htm#myisamchk">5.6.4.
+<span><strong>myisamchk</strong></span>
+утилита табличного обслуживания MyISAM</a></span></dt>
+<dt><span><a href="programs.htm#myisamlog">5.6.5.
+<span><strong>myisamlog</strong></span>
+показ содержания файла системного журнала MyISAM</a></span></dt>
+<dt><span><a href="programs.htm#myisampack">5.6.6.
+<span><strong>myisampack</strong></span>
+генератор сжатых таблиц MyISAM только для чтения</a></span></dt>
+<dt><span><a href="programs.htm#mysql-config-editor">5.6.7.
+<span><strong>mysql_config_editor</strong></span>
+утилита конфигурации MySQL</a></span></dt>
+<dt><span><a href="programs.htm#mysqlbinlog">5.6.8.
+<span><strong>mysqlbinlog</strong></span> утилита для обработки двоичных
+файлов системного журнала</a></span></dt>
+<dt><span><a href="programs.htm#mysqldumpslow">5.6.9.
+<span><strong>mysqldumpslow</strong>
+</span> обзор файлов медленного системного журнала</a></span></dt></dl></dd>
+<dt><span><a href="programs.htm#programs-development">5.7.
+Утилиты развития MySQL</a></span></dt>
+<dd><dl><dt><span><a href="programs.htm#mysql-config">5.7.1.
+<span><strong>mysql_config</strong></span> показ опций
+для компилирования клиентов</a></span></dt>
+<dt><span><a href="programs.htm#my-print-defaults">5.7.2.
+<span><strong>my_print_defaults</strong></span> показ опций из файлов опций
+</a></span></dt>
+<dt><span><a href="programs.htm#resolve-stack-dump">5.7.3.
+<span><strong>resolve_stack_dump</strong></span>
+преобразование числового дампа трассировки стека к символам
+</a></span></dt></dl></dd>
+<dt><span><a href="programs.htm#programs-miscellaneous">5.8.
+Разные программы</a></span></dt>
+<dd><dl><dt><span><a href="programs.htm#lz4-decompress">5.8.1.
+<span><strong>lz4_decompress</strong>
+</span> распаковывает сжатый LZ4 вывод mysqlpump</a></span></dt>
+<dt><span><a href="programs.htm#perror">5.8.2.
+<span><strong>perror</strong></span> объясняет коды ошибки</a></span></dt>
+<dt><span><a href="programs.htm#replace-utility">5.8.3.
+<span><strong>replace</strong></span> утилита строковой замены
+</a></span></dt>
+<dt><span><a href="programs.htm#resolveip">5.8.4.
+<span><strong>resolveip</strong></span>
+преобразование имени хоста к IP-адресу или наоборот</a></span></dt>
+<dt><span><a href="programs.htm#zlib-decompress">5.8.5.
+<span><strong>zlib_decompress</strong></span>
+распаковывает ZLIB-сжатый вывод mysqlpump</a></span></dt></dl></dd>
+<dt><span><a href="programs.htm#environment-variables">5.9.
+Переменные окружения программы MySQL</a></span></dt></dl></dd>
+
+<dt><span><a href="server.htm">6. Администрирование сервера MySQL</a></span>
+</dt>
+<dd><dl><dt><span><a href="server.htm#mysqld-server">6.1. MySQL Server</a>
+</span></dt>
+<dd><dl><dt><span><a href="server.htm#server-configuration">6.1.1.
+Конфигурирование сервера</a></span></dt>
+<dt><span><a href="server.htm#server-configuration-defaults">6.1.2.
+Значения по умолчанию конфигурации сервера</a></span></dt>
+<dt><span><a href="server.htm#mysqld-option-tables">6.1.3.
+Параметры и переменные сервера</a></span></dt>
+<dt><span><a href="server.htm#server-options">6.1.4.
+Опции команд сервера</a></span></dt>
+<dt><span><a href="server.htm#server-system-variables">6.1.5.
+Системные переменные сервера</a></span></dt>
+<dt><span><a href="server.htm#using-system-variables">6.1.6.
+Использование системных переменных</a></span></dt>
+<dt><span><a href="server.htm#server-status-variables">6.1.7.
+Переменные состояния сервера</a></span></dt>
+<dt><span><a href="server.htm#sql-mode">6.1.8.
+Режимы SQL сервера</a></span></dt>
+<dt><span><a href="server.htm#ipv6-support">6.1.9.
+Поддержка IPv6</a></span></dt>
+<dt><span><a href="server.htm#server-side-help-support">6.1.10.
+Серверная справка</a></span></dt>
+<dt><span><a href="server.htm#server-signal-response">6.1.11.
+Ответ сервера на сигналы</a></span></dt>
+<dt><span><a href="server.htm#server-shutdown">6.1.12.
+Процесс завершения работы сервера</a></span></dt></dl></dd>
+<dt><span><a href="server.htm#data-directory">6.2.
+Каталог данных MySQL</a></span></dt>
+<dt><span><a href="server.htm#system-database">6.3.
+Системная база данных mysql</a></span></dt>
+<dt><span><a href="server.htm#server-logs">6.4. Журналы сервера MySQL</a>
+</span></dt>
+<dd><dl><dt><span><a href="server.htm#log-destinations">6.4.1.
+Выбор мест назначения журналов общих и медленных запросов</a></span></dt>
+<dt><span><a href="server.htm#error-log">6.4.2. Журнал ошибок</a></span></dt>
+<dt><span><a href="server.htm#query-log">6.4.3. Общий журнал запроса
+</a></span></dt>
+<dt><span><a href="server.htm#binary-log">6.4.4. Двоичный журнал</a></span>
+</dt>
+<dt><span><a href="server.htm#slow-query-log">6.4.5.
+Медленный журнал запроса</a></span></dt>
+<dt><span><a href="server.htm#ddl-log">6.4.6. Журнал DDL</a></span></dt>
+<dt><span><a href="server.htm#log-file-maintenance">6.4.7.
+Обслуживание журнала сервера</a></span></dt></dl></dd>
+<dt><span><a href="server.htm#server-components">6.5.
+Серверные компоненты</a></span></dt>
+<dt><span><a href="server.htm#server-plugins">6.6.
+Плагины MySQL Server</a></span></dt>
+<dd><dl><dt><span><a href="server.htm#server-plugins-available">6.6.1.
+Доступные плагины сервера</a></span></dt>
+<dt><span><a href="server.htm#server-plugin-loading">6.6.2.
+Установка и удаление плагинов</a></span></dt>
+<dt><span><a href="server.htm#obtaining-plugin-information">6.6.3.
+Получение информации о плагине сервера</a></span></dt>
+<dt><span><a href="server.htm#rewriter-query-rewrite-plugin">6.6.4.
+Плагин перезаписи запроса</a></span></dt>
+<dt><span><a href="server.htm#version-tokens">6.6.5.
+Version Tokens</a></span></dt></dl></dd>
+<dt><span><a href="server.htm#multiple-servers">6.7.
+Выполнение многих экземпляров MySQL на одной машине</a></span></dt>
+<dd><dl><dt><span><a href="server.htm#multiple-data-directories">6.7.1.
+Установка многих каталогов данных</a></span></dt>
+<dt><span><a href="server.htm#multiple-windows-servers">6.7.2.
+Выполнение нескольких экземпляров MySQL в Windows</a></span></dt>
+<dt><span><a href="server.htm#multiple-unix-servers">6.7.3.
+Выполнение нескольких экземпляров MySQL в Unix</a></span></dt>
+<dt><span><a href="server.htm#multiple-server-clients">6.7.4.
+Использование клиентских программ в многосерверной среде</a></span>
+</dt></dl></dd>
+<dt><span><a href="server.htm#dba-dtrace-server">6.8.
+Трассировка mysqld, используя DTrace</a></span></dt>
+<dd><dl><dt><span><a href="server.htm#dba-dtrace-mysqld-ref">6.8.1.
+Обзор зондов mysqld DTrace</a></span></dt></dl></dd></dl></dd>
+
+<dt><span><a href="security.htm">7. Безопасность</a></span></dt>
+<dd><dl><dt><span><a href="security.htm#general-security-issues">7.1.
+Общие вопросы безопасности</a></span></dt>
+<dd><dl><dt><span><a href="security.htm#security-guidelines">7.1.1.
+Направляющие линии безопасности</a></span></dt>
+<dt><span><a href="security.htm#password-security">7.1.2.
+Хранение безопасных паролей</a></span></dt>
+<dt><span><a href="security.htm#security-against-attack">7.1.3.
+Создание безопасного MySQL</a></span></dt>
+<dt><span><a href="security.htm#security-options">7.1.4.
+Связанные с безопасностью опции и переменные mysqld</a></span></dt>
+<dt><span><a href="security.htm#changing-mysql-user">7.1.5.
+Как выполнить MySQL как нормальный пользователь</a></span></dt>
+<dt><span><a href="security.htm#load-data-local">7.1.6.
+Вопросы безопасности с LOAD DATA LOCAL</a></span></dt>
+<dt><span><a href="security.htm#secure-client-programming">7.1.7.
+Направляющие линии безопасности программирования клиента</a></span>
+</dt></dl></dd>
+<dt><span><a href="security.htm#privilege-system">7.2.
+Система привилегий доступа MySQL</a></span></dt>
+<dd><dl><dt><span><a href="security.htm#privileges-provided">7.2.1.
+Привилегии, обеспеченные MySQL</a></span></dt>
+<dt><span><a href="security.htm#grant-tables">7.2.2.
+Таблицы прав доступа</a></span></dt>
+<dt><span><a href="security.htm#account-names">7.2.3.
+Определение имени учетной записи</a></span></dt>
+<dt><span><a href="security.htm#role-names">7.2.4.
+Определение ролевых имен</a></span></dt>
+<dt><span><a href="security.htm#connection-access">7.2.5.
+Управление доступом, этап 1: проверка соединения</a></span></dt>
+<dt><span><a href="security.htm#request-access">7.2.6.
+Управление доступом, этап 2: проверка запроса</a></span></dt>
+<dt><span><a href="security.htm#privilege-changes">7.2.7.
+Когда изменения привилегии вступают в силу</a></span></dt>
+<dt><span><a href="security.htm#problems-connecting">7.2.8.
+Поиск неисправностей и проблем соединений с MySQL</a></span></dt></dl></dd>
+<dt><span><a href="security.htm#user-account-management">7.3.
+Управление учетной записью пользователя MySQL</a></span></dt>
+<dd><dl><dt><span><a href="security.htm#user-names">7.3.1.
+Имена пользователя и пароли</a></span></dt>
+<dt><span><a href="security.htm#adding-users">7.3.2.
+Добавление учетных записей пользователя</a></span></dt>
+<dt><span><a href="security.htm#removing-users">7.3.3.
+Удаление учетных записей пользователя</a></span></dt>
+<dt><span><a href="security.htm#roles">7.3.4. Используя роли</a></span></dt>
+<dt><span><a href="security.htm#user-resources">7.3.5.
+Задание пределов ресурсов для учетной записи</a></span></dt>
+<dt><span><a href="security.htm#assigning-passwords">7.3.6.
+Назначение паролей учетной записи</a></span></dt>
+<dt><span><a href="security.htm#password-expiration-policy">7.3.7.
+Политика истечения пароля</a></span></dt>
+<dt><span><a href="security.htm#password-expiration-sandbox-mode">7.3.8.
+Истечение пароля и режим песочницы</a></span></dt>
+<dt><span><a href="security.htm#pluggable-authentication">7.3.9.
+Аутентификация плагинами</a></span></dt>
+<dt><span><a href="security.htm#proxy-users">7.3.10. Пользователи Proxy
+</a></span></dt>
+<dt><span><a href="security.htm#account-locking">7.3.11.
+Блокировка учетной записи пользователя</a></span></dt>
+<dt><span><a href="security.htm#account-activity-auditing">7.3.12.
+Ревизия деятельности учетной записи MySQL</a></span></dt></dl></dd>
+<dt><span><a href="security.htm#secure-connections">7.4.
+Используя безопасные соединения</a></span></dt>
+<dd><dl><dt><span><a href="security.htm#openssl-versus-yassl">7.4.1.
+OpenSSL и yaSSL</a></span></dt>
+<dt><span><a href="security.htm#building-with-secure-connection-support">
+7.4.2. Создание MySQL с поддержкой безопасных соединений</a></span></dt>
+<dt><span><a href="security.htm#secure-connection-protocols-ciphers">7.4.3.
+Безопасные протоколы соединения и шифры</a></span></dt>
+<dt><span><a href="security.htm#using-secure-connections">7.4.4.
+Конфигурирование MySQL, чтобы использовать безопасные соединения
+</a></span></dt>
+<dt><span><a href="security.htm#secure-connection-options">7.4.5.
+Опции команды для безопасных соединений</a></span></dt>
+<dt><span><a href="security.htm#creating-ssl-rsa-files">7.4.6.
+Создание сертификатов и ключей SSL и RSA</a></span></dt>
+<dt><span><a href="security.htm#windows-and-ssh">7.4.7.
+Соединение с MySQL из Windows по SSH</a></span></dt></dl></dd>
+<dt><span><a href="security.htm#security-plugins">7.5.
+Плагины безопасности</a></span></dt>
+<dd><dl><dt><span><a href="security.htm#authentication-plugins">7.5.1.
+Плагины аутентификации</a></span></dt>
+<dt><span><a href="security.htm#validate-password-plugin">7.5.2.
+Плагин проверки допустимости пароля</a></span></dt>
+<dt><span><a href="security.htm#keyring">7.5.3. Брелок MySQL</a></span></dt>
+</dl></dd></dl></dd>
+
+<dt><span><a href="backup.htm">8. Резервирование и восстановление</a>
+</span></dt>
+<dd><dl><dt><span><a href="backup.htm#backup-types">8.1.
+Типы резервирования и восстановления</a></span></dt>
+<dt><span><a href="backup.htm#backup-methods">8.2.
+Методы резервирования баз данных</a></span></dt>
+<dt><span><a href="backup.htm#backup-strategy-example">8.3.
+Стратегия резервного копирования и восстановления в качестве примера</a>
+</span></dt>
+<dd><dl><dt><span><a href="backup.htm#backup-policy">8.3.1.
+Установление политики резервирования</a></span></dt>
+<dt><span><a href="backup.htm#recovery-from-backups">8.3.2.
+Использование резервных копий для восстановления</a></span></dt>
+<dt><span><a href="backup.htm#backup-strategy-summary">8.3.3.
+Обзор стратегий резервного копирования</a></span></dt></dl></dd>
+<dt><span><a href="backup.htm#using-mysqldump">8.4.
+Использование mysqldump для резервирования</a></span></dt>
+<dd><dl><dt><span><a href="backup.htm#mysqldump-sql-format">8.4.1.
+Дамп данных в формат SQL с помощью mysqldump</a></span></dt>
+<dt><span><a href="backup.htm#reloading-sql-format-dumps">8.4.2.
+Загрузка резервных копий формата SQL</a></span></dt>
+<dt><span><a href="backup.htm#mysqldump-delimited-text">8.4.3.
+Дамп данных в формат разграниченного текста с mysqldump</a></span></dt>
+<dt><span><a href="backup.htm#reloading-delimited-text-dumps">8.4.4.
+Загрузка резервных копий формата разграниченного текста</a></span></dt>
+<dt><span><a href="backup.htm#mysqldump-tips">8.4.5.
+Подсказки по mysqldump</a></span></dt></dl></dd>
+<dt><span><a href="backup.htm#point-in-time-recovery">8.5.
+Инкрементное восстановление, используя двоичный журнал</a></span></dt>
+<dd><dl><dt><span><a href="backup.htm#point-in-time-recovery-times">8.5.1.
+Восстановление момента времени, используя время события</a></span></dt>
+<dt><span><a href="backup.htm#point-in-time-recovery-positions">8.5.2.
+Восстановление момента времени, используя позиции события</a>
+</span></dt></dl></dd>
+<dt><span><a href="backup.htm#myisam-table-maintenance">8.6.
+Поддержка и аварийное восстановление таблиц MyISAM</a></span></dt>
+<dd><dl><dt><span><a href="backup.htm#myisam-crash-recovery">8.6.1.
+Применение myisamchk для аварийного восстановления</a></span></dt>
+<dt><span><a href="backup.htm#myisam-check">8.6.2.
+Как проверить на ошибки таблицу MyISAM</a></span></dt>
+<dt><span><a href="backup.htm#myisam-repair">8.6.3.
+Как восстановить таблицы MyISAM</a></span></dt>
+<dt><span><a href="backup.htm#myisam-optimization">8.6.4.
+Оптимизация таблиц MyISAM</a></span></dt>
+<dt><span><a href="backup.htm#myisam-maintenance-schedule">8.6.5.
+Установка графика текущего обслуживания таблиц MyISAM</a></span></dt></dl>
+</dd></dl></dd>
+<dt><span><a href="optimiz.htm">9. Оптимизация</a></span></dt>
+<dd><dl><dt><span><a href="optimiz.htm#optimize-overview">9.1.
+Краткий обзор оптимизации</a></span></dt>
+<dt><span><a href="optimiz.htm#statement-optimization">9.2.
+Оптимизация запросов SQL</a></span></dt>
+<dd><dl><dt><span><a href="optimiz.htm#select-optimization">9.2.1.
+Оптимизация SELECT</a></span></dt>
+<dt><span><a href="optimiz.htm#data-change-optimization">9.2.2.
+Оптимизация запросов изменения данных</a></span></dt>
+<dt><span><a href="optimiz.htm#permission-optimization">9.2.3.
+Оптимизация привилегий базы данных</a></span></dt>
+<dt><span><a href="optimiz.htm#information-schema-optimization">9.2.4.
+Оптимизация запросов INFORMATION_SCHEMA</a></span></dt>
+<dt><span><a href="optimiz.htm#performance-schema-optimization">9.2.5.
+Оптимизация запросов Performance Schema</a></span></dt>
+<dt><span><a href="optimiz.htm#miscellaneous-optimization-tips">9.2.6.
+Другие подсказки по оптимизации</a></span></dt></dl></dd>
+<dt><span><a href="optimiz.htm#optimization-indexes">9.3.
+Оптимизация и индексы</a></span></dt>
+<dd><dl><dt><span><a href="optimiz.htm#mysql-indexes">9.3.1.
+Как MySQL использует индексы</a></span></dt>
+<dt><span><a href="optimiz.htm#optimizing-primary-keys">9.3.2.
+Используя первичные ключи</a></span></dt>
+<dt><span><a href="optimiz.htm#optimizing-foreign-keys">9.3.3.
+Используя внешние ключи</a></span></dt>
+<dt><span><a href="optimiz.htm#column-indexes">9.3.4.
+Столбец индекса</a></span></dt>
+<dt><span><a href="optimiz.htm#multiple-column-indexes">9.3.5.
+Многостолбцовые индексы</a></span></dt>
+<dt><span><a href="optimiz.htm#verifying-index-usage">9.3.6.
+Подтверждение использования индекса</a></span></dt>
+<dt><span><a href="optimiz.htm#index-statistics">9.3.7.
+Набор индексной статистики InnoDB и MyISAM</a></span></dt>
+<dt><span><a href="optimiz.htm#index-btree-hash">9.3.8.
+Сравнение B-дерева и хеш-индекса</a></span></dt>
+<dt><span><a href="optimiz.htm#generated-column-index-optimizations">9.3.9.
+Использование оптимизатором произведенного столбца индекса</a></span></dt>
+<dt><span><a href="optimiz.htm#invisible-indexes">9.3.10.
+Невидимый индекс</a></span></dt></dl></dd>
+<dt><span><a href="optimiz.htm#optimizing-database-structure">9.4.
+Оптимизация структуры базы данных</a></span></dt>
+<dd><dl><dt><span><a href="optimiz.htm#data-size">9.4.1.
+Оптимизация размера данных</a></span></dt>
+<dt><span><a href="optimiz.htm#optimize-data-types">9.4.2.
+Оптимизация типов данных MySQL</a></span></dt>
+<dt><span><a href="optimiz.htm#optimize-multi-tables">9.4.3.
+Оптимизация для многих таблиц</a></span></dt>
+<dt><span><a href="optimiz.htm#internal-temporary-tables">9.4.4.
+Внутренние временные таблицы в MySQL</a></span></dt></dl></dd>
+<dt><span><a href="optimiz.htm#optimizing-innodb">9.5.
+Оптимизация таблиц InnoDB</a></span></dt>
+<dd><dl><dt><span><a href="optimiz.htm#optimizing-innodb-storage-layout">
+9.5.1. Оптимизация расположения хранения для таблиц InnoDB</a></span></dt>
+<dt><span><a href="optimiz.htm#optimizing-innodb-transaction-management">
+9.5.2. Оптимизирующее операционное управление InnoDB</a></span></dt>
+<dt><span><a href="optimiz.htm#innodb-performance-ro-txn">9.5.3.
+Оптимизация транзакций только для чтения</a></span></dt>
+<dt><span><a href="optimiz.htm#optimizing-innodb-logging">9.5.4.
+Оптимизация журнала InnoDB Redo</a></span></dt>
+<dt><span><a href="optimiz.htm#optimizing-innodb-bulk-data-loading">9.5.5.
+Оптовые данные для таблиц InnoDB</a></span></dt>
+<dt><span><a href="optimiz.htm#optimizing-innodb-queries">9.5.6.
+Оптимизация запросов InnoDB</a></span></dt>
+<dt><span><a href="optimiz.htm#optimizing-innodb-ddl-operations">9.5.7.
+Оптимизация InnoDB DDL</a></span></dt>
+<dt><span><a href="optimiz.htm#optimizing-innodb-diskio">9.5.8.
+Оптимизация дискового ввода/вывода InnoDB</a></span></dt>
+<dt><span><a href="optimiz.htm#optimizing-innodb-configuration-variables">
+9.5.9. Оптимизация переменных конфигурации InnoDB</a></span></dt>
+<dt><span><a href="optimiz.htm#optimizing-innodb-many-tables">9.5.10.
+Оптимизация InnoDB для систем со многими таблицами</a></span></dt></dl></dd>
+<dt><span><a href="optimiz.htm#optimizing-myisam">9.6.
+Оптимизация для таблиц MyISAM</a></span></dt>
+<dd><dl><dt><span><a href="optimiz.htm#optimizing-queries-myisam">9.6.1.
+Оптимизация запросов MyISAM</a></span></dt>
+<dt><span><a href="optimiz.htm#optimizing-myisam-bulk-data-loading">9.6.2.
+Оптовые загрузки данных для MyISAM</a></span></dt>
+<dt><span><a href="optimiz.htm#repair-table-speed">9.6.3.
+Скорость REPAIR TABLE</a></span></dt></dl></dd>
+<dt><span><a href="optimiz.htm#optimizing-memory-tables">9.7.
+Оптимизация таблиц MEMORY</a></span></dt>
+<dt><span><a href="optimiz.htm#execution-plan-information">9.8.
+Понимание плана выполнения запроса</a></span></dt>
+<dd><dl><dt><span><a href="optimiz.htm#using-explain">9.8.1.
+Оптимизация запросов с EXPLAIN</a></span></dt>
+<dt><span><a href="optimiz.htm#explain-output">9.8.2.
+Выходной формат EXPLAIN</a></span></dt>
+<dt><span><a href="optimiz.htm#explain-extended">9.8.3.
+Формат вывода EXPLAIN EXTENDED</a></span></dt>
+<dt><span><a href="optimiz.htm#explain-for-connection">9.8.4.
+Получение информации о плане выполнения для названного соединения
+</a></span></dt>
+<dt><span><a href="optimiz.htm#estimating-performance">9.8.5.
+Оценка работы запроса</a></span></dt></dl></dd>
+<dt><span><a href="optimiz.htm#controlling-optimizer">9.9.
+Управление оптимизатором запросов</a></span></dt>
+<dd><dl><dt><span><a href="optimiz.htm#controlling-query-plan-evaluation">
+9.9.1. Управление оценкой плана запроса</a></span></dt>
+<dt><span><a href="optimiz.htm#switchable-optimizations">9.9.2.
+Управление переключаемой оптимизацией</a></span></dt>
+<dt><span><a href="optimiz.htm#optimizer-hints">9.9.3.
+Подсказки оптимизатору</a></span></dt>
+<dt><span><a href="optimiz.htm#index-hints">9.9.4.
+Индексные подсказки</a></span></dt>
+<dt><span><a href="optimiz.htm#cost-model">9.9.5.
+Модель стоимости оптимизатора</a></span></dt>
+<dt><span><a href="optimiz.htm#optimizer-statistics">9.9.6.
+Статистика оптимизатора</a></span></dt></dl></dd>
+<dt><span><a href="optimiz.htm#buffering-caching">9.10.
+Буферизация и кэширование</a></span></dt>
+<dd><dl><dt><span><a href="optimiz.htm#innodb-buffer-pool-optimization">
+9.10.1. Оптимизация буферного пула InnoDB</a></span></dt>
+<dt><span><a href="optimiz.htm#myisam-key-cache">9.10.2.
+Ключевой кэш MyISAM</a></span></dt>
+<dt><span><a href="optimiz.htm#query-cache">9.10.3.
+Кэш запроса MySQL</a></span></dt>
+<dt><span><a href="optimiz.htm#statement-caching">9.10.4.
+Кэширование готовых запросов и сохраненных программ</a></span></dt></dl></dd>
+<dt><span><a href="optimiz.htm#locking-issues">9.11.
+Оптимизации операций блокировки</a></span></dt>
+<dd><dl><dt><span><a href="optimiz.htm#internal-locking">9.11.1.
+Внутренние методы блокировки</a></span></dt>
+<dt><span><a href="optimiz.htm#table-locking">9.11.2.
+Табличные проблемы блокировки</a></span></dt>
+<dt><span><a href="optimiz.htm#concurrent-inserts">9.11.3.
+Параллельные вставки</a></span></dt>
+<dt><span><a href="optimiz.htm#metadata-locking">9.11.4.
+Блокировка метаданных</a></span></dt>
+<dt><span><a href="optimiz.htm#external-locking">9.11.5.
+Внешняя блокировка</a></span></dt></dl></dd>
+<dt><span><a href="optimiz.htm#optimizing-server">9.12.
+Оптимизация MySQL Server</a></span></dt>
+<dd><dl><dt><span><a href="optimiz.htm#disk-issues">9.12.1.
+Оптимизация дискового I/O</a></span></dt>
+<dt><span><a href="optimiz.htm#symbolic-links">9.12.2.
+Использование символических ссылок</a></span></dt>
+<dt><span><a href="optimiz.htm#optimizing-memory">9.12.3.
+Оптимизация использования памяти</a></span></dt>
+<dt><span><a href="optimiz.htm#optimizing-network">9.12.4.
+Оптимизация сетевого использования</a></span></dt></dl></dd>
+<dt><span><a href="optimiz.htm#optimize-benchmarking">9.13.
+Сопоставительный анализ (Benchmarking)</a></span></dt>
+<dd><dl><dt><span><a href="optimiz.htm#select-benchmarking">9.13.1.
+Измерение скорости выражений и функций</a></span></dt>
+<dt><span><a href="optimiz.htm#custom-benchmarks">9.13.2.
+Используя Ваши собственные точки отсчета</a></span></dt>
+<dt><span><a href="optimiz.htm#monitoring-performance-schema">9.13.3.
+Определение эксплуатационных качеств с performance_schema</a></span>
+</dt></dl></dd>
+<dt><span><a href="optimiz.htm#thread-information">9.14.
+Информация о потоке исследования</a></span></dt>
+<dd><dl><dt><span><a href="optimiz.htm#thread-commands">9.14.1.
+Значения команды потока</a></span></dt>
+<dt><span><a href="optimiz.htm#general-thread-states">9.14.2.
+Общие состояния потока</a></span></dt>
+<dt><span><a href="optimiz.htm#query-cache-thread-states">9.14.3.
+Состояния потока кэша запроса</a></span></dt>
+<dt><span><a href="optimiz.htm#master-thread-states">9.14.4.
+Ведущие состояния потока репликации</a></span></dt>
+<dt><span><a href="optimiz.htm#slave-io-thread-states">9.14.5.
+Ведомые состояния потока ввода/вывода</a></span></dt>
+<dt><span><a href="optimiz.htm#slave-sql-thread-states">9.14.6.
+Ведомое устройство ответа состояния потока SQL</a></span></dt>
+<dt><span><a href="optimiz.htm#slave-connection-thread-states">9.14.7.
+Ведомые состояния соединения потока</a></span></dt>
+<dt><span><a href="optimiz.htm#event-scheduler-thread-states">9.14.8.
+Состояния потока планировщика событий</a></span></dt></dl></dd></dl></dd>
+<dt><span><a href="lang.htm">10. Структура языка</a></span></dt>
+<dd><dl><dt><span><a href="lang.htm#literals">10.1. Буквальные значения
+</a></span></dt>
+<dd><dl><dt><span><a href="lang.htm#string-literals">10.1.1.
+Строковые литералы</a></span></dt>
+<dt><span><a href="lang.htm#number-literals">10.1.2. Числовые литералы
+</a></span></dt>
+<dt><span><a href="lang.htm#date-and-time-literals">10.1.3.
+Литералы Date и Time</a></span></dt>
+<dt><span><a href="lang.htm#hexadecimal-literals">10.1.4.
+Шестнадцатеричные литералы</a></span></dt>
+<dt><span><a href="lang.htm#bit-value-literals">10.1.5. Битовые строки
+</a></span></dt>
+<dt><span><a href="lang.htm#boolean-literals">10.1.6. Boolean</a></span></dt>
+<dt><span><a href="lang.htm#null-values">10.1.7. NULL</a></span></dt></dl>
+</dd>
+<dt><span><a href="lang.htm#identifiers">10.2.
+Названия объекта схемы</a></span></dt>
+<dd><dl><dt><span><a href="lang.htm#identifier-qualifiers">10.2.1.
+Спецификаторы идентификатора</a></span></dt>
+<dt><span><a href="lang.htm#identifier-case-sensitivity">10.2.2.
+Чувствительность к регистру идентификатора</a></span></dt>
+<dt><span><a href="lang.htm#identifier-mapping">10.2.3.
+Отображение идентификаторов к именам файлов</a></span></dt>
+<dt><span><a href="lang.htm#function-resolution">10.2.4.
+Парсинг имени функции и разрешение</a></span></dt></dl></dd>
+<dt><span><a href="lang.htm#keywords">10.3.
+Ключевые и зарезервированные слова</a></span></dt>
+<dt><span><a href="lang.htm#user-variables">10.4.
+Определяемые пользователем переменные</a></span></dt>
+<dt><span><a href="lang.htm#expressions">10.5. Синтаксис выражения
+</a></span></dt>
+<dt><span><a href="lang.htm#comments">10.6. Синтаксис комментария</a></span>
+</dt></dl></dd>
+<dt><span><a href="global.htm">11. Глобализация</a></span></dt>
+<dd><dl><dt><span><a href="global.htm#charset">11.1.
+Поддержка набора символов</a></span></dt>
+<dd><dl><dt><span><a href="global.htm#charset-general">11.1.1.
+Наборы символов и сопоставления в общем виде</a></span></dt>
+<dt><span><a href="global.htm#charset-mysql">11.1.2.
+Наборы символов и сопоставления в MySQL</a></span></dt>
+<dt><span><a href="global.htm#charset-syntax">11.1.3.
+Определение наборов символов и сопоставлений</a></span></dt>
+<dt><span><a href="global.htm#charset-connection">11.1.4.
+Наборы символов и сопоставления соединения</a></span></dt>
+<dt><span><a href="global.htm#charset-applications">11.1.5.
+Конфигурирование набора символов и сопоставления приложения</a></span></dt>
+<dt><span><a href="global.htm#charset-errors">11.1.6.
+Набор символов для сообщений об ошибках</a></span></dt>
+<dt><span><a href="global.htm#charset-conversion">11.1.7.
+Преобразование набора символов столбца</a></span></dt>
+<dt><span><a href="global.htm#charset-collations">11.1.8.
+Проблемы сопоставления</a></span></dt>
+<dt><span><a href="global.htm#charset-unicode">11.1.9.
+Поддержка Unicode</a></span></dt>
+<dt><span><a href="global.htm#charset-charsets">11.1.10.
+Поддерживаемые наборы символов и сопоставления</a></span></dt></dl></dd>
+<dt><span><a href="global.htm#error-message-language">11.2.
+Установка языка сообщений об ошибках</a></span></dt>
+<dt><span><a href="global.htm#adding-character-set">11.3.
+Добавление набора символов</a></span></dt>
+<dd><dl><dt><span><a href="global.htm#character-arrays">11.3.1.
+Символьные массивы определения</a></span></dt>
+<dt><span><a href="global.htm#string-collating">11.3.2.
+Строковая поддержка сопоставления сложных наборов символов</a></span></dt>
+<dt><span><a href="global.htm#multibyte-characters">11.3.3.
+Поддержка мультибайтных символов</a></span></dt></dl></dd>
+<dt><span><a href="global.htm#adding-collation">11.4.
+Добавление сопоставления к набору символов</a></span></dt>
+<dd><dl><dt><span><a href="global.htm#charset-collation-implementations">
+11.4.1. Типы выполнения сопоставления</a></span></dt>
+<dt><span><a href="global.htm#adding-collation-choosing-id">11.4.2.
+Выбор ID сопоставления</a></span></dt>
+<dt><span><a href="global.htm#adding-collation-simple-8bit">11.4.3.
+Добавление простого сопоставления к 8-битовому набору символов</a></span></dt>
+<dt><span><a href="global.htm#adding-collation-unicode-uca">11.4.4.
+Добавление сопоставления UCA к набору символов Unicode</a></span>
+</dt></dl></dd>
+<dt><span><a href="global.htm#charset-configuration">11.5.
+Конфигурация набора символов</a></span></dt>
+<dt><span><a href="global.htm#time-zone-support">11.6.
+Поддержка часового пояса сервера MySQL</a></span></dt>
+<dd><dl><dt><span><a href="global.htm#time-zone-upgrades">11.6.1.
+Изменения часового пояса</a></span></dt>
+<dt><span><a href="global.htm#time-zone-leap-seconds">11.6.2.
+Поддержка часового пояса с прыжком секунд</a></span></dt></dl></dd>
+<dt><span><a href="global.htm#locale-support">11.7.
+Поддержка места действия сервера MySQL</a></span></dt></dl></dd>
+<dt><span><a href="types.htm">12. Типы данных</a></span></dt>
+<dd><dl><dt><span><a href="types.htm#data-type-overview">12.1.
+Краткий обзор типов данных</a></span></dt>
+<dd><dl><dt><span><a href="types.htm#numeric-type-overview">12.1.1.
+Краткий обзор числовых типов</a></span></dt>
+<dt><span><a href="types.htm#date-and-time-type-overview">12.1.2.
+Краткий обзор типов даты и времени</a></span></dt>
+<dt><span><a href="types.htm#string-type-overview">12.1.3.
+Краткий обзор строк</a></span></dt></dl></dd>
+<dt><span><a href="types.htm#numeric-types">12.2. Числовые типы
+</a></span></dt>
+<dd><dl><dt><span><a href="types.htm#integer-types">12.2.1.
+Типы целого числа (точное значение)</a></span></dt>
+<dt><span><a href="types.htm#fixed-point-types">12.2.2.
+Типы с фиксированной точкой (точное значение) DECIMAL, NUMERIC</a></span></dt>
+<dt><span><a href="types.htm#floating-point-types">12.2.3.
+Типы с плавающей запятой (приблизительная точность) FLOAT, DOUBLE
+</a></span></dt>
+<dt><span><a href="types.htm#bit-type">12.2.4. Тип битового значения BIT</a>
+</span></dt>
+<dt><span><a href="types.htm#numeric-type-attributes">12.2.5.
+Числовые признаки типа</a></span></dt>
+<dt><span><a href="types.htm#out-of-range-and-overflow">12.2.6.
+Обработка переполнения и выхода из диапазона</a></span></dt></dl></dd>
+<dt><span><a href="types.htm#date-and-time-types">12.3.
+Типы даты и времени</a></span></dt>
+<dd><dl><dt><span><a href="types.htm#datetime">12.3.1.
+Типы DATE, DATETIME и TIMESTAMP</a></span></dt>
+<dt><span><a href="types.htm#time">12.3.2. Тип TIME</a></span></dt>
+<dt><span><a href="types.htm#year">12.3.3. Тип YEAR</a></span></dt>
+<dt><span><a href="types.htm#migrating-to-year4">12.3.4.
+Миграция столбцов из YEAR(2) в YEAR(4)</a></span></dt>
+<dt><span><a href="types.htm#timestamp-initialization">12.3.5.
+Автоматическая инициализация и обновление для TIMESTAMP и DATETIME</a>
+</span></dt>
+<dt><span><a href="types.htm#fractional-seconds">12.3.6.
+Дробные доли секунд во временных значениях</a></span></dt>
+<dt><span><a href="types.htm#date-and-time-type-conversion">12.3.7.
+Преобразование между типами даты и времени</a></span></dt>
+<dt><span><a href="types.htm#two-digit-years">12.3.8.
+Годы с двумя цифрами в датах</a></span></dt></dl></dd>
+<dt><span><a href="types.htm#string-types">12.4. Строковые типы</a></span>
+</dt>
+<dd><dl><dt><span><a href="types.htm#char">12.4.1. Типы CHAR и VARCHAR
+</a></span></dt>
+<dt><span><a href="types.htm#binary-varbinary">12.4.2.
+Типы BINARY и VARBINARY</a></span></dt>
+<dt><span><a href="types.htm#blob">12.4.3. Типы BLOB и TEXT</a></span></dt>
+<dt><span><a href="types.htm#enum">12.4.4. Тип ENUM</a></span></dt>
+<dt><span><a href="types.htm#set">12.4.5. Тип SET</a></span></dt></dl></dd>
+<dt><span><a href="types.htm#spatial-extensions">12.5.
+Расширения для пространственных данных</a></span></dt>
+<dd><dl><dt><span><a href="types.htm#spatial-datatypes">12.5.1.
+Пространственные типы данных</a></span></dt>
+<dt><span><a href="types.htm#opengis-geometry-model">12.5.2.
+Модель геометрии OpenGIS</a></span></dt>
+<dt><span><a href="types.htm#using-spatial-data">12.5.3.
+Использование пространственных данных</a></span></dt></dl></dd>
+<dt><span><a href="types.htm#json">12.6. Тип данных JSON</a></span></dt>
+<dt><span><a href="types.htm#data-type-defaults">12.7.
+Значения по умолчанию</a></span></dt>
+<dt><span><a href="types.htm#storage-requirements">12.8.
+Требования хранения типов данных</a></span></dt>
+<dt><span><a href="types.htm#choosing-types">12.9.
+Выбор правильного типа для столбца</a></span></dt>
+<dt><span><a href="types.htm#other-vendor-data-types">12.10.
+Применение типов данных из других баз данных</a></span></dt></dl></dd>
+<dt><span><a href="funct.htm">13. Функции и операторы</a></span></dt>
+<dd><dl><dt><span><a href="funct.htm#func-op-summary-ref">13.1.
+Обзор функций и операторов</a></span></dt>
+<dt><span><a href="funct.htm#type-conversion">13.2.
+Преобразование типов в выражениях</a></span></dt>
+<dt><span><a href="funct.htm#non-typed-operators">13.3. Операторы</a></span>
+</dt>
+<dd><dl><dt><span><a href="funct.htm#operator-precedence">13.3.1.
+Приоритет операторов</a></span></dt>
+<dt><span><a href="funct.htm#comparison-operators">13.3.2.
+Функции сравнения и операторы</a></span></dt>
+<dt><span><a href="funct.htm#logical-operators">13.3.3.
+Логические операторы</a></span></dt>
+<dt><span><a href="funct.htm#assignment-operators">13.3.4.
+Операторы присваивания</a></span></dt></dl></dd>
+<dt><span><a href="funct.htm#control-flow-functions">13.4.
+Функции управления потоком</a></span></dt>
+<dt><span><a href="funct.htm#string-functions">13.5. Строковые функции
+</a></span></dt>
+<dd><dl><dt><span><a href="funct.htm#string-comparison-functions">13.5.1.
+Функции сравнения строк</a></span></dt>
+<dt><span><a href="funct.htm#regexp">13.5.2. Регулярные выражения</a></span>
+</dt>
+<dt><span><a href="funct.htm#string-functions-charset">13.5.3.
+Набор символов и сопоставление функциональных результатов</a></span></dt>
+</dl></dd>
+<dt><span><a href="funct.htm#numeric-functions">13.6.
+Числовые функции и операторы</a></span></dt>
+<dd><dl><dt><span><a href="funct.htm#arithmetic-functions">13.6.1.
+Арифметические операторы</a></span></dt>
+<dt><span><a href="funct.htm#mathematical-functions">13.6.2.
+Математические функции</a></span></dt></dl></dd>
+<dt><span><a href="funct.htm#date-and-time-functions">13.7.
+Функции даты и времени</a></span></dt>
+<dt><span><a href="funct.htm#mysql-calendar">13.8.
+Какой календарь использует MySQL?</a></span></dt>
+<dt><span><a href="funct.htm#fulltext-search">13.9.
+Функции полнотекстового поиска</a></span></dt>
+<dd><dl><dt><span><a href="funct.htm#fulltext-natural-language">13.9.1.
+Полнотекстовые поиски на естественном языке</a></span></dt>
+<dt><span><a href="funct.htm#fulltext-boolean">13.9.2.
+Булев полнотекстовый поиск</a></span></dt>
+<dt><span><a href="funct.htm#fulltext-query-expansion">13.9.3.
+Полнотекстовые поиски с расширением запроса</a></span></dt>
+<dt><span><a href="funct.htm#fulltext-stopwords">13.9.4.
+Полнотекстовые стоп-слова</a></span></dt>
+<dt><span><a href="funct.htm#fulltext-restrictions">13.9.5.
+Полнотекстовые ограничения</a></span></dt>
+<dt><span><a href="funct.htm#fulltext-fine-tuning">13.9.6.
+Точная настройка полнотекстового поиска в MySQL</a></span></dt>
+<dt><span><a href="funct.htm#full-text-adding-collation">13.9.7.
+Добавление сопоставления для полнотекстовой индексации</a></span></dt>
+<dt><span><a href="funct.htm#fulltext-search-ngram">13.9.8.
+Полнотекстовый анализатор ngram</a></span></dt>
+<dt><span><a href="funct.htm#fulltext-search-mecab">13.9.9.
+Полнотекстовый плагин анализатора MeCab</a></span></dt></dl></dd>
+<dt><span><a href="funct.htm#cast-functions">13.10.
+Функции и операторы преобразования</a></span></dt>
+<dt><span><a href="funct.htm#xml-functions">13.11. Функции XML</a></span></dt>
+<dt><span><a href="funct.htm#bit-functions">13.12.
+Битовые функции и операторы</a></span></dt>
+<dt><span><a href="funct.htm#encryption-functions">13.13.
+Функции шифрования и сжатия</a></span></dt>
+<dt><span><a href="funct.htm#information-functions">13.14.
+Информационные функции</a></span></dt>
+<dt><span><a href="funct.htm#spatial-analysis-functions">13.15.
+Пространственные аналитические функции</a></span></dt>
+<dd><dl><dt><span><a href="funct.htm#spatial-function-reference">13.15.1.
+Обзор пространственных функций</a></span></dt>
+<dt><span><a href="funct.htm#spatial-function-argument-handling">13.15.2.
+Обработка параметров пространственными функциями</a></span></dt>
+<dt><span><a href="funct.htm#gis-wkt-functions">13.15.3.
+Функции, которые создают значения геометрии из значений WKT</a></span></dt>
+<dt><span><a href="funct.htm#gis-wkb-functions">13.15.4.
+Функции, которые создают значения геометрии из значений WKB</a></span></dt>
+<dt><span><a href="funct.htm#gis-mysql-specific-functions">13.15.5.
+Функции MySQL, которые создают значения геометрии</a></span></dt>
+<dt><span><a href="funct.htm#gis-format-conversion-functions">13.15.6.
+Конверсионные функции формата геометрии</a></span></dt>
+<dt><span><a href="funct.htm#gis-property-functions">13.15.7.
+Функции свойства геометрии</a></span></dt>
+<dt><span><a href="funct.htm#spatial-operator-functions">13.15.8.
+Пространственные функции и операторы</a></span></dt>
+<dt><span><a href="funct.htm#spatial-relation-functions">13.15.9.
+Функции, которые проверяют пространственные отношения
+между объектами геометрии</a></span></dt>
+<dt><span><a href="funct.htm#spatial-geohash-functions">13.15.10.
+Пространственные функции Geohash</a></span></dt>
+<dt><span><a href="funct.htm#spatial-geojson-functions">13.15.11.
+Пространственные функции GeoJSON</a></span></dt>
+<dt><span><a href="funct.htm#spatial-convenience-functions">13.15.12.
+Вспомогательные пространственные функции</a></span></dt></dl></dd>
+<dt><span><a href="funct.htm#json-functions">13.16. Функции JSON</a></span>
+</dt>
+<dd><dl><dt><span><a href="funct.htm#json-function-reference">13.16.1.
+Функции JSON (обзор)</a></span></dt>
+<dt><span><a href="funct.htm#json-creation-functions">13.16.2.
+Функции, которые создают значения JSON</a></span></dt>
+<dt><span><a href="funct.htm#json-search-functions">13.16.3.
+Функции поиска значений JSON</a></span></dt>
+<dt><span><a href="funct.htm#json-modification-functions">13.16.4.
+Функции, которые изменяют значения JSON</a></span></dt>
+<dt><span><a href="funct.htm#json-attribute-functions">13.16.5.
+Функции, возвращающие атрибуты значений JSON</a></span></dt>
+<dt><span><a href="funct.htm#json-path-syntax">13.16.6.
+Синтаксис JSON Path</a></span></dt></dl></dd>
+<dt><span><a href="funct.htm#gtid-functions">13.17.
+Функции, используемые с глобальными транзакционными ID</a></span></dt>
+<dt><span><a href="funct.htm#miscellaneous-functions">13.18.
+Прочие функции</a></span></dt>
+<dt><span><a href="funct.htm#group-by-functions-and-modifiers">13.19.
+Агрегатные функции (GROUP BY)</a></span></dt>
+<dd><dl><dt><span><a href="funct.htm#group-by-functions">13.19.1.
+Обзор агрегатных функций (GROUP BY)</a></span></dt>
+<dt><span><a href="funct.htm#group-by-modifiers">13.19.2.
+Модификаторы GROUP BY</a></span></dt>
+<dt><span><a href="funct.htm#group-by-handling">13.19.3.
+Обработка MySQL GROUP BY</a></span></dt>
+<dt><span><a href="funct.htm#group-by-functional-dependence">13.19.4.
+Обнаружение функциональной зависимости</a></span></dt></dl></dd>
+<dt><span><a href="funct.htm#precision-math">13.20. Точная математика</a>
+</span></dt>
+<dd><dl><dt><span><a href="funct.htm#precision-math-numbers">13.20.1.
+Типы числовых значений</a></span></dt>
+<dt><span><a href="funct.htm#precision-math-decimal-characteristics">13.20.2.
+Характеристики типа данных DECIMAL</a></span></dt>
+<dt><span><a href="funct.htm#precision-math-expressions">13.20.3.
+Обработка выражений</a></span></dt>
+<dt><span><a href="funct.htm#precision-math-rounding">13.20.4.
+Логика округления</a></span></dt>
+<dt><span><a href="funct.htm#precision-math-examples">13.20.5.
+Примеры точной математики</a></span></dt></dl></dd></dl></dd>
+<dt><span><a href="sql.htm">14. Синтаксис SQL</a></span></dt>
+<dd><dl><dt><span><a href="sql.htm#sql-syntax-data-definition">
+14.1. Запросы определения данных</a></span></dt>
+<dd><dl><dt><span><a href="sql.htm#alter-database">14.1.1 ALTER DATABASE</a>
+</span></dt>
+<dt><span><a href="sql.htm#alter-event">14.1.2. ALTER EVENT</a></span></dt>
+<dt><span><a href="sql.htm#alter-function">14.1.3. ALTER FUNCTION</a></span>
+</dt>
+<dt><span><a href="sql.htm#alter-instance">14.1.4. ALTER INSTANCE</a></span>
+</dt>
+<dt><span><a href="sql.htm#alter-procedure">14.1.5. ALTER PROCEDURE</a>
+</span></dt>
+<dt><span><a href="sql.htm#alter-server">14.1.6. ALTER SERVER</a></span></dt>
+<dt><span><a href="sql.htm#alter-table">14.1.7. ALTER TABLE</a></span></dt>
+<dt><span><a href="sql.htm#alter-view">14.1.8. ALTER VIEW</a></span></dt>
+<dt><span><a href="sql.htm#create-database">14.1.9. CREATE DATABASE</a>
+</span></dt>
+<dt><span><a href="sql.htm#create-event">14.1.10. CREATE EVENT</a></span></dt>
+<dt><span><a href="sql.htm#create-function">14.1.11. CREATE FUNCTION</a>
+</span></dt>
+<dt><span><a href="sql.htm#create-index">14.1.12. CREATE INDEX</a></span></dt>
+<dt><span><a href="sql.htm#create-procedure">14.1.13. CREATE PROCEDURE и
+CREATE FUNCTION</a></span></dt>
+<dt><span><a href="sql.htm#create-server">14.1.14. CREATE SERVER</a></span>
+</dt>
+<dt><span><a href="sql.htm#create-table">14.1.15. CREATE TABLE</a></span></dt>
+<dt><span><a href="sql.htm#create-tablespace">14.1.16. CREATE TABLESPACE</a>
+</span></dt>
+<dt><span><a href="sql.htm#create-trigger">14.1.17. CREATE TRIGGER</a></span>
+</dt>
+<dt><span><a href="sql.htm#create-view">14.1.18. CREATE VIEW</a></span></dt>
+<dt><span><a href="sql.htm#drop-database">14.1.19. DROP DATABASE</a></span>
+</dt>
+<dt><span><a href="sql.htm#drop-event">14.1.20. DROP EVENT</a></span></dt>
+<dt><span><a href="sql.htm#drop-function">14.1.21. DROP FUNCTION</a></span>
+</dt>
+<dt><span><a href="sql.htm#drop-index">14.1.22. DROP INDEX</a></span></dt>
+<dt><span><a href="sql.htm#drop-procedure">14.1.23. DROP PROCEDURE и
+DROP FUNCTION</a></span></dt>
+<dt><span><a href="sql.htm#drop-server">14.1.24. DROP SERVER</a></span></dt>
+<dt><span><a href="sql.htm#drop-table">14.1.25. DROP TABLE</a></span></dt>
+<dt><span><a href="sql.htm#drop-tablespace">14.1.26. DROP TABLESPACE</a>
+</span></dt>
+<dt><span><a href="sql.htm#drop-trigger">14.1.27. DROP TRIGGER</a></span></dt>
+<dt><span><a href="sql.htm#drop-view">14.1.28. DROP VIEW</a></span></dt>
+<dt><span><a href="sql.htm#rename-table">14.1.29. RENAME TABLE</a></span>
+</dt>
+<dt><span><a href="sql.htm#truncate-table">14.1.30. TRUNCATE TABLE</a></span>
+</dt></dl></dd>
+<dt><span><a href="sql.htm#sql-syntax-data-manipulation">14.2.
+Манипуляции данными</a></span></dt>
+<dd><dl><dt><span><a href="sql.htm#call">14.2.1. CALL</a></span></dt>
+<dt><span><a href="sql.htm#delete">14.2.2. DELETE</a></span></dt>
+<dt><span><a href="sql.htm#do">14.2.3. DO</a></span></dt>
+<dt><span><a href="sql.htm#handler">14.2.4. HANDLER</a></span></dt>
+<dt><span><a href="sql.htm#insert">14.2.5. INSERT</a></span></dt>
+<dt><span><a href="sql.htm#load-data">14.2.6. LOAD DATA INFILE</a></span></dt>
+<dt><span><a href="sql.htm#load-xml">14.2.7. LOAD XML</a></span></dt>
+<dt><span><a href="sql.htm#replace">14.2.8. REPLACE</a></span></dt>
+<dt><span><a href="sql.htm#select">14.2.9. SELECT</a></span></dt>
+<dt><span><a href="sql.htm#subqueries">14.2.10. Синтаксис подзапроса</a>
+</span></dt>
+<dt><span><a href="sql.htm#update">14.2.11. UPDATE</a></span></dt></dl></dd>
+<dt><span><a href="sql.htm#sql-syntax-transactions">14.3.
+Транзакционные и блокирующие запросы</a></span></dt>
+<dd><dl><dt><span><a href="sql.htm#commit">14.3.1. START TRANSACTION, COMMIT
+и ROLLBACK</a></span></dt>
+<dt><span><a href="sql.htm#cannot-roll-back">14.3.2.
+Запросы, которые не могут быть отменены</a></span></dt>
+<dt><span><a href="sql.htm#implicit-commit">14.3.3.
+Запросы, которые неявно закрывают транзакцию</a></span></dt>
+<dt><span><a href="sql.htm#savepoint">14.3.4. SAVEPOINT, ROLLBACK TO
+SAVEPOINT и RELEASE SAVEPOINT</a></span></dt>
+<dt><span><a href="sql.htm#lock-tables">14.3.5. LOCK TABLES и UNLOCK TABLES
+</a></span></dt>
+<dt><span><a href="sql.htm#set-transaction">14.3.6. SET TRANSACTION</a>
+</span></dt>
+<dt><span><a href="sql.htm#xa">14.3.7. Транзакции XA</a></span></dt></dl>
+</dd>
+<dt><span><a href="sql.htm#sql-syntax-replication">14.4.
+Запросы репликации</a></span></dt>
+<dd><dl><dt><span><a href="sql.htm#replication-master-sql">14.4.1.
+Запросы SQL для управления главными серверами</a></span></dt>
+<dt><span><a href="sql.htm#replication-slave-sql">14.4.2.
+Запросы SQL для управления ведомыми серверами</a></span></dt>
+<dt><span><a href="sql.htm#replication-group-sql">14.4.3.
+Запросы SQL для управления группами репликации</a></span></dt></dl></dd>
+<dt><span><a href="sql.htm#sql-syntax-prepared-statements">14.5.
+Подготовленные запросы SQL</a></span></dt>
+<dd><dl><dt><span><a href="sql.htm#prepare">14.5.1. PREPARE</a></span></dt>
+<dt><span><a href="sql.htm#execute">14.5.2. EXECUTE</a></span></dt>
+<dt><span><a href="sql.htm#deallocate-prepare">14.5.3. DEALLOCATE PREPARE</a>
+</span></dt></dl></dd>
+<dt><span><a href="sql.htm#sql-syntax-compound-statements">14.6.
+Синтаксис составного запроса</a></span></dt>
+<dd><dl><dt><span><a href="sql.htm#begin-end">14.6.1. BEGIN ... END</a>
+</span></dt>
+<dt><span><a href="sql.htm#statement-labels">14.6.2. Метки запросов</a>
+</span></dt>
+<dt><span><a href="sql.htm#declare">14.6.3. DECLARE</a></span></dt>
+<dt><span><a href="sql.htm#stored-program-variables">14.6.4.
+Переменные в сохраненных программах</a></span></dt>
+<dt><span><a href="sql.htm#flow-control-statements">14.6.5.
+Запросы управления потоками</a></span></dt>
+<dt><span><a href="sql.htm#cursors">14.6.6. Курсоры</a></span></dt>
+<dt><span><a href="sql.htm#condition-handling">14.6.7.
+Обработка условия</a></span></dt></dl></dd>
+<dt><span><a href="sql.htm#sql-syntax-server-administration">14.7.
+Запросы управления базами данных</a></span></dt>
+<dd><dl><dt><span><a href="sql.htm#account-management-sql">14.7.1.
+Запросы управления учетными записями</a></span></dt>
+<dt><span><a href="sql.htm#table-maintenance-sql">14.7.2.
+Запросы обслуживания таблиц</a></span></dt>
+<dt><span><a href="sql.htm#component-sql">14.7.3.
+Компоненты, плагины и определяемые пользователем функциональные запросы
+</a></span></dt>
+<dt><span><a href="sql.htm#set-statement">14.7.4. SET</a></span></dt>
+<dt><span><a href="sql.htm#show">14.7.5. SHOW</a></span></dt>
+<dt><span><a href="sql.htm#other-administrative-sql">14.7.6.
+Другие административные запросы</a></span></dt></dl></dd>
+<dt><span><a href="sql.htm#sql-syntax-utility">14.8. Служебные запросы
+</a></span></dt>
+<dd><dl><dt><span><a href="sql.htm#describe">14.8.1. DESCRIBE</a></span></dt>
+<dt><span><a href="sql.htm#explain">14.8.2. EXPLAIN</a></span></dt>
+<dt><span><a href="sql.htm#help">14.8.3. HELP</a></span></dt>
+<dt><span><a href="sql.htm#use">14.8.4. USE</a></span></dt></dl></dd></dl>
+</dd>
+<dt><span><a href="data.htm">15. Словарь данных MySQL</a></span></dt>
+<dd><dl><dt><span><a href="data.htm#data-dictionary-schema">15.1.
+Схема словаря данных</a></span></dt>
+<dt><span><a href="data.htm#data-dictionary-file-removal">15.2.
+Удаление основанного на файлах хранения метаданных</a></span></dt>
+<dt><span><a href="data.htm#data-dictionary-transactional-storage">15.3.
+Транзакционное хранение данных словаря</a></span></dt>
+<dt><span><a href="data.htm#data-dictionary-object-cache">15.4.
+Кэш объектов словаря</a></span></dt>
+<dt><span><a href="data.htm#data-dictionary-information-schema">15.5.
+Интеграция INFORMATION_SCHEMA и словаря данных</a></span></dt>
+<dt><span><a href="data.htm#data-dictionary-usage-differences">15.6.
+Различия в использовании словаря данных</a></span></dt>
+<dt><span><a href="data.htm#data-dictionary-limitations">15.7.
+Ограничения словаря данных</a></span></dt></dl></dd>
+<dt><span><a href="innodb.htm">16. Механизм хранения InnoDB</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#innodb-introduction">16.1.
+Введение в InnoDB</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#innodb-benefits">16.1.1.
+Выгода от использования таблиц InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-best-practices">16.1.2.
+Лучшие методы для таблиц InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-check-availability">16.1.3.
+Проверка, что InnoDB механизм хранения по умолчанию</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-benchmarking">16.1.4.
+Тестирование и сопоставительный анализ с InnoDB</a></span></dt></dl></dd>
+<dt><span><a href="innodb.htm#mysql-acid">16.2. InnoDB и модель ACID
+</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-multi-versioning">16.3.
+Мультиверсии InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-concepts">16.4.
+Архитектура InnoDB</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#innodb-buffer-pool-intro">16.4.1.
+Буферный пул</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-insert-buffering">16.4.2.
+Буфер изменения</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-adaptive-hash">16.4.3.
+Адаптивный хеш-индекс</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-redo-log-buffer">16.4.4.
+Буфер журнала Redo</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-system-tablespace">16.4.5.
+Системное табличное пространство</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-doublewrite-buffer">16.4.6.
+Буфер Doublewrite</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-undo-logs">16.4.7. Журнал отмены
+</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-file-per-table-intro">16.4.8.
+Табличные пространства File-Per-Table</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-general-tablespace-intro">16.4.9.
+Общие табличные пространства</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-undo-tablespace-intro">16.4.10.
+Табличное пространство отмены</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-temporary-tablespace">16.4.11.
+Временное табличное пространство</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-redo-log">16.4.12. Журнал redo</a>
+</span></dt></dl></dd>
+<dt><span><a href="innodb.htm#innodb-locking-transaction-model">16.5.
+Блокировка InnoDB и операционная модель</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#innodb-locking">16.5.1.
+Блокировка InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-transaction-model">16.5.2.
+Транзакционная модель InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-locks-set">16.5.3.
+Установка блокировок различными запросами SQL в InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-next-key-locking">16.5.4.
+Строки-призраки</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-deadlocks">16.5.5. Тупики в InnoDB
+</a></span></dt></dl></dd>
+<dt><span><a href="innodb.htm#innodb-configuration">16.6. Конфигурация InnoDB
+</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#innodb-init-startup-configuration">
+16.6.1. Конфигурация запуска InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-read-only-instance">16.6.2.
+Конфигурирование InnoDB для работы только для чтения</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-performance-buffer-pool">16.6.3.
+Конфигурация буферного пула InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-performance-change_buffering">16.6.4.
+Конфигурирование изменения буферизации InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-performance-thread_concurrency">16.6.5.
+Конфигурирование параллелизма потока для InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-performance-multiple_io_threads">16.6.6.
+Конфигурирование числа фоновых потоков ввода/вывода InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-performance-thread_io_rate">16.6.7.
+Конфигурирование ведущего уровня ввода/вывода потока InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-performance-spin_lock_polling">16.6.8.
+Конфигурирование опроса спин-блокировки</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-improved-purge-scheduling">16.6.9.
+Конфигурирование планирования чистки InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-performance-optimizer-statistics">
+16.6.10. Настройка оптимизатора статистики для InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#index-page-merge-threshold">16.6.11.
+Конфигурирование порога слияния для индексных страниц</a></span></dt></dl>
+</dd>
+<dt><span><a href="innodb.htm#innodb-tablespace">16.7.
+Табличные пространства InnoDB</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#innodb-resize-system-tablespace">
+16.7.1. Изменение размеров системного табличного пространства InnoDB</a>
+</span></dt>
+<dt><span><a href="innodb.htm#innodb-data-log-reconfiguration">16.7.2.
+Изменение числа или размера файлов системного журнала Redo</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-raw-devices">16.7.3.
+Использование сырого дискового раздела для системного табличного пространства
+</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-multiple-tablespaces">16.7.4.
+Табличные пространства InnoDB File-Per-Table</a></span></dt>
+<dt><span><a href="innodb.htm#tablespace-placing">16.7.5.
+Создание табличного пространства File-Per-Table вне каталога данных
+</a></span></dt>
+<dt><span><a href="innodb.htm#tablespace-copying">16.7.6.
+Копирование табличных пространств к другому серверу</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-undo-tablespace">16.7.7.
+Хранение журналов отмены в отдельных табличных пространствах</a></span></dt>
+<dt><span><a href="innodb.htm#truncate-undo-tablespace">16.7.8.
+Усечение журналов отмены, которые находятся в табличных пространствах отмены
+</a></span></dt>
+<dt><span><a href="innodb.htm#general-tablespaces">16.7.9.
+Общие табличные пространства InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-tablespace-encryption">16.7.10.
+Шифрование табличного пространства InnoDB</a></span></dt></dl></dd>
+<dt><span><a href="innodb.htm#innodb-tables">16.8. Таблицы и индексы InnoDB
+</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#using-innodb-tables">16.8.1.
+Составление таблиц InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-physical-record">16.8.2.
+Физическая структура строки таблиц InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-migration">16.8.3.
+Перемещение или копирование таблиц InnoDB в другую машину</a></span></dt>
+<dt><span><a href="innodb.htm#converting-tables-to-innodb">16.8.4.
+Преобразование таблиц из MyISAM в InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-auto-increment-handling">16.8.5.
+Обработка AUTO_INCREMENT в InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-foreign-key-constraints">16.8.6.
+InnoDB и ограничения FOREIGN KEY</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-restrictions">16.8.7.
+Пределы на таблицах InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-index-types">16.8.8.
+Кластеризируемый и вторичный индексы</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-fulltext-index">16.8.9.
+Индексы InnoDB FULLTEXT</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-physical-structure">16.8.10.
+Физическая структура индексов InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#sorted-index-builds">16.8.11.
+Создание сортированного индекса</a></span></dt></dl></dd>
+<dt><span><a href="innodb.htm#innodb-compression">16.9.
+Таблица InnoDB и сжатие страницы</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#innodb-table-compression">16.9.1.
+Табличное сжатие InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-page-compression">16.9.2.
+Сжатие страницы InnoDB</a></span></dt></dl></dd>
+<dt><span><a href="innodb.htm#innodb-row-format">16.10.
+Форматы хранения и строки InnoDB</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#innodb-row-format-overview">16.10.1.
+Краткий обзор хранения строки InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-row-format-specification">16.10.2.
+Определение формата строки для таблицы</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-row-format-dynamic">16.10.3.
+Форматы строки DYNAMIC и COMPRESSED</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-row-format-antelope">16.10.4.
+Форматы строки COMPACT и REDUNDANT</a></span></dt></dl></dd>
+<dt><span><a href="innodb.htm#innodb-disk-management">16.11.
+Управление вводом/выводом и местом в файлах</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#innodb-disk-io">16.11.1.
+Дисковый ввод/вывод</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-file-space">16.11.2.
+Управление пространством файла</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-checkpoints">16.11.3.
+Контрольные точки InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-file-defragmenting">16.11.4.
+Дефрагментация таблиц</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-truncate-table-reclaim-space">16.11.5.
+Восстановление дискового пространства с TRUNCATE TABLE</a></span></dt></dl>
+</dd>
+<dt><span><a href="innodb.htm#innodb-online-ddl">16.12. InnoDB и Online DDL
+</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#innodb-create-index-overview">16.12.1.
+Обзор Online DDL</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-create-index-concurrency">16.12.2.
+Работа и соображения параллелизма для Online DDL</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-online-ddl-syntax">16.12.3.
+Синтаксис SQL для онлайн DDL</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-online-ddl-single-multi">16.12.4.
+Объединение или отделение запросов DDL</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-create-index-examples">16.12.5.
+Примеры Online DDL</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-create-index-implementation">16.12.6.
+Детали выполнения DDL онлайн</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-create-index-recovery">16.12.7.
+Восстановление катастрофического отказа с DDL онлайн</a></span></dt>
+<dt><span><a href="innodb.htm#online-ddl-partitioning">16.12.8.
+Online DDL для разделенных таблиц InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-create-index-limitations">16.12.9.
+Ограничения Online DDL</a></span></dt></dl></dd>
+<dt><span><a href="innodb.htm#innodb-parameters">16.13.
+Опции запуска InnoDB и системные переменные</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-information-schema">16.14.
+Таблицы InnoDB INFORMATION_SCHEMA</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#innodb-information-schema-compression-tables">
+16.14.1. InnoDB INFORMATION_SCHEMA о сжатии</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-information-schema-transactions">
+16.14.2. Информация о транзакциях и блокировках в InnoDB INFORMATION_SCHEMA
+</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-information-schema-system-tables">
+16.14.3. Системные таблицы InnoDB INFORMATION_SCHEMA</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-information-schema-fulltext_index-tables">
+16.14.4. Таблицы индекса InnoDB INFORMATION_SCHEMA FULLTEXT</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-information-schema-buffer-pool-tables">
+16.14.5. Таблицы буферного пула InnoDB INFORMATION_SCHEMA</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-information-schema-metrics-table">
+16.14.6. Таблица метрик InnoDB INFORMATION_SCHEMA</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-information-schema-temp-table-info">
+16.14.7. Информация о временных таблицах в InnoDB INFORMATION_SCHEMA</a>
+</span></dt>
+<dt><span><a href="innodb.htm#innodb-information-schema-files-table">
+16.14.8. Получение метаданных о табличном пространстве из
+INFORMATION_SCHEMA.FILES</a></span></dt></dl></dd>
+<dt><span><a href="innodb.htm#innodb-performance-schema">16.15.
+Интеграция с MySQL Performance Schema</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#monitor-alter-table-performance-schema">
+16.15.1. Контроль ALTER TABLE для таблиц InnoDB, используя Performance Schema
+</a></span></dt>
+<dt><span><a href="innodb.htm#monitor-innodb-mutex-waits-performance-schema">
+16.15.2. Мониторинг InnoDB Mutex Waits с Performance Schema
+</a></span></dt></dl></dd>
+<dt><span><a href="innodb.htm#innodb-monitors">16.16. Мониторы InnoDB
+</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#innodb-monitor-types">16.16.1.
+Типы мониторов InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-enabling-monitors">16.16.2.
+Включение мониторов InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-standard-monitor">16.16.3.
+Вывод InnoDB Standard Monitor и Lock Monitor</a></span></dt></dl></dd>
+<dt><span><a href="innodb.htm#innodb-backup">16.17.
+Резервирование и восстановление InnoDB</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#innodb-recovery">16.17.1.
+Процесс восстановления InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-recovery-tablespace-discovery">16.17.2.
+Открытие табличного пространства во время
+восстановления катастрофического отказа</a></span></dt></dl></dd>
+<dt><span><a href="innodb.htm#innodb-and-mysql-replication">16.18.
+InnoDB и репликация MySQL</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-memcached">16.19.
+Плагин InnoDB memcached</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#innodb-memcached-benefits">16.19.1.
+Выгода от плагина InnoDB memcached</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-memcached-intro">16.19.2.
+Архитектура InnoDB memcached</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-memcached-setup">16.19.3.
+Установка плагина InnoDB memcached</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-memcached-multiple-get-range-query">
+16.19.4. Поддержка запроса диапазона и множественные memcached get
+</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-memcached-security">16.19.5.
+Соображения безопасности для InnoDB memcached</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-memcached-developing">16.19.6.
+Написание приложений для плагина InnoDB memcached</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-memcached-replication">16.19.7.
+Репликация и плагин InnoDB memcached</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-memcached-internals">16.19.8.
+Внутренности плагина InnoDB memcached</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-memcached-troubleshoot">16.19.9.
+Проблемы с InnoDB memcached</a></span></dt></dl></dd>
+<dt><span><a href="innodb.htm#innodb-troubleshooting">16.20.
+Проблемы с InnoDB</a></span></dt>
+<dd><dl><dt><span><a href="innodb.htm#error-creating-innodb">16.20.1.
+Проблемы с InnoDB I/O</a></span></dt>
+<dt><span><a href="innodb.htm#forcing-innodb-recovery">16.20.2.
+Восстановление InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-troubleshooting-datadict">16.20.3.
+Проблемы словаря данных InnoDB</a></span></dt>
+<dt><span><a href="innodb.htm#innodb-error-handling">16.20.4.
+Обработка ошибок InnoDB</a></span></dt></dl></dd></dl></dd>
+<dt><span><a href="storage.htm">17. Механизмы хранения</a></span></dt>
+<dd><dl><dt><span><a href="storage.htm#storage-engine-setting">17.1.
+Установка механизма хранения</a></span></dt>
+<dt><span><a href="storage.htm#myisam-storage-engine">17.2.
+Механизм хранения MyISAM</a></span></dt>
+<dd><dl><dt><span><a href="storage.htm#myisam-start">17.2.1.
+Опции запуска MyISAM</a></span></dt>
+<dt><span><a href="storage.htm#key-space">17.2.2.
+Необходимое пространство для ключей</a></span></dt>
+<dt><span><a href="storage.htm#myisam-table-formats">17.2.3.
+Табличные форматы хранения MyISAM</a></span></dt>
+<dt><span><a href="storage.htm#myisam-table-problems">17.2.4.
+Проблемы таблиц MyISAM</a></span></dt></dl></dd>
+<dt><span><a href="storage.htm#memory-storage-engine">17.3.
+Механизм хранения MEMORY</a></span></dt>
+<dt><span><a href="storage.htm#csv-storage-engine">17.4.
+Механизм хранения CSV</a></span></dt>
+<dd><dl><dt><span><a href="storage.htm#se-csv-repair">17.4.1.
+Восстановление и проверка таблиц CSV</a></span></dt>
+<dt><span><a href="storage.htm#se-csv-limitations">17.4.2. Ограничения CSV
+</a></span></dt></dl></dd>
+<dt><span><a href="storage.htm#archive-storage-engine">17.5.
+Механизм хранения ARCHIVE</a></span></dt>
+<dt><span><a href="storage.htm#blackhole-storage-engine">17.6.
+Механизм хранения BLACKHOLE</a></span></dt>
+<dt><span><a href="storage.htm#merge-storage-engine">17.7.
+Механизм хранения MERGE</a></span></dt>
+<dd><dl><dt><span><a href="storage.htm#merge-table-advantages">17.7.1.
+Табличные преимущества и недостатки MERGE</a></span></dt>
+<dt><span><a href="storage.htm#merge-table-problems">17.7.2.
+Табличные проблемы MERGE</a></span></dt></dl></dd>
+<dt><span><a href="storage.htm#federated-storage-engine">17.8.
+Механизм хранения FEDERATED</a></span></dt>
+<dd><dl><dt><span><a href="storage.htm#federated-description">17.8.1.
+Краткий обзор механизма хранения FEDERATED</a></span></dt>
+<dt><span><a href="storage.htm#federated-create">17.8.2.
+Как составить таблицу FEDERATED</a></span></dt>
+<dt><span><a href="storage.htm#federated-usagenotes">17.8.3.
+Примечания и подсказки о механизме хранения FEDERATED</a></span></dt>
+<dt><span><a href="storage.htm#federated-storage-engine-resources">17.8.4.
+Ресурсы механизма хранения FEDERATED</a></span></dt></dl></dd>
+<dt><span><a href="storage.htm#example-storage-engine">17.9.
+Механизм хранения EXAMPLE</a></span></dt>
+<dt><span><a href="storage.htm#storage-engines-other">17.10.
+Другие механизмы хранения</a></span></dt>
+<dt><span><a href="storage.htm#pluggable-storage-overview">17.11.
+Краткий обзор MySQL Storage Engine Architecture</a></span></dt>
+<dd><dl><dt><span><a href="storage.htm#pluggable-storage">17.11.1.
+Архитектура подключаемого механизма хранения</a></span></dt>
+<dt><span><a href="storage.htm#pluggable-storage-common-layer">17.11.2.
+Общий уровень базы данных сервера</a></span></dt></dl></dd></dl></dd>
+<dt><span><a href="ha.htm">18. Высокая доступность и масштабируемость</a>
+</span></dt>
+<dd><dl><dt><span><a href="ha.htm#ha-zfs-replication">18.1.
+Использование репликации ZFS</a></span></dt>
+<dd><dl><dt><span><a href="ha.htm#ha-zfs-config">18.1.1.
+Использование ZFS для репликации файловой системы</a></span></dt>
+<dt><span><a href="ha.htm#ha-zfs-mysql">18.1.2.
+Конфигурирование MySQL для репликации ZFS</a></span></dt>
+<dt><span><a href="ha.htm#ha-zfs-mysql-recovery">18.1.3.
+Обработка восстановления MySQL с ZFS</a></span></dt></dl></dd>
+<dt><span><a href="ha.htm#ha-memcached">18.2.
+Использование MySQL с <span><strong>memcached</strong></span></a></span></dt>
+<dd><dl><dt><span><a href="ha.htm#ha-memcached-install">18.2.1.
+Установка <span><strong>memcached</strong></span></a></span></dt>
+<dt><span><a href="ha.htm#ha-memcached-using">18.2.2. Применение
+<span><strong>memcached</strong></span></a></span></dt>
+<dt><span><a href="ha.htm#ha-memcached-interfaces">18.2.3.
+Разработка приложений <span><strong>memcached</strong></span></dt>
+<dt><span><a href="ha.htm#ha-memcached-stats">18.2.4.
+Получение статистики <span><strong>memcached</strong></span></dt>
+<dt><span><a href="ha.htm#ha-memcached-faq">18.2.5.
+<span><strong>memcached</strong></span> FAQ</dt></dl></dd></dl></dd>
+<dt><span><a href="replica.htm">19. Репликация</a></span></dt>
+<dd><dl><dt><span><a href="replica.htm#replication-configuration">19.1.
+Конфигурирование репликации</a></span></dt>
+<dd><dl><dt><span>
+<a href="replica.htm#binlog-replication-configuration-overview">19.1.1.
+Краткий обзор конфигурации репликации на основе
+двоичной позиции файла системного журнала</a></span></dt>
+<dt><span><a href="replica.htm#replication-howto">19.1.2.
+Установка двоичной позиции файла системного журнала</a></span></dt>
+<dt><span><a href="replica.htm#replication-gtids">19.1.3.
+Репликация с глобальными операционными идентификаторами</a></span></dt>
+<dt><span><a href="replica.htm#replication-multi-source">19.1.4.
+Репликация с нескольких источников</a></span></dt>
+<dt><span><a href="replica.htm#replication-mode-change-online">19.1.5.
+Изменение режимов репликации на серверах онлайн</a></span></dt>
+<dt><span><a href="replica.htm#replication-options">19.1.6.
+Репликация и опции двоичного журналирования</a></span></dt>
+<dt><span><a href="replica.htm#replication-administration">19.1.7.
+Общие задачи управления репликацией</a></span></dt></dl></dd>
+<dt><span><a href="replica.htm#replication-implementation">19.2.
+Выполнение репликации</a></span></dt>
+<dd><dl><dt><span><a href="replica.htm#replication-formats">19.2.1.
+Форматы репликации</a></span></dt>
+<dt><span><a href="replica.htm#replication-implementation-details">19.2.2.
+Детали выполнения репликации</a></span></dt>
+<dt><span><a href="replica.htm#replication-channels">19.2.3.
+Каналы репликации</a></span></dt>
+<dt><span><a href="replica.htm#slave-logs">19.2.4.
+Реле репликации и журналы состояния</a></span></dt>
+<dt><span><a href="replica.htm#replication-rules">19.2.5.
+Как серверы оценивают правила фильтрации репликации</a></span></dt></dl></dd>
+<dt><span><a href="replica.htm#replication-solutions">19.3.
+Решения для репликации</a></span></dt>
+<dd><dl><dt><span><a href="replica.htm#replication-solutions-backups">19.3.1.
+Использование репликации для резервных копий</a></span></dt>
+<dt><span><a href="replica.htm#replication-solutions-unexpected-slave-halt">
+19.3.2. Обработка неожиданного останова ведомого устройства репликации
+</a></span></dt>
+<dt><span><a href="replica.htm#replication-solutions-rbr-monitoring">19.3.3.
+Контроль основанной на строке репликации</a></span></dt>
+<dt><span><a href="replica.htm#replication-solutions-diffengines">19.3.4.
+Используя репликацию с различными основными и ведомыми механизмами хранения
+</a></span></dt>
+<dt><span><a href="replica.htm#replication-solutions-scaleout">19.3.5.
+Использование репликации для масштаба</a></span></dt>
+<dt><span><a href="replica.htm#replication-solutions-partitioning">19.3.6.
+Мультиплицирование различных баз данных к различным ведомым устройствам
+</a></span></dt>
+<dt><span><a href="replica.htm#replication-solutions-performance">19.3.7.
+Улучшение работы репликации</a></span></dt>
+<dt><span><a href="replica.htm#replication-solutions-switch">19.3.8.
+Переключающиеся ведущие устройства</a></span></dt>
+<dt><span><a href="replica.htm#replication-solutions-secure-connections">
+19.3.9. Настройка репликации, чтобы использовать безопасные соединения
+</a></span></dt>
+<dt><span><a href="replica.htm#replication-semisync">19.3.10.
+Полусинхронная репликация</a></span></dt>
+<dt><span><a href="replica.htm#replication-delayed">19.3.11.
+Отсроченная репликация</a></span></dt></dl></dd>
+<dt><span><a href="replica.htm#replication-notes">19.4.
+Примечания и подсказки репликации</a></span></dt>
+<dd><dl><dt><span><a href="replica.htm#replication-features">19.4.1.
+Особенности и проблемы репликации</a></span></dt>
+<dt><span><a href="replica.htm#replication-compatibility">19.4.2.
+Совместимость репликации между версиями MySQL</a></span></dt>
+<dt><span><a href="replica.htm#replication-upgrade">19.4.3.
+Обновление установки репликации</a></span></dt>
+<dt><span><a href="replica.htm#replication-problems">19.4.4.
+Поиск неисправностей репликации</a></span></dt>
+<dt><span><a href="replica.htm#replication-bugs">19.4.5.
+Как сообщить об ошибках или проблемах репликации</a></span></dt>
+</dl></dd></dl></dd>
+<dt><span><a href="partit.htm">20. Разделение</a></span></dt>
+<dd><dl><dt><span><a href="partit.htm#partitioning-overview">20.1.
+Краткий обзор разделения в MySQL</a></span></dt>
+<dt><span><a href="partit.htm#partitioning-types">20.2. Типы разделения</a>
+</span></dt>
+<dd><dl><dt><span><a href="partit.htm#partitioning-range">20.2.1. RANGE</a>
+</span></dt>
+<dt><span><a href="partit.htm#partitioning-list">20.2.2. LIST</a></span></dt>
+<dt><span><a href="partit.htm#partitioning-columns">20.2.3. COLUMNS</a>
+</span></dt>
+<dt><span><a href="partit.htm#partitioning-hash">20.2.4. HASH</a></span></dt>
+<dt><span><a href="partit.htm#partitioning-key">20.2.5. KEY</a></span></dt>
+<dt><span><a href="partit.htm#partitioning-subpartitions">20.2.6.
+Подразделение</a></span></dt>
+<dt><span><a href="partit.htm#partitioning-handling-nulls">20.2.7.
+Как MySQL обрабатывает NULL в разделах</a></span></dt></dl></dd>
+<dt><span><a href="partit.htm#partitioning-management">20.3.
+Управление разделением</a></span></dt>
+<dd><dl><dt><span><a href="partit.htm#partitioning-management-range-list">
+20.3.1. Управление RANGE и LIST</a></span></dt>
+<dt><span><a href="partit.htm#partitioning-management-hash-key">20.3.2.
+Управление HASH и KEY</a></span></dt>
+<dt><span><a href="partit.htm#partitioning-management-exchange">20.3.3.
+Обмен разделами с таблицами</a></span></dt>
+<dt><span><a href="partit.htm#partitioning-maintenance">20.3.4.
+Обслуживание разделения</a></span></dt>
+<dt><span><a href="partit.htm#partitioning-info">20.3.5.
+Получение информации о разделении</a></span></dt></dl></dd>
+<dt><span><a href="partit.htm#partitioning-pruning">20.4.
+Сокращение разделения</a></span></dt>
+<dt><span><a href="partit.htm#partitioning-selection">20.5. Выбор разделения
+</a></span></dt>
+<dt><span><a href="partit.htm#partitioning-limitations">20.6.
+Ограничения на разделение</a></span></dt>
+<dd><dl><dt><span><a href="partit.htm#partitioning-limitations-partitioning-keys-unique-keys">
+20.6.1. Первичные и уникальные ключи</a></span></dt>
+<dt><span><a href="partit.htm#partitioning-limitations-storage-engines">
+20.6.2. Ограничения, касающиеся механизмов хранения</a></span></dt>
+<dt><span><a href="partit.htm#partitioning-limitations-functions">20.6.3.
+Ограничения, касающиеся функций</a></span></dt></dl></dd></dl></dd>
+<dt><span><a href="stored.htm">21. Сохраненные программы и представления
+</a></span></dt>
+<dd><dl><dt><span><a href="stored.htm#stored-programs-defining">21.1.
+Определение сохраненных программ</a></span></dt>
+<dt><span><a href="stored.htm#stored-routines">21.2.
+Использование сохраненных подпрограмм (процедуры и функции)</a></span></dt>
+<dd><dl><dt><span><a href="stored.htm#stored-routines-syntax">21.2.1.
+Синтаксис подпрограмм</a></span></dt>
+<dt><span><a href="stored.htm#stored-routines-privileges">21.2.2.
+Сохраненные подпрограммы и привилегии MySQL</a></span></dt>
+<dt><span><a href="stored.htm#stored-routines-metadata">21.2.3.
+Сохраненные метаданные</a></span></dt>
+<dt><span><a href="stored.htm#stored-routines-last-insert-id">21.2.4.
+Хранимые процедуры, функции, триггеры и LAST_INSERT_ID()
+</a></span></dt></dl></dd>
+<dt><span><a href="stored.htm#triggers">21.3. Использование триггеров
+</a></span></dt>
+<dd><dl><dt><span><a href="stored.htm#trigger-syntax">21.3.1.
+Синтаксис и примеры триггеров</a></span></dt>
+<dt><span><a href="stored.htm#trigger-metadata">21.3.2.
+Метаданные триггеров</a></span></dt></dl></dd>
+<dt><span><a href="stored.htm#event-scheduler">21.4.
+Использование планировщика событий</a></span></dt>
+<dd><dl><dt><span><a href="stored.htm#events-overview">21.4.1.
+Краткий обзор планировщика событий</a></span></dt>
+<dt><span><a href="stored.htm#events-configuration">21.4.2.
+Конфигурация планировщика событий</a></span></dt>
+<dt><span><a href="stored.htm#events-syntax">21.4.3. Синтаксис событий
+</a></span></dt>
+<dt><span><a href="stored.htm#events-metadata">21.4.4. Метаданные событий
+</a></span></dt>
+<dt><span><a href="stored.htm#events-status-info">21.4.5.
+Состояние планировщика событий</a></span></dt>
+<dt><span><a href="stored.htm#events-privileges">21.4.6.
+Привилегии планировщика и событий MySQL</a></span></dt></dl></dd>
+<dt><span><a href="stored.htm#views">21.5. Использование представлений
+</a></span></dt>
+<dd><dl><dt><span><a href="stored.htm#view-syntax">21.5.1.
+Синтаксис представления</a></span></dt>
+<dt><span><a href="stored.htm#view-algorithms">21.5.2.
+Алгоритмы обработки представления</a></span></dt>
+<dt><span><a href="stored.htm#view-updatability">21.5.3.
+Обновляемые и вставляемые представления</a></span></dt>
+<dt><span><a href="stored.htm#view-check-option">21.5.4.
+Предложение WITH CHECK OPTION</a></span></dt>
+<dt><span><a href="stored.htm#view-metadata">21.5.5.
+Метаданные о представлении</a></span></dt></dl></dd>
+<dt><span><a href="stored.htm#stored-programs-security">21.6.
+Управление доступом для сохраненных программ и представлений</a></span></dt>
+<dt><span><a href="stored.htm#stored-programs-logging">21.7.
+Двоичное журналирование сохраненных программ</a></span></dt></dl></dd>
+<dt><span><a href="inform.htm">22. Таблицы INFORMATION_SCHEMA</a></span></dt>
+<dd><dl><dt><span><a href="inform.htm#character-sets-table">22.1.
+Таблица INFORMATION_SCHEMA CHARACTER_SETS</a></span></dt>
+<dt><span><a href="inform.htm#collations-table">22.2.
+Таблица INFORMATION_SCHEMA COLLATIONS</a></span></dt>
+<dt><span><a href="inform.htm#collation-character-set-applicability-table">
+22.3. Таблица INFORMATION_SCHEMA COLLATION_CHARACTER_SET_APPLICABILITY
+</a></span></dt>
+<dt><span><a href="inform.htm#columns-table">22.4.
+Таблица INFORMATION_SCHEMA COLUMNS</a></span></dt>
+<dt><span><a href="inform.htm#column-privileges-table">22.5.
+Таблица INFORMATION_SCHEMA COLUMN_PRIVILEGES</a></span></dt>
+<dt><span><a href="inform.htm#engines-table">22.6.
+Таблица INFORMATION_SCHEMA ENGINES</a></span></dt>
+<dt><span><a href="inform.htm#events-table">22.7.
+Таблица INFORMATION_SCHEMA EVENTS</a></span></dt>
+<dt><span><a href="inform.htm#files-table">22.8.
+Таблица INFORMATION_SCHEMA FILES</a></span></dt>
+<dt><span><a href="inform.htm#status-table">22.9.
+Таблицы INFORMATION_SCHEMA GLOBAL_STATUS и SESSION_STATUS</a></span></dt>
+<dt><span><a href="inform.htm#variables-table">22.10.
+INFORMATION_SCHEMA GLOBAL_VARIABLES и SESSION_VARIABLES</a></span></dt>
+<dt><span><a href="inform.htm#key-column-usage-table">22.11.
+Таблица INFORMATION_SCHEMA KEY_COLUMN_USAGE</a></span></dt>
+<dt><span><a href="inform.htm#optimizer-trace-table">22.12.
+Таблица INFORMATION_SCHEMA OPTIMIZER_TRACE</a></span></dt>
+<dt><span><a href="inform.htm#parameters-table">22.13.
+Таблица INFORMATION_SCHEMA PARAMETERS</a></span></dt>
+<dt><span><a href="inform.htm#partitions-table">22.14.
+Таблица INFORMATION_SCHEMA PARTITIONS</a></span></dt>
+<dt><span><a href="inform.htm#plugins-table">22.15.
+Таблица INFORMATION_SCHEMA PLUGINS</a></span></dt>
+<dt><span><a href="inform.htm#processlist-table">22.16.
+Таблица INFORMATION_SCHEMA PROCESSLIST</a></span></dt>
+<dt><span><a href="inform.htm#profiling-table">22.17.
+Таблица INFORMATION_SCHEMA PROFILING</a></span></dt>
+<dt><span><a href="inform.htm#referential-constraints-table">22.18.
+Таблица INFORMATION_SCHEMA REFERENTIAL_CONSTRAINTS</a></span></dt>
+<dt><span><a href="inform.htm#routines-table">22.19.
+Таблица INFORMATION_SCHEMA ROUTINES</a></span></dt>
+<dt><span><a href="inform.htm#schemata-table">22.20.
+Таблица INFORMATION_SCHEMA SCHEMATA</a></span></dt>
+<dt><span><a href="inform.htm#schema-privileges-table">22.21.
+Таблица INFORMATION_SCHEMA SCHEMA_PRIVILEGES</a></span></dt>
+<dt><span><a href="inform.htm#statistics-table">22.22.
+Таблицы INFORMATION_SCHEMA STATISTICS и STATISTICS_DYNAMIC</a></span></dt>
+<dt><span><a href="inform.htm#tables-table">22.23.
+Таблицы INFORMATION_SCHEMA TABLES и TABLES_DYNAMIC</a></span></dt>
+<dt><span><a href="inform.htm#tablespaces-table">22.24.
+Таблица INFORMATION_SCHEMA TABLESPACES</a></span></dt>
+<dt><span><a href="inform.htm#table-constraints-table">22.25.
+Таблица INFORMATION_SCHEMA TABLE_CONSTRAINTS</a></span></dt>
+<dt><span><a href="inform.htm#table-privileges-table">22.26.
+Таблица INFORMATION_SCHEMA TABLE_PRIVILEGES</a></span></dt>
+<dt><span><a href="inform.htm#triggers-table">22.27.
+Таблица INFORMATION_SCHEMA TRIGGERS</a></span></dt>
+<dt><span><a href="inform.htm#user-privileges-table">22.28.
+Таблица INFORMATION_SCHEMA USER_PRIVILEGES</a></span></dt>
+<dt><span><a href="inform.htm#views-table">22.29.
+Таблица INFORMATION_SCHEMA VIEWS</a></span></dt>
+<dt><span><a href="inform.htm#innodb-i_s-tables">22.30.
+Таблицы InnoDB INFORMATION_SCHEMA</a></span></dt>
+<dd><dl><dt><span><a href="inform.htm#innodb-buffer-page-table">22.30.1.
+Таблица INFORMATION_SCHEMA INNODB_BUFFER_PAGE</a></span></dt>
+<dt><span><a href="inform.htm#innodb-buffer-page-lru-table">22.30.2.
+Таблица INFORMATION_SCHEMA INNODB_BUFFER_PAGE_LRU</a></span></dt>
+<dt><span><a href="inform.htm#innodb-buffer-pool-stats-table">22.30.3.
+Таблица INFORMATION_SCHEMA INNODB_BUFFER_POOL_STATS</a></span></dt>
+<dt><span><a href="inform.htm#innodb-cached-indexes-table">22.30.4.
+Таблица INFORMATION_SCHEMA INNODB_CACHED_INDEXES</a></span></dt>
+<dt><span><a href="inform.htm#innodb-cmp-table">22.30.5.
+Таблицы INFORMATION_SCHEMA INNODB_CMP и INNODB_CMP_RESET</a></span></dt>
+<dt><span><a href="inform.htm#innodb-cmpmem-table">22.30.6.
+Таблицы INFORMATION_SCHEMA INNODB_CMPMEM и INNODB_CMPMEM_RESET
+</a></span></dt>
+<dt><span><a href="inform.htm#innodb-cmp-per-index-table">22.30.7.
+Таблицы INFORMATION_SCHEMA INNODB_CMP_PER_INDEX и
+INNODB_CMP_PER_INDEX_RESET</a></span></dt>
+<dt><span><a href="inform.htm#innodb-ft-being-deleted-table">22.30.8.
+Таблица INFORMATION_SCHEMA INNODB_FT_BEING_DELETED</a></span></dt>
+<dt><span><a href="inform.htm#innodb-ft-config-table">22.30.9.
+Таблица INFORMATION_SCHEMA INNODB_FT_CONFIG</a></span></dt>
+<dt><span><a href="inform.htm#innodb-ft-default-stopword-table">22.30.10.
+Таблица INFORMATION_SCHEMA INNODB_FT_DEFAULT_STOPWORD</a></span></dt>
+<dt><span><a href="inform.htm#innodb-ft-deleted-table">22.30.11.
+Таблица INFORMATION_SCHEMA INNODB_FT_DELETED</a></span></dt>
+<dt><span><a href="inform.htm#innodb-ft-index-cache-table">22.30.12.
+Таблица INFORMATION_SCHEMA INNODB_FT_INDEX_CACHE</a></span></dt>
+<dt><span><a href="inform.htm#innodb-ft-index-table-table">22.30.13.
+Таблица INFORMATION_SCHEMA INNODB_FT_INDEX_TABLE</a></span></dt>
+<dt><span><a href="inform.htm#innodb-locks-table">22.30.14.
+Таблица INFORMATION_SCHEMA INNODB_LOCKS</a></span></dt>
+<dt><span><a href="inform.htm#innodb-lock-waits-table">22.30.15.
+Таблица INFORMATION_SCHEMA INNODB_LOCK_WAITS</a></span></dt>
+<dt><span><a href="inform.htm#innodb-metrics-table">22.30.16.
+Таблица INFORMATION_SCHEMA INNODB_METRICS</a></span></dt>
+<dt><span><a href="inform.htm#innodb-sys-columns-table">22.30.17.
+Таблица INFORMATION_SCHEMA INNODB_SYS_COLUMNS</a></span></dt>
+<dt><span><a href="inform.htm#innodb-sys-datafiles-table">22.30.18.
+Таблица INFORMATION_SCHEMA INNODB_SYS_DATAFILES</a></span></dt>
+<dt><span><a href="inform.htm#innodb-sys-fields-table">22.30.19.
+Таблица INFORMATION_SCHEMA INNODB_SYS_FIELDS</a></span></dt>
+<dt><span><a href="inform.htm#innodb-sys-foreign-table">22.30.20.
+Таблица INFORMATION_SCHEMA INNODB_SYS_FOREIGN</a></span></dt>
+<dt><span><a href="inform.htm#innodb-sys-foreign-cols-table">22.30.21.
+Таблица INFORMATION_SCHEMA INNODB_SYS_FOREIGN_COLS</a></span></dt>
+<dt><span><a href="inform.htm#innodb-sys-indexes-table">22.30.22.
+Таблица INFORMATION_SCHEMA INNODB_SYS_INDEXES</a></span></dt>
+<dt><span><a href="inform.htm#innodb-sys-tables-table">22.30.23.
+Таблица INFORMATION_SCHEMA INNODB_SYS_TABLES</a></span></dt>
+<dt><span><a href="inform.htm#innodb-sys-tablespaces-table">22.30.24.
+Таблица INFORMATION_SCHEMA INNODB_SYS_TABLESPACES</a></span></dt>
+<dt><span><a href="inform.htm#innodb-sys-tablestats-table">22.30.25.
+Таблица INFORMATION_SCHEMA INNODB_SYS_TABLESTATS View</a></span></dt>
+<dt><span><a href="inform.htm#innodb-sys-virtual-table">22.30.26.
+Таблица INFORMATION_SCHEMA INNODB_SYS_VIRTUAL</a></span></dt>
+<dt><span><a href="inform.htm#innodb-temp-table-info-table">22.30.27.
+Таблица INFORMATION_SCHEMA INNODB_TEMP_TABLE_INFO</a></span></dt>
+<dt><span><a href="inform.htm#innodb-trx-table">22.30.28.
+Таблица INFORMATION_SCHEMA INNODB_TRX</a></span></dt></dl></dd>
+<dt><span><a href="inform.htm#extended-show">22.31.
+Расширения запроса SHOW</a></span></dt></dl></dd>
+<dt><span><a href="perfor.htm">23. MySQL Performance Schema</a></span></dt>
+<dd><dl><dt><span><a href="perfor.htm#performance-schema-quick-start">23.1.
+Быстрый запуск Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-configuration">23.2.
+Конфигурация Performance Schema</a></span></dt>
+<dd><dl><dt><span><a href="perfor.htm#performance-schema-build-configuration">
+23.2.1. Создание конфигурации Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-startup-configuration">
+23.2.2. Конфигурация запуска Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-runtime-configuration">
+23.2.3. Конфигурация Performance Schema во время работы</a></span>
+</dt></dl></dd>
+<dt><span><a href="perfor.htm#performance-schema-queries">23.3.
+Запросы Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-instrument-naming">23.4.
+Соглашения о присвоении имен инструментам Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-status-monitoring">23.5.
+Контроль состояния Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-atom-molecule-events">23.6.
+События атома и молекулы Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-statement-digests">23.7.
+Обзоры запроса Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-table-characteristics">23.8.
+Общие табличные характеристики Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-table-descriptions">23.9.
+Описания таблиц Performance Schema</a></span></dt>
+<dd><dl><dt><span><a href="perfor.htm#performance-schema-table-index">23.9.1.
+Индекс таблиц Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-setup-tables">23.9.2.
+Таблицы установки Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-instance-tables">23.9.3.
+Таблицы случая Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-wait-tables">23.9.4.
+Таблицы ожидания событий Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-stage-tables">23.9.5.
+Таблицы событий этапа Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-statement-tables">23.9.6.
+Таблицы событий запросов Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-transaction-tables">23.9.7.
+Операционные таблицы Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-connection-tables">23.9.8.
+Таблицы соединения Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-connection-attribute-tables">
+23.9.9. Таблицы атрибутов соединения Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-user-variable-tables">
+23.9.10. Таблицы пользовательских переменных Performance Schema</a></span>
+</dt>
+<dt><span><a href="perfor.htm#performance-schema-replication-tables">23.9.11.
+Таблицы репликации Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-lock-tables">23.9.12.
+Таблицы блокировки Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-system-variable-tables">
+23.9.13. Системные таблицы переменных Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-status-variable-tables">
+23.9.14. Таблицы состояния переменных Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-summary-tables">23.9.15.
+Сводные таблицы Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-miscellaneous-tables">
+23.9.16. Прочие таблицы Performance Schema</a></span></dt></dl></dd>
+<dt><span><a href="perfor.htm#performance-schema-option-variable-reference">
+23.10. Обзор опций и переменных Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-options">23.11.
+Опции команд Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-system-variables">23.12.
+Системные переменные Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-status-variables">23.13.
+Переменные состояния Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-memory-model">23.14.
+Модель распределения памяти Performance Schema</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-and-plugins">23.15.
+Performance Schema и плагины</a></span></dt>
+<dt><span><a href="perfor.htm#performance-schema-examples">23.16.
+Применение Performance Schema, чтобы диагностировать проблемы</a></span></dt>
+<dd><dl><dt><span><a href="perfor.htm#performance-schema-query-profiling">
+23.16.1. Профилирование запроса, используя Performance Schema
+</a></span></dt></dl></dd>
+<dt><span><a href="perfor.htm#performance-schema-variable-table-migration">
+23.17. Переход к таблицам переменных системы и состояния Performance Schema
+</a></span></dt></dl></dd>
+<dt><span><a href="sys.htm">24. MySQL sys Schema</a></span></dt>
+<dd><dl><dt><span><a href="sys.htm#sys-schema-prerequisites">24.1.
+Предпосылки для использования sys Schema</a></span></dt>
+<dt><span><a href="sys.htm#sys-schema-usage">24.2. Применение sys Schema
+</a></span></dt>
+<dt><span><a href="sys.htm#sys-schema-progress-reporting">24.3.
+Сообщение продвижения sys Schema</a></span></dt>
+<dt><span><a href="sys.htm#sys-schema-reference">24.4.
+Объектная ссылка sys Schema</a></span></dt>
+<dd><dl><dt><span><a href="sys.htm#sys-schema-object-index">24.4.1.
+Индекс объектов sys Schema</a></span></dt>
+<dt><span><a href="sys.htm#sys-schema-tables">24.4.2.
+Таблицы и триггеры sys Schema</a></span></dt>
+<dt><span><a href="sys.htm#sys-schema-views">24.4.3.
+Представления sys Schema</a></span></dt>
+<dt><span><a href="sys.htm#sys-schema-procedures">24.4.4.
+Хранимые процедуры sys Schema</a></span></dt>
+<dt><span><a href="sys.htm#sys-schema-functions">24.4.5.
+Хранимые функции sys Schema</a></span></dt></dl></dd></dl></dd>
+<dt><span><a href="connect.htm">25. Коннекторы и API</a></span></dt>
+<dd><dl><dt><span><a href="connect.htm#connector-odbc-info">25.1.
+MySQL Connector/ODBC</a></span></dt>
+<dt><span><a href="connect.htm#connector-net-info">25.2. MySQL Connector/Net
+</a></span></dt>
+<dt><span><a href="connect.htm#connector-j-info">25.3. MySQL Connector/J</a>
+</span></dt>
+<dt><span><a href="connect.htm#connector-cpp-info">25.4. MySQL Connector/C++
+</a></span></dt>
+<dt><span><a href="connect.htm#connector-c-info">25.5. MySQL Connector/C</a>
+</span></dt>
+<dt><span><a href="connect.htm#connector-python-info">25.6.
+MySQL Connector/Python</a></span></dt>
+<dt><span><a href="connect.htm#libmysqld">25.7.
+libmysqld, встраиваемая библиотека сервера MySQL</a></span></dt>
+<dd><dl><dt><span><a href="connect.htm#libmysqld-compiling">25.7.1.
+Компиляция программ с libmysqld</a></span></dt>
+<dt><span><a href="connect.htm#libmysqld-restrictions">25.7.2.
+Ограничения использования встроенного сервера MySQL</a></span></dt>
+<dt><span><a href="connect.htm#libmysqld-options">25.7.3.
+Опции встроенного сервера</a></span></dt>
+<dt><span><a href="connect.htm#libmysqld-example">25.7.4.
+Примеры встроенного сервера</a></span></dt></dl></dd>
+<dt><span><a href="connect.htm#c-api">25.8. MySQL C API</a></span></dt>
+<dd><dl><dt><span><a href="connect.htm#c-api-implementations">25.8.1.
+Реализация MySQL C API</a></span></dt>
+<dt><span><a href="connect.htm#c-api-multiple-installations">25.8.2.
+Совместная установка MySQL Server и Connector/C</a></span></dt>
+<dt><span><a href="connect.htm#c-api-example-programs">25.8.3.
+Пример клиента C API</a></span></dt>
+<dt><span><a href="connect.htm#c-api-building-running-clients">25.8.4.
+Сборка и запуск программ-клиентов C API</a></span></dt>
+<dt><span><a href="connect.htm#c-api-data-structures">25.8.5.
+Структуры данных C API</a></span></dt>
+<dt><span><a href="connect.htm#c-api-function-overview">25.8.6.
+Обзор функций C API</a></span></dt>
+<dt><span><a href="connect.htm#c-api-functions">25.8.7.
+Описание функций C API</a></span></dt>
+<dt><span><a href="connect.htm#c-api-prepared-statements">25.8.8.
+Подготовленные запросы в C API</a></span></dt>
+<dt><span><a href="connect.htm#c-api-prepared-statement-data-structures">
+25.8.9. Структуры данных подготовленных запросов C API</a></span></dt>
+<dt><span><a href="connect.htm#c-api-prepared-statement-function-overview">
+25.8.10. Обзор функций C API для подготовленных запросов</a></span></dt>
+<dt><span><a href="connect.htm#c-api-prepared-statement-functions">25.8.11.
+Описание функций подготовленных запросов в C API</a></span></dt>
+<dt><span><a href="connect.htm#c-api-thread-functions">25.8.12.
+Описание функций потоков C API</a></span></dt>
+<dt><span><a href="connect.htm#c-api-embedded-server-functions">25.8.13.
+Описание функций C API встроенного сервера</a></span></dt>
+<dt><span><a href="connect.htm#c-api-plugin-functions">25.8.14.
+Функции плагинов C API</a></span></dt>
+<dt><span><a href="connect.htm#c-api-problems">25.8.15.
+Основные вопросы и проблемы при использовании C API</a></span></dt>
+<dt><span><a href="connect.htm#auto-reconnect">25.8.16.
+Управление автоматическим пересоединением</a></span></dt>
+<dt><span><a href="connect.htm#c-api-multiple-queries">25.8.17.
+Поддержка C API выполнения нескольких запросов сразу</a></span></dt>
+<dt><span><a href="connect.htm#c-api-prepared-statement-problems">25.8.18.
+Проблемы подготовленных запросов в C API</a></span></dt>
+<dt><span><a href="connect.htm#c-api-prepared-statement-date-handling">
+25.8.19. Обработка даты и времени подготовленными запросами в C API</a>
+</span></dt>
+<dt><span><a href="connect.htm#c-api-prepared-call-statements">25.8.20.
+Поддержка C API подготовленных запросов CALL</a></span></dt></dl></dd>
+<dt><span><a href="connect.htm#apis-php-info">25.9. MySQL PHP API</a></span>
+</dt>
+<dt><span><a href="connect.htm#apis-perl">25.10. MySQL Perl API</a></span>
+</dt>
+<dt><span><a href="connect.htm#apis-python">25.11. MySQL Python API</a>
+</span></dt>
+<dt><span><a href="connect.htm#apis-ruby">25.12. MySQL Ruby API</a></span>
+</dt>
+<dd><dl><dt><span><a href="connect.htm#apis-ruby-mysqlruby">25.12.1.
+MySQL/Ruby API</a></span></dt>
+<dt><span><a href="connect.htm#apis-ruby-rubymysql">25.12.2. Ruby/MySQL API
+</a></span></dt></dl></dd>
+<dt><span><a href="connect.htm#apis-tcl">25.13. MySQL Tcl API</a></span></dt>
+<dt><span><a href="connect.htm#apis-eiffel">25.14. MySQL Eiffel Wrapper</a>
+</span></dt></dl></dd>
+<dt><span><a href="extend.htm">26. Расширение MySQL</a></span></dt>
+<dd><dl><dt><span><a href="extend.htm#mysql-internals">26.1.
+MySQL изнутри</a></span></dt>
+<dd><dl><dt><span><a href="extend.htm#mysql-threads">26.1.1. Потоки MySQL</a>
+</span></dt>
+<dt><span><a href="extend.htm#mysql-test-suite">26.1.2. MySQL Test Suite</a>
+</span></dt></dl></dd>
+<dt><span><a href="extend.htm#plugin-api">26.2. MySQL Plugin API</a></span>
+</dt>
+<dd><dl><dt><span><a href="extend.htm#plugin-types">26.2.1. Типы плагинов</a>
+</span></dt>
+<dt><span><a href="extend.htm#plugin-api-characteristics">26.2.2.
+Характеристики API</a></span></dt>
+<dt><span><a href="extend.htm#plugin-api-components">26.2.3.
+Компоненты Plugin API</a></span></dt>
+<dt><span><a href="extend.htm#writing-plugins">26.2.4. Написание плагинов
+</a></span></dt></dl></dd>
+<dt><span><a href="extend.htm#plugin-services">26.3.
+Сервисы MySQL для плагинов</a></span></dt>
+<dd><dl><dt><span><a href="extend.htm#locking-service">26.3.1.
+Служба блокировки</a></span></dt>
+<dt><span><a href="extend.htm#keyring-service">26.3.2.
+Сервис Keyring</a></span></dt></dl></dd>
+<dt><span><a href="extend.htm#adding-functions">26.4.
+Добавление новых функций в MySQL</a></span></dt>
+<dd><dl><dt><span><a href="extend.htm#udf-features">26.4.1.
+Особенности определяемого пользователем функционального интерфейса
+</a></span></dt>
+<dt><span><a href="extend.htm#adding-udf">26.4.2.
+Добавление новой определяемой пользователем функции</a></span></dt>
+<dt><span><a href="extend.htm#adding-native-function">26.4.3.
+Добавление новой нативной функции</a></span></dt></dl></dd>
+<dt><span><a href="extend.htm#porting">26.5.
+Отладка и портирование MySQL</a></span></dt>
+<dd><dl><dt><span><a href="extend.htm#debugging-server">26.5.1.
+Отладка сервера MySQL</a></span></dt>
+<dt><span><a href="extend.htm#debugging-client">26.5.2.
+Отладка клиента MySQL</a></span></dt>
+<dt><span><a href="extend.htm#dbug-package">26.5.3. Пакет DBUG
+</a></span></dt></dl></dd></dl></dd>
+<dt><span><a href="mysql.htm">27. MySQL Enterprise Edition</a></span></dt>
+<dd><dl><dt><span><a href="mysql.htm#mysql-enterprise-monitor">27.1.
+Обзор MySQL Enterprise Monitor</a></span></dt>
+<dt><span><a href="mysql.htm#mysql-enterprise-backup">27.2.
+Обзор MySQL Enterprise Backup</a></span></dt>
+<dt><span><a href="mysql.htm#mysql-enterprise-security">27.3.
+Обзор MySQL Enterprise Security</a></span></dt>
+<dt><span><a href="mysql.htm#mysql-enterprise-encryption">27.4.
+Обзор MySQL Enterprise Encryption</a></span></dt>
+<dt><span><a href="mysql.htm#mysql-enterprise-audit">27.5.
+Обзор MySQL Enterprise Audit</a></span></dt>
+<dt><span><a href="mysql.htm#mysql-enterprise-firewall">27.6.
+Обзор MySQL Enterprise Firewall</a></span></dt>
+<dt><span><a href="mysql.htm#mysql-enterprise-thread-pool">27.7.
+Обзор MySQL Enterprise Thread Pool</a></span></dt></dl></dd>
+<dt><span><a href="workbench.html">28. MySQL Workbench</a></span></dt>
+<dt><span><a href="faqs.htm">Приложение A. MySQL 8.0
+Frequently Asked Questions</a></span></dt>
+<dd><dl><dt><span><a href="faqs.htm#faqs-general">
+A.1. MySQL 8.0 FAQ: Общие вопросы</a></span></dt>
+<dt><span><a href="faqs.htm#faqs-storage-engines">A.2.
+MySQL 8.0 FAQ: механизмы хранения</a></span></dt>
+<dt><span><a href="faqs.htm#faqs-sql-modes">A.3. MySQL 8.0 FAQ: Режимы SQL
+</a></span></dt>
+<dt><span><a href="faqs.htm#faqs-stored-procs">A.4.
+MySQL 8.0 FAQ: Хранимые процедуры и функции</a></span></dt>
+<dt><span><a href="faqs.htm#faqs-triggers">A.5.
+MySQL 8.0 FAQ: Триггеры</a></span></dt>
+<dt><span><a href="faqs.htm#faqs-views">A.6.
+MySQL 8.0 FAQ: Views</a></span></dt>
+<dt><span><a href="faqs.htm#faqs-information-schema">A.7.
+MySQL 8.0 FAQ: INFORMATION_SCHEMA</a></span></dt>
+<dt><span><a href="faqs.htm#faqs-migration">A.8.
+MySQL 8.0 FAQ: Миграция</a></span></dt>
+<dt><span><a href="faqs.htm#faqs-security">A.9.
+MySQL 8.0 FAQ: Безопасность</a></span></dt>
+<dt><span><a href="faqs.htm#faqs-mysql-cluster">A.10.
+MySQL 8.0 FAQ: MySQL Cluster</a></span></dt>
+<dt><span><a href="faqs.htm#faqs-cjk">A.11.
+MySQL 8.0 FAQ: Наборы символов Chinese, Japanese и Korean в MySQL
+</a></span></dt>
+<dt><span><a href="faqs.htm#faqs-connectors-apis">A.12.
+MySQL 8.0 FAQ: Connectors &amp; API</a></span></dt>
+<dt><span><a href="faqs.htm#faqs-replication">A.13.
+MySQL 8.0 FAQ: Репликация</a></span></dt>
+<dt><span><a href="faqs.htm#faqs-innodb-change-buffer">A.14.
+MySQL 8.0 FAQ: Буфер изменений InnoDB</a></span></dt>
+<dt><span><a href="faqs.htm#faqs-tablespace-encryption">A.15.
+MySQL 8.0 FAQ: Шифрование табличного пространства InnoDB</a></span></dt>
+<dt><span><a href="faqs.htm#faqs-virtualization">A.16.
+MySQL 8.0 FAQ: Поддержка виртуализации</a></span></dt></dl></dd>
+<dt><span><a href="error.htm">Приложение B. Ошибки, коды
+ошибок и общие проблемы</a></span></dt>
+<dd><dl><dt><span><a href="error.htm#error-sources">
+B.1. Источники информации об ошибке</a></span></dt>
+<dt><span><a href="error.htm#error-types">B.2. Типы значений ошибки
+</a></span></dt>
+<dt><span><a href="error.htm#error-messages-server">
+B.3. Коды ошибок сервера</a></span></dt>
+<dt><span><a href="error.htm#error-messages-client">
+B.4. Коды ошибки и сообщения клиента</a></span></dt>
+<dt><span><a href="error.htm#problems">B.5.
+Проблемы и распространенные ошибки</a></span></dt>
+<dd><dl><dt><span><a href="error.htm#what-is-crashing">B.5.1.
+Как определить, что вызывает проблему</a></span></dt>
+<dt><span><a href="error.htm#common-errors">B.5.2.
+Распространенные ошибки при использовании программ MySQL</a></span></dt>
+<dt><span><a href="error.htm#administration-issues">B.5.3.
+Проблемы администрирования</a></span></dt>
+<dt><span><a href="error.htm#query-issues">B.5.4.
+Связанные с запросом проблемы</a></span></dt>
+<dt><span><a href="error.htm#optimizer-issues">B.5.5.
+Проблемы с оптимизацией запросов</a></span></dt>
+<dt><span><a href="error.htm#table-definition-issues">B.5.6.
+Проблемы определения таблиц</a></span></dt>
+<dt><span><a href="error.htm#bugs">B.5.7.
+Известные проблемы в MySQL</a></span></dt></dl></dd></dl></dd>
+<dt><span><a href="restr.htm">Приложение C. Ограничения и лимиты
+</a></span></dt>
+<dd><dl><dt><span><a href="restr.htm#stored-program-restrictions">
+C.1. Ограничения на сохраненные программы</a></span></dt>
+<dt><span><a href="restr.htm#condition-handling-restrictions">C.2.
+Ограничения на условия обработки</a></span></dt>
+<dt><span><a href="restr.htm#cursor-restrictions">C.3.
+Ограничения на серверные курсоры</a></span></dt>
+<dt><span><a href="restr.htm#subquery-restrictions">C.4.
+Ограничения на подзапросы</a></span></dt>
+<dt><span><a href="restr.htm#view-restrictions">C.5.
+Ограничения на представления</a></span></dt>
+<dt><span><a href="restr.htm#xa-restrictions">C.6.
+Ограничения транзакций XA</a></span></dt>
+<dt><span><a href="restr.htm#charset-restrictions">C.7.
+Ограничения на наборы символов</a></span></dt>
+<dt><span><a href="restr.htm#performance-schema-restrictions">C.8.
+Ограничения Performance Schema</a></span></dt>
+<dt><span><a href="restr.htm#pluggable-authentication-restrictions">C.9.
+Ограничения на подключаемую аутентификацию</a></span></dt>
+<dt><span><a href="restr.htm#limits">C.10. Лимиты в MySQL</a></span></dt>
+<dd><dl><dt><span><a href="restr.htm#joins-limits">C.10.1. Лимиты на Join
+</a></span></dt>
+<dt><span><a href="restr.htm#database-count-limit">C.10.2.
+Лимиты на число баз данных и таблиц</a></span></dt>
+<dt><span><a href="restr.htm#table-size-limit">C.10.3.
+Лимит размера таблиц</a></span></dt>
+<dt><span><a href="restr.htm#column-count-limit">C.10.4.
+Лимиты на число столбцов и размер строк в таблице</a></span></dt>
+<dt><span><a href="restr.htm#limits-windows">C.10.5.
+Ограничения в Windows</a></span></dt></dl></dd></dl></dd>
+<dt><span><a href="glossary.htm">Глоссарий MySQL</a></span></dt></dl>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</body>
+</html>

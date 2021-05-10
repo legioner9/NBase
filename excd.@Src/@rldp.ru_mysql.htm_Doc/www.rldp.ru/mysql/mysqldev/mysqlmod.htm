@@ -1,0 +1,571 @@
+<HTML>
+<HEAD>
+  <TITLE>MySQLmodule-1.4</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1>5.6. MySQLmodule-1.4</H1>
+<P>Этот модуль был разработан под Linux (RH50), MySQL 3.21.30 и Python 1.5.1.
+MySQLmodule-1.x основан на mySQLmodule-0.1.4, разработанном:
+
+<UL><LI>Copyright (C) 1997  Joseph Skinner <joe@earthlink.co.nz>
+<LI>Copyright (C) 1997  James Henstridge <james@daa.com.au></UL>
+
+<P>mySQLmodule-0.1.4 в свою очередь основан на mSQLmodule, разработанном:
+<UL><LI>Portions copyright (C) 1995  Thawte Consulting, cc
+<LI>Portions copyright (C) 1994  Anthony Baxter</UL>
+
+<H2>5.6.1 Почему другой интерфейс Python/MySQL?</H2>
+<P>Была обнаружена проблема при сохранении строк, содержащих ASCII-ноль
+(<B>\0</B>) в базе данных MySQL. После расследования в языке Python (который
+создал первоначальную ошибку), был проверен код mySQLmodule и там найден ряд
+проблем. Некоторые подпрограммы не освобождают распределенную память,
+некоторые функции MySQL API не были доступны, и многих разработчиков
+совершенно не устраивал тот факт, что mySQLmodule возвратит различные
+структуры данных в зависимости от метода. Так что я переделал код. Так как
+эти изменения включают изменение в методах Python и значениях возврата, был
+повышен код версии и изменено имя модуля на MySQL, чтобы оно не
+столкнулось с оригиналом (mySQL).
+
+<P>Рационально возвратить список списков вместо набора или списка наборов. Не
+стоит создавать ситуацию, когда подпрограммы доступа к DB занимаются
+обработкой типа возврата, и стоит предусмотреть возможность изменить данные
+в возвращенной таблице напрямую.
+<PRE>
+Data = DBH['select * from MyTable']
+if Data:
+   rows = len(Data)
+   cols = len(Data[0])
+   for i in range(rows):
+     for j in range(cols):
+       if not Data[i][j]: Data[i][j] = DefaultElement()
+   Do_Something(Data)
+</PRE>
+
+<P>Никакой потребности усложнять это при наличии наборов внутри внешнего
+списка нет. Для тех, кто предпочитает словари, метод STH <B>fetchdict()</B>
+возвратит список словарей. Ключи словаря квалифицированы с соответствующим
+именем (возможно, не одним) обрабатываемой таблицы.
+
+<H2>5.6.2 Компиляция и установка модуля MySQL</H2>
+<UL><LI>Скопируйте <B>MySQLmodule.c</B> в подкаталог <B>Modules</B>
+дерева исходников Python.
+
+<LI>Добавьте следующие строки в Ваш файл <B>Setup</B> в этом каталоге:
+<PRE>
+MySQL MySQLmodule.c -L/usr/local/lib/mysql/ -lmysqlclient \
+                    -I/usr/local/include/mysql
+</PRE>
+
+<P>Обратите внимание, что расположение библиотеки MySQL и include-каталога
+может быть иным на Вашей специфической системе. Вы можете формировать
+разделяемый модуль (вставкой ниже индикатора
+<B>shared</B> в файле <B>Setup</B>).
+
+<LI>Если Вы формировали Python ранее, просто выполните <B>make</B> в Вашем
+основном каталоге Python. Если нет, следуйте командам о том, как
+компилировать и установить Python.</UL>
+
+<P>Чтобы формировать динамически загружаемый модуль без доступа к дереву
+исходников python, используйте:
+<PRE>
+gcc -shared -I/usr/include/python1.5 -I/usr/local/include/mysql \
+    MySQLmodule.c -lmysqlclient -L/usr/lib/python1.5/config \
+    -lpython1.5 -o MySQLmodule.so
+</PRE>
+
+<P>Переместите возникающий в результате файл <B>MySQLmodule.so</B> в
+<B>PYTHONPATH</B>. Замените соответствующие расположения Ваших
+библиотек и include-файлов.
+
+<P>Обратите внимание, что модуль чувствителен к регистру, и что имя было
+изменено на MySQL, чтобы не разорвать любой существующий код, который
+использует старый модуль mySQL.
+
+<H2>Экспортируемые типы, функции и классы</H2>
+<P>Модуль MySQL экспортирует следующее:
+<UL><LI><B>DBH_Type:</B><BR>
+Тип объекта базы данных.
+
+<LI><B>STH_Type:</B><BR>
+Тип ошибки объекта курсора (исключительная ситуация, выдаваемая в некоторых
+обстоятельствах вместо <B>TypeError</B>).
+
+<LI><B>__doc__:</B><BR>
+Версия, доступная из Python
+
+<LI><B>connect([host[,user[,pass]]])</B><BR>
+Функциональный возврат объекта базы данных. Факультативные параметры: имя
+компьютера (<B>host</B>), с которым надлежит соединиться, <B>username</B> для
+связи с MySQL и соответствуюющий пароль <B>password</B>. Если никакой
+компьютер не задан, функция примет <B>localhost</B> (и будет использовать
+Unix-сокет для подключения к нему).
+
+<LI><B>escape(string)</B><BR>
+Вернет правильно экранированную строку, чтобы позволить вставку в DB. Эта
+подпрограмма вызывает <B>mysql_escape_string()</B>, которая в
+3.21.29-gamma не работает. Версия 3.21.30 и выше работают нормально.
+
+<P>Обратите внимание: в следующем <B>"таблица"</B> означает <B>"список
+списков"</B> (за исключением <B>fetchdict</B>). <B>MySQL.connect()</B> вернет
+дескриптор базы данных (DBH) со следующими методами:
+
+<LI><B>Table = DBH.listdbs([wild])</B><BR>
+Возвращает таблицу, дающую имена баз данных на компьютере MySQL, с которым
+соединился через вызов <B>MySQL.connect()</B>. Факультативный параметр:
+MySQL-строка с символами подстановки (синтаксис аналогичен <B>LIKE</B>).
+
+<LI><B>DBH.selectdb(DB_Name[,storage])</B><BR>
+Присоединяет этот объект к специфической базе данных. Выполненные запросы
+будут направлены к этой базе данных, пока не будет сделано другое обращение
+метода <B>selectdb</B>. Факультативный параметр <B>storage</B> типа
+<B>integer</B> может использоваться, чтобы хранить наборы результатов
+запросов на сервере. Обратите внимание, что это отрицательно воздействует на
+эффективность сервера, но позволяет клиентуре с маленькой памятью работать с
+записями по мере надобности. Значение по умолчанию: <B>0</B>, то есть все
+записи перемещены пользователю сразу.
+
+<LI><B>Table = DBH.listtables([wild])</B><BR>
+Возвращает таблицу с именами таблиц в выбранной базе данных. Имеет силу
+только после того, как было сделано обращение <B>selectdb</B>. Факультативный
+параметр может использоваться, чтобы ограничить возвращенный набор таблиц
+(тот же самый синтаксис, какой принят в <B>LIKE</B>).
+
+<LI><B>Table = DBH.listfields(table[,wild])</B><BR>
+Возвращает таблицу описаний полей в данной таблице. Факультативный параметр
+может использоваться, чтобы ограничить возвращенный набор полей (тот же самый
+синтаксис, какой принят в <B>LIKE</B>).
+
+<LI><B>Table = DBH.listprocesses()</B><BR>
+Возвращает информацию относительно работающих процессов MySQL. Требует
+соответствующих привилегий (иначе возвращает <B>None</B>).
+
+<LI><B>String = DBH.stat()</B><BR>
+Возвращает информацию состояния из MySQL.
+
+<LI><B>DBH.create(DB_Definition)</B><BR>
+Создает новую базу данных.<BR>
+
+<LI><B>DBH.drop(DB_Name)</B><BR>
+Удаляет базу данных.
+
+<LI><B>DBH.reload()</B><BR>
+Перезагружает таблицы привилегий MySQL.
+
+<LI><B>DBH.shutdown()</B><BR>
+Завершает сервер MySQL.
+
+<LI><B>DBH.close()</B><BR>
+Закрывает DB-подключение.
+
+<LI><B>String = DBH.clientinfo()</B><BR>
+Возвращает информацию о версии <B>MySQLmodule</B>.
+
+<LI><B>String = DBH.serverinfo()</B><BR>
+Возвращает информацию о сервере MySQL.
+
+<LI><B>String = DBH.hostinfo()</B><BR>
+Возвращает информацию относительно хоста соединения и типа подключения.
+
+<LI><B>Integer = DBH.protoinfo()</B><BR>
+Возвращает информацию о версии протокола MySQL.
+
+<LI><B>Table = DBH.do(query)</B> или <B>Table = DBH[query]</B><BR>
+Возвращает результат запроса SQL или число обработанных строк. Оба метода
+используют тип памяти, установленный в <B>DBH.selectdb()</B>.
+
+<LI><B>Integer = DBH.insert_id()</B><BR>
+Предоставляет доступ к последнему сгенерированному числу
+<B>auto_increment</B>. Это число может изменяться, если были
+запросы между обращениями.
+
+<LI><B>STH = DBH.query(query[,storage])</B><BR>
+Возвращает операторный дескриптор для методов курсора (см. ниже).
+Факультативный параметр <B>storage</B> может использоваться, чтобы отменить
+значение по умолчанию DBH, установленное <B>DBH.selectdb()</B>.</UL>
+
+<P>Методы для операторных дескрипторов (STH):
+<UL><LI><B>Table = STH.fetchrows([n])</B><BR>
+Возвращает результаты запроса к DB. Если <B>n&lt;0</B>, все строки будут
+выбраны. Иначе будут возвращены только следующие <B>n</B> строк. Значение по
+умолчанию должно возвратить все строки.
+
+<LI><B>Table = STH.fetchdict([n])</B><BR>
+Аналогично <B>STH.fetchrows()</B>, за исключением того, что список словарей
+возвращен с парами <B>tablename.fieldname:data</B>.
+
+<LI><B>Table = STH.fields()</B><BR>
+Возвращает описания поля результата запроса STH. В настоящее время
+MySQLmodule понимает <B>"pri", "notnull", "auto_inc", "ukey"</B> и <B>"mkey"
+</B>.
+
+<LI><B>STH.seek(n)</B><BR>
+Двигает курсор к строке <B>n</B> (<B>0</B> определяет первую строку).
+Доступен только, если результат хранится на стороне пользователя (выбрано в
+<B>DBH.selectdb</B>). Иначе создает исключительную ситуацию.
+
+<LI><B>Integer = STH.numrows()</B><BR>
+Возвращает, сколько строк находятся в результате запроса STH.
+<B>Предупреждение:</B> в действительности это число отражает сколько записей
+получил клиент. Для методов хранения на стороне сервера, это начинается с
+<B>0</B> и увеличивается по мере того, как пользователь выбирает строки. Для
+методов хранения на стороне клиента это число немедленно дает общее
+количество строк для этого запроса.
+
+<LI><B>Integer = STH.numfields()</B><BR>
+Возвращает, сколько столбцов находятся в результате запроса STH.
+
+<LI><B>Integer = STH.affectedrows()</B><BR>
+Возвращает данные на сколько строк воздействовал последний запрос.
+<B>Обратите внимание</B>, что MySQL не всегда возвращает правильное значение.
+
+<LI><B>Integer = STH.insert_id()</B><BR>
+Возвращает значение <B>auto_increment</B> из STH-запроса <B>insert</B>.
+<B>Обратите внимание</B>, что это число постоянно, пока STH существует.
+
+<LI><B>Integer = STH.eof()</B><BR>
+Возвратит <B>1</B>, если последняя строка читалась, иначе <B>0</B>. Всегда
+<B>1</B>, если выбрано хранение данных на стороне пользователя
+(значение по умолчанию).</UL>
+
+<H2>Использование модуля MySQL</H2>
+<PRE>
+import MySQL
+DBH = MySQL.connect()   # localhost
+print DBH.listdbs()
+DBH.selectdb('test')
+print DBH.serverinfo()
+print DBH.stat()
+DBH["create table pytest (x int, y int, s char(20))"]
+DBH["insert into pytest values (1,2,'abc')"]
+DBH.do("insert into pytest values (3,4,'def')")
+STH = DBH.query("insert into pytest values (5,6,'ghi')")
+print STH.affectedrows()
+print DBH['select * from pytest']
+STH = DBH.query("select * from pytest")
+print STH.numrows()
+print STH.fields()
+print STH.fetchrows(-1)
+STH.seek(0)
+print STH.fetchrows(1)
+print STH.fetchrows(1)
+STH.seek(0)
+print STH.fetchrows(2)
+print STH.fetchrows(2)
+print STH.numfields()
+STH.seek(0)
+print STH.fetchdict(1)
+print STH.fetchdict()
+STH = DBH.query("select * from pytest",1)
+print STH.fetchdict(1)
+print STH.fetchdict() # compare to previous dicts
+STH = DBH.query("select * from pytest",1)
+print STH.fetchrows(1)
+print STH.eof()
+print STH.fetchrows()
+print STH.eof()
+DBH['drop table pytest']
+</PRE>
+
+<H2>5.6.3 Примечания относительно хранения на сервере</H2>
+<P>MySQL предлагает два немного различных пути доступа к данным
+из базы данных.
+
+<P>Заданный по умолчанию метод в MySQLmodule состоит в том, чтобы
+использовать хранение на стороне пользователя, то есть все запросы, включая
+методы курсора (STH), выбирают все данные с сервера. К строкам обращаются
+через <B>STH.fetchrows(n)</B> или <B>STH.fetchdict(n)</B> индивидуально
+(<B>n=1</B>), блочно (<B>n&gt;1</B>), все строки забирают одной порцией
+(<B>n&lt;0</B>) или не обращаются вообще (<B>n=0</B>). <B>STH.numrows()</B>
+может сообщать после запроса сколько строк находится в результате.
+<B>STH.seek(k)</B> может использоваться, чтобы обратиться к строкам в
+произвольном порядке. Недостаток хранения на стороне пользователя состоит в
+том, что это использует память пользователя, чтобы сохранить все строки.
+Этот способ учитывает конструкции типа:
+<PRE>
+STH = DBH.query("select * from Foo")
+N = STH.numrows()
+if N &gt; 1000: raise Hell,"You must be joking!"
+for i in xrange(N):
+  [Data] = STH.fetchdict(1)
+</PRE>
+
+<P>Так как пользователь действительно переместил к себе все строки, которые
+подготовил сервер, все транзакции на этом канале прекратились, и сервер готов
+принять новые команды. Это также означает, что <B>STH.eof()</B> всегда
+<B>true (1)</B> для хранения данных на стороне клиента.
+
+<P>Хранение на стороне сервера не требует, чтобы у пользователя было много
+памяти. Все записи будут перемещены на основании запроса. Однако, этот способ
+имеет несколько недостатков. Так как теперь возникает возможность того, что
+пользователь не забрал все строки, каждая новая команда должна проверить,
+является ли свободным, то есть готов ли он принять новую команду. Если нет,
+команда должна очистить канал команды, выдавая запросы на чтение в
+количестве, достаточном, чтобы получить оставшиеся строки. MySQL API 3.21
+не предлагает команды <B>abort()</B>. <B>STH.numrows()</B> не знает ничего
+относительно того, сколько строк были выбраны запросом, так что
+вышеупомянутый код примера будет падать. <B>STH.numrows()</B> будет, однако,
+модифицироваться, поскольку строки все-таки читаются, например:
+<PRE>
+STH = DBH.query("select * from Foo")
+Data = STH.fetchrows(-1)
+print "Got",STH.numrows(),"rows."   # len(Data) is the same
+</PRE>
+
+<P><B>STH.eof()</B> имеет смысл только при хранении данных на сервере, но
+даже здесь такой код полезен не всегда:
+<PRE>
+STH = DBH.query("select 1")
+print STH.eof()          # will print 0
+Data = STH.fetchrows(1)  # retrieve the row
+print STH.eof()          # still 0 :-(
+Data = STH.fetchrows(1)  # must repeat. Data will be []
+print STH.eof()          # now we get 1, but we already
+                         # knew that we've hit the end
+</PRE>
+
+<P>Можно было рассматривать это, как ошибку. <B>STH.seek(k)</B> больше не
+доступен и создает исключение (<B>"cannot seek on server"</B>), то есть
+строки должны теперь читаться последовательно.
+
+<P>Хранение на стороне сервера также создает дополнительную нагрузку на
+сервер. В частности, он должен остаться в контакте с пользователем, пока все
+строки не будут прочитаны. Так что лучше бы быстро получить все строки и не
+делать длинную обработку или, что еще хуже, позволять пользователю
+останавливать поиск (например, нажимая клавиши
+<B>Ctrl-S</B> в интерактивном интерфейсе).
+
+<P>Для тех, кто не может решить, который метод является более подходящим для
+прикладной программы, MySQLmodule позволяет смешивать оба метода свободно.
+Заданное по умолчанию поведение может быть установлено через
+<B>DBH.selectdb()</B> и может быть изменено для индивидуального курсора
+(STH). Обратите внимание, что незавершенные запросы будут
+отменены последующими командами:
+<PRE>
+STH = DBH.query("select * from Foo",1) # use server side storage
+Tables = DBH.listtables()              # stomp on previous results
+Data = STH.fetchrows()                 # nothing here anymore vs.
+STH = DBH.query("select * from Foo",0) # use client side storage
+Tables = DBH.listtables()              # won't interfere
+Data = STH.fetchrows()                 # no problem...
+</PRE>
+
+<P>Хранение на стороне сервера также создает более сложный код в MySQLmodule.
+Обычно при хранении на стороне клиента STH-курсоры независимы от дескриптора
+базы данных. Немедленно после запроса все данные будут перекачаны клиенту, и
+пользователь может делать все, что сочтет необходимым с дескриптором DBH. Но
+при хранении на стороне сервера это становится сложным. С курсорами стороны
+сервера указатель на дескриптор сохранен в дескрипторе STH. MySQLmodule
+удостоверится, что этот кусок памяти не освобожден прежде, чем закроются все
+ожидающие обработки курсоры. Это означает, что <B>mysql_close()</B> не
+обязательно вызван, если база данных, обрабатываемая DBH, разрушена:
+<PRE>
+DBH = MySQL.connect()         # get a DB handle
+STH = DBH.query("select 1",1) # server side cursor
+del DBH                       # mysql_close() *not* called
+STH.fetchrows()               # will succeed!
+del STH                       # now mysql_close() will be called
+                              # in DBH_dealloc()
+</PRE>
+
+<P>Если Вы должны закрыть дескриптор DB немедленно, используйте
+<B>DBH.close()</B>. Все дальнейшие попытки работать на этом дескрипторе (даже
+ожидающие обработки курсоры стороны сервера) получат исключительную ситуацию
+<B>"... server has gone away"</B>. Начиная с того момента, как mySQL не может
+принимать команды из последовательности, все DBH-методы должны проверить
+незавершенные STH-курсоры. Чтобы обращаться к ним, дескриптор DBH хранит
+указатель на STH-курсор.
+
+<H2>5.6.4 Установка MySQLmodule-1.4 под Windows NT</H2>
+<P>Следующие инструкции основаны на информации, предоставленной Nigel Head
+(nhead@houbits.com).
+
+<UL><LI>Вы должны получить файл <B>libMySQL.dll</B> из клиентского пакета
+<B>win32-mysql</B> версии 3.22.8 или выше, более ранние версии не будут
+работать. Это доступно на www.tcx.se (или зеркалах) для свободной загрузки.
+Вы должны, вероятно, переместить файл в то же самое расположение, что и Ваша
+библиотека <B>python15.dll</B>.
+
+<LI>Скомпилируйте <B>MySQLmodule-1.4</B> с включенным переключателем
+<B>WIN32</B>. <B>VC5</B> и файлы проекта <B>MySQL.dsp</B> и <B>MySQL.dsw</B>
+включены (но, вероятно, их придется изменять, чтобы удовлетворить
+требованиям Вашей среды).
+
+<LI>Переместите возникающий в результате файл <B>MySQL.pyd</B> в Ваш
+каталог Python DLL.</UL>
+
+<P>Если что-то пойдет не так, помощь лучше всего поискать в конференции
+<B>comp.lang.python</B>.
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

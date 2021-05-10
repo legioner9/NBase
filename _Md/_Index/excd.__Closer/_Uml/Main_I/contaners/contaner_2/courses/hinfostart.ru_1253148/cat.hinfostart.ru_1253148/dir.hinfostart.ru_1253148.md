@@ -1,0 +1,16 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\hinfostart.ru_1253148\cat.hinfostart.ru_1253148\dir.hinfostart.ru_1253148.md">hinfostart.ru_1253148</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\hinfostart.ru_1253148\infostart.ru.md">infostart.ru.md</a>
+        - *# <a href="https://infostart.ru/1c/articles/1253148/" target="_blank">Находим взаимопонимание с заказчиками с применением Enterprise Architect</a>
+        - *## Зачем заниматься моделированием?
+        - *## Модель
+        - *## Язык моделирования UML
+        - *## Применение UML для практического моделирования
+        - *## Кейс обработки требований заказчика
+        - *## Формализация бизнес-процессов в Enterprise Architect
+        - *## Обрабатываем требования протокола
+        - *## Обрабатываем требования приложения к протоколу
+        - *## Добавляем связи на объекты
+        - *## Описываем роли с помощью диаграммы Use Case
+        - *## Строим диаграмму Ганта для планирования работ по проекту
+        - *## Генерируем документацию
+        - *## Вопросы:

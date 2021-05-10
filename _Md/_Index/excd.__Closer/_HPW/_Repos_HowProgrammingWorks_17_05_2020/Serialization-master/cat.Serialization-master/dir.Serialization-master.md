@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Serialization-master\cat.Serialization-master\dir.Serialization-master.md">Serialization-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Serialization-master\README.md">README.md</a>
+        - *# Translating data structures into syntactic structures or binary format

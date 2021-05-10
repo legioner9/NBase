@@ -1,0 +1,1152 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 4. Выполнение кода MySQL Shell</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="mysql-shell-code-execution"></a>
+Глава 4. Выполнение кода MySQL Shell</h1>
+<p>Эта секция объясняет, как выполнение кода работает в MySQL Shell.</p>
+
+<h2><a name="mysql-shell-active-language"></a>4.1. Активный язык</h2>
+<p>MySQL Shell может выполнить SQL, JavaScript или Python,
+но только один язык может быть активным за один раз.
+Активный режим определяет, как выполненные запросы обрабатываются:
+
+<ul><li>Используя способ SQL, запросы обрабатываются как SQL, что означает,
+что их посылают в сервер MySQL для выполнения.</p></li>
+<li>Используя способ JavaScript, запросы обрабатываются как код JavaScript.
+</p></li>
+<li>Используя способ Питона, запросы обрабатываются как код Python.</li></ul>
+
+<p>Когда MySQL Shell работает в интерактивном режиме, активируйте
+определенный язык командами:
+<code class="literal">\sql</code>, <code class="literal">\js</code> или
+<code class="literal">\py</code>.</p>
+
+<p>Когда MySQL Shell работает в пакетном режиме, активируйте определенный
+язык, передав любой из этих параметров командной строки:
+<a href="mysqlsh-command.html#option_mysqlsh_js"><code class="option">--js
+</code></a>, <a href="mysqlsh-command.html#option_mysqlsh_py">
+<code class="option">--py</code></a> или
+<a href="mysqlsh-command.html#option_mysqlsh_sql"><code class="option">--sql
+</code></a>. Режимом по умолчанию, если ни один не
+определяется, является JavaScript.</p>
+
+<p>Используйте MySQL Shell, чтобы выполнить содержание файла
+<code class="filename">code.sql</code> как SQL.</p>
+<pre>
+shell&gt; <strong class="userinput"><code>mysqlsh --sql &lt; code.sql</code></strong>
+</pre>
+
+<p>Используйте MySQL Shell, чтобы выполнить содержание файла
+<code class="filename">code.js</code> как JavaScript.</p>
+<pre>
+shell&gt; <strong class="userinput"><code>mysqlsh &lt; code.js</code></strong>
+</pre>
+
+<p>Используйте MySQL Shell, чтобы выполнить содержание файла
+<code class="filename">code.py</code> как Python.</p>
+<pre>
+shell&gt; <strong class="userinput"><code>mysqlsh --py &lt; code.py</code></strong>
+</pre>
+
+<p>С MySQL Shell 8.0.16 можно выполнить единственный SQL-оператор в то время,
+как другой язык активен, вводя команду <code class="literal">\sql</code>
+немедленно сопровождаемую SQL-оператором. Например:</p>
+<pre>
+\sql select * from sakila.actor limit 3;
+</pre>
+
+<p>Для SQL-оператора не нужно никакое дополнительное цитирование
+и дополнительный разделитель запросов. Команда принимает только единственный
+SQL-запрос на одной строке. С этим форматом MySQL Shell не переключает
+режим, как это было бы, если вы вводите
+<code class="literal">\sql</code>. После того, как SQL-оператор был выполнен,
+MySQL Shell остается в режиме JavaScript или Питона.</p>
+
+<h2><a name="mysql-shell-interactive-code-execution"></a>4.2.
+Интерактивное выполнение кода</h2>
+<p>Режим по умолчанию MySQL Shell обеспечивает интерактивное выполнение
+операций по базе данных, которые вы печатаете в командной строке.
+Эти операции могут быть написаны на JavaScript, Питоне или SQL, в зависимости
+от текущего режима. Когда выполнено, результаты операции показаны на экране.
+</p>
+
+<p>Как с любым другим языковым интерпретатором, MySQL Shell очень строг
+относительно синтаксиса. Например, следующий отрывок JavaScript открывает
+сессию для сервера MySQL, затем читает и печатает документы в коллекции:</p>
+<pre>
+var mySession = mysqlx.getSession('user:pwd@localhost');
+var result = mySession.world_x.countryinfo.find().execute();
+var record = result.fetchOne();
+
+while(record)
+{
+   print(record);
+   record = result.fetchOne();
+}
+</pre>
+
+<p>Как замечено выше, вызов <code class="literal">find()</code>
+сопровождается функцией <code class="literal">execute()</code>.
+Команды базы данных CRUD на самом деле выполняются на MySQL Server только
+когда вызвана <code class="literal">execute()</code>.
+Однако, работая с MySQL Shell в интерактивном режиме,
+<code class="literal">execute()</code> неявно вызвана каждый раз, когда
+вы нажимаете <code class="literal">Return</code>. Тогда результаты операции
+получены и показаны на экране. Правила для того, когда необходимо вызвать
+<code class="literal">execute()</code> или нет, следующие:
+
+<ul><li>Используя MySQL Shell таким образом, вызов
+<code class="literal">execute()</code> становится опциональным в:</p>
+<ul><li><p><code class="literal">Collection.add()</code></p></li>
+<li><code class="literal">Collection.find()</code></p></li>
+<li><code class="literal">Collection.remove()</code></p></li>
+<li><code class="literal">Collection.modify()</code></p></li>
+<li><code class="literal">Table.insert()</code></p></li>
+<li><code class="literal">Table.select()</code></p></li>
+<li><code class="literal">Table.delete()</code></p></li>
+<li><code class="literal">Table.update()</code></p></li></ul></li>
+
+<li>Автоматическое выполнение отключено, если объект назначен на переменную.
+В таком запросе вызов <code class="literal">execute()</code>
+обязателен, чтобы выполнить операцию.</p></li>
+
+<li>Когда строка обрабатывается, и функция возвращает любой из доступных
+объектов <code class="literal">Result</code>, информация, содержавшаяся в
+объекте Result, автоматически показана на экране. Функции, которые возвращают
+объект результата, включают:</p>
+
+<ul><li><p>Выполнение SQL и операции CRUD (упоминаются выше).</p></li>
+<li>Операционная обработка и функции удаления объетов сессии в обоих модулях
+<code class="literal">mysql</code> и <code class="literal">mysqlx</code>:</p>
+
+<ul><li><p><code class="literal">startTransaction()</code></p></li>
+<li><code class="literal">commit()</code></p></li>
+<li><code class="literal">rollback()</code></p></li>
+<li><code class="literal">dropSchema()</code></p></li>
+<li><code class="literal">dropCollection()</code></p></li>
+<li><code class="literal">ClassicSession.runSql()</code>
+</li></ul></li></ul></li></ul>
+
+<p>На основе вышеупомянутых правил, запросы в MySQL Shell должны были в
+интерактивном режиме установить сессию, запросить
+и напечатать документы в коллекции:</p>
+<pre>
+mysql-js&gt; <strong class="userinput"><code>var mySession = mysqlx.getSession('user:pwd@localhost');</code></strong>
+</pre>
+
+<p>Никакого вызова <code class="literal">execute()</code> не надо,
+объект результата автоматически печатается.</p>
+<pre>
+mysql-js&gt; <strong class="userinput"><code>mySession.world_x.countryinfo.find();</code></strong>
+</pre>
+
+<h3><a name="mysql-shell-multiple-line-support"></a>Многострочная поддержка
+</h3>
+<p>Возможно определить запросы на нескольких строках. В режиме Python
+или JavaScript этот способ автоматически включен, когда блок запросов
+начинается как в определениях функции, условных операторах, циклов и т.п.
+В режиме SQL многострочный формат начинается, когда выдана команда
+<code class="literal">\</code>.</p>
+
+<p>Как только многострочный режим начат, впоследствии
+введенные запросы кэшируются.</p>
+<p>Например:</p>
+
+<pre>
+mysql-sql&gt; <strong class="userinput"><code>\</code></strong>
+... <strong class="userinput"><code>create procedure get_actors()</code></strong>
+... <strong class="userinput"><code>begin</code></strong>
+... <strong class="userinput"><code>select first_name from sakila.actor;</code></strong>
+... <strong class="userinput"><code>end</code></strong>
+...
+mysql-sql&gt;
+</pre>
+
+<p>Вы не можете использовать многострочный режим, когда вы используете
+команду <code class="literal">\sql</code> с запросом, чтобы выполнить
+единственный SQL-оператор в то время, как другой язык активен.
+Команда принимает только единственный SQL-запрос на одной строке.</p>
+
+<h2><a name="mysql-shell-autocompletion"></a>4.3. Автозавершение кода</h2>
+<p>MySQL Shell поддерживает автозавершение текста, предшествующего курсору,
+нажимая <span class="keycap"><strong>Tab</strong></span>.
+<a href="mysql-shell-configuring.html#mysql-shell-commands">Команда</a>
+может быть автоматически заполнена в любом из языковых режимов. Например,
+ввод <strong class="userinput"><code>\con</code></strong> и нажатие
+<code class="literal">Tab</code> автоматически заполняет
+<strong class="userinput"><code>\connect</code></strong>.
+Автозавершение доступно для языковых ключевых слов SQL, JavaScript и Python
+в зависимости от текущего
+<a href="#mysql-shell-active-language">
+активного языка</a> в приложении.</p>
+
+<p>Автозавершение поддерживает следующие текстовые объекты:
+<ul><li>В режиме SQL автозавершение знает о названиях схемы, именах таблиц,
+именах столбцов текущей активной схемы.</p></li>
+
+<li>В JavaScript и Python автозавершение знает об
+элементах объекта, например:</p>
+<ul><li><p>имена глобального объекта, например,
+<code class="literal">session</code>,
+<code class="literal">db</code>, <code class="literal">dba</code>,
+<code class="literal">shell</code>, <code class="literal">mysql</code>,
+<code class="literal">mysqlx</code> и подобные.</p></li>
+
+<li>члены глобальных объектов, например,
+<code class="literal">session.connect()</code>,
+<code class="literal">dba.configureLocalInstance()</code> и подобные.</p></li>
+
+<li>глобальные переменные пользователя.</p></li>
+<li>цепочечные ссылки свойства объекта, например,
+<code class="literal">shell.options.verbose</code>.</p></li>
+
+<li>цепочечные вызовы метода X DevAPI, например,
+<code class="literal">col.find().where().execute().fetchOne()</code>.
+</p></li></ul></li></ul>
+
+<p>По умолчанию автозавершение позволено, чтобы изменить это поведение,
+посмотрите <a href="#mysql-shell-configuring-autocompletion">
+про настройку автозавершения</a>.</p>
+
+<p>Как только вы активируете автозавершение, если у текста, предшествующего
+курсору, есть точно одно возможное соответствие, текст автоматически
+закончен. Если автозавершение находит многократные возможные соответствия,
+оно сигналит. Если <code class="literal">Tab</code> нажат снова, будет
+показан список возможных завершений. Если никакое соответствие не найдено,
+никакого автозавершения не происходит.</p>
+
+<h3><a name="mysql-shell-autocompleting-sql"></a>
+Автоматическое заполнение SQL</h3>
+<p>Когда MySQL Shell в режиме SQL, автозавершение пытается закончить любое
+слово со всеми возможными завершениями. В SQL может быть
+автоматически заполнено следующее:
+
+<ul><li>Ключевые слова SQL - список известных ключевых слов SQL.
+Соответствие нечувствительно к регистру.</p></li>
+<li>Отрывки SQL - определенные общие отрывки, такие как
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/show-create-table.html"
+target="_top"><code class="literal">SHOW CREATE TABLE</code></a>,
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/alter-table.html"
+target="_top"><code class="literal">ALTER TABLE</code></a>,
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/create-table.html"
+target="_top"><code class="literal">CREATE TABLE</code></a> и подобные.
+</p></li>
+
+<li>Имена таблиц - если есть активная схема и кэширование имени базы данных
+не отключены, все таблицы схемы используются в качестве возможных завершений.
+</li></ul>
+
+<p>Как специальное исключение, если обратный апостроф найден,
+только имена таблиц рассматривают для завершения.
+В режиме SQL автозавершение не учитывает контекст, означая, что нет никакой
+фильтрации завершений на основе грамматики SQL.
+Другими словами, автоматическое заполнение
+<strong class="userinput"><code>SEL</code></strong> вернет
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/select.html" target="_top">
+<code class="literal">SELECT</code></a>, но это могло также
+включать таблицу selfies.</p>
+
+<h3><a name="mysql-shell-autocompleting-scripting"></a>
+Автоматически заполнение JavaScript и Python</h3>
+<p>В режимах JavaScript и Python последовательность, которая будет закончена,
+определяется справа налево, начинаясь в текущей позиции курсора, когда
+нажата <span class="keycap"><strong>Tab</strong></span>. Содержание в вызовах
+метода проигнорировано, но должно быть синтаксически правильным.
+Это означает, что последовательности, комментарии и вложенные вызовы метода
+должны все быть правильно закрыты и уравновешены. Это позволяет методам быть
+обработанными правильно. Например, когда вы вводите:</p>
+
+<pre>
+<strong class="userinput"><code>print(db.user.select().where("user in ('foo', 'bar')").e</code></strong>
+</pre>
+
+нажатие <span class="keycap"><strong>Tab</strong></span>
+заставило бы автозавершение пытаться закончить текст
+<strong class="userinput"><code>db.user.select().where().e</code></strong>,
+но этот недействительный код приводит к неопределенному поведению.
+Любой пробел, включая новые строки, между
+символами, отделенными <code class="literal">.</code>, проигнорирован.</p>
+
+<h3><a name="mysql-shell-configuring-autocompletion"></a>
+Настройка автозавершения</h3>
+<p>По умолчанию автозавершение позволено. Эта секция объясняет, как отключить
+автозавершение и использовать команду <code class="literal">\rehash</code>
+MySQL Shell. Автозавершение использует кэш объектов имен базы данных, о
+которых знает MySQL Shell. Когда автозавершение позволено, этот кэш
+автоматически обновляется. Например, каждый раз, когда вы загружаете схему,
+движок автозавершения обновляет кэш на основе текстовых объектов,
+найденных в схеме, чтобы можно было автоматически заполнить имена
+таблиц и так далее.</p>
+
+<p>Чтобы отключить это поведение, вы можете:
+<ul><li>Запустить MySQL Shell с опцией
+<a href="mysqlsh-command.html#option_mysqlsh_no-name-cache">
+<code class="option">--no-name-cache</code></a>.</p></li>
+
+<li>Измените ключи <code class="literal">autocomplete.nameCache</code> и
+<code class="literal">devapi.dbObjectHandles</code> в
+<code class="literal">shell.options</code>, чтобы отключить автозавершение
+в то время, как MySQL Shell работает.</li></ul>
+
+<p>Когда кэш автозавершения выключен, можно вручную обновить автозавершение
+текстовых объектов командой <code class="literal">\rehash</code>.
+вызывает перезагрузку кэша имен на основе текущей активной схемы.</p>
+
+<p>Чтобы отключить автозавершение в то время, как MySQL Shell работает,
+используют следующие ключи <code class="literal">shell.options</code>:
+<ul><li><code class="literal">autocomplete.nameCache: boolean</code>
+кэширование автозавершения имени для использования SQL.</p></li>
+
+<li><code class="literal">devapi.dbObjectHandles: boolean</code>
+кэширование автозавершения имени для использования объектом X DevAPI
+<code class="literal">db</code> object, например,
+<code class="literal">db.mytable</code>,
+<code class="literal">db.mycollection</code>.</li></ul>
+
+<p>Оба ключа устанавливаются в <code class="literal">true</code>
+по умолчанию и в <code class="literal">false</code>, если использована
+опция <a href="mysqlsh-command.html#option_mysqlsh_no-name-cache">
+<code class="option">--no-name-cache</code></a>.
+Чтобы изменить кэширование автозавершения имен для SQL в то время,
+как работает MySQL Shell, надо:
+<pre>
+shell.options['autocomplete.nameCache']=true
+</pre>
+
+<p>Используйте <code class="literal">\rehash</code>, чтобы обновить
+кэш имен вручную.</p>
+<p>Чтобы изменить кэширование автозавершения имен для JavaScript и
+Python в то время, как работает MySQL Shell, надо:
+<pre>
+shell.options['devapi.dbObjectHandles']=true
+</pre>
+<p>Снова можно использовать <code class="literal">\rehash</code>,
+чтобы обновить кэш имен вручную.</p>
+
+<h2><a name="mysql-shell-working-with-history"></a>4.4.
+Кодовая история MySQL Shell</h2>
+<p>Код, который вы вводите в MySQL Shell, сохранен в истории, к которой можно
+получить доступ, используя клавиши вверх и вниз. Можно также искать историю,
+используя функцию поиска истории. Чтобы искать по истории, используйте
+<span class="keycap"><strong>Ctrl+R</strong></span>, чтобы искать назад или
+<span class="keycap"><strong>Ctrl+S</strong></span>, чтобы искать вперед.
+Как только поиск активен, он ищет символы любых последовательностей, которые
+соответствуют им в истории, и показывает первое совпадение. Используйте
+<span class="keycap"><strong>Ctrl+S</strong></span> или
+<span class="keycap"><strong>Ctrl+R</strong></span>, чтобы искать дальнейшие
+соответствия текущему критерию поиска. Ввод большего количества знаков
+совершенствует поиск. Во время поиска можно нажать клавиши курсора, чтобы
+двигаться по истории с текущего результата поиска. Нажмите Enter, чтобы
+принять показанный вариант. Используйте <span class="keycap"><strong>Ctrl+C
+</strong></span>, чтобы отменить поиск.</p>
+
+<p>Параметр конфигурации <code class="literal">
+shell.options["history.maxSize"]=<em class="replaceable"><code>number</code>
+</em></code> определяет максимальное число записей, чтобы сохранить в
+истории. По умолчанию 1000. Если количество записей истории превышает
+максимум, самые старые записи удалены. Если максимум установлен в 0, никакие
+записи истории не сохранены.</p>
+
+<p>Записи истории записаны в
+<code class="filename">~/.mysqlsh/history</code> в Linux и Mac или в
+<code class="filename">%AppData%\MySQL\mysqlsh\history</code> в Windows.
+Пользовательский путь конфигурации может быть отвергнут на всех платформах,
+определив переменную окружения
+<code class="varname">MYSQLSH_USER_CONFIG_HOME</code>. Значение этой
+переменной заменяет <code class="filename">%AppData%\MySQL\mysqlsh\</code> в
+Windows или <code class="filename">~/.mysqlsh/</code> в Unix.
+Файл истории создается автоматически MySQL Shell и читаем только владельцем.
+Если файл истории не может быть прочитан или записан, MySQL Shell
+регистрирует сообщение об ошибке и пропускает операцию чтения или записи.</p>
+
+<p>Команда MySQL Shell <code class="literal">\history</code> показывает
+записи истории в порядке ввода вместе с их номером записи, который может
+использоваться с командой <code class="literal">\history delete
+<em class="replaceable"><code>entry_number</code></em></code>.
+Можно вручную удалить отдельные записи истории, указанный числовой диапазон
+записей истории или хвост истории. Можно также использовать
+<code class="literal">\history clear</code>, чтобы
+удалить всю историю вручную. Когда вы выходите из MySQL Shell, если опция
+<code class="literal">shell.options["history.autoSave"]</code> =
+<code class="literal">true</code>, записи истории, которые остаются в файле
+истории, сохранены и их нумерация перезагружается, чтобы начаться с 1. Если
+опция <code class="literal">shell.options["history.autoSave"]</code> =
+<code class="literal">false</code>, что является значением по умолчанию,
+файл истории очищен.</p>
+
+<p>Только код, который вы печатаете в интерактивном режиме в ответ на
+приглашение MySQL Shell, добавляется к истории. Код, который выполняется
+косвенно или внутренне, например, когда выполнена команда
+<code class="literal">\source</code>, не добавляется к истории. Когда вы
+вводите многострочную команду, символы новой строки исчезают из записи
+истории. Если тот же самый код введен многократно, он сохранен в истории
+только однажды, уменьшив дублирование.</p>
+
+<p>Можно настроить записи, которые добавляются к истории, используя опцию
+<code class="option">--histignore</code>. Кроме того, используя MySQL Shell в
+режиме SQL, можно формировать последовательности, которые не должны быть
+добавлены к истории. Этот черный список истории также применяется, когда вы
+используете <code class="literal">\sql</code>, чтобы выполнить единственные
+SQL-операторы в то время, как другой язык активен.</p>
+
+<p>Последовательности, которые соответствуют образцам
+<code class="literal">IDENTIFIED</code> или
+<code class="literal">PASSWORD</code> по умолчанию не добавляются к истории.
+Чтобы формировать дальнейшие последовательности, используйте опцию
+<code class="option">--histignore</code> или
+<code class="literal">shell.options["history.sql.ignorePattern"]</code>.
+Многократные строки могут быть определены через двоеточие (:).
+Соответствие истории использует нечувствительный к регистру образец.
+Поддержаны подстановочные знаки * (соответствует каким-либо 0 или больше
+знакам) и ? (соответствует точно 1 символу).
+Последовательности по умолчанию определяются как
+<code class="literal">"*IDENTIFIED*:*PASSWORD*"</code>.</p>
+
+<p>Обратите внимание на то, что независимо от набора фильтров в черном
+списке истории, последний выполненный запрос всегда доступен, нажимая
+стрелки, чтобы можно было сделать исправления, не перепечатывая его.
+Если фильтрация относится к последнему выполненному запросу, он
+удален из истории, как только введен другой запрос, или если вы немедленно
+выходите из MySQL Shell после выполнения запроса.</p>
+
+<h2><a name="mysql-shell-batch-code-execution"></a>4.5.
+Пакетное выполнение кода</h2>
+<p>MySQL Shell обеспечивает пакетное выполнение кода из:
+
+<ul><li>Файл для обработки.</p></li>
+<li>Файл, содержащий код, который перенаправляется к стандартному
+вводу для выполнения.</p></li>
+
+<li>Код из другого источника, который перенаправляется к стандартному
+вводу для выполнения.</p></li></ul>
+
+<p>Как альтернатива пакетному выполнению можно также управлять MySQL Shell из
+терминала, см. <a href="#mysql-shell-command-interface">
+раздел 4.7</a>.</p>
+
+<p>В пакетном режиме вся логика команды, рассмотренная в
+<a href="#mysql-shell-interactive-code-execution">
+разделе 4.2</a> недоступна, только действительный код
+для активного языка может быть выполнен. Обрабатывая код SQL, это
+выполняет запросы пошагово, используя следующую логику:
+прочитать/обработать/напечатать результат. Обрабатывая код не SQL, это
+загружает его полностью из входного источника и выполняет как одно целое.
+Используйте опцию <a href="mysqlsh-command.html#option_mysqlsh_interactive">
+<code class="option">--interactive</code></a> (или <code class="option">-i
+</code>), чтобы настроить MySQL Shell, чтобы обработать входной источник, как
+будто это выполняется в интерактивном режиме. Такой подход активирует все
+опции, обеспеченные интерактивным режимом, который будет использоваться в
+пакетной обработке данных.</p>
+
+<p>В этом случае, независимо от источника, он прочитан построчно
+и обработан с использованием интерактивного трубопровода.</p>
+<p>Ввод обрабатывается на основе текущего языка программирования, выбранного
+в MySQL Shell, который по умолчанию JavaScript.
+Можно изменить язык программирования по умолчанию, используя опцию
+<code class="literal">defaultMode</code>. Файлы с расширениями
+<code class="filename">.js</code>,
+<code class="filename">.py</code> и <code class="filename">.sql</code>
+всегда обрабатываются в соответствующем языковом режиме, независимо от языка
+программирования по умолчанию.</p>
+
+<p>Этот пример показывает, как загрузить код JavaScript из
+файла для пакетной обработки данных:</p>
+<pre>
+shell&gt; <strong class="userinput"><code>mysqlsh --file code.js</code></strong>
+</pre>
+
+<p>Здесь файл JavaScript перенаправляется к стандартному
+вводу для выполнения:</p>
+<pre>
+shell&gt; <strong class="userinput"><code>mysqlsh &lt; code.js</code></strong>
+</pre>
+
+<p>Этот пример показывает, как перенаправить код SQL к стандартному
+вводу для выполнения:
+<pre>
+shell&gt; <strong class="userinput"><code>echo "show databases;" | mysqlsh --sql --uri user@192.0.2.20:33060</code></strong>
+</pre>
+
+<h3><a name="mysql-shell-executable-scripts"></a>Выполнимые скрипты</h3>
+<p>В Linux можно создать выполнимые скрипты, которые работают с
+MySQL Shell включением строки <code class="literal">#!</code> как первой
+строки. Эта строка должна предоставить полный путь к MySQL Shell и включать
+опцию <a href="mysqlsh-command.html#option_mysqlsh_file">
+<code class="option">--file</code></a>:
+<pre>
+#!/usr/local/mysql-shell/bin/mysqlsh --file
+print("Hello World\n");
+</pre>
+
+<p>Файл скрипта должен быть отмечен как исполняемый
+в файловой системе. Запуск скрипта вызывает MySQL Shell
+и выполняет содержание скрипта.</p>
+
+<h2><a name="mysql-shell-output-formats"></a>4.6. Выходные форматы</h2>
+<p>MySQL Shell может напечатать результаты в форматах таблицы, разделенном
+табуляцией, вертикальном или JSON. С MySQL Shell 8.0.14 опция
+<code class="literal">resultFormat</code> может использоваться, чтобы
+определить любой из этих выходных форматов как постоянный
+для всех сессий или только для текущей сессии. Изменение этого выбора
+немедленно вступает в силу. Для инструкций, как установить параметры
+конфигурации MySQL Shell, смотрите
+<a href="mysql-shell-customizing.html#mysql-shell-configuring-options">раздел
+8.4</a>. Альтернативно, параметр командной строки
+<a href="mysqlsh-command.html#option_mysqlsh_result-format">
+<code class="option">--result-format</code></a> или его псевдонимы
+(<a href="mysqlsh-command.html#option_mysqlsh_table"><code class="option">
+--table</code></a>,
+<a href="mysqlsh-command.html#option_mysqlsh_tabbed"><code class="option">
+--tabbed</code></a>,
+<a href="mysqlsh-command.html#option_mysqlsh_vertical"><code class="option">
+--vertical</code></a>) может использоваться при запуске, чтобы определить
+выходной формат для сессии. Для списка параметров командной строки посмотрите
+<a href="mysqlsh-command.html#mysqlsh">раздел A.1</a>.</p>
+
+<p>Если опция <code class="literal">resultFormat</code> не была определена,
+когда MySQL Shell находится в интерактивном режиме, формат по умолчанию для
+печати набора результатов является отформатированной таблицей, а
+когда MySQL Shell находится в пакетном режиме, формат по умолчанию для печати
+набора результатов является разделенным табуляциями. Когда вы устанавливаете
+умолчание, используя опцию <code class="literal">resultFormat</code>, это
+умолчание применяется в интерактивном и в пакетном режимах.</p>
+
+<p>Чтобы помочь объединить MySQL Shell с внешними инструментами, можно
+использовать опцию <a href="mysqlsh-command.html#option_mysqlsh_json">
+<code class="option">--json</code></a>, чтобы управлять JSON для всего вывода
+MySQL Shell, когда вы запускаете MySQL Shell из командной строки. Когда
+обертывание JSON включено, MySQL Shell производит красивый JSON
+или сырой JSON и значение опции <code class="literal">resultFormat</code>
+проигнорировано. Когда обертывание JSON выключают или не затребовали для
+сессии, наборы результатов произведены в формате, определенном опцией
+<code class="literal">resultFormat</code>.</p>
+
+<p>Опция <code class="literal">outputFormat</code> устарела.
+Эта опция объединила обертывание JSON и функции печати результата.
+Если это все еще определяется в вашем конфигурационном файле MySQL Shell или
+скриптах, делается следующее:
+
+<ul><li>При значениях <code class="literal">json</code> или
+<code class="literal">json/raw</code> для
+<code class="literal">outputFormat</code> активирует JSON с
+симпатичным или сырым JSON соответственно.</p></li>
+
+<li>При значениях <code class="literal">table</code>,
+<code class="literal">tabbed</code> или <code class="literal">vertical</code>
+для <code class="literal">outputFormat</code> выключает обертывание JSON и
+устанавливает параметр конфигурации <code class="literal">resultFormat</code>
+для сессии к соответствующему значению.</p></li></ul>
+
+<h3><a name="mysql-shell-output-table-format"></a>4.6.1. Формат таблицы</h3>
+<p>Формат таблицы используется по умолчанию для печати наборов результатов,
+когда MySQL Shell находится в интерактивном режиме. Результаты запроса
+представлены как отформатированная таблица для лучшего вида и
+чтобы помочь анализу.</p>
+
+<p>Чтобы получить этот выходной формат, работая в пакетном режиме, запустите
+MySQL Shell с опцией <a href="mysqlsh-command.html#option_mysqlsh_result-format">
+<code class="option">--result-format=table</code></a> (или псевдонимом
+<a href="mysqlsh-command.html#option_mysqlsh_table"><code class="option">
+--table</code></a>) или задайте параметр конфигурации
+<code class="literal">resultFormat</code> как
+<code class="literal">table</code>.
+
+<pre>
+mysql-sql&gt; <strong class="userinput"><code>select * from sakila.actor limit 3;</code></strong>
++----------+-------------+----------+--------------------+
+| actor_id | first_name| l ast_name | last_update        |
++----------+-------------+----------+--------------------+
+| 1        | PENELOPE    | GUINESS  | 2006-02-15 4:34:33 |
+| 2        | NICK        | WAHLBERG | 2006-02-15 4:34:33 |
+| 3        | ED          | CHASE    | 2006-02-15 4:34:33 |
++----------+-------------+----------+--------------------+
+3 rows in set (0.00 sec)
+
+mysql-sql&gt;
+</pre>
+
+<h3><a name="mysql-shell-output-tab-format"></a>4.6.2.
+Формат с символами табуляции</h3>
+<p>Этот формат используется по умолчанию для печати наборов результатов,
+когда MySQL Shell работает в пакетном режиме, чтобы произвести лучший вывод
+для автоматизированного анализа.</p>
+
+<p>Чтобы получить этот выходной формат, работая в интерактивном режиме,
+запустите MySQL Shell с опцией
+<a href="mysqlsh-command.html#option_mysqlsh_result-format">
+<code class="option">--result-format=tabbed</code></a> (или псевдонимом
+<a href="mysqlsh-command.html#option_mysqlsh_tabbed"><code class="option">
+--tabbed</code></a>) или установите параметр конфигурации MySQL Shell
+<code class="literal">resultFormat</code> в
+<code class="literal">tabbed</code>.</p>
+
+<pre>
+&gt;<strong class="userinput"><code>echo "select * from sakila.actor limit 3;" | mysqlsh --classic --uri user@192.0.2.20:33460</code></strong>
+actor_idfirst_namelast_name last_update
+1 PENELOPE GUINESS 2006-02-15 4:34:33
+2 NICK WAHLBERG 2006-02-15 4:34:33
+3 ED CHASE 2006-02-15 4:34:33
+</pre>
+
+<h3><a name="mysql-shell-output-vertical"></a>4.6.3. Вертикальный формат</h3>
+<p>Вертикальный формат печатает наборы результатов вертикально вместо
+горизонтальной таблицы, таким же образом как когда используется
+терминатор запроса <code class="literal">\G</code> для запроса SQL.
+Вертикальный формат более удобочитаемый там, где есть более
+длинные текстовые строки.</p>
+
+<p>Чтобы получить этот выходной формат, запустите MySQL Shell с опцией
+<a href="mysqlsh-command.html#option_mysqlsh_result-format">
+<code class="option">--result-format=vertical</code></a> (или ее псевдонимом
+<a href="mysqlsh-command.html#option_mysqlsh_vertical"><code class="option">
+--vertical</code></a>) или установите параметр конфигурации MySQL Shell
+<code class="literal">resultFormat</code> в
+<code class="literal">vertical</code>.</p>
+
+<h3><a name="mysql-shell-json-output"></a>4.6.4. Формат вывода JSON</h3>
+<p>Параметры формата JSON печатают наборы результатов как любой сырой JSON
+(<code class="literal">json/raw</code>) или красивый JSON
+(<code class="literal">json</code>). Чтобы получить этот выходной формат,
+запустите MySQL Shell с опцией
+<a href="mysqlsh-command.html#option_mysqlsh_result-format">
+<code class="option">--result-format=json</code></a> (для красивого JSON) или
+с <a href="mysqlsh-command.html#option_mysqlsh_result-format">
+<code class="option">--result-format=json/raw</code></a> или установите
+параметр конфигурации MySQL Shell <code class="literal">resultFormat</code> в
+<code class="literal">json</code> (для красивого JSON) или в
+<code class="literal">json/raw</code>.</p>
+
+<p>В пакетном режиме, чтобы помочь объединить MySQL Shell с внешними
+инструментами, можно использовать опцию
+<a href="mysqlsh-command.html#option_mysqlsh_json"><code class="option">
+--json</code></a>, чтобы управлять JSON для всего вывода, когда вы
+запускаете MySQL Shell из командной строки. Когда обертывание JSON включено,
+MySQL Shell производит по умолчанию красивый JSON, значение опции
+<code class="literal">resultFormat</code> проигнорировано. Для инструкций
+посмотрите <a href="#mysql-shell-json-wrapping">
+раздел 4.6.5</a>.</p>
+
+<p><span class="strong"><strong>Формат JSON (красивый) в интерактивном режиме
+</strong></span></p>
+<pre>
+mysql-sql&gt; <strong class="userinput"><code>select * from sakila.actor limit 3;</code></strong>
+{
+"duration": "0.00 sec",
+"info": "",
+"row_count": 3,
+"rows": [
+[
+1,
+"PENELOPE",
+"GUINESS",
+{
+"year": 2006,
+"month": 1,
+"day": 15,
+"hour": 4,
+"minute": 34,
+"second": 33.0
+}
+],
+[
+2,
+"NICK",
+"WAHLBERG",
+{
+"year": 2006,
+"month": 1,
+"day": 15,
+"hour": 4,
+"minute": 34,
+"second": 33.0
+}
+],
+[
+3,
+"ED",
+"CHASE",
+{
+"year": 2006,
+"month": 1,
+"day": 15,
+"hour": 4,
+"minute": 34,
+"second": 33.0
+}
+]
+],
+"warning_count": 0
+}
+
+mysql-sql&gt;
+</pre>
+
+<p><span class="strong"><strong>Сырой формат JSON в интерактивном режиме
+</strong></span></p>
+
+<pre>
+mysql-sql&gt; <strong class="userinput"><code>select * from sakila.actor limit 3;</code></strong>
+{"duration":"0.00 sec","info":"","row_count":3,"rows":[[1,"PENELOPE","GUINESS",{"year":2006,"month":1,"day":15,"hour":4,"minute":34,"second":33.0}],[2,"NICK","WAHLBERG",{"year":2006,"month":1,"day":15,"hour":4,"minute":34,"second":33.0}],[3,"ED","CHASE",{"year":2006,"month":1,"day":15,"hour":4,"minute":34,"second":33.0}]],"warning_count":0}
+
+mysql-sql&gt;
+</pre>
+
+<h3><a name="mysql-shell-json-wrapping"></a>4.6.5. Обертка JSON</h3>
+<p>Чтобы помочь объединить MySQL Shell с внешними инструментами, можно
+использовать опцию <a href="mysqlsh-command.html#option_mysqlsh_json">
+<code class="option">--json</code></a>, чтобы управлять JSON, когда вы
+запускаете MySQL Shell из командной строки. Опция
+<a href="mysqlsh-command.html#option_mysqlsh_json"><code class="option">
+--json</code></a> вступает в силу только для сессии,
+для которой определяется.</p>
+
+<p>Определение <a href="mysqlsh-command.html#option_mysqlsh_json">
+<code class="option">--json</code></a>,
+<a href="mysqlsh-command.html#option_mysqlsh_json"><code class="option">
+--json=pretty</code></a> или
+<a href="mysqlsh-command.html#option_mysqlsh_json"><code class="option">
+--json=raw</code></a> включает JSON для сессии. С
+<a href="mysqlsh-command.html#option_mysqlsh_json"><code class="option">
+--json=pretty</code></a> или без указанного значения генерируется красивый
+JSON. С <a href="mysqlsh-command.html#option_mysqlsh_json">
+<code class="option">--json=raw</code></a> генерируется сырой JSON.</p>
+
+<p>Когда обертывание JSON включено, любое значение, которое было
+определено для опции <code class="literal">resultFormat</code>
+в конфигурационном файле или в командной строке (опцией
+<a href="mysqlsh-command.html#option_mysqlsh_result-format">
+<code class="option">--result-format</code></a>) проигнорировано.</p>
+
+<p>Определение <a href="mysqlsh-command.html#option_mysqlsh_json">
+<code class="option">--json=off</code></a> выключает JSON для сессии.
+Когда обертывание JSON выключают или не затребовали для сессии, наборы
+результатов произведены в формате, определенном опцией
+<code class="literal">resultFormat</code>.</p>
+
+<p><span class="strong"><strong>Вывод MySQL Shell с JSON</strong></span></p>
+<pre>
+shell&gt;<strong class="userinput"><code>echo "select * from sakila.actor limit 3;" | mysqlsh --json=raw --sqlc --uri user@192.0.2.20:3306</code></strong>
+{"duration":"0.00 sec","info":"","row_count":3,"rows":[[1,"PENELOPE","GUINESS",{"year":2006,"month":1,"day":15,"hour":4,"minute":34,"second":33.0}],[2,"NICK","WAHLBERG",{"year":2006,"month":1,"day":15,"hour":4,"minute":34,"second":33.0}],[3,"ED","CHASE",{"year":2006,"month":1,"day":15,"hour":4,"minute":34,"second":33.0}]],"warning_count":0}
+
+shell&gt;<strong class="userinput"><code>echo "select * from sakila.actor limit 3;" | mysqlsh --json --sqlc --uri user@192.0.2.20:3306</code></strong>
+или
+shell&gt;<strong class="userinput"><code>echo "select * from sakila.actor limit 3;" | mysqlsh --json=pretty --sqlc --uri user@192.0.2.20:3306</code></strong>
+{
+"duration": "0.00 sec",
+"info": "",
+"row_count": 3,
+"rows": [
+[
+1,
+"PENELOPE",
+"GUINESS",
+{
+"year": 2006,
+"month": 1,
+"day": 15,
+"hour": 4,
+"minute": 34,
+"second": 33.0
+}
+],
+[
+2,
+"NICK",
+"WAHLBERG",
+{
+"year": 2006,
+"month": 1,
+"day": 15,
+"hour": 4,
+"minute": 34,
+"second": 33.0
+}
+],
+[
+3,
+"ED",
+"CHASE",
+{
+"year": 2006,
+"month": 1,
+"day": 15,
+"hour": 4,
+"minute": 34,
+"second": 33.0
+}
+]
+],
+"warning_count": 0
+}
+shell&gt;
+</pre>
+
+<h3><a name="mysql-shell-output-metadata"></a>4.6.6. Метаданные результата
+</h3>
+<p>Когда операция выполняется, в дополнение к любым возвращенным результатам,
+возвращена некоторая дополнительная информация. Это включает такую информацию,
+как количество затронутых строк, предупреждений, продолжительности и так
+далее, когда любое из этих условий верно:
+
+<ul><li>Формат JSON используется для вывода.</p></li>
+<li>MySQL Shell работает в интерактивном режиме.</li></ul>
+<p>Когда формат JSON используется для вывода, метаданные возвращены как часть
+объекта JSON. В интерактивном режиме метаданные печатаются после результатов.
+</p>
+
+<h2><a name="mysql-shell-command-interface"></a>4.7.
+Интерфейс командной строки API</h2>
+<p>MySQL Shell выставляет большую часть своей функциональности, используя
+синтаксис команды API, который позволяет вам легко объединить
+<a href="mysqlsh-command.html#mysqlsh"><span class="command">
+<strong>mysqlsh</strong></span></a> с другими инструментами.
+Эта функциональность подобна использованию опции
+<a href="mysqlsh-command.html#option_mysqlsh_execute"><code class="option">
+--execute</code></a>, но интерфейс команды использует упрощенный синтаксис,
+который уменьшает цитирование и возможность экранировки, которая может
+требоваться терминалами. Например, если вы хотите создать кластер InnoDB,
+используя скрипт для <span class="command"><strong>bash</strong></span>,
+вы могли бы использовать эту функциональность.
+Следующие объекты MySQL Shell доступны:
+
+<ul><li><code class="literal">dba</code> глобальный объект для доступа к
+функциям кластера InnoDB.</p></li>
+<li><code class="literal">cluster</code>
+глобальный объект для доступа к кластеру InnoDB.</p></li>
+
+<li><code class="literal">shell</code> MySQL Shell.</p></li>
+<li><code class="literal">shell.options</code> для формирования
+опций MySQL Shell.</p></li>
+<li><code class="literal">util</code> глобальный объект для доступа к
+утилитам MySQL Shell.</p></li></ul>
+
+<h3><a name="mysql-shell-command-interface-syntax"></a>
+Синтаксис интеграции командной строки API</h3>
+<p>Когда вы запускаете MySQL Shell в командной строке, используя следующий
+специальный синтаксис, <code class="literal">--</code> указывает
+на конец списка вариантов после того, как это будут рассматривать как команду
+и ее аргументы.</p>
+
+<pre>
+mysqlsh [options] -- <em class="replaceable"><code>shell_object</code></em>
+        <em class="replaceable"><code>object_method</code></em>
+        [<em class="replaceable"><code>arguments</code></em>]
+</pre>
+
+<p>Где следующее применяется:
+<ul><li><em class="replaceable"><code>shell_object</code></em>
+последовательность, которая передается глобальному объекту MySQL Shell.
+</p></li>
+
+<li><em class="replaceable"><code>object_method</code></em>
+название метода, предоставленного
+<em class="replaceable"><code>shell_object</code></em>.
+Имена методов могут быть обеспечены JavaScript, Python или
+альтернативной командной строкой в дружественном формате, где все известные
+методы используют все строчные буквы, и слова отделены дефисами.
+Название <em class="replaceable"><code>object_method</code></em>
+автоматически преобразовывается из стандартного имени JavaScript camelCase,
+где все изменения регистра заменяются <code class="literal">-</code>
+и превращаются в строчные буквы. Например,
+<code class="literal">getCluster</code> станет
+<code class="literal">get-cluster</code>.</p></li>
+
+<li><em class="replaceable"><code>arguments</code></em> аргументы, переданные
+<em class="replaceable"><code>object_method</code></em>, когда это вызывают.
+</li></ul>
+
+<p><em class="replaceable"><code>shell_object</code></em>
+должен соответствовать одному из выставленных глобальных объектов, и
+<em class="replaceable"><code>object_method</code></em>
+должен соответствовать одному из методов глобального объекта в одном из
+допустимых форматов (JavaScript, Python или дружественная командная строка).
+Если они не соответствуют действительному глобальному объекту и его методам,
+MySQL Shell завершается с кодом 10.</p>
+
+<h3><a name="mysql-shell-command-interface-arguments"></a>
+Синтаксис аргумента интеграции командной строки API</h3>
+<p>Список <em class="replaceable"><code>arguments</code></em>
+дополнительный, и все аргументы должны следовать синтаксису, подходящему
+для использования командной строки, как описано в этой секции. Например,
+специальных символов, которые обработаны системной оболочкой
+(<span class="command"><strong>bash</strong></span>,
+<span class="command"><strong>cmd</strong></span> и т.п.)
+нужно избежать, и если цитирование необходимо, только цитирование
+родительской оболочки нужно рассмотреть. Другими словами, если
+<span class="quote"><span class="quote">foo bar</span></span>
+используется в качестве параметра в <span class="command"><strong>bash
+</strong></span>, кавычки убраны, и экранировка обработана.</p>
+
+<p>Есть два типа аргументов, которые могут использоваться в списке
+аргументов: позиционные параметры и параметры, передаваемые по имени.
+Позиционные параметры, например, простые типы, такие как последовательности,
+числа, булевы, пустые. Параметры, передаваемые по имени, это пары значения
+ключа, где значения это простые типы. Их использование должно
+придерживаться следующего образца:</p>
+
+<pre>
+[ positional_argument ]* [ { named_argument* } ]* [ named_argument ]*
+</pre>
+
+<p>Правила для использования этого синтаксиса:
+<ul><li>Все части синтаксиса дополнительные и могут быть
+даны в любом порядке.</p></li>
+<li>Вложение фигурных скобок запрещается.</p></li>
+
+<li>У всех значений ключа, поставляемых как параметры, передаваемые по имени,
+должны быть уникальные имена в их области действия. Область действия
+не сгруппирована или в группе (в фигурных скобках).</li></ul>
+
+<p>Эти аргументы тогда преобразовываются в аргументы, переданные к вызову
+метода следующим образом:
+<ul><li>Все несгруппированные параметры, передаваемые по имени, независимо,
+где они появляются, объединены в единственный словарь и переданы как
+последний параметр методу.</p></li>
+
+<li>Параметры, передаваемые по имени, сгруппированные в фигурных скобках,
+объединены в единственный словарь.</p></li>
+
+<li>Позиционные параметры и словари, следующие из сгруппированных параметров,
+передаваемых по имени, вставляются в список
+<em class="replaceable"><code>arguments</code></em> в том порядке, в каком
+они появляются в командной строке.</p></li></ul>
+
+<h3><a name="mysql-shell-command-interface-examples"></a>
+Примеры API-интерфейса</h3>
+<p>Используя интеграцию API, запрос команд MySQL Shell легче, чем с опцией
+<a href="mysqlsh-command.html#option_mysqlsh_execute"><code class="option">
+--execute</code></a>. Следующие примеры показывают, как
+использовать эту функциональность:
+
+<ul><li>Проверить, что экземпляр сервера подходит для модернизации и
+возвратить результаты как JSON для последующей обработки:</p>
+<pre>
+$ <strong class="userinput"><code>mysqlsh -- util check-for-server-upgrade \
+  { --user=root --host=localhost --port=3301 } --password='password' \
+  --outputFormat=JSON --config-path=/etc/mysql/my.cnf</code></strong>
+</pre>
+
+<p>Это отображается эквивалентной команде в MySQL Shell:</p>
+<pre>
+mysql-js&gt; <strong class="userinput"><code>util.checkForServerUpgrade({user:'root', host:'localhost', port:3301}, {password:'password', outputFormat:'JSON', configPath:'/etc/mysql/my.cnf'})</code></strong>
+</pre></li>
+
+<li>Чтобы развернуть экземпляр песочницы кластера InnoDB, слушающей на порте
+1234, и определить пароль соединения:</p>
+<pre>
+$ <strong class="userinput"><code>mysqlsh -- dba deploy-sandbox-instance 1234 --password=<em class="replaceable"><code>password</code></em> </code></strong>
+</pre>
+
+<p>Это отображается к эквивалентной команде в MySQL Shell:</p>
+<pre>
+mysql-js&gt; <strong class="userinput"><code>dba.deploySandboxInstance(1234, {password: <em class="replaceable"><code>password</code></em>})</code></strong>
+</pre></li>
+
+<li>Создать кластер InnoDB, используя экземпляр песочницы, слушающий на
+порте 1234, и определяющий имя <code class="literal">mycluster</code>:</p>
+<pre>
+$ <strong class="userinput"><code>mysqlsh root@localhost:1234 -- dba create-cluster mycluster</code></strong>
+</pre>
+
+<p>Это отображается к эквивалентной команде в MySQL Shell:</p>
+<pre>
+mysql-js&gt; <strong class="userinput"><code>dba.createCluster('mycluster')</code></strong>
+</pre></li>
+
+<li>Проверить статус кластера InnoDB, используя экземпляр
+песочницы, слушающий на порте 1234:</p>
+<pre>
+$ <strong class="userinput"><code>mysqlsh root@localhost:1234 -- cluster status</code></strong>
+</pre>
+
+<p>Это отображается к эквивалентной команде в MySQL Shell:</p>
+<pre>
+mysql-js&gt; <strong class="userinput"><code>cluster.status()</code></strong>
+</pre></li>
+
+<li>Настроить MySQL Shell, чтобы включить историю команд:</p>
+<pre>
+$ <strong class="userinput"><code>mysqlsh -- shell.options set_persist history.autoSave true</code></strong>
+</pre>
+
+<p>Это отображается к эквивалентной команде в MySQL Shell:</p>
+<pre>
+mysql-js&gt; <strong class="userinput"><code>shell.options.set_persist('history.autoSave', true);</code></strong>
+</pre></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

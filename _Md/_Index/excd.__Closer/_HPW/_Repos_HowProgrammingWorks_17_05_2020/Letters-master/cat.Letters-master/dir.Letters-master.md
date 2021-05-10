@@ -1,0 +1,183 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\cat.Letters-master\dir.Letters-master.md">Letters-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Discussions\cat.Discussions\dir.Discussions.md">Discussions</a>
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Discussions\method-2017-04-10.md">method-2017-04-10.md</a>
+            - *# Методсеминар по программной инженерии
+    
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\cat.Docs\dir.Docs.md">Docs</a>
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\NODEJS\cat.NODEJS\dir.NODEJS.md">NODEJS</a>
+            - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\NODEJS\README.md">README.md</a>
+                - *# Планы обучения для "Программной инженерии" по треку Node.js
+                - *## Введение в технологию
+                - *## Курс переподготовки JavaScript разработчиков
+                - *## Курс обучения для студентов КПИ
+        
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\PROG\cat.PROG\dir.PROG.md">PROG</a>
+            - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\PROG\README.md">README.md</a>
+                - *# Парадигмы программирования
+                - *## Первый семестр
+                - *### Базовый синтаксис
+                - *### Базовые концепции
+                - *### Структуры данных
+                - *## Второй семестр
+                - *### Концепции и техники
+                - *### Парадигмы и техники программирования
+                - *## Третий семестр
+                - *### Системная архитектура программ
+                - *### Комплексные примеры проектов
+                - *### Метапрограммирование
+        
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\PROTOCOLS\cat.PROTOCOLS\dir.PROTOCOLS.md">PROTOCOLS</a>
+            - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\PROTOCOLS\Protocols-Questions-02.md">Protocols-Questions-02.md</a>
+                - *## Проектирование сетевых протоколов
+                - *### Теоретические вопросы на экзамен
+            - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\PROTOCOLS\Protocols-Questions-03.md">Protocols-Questions-03.md</a>
+                - *## Проектирование сетевых протоколов
+                - *### Базовые теоретические вопросы на экзамен
+        
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\SOFTARCH\cat.SOFTARCH\dir.SOFTARCH.md">SOFTARCH</a>
+            - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\SOFTARCH\README.md">README.md</a>
+                - *## Архитектура и проектирование программного обеспечения
+                - *### Теоретические вопросы на экзамен
+                - *### Практические задания на экзамен
+        
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\TOOLS\cat.TOOLS\dir.TOOLS.md">TOOLS</a>
+            - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\TOOLS\README.md">README.md</a>
+                - *# Инструментарий разработчика
+        
+    
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Spring\cat.KPI-2016-Spring\dir.KPI-2016-Spring.md">KPI-2016-Spring</a>
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Spring\Intro.md">Intro.md</a>
+            - *## Введение в Node.js
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Spring\Letter1.md">Letter1.md</a>
+            - *## Письмо 1
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Spring\Letter2.md">Letter2.md</a>
+            - *## Письмо 2
+            - *### Материалы и ссылки:
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Spring\Letter3.md">Letter3.md</a>
+            - *## Письмо 3
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Spring\Letter3a.md">Letter3a.md</a>
+            - *## Письмо 3.a
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Spring\Letter4.md">Letter4.md</a>
+            - *## Письмо 4
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Spring\Letter5.md">Letter5.md</a>
+            - *## Письмо 5
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Spring\Meetings.md">Meetings.md</a>
+            - *## Семинары на весну 2016 года
+            - *## 25-18
+            - *## 306-18
+            - *## 307-18
+    
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Summer\cat.KPI-2016-Summer\dir.KPI-2016-Summer.md">KPI-2016-Summer</a>
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Summer\02-JavaScript-New-Features.md">02-JavaScript-New-Features.md</a>
+            - *# Новые возможности в JavaScript
+            - *## Property definition
+            - *## Функции объектов/хешей
+            - *## Destructuring assignment
+            - *## Константы
+            - *## Блоки видимости
+            - *## Arrow functions (толстые стрелки, fat arrow)
+            - *## Значения папаметров по умолчанию
+            - *## Прочие параметры (Spread)
+            - *## Spread для строки
+            - *## Генераторы / Generators
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Summer\Intro.md">Intro.md</a>
+            - *# Летняя школа по Node.js в КПИ
+            - *## Вступительная лекция
+            - *## Группы митапов
+            - *## КПИ и Node.js
+            - *## Планы обучения для "Программной инженерии" по треку Node.js
+            - *## Еще ссылки
+            - *## Подготовка среды
+            - *## Основные темы для летней школы
+            - *## Митапы NodeUA
+            - *##Расписание
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Summer\Meetings.md">Meetings.md</a>
+            - *## Семинары на лето 2016 года
+            - *## Расписание дня на школу
+            - *## Расписание на митапы по субботам
+            - *## 307-18
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2016-Summer\README.md">README.md</a>
+            - *# Материалы летней школы
+    
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Autumn\cat.KPI-2017-Autumn\dir.KPI-2017-Autumn.md">KPI-2017-Autumn</a>
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Autumn\Lecture1.md">Lecture1.md</a>
+            - *# Лекция #1 Введение в программную инженерию
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Autumn\Lecture2.md">Lecture2.md</a>
+            - *# Лекция #2 Основы JS: переменные, типы и функции
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Autumn\Lecture3.md">Lecture3.md</a>
+            - *# Лекции #3 "Настройка среды: git, github"
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Autumn\Lecture4.md">Lecture4.md</a>
+            - *# Лекции #4 "Структуры данных, строки, композиция функций"
+            - *### Примеры кода:
+            - *### Домашнее задание:
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Autumn\Lecture5.md">Lecture5.md</a>
+            - *# Лекции #5 "JavaSctipt for Babies"
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Autumn\Lecture6.md">Lecture6.md</a>
+            - *# Лекции #6 "Композиция функций, частичное применение, обертки"
+            - *### Примеры кода
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Autumn\Lecture7.md">Lecture7.md</a>
+            - *# Лекции #7 "Введение в Node.js"
+            - *### Ссылки:
+            - *### Задание:
+    
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Spring\cat.KPI-2017-Spring\dir.KPI-2017-Spring.md">KPI-2017-Spring</a>
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Spring\Letter1.md">Letter1.md</a>
+            - *## Введение в Node.js
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Spring\Letter2.md">Letter2.md</a>
+            - *## Введение в Node.js
+    
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Summer\cat.KPI-2017-Summer\dir.KPI-2017-Summer.md">KPI-2017-Summer</a>
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Summer\Lecture3.md">Lecture3.md</a>
+            - *# Лекция 3: JavaScript, как ассемблер нашего времени
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Summer\Lecture4.md">Lecture4.md</a>
+            - *# Лекция 4: Введение в Node.js и серверный JavaScript
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Summer\Lecture5.md">Lecture5.md</a>
+            - *# Лекция 5: Замыкания, примеси, обертки, функторы
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Summer\Lecture6.md">Lecture6.md</a>
+            - *# Лекция 6: Файлы, потоки и буферы, и фронтенд
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Summer\Meetings.md">Meetings.md</a>
+            - *## Расписание летней школы 2017 года
+    
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Presentations\cat.Presentations\dir.Presentations.md">Presentations</a>
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Presentations\KPI-2017-SCHOOL-02\cat.KPI-2017-SCHOOL-02\dir.KPI-2017-SCHOOL-02.md">KPI-2017-SCHOOL-02</a>
+            - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Presentations\KPI-2017-SCHOOL-02\css\cat.css\dir.css.md">css</a>
+                - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Presentations\KPI-2017-SCHOOL-02\css\theme\cat.theme\dir.theme.md">theme</a>
+                    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Presentations\KPI-2017-SCHOOL-02\css\theme\README.md">README.md</a>
+                        - *## Dependencies
+                        - *## Creating a Theme
+                
+            
+            - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Presentations\KPI-2017-SCHOOL-02\kpi.md">kpi.md</a>
+                - *## «Ваше положение таково, что понять вам его невозможно»
+                - *### Тимур Шемсединов
+                - *### Что я нашел в КПИ на 1 курсе
+                - *### Я возвращался в КПИ много раз
+                - *### К чему я пришел
+                - *### Переселился в КПИ
+                - *### Что сделано за 2 года
+                - *### Стек технологий Metarhia
+                - *### Внедрено в отраслях:
+                - *### Open Souce / Free Software
+                - *### Контакты и ссылки
+                - *## «Да у нас дыра,<br>но сквозь эту дыру<br>сквозит будущее»
+            - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Presentations\KPI-2017-SCHOOL-02\plugin\cat.plugin\dir.plugin.md">plugin</a>
+                - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Presentations\KPI-2017-SCHOOL-02\plugin\markdown\cat.markdown\dir.markdown.md">markdown</a>
+                    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Presentations\KPI-2017-SCHOOL-02\plugin\markdown\example.md">example.md</a>
+                        - *# Markdown Demo
+                        - *## External 1.1
+                        - *## External 1.2
+                        - *## External 2
+                        - *## External 3.1
+                        - *## External 3.2
+                
+            
+        
+    
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\README.md">README.md</a>
+        - *## Письма к студентам курса
+        - *# Осень 2017
+        - *# Лето 2017
+        - *# Весна 2017
+        - *# Осень 2016
+        - *# Лето 2016
+        - *# Весна 2016

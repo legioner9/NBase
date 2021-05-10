@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\thetaggedvaluestab\assigninginformationtoatag\cat.assigninginformationtoatag\dir.assigninginformationtoatag.md">assigninginformationtoatag</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\thetaggedvaluestab\assigninginformationtoatag\assigninginformationtoatag.md">assigninginformationtoatag.md</a>
+        - *### [Assign Notes to a Tagged Value](https://sparxsystems.com/enterprise_architect_user_guide/15.1/modeling/assigninginformationtoatag.html) Назначьте примечания к значению с тегом

@@ -1,0 +1,10 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.1.1_.11._Семантические_элементы_HTML5.dir\cat.2.1.1_.11._Семантические_элементы_HTML5.dir\dir.2.1.1_.11._Семантические_элементы_HTML5.dir.md">2.1.1_.11._Семантические_элементы_HTML5.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.1.1_.11._Семантические_элементы_HTML5.dir\2.1.1_.11._Семантические_элементы_HTML5.md">2.1.1_.11._Семантические_элементы_HTML5.md</a>
+        - *## 1.11. [Семантические элементы HTML5](https://html5book.ru/html5-semantic-elements/)
+        - *### Метаданные
+        - *### Потоковое содержимое
+        - *### Секционное содержимое
+        - *### Заголовочное содержимое
+        - *### Текстовое содержимое
+        - *### Встроенное содержимое
+        - *### Интерактивное содержимое

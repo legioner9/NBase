@@ -1,0 +1,351 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 2. Рекомендации для разработчиков</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-python-coding"></a>
+Глава 2. Рекомендации для разработчиков</h1>
+<p>Следующие рекомендации касаются аспектов разработки приложений MySQL,
+которые не могли бы быть немедленно очевидны для разработчиков, происходящих
+из среды Python:</p>
+
+<ul><li><p>Для безопасности не кодируйте явно значения для соединения
+с базой данных в вашем главном скрипте. Python имеет <code class="literal">
+config.py</code>, где можно отделить такие значения от остальной части кода.
+</p></li>
+
+<li><p>Скрипты Python часто растут и сносят большие структуры данных в памяти
+до пределов доступной RAM. Поскольку MySQL часто имеет дело с наборами
+данных, которые во много раз больше, чем доступная память, методы, которые
+оптимизируют пространство памяти и дисковый ввод-вывод, особенно важны.
+Например, в таблицах MySQL, вы, как правило, используете числовые ID, а не
+основанные на операциях со строками ключи словаря, так, чтобы значения ключа
+были компактны и имели предсказуемую длину. Это особенно важно для
+столбцов, которые составляют
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_primary_key"
+target="_top">primary key</a> для таблиц <code class="literal">InnoDB</code>,
+потому что те значения столбцов дублированы в каждом
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_secondary_index"
+target="_top">secondary index</a>.</p></li>
+
+<li><p>Любое приложение, которое принимает ввод, должно ожидать
+обрабатывать неправильные данные.</p>
+<p>Неправильные данные могли бы быть случайными, такими как значения
+не из диапазона или неформатированные последовательности.
+Приложение может использовать проверки серверной стороны, такие как
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_unique_constraint"
+target="_top">unique constraints</a> и
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_not_null_constraint"
+target="_top">NOT NULL constraints</a>, чтобы удержать неправильные данные от
+достижения базы данных когда-либо. На клиентской стороне используйте такие
+методы, как обработчики исключений, чтобы сообщить о любых проблемах и
+принять меры по ликвидации последствий.</p>
+
+<p>Неправильные данные могли бы также быть преднамеренными, представляя
+<span class="quote">SQL injection</span>. Например, входные значения могли бы
+содержать кавычки, точки с запятой, символы подстановки
+<code class="literal">%</code> и <code class="literal">_</code> и
+другие знаки, значительные в SQL-операторах. Проверьте входные значения,
+чтобы удостовериться, что у них есть только ожидаемые знаки.
+Экранируйте любые специальные символы, которые могут изменить намеченное
+поведение, когда подставлены в SQL-оператор. Никогда не связывайте значение
+ввода данных пользователем в SQL-оператор, не делая проверки и экранировки.
+Даже когда ввод произведен некоторой другой программой, ожидайте, что другая
+программа, возможно, также подставилась под угрозу и посылает вам
+неправильные или злонамеренные данные.</p></li>
+
+<li><p>Поскольку наборы результатов от SQL-запросов могут быть очень
+большими, используйте соответствующий метод, чтобы получить элементы набора
+результатов, поскольку вы образовываете циклы.
+<a href="refer.htm#connector-python-api-mysqlcursor-fetchone">
+fetchone()</a> получает единственный элемент, когда вы знаете, что набор
+результатов содержит единственную строку.
+<a href="refer.htm#connector-python-api-mysqlcursor-fetchall">
+fetchall()</a> получает все элементы, когда вы знаете, что набор результатов
+содержит ограниченное количество строк.
+<a href="refer.htm#connector-python-api-mysqlcursor-fetchmany">
+fetchmany()</a> является методом общего назначения, когда вы не можете
+предсказать размер набора результатов: вы продолжаете вызывать его и
+получать возвращенные элементы, пока больше не останется результатов.
+</p></li>
+
+<li><p>Так как у Python уже есть удобные модули, например,
+<code class="literal">pickle</code> и
+<code class="literal">cPickle</code>, чтобы прочитать и написать структуры
+данных на диске, у данных, которые вы принимаете решение хранить в MySQL
+вместо этого, вероятно, будут специальные особенности:</p>
+
+<ul><li><p><span class="bold"><strong>Слишком большие, чтобы поместиться в
+памяти когда-то. </strong></span>Вы используете
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/select.html" target="_top">
+<code class="literal">SELECT</code></a>, чтобы запросить только те элементы,
+какие нужны, и <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/group-by-functions.html"
+target="_top">агрегатные функции</a>, чтобы выполнить вычисления через
+много элементов. Вы формируете опцию
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/innodb-parameters.html#sysvar_innodb_buffer_pool_size"
+target="_top"><code class="literal">innodb_buffer_pool_size</code></a>
+в сервере MySQL, чтобы выделить определенное количество RAM для
+кэширования результатов запроса.</p></li>
+
+<li><p><span class="bold"><strong>Слишком сложно, чтобы быть представленным
+единственной структурой данных. </strong></span>Вы делите данные между
+различными таблицами SQL. Можно повторно объединить данные из многих таблиц
+при помощи запроса
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_join"
+target="_top">join</a>. Вы удостоверяетесь, что связанные данные сохранены в
+синхронизации между различными таблицами, настроив отношения
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_foreign_key"
+target="_top">foreign key</a>.</p></li>
+
+<li><p><span class="bold"><strong>Обновляются часто, возможно многочисленными
+пользователями одновременно. </strong></span>Обновления могли бы затронуть
+только небольшую часть данных, делая расточительным писать целую структуру
+каждый раз. Вы используете SQL-запросы
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html" target="_top">
+<code class="literal">INSERT</code></a>,
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/update.html" target="_top">
+<code class="literal">UPDATE</code></a> и
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/delete.html" target="_top">
+<code class="literal">DELETE</code></a>, чтобы обновить различные элементы
+одновременно. Вы используете таблицы
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/innodb-storage-engine.html"
+target="_top"><code class="literal">InnoDB</code></a> и
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_transaction"
+target="_top">транзакции</a>, чтобы помешать операциям записи находиться в
+противоречии друг с другом и возвращать последовательные результаты запроса,
+как раз когда основные данные обновляются.</p></li></ul></li>
+
+<li><p>Использование методов наиболее успешной практики MySQL для работы
+может помочь вашему приложению масштабироваться не требуя переработки
+и изменения архитектуры. Посмотрите
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/optimization.html"
+target="_top">Optimization</a> для методов наиболее успешной практики для
+работы MySQL. Это предлагает рекомендации и советы для настройки SQL,
+проектирования баз данных и конфигурации сервера.</p></li>
+
+<li><p>Можно избежать проблем, изучив SQL-операторы MySQL для общих операций:
+операторы, чтобы использовать в запросах, методы для оптовых загрузок данных
+и так далее. Некоторые запросы это расширения к основным, определенным
+стандартом SQL. См.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/sql-data-manipulation-statements.html"
+target="_top">Data Manipulation Statements</a>,
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/sql-data-definition-statements.html"
+target="_top">Data Definition Statements</a>, and
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/select.html" target="_top">
+SELECT Statement</a> для главных классов запросов.</p></li>
+
+<li><p>Выполнение SQL-операторов от Python, как правило, включает объявление
+очень длинных, возможно многострочных строковых литералов.
+Поскольку строковые литералы в SQL-операторах могут быть заключены в
+одиночные кавычки, двойные кавычки или содержать любой из этих знаков для
+простоты, можно использовать механизм Python's triple-quoting. Например:</p>
+
+<pre class="programlisting">
+'''It doesn't matter if this string contains 'single'
+or "double" quotes, as long as there
+aren't 3 in a row.'''
+</pre>
+
+<p>Можно использовать любой из символов <code class="literal">'</code> или
+<code class="literal">"</code> для многострочных строковых литералов.
+</p></li>
+
+<li><p>Многие секреты быстрого и масштабируемого применения MySQL включают
+использование правильного синтаксиса в самом начале вашей работы, в запросе
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/create-table.html"
+target="_top"><code class="literal">CREATE TABLE</code></a>.
+Например, Oracle рекомендует <code class="literal">ENGINE=INNODB</code>
+для большинства таблиц и делает <code class="literal">InnoDB</code>
+механизмом хранения по умолчанию в MySQL 5.5 и выше. Применение таблиц типа
+<code class="literal">InnoDB</code> позволяет транзакционное поведение,
+которое помогает масштабируемость нагрузки и предлагает автоматическое
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_crash_recovery"
+target="_top">восстановление</a>. Другая рекомендация состоит в том,
+чтобы объявить числовой
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_primary_key"
+target="_top">primary key</a> для каждой таблицы, который предлагает самый
+быстрый способ искать значения и может действовать как указатель на
+присваиваемые значения в других таблицах
+(<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_foreign_key"
+target="_top">foreign key</a>). Также в
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/create-table.html"
+target="_top"><code class="literal">CREATE TABLE</code></a>
+использование самых компактных типов данных, которые удовлетворяют ваши
+требования к приложению, помогает работе и масштабируемости, потому что это
+позволяет серверу базы данных переместить меньше данных
+между памятью и диском.</p></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

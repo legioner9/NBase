@@ -1,0 +1,5 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\ServeStatic-master\cat.ServeStatic-master\dir.ServeStatic-master.md">ServeStatic-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\ServeStatic-master\Exercises.ru.md">Exercises.ru.md</a>
+        - *## Упражнения
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\ServeStatic-master\README.md">README.md</a>
+        - *# Serve static content with HTTP

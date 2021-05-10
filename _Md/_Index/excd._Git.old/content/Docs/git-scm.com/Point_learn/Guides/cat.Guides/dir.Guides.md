@@ -1,0 +1,6 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\git-scm.com\Point_learn\Guides\cat.Guides\dir.Guides.md">Guides</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\git-scm.com\Point_learn\Guides\gitattributes.md">gitattributes.md</a>
+        - *# [gitattributes](https://git-scm.com/docs/gitattributes)
+        - *## NAME
+        - *## SYNOPSIS
+        - *## DESCRIPTION

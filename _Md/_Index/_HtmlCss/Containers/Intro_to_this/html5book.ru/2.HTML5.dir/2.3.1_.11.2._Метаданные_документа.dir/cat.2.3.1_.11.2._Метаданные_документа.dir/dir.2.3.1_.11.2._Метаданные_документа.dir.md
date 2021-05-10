@@ -1,0 +1,7 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.3.1_.11.2._Метаданные_документа.dir\cat.2.3.1_.11.2._Метаданные_документа.dir\dir.2.3.1_.11.2._Метаданные_документа.dir.md">2.3.1_.11.2._Метаданные_документа.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.3.1_.11.2._Метаданные_документа.dir\2.3.1_.11.2._Метаданные_документа.md">2.3.1_.11.2._Метаданные_документа.md</a>
+        - *## [1.11.2. Метаданные документа](https://html5book.ru/metadannye-dokumenta)
+        - *### 3. Элемент \<base>
+        - *### АТРИБУТЫ ЭЛЕМЕНТА \<LINK>
+        - *### АТРИБУТЫ ЭЛЕМЕНТА \<META>
+        - *### АТРИБУТЫ ЭЛЕМЕНТА \<STYLE>

@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\.git-diff.html.dir\cat..git-diff.html.dir\dir..git-diff.html.dir.md">.git-diff.html.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\.git-diff.html.dir\git-diff.html.consp.md">git-diff.html.consp.md</a>
+        - *# git-diff(1) Manual Page

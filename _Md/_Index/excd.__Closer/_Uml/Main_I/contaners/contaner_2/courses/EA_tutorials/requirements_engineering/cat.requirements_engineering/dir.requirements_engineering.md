@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\requirements_engineering\cat.requirements_engineering\dir.requirements_engineering.md">requirements_engineering</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\requirements_engineering\requirements_engineering.md">requirements_engineering.md</a>
+        - *# <a href="https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/requirements_engineering.html" target="_blank">Requirement Models</a> Модели требований

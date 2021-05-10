@@ -1,0 +1,1 @@
+[Как запустить Bash скрипт в Linux](https://zen.yandex.ru/media/merion_networks/kak-zapustit-bash-skript-v-linux-5f21cbf59c71bf02d583a6d3)

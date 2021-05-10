@@ -1,0 +1,8 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Arch\_EGE\Русский\contaners\contaner_1\2\cat.2\dir.2.md">2</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Arch\_EGE\Русский\contaners\contaner_1\2\80lev.md">80lev.md</a>
+        - *# Сочинительные союзы
+        - *# Местоимения - их разряды
+        - *# Частицы
+        - *# Вводные слова
+        - *# Наречия
+        - *# Союзные слова

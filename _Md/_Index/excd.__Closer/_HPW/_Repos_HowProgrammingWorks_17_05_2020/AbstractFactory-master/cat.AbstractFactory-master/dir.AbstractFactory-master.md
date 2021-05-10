@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\AbstractFactory-master\cat.AbstractFactory-master\dir.AbstractFactory-master.md">AbstractFactory-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\AbstractFactory-master\README.md">README.md</a>
+        - *# Abstract Factory Pattern

@@ -1,0 +1,17 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\++Основы_программирования\2. Операции и стандартные библиотечные функции языка\_this_conspect\cat._this_conspect\dir._this_conspect.md">_this_conspect</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\++Основы_программирования\2. Операции и стандартные библиотечные функции языка\_this_conspect\consp.md">consp.md</a>
+        - *# Операции и стандартные библиотечные функции языка
+        - *## Unary operation 
+        - *### sizeof 
+        - *#### объем памяти, отводимых под переменные определенного типа.
+        - *#### к массиву дает количество байтов, занимаемых массивом,
+        - *#### к указателю дает размер самого указателя,
+        - *## binary operations
+        - *## binary shift operations
+        - *## bitwise logical operations
+        - *## logical operation of relationships
+        - *## assignment operations
+        - *## standart function
+        - *## priority of arithmetic operations
+        - *## type coercion
+        - *## example of use operation

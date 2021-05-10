@@ -1,0 +1,3807 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=">
+  <title>Глава 6. Работа с Connector/J</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-j-reference"></a>Глава 6. Работа с Connector/J</h1>
+<p>Этот раздел руководства содержит справочный материал
+для MySQL Connector/J.</p>
+
+<h2><a name="connector-j-reference-driver-name"></a>
+6.1. Имя класса драйвера и источника данных</h2>
+<p>Название класса, который осуществляет
+<code class="literal">java.sql.Driver</code> в MySQL Connector/J:
+<code class="literal">com.mysql.cj.jdbc.Driver</code>.</p>
+
+<h2><a name="connector-j-reference-jdbc-url-format"></a>
+6.2. Синтаксис URL связи</h2>
+<a class="indexterm" name="idm45064741013104"></a>
+<a class="indexterm" name="idm45064741011712"></a>
+<p>Эта секция объясняет синтаксис URL для соединения с MySQL.</p>
+<p>Это универсальный формат связи URL:</p>
+
+<pre class="programlisting">
+protocol//[hosts][/database][?properties]
+</pre>
+
+<p>URL состоит из следующих частей:</p>
+<p>Любые зарезервированные символы для URL (например,
+<code class="literal">/</code>, <code class="literal">:</code>,
+<code class="literal">@</code>, <code class="literal">(</code>, ),
+<code class="literal">[</code>, <code class="literal">]</code>,
+<code class="literal">&amp;</code>, <code class="literal">#</code>,
+<code class="literal">=</code>, <code class="literal">?</code> и пробел),
+которые появляются в любой части URL, должны быть закодированы процентом.</p>
+
+<h3><a name="idm45064741000112"></a>
+<em class="replaceable"><code>protocol</code></em></h3>
+<p>Есть возможные протоколы для связи:</p>
+
+<ul><li><p><code class="literal">jdbc:mysql:</code>
+для обычных и основных связей отказоустойчивости JDBC.</p></li>
+<li><p><code class="literal">jdbc:mysql:loadbalance:</code>
+для выравнивания нагрузки связи JDBC. Посмотрите
+<a href="multi.htm#connector-j-usagenotes-j2ee-concepts-managing-load-balanced-connections">
+раздел 9.3</a> для деталей.</p></li>
+
+<li><p><code class="literal">jdbc:mysql:replication:</code>
+для соединений репликации JDBC. Посмотрите
+<a href="multi.htm#connector-j-master-slave-replication-connection">раздел
+9.4</a>.</p></li>
+
+<li><p><code class="literal">mysqlx:</code> для связей X DevAPI.</p></li>
+<li><p><code class="literal">jdbc:mysql+srv:</code>
+для обычной и основной отказоустойчивости связи JDBC, которые используют
+записи DNS SRV.</p></li>
+
+<li><p><code class="literal">jdbc:mysql+srv:loadbalance:</code>
+для выравнивания нагрузки связи JDBC, которые используют записи DNS SRV.
+</p></li>
+
+<li><p><code class="literal">jdbc:mysql+srv:replication:</code>
+для соединений репликации JDBC, которые используют записи DNS SRV.</p></li>
+<li><p><code class="literal">mysqlx+srv:</code>
+для связей X DevAPI, которые используют записи DNS SRV.</p></li></ul>
+
+<h3><a name="idm45064740985488"></a>
+<em class="replaceable"><code>hosts</code></em></h3>
+<p>В зависимости от ситуации, <em class="replaceable"><code>host</code></em>
+может состоять просто из имени хоста, или это может быть сложная структура,
+состоящая из различных элементов как многократные имена хоста, номера портов,
+определенные для хоста свойства и удостоверения пользователя.</p>
+
+<ul><li><p><a name="connector-j-url-single-host"></a>Единственный хост:</p>
+<ul><li><p><a name="connector-j-url-single-host-without-props"></a>
+Связи единственного хоста, не добавляя определенные для него свойства:</p>
+
+<ul><li><p><em class="replaceable"><code>hosts</code></em> написан в формате
+<em class="replaceable"><code>host</code></em>:<em class="replaceable"><code>
+port</code></em>. Это пример простой связи единственного хоста URL:</p>
+
+<pre class="programlisting">
+jdbc:mysql://host1:33060/sakila
+</pre></li>
+
+<li><p><em class="replaceable"><code>host</code></em> может быть IPv4 или
+IPv6, в последнем случае это должно быть помещено в квадратных скобках,
+например, <span class="quote">[1000:2000::abcd]</span>. Когда
+<em class="replaceable"><code>host</code></em> не указан, используется
+значение по умолчанию <code class="literal">localhost</code>.</p></li>
+
+<li><p><em class="replaceable"><code>port</code></em> это
+стандартный номер порта, т.е. целое число между 1 и 65535.
+Номер порта по умолчанию для обычного подключения MySQL 3306 и 33060 для
+для связи, использующей X Protocol. Если
+<em class="replaceable"><code>port</code></em> не указан,
+соответствующее умолчание используется.</p></li></ul></li>
+
+<li><p><a name="connector-j-url-single-host-with-props"></a>
+Связи единственного хоста, добавляющие определенные для хоста свойства:</p>
+<ul><li><p>В этом случае хост определяется как последовательность
+<code class="literal"><em class="replaceable"><code>key</code></em>=
+<em class="replaceable"><code>value</code></em></code>.
+Ключи используются, чтобы опознать хост, порт, а также любые определенные для
+хоста свойства. Есть два дополнительных формата для определения ключей:</p>
+
+<ul><li><p>Форма <span class="quote">address-equals</span>:</p>
+<pre class="programlisting">
+address=(host=host_or_ip)(port=port)(key1=value1)(key2=value2)...(keyN=valueN)
+</pre>
+
+<p>Вот типовой URL, использующий форму
+<span class="quote">address-equals</span>:</p>
+<pre class="programlisting">
+jdbc:mysql://address=(host=myhost)(port=1111)(key1=value1)/db
+</pre></li>
+
+<li><p>Форма <span class="quote">key-value</span>:</p>
+<pre class="programlisting">
+(host=host,port=port,key1=value1,key2=value2,...,keyN=valueN)
+</pre>
+
+<p>Вот типовой URL, использующий форму <span class="quote">key-value</span>:
+</p>
+<pre class="programlisting">
+jdbc:mysql://(host=myhost,port=1111,key1=value1)/db
+</pre></li></ul></li>
+
+<li><p>Хост и порт опознаются ключами
+<em class="replaceable"><code>host</code></em> и
+<em class="replaceable"><code>port</code></em>.
+Описания формата и значения по умолчанию
+<em class="replaceable"><code>host</code></em> и
+<em class="replaceable"><code>port</code></em>, данные
+<a href="#connector-j-url-single-host-without-props">выше</a>,
+также применяются здесь.</p></li>
+
+<li><p>Другие ключи, которые могут быть добавлены, включают
+<code class="literal">user</code>,
+<code class="literal">password</code>,
+<code class="literal">protocol</code> и т.д.
+Они отвергают глобальные значения в части
+<a href="#connector-j-url-properties">
+<em class="replaceable"><code>properties</code></em> URL</a>.
+Перекрыть можно только пользователя, пароль, сетевые тайм-ауты
+и размеры кэшей метаданных и запросов, эффекты других переопределений для
+хоста не определяются.</p></li>
+
+<li><p>Различные протоколы могут потребовать различных ключей. Например,
+схема <code class="literal">mysqlx:</code> использует два специальных ключа,
+<em class="replaceable"><code>address</code></em> и
+<em class="replaceable"><code>priority</code></em>.
+<em class="replaceable"><code>address</code></em> это пара
+<em class="replaceable"><code>host</code></em>:<em class="replaceable"><code>
+port</code></em>, а <em class="replaceable"><code>priority</code></em>
+целое число. Например:</p>
+
+<pre class="programlisting">
+mysqlx://(address=host:1111,priority=1,key1=value1)/db
+</pre></li>
+
+<li><p><em class="replaceable"><code>key</code></em>
+чувствительное к регистру. Два ключей с отличиями только в регистре, это
+разные ключи, и нет никаких гарантий, который будет использоваться.
+</p></li></ul></li></ul></li>
+
+<li><p><a name="connector-j-url-multiple-hosts"></a>Много хостов</p>
+<p>Есть два формата для определения многократных хостов:</p>
+<ul><li><p>Сптсок разделенных запятой значений:</p>
+<pre class="programlisting">
+host1,host2,...,hostN
+</pre>
+
+<p>Каждый хост может быть определен любым из этих трех способов, описанных
+<a href="#connector-j-url-single-host">выше</a>.
+Вот некоторые примеры:</p>
+
+<pre class="programlisting">
+jdbc:mysql://myhost1:1111,myhost2:2222/db
+jdbc:mysql://address=(host=myhost1)(port=1111)(key1=value1),address=(host=myhost2)(port=2222)(key2=value2)/db
+jdbc:mysql://(host=myhost1,port=1111,key1=value1),(host=myhost2,port=2222,key2=value2)/db
+jdbc:mysql://myhost1:1111,(host=myhost2,port=2222,key2=value2)/db
+mysqlx://(address=host1:1111,priority=1,key1=value1),(address=host2:2222,priority=2,key2=value2)/db
+</pre></li>
+
+<li><p>Хосты в списке разделены запятой, затем идет
+список в квадратных скобках:</p>
+<pre class="programlisting">
+[<em class="replaceable"><code>host1</code></em>,<em class="replaceable"><code>host2</code></em>,...,<em class="replaceable"><code>hostN</code></em>]
+</pre>
+
+<p>Это называют формой подсписка хоста, которая позволяет разделять
+<a href="#connector-j-url-user-credentials">удостоверения
+пользователя</a> всех хостов в списке, как будто они единственный хост.
+Каждый хост в списке может быть определен любым из этих трех способов,
+описанных <a href="#connector-j-url-single-host">выше</a>.
+Вот некоторые примеры:</p>
+
+<pre class="programlisting">
+jdbc:mysql://sandy:secret@[myhost1:1111,myhost2:2222]/db
+jdbc:mysql://sandy:secret@[address=(host=myhost1)(port=1111)(key1=value1),address=(host=myhost2)(port=2222)(key2=value2)]/db
+jdbc:mysql://sandy:secret@[myhost1:1111,address=(host=myhost2)(port=2222)(key2=value2)]/db
+</pre>
+
+<p>В то время как невозможно написать подсписки хоста рекурсивно,
+список хостов может содержать подсписки хостов как своих членских хостов.
+</p></li></ul></li>
+
+<li><p><a name="connector-j-url-user-credentials"></a>Данные пользователей</p>
+<p>Данные пользователей могут быть установлены за пределами связи URL,
+например, как аргументы, получая связь от
+<code class="literal">java.sql.DriverManager</code> (см.
+<a href="#connector-j-reference-configuration-properties">раздел
+6.3</a> для деталей). Когда работают со связью URL, есть несколько
+способов определить их:</p>
+
+<ul><li><p>Префикс единственный хост, подсписок хоста (см.
+<a href="#connector-j-url-multiple-hosts">здесь</a>) или
+или любой хост в списке хостов с удостоверениями пользователя с
+<code class="literal">@</code>:</p>
+
+<pre class="programlisting">
+<em class="replaceable"><code>user</code></em>:<em class="replaceable"><code>password</code></em>@<em class="replaceable"><code>host_or_host_sublist</code></em>
+</pre>
+
+<p>Например:</p>
+<pre class="programlisting">
+mysqlx://sandy:secret@[(address=host1:1111, priority=1, key1=value1),
+                       (address=host2:2222, priority=2, key2=value2))]/db
+</pre></li>
+
+<li><p>Используйте ключи <code class="literal">user</code> и
+<code class="literal">password</code>, чтобы определить параметры
+для каждого хоста:</p>
+
+<pre class="programlisting">
+(user=sandy)(password=mypass)
+</pre>
+
+<p>Например:</p>
+<pre class="programlisting">
+jdbc:mysql://[(host=myhost1,port=1111,user=sandy,password=secret),
+              (host=myhost2,port=2222,user=finn,password=secret)]/db
+jdbc:mysql://address=(host=myhost1)(port=1111)(user=sandy)(password=secret),
+             address=(host=myhost2)(port=2222)(user=finn)(password=secret)/db
+</pre></li></ul>
+
+<p>В обеих формах, когда многопользовательские параметры определяются,
+левая имеет приоритет, то есть, идя слева направо в строке подключения,
+используется первый найденный параметр, который применим к хосту.</p>
+
+<p><span class="emphasis"><em>Внутри</em></span>
+подсписка хостов ни у какого хоста не может быть параметров
+пользователя в формате @, но отдельному хосту можно определить
+параметры пользователя в формате ключа.</p></li></ul>
+
+<h3><a name="idm45064740914816"></a><em class="replaceable"><code>database
+</code></em></h3>
+<p>База данных по умолчанию или каталог, чтобы открыть.
+Если база данных не определяется, связь установлена без базы данных по
+умолчанию. В этом случае нужен вызов метода
+<code class="function">setCatalog()</code> в экземпляре
+<code class="literal">Connection</code> или указание имени таблицы, используя
+имя базы данных (то есть,
+<code class="literal">SELECT <em class="replaceable"><code>dbname</code></em>.
+<em class="replaceable"><code>tablename</code></em>.<em class="replaceable">
+<code>colname</code></em> FROM dbname.tablename...</code>)
+в ваших SQL-операторах. Открытие связи, не определяя базу данных, в целом
+полезно только при разработке инструментов, которые работают с многими базами
+данных, такими как GUI-менеджеры баз данных.</p>
+
+<p>Всегда используйте метод
+<code class="literal">Connection.setCatalog()</code>, чтобы определить
+желаемую базу данных в запросах JDBC вместо применения вызова
+<code class="literal">USE <em class="replaceable"><code>database</code>
+</em></code>.</p>
+
+<h3><a name="connector-j-url-properties"></a><em class="replaceable"><code>
+properties</code></em></h3>
+<p>Последовательность глобальных свойств, относящихся ко всем хостам,
+которым предшествует <code class="literal">?</code>, записанная как пары
+<code class="literal"><em class="replaceable"><code>key</code></em>=
+<em class="replaceable"><code>value</code></em></code>, отделенные символом
+<span class="quote"><code class="literal">&amp;</code></span>.
+Вот некоторые примеры:</p>
+
+<pre class="programlisting">
+jdbc:mysql://(host=myhost1,port=1111),(host=myhost2,port=2222)/db?key1=value1&amp;key2=value2&amp;key3=value3
+</pre>
+
+<p>Следующее верно для пар ключ/значение:</p>
+<ul><li><p><em class="replaceable"><code>key</code></em> и
+<em class="replaceable"><code>value</code></em> просто последовательности.
+Надлежащее преобразование типов и проверка выполняются
+внутренне в Connector/J.</p></li>
+
+<li><p><em class="replaceable"><code>key</code></em>
+чувствительны к регистру. Два ключа с отличием только в регистре
+входят в противоречие и неизвестно, какой будет использоваться.</p></li>
+
+<li><p>Любые определенные для хоста значения, определенные с парами
+ключ/значение, как объяснено в
+<a href="#connector-j-url-single-host-with-props">здесь</a> и
+<a href="#connector-j-url-multiple-hosts">здесь</a>,
+отвергают глобальные значения.</p></li></ul>
+
+<p>См. <a href="#connector-j-reference-configuration-properties">
+раздел 6.3</a> для получения дополнительной
+информации о свойствах конфигурации.</p>
+
+<h2><a name="connector-j-reference-configuration-properties"></a>
+6.3. Свойства конфигурации</h2>
+<a class="indexterm" name="idm45064740895168"></a>
+<a class="indexterm" name="idm45064740893776"></a>
+<p>Свойства конфигурации определяют, как Connector/J установит связь с
+сервером MySQL. Если не указано иное, свойства могут быть установлены для
+объекта <code class="literal">DataSource</code> или объекта
+<code class="literal">Connection</code>.</p>
+
+<p>Свойства конфигурации могут быть установлены одним из следующих способов:
+</p>
+<ul><li><p>Используя  методы <code class="literal">set*()</code>
+на MySQL-реализации <code class="literal">java.sql.DataSource</code>
+(который является предпочтительным методом, используя
+<code class="literal">java.sql.DataSource</code>):</p>
+
+<ul><li><p><code class="literal">com.mysql.cj.jdbc.MysqlDataSource</code>
+</p></li>
+<li><p><code class="literal">com.mysql.cj.jdbc.MysqlConnectionPoolDataSource
+</code></p></li></ul></li>
+
+<li><p>Как пара ключ/значение в экземпляре
+<code class="literal">java.util.Properties</code>, переданном к
+<code class="literal">DriverManager.getConnection()</code> или
+<code class="literal">Driver.connect()</code>.</p></li>
+
+<li><p>Как параметр URL JDBC в URL, данном
+<code class="literal">java.sql.DriverManager.getConnection()</code>,
+<code class="literal">java.sql.Driver.connect()</code> или MySQL-реализации
+метода <code class="literal">javax.sql.DataSource</code>
+<code class="function">setURL()</code>. Если вы определите свойство
+конфигурации в URL, не предоставляя значение для него, ничто не будет
+установлено, например, добавление
+<code class="literal">useServerPrepStmts</code>
+к URL не заставляет Connector/J использовать подготовленные запросы
+серверной стороны, необходимо добавить
+<code class="literal">useServerPrepStmts=true</code>.</p>
+
+<p>Если механизм, который вы используете, чтобы формировать URL JDBC, основан
+на XML, используйте символ XML <code class="literal">&amp;amp;</code>, чтобы
+отделить параметры конфигурации, поскольку амперсанд это зарезервированный
+символ для XML.</p></li></ul>
+
+<p>Свойства перечисляются в следующих таблицах.</p>
+<p><b>Идентификация.</b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p>
+<span class="strong"><strong>user</strong></span></p>
+<p>Пользователь, чтобы соединиться с сервером.</p>
+<p>Начиная с версии: все версии.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>password</strong></span></p>
+<p>Пароль, чтобы соединиться с сервером.</p>
+<p>Начиная с версии: все версии.
+</p></td></tr></tbody></table>
+
+<p><b>Связь.</b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p>
+<span class="strong"><strong>connectionAttributes</strong></span></p>
+
+<p>Разграниченный запятой список определенных пользователями пар
+key:value (в дополнение к типичным MySQL-определенным парам key:value),
+чтобы быть переданными в MySQL Server для показа как атрибуты связи в
+таблице PERFORMANCE_SCHEMA.SESSION_CONNECT_ATTRS.
+Использование в качестве примера:
+connectionAttributes=key1:value1,key2:value2.
+Эта функциональность доступна для использования только с MySQL Server 5.6 или
+позже. Более ранние версии MySQL Server не поддерживают признаки связи,
+заставляя этот параметр конфигурации быть проигнорированным.
+Определение connectionAttributes=none заставит обработку признака связи быть
+обойденной для ситуаций, где скорость создания/инициализации
+связи очень важна.</p>
+<p>Начиная с версии: 5.1.25.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>connectionLifecycleInterceptors</strong></span>
+</p>
+
+<p>Разграниченный запятой список классов, которые реализуют
+"com.mysql.cj.jdbc.interceptors.ConnectionLifecycleInterceptor", который
+должен зарегистрировать события жизненного цикла связи (создание,
+разрушение, передача, отмена, установка текущей базы данных и изменение
+режима autocommit) и потенциально изменяет выполнение этих команд.
+ConnectionLifecycleInterceptors "наращиваемый", больше чем один перехватчик
+может быть определен через свойство конфигурации как разграниченный запятой
+список с перехватчиками в порядке слева направо.</p>
+<p>Начиная с версии: 5.1.4.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useConfigs</strong></span></p>
+<p>Загрузите разграниченный запятой список свойств конфигурации прежде, чем
+разобрать URL или применить определенные пользователями свойства.
+Эти конфигурации объяснены в документации.</p>
+<p>Начиная с версии: 3.1.5.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>authenticationPlugins</strong></span></p>
+<p>Разграниченный запятой список классов, которые реализуют
+com.mysql.cj.protocol.AuthenticationPlugin и будет использоваться для
+идентификации, если не отключено свойство "disabledAuthenticationPlugins".</p>
+<p>Начиная с версии: 5.1.19.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>clientInfoProvider</strong></span></p>
+<p>Название класса, который осуществляет интерфейс
+com.mysql.cj.jdbc.ClientInfoProvider, чтобы поддержать методы
+JDBC 4.0 Connection.get/setClientInfo().</p>
+<p>Значение по умолчанию: com.mysql.cj.jdbc.CommentClientInfoProvider.</p>
+<p>Начиная с версии: 5.1.0.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>createDatabaseIfNotExist</strong></span></p>
+<p>Создает базу данных, данную в URL, если это еще не существует.
+Предполагает, что у пользователя есть разрешения создать базы данных.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.9.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>databaseTerm</strong></span></p>
+<p>MySQL использует термин &quot;схема&quot; как синоним термина &quot;база
+данных&quot;, в то время как Connector/J исторически берет термин JDBC
+&quot;каталог&quot; в качестве синонимичного с &quot;базой данных&quot;.
+Это свойство для Connector/J определяет, какой термин, &quot;каталог&quot;
+или &quot;схема&quot;, используется в запросе к базе данных.
+Свойство берет одно из двух значений CATALOG или SCHEMA
+и использует его, чтобы определить (1), какие методы связи могут
+использоваться, чтобы установить/получить текущую базу данных (например,
+setCatalog() or setSchema()), (2) какие аргументы могут использоваться в
+рамках различных методов DatabaseMetaData, чтобы отфильтровать результаты
+(например, параметр catalog или schemaPattern в getColumns()) и
+(3) какие области в ResultSet, возвращенном методами DatabaseMetaData,
+содержат идентификационную информацию базы данных (т.е. TABLE_CAT или
+TABLE_SCHEM в ResultSet, возвращенном getTables()).</p>
+
+<p>Если databaseTerm=CATALOG, schemaPattern для поисков проигнорированы и
+требования методов схемы (как setSchema() или get Schema()) не работают.</p>
+<p>Значение по умолчанию: CATALOG.</p>
+<p>Начиная с версии: 8.0.17.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>defaultAuthenticationPlugin</strong></span></p>
+<p>Название класса, осуществляющего
+com.mysql.cj.protocol.AuthenticationPlugin, который будет использоваться в
+качестве плагина идентификации по умолчанию (см. ниже).
+Ошибка использовать класс, который не перечисляется в
+"authenticationPlugins". Ошибка установить плагин, который был отключен
+свойством "disabledAuthenticationPlugins". Ошибка установить это значение к
+пустому указателю или пустой строке (т.е. должен быть, по крайней мере,
+действительный плагин идентификации по умолчанию, определенный для связи).
+</p>
+
+<p>Значение по умолчанию:
+com.mysql.cj.protocol.a.authentication.MysqlNativePasswordPlugin</p>
+<p>Начиная с версии: 5.1.19.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>detectCustomCollations</strong></span></p>
+<p>Если драйвер обнаруживает наборы символов/сопоставления, установленные на
+сервере (true/false, по умолчанию 'false'), то если опция = 'true', драйвер
+получает фактические наборы символов/сопоставления от сервера каждый раз,
+когда связь устанавливается. Это может значительно
+замедлить инициализацию связи.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.1.29.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>disabledAuthenticationPlugins</strong></span></p>
+<p>Разграниченный запятой список классов, осуществляющих
+com.mysql.cj.protocol.AuthenticationPlugin или механизмы вроде
+"mysql_native_password". Плагины идентификации или перечисленные механизмы не
+будут использоваться для идентификации, которая потерпит неудачу, если она
+потребует одного из них. Ошибка отключить плагин идентификации по умолчанию
+(или названный свойством "defaultAuthenticationPlugin" или строго
+закодированный, если свойство "defaultAuthenticationPlugin" не установлено).
+</p>
+<p>Начиная с версии: 5.1.19.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>disconnectOnExpiredPasswords</strong></span></p>
+<p>Если "disconnectOnExpiredPasswords" = "false" и пароль выдохся, сервер
+входит в режим "sandbox" и посылает ERR(08001, ER_MUST_CHANGE_PASSWORD)
+для всех команд, которые не необходимы, чтобы установить новый пароль, пока
+новый пароль не установлен.</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 5.1.23.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>interactiveClient</strong></span></p>
+
+<p>Установит флаг CLIENT_INTERACTIVE, который говорит MySQL-связям
+тайм-аут на основе INTERACTIVE_TIMEOUT вместо WAIT_TIMEOUT.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.0.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>passwordCharacterEncoding</strong></span></p>
+<p>Какая кодировка символов используется для паролей?
+Если оставить этот набор значением по умолчанию (пустой указатель), то
+используется набор значений в "characterEncoding", если оно есть, иначе
+используется UTF-8 в качестве кодировки по умолчанию. Если пароль содержит
+знаки не-ASCII, кодировка пароля должна соответствовать той, какая была
+установлена на сервере в то время, когда пароль был создан.
+Для паролей в других кодировках символов кодировка должна быть определена с
+этим свойством (или с "characterEncoding"), поскольку для драйвера невозможно
+опознать это автоматически.</p>
+<p>Начиная с версии: 5.1.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>propertiesTransform</strong></span></p>
+<p>Реализация com.mysql.cj.conf.ConnectionPropertiesTransform, который
+драйвер будет использовать, чтобы изменить свойства URL, переданные ему
+прежде, чем делать попытку связи.</p>
+<p>Начиная с версии: 3.1.4.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>rollbackOnPooledClose</strong></span></p>
+<p>Драйвер должен выпустить rollback(), когда логическая
+связь в пуле закрывается?</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.0.15.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useAffectedRows</strong></span></p>
+<p>Не устанавливайте флаг CLIENT_FOUND_ROWS, соединяясь с сервером
+(несовместимо с JDBC, сломает большинство запросов, которые полагаются на
+&quot;найденные&quot; вместо &quot;затронутых" для запросов DML),
+но действительно получает &quot;правильное&quot; количество обновлений из
+"INSERT ... ON DUPLICATE KEY UPDATE", которые будут возвращены сервером.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.1.7.</p></td></tr></tbody></table>
+
+<p><b>Сессия.</b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p>
+<span class="strong"><strong>sessionVariables</strong></span></p>
+
+<p>Разделенный запятой или точкой с запятой список пар name=value, чтобы быть
+посланными как SET [SESSION] ... к серверу, когда драйвер соединяется.</p>
+<p>Начиная с версии: 3.1.8.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>characterEncoding</strong></span></p>
+<p>Какую кодировку символов драйвер должен использовать, имея дело с
+последовательностями (по умолчанию 'autodetect').</p>
+<p>Начиная с версии: 1.1g.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>characterSetResults</strong></span></p>
+<p>Набор символов, в котором серверу надлежит возвращать результаты.</p>
+<p>Начиная с версии: 3.0.13.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>connectionCollation</strong></span></p>
+<p>Если установлено, говорит серверу использовать это сопоставление в
+SET NAMES charset COLLATE connectionCollation. Также отвергает
+characterEncoding, которые соответствуют набору символов этого сопоставления.
+</p>
+<p>Начиная с версии: 3.0.13.</p></td></tr></tbody></table>
+
+<p><b>Организация сети.</b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p>
+<span class="strong"><strong>socksProxyHost</strong></span></p>
+<p>Имя или IP-адрес хоста SOCKS.</p>
+<p>Начиная с версии: 5.1.34.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>socksProxyPort</strong></span></p>
+<p>Порт сервера SOCKS.</p>
+<p>Значение по умолчанию: 1080.</p>
+<p>Начиная с версии: 5.1.34.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>socketFactory</strong></span></p>
+<p>Название класса, который драйвер должен использовать для создания сокетных
+соединений с сервером. Этот класс должен осуществить интерфейс
+'com.mysql.cj.protocol.SocketFactory' и иметь конструктор
+public без параметров.</p>
+<p>Значение по умолчанию: com.mysql.cj.protocol.StandardSocketFactory.</p>
+<p>Начиная с версии: 3.0.3.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>connectTimeout</strong></span></p>
+<p>Тайм-аут для соединения сокета (в миллисекундах), 0 = нет тайм-аута.
+Работает только с JDK-1.4 или более новым.</p>
+<p>Значение по умолчанию: 0.</p>
+<p>Начиная с версии: 3.0.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>socketTimeout</strong></span></p>
+<p>Тайм-аут для сетевых операций с сокетом (в миллисекундах),
+0 = нет тайм-аута.</p>
+<p>Значение по умолчанию: 0.</p>
+<p>Начиная с версии: 3.0.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>dnsSrv</strong></span></p>
+<p>Драйвер должен использовать данное имя хоста для поиска записи DNS SRV
+и использовать получающийся список хостов в связи отказоустойчивости?
+Обратите внимание на то, что единственное имя хоста без порта должно быть
+обеспечено, когда эта опция включена.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 8.0.19.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>localSocketAddress</strong></span></p>
+<p>Имя хоста или IP-адрес, чтобы явно формировать интерфейс, с которым
+драйвер свяжет клиентскую сторону связи TCP/IP, соединяясь.</p>
+<p>Начиная с версии: 5.0.5.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>maxAllowedPacket</strong></span></p>
+<p>Максимальный позволенный размер пакета, чтобы послать на сервер.
+Если не задан, значение системной переменной 'max_allowed_packet'
+будет использоваться, чтобы инициализировать это после соединения.
+Это значение не вступит в силу, если установлено больше, чем значение
+'max_allowed_packet'. Кроме того, из-за внутренней зависимости от свойства
+"blobSendChunkSize" есть минимальное значение "8203", если
+"useServerPrepStmts" = "true".</p>
+<p>Значение по умолчанию: 65535.</p>
+<p>Начиная с версии: 5.1.8.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>tcpKeepAlive</strong></span></p>
+<p>Соединяясь по TCP/IP, должен ли драйвер установить SO_KEEPALIVE?</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 5.0.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>tcpNoDelay</strong></span></p>
+<p>Соединяясь по TCP/IP, должен ли драйвер установить
+SO_TCP_NODELAY (отключающий Nagle Algorithm)?</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 5.0.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>tcpRcvBuf</strong></span></p>
+<p>Соединяясь по TCP/IP, должен ли драйвер установить SO_RCV_BUF
+к данному значению? Значение по умолчанию '0' означает использование значения
+по умолчанию платформы для этого.</p>
+<p>Значение по умолчанию: 0.</p>
+<p>Начиная с версии: 5.0.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>tcpSndBuf</strong></span></p>
+<p>Соединяясь по TCP/IP, должен ли драйвер установить SO_SND_BUF
+к данному значению? Значение по умолчанию '0' означает использование значения
+по умолчанию платформы для этого.</p>
+<p>Значение по умолчанию: 0.</p>
+<p>Начиная с версии: 5.0.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>tcpTrafficClass</strong></span></p>
+<p>Соединяясь по TCP/IP, должен ли драйвер установить
+класс трафика или поле type-of-service? См. документацию для
+java.net.Socket.setTrafficClass() для получения дополнительной информации.</p>
+<p>Значение по умолчанию: 0.</p>
+<p>Начиная с версии: 5.0.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useCompression</strong></span></p>
+<p>Использовать zlib сжатие, общаясь с сервером? (true/false).</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.0.17.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useUnbufferedInput</strong></span></p>
+<p>Не используйте BufferedInputStream для чтения данных из сервера.</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.0.11.</p></td></tr></tbody></table>
+
+<p><b>Безопасность.</b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p>
+<span class="strong"><strong>allowMultiQueries</strong></span></p>
+<p>Позволить использование ';', чтобы разграничить много запросов
+во время одного запроса (true/false). Умолчание 'false' не затрагивает
+методы addBatch() и executeBatch(), которые полагаются на
+rewriteBatchStatements.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useSSL</strong></span></p>
+<p>Для 8.0.12 и ранее: используйте SSL, общаясь с сервером, по умолчанию
+'true', соединяясь с MySQL 5.5.45+, 5.6.26+ или 5.7.6+, иначе
+по умолчанию 'false'.</p>
+
+<p>Для 8.0.13 и позже: по умолчанию 'true'. Устарело.
+См. sslMode для деталей.</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.0.2.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>requireSSL</strong></span></p>
+<p>Для 8.0.12 и ранее: потребовать от сервера поддержки связи SSL, если
+useSSL=true?</p>
+
+<p>Для 8.0.13 и позже: устарело. См. sslMode для деталей.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.0.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>verifyServerCertificate</strong></span></p>
+<p>Для 8.0.12 и ранее: Если &quot;useSSL&quot; установлен в "true",
+драйвер должен проверить сертификат сервера? Используя эту функцию, параметры
+keystore должны быть определены свойствами "clientCertificateKeyStore*", а не
+свойствами системы. По умолчанию 'false', соединяясь с MySQL 5.5.45+, 5.6.26+
+or 5.7.6+ и "useSSL" не было явно установлено в "true".
+Иначе по умолчанию 'true'.</p>
+
+<p>Для 8.0.13 и позже: по умолчанию 'false'. Устарело. См.
+описание sslMode для деталей.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.1.6.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>clientCertificateKeyStoreUrl</strong></span></p>
+<p>URL к сертификату клиента KeyStore (если не определен,
+используйте по умолчанию).</p>
+<p>Начиная с версии: 5.1.0.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>clientCertificateKeyStoreType</strong></span></p>
+<p>Тип KeyStore для сертификатов клиента (NULL или пустое значение
+используют тип по умолчанию, который "JKS").
+Стандартные типы keystore, поддержанные JVM: "JKS" и "PKCS12",
+ваша среда может иметь больше вариантов в зависимости от того, какие продукты
+безопасности устанавливаются и доступны JVM.</p>
+<p>Значение по умолчанию: JKS.</p>
+<p>Начиная с версии: 5.1.0.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+clientCertificateKeyStorePassword</strong></span></p>
+<p>Пароль для сертификатов клиента KeyStore.</p>
+<p>Начиная с версии: 5.1.0.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>trustCertificateKeyStoreUrl</strong></span></p>
+<p>URL к доверенному корневому сертификату KeyStore (если не определено,
+используйте по умолчанию).</p>
+<p>Начиная с версии: 5.1.0.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>trustCertificateKeyStoreType</strong></span></p>
+<p>Тип KeyStore для доверенных корневых сертификатов (NULL или пустое
+значение используют тип по умолчанию, который "JKS").
+Стандартные типы keystore, поддержанные JVM: "JKS" и "PKCS12",
+ваша среда может иметь больше вариантов в зависимости от того, какие продукты
+безопасности устанавливаются и доступны JVM.</p>
+<p>Значение по умолчанию: JKS.</p>
+<p>Начиная с версии: 5.1.0.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+trustCertificateKeyStorePassword</strong></span></p>
+<p>Пароль для доверенных корневых сертификатов KeyStore.</p>
+<p>Начиная с версии: 5.1.0.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>enabledSSLCipherSuites</strong></span></p>
+<p>Если &quot;useSSL&quot; установлено в "true", отвергает шифры, позволенные
+для использования на сокетах SSL. Это может требоваться, используя внешних
+поставщиков JSSE или чтобы определить шифры, совместимые с сервером MySQL
+и с используемой JVM.</p>
+<p>Начиная с версии: 5.1.35.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>enabledTLSProtocols</strong></span></p>
+<p>Если &quot;useSSL&quot; установлено в "true", отвергает
+протоколы TLS, позволенные для использования на сокетах SSL.
+Это может использоваться, чтобы ограничить связи с
+определенными версиями TLS.</p>
+<p>Начиная с версии: 8.0.8.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>allowLoadLocalInfile</strong></span></p>
+<p>Драйвер должен позволить использование 'LOAD DATA LOCAL INFILE...'?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.0.3.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>allowUrlInLocalInfile</strong></span></p>
+<p>Драйвер должен позволить URL в 'LOAD DATA LOCAL INFILE'?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.4.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>allowPublicKeyRetrieval</strong></span></p>
+<p>Позволяет специальный обмен, чтобы получить открытый ключ RSA сервера
+непосредственно от сервера.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.1.31.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>paranoid</strong></span></p>
+<p>Предотвратить показ уязвимой иинформации в сообщениях об ошибках и
+структурах данных, хранящих уязвимые данные, когда возможно?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.0.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>serverRSAPublicKeyFile</strong></span></p>
+<p>Путь к файлу открытого ключа RSA сервера для идентификации
+sha256_password. Если не определено, открытый ключ будет получен от сервера.
+</p>
+<p>Начиная с версии: 5.1.31.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>sslMode</strong></span></p>
+<p>По умолчанию сетевые соединения зашифрованы SSL,
+это свойство разрешает безопасным соединениям быть выключенными или
+применить разные уровни безопасности, которые будут выбраны.
+Следующие значения позволены: "DISABLED" устанавливает незашифрованные связи,
+"PREFERRED" (по умолчанию) устанавливает зашифрованные связи, если сервер
+их позволил, иначе отступит к незашифрованным связям,
+"REQUIRED" устанавливает безопасные соединения, если сервер их позволил,
+терпит неудачу иначе, "VERIFY_CA" аналог "REQUIRED", но дополнительно
+проверяет сертификат TLS сервера по настроенным сертификатам
+Certificate Authority (CA), "VERIFY_IDENTITY" аналог "VERIFY_CA",
+но дополнительно проверяет, что сертификат сервера соответствует хосту, к
+которому предпринята связь.</p>
+
+<p>Эта свойство заменило устаревшие свойства "useSSL", "requireSSL" и
+"verifyServerCertificate", которые все еще приняты, но переведены на значение
+для "sslMode", если "sslMode" явно не установлен: "useSSL=false" переведен к
+"sslMode=DISABLED", {"useSSL=true", "requireSSL=false",
+"verifyServerCertificate=false"} превращается в "sslMode=PREFERRED",
+{"useSSL=true", "requireSSL=true", "verifyServerCertificate=false"}
+превращается в "sslMode=REQUIRED", {"useSSL=true" И
+"verifyServerCertificate=true"} превращается в "sslMode=VERIFY_CA".
+Нет никаких эквивалентных устаревших параметров настройки для
+"sslMode=VERIFY_IDENTITY". Обратите внимание на то, что для ВСЕХ версий
+сервера настройка по умолчанию "sslMode" = "PREFERRED",
+и это эквивалентно устаревшим параметрам настройки "useSSL=true",
+"requireSSL=false" и "verifyServerCertificate=false", которые отличаются от
+их настроек по умолчанию для Connector/J 8.0.12 и ранее в некоторых
+ситуациях. Должны быть рассмотрены запросы, которые продолжают использовать
+устаревшие свойства и полагаться на их старые настройки по умолчанию.</p>
+
+<p>Устаревшие свойства проигнорированы, если &quot;sslMode&quot; установлен
+явно. Если ни один из &quot;sslMode&quot; или &quot;useSSL&quot; не
+установлен явно, настройка по умолчанию "sslMode=PREFERRED".</p>
+<p>Значение по умолчанию: PREFERRED.</p>
+<p>Начиная с версии: 8.0.13.</p></td></tr></tbody></table>
+
+<p><b>Запросы.</b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p>
+<span class="strong"><strong>continueBatchOnError</strong></span></p>
+<p>Драйвер продолжает обрабатывать пакетные команды, если один
+запрос терпит неудачу? JDBC позволяет оба варианта.</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.0.3.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>dontTrackOpenResources</strong></span></p>
+<p>Спецификация JDBC требует, чтобы драйвер автоматически отследил и закрыл
+ресурсы, однако если ваше запрос не делает явного вызова close()
+на запросах или наборах результатов, это может вызвать утечку памяти.
+Установка этого свойства в true ослабляет это ограничение и может поднять
+эффективность памяти для некоторых запросов. Также автоматическое закрытие
+запросов и текущего ResultSet в
+Statement.closeOnCompletion() и Statement.getMoreResults
+([Statement.CLOSE_CURRENT_RESULT | Statement.CLOSE_ALL_RESULTS]),
+соответственно, прекращается. Это свойство автоматически устанавливает
+holdResultsOpenOverStatementClose=true.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>queryInterceptors</strong></span></p>
+<p>Разграниченный запятой список классов, реализующих
+"com.mysql.cj.interceptors.QueryInterceptor", который должен быть размещен в
+&quot;промежуточном&quot; выполнении запросов, чтобы влиять на результаты.
+QueryInterceptors результаты, возвращенные цепочкой, результаты, возвращенные
+&quot;текущим&quot; перехватчиком, будут переданы следующему в цепи слева
+направо, как определено в этом свойстве.</p>
+<p>Начиная с версии: 8.0.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>queryTimeoutKillsConnection</strong></span></p>
+<p>Если перерыв, данный в Statement.setQueryTimeout() истекает, драйвер
+должен насильственно прервать Связь вместо того, чтобы
+пытаться прервать запрос?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.1.9.</p></td></tr></tbody></table>
+
+<p><b>Подготовленные запросы.</b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p>
+<span class="strong"><strong>allowNanAndInf</strong></span></p>
+<p>Драйвер должен разрешить NaN или +/-INF в PreparedStatement.setDouble()?
+</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.5.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>autoClosePStmtStreams</strong></span></p>
+<p>Драйвер должен автоматически вызвать .close()
+на потоках/читателях, переданных как аргументы через методы set*()?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.12.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>compensateOnDuplicateKeyUpdateCounts
+</strong></span></p>
+<p>Драйвер должен компенсировать количество обновлений "ON DUPLICATE KEY"
+INSERT (2 = 1, 0 = 1), используя подготовленные запросы?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.1.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>emulateUnsupportedPstmts</strong></span></p>
+<p>Драйвер должен обнаружить подготовленные запросы, которые не
+поддерживаются сервером, и замениюь их клиентскими эмулированными версиями?
+</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.1.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>generateSimpleParameterMetadata</strong></span>
+</p>
+<p>Драйвер должен произвести упрощенные метаданные параметра для
+PreparedStatements, когда никакие метаданные недоступны или потому что
+сервер не мог поддержать подготовку запроса
+или подготовленные запросы серверной стороны отключены?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.0.5.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+processEscapeCodesForPrepStmts</strong></span></p>
+<p>Драйвер должен обработать коды экранировки в запросах, которые
+подготовлены? Поведение обработки по умолчанию в неподготовленных запросах
+должно быть определено свойством 'enableEscapeProcessing'.</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.1.12.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useServerPrepStmts</strong></span></p>
+<p>Используйте подготовленные запросы серверной стороны, если
+сервер поддерживает их?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.0.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useStreamLengthsInPrepStmts</strong></span></p>
+<p>Учитывать параметр длины потока в вызове метода
+PreparedStatement/ResultSet.setXXXStream()?</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.0.2.</p></td></tr></tbody></table>
+
+<p><b>Наборы результатов.</b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p>
+<span class="strong"><strong>clobberStreamingResults</strong></span></p>
+<p>Это заставит текущий ResultSet быть автоматически закрытым, и любые
+данные, все еще поступающие от сервера, будут отклонены, если другой запрос
+будет выполнен, прежде чем все данные были прочитаны из сервера.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.0.9.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>emptyStringsConvertToZero</strong></span></p>
+<p>Драйвер должен позволить преобразования от пустой строки
+до числовых значений '0'?</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.1.8.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>holdResultsOpenOverStatementClose</strong>
+</span></p>
+<p>Драйвер должен закрыть наборы результатов Statement.close()
+как требуется спецификацией JDBC?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>jdbcCompliantTruncation</strong></span></p>
+<p>Драйвер бросает исключения java.sql.DataTruncation, когда данные усечены,
+как требуется спецификацией JDBC, когда связан с сервером, который
+поддерживает предупреждения (MySQL 4.1.0 и более новый)? Это свойство не
+имеет никакого эффекта, если sql-режим сервера включает
+STRICT_TRANS_TABLES.</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.1.2.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>maxRows</strong></span></p>
+<p>Максимальное количество строк, чтобы возвратить (0 возвращает все).</p>
+<p>Значение по умолчанию: 0.</p>
+<p>Начиная с версии: все версии.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+netTimeoutForStreamingResults</strong></span></p>
+<p>Какое значение драйвер должен автоматически установить серверному
+параметру 'net_write_timeout', когда текущая передача наборов результатов
+используется? В секундах, значение '0' означает, что драйвер не пытается
+приспособить это значение.</p>
+<p>Значение по умолчанию: 600.</p>
+<p>Начиная с версии: 5.1.0.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>padCharsWithSpace</strong></span></p>
+<p>Если у колонки набора результатов есть тип CHAR, и значение не заполняет
+количество символов, определенных в DDL для колонки, драйвер должен дополнить
+оставшиеся символы пробелами (для соблюдения ANSI)?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.0.6.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>populateInsertRowWithDefaultValues
+</strong></span></p>
+<p>Используя ResultSets, которые являются CONCUR_UPDATABLE,
+драйвер должен предварительно заполнить строку значениями по умолчанию от DDL
+для таблицы, используемой в запросе, таким образом, те значения немедленно
+доступны для ResultSet? Эта функциональность требует обращения к базе данных
+для метаданных каждый раз, когда набор результатов этого типа создается. Если
+отключено (по умолчанию), значения по умолчанию будут заполнены внутренним
+вызовом refreshRow(), который задерживает значения по умолчанию и/или
+значения, измененные триггерами</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.0.5.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>strictUpdates</strong></span></p>
+<p>Драйвер должен сделать строгую проверку (все отобранные первичные ключи)
+обновляемых наборов результатов?</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.0.4.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>tinyInt1isBit</strong></span></p>
+<p>Драйвер должен рассматривать тип данных TINYINT(1) как тип BIT (потому что
+сервер тихо преобразовывает BIT -&gt; TINYINT(1), составляя таблицы)?</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.0.16.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>transformedBitIsBoolean</strong></span></p>
+<p>Если драйвер преобразовывает TINYINT(1) в другой тип, он должен
+использовать BOOLEAN вместо BIT для будущей совместимости с MySQL-5.0,
+поскольку у MySQL-5.0 есть тип BIT?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.9.</p></td></tr></tbody></table>
+
+<p><b>Метаданные.</b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p><span class="strong"><strong>
+getProceduresReturnsFunctions</strong></span></p>
+<p>У Pre-JDBC4 DatabaseMetaData API есть только методы
+getProcedures() и getProcedureColumns(), таким образом, они возвращают
+информацию о метаданных для хранимых процедур и для функций.
+JDBC4 был расширен методами getFunctions() и getFunctionColumns(),
+ожидаемые поведения предыдущих методов не определены четко. Для JDBC4 и выше
+по умолчанию 'true' в этой опции означает, что вызовы
+DatabaseMetaData.getProcedures() и DatabaseMetaData.getProcedureColumns()
+возвращают метаданные для процедур и для функций как прежде, поддерживая
+обратную совместимость. Установка в 'false' предписывает
+возвратить метаданные только для процедур.</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 5.1.26.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>noAccessToProcedureBodies</strong></span></p>
+<p>Когда определение типов параметра процедуры для CallableStatements
+и подключенного пользователя не может получить доступ к телам процедуры через
+"SHOW CREATE PROCEDURE" или выбрать в mysql.proc, драйвер должен вместо этого
+создать основные метаданные (все параметры, о которых сообщают как INOUT
+VARCHAR) вместо того, чтобы бросить исключение?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.0.3.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>nullDatabaseMeansCurrent</strong></span></p>
+<p>Когда методы DatabaseMetadata просят параметр 'каталога' или 'схемы',
+пустой указатель означает использовать текущую базу данных? См. также
+свойство 'databaseTerm'.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.8.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useHostsInPrivileges</strong></span></p>
+<p>Добавить '@hostname' к пользователям в
+DatabaseMetaData.getColumn/TablePrivileges().</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.0.2.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useInformationSchema</strong></span></p>
+<p>Драйвер должен использовать INFORMATION_SCHEMA, чтобы получить информацию,
+используемую DatabaseMetaData? По умолчанию 'true', соединяясь с MySQL
+8.0.3+, иначе по умолчанию 'false'.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.0.0.</p></td></tr></tbody></table>
+
+<p><b>Обработка BLOB/CLOB.</b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p>
+<span class="strong"><strong>autoDeserialize</strong></span></p>
+<p>Драйвер должен автоматически обнаружить и десериализовать
+объекты в полях BLOB?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.5.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>blobSendChunkSize</strong></span></p>
+<p>Размер куска, чтобы использовать, посылая BLOB/CLOB через
+ServerPreparedStatements. Обратите внимание на то, что это значение не может
+превысить значение "maxAllowedPacket" и, если это так, тогда это значение
+будет исправлено автоматически.</p>
+<p>Значение по умолчанию: 1048576.</p>
+<p>Начиная с версии: 3.1.9.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>blobsAreStrings</strong></span></p>
+<p>Драйвер должен всегда рассматривать BLOB как Strings, чтобы работать
+в обход сомнительных метаданных, возвращенных сервером для GROUP BY?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.0.8.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>clobCharacterEncoding</strong></span></p>
+<p>Кодировка символов, чтобы использовать для отправки и получения
+TEXT, MEDIUMTEXT и LONGTEXT вместо формируемой связи characterEncoding.</p>
+<p>Начиная с версии: 5.0.0.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>emulateLocators</strong></span></p>
+<p>Драйвер должен подражать java.sql.Blobs с локаторами? С этой
+активированной опцией драйвер задержит загрузку фактических данных Blob, пока
+к тому из методов получения (getInputStream(), getBytes() и т.д.)
+на потоке blob не получили доступ. Для этого необходимо использовать
+псевдоним столбца к актуальному имени Blob.
+У особенности также есть следующие ограничения: SELECT, который создал набор
+результатов, должен сослаться только на одну таблицу, у нее должен быть
+первичный ключ, SELECT должен использовать псевдоним оригинального имени
+столбца blob, определенный как последовательность, SELECT должен покрыть все
+столбцы, которые составляют первичный ключ.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.0.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>functionsNeverReturnBlobs</strong></span></p>
+<p>Драйвер должен всегда рассматривать данные из функций, возвращая BLOB как
+String, чтобы работать в обход сомнительных метаданных, возвращенных сервером
+для GROUP BY?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.0.8.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>locatorFetchBufferSize</strong></span></p>
+<p>Если 'emulateLocators' = 'true', какого размера буфер должен
+использоваться, получая данные BLOB для getBinaryInputStream?</p>
+<p>Значение по умолчанию: 1048576.</p>
+<p>Начиная с версии: 3.2.1.</p></td></tr></tbody></table>
+
+<p><b>Обработка даты и времени. </b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p>
+<span class="strong"><strong>noDatetimeStringSync</strong></span></p>
+<p>Не гарантируйте, что
+ResultSet.getDatetimeType().toString().equals(ResultSet.getString()).</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>sendFractionalSeconds</strong></span></p>
+<p>Пошлите дробную часть секунд из TIMESTAMP. Если установлено в false,
+значение наносекунд в TIMESTAMP будет усечено прежде, чем послать любые
+данные в сервер. Этот выбор применяется только к подготовленным запросам,
+вызываемым запросам или обновляемым наборам результатов.</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 5.1.37.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>serverTimezone</strong></span></p>
+<p>Отвергните обнаружение/отображение часового пояса.
+Используется, когда часовой пояс от сервера не отображается к
+часовому поясу Java.</p>
+<p>Начиная с версии: 3.0.2.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>treatUtilDateAsTimestamp</strong></span></p>
+<p>Передавать java.util.Date как TIMESTAMP в целях
+PreparedStatement.setObject()?</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 5.0.5.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>yearIsDateType</strong></span></p>
+<p>Драйвер JDBC должен передать тип MySQL "YEAR" как
+java.sql.Date или SHORT?</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.1.9.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>zeroDateTimeBehavior</strong></span></p>
+<p>Что должно произойти, когда драйвер сталкивается с DATETIME, которые
+составлены полностью из нолей (используемый MySQL, чтобы представлять
+недействительные даты)? Действительные значения:
+"EXCEPTION", "ROUND" и "CONVERT_TO_NULL".</p>
+<p>Значение по умолчанию: EXCEPTION.</p>
+<p>Начиная с версии: 3.1.4.</p></td></tr></tbody></table>
+
+<p><b>Высокая доступность и объединение в кластеры.</b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p>
+<span class="strong"><strong>autoReconnect</strong></span></p>
+<p>Драйвер должен попытаться восстановить несвежие и/или мертвые связи?
+Если позволено, драйвер бросит исключение для запроса на несвежей или мертвой
+связи, которые принадлежат текущей транзакции, но попытается снова соединится
+перед следующим запросом на связи в новой транзакции. Использование этой
+особенности не рекомендуется, потому что есть побочные эффекты с состоянием
+сеанса и непротиворечивостью данных, когда запросы не работают с
+SQLExceptions правильно, и разработан только чтобы использоваться, когда вы
+не способны настроить свой запрос работать с SQLExceptions, следующим из
+мертвых и несвежих связей правильно. Альтернативно, как последний выбор,
+исследуйте настройку серверной переменной MySQL "wait_timeout"
+к высокому значению, а не по умолчанию 8 часов.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 1.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>autoReconnectForPools</strong></span></p>
+<p>Используйте стратегию повторного соединения, подходящую для пулов связи.
+</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.3.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>failOverReadOnly</strong></span></p>
+<p>При сбое в режиме autoReconnect
+связь должна быть установлена в 'только для чтения'?</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.0.12.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>maxReconnects</strong></span></p>
+<p>Максимальное количество попыток реконнекта, если autoReconnect = true.</p>
+<p>Значение по умолчанию: 3.</p>
+<p>Начиная с версии: 1.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>reconnectAtTxEnd</strong></span></p>
+<p>Если autoReconnect = true, драйвер должен делать попытку повторных
+соединений в конце каждой транзакции?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.0.10.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>retriesAllDown</strong></span></p>
+<p>Используя выравнивание нагрузки или отказоустойчивость, сколько раз
+драйвер должен опросить доступные хосты, пытаясь соединиться.
+Между циклами драйвер сделает паузу в течение 250 мс, если никакие серверы
+не будут доступны.</p>
+<p>Значение по умолчанию: 120.</p>
+<p>Начиная с версии: 5.1.6.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>initialTimeout</strong></span></p>
+<p>Если включен autoReconnect, начальное время, которое надо ждать между
+повторными попытками подключения (в секундах).</p>
+<p>Значение по умолчанию: 2.</p>
+<p>Начиная с версии: 1.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>queriesBeforeRetryMaster</strong></span></p>
+<p>Количество запросов перед отступанием к основному хосту при отказе
+(используя отказоустойчивость мультихоста). При любом условии
+'queriesBeforeRetryMaster' или 'secondsBeforeRetryMaster'
+попытка снова соединиться с основным хостом будет сделана.
+Установка обоих свойств к 0 отключает автоматический возврат к
+основному хосту в границах транзакции.</p>
+<p>Значение по умолчанию: 50.</p>
+<p>Начиная с версии: 3.0.2.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>secondsBeforeRetryMaster</strong></span></p>
+<p>Сколько времени драйвер должен ждать
+прежде, чем попытаться снова соединиться с основным хостом? При любом условии
+'queriesBeforeRetryMaster' или 'secondsBeforeRetryMaster'
+попытка снова соединиться с основным хостом будет сделана.
+Установка обоих свойств к 0 отключает автоматический возврат к
+основному хосту в границах транзакции.</p>
+<p>Значение по умолчанию: 30.</p>
+<p>Начиная с версии: 3.0.2.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>allowMasterDownConnections</strong></span></p>
+<p>По умолчанию осведомленная о репликации
+связь не соединится, когда формируемые основные хосты будут все недоступны
+при начальной связи. Настройка этой опции в 'true'
+позволяет устанавливать начальную связь при недоступных подчиненных
+серверах в статусе только для чтения. Это не предотвратит последующие
+неудачи, переключаясь назад на основные хосты, т.е. устанавливая соединение
+репликации в состояние чтения-записи.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.1.27.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>allowSlaveDownConnections</strong></span></p>
+<p>По умолчанию осведомленная о репликации связь
+не соединится, когда формируемые подчиненные хосты будут все недоступны при
+начальной связи. Настройка этой опции в 'true' позволяет устанавливать
+начальную связь. Это не предотвратит неудачи, переключаясь на
+устанавливая соединение репликации в состояние только для чтения.
+Свойство 'readFromMasterWhenNoSlaves' должно использоваться с этой целью.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 6.0.2.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>ha.enableJMX</strong></span></p>
+<p>Позволяет основанное на JMX управление уравновешенными
+группами связи, включая живое дополнение/удаление хостов от пула
+выравнивания нагрузки. Позволяет основанное на JMX управление группами
+соединения репликации, включая живое продвижение подчиненных хостов,
+добавление новых подчиненных и удаление любых хостов из
+уравновешенных пулов связи.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.1.27.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+loadBalanceHostRemovalGracePeriod</strong></span></p>
+<p>Устанавливает льготный период ожидания хоста, удаляемого из уравновешенной
+связи, когда это в настоящее время активный хост.</p>
+<p>Значение по умолчанию: 15000.</p>
+<p>Начиная с версии: 6.0.3.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>readFromMasterWhenNoSlaves</strong></span></p>
+<p>Осведомленные о репликации связи распределяют нагрузку при помощи основных
+хостов, когда в состоянии чтения-записи и при помощи подчиненных, когда в
+режиме только для чтения. Если, устанавливая связь со статусом только для
+чтения, ни один из подчиненных хостов не доступен, SQLExeception брошен.
+Установка этой опции в 'true' позволяет терпеть неудачу основным хостам,
+устанавливая состояние связи в только для чтения, когда никакие
+подчиненные хосты не доступны в момент переключения.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 6.0.2.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+selfDestructOnPingMaxOperations</strong></span></p>
+<p>Если установлено в ненулевое значение, драйвер сообщит о закыртии
+связи и о неудаче, когда вызван
+Connection.ping() или Connection.isValid(int),
+если число команд связи, посланных в сервер, превышает это значение.</p>
+<p>Значение по умолчанию: 0.</p>
+<p>Начиная с версии: 5.1.6.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+selfDestructOnPingSecondsLifetime</strong></span></p>
+<p>Если установлено в ненулевое значение, драйвер закроет связь и сообщит о
+неудаче, когда вызван Connection.ping() или Connection.isValid(int), если
+время жизни связи превышает это значение (в миллисекундах).</p>
+<p>Значение по умолчанию: 0.</p>
+<p>Начиная с версии: 5.1.6.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>ha.loadBalanceStrategy</strong></span></p>
+<p>Используя уравновешенную связь, чтобы соединиться с узлами SQL в
+конфигурации MySQL Cluster/NDB (при помощи префикса URL
+"jdbc:mysql:loadbalance://"), какой алгоритм балансировки нагрузки должен
+использоваться: (1) "random": драйвер выберет случайный хост каждому запросу.
+Это имеет тенденцию работать лучше, чем циклический алгоритм, поскольку
+хаотичность будет несколько сглаживать распределение нагрузок, где запросы
+имеют разное время ответа, в то время как циклический алгоритм может иногда
+приводить к перегруженным узлам, если есть изменения времени ответа
+через рабочую нагрузку. (2) "bestResponseTime": драйвер будет
+маршрутизировать запрос хосту, у которого было лучшее время отклика для
+предыдущей транзакции. (3) "serverAffinity": драйвер первоначально пытается
+использовать близость сервера, все еще извлекая выгоду из аспектов
+отказоустойчивости и выравнивания нагрузки. Близость сервера требует, чтобы
+список был предоставлен, используя свойство 'serverAffinityOrder'.
+Если ни один из серверов, перечисленных в списке близости, не отзывается,
+драйвер тогда обращается к стратегии "random", чтобы
+возобновить выбор следующего сервера.</p>
+<p>Значение по умолчанию: random.</p>
+<p>Начиная с версии: 5.0.6.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+loadBalanceAutoCommitStatementRegex</strong></span></p>
+<p>Когда включено выравнивание нагрузки для запросов auto-commit
+(через loadBalanceAutoCommitStatementThreshold), счетчик запросов
+увеличится только, когда SQL будет соответствовать регулярному выражению.
+По умолчанию соответствует каждый запрос.</p>
+<p>Начиная с версии: 5.1.15.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+loadBalanceAutoCommitStatementThreshold</strong></span></p>
+<p>Когда включен auto-commit, количество запросов, которые должны быть
+выполнены прежде, чем вызвать выравнивание нагрузки, чтобы повторно
+балансировать. Значение по умолчанию 0 предписывает
+повторно балансировать только, когда сталкиваются с исключениями или
+выключен auto-commit и транзакции явно переданы или отменены.</p>
+<p>Значение по умолчанию: 0.</p>
+<p>Начиная с версии: 5.1.15.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>loadBalanceBlacklistTimeout</strong></span></p>
+<p>Время в миллисекундах между проверками серверов, которые недоступны,
+управляет, сколько времени сервер живет в глобальном черном списке.</p>
+<p>Значение по умолчанию: 0.</p>
+<p>Начиная с версии: 5.1.0.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>loadBalanceConnectionGroup</strong></span></p>
+<p>Логическая группа уравновешенных связей в classloader,
+используемом, чтобы управлять различными группами независимо.
+Если не определено, живое управление уравновешенными связями искалечено.</p>
+<p>Начиная с версии: 5.1.13.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>loadBalanceExceptionChecker</strong></span></p>
+<p>Полностью квалифицированное имя класса контролера исключения.
+Класс должен осуществить интерфейс
+com.mysql.cj.jdbc.ha.LoadBalanceExceptionChecker и используется, чтобы
+смотреть SQLExceptions и определить, должны ли они передать
+отказоустойчивость другому хосту в уравновешенном развертывании.</p>
+<p>Значение по умолчанию:
+com.mysql.cj.jdbc.ha.StandardLoadBalanceExceptionChecker.</p>
+<p>Начиная с версии: 5.1.13.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>loadBalancePingTimeout</strong></span></p>
+<p>Время в миллисекундах, чтобы ждать ответа от каждой из уравновешенных
+физических связей, используя уравновешенное соединение.</p>
+<p>Значение по умолчанию: 0.</p>
+<p>Начиная с версии: 5.1.13.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+loadBalanceSQLExceptionSubclassFailover</strong></span></p>
+<p>Разграниченный запятой список классов/интерфейсов, используемых
+по умолчанию контролером исключения, чтобы определить, должен ли данный
+SQLException вызвать отказоустойчивость. Сравнение сделано, используя
+Class.isInstance(SQLException) с использованием брошенного SQLException.</p>
+<p>Начиная с версии: 5.1.13.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>loadBalanceSQLStateFailover</strong></span></p>
+<p>Разграниченный запятой список кодов SQLState, используемых по умолчанию
+контролером исключения, чтобы определить, должен ли данный SQLException
+вызвать отказоустойчивость. SQLState данного SQLException оценен, чтобы
+определить, начинается ли он с какого-либо значения
+в разграниченном запятой списке.</p>
+<p>Начиная с версии: 5.1.13.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+loadBalanceValidateConnectionOnSwapServer</strong></span></p>
+<p>Уравновешенная cвязь должна явно проверить, жива ли связь, когда
+происходит обмен на новую физическую связь при commit/rollback?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.1.13.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+pinGlobalTxToPhysicalConnection</strong></span></p>
+<p>Используя XAConnections, драйвер должен гарантировать, что операции на
+данном XID всегда направляются к той же самой физической связи?
+Это позволяет XAConnection поддерживать
+"XA START ... JOIN" после "XA END".</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.0.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>replicationConnectionGroup</strong></span></p>
+<p>Логическая группа соединений репликации в classloader, используемая,
+чтобы управлять различными группами независимо. Если не определено, живое
+управление соединениями репликации искалечено.</p>
+<p>Начиная с версии: 8.0.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>resourceId</strong></span></p>
+<p>Глобально уникальное имя, которое определяет ресурс,
+с которым этот источник данных или связь связываются, используется для
+XAResource.isSameRM(), когда драйвер не может определить это значение на
+основе имен хоста, используемых в URL.</p>
+<p>Начиная с версии: 5.0.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>serverAffinityOrder</strong></span></p>
+<p>Список разделенных запятой значений, содержащий пары хоста/порта, которые
+должны использоваться в выравнивании нагрузки по схеме "serverAffinity".
+Только подмножество хостов, перечисленных в главной группе хостов в этом URL,
+будет использоваться, и они должны быть идентичными в регистре и типе, то
+есть нельзя использовать IP-адрес в одном месте и соответствующее
+имя хоста в другом.</p>
+<p>Начиная с версии: 8.0.8.</p></td></tr></tbody></table>
+
+<p><b>Исполнительные расширения.</b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p>
+<span class="strong"><strong>callableStmtCacheSize</strong></span></p>
+<p>Если включено 'cacheCallableStmts', сколько вызываемых запросов
+должно быть кэшировано?</p>
+<p>Значение по умолчанию: 100.</p>
+<p>Начиная с версии: 3.1.2.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>metadataCacheSize</strong></span></p>
+<p>Количество запросов для кэширования ResultSetMetadata, если
+cacheResultSetMetaData установлен в 'true'.</p>
+<p>Значение по умолчанию: 50.</p>
+<p>Начиная с версии: 3.1.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useLocalSessionState</strong></span></p>
+<p>Драйвер должен обратиться к внутренним значениям autocommit
+и изоляции транзакции, которые установлены
+Connection.setAutoCommit() и Connection.setTransactionIsolation(),
+и операционному состоянию, заданному протоколом, вместо того, чтобы запросить
+базу данных или вслепую послать команды в базу данных для вызова методов
+commit() или rollback()?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useLocalTransactionState</strong></span></p>
+<p>Драйвер должен использовать состояние транзакции, обеспеченное протоколом
+MySQL, чтобы определить, нужно ли на самом деле послать в базу данных
+commit() или rollback()?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.1.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>prepStmtCacheSize</strong></span></p>
+<p>Если кэширование подготовленных запросов позволено,
+сколько подготовленных запросов должно кэшироваться?</p>
+<p>Значение по умолчанию: 25.</p>
+<p>Начиная с версии: 3.0.10.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>prepStmtCacheSqlLimit</strong></span></p>
+<p>Если кэширование подготовленных запросов позволено,
+размер самого большого SQL, который драйвер кэширует?</p>
+<p>Значение по умолчанию: 256.</p>
+<p>Начиная с версии: 3.0.10.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>parseInfoCacheFactory</strong></span></p>
+<p>Название класса, осуществляющего com.mysql.cj.CacheAdapterFactory,
+который будет использоваться, чтобы создать кэши для разобранного
+представления клиентских подготовленных запросов.</p>
+<p>Значение по умолчанию: com.mysql.cj.PerConnectionLRUFactory.</p>
+<p>Начиная с версии: 5.1.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>serverConfigCacheFactory</strong></span></p>
+<p>Название класса, осуществляющего
+com.mysql.cj.CacheAdapterFactory &lt;String, Map&lt;String, String&gt;&gt;,
+который будет использоваться, чтобы создать кэши значений
+конфигурации сервера MySQL.</p>
+<p>Значение по умолчанию: com.mysql.cj.util.PerVmServerConfigCacheFactory.</p>
+<p>Начиная с версии: 5.1.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>alwaysSendSetIsolation</strong></span></p>
+<p>Драйвер должен всегда общаться с базой данных, когда вызван
+Connection.setTransactionIsolation()? Если false, драйвер
+будет общаться с базой данных только когда требуемая изоляция транзакции
+будет отличаться от последнего значения, которое было установлено через
+Connection.setTransactionIsolation(), или значения, которое было прочитано из
+сервера, когда связь была установлена. Обратите внимание на то, что
+useLocalSessionState=true вызовет то же самое поведение, как
+alwaysSendSetIsolation=false, независимо от того, как установлен
+alwaysSendSetIsolation.</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.1.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>maintainTimeStats</strong></span></p>
+<p>Драйвер должен поддержать различные внутренние таймеры, чтобы позволить
+вычисления времени простоя, а также больше многословных сообщений об ошибках,
+когда связь с сервером прерывается? Установка в false удаляет по крайней мере
+два вызова System.getCurrentTimeMillis() на запрос.</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.1.9.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useCursorFetch</strong></span></p>
+<p>Драйвер должен использовать основанную на курсоре установку, чтобы
+получить строки? Если установлено в "true" и "defaultFetchSize" &gt; 0
+(или setFetchSize() &gt; 0 вызван в запросе), тогда основанный на курсоре
+набор результатов будет использоваться. Обратите внимание на то, что
+"useServerPrepStmts" автоматически установлен в "true" в этом случае, потому
+что функциональность курсора доступна только для подготовленных
+запросов серверной стороны.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.0.0.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>cacheCallableStmts</strong></span></p>
+<p>Если драйвер кэширует стадию парсинга CallableStatements.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.2.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>cachePrepStmts</strong></span></p>
+<p>Действительно ли драйвер должен кэшировать стадию парсинга
+PreparedStatements клиентских подготовленных запросов,
+проверить на пригодность сами запросы?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.0.10.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>cacheResultSetMetadata</strong></span></p>
+<p>Действительно ли драйвер должен кэшировать ResultSetMetaData для
+Statements и PreparedStatements? Требует JDK-1.4+.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>cacheServerConfiguration</strong></span></p>
+<p>Действительно ли драйвер должен кэшировать результаты 'SHOW
+VARIABLES' и 'SHOW COLLATION' на основе URL?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.5.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>defaultFetchSize</strong></span></p>
+<p>Драйвер вызовет setFetchSize(n) с этим значением на всех
+недавно созданных запросах.</p>
+<p>Значение по умолчанию: 0.</p>
+<p>Начиная с версии: 3.1.9.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+dontCheckOnDuplicateKeyUpdateInSQL</strong></span></p>
+<p>Остановит проверку содержит ли каждый оператор INSERT пункт
+"ON DUPLICATE KEY UPDATE". Как побочный эффект, получая произведенную
+информацию о ключах, запросы возвратят список, где обычно ее не было бы.
+Также знайте, что в этом случае список произведенных возвращенных ключей
+может не быть точным. Эффект этого значения отменяется, если установлено
+одновременно с 'rewriteBatchedStatements=true'.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.1.32.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>elideSetAutoCommits</strong></span></p>
+<p>Используя MySQL-4.1 или более новый, драйвер должен только выпустить
+запросы 'set autocommit=n', когда состояние сервера не соответствует
+требуемому Connection.setAutoCommit(boolean)?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.3.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>enableEscapeProcessing</strong></span></p>
+<p>Устанавливает поведение обработки экранировки по умолчанию для объектов
+запроса. Метод Statement.setEscapeProcessing()
+может использоваться, чтобы определить поведение обработки
+для отдельного объекта запроса. Поведение обработки по умолчанию в
+подготовленных запросах должно быть определено свойством
+'processEscapeCodesForPrepStmts'.</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 6.0.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>enableQueryTimeouts</strong></span></p>
+<p>Когда позволено, набор тайм-аутов запроса установлен через
+Statement.setQueryTimeout(), используя общий экземпляр
+java.util.Timer для планирования. Даже если тайм-аут не истекает прежде, чем
+запрос обрабатывается, память, используемая TimerTask
+для данного тайм-аута, не будет восстановлена до времени, когда он истек
+бы, если бы это не было отменено драйвером. Окружающая среда высокой
+нагрузки могла бы хотеть рассмотреть отключение этой функциональности.</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 5.0.6.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>largeRowSizeThreshold</strong></span></p>
+<p>Какой размер набора результатов драйвер JDBC должен считать большим и
+использовать более эффективный способ представлять его внутренне?</p>
+<p>Значение по умолчанию: 2048.</p>
+<p>Начиная с версии: 5.1.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>readOnlyPropagatesToServer</strong></span></p>
+<p>Драйвер должен сделать соответствующие запросы, чтобы неявно установить
+операционный режим доступа на серверной стороне, когда вызван
+Connection.setReadOnly()? Установка этого значения к 'true'
+позволяет InnoDB потенциальную оптимизацию только для чтения, но также и
+требует дополнительного обмена данными, чтобы установить правильное
+операционное состояние. Даже если это свойство будет установлено в 'false',
+драйвер сделает максимальные усилия, чтобы предотвратить выполнение запросов,
+изменения состояния базы данных. Требует минимум MySQL 5.6.</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 5.1.35.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>rewriteBatchedStatements</strong></span></p>
+<p>Драйвер должен использовать мультизапросы (независимо от
+"allowMultiQueries"), а также переписывание подготовленных запросов для
+INSERT во вставки нескольких значений, когда вызывают executeBatch()?
+Заметьте, что у этого есть потенциал для инъекции SQL, используя простой
+java.sql.Statements, если ваш код не анализирует ввод правильно.
+Заметьте, что для подготовленных запросов серверной стороны
+запросы не могут в настоящее время использовать в своих интересах
+опцию переписывания, и что, если вы не определяете длину потока, используя
+PreparedStatement.set*Stream(), драйвер не будет в состоянии определить
+оптимальное количество параметров на пакет, и вы могли бы получить ошибку от
+драйвера, что пакет слишком большой. Statement.getGeneratedKeys() для этих
+переписанных запросов работает только, когда вся партия включает операторы
+INSERT. Пожалуйста, будьте осторожны с использованием
+rewriteBatchedStatements=true в сочетании с INSERT .. ON
+DUPLICATE KEY UPDATE, который для переписанного сервером запроса возвращает
+только одно значение как сумму всех затронутых (или найденных) строк
+в партии, и невозможно отобразить его правильно к первоначальным запросам.
+В этом случае драйвер возвращает 0 в результате каждого пакетного запроса,
+если полное количество было 0, и Statement.SUCCESS_NO_INFO в результате
+каждого пакетного запроса, если полное количество было &gt;0.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.13.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useReadAheadInput</strong></span></p>
+<p>Использовать более новый оптимизированный неблокирующий буферизованный
+поток ввода, читая с сервера?</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.1.5.</p></td></tr></tbody></table>
+
+<p><b>Отладка/Профилирование.</b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p>
+<span class="strong"><strong>logger</strong></span></p>
+<p>Название класса, который осуществляет "com.mysql.cj.log.Log",
+который будет использоваться, чтобы зарегистрировать сообщения
+(по умолчанию "com.mysql.cj.log.StandardLogger", который пишет в STDERR).</p>
+<p>Значение по умолчанию: com.mysql.cj.log.StandardLogger.</p>
+<p>Начиная с версии: 3.1.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>profilerEventHandler</strong></span></p>
+<p>Название класса, который осуществляет интерфейс
+com.mysql.cj.log.ProfilerEventHandler, который будет использоваться, чтобы
+обращаться с событиями профилирования/отслеживания.</p>
+<p>Значение по умолчанию: com.mysql.cj.log.LoggingProfilerEventHandler.</p>
+<p>Начиная с версии: 5.1.6.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useNanosForElapsedTime</strong></span></p>
+<p>Для профилирования/отладки функциональности, которая измеряет прошедшее
+время, драйвер должен попытаться использовать обработку наносекунд при
+ее наличии (JDK &gt;= 1.5)?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.0.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>maxQuerySizeToLog</strong></span></p>
+<p>Управляет максимальной длиной части запроса, который будет
+зарегистрирован при отладке.</p>
+<p>Значение по умолчанию: 2048.</p>
+<p>Начиная с версии: 3.1.3.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>profileSQL</strong></span></p>
+<p>Трассировка запросов и время выполнения/получения к формируемому
+'profilerEventHandler'.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.0.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>logSlowQueries</strong></span></p>
+<p>Должны ли запросы, которые занимают больше времени, чем
+'slowQueryThresholdMillis' или определенные
+'autoSlowLog' зарегистрированы 'profilerEventHandler'?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.2.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>slowQueryThresholdMillis</strong></span></p>
+<p>Если включено 'logSlowQueries', сколько времени запрос должен занять
+(в ms), прежде чем он будет зарегистрирован как медленный?</p>
+<p>Значение по умолчанию: 2000.</p>
+<p>Начиная с версии: 3.1.2.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>slowQueryThresholdNanos</strong></span></p>
+<p>Если включено 'logSlowQueries', 'useNanosForElapsedTime' установлен в
+true, и это свойство установлено в ненулевое значение, драйвер будет
+использовать этот порог (в наносекундах), чтобы определить, был
+ли запрос медленным.</p>
+<p>Значение по умолчанию: 0.</p>
+<p>Начиная с версии: 5.0.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>autoSlowLog</strong></span></p>
+<p>Вместо того, чтобы использовать slowQueryThreshold*, чтобы определить,
+достаточно ли запрос медленный, чтобы быть зарегистрированным, поддержать ли
+статистические данные, которые позволяют драйверу
+определять запросы, которые вне 99%?</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 5.1.4.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>explainSlowQueries</strong></span></p>
+<p>Если включено 'logSlowQueries', драйвер должен автоматически выпустить
+'EXPLAIN' на сервере и послать результаты в журнал как
+уровень протокола WARN?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.2.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>gatherPerfMetrics</strong></span></p>
+<p>Драйвер должен собрать исполнительные метрики и сообщить о них через
+протокол каждые 'reportMetricsIntervalMillis' миллисекунд?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.2.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>reportMetricsIntervalMillis</strong></span></p>
+<p>Если включено 'gatherPerfMetrics', как часто они должны
+быть зарегистрированы (в ms)?</p>
+<p>Значение по умолчанию: 30000.</p>
+<p>Начиная с версии: 3.1.2.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>logXaCommands</strong></span></p>
+<p>Драйвер должен зарегистрировать команды XA, посланные
+MysqlXaConnection серверу как уровень протокола DEBUG?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.0.5.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>traceProtocol</strong></span></p>
+<p>Сетевой протокол должен быть зарегистрирован на уровне TRACE?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.2.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>enablePacketDebug</strong></span></p>
+<p>Когда включено, кольцевой буфер пакетов 'packetDebugBufferSize'
+будет сохранен и сброшен в дамп, когда исключения будут брошены в ключевые
+области в коде драйвера.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.3.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>packetDebugBufferSize</strong></span></p>
+<p>Максимальное количество пакетов, чтобы сохранить, когда
+'enablePacketDebug' = true.</p>
+<p>Значение по умолчанию: 20.</p>
+<p>Начиная с версии: 3.1.3.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useUsageAdvisor</strong></span></p>
+<p>Драйвер должен выпустить предупреждения 'usage', советуя надлежащее и
+эффективное использование JDBC и MySQL Connector/J в 'profilerEventHandler'?
+</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.1.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>resultSetSizeThreshold</strong></span></p>
+<p>Если 'useUsageAdvisor' = true, сколько строк набор результатов должен
+содержать, прежде чем драйвер предупреждает, что это подозрительно большое?
+</p>
+<p>Значение по умолчанию: 100.</p>
+<p>Начиная с версии: 5.0.5.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>autoGenerateTestcaseScript</strong></span></p>
+<p>Драйвер должен сбросить в дамп в STDERR SQL, который выполняет, включая
+подготовленные запросы серверной стороны?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.9.</p></td></tr></tbody></table>
+
+<p><b>Исключения/Предупреждения.</b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p>
+<span class="strong"><strong>dumpQueriesOnException</strong></span></p>
+<p>Драйвер должен сбросить дамп содержания запроса, посланного в сервер, в
+сообщении для SQLExceptions?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.3.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>exceptionInterceptors</strong></span></p>
+<p>Разграниченный запятой список классов, реализующих
+com.mysql.cj.exceptions.ExceptionInterceptor. Эти классы будут
+создавать по одному экземпляру для каждого подключения, всем SQLExceptions,
+брошенным драйвером, позволят быть перехваченным этими перехватчиками
+цепочечным способом с первым классом, перечисленным как начало цепи.</p>
+<p>Начиная с версии: 5.1.8.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>ignoreNonTxTables</strong></span></p>
+<p>Проигнорировать нетранзакционное предупреждение таблицы для отмены?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.0.9.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+includeInnodbStatusInDeadlockExceptions</strong></span></p>
+<p>Включать вывод "SHOW ENGINE INNODB STATUS" в сообщениях об исключениях,
+когда исключения мертвой блокировки будут обнаружены?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.0.7.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+includeThreadDumpInDeadlockExceptions</strong></span></p>
+<p>Включать текущий дамп потока Java в сообщения об исключениях, когда
+исключения мертвой блокировки будут обнаружены?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.1.15.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+includeThreadNamesAsStatementComment</strong></span></p>
+<p>Включать название текущего потока как комментарий, видимый в
+"SHOW PROCESSLIST", или в дампах мертвой блокировки Innodb, полезных в
+корреляции с "includeInnodbStatusInDeadlockExceptions=true" и
+"includeThreadDumpInDeadlockExceptions=true".</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.1.15.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useOnlyServerErrorMessages</strong></span></p>
+<p>Не транслировать 'стандартные' сообщения об ошибках SQLState к сообщениям
+об ошибках, возвращенным сервером.</p>
+<p>Значение по умолчанию: true.</p>
+<p>Начиная с версии: 3.0.15.</p></td></tr></tbody></table>
+
+<p><b>Настройки для интеграции с другими продуктами.</b></p>
+<table border="1"><thead><tr><th scope="col"><span class="bold">
+<strong>Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p><span class="strong"><strong>
+overrideSupportsIntegrityEnhancementFacility</strong></span></p>
+<p>Драйвер должен возвратить "true" для
+DatabaseMetaData.supportsIntegrityEnhancementFacility() даже если база
+данных не поддерживает его, приложениям, которые требуют, чтобы этот метод
+возвратил "true", чтобы сигнализировать о поддержке внешних ключей, даже при
+том, что спецификация SQL указывает, что это средство содержит намного
+больше, чем просто поддержка внешнего ключа (одно такое приложение
+это OpenOffice)?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.1.12.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>ultraDevHack</strong></span></p>
+<p>Создать PreparedStatements для prepareCall()
+при необходимости, потому что UltraDev поврежден и выпускает
+prepareCall() для ВСЕХ запросов?</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 2.0.3.</p></td></tr></tbody></table>
+
+<p><b>Совместимость с JDBC.</b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p>
+<span class="strong"><strong>useColumnNamesInFindColumn</strong></span></p>
+<p>До JDBC-4.0 спецификации JDBC связывали ошибку с тем, что могло быть дано
+как "column name" в методах ResultSet (вроде findColumn())
+или получателях, которые взяли свойство String. JDBC-4.0 разъяснил "column
+name" как метку в пункте "AS", возвращаемую
+ResultSetMetaData.getColumnLabel(), или имя столбца, если нет AS.
+Установка этого значения в "true" даст поведение, которое является подходящим
+JDBC-3.0 и более ранним версиям спецификации JDBC, но которое из-за ошибки
+спецификации могло дать неожиданные результаты. Это свойство предпочтительнее
+"useOldAliasMetadataBehavior", если вам не нужно определенное поведение,
+которое это обеспечивает относительно ResultSetMetadata.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.1.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>pedantic</strong></span></p>
+<p>Следовать спецификацией символов JDBC.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 3.0.0.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>useOldAliasMetadataBehavior</strong></span></p>
+<p>Драйвер должен использовать устаревшее поведение для "AS"
+на столбцах и таблицах и возвратить только псевдонимы (если таковые имеются)
+для ResultSetMetaData.getColumnName() или ResultSetMetaData.getTableName(), а
+не первоначальный столбец/имя таблицы?
+В 5.0.x значение по умолчанию было true.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 5.0.4.</p></td></tr></tbody></table>
+
+<p><b>X Protocol и X DevAPI.</b></p>
+<table border="1">
+<thead><tr><th scope="col"><span class="bold"><strong>
+Свойства и описания</strong></span></th></tr></thead>
+<tbody><tr><td scope="row"><p>
+<span class="strong"><strong>xdevapi.asyncResponseTimeout</strong></span></p>
+<p>Перерыв (в секундах) для получения ответа сервера с помощью X Protocol.</p>
+<p>Значение по умолчанию: 300.</p>
+<p>Начиная с версии: 8.0.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>xdevapi.auth</strong></span></p>
+<p>Механизм аутентификации, чтобы использовать с X Protocol.
+Позволенные значения: "SHA256_MEMORY", "MYSQL41",
+"PLAIN" и "EXTERNAL". Значение нечувствительно к регистру. Если свойство не
+установлено, механизм выбран в зависимости от типа подключения: "PLAIN"
+используется для связей TLS, "SHA256_MEMORY" или "MYSQL41"
+используется для незашифрованных связей.</p>
+<p>Значение по умолчанию: PLAIN.</p>
+<p>Начиная с версии: 8.0.8.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>xdevapi.connect-timeout</strong></span></p>
+<p>X DevAPI тайм-аут для сокетного соединения (в миллисекундах), '0' = без
+тайм-аута. По умолчанию '10000'. Если не задан явно "xdevapi.connect-timeout"
+и задан явно "connectTimeout", "xdevapi.connect-timeout" принимает значение
+из "connectTimeout". Если "xdevapi.useAsyncProtocol=true",
+проигнорированы "xdevapi.connect-timeout" и "connectTimeout".</p>
+<p>Значение по умолчанию: 10000.</p>
+<p>Начиная с версии: 8.0.13.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>xdevapi.connection-attributes</strong></span></p>
+<p>Разграниченный запятой список определенных пользователями пар key=value
+(в дополнение к стандартным определенным X Protocol парам key=value), чтобы
+передать MySQL Server для показа как параметры связи в таблицах
+PERFORMANCE_SCHEMA tables session_account_connect_attrs и
+session_connect_attrs. Например:
+xdevapi.connection-attributes=key1=value1,key2=value2 или
+xdevapi.connection-attributes=[key1=value1,key2=value2].
+Эта функциональность доступна для использования только с MySQL Server 8.0.16
+или позже. Более ранние версии X-протокола не поддерживают признаки связи,
+заставляя этот параметр конфигурации быть проигнорированными. Для ситуаций,
+где скорость создания/инициализации сессии очень важна, установка
+xdevapi.connection-attributes=false заставит обойти обработку признака связи.
+</p>
+<p>Начиная с версии: 8.0.16.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>xdevapi.dns-srv</strong></span></p>
+<p>Опция для инструктирования драйвера использовать данное имя хоста для
+поиска записи DNS SRV и использовать получающийся список хостов в связи
+отказоустойчивости мультихоста. Обратите внимание на то, что единственное имя
+хоста без порта должно быть обеспечено, когда это включено.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 8.0.19.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>xdevapi.ssl-mode</strong></span></p>
+<p>Режим SSL. Если не определен, применияется "sslMode".
+Поскольку "PREFERRED" не применим к X-протоколу, если "xdevapi.ssl-mode" не
+установлено, а "sslMode" = "PREFERRED", "xdevapi.ssl-mode" = "REQUIRED".</p>
+<p>Значение по умолчанию: REQUIRED.</p>
+<p>Начиная с версии: 8.0.7.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>xdevapi.ssl-truststore</strong></span></p>
+<p>URL к базе ключей сертификатов CA, которой доверяют. Если не определено,
+используется значение trustCertificateKeyStoreUrl.</p>
+<p>Начиная с версии: 6.0.6.</p></td></tr>
+
+<tr><td scope="row"><p><span class="strong"><strong>
+xdevapi.ssl-truststore-password</strong></span></p>
+<p>Пароль для базы ключей сертификатов CA, которой доверяют.
+Если не определено, используется значение trustCertificateKeyStorePassword.
+</p>
+<p>Начиная с версии: 6.0.6.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>xdevapi.ssl-truststore-type</strong></span></p>
+<p>Тип базы ключей сертификатов CA, которой доверяют. Если не определено,
+используется значение trustCertificateKeyStoreType.</p>
+<p>Значение по умолчанию: JKS.</p>
+<p>Начиная с версии: 6.0.6.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>xdevapi.tls-ciphersuites</strong></span></p>
+<p>Значения шифров для использования на сокетах SSL. Если не определено,
+используется значение enabledSSLCipherSuites.</p>
+<p>Начиная с версии: 8.0.19.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>xdevapi.tls-versions</strong></span></p>
+<p>Значения, перекрывающие протоколы TLS для использования на сокетах SSL.
+Если не определено, используется значение enabledTLSProtocols.</p>
+<p>Начиная с версии: 8.0.19.</p></td></tr>
+
+<tr><td scope="row"><p>
+<span class="strong"><strong>xdevapi.useAsyncProtocol</strong></span></p>
+<p>Используйте асинхронный вариант X Protocol.</p>
+<p>Значение по умолчанию: false.</p>
+<p>Начиная с версии: 6.0.0.</p></td></tr></tbody></table>
+
+<h2><a name="connector-j-reference-implementation-notes"></a>
+6.4. Примечания о реализации JDBC API</h2>
+<a class="indexterm" name="idm45064740191040"></a>
+<p>MySQL Connector/J как строгое внедрение
+<a href="../../../www.oracle.com/technetwork/java/javase/jdbc/index.html"
+target="_top">JDBC API</a>, проходит все тесты в общедоступной версии набора
+тестов на соблюдение Oracle's JDBC. Спецификация JDBC гибка в том, как
+определенная функциональность должна быть осуществлена. Эта секция сообщает
+подробности на уровне интерфейса о решениях реализации, которые могли бы
+затронуть, как вы кодируете запросы с MySQL Connector/J.</p>
+
+<ul><li><p><span class="bold"><strong>BLOB</strong></span></p>
+<p>Можно подражать BLOB с локаторами, добавляя свойство
+<code class="literal">emulateLocators=true</code> к JDBC URL.
+Используя этот метод, драйвер задержит загрузку фактических данных BLOB, пока
+вы не будете получать другие данные и затем будете использовать методы поиска
+(<code class="function">getInputStream()</code>,
+<code class="function">getBytes()</code> и т.д.) на потоке данных BLOB.</p>
+
+<p>Необходимо использовать псевдоним столбца со
+значением столбца к подлинному имени BLOB, например:</p>
+<pre class="programlisting">
+SELECT id, 'data' as blob_data from blobtable
+</pre>
+
+<p>Необходимо также следовать этим правилам:</p>
+<ul><li><p><a href="../../../https@dev.mysql.com/doc/refman/8.0/en/select.html"
+target="_top"><code class="literal">SELECT</code></a>
+должен сослаться только на одну таблицу. У таблицы должен быть
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_primary_key"
+target="_top">primary key</a>.</p></li>
+
+<li><p><a href="../../../https@dev.mysql.com/doc/refman/8.0/en/select.html"
+target="_top"><code class="literal">SELECT</code></a> должен применить
+псевдоним оригинального имени столбца BLOB, определенного как
+строка, к альтернативному названию.</p></li>
+
+<li><p><a href="../../../https@dev.mysql.com/doc/refman/8.0/en/select.html"
+target="_top"><code class="literal">SELECT</code></a>
+должен покрыть все столбцы, которые составляют первичный ключ.</p></li></ul>
+
+<p>Внедрение BLOB не позволяет оперативную модификацию
+(это копии, как сообщает метод
+<code class="literal">DatabaseMetaData.locatorsUpdateCopies()</code>).
+Из-за этого используйте соответствующий
+<code class="literal">PreparedStatement.setBlob()</code> или
+<code class="literal">ResultSet.updateBlob()</code> (в случае обновляемых
+наборов результатов), чтобы сохранить изменения в базе данных.</p></li>
+
+<li><p><span class="bold"><strong>Связь</strong></span></p>
+<p>Метод <code class="function">isClosed()</code>
+не пингует сервер, чтобы определить, доступен ли он.
+В соответствии со спецификацией JDBC, он вернет true только если
+<code class="function">closed()</code> был вызван на связи.
+Если необходимо определить, действительна ли связь, выпустите простой запрос,
+такой как <code class="literal">SELECT 1</code>.
+Драйвер бросит исключение, если связь больше не действительна.</p></li>
+
+<li><p><span class="bold"><strong>DatabaseMetaData</strong></span></p>
+<p>Информация <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_foreign_key"
+target="_top">Foreign key</a> (<code class="function">getImportedKeys()
+</code>/<code class="function">getExportedKeys()</code> и
+<code class="function">getCrossReference()</code>) доступна только из таблиц
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/innodb-storage-engine.html"
+target="_top"><code class="literal">InnoDB</code></a>. Драйвер применяет
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/show-create-table.html"
+target="_top"><code class="literal">SHOW CREATE TABLE</code></a>,
+чтобы получить эту информацию, поэтому если какие-либо другие механизмы
+хранения добавляют поддержку внешних ключей, драйвер прозрачно поддержал
+бы их тоже.</p></li>
+
+<li><p><span class="bold"><strong>PreparedStatement</strong></span></p>
+<p>Два варианта подготовленных запросов осуществляются Connector/J,
+клиентская и серверная сторона. Клиентские подготовленные запросы
+используются по умолчанию, потому что ранние версии MySQL не поддерживали
+функцию подготовленных запросов или имели проблемы с ее внедрением.
+Запросы на сервере и кодированные двоично наборы результатов используются,
+когда сервер поддерживает их. Чтобы позволить использование серверной стороны
+подготовленных запросов, установите <code class="literal">
+useServerPrepStmts=true</code>.</p>
+
+<p>Будьте осторожны с использованием серверной стороны запросов с
+параметрами <span class="bold"><strong>large</strong></span>, которые
+устанавливаются, используя <code class="function">setBinaryStream()</code>,
+<code class="function">setAsciiStream()</code>,
+<code class="function">setUnicodeStream()</code>,<code class="function">
+setCharacterStream()</code>,
+<code class="function">setNCharacterStream()</code>,
+<code class="function">setBlob()</code>,
+<code class="function">setClob()</code> или
+<code class="function">setNCLob()</code>.
+Чтобы повторно выполнить запрос с любым большим параметром, измененным
+на небольшой параметр, вызовите
+<code class="function">clearParameters()</code> и заново установите все
+параметры. Причины этого следующие:</p>
+
+<ul><li><p>Во время клиентской эмуляции и работы серверных запросов
+большие данные переданы только когда вызван
+<code class="literal">PreparedStatement.execute()</code>.</p></li></ul>
+
+<ul><li><p>Как только это было сделано, поток, используемый, чтобы прочитать
+данные на клиентской стороне, закрывается (согласно JDBC spec)
+и не может быть прочитан снова.</p></li></ul>
+
+<ul><li><p>Если параметр изменяется от большого до небольшого, драйвер должен
+перезагрузить состояние серверной стороны подготовленного запроса, чтобы
+позволить параметру, который изменяется, занять место предшествующего
+большого значения. Это удаляет все большие данные, которые уже послали в
+сервер, таким образом требуя, чтобы данные были посланы заново, используя
+метод <code class="function">setBinaryStream()</code>,
+<code class="function">setAsciiStream()</code>,
+<code class="function">setUnicodeStream()</code>,
+<code class="function">setCharacterStream()</code>,
+<code class="function">setNCharacterStream()</code>,
+<code class="function">setBlob()</code>,
+<code class="function">setClob()</code> или
+<code class="function">setNCLob()</code>.</p></li></ul>
+
+<p>Следовательно, чтобы изменить тип параметра к небольшому, необходимо
+вызвать <code class="function">clearParameters()</code> и переустановить
+все параметры подготовленного запросы снова, прежде чем это сможет
+быть повторно выполнено.</p></li>
+
+<li><p><span class="bold"><strong>ResultSet</strong></span></p>
+<p>По умолчанию ResultSets полностью получены и сохранены в памяти.
+В большинстве случаев это самый эффективный способ работать и из-за дизайна
+протокола сети MySQL его легче осуществить. Если вы работаете с ResultSets,
+которые имеют большое количество строк или больших значений и не могут
+выделить пространство &quot;кучи&quot; в вашем JVM для требуемой памяти,
+можно сказать велеть драйверу передать результаты построчно.</p>
+
+<p>Чтобы позволить эту функциональность, создайте экземпляр
+<code class="literal">Statement</code> примерно так:</p>
+<pre class="programlisting">
+stmt = conn.createStatement(java.sql.ResultSet.TYPE_FORWARD_ONLY,
+                            java.sql.ResultSet.CONCUR_READ_ONLY);
+stmt.setFetchSize(Integer.MIN_VALUE);
+</pre>
+
+<p>Комбинация набора результатов только для чтения, только для пересылки и
+с размером получения <code class="literal">Integer.MIN_VALUE</code>
+служит сигналом драйверу передавать набор результатов потоком построчно.
+После этого любые наборы результатов, созданные запросом,
+будут получены построчно.</p>
+
+<p>Есть некоторые проблемы с этим подходом. Необходимо прочитать все
+строки в наборе результатов (или закрыть его), прежде чем можно будет
+выпустить любые другие запросы на связи, или исключение будет брошено.</p>
+
+<p>Если запрос в объеме транзакции, то блокировки выпущены, когда
+транзакция заканчивается (это подразумевает, что запрос должен закончиться
+сначала). Как с большинством других баз данных, запросы не полны, пока все
+ожидаемые результаты запроса не прочитаны, или активный набор результатов для
+запроса не закрывается.</p>
+
+<p>Поэтому, используя текущие результаты, обработайте их как можно быстрее,
+если вы хотите поддержать параллельный доступ к таблицам, на которые
+ссылается запрос, производящий набор результатов.</p>
+
+<p>Другая альтернатива должна использовать основанный на курсоре поток, чтобы
+получить количество строк каждый раз. Это может быть сделано, установив
+свойство связи <code class="literal">useCursorFetch</code> = true, а затем
+вызвав <code class="literal">setFetchSize(int)</code> с
+<code class="literal">int</code> будучи желаемым количеством строк, которые
+будут возвращены каждый раз:</p>
+
+<pre class="programlisting">
+conn = DriverManager.getConnection("jdbc:mysql://localhost/?useCursorFetch=true", "user", "s3cr3t");
+stmt = conn.createStatement();
+stmt.setFetchSize(100);
+rs = stmt.executeQuery("SELECT * FROM your_table_here");
+</pre></li>
+
+<li><p><span class="bold"><strong>Запросы</strong></span></p>
+<p>Connector/J включает поддержку
+<code class="literal">Statement.cancel()</code> и
+<code class="literal">Statement.setQueryTimeout()</code>.
+Оба требуют, чтобы отдельная связь создала команду
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/kill.html" target="_top">
+<code class="literal">KILL QUERY</code></a>. В случае
+<code class="function">setQueryTimeout()</code> реализация создает
+дополнительный поток, чтобы обращаться с функциональностью тайм-аута.</p>
+
+<p>Отказ отменить запрос для <code class="function">setQueryTimeout()</code>
+может проявиться как <code class="literal">RuntimeException</code>
+вместо того, чтобы терпеть неудачу тихо, так как в настоящее время нет
+никакого способа открыть поток, который выполняет запрос, отменяемый из-за
+истечения тайм-аута и бросить из него исключение вместо этого.</p>
+
+<p>MySQL не поддерживает курсоры SQL, и драйвер JDBC не подражает им, таким
+образом, <code class="literal">setCursorName()</code>
+не имеет никакого эффекта.</p>
+
+<p>Connector/J также поставляет два дополнительных метода:</p>
+<ul><li><p><code class="function">setLocalInfileInputStream()</code>
+устанавливает экземпляр <code class="literal">InputStream</code>, который
+будет использоваться, чтобы послать данные в сервер MySQL для
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/load-data.html"
+target="_top"><code class="literal">LOAD DATA LOCAL INFILE</code></a>
+вместо <code class="literal">FileInputStream</code> или
+<code class="literal">URLInputStream</code>, который
+представляет путь, данный как аргумент запроса.</p>
+
+<p>Этот поток будет прочитан после выполнения
+a <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/load-data.html"
+target="_top"><code class="literal">LOAD DATA LOCAL INFILE</code></a>
+и будет автоматически закрыт драйвером, таким образом, он должен быть
+перезагружен перед каждым вызовом <code class="literal">execute*()</code>,
+что заставило бы сервер MySQL запрашивать данные, чтобы обработать запрос для
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/load-data.html"
+target="_top"><code class="literal">LOAD DATA LOCAL INFILE</code></a>.</p>
+
+<p>Если это значение установлено к <code class="literal">NULL</code>,
+драйвер вернется к использованию
+<code class="literal">FileInputStream</code> или
+<code class="literal">URLInputStream</code> как требуется.</p></li>
+
+<li><p><code class="function">getLocalInfileInputStream()</code> вернет
+экземпляр <code class="literal">InputStream</code>, который будет
+использоваться, чтобы послать данные в ответ на
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/load-data.html"
+target="_top"><code class="literal">LOAD DATA LOCAL INFILE</code></a>.</p>
+
+<p>Этот метод вернет <code class="literal">NULL</code>, если никакой такой
+поток не был установлен, используя
+<code class="function">setLocalInfileInputStream()</code>.
+</p></li></ul></li></ul>
+
+<h2><a name="connector-j-reference-type-conversions"></a>
+6.5. Java, JDBC и типы MySQL</h2>
+<a class="indexterm" name="idm45064740101712"></a>
+<p>В целом любой тип данных MySQL может быть преобразован в
+<code class="literal">java.lang.String</code> и любой числовой тип может быть
+преобразован в любые числовые типы Java, хотя округление, переполнение или
+потеря точности могут произойти.</p>
+
+<p>Все типы <code class="literal">TEXT</code> вернут
+<code class="literal">Types.LONGVARCHAR</code> с различными значениями
+<code class="literal">getPrecision()</code> (65535, 255, 16777215 и
+2147483647), причем <code class="literal">getColumnType()</code> вернет
+<code class="literal">-1</code>. Это поведение намеренное даже при том, что
+<code class="literal">TINYTEXT</code> не падает из-за размера в категории
+<code class="literal">LONGVARCHAR</code>. Это должно избежать различной
+обработки в том же самом базовом типе.
+<code class="literal">getColumnType()</code> вернет
+<code class="literal">-1</code> потому что внутренняя обработка сервера имеет
+тип <code class="literal">TEXT</code>, который подобен
+<code class="literal">BLOB</code>.</p>
+
+<p>Также отметьте, что <code class="literal">getColumnTypeName()</code>
+вернет <code class="literal">VARCHAR</code> даже при том, что
+<code class="literal">getColumnType()</code> вернет
+<code class="literal">Types.LONGVARCHAR</code>, потому что
+<code class="literal">VARCHAR</code> определяемое собственное имя столбца
+базы данных для этого типа.</p>
+
+<p>Connector/J выпускает предупреждения или бросает исключения
+<code class="literal">DataTruncation</code>, как требуется спецификацией
+JDBC, если связь не формировалась, чтобы не делать так при помощи значения
+<code class="literal">jdbcCompliantTruncation</code>, установив его в
+<code class="literal">false</code>.</p>
+
+<p>Преобразования, которые, как всегда гарантируют, будут работать,
+перечисляются в следующей таблице. Первые столбец перечисляет один или
+несколько типов данных MySQL и второй столбец перечисляет один или несколько
+типов Java, в которые могут быть преобразованы типы MySQL.</p>
+
+<a name="idm45064740083456"></a>
+<p><b>Таблица 6.1. Возможные преобразования между типами данных MySQL и Java
+</b></p>
+<table border="1">
+<tbody><tr><td scope="row"><code class="literal">
+CHAR, VARCHAR, BLOB, TEXT, ENUM, and SET</code></td>
+<td><code class="literal">java.lang.String, java.io.InputStream,
+java.io.Reader, java.sql.Blob, java.sql.Clob</code></td></tr>
+<tr><td scope="row"><code class="literal">FLOAT, REAL, DOUBLE PRECISION,
+NUMERIC, DECIMAL, TINYINT, SMALLINT, MEDIUMINT, INTEGER, BIGINT</code></td>
+<td><code class="literal">java.lang.String, java.lang.Short,
+java.lang.Integer, java.lang.Long, java.lang.Double,
+java.math.BigDecimal</code></td></tr>
+<tr><td scope="row"><code class="literal">DATE, TIME, DATETIME, TIMESTAMP
+</code></td><td><code class="literal">java.lang.String, java.sql.Date,
+java.sql.Timestamp</code></td></tr></tbody></table><br class="table-break">
+
+<p>Округление, переполнение или потеря точности могут произойти, если вы
+выбираете Java-тип числовых данных, у которого есть меньшая точность, чем
+тип данных MySQL, в который вы преобразовываете.</p>
+
+<p>Метод <code class="classname">ResultSet.getObject()</code>
+использует преобразования типов между типами MySQL и Явы, следуя спецификации
+JDBC в соответствующих случаях. Значения, возвращенные
+<code class="classname">ResultSetMetaData.GetColumnTypeName()</code> и
+<code class="classname">ResultSetMetaData.GetColumnClassName()</code>,
+показаны в приведенной ниже таблице. Для получения дополнительной информации
+о типах JDBC посмотрите ссылку на класс
+<a href="../../../docs.oracle.com/javase/8/docs/api/java/sql/Types.html"
+target="_top">java.sql.Types</a>.</p>
+
+<a name="idm45064740069520"></a>
+<p><b>Таблица 6.2. Типы MySQL и возвращаемые значения для
+ResultSetMetaData.GetColumnTypeName() и
+ResultSetMetaData.GetColumnClassName()</b></p>
+<table border="1">
+<thead><tr><th scope="col">Имя типа MySQL</th>
+<th scope="col">Возвращаемое значение <code class="literal">
+GetColumnTypeName</code></th>
+<th scope="col">Возвращаемое значение
+<code class="literal">GetColumnClassName</code></th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">BIT(1)</code></td>
+<td><code class="literal">BIT</code></td><td><code class="classname">
+java.lang.Boolean</code></td></tr>
+<tr><td scope="row"><code class="literal">BIT(&gt; 1)</code></td>
+<td><code class="literal">BIT</code></td>
+<td><code class="classname">byte[]</code></td></tr>
+<tr><td scope="row"><code class="literal">TINYINT</code></td>
+<td><code class="literal">TINYINT</code></td>
+<td><code class="classname">java.lang.Boolean</code>,
+если свойство конфигурации
+<code class="literal">tinyInt1isBit</code> установлено в
+<code class="literal">true</code> (по умолчанию) и размер ресурса хранения
+равняется 1 или <code class="classname">java.lang.Integer</code>,
+если нет.</td></tr>
+<tr><td scope="row"><code class="literal">BOOL</code>,
+<code class="literal">BOOLEAN</code></td>
+<td><code class="literal">TINYINT</code></td>
+<td>См. <code class="literal">TINYINT</code> выше, поскольку это в настоящее
+время псевдонимы для <code class="literal">TINYINT(1)</code></td></tr>
+<tr><td scope="row"><code class="literal">SMALLINT[(M)] [UNSIGNED]</code>
+</td><td><code class="literal">SMALLINT [UNSIGNED]</code></td>
+<td><code class="classname">java.lang.Integer</code>
+(независимо от того, является ли это
+<code class="literal">UNSIGNED</code> или нет)</td></tr>
+<tr><td scope="row"><code class="literal">MEDIUMINT[(M)] [UNSIGNED]</code>
+</td><td><code class="literal">MEDIUMINT [UNSIGNED]</code></td>
+<td><code class="classname">java.lang.Integer</code>
+(независимо от того, является ли это
+<code class="literal">UNSIGNED</code> или нет)</td></tr>
+<tr><td scope="row"><code class="literal">INT,INTEGER[(M)] [UNSIGNED]</code>
+</td><td><code class="literal">INTEGER [UNSIGNED]</code></td>
+<td><code class="classname">java.lang.Integer</code>,
+если <code class="literal">UNSIGNED</code>
+<code class="classname">java.lang.Long</code></td></tr>
+<tr><td scope="row"><code class="literal">BIGINT[(M)] [UNSIGNED]</code></td>
+<td><code class="literal">BIGINT [UNSIGNED]</code></td>
+<td><code class="classname">java.lang.Long</code>, если UNSIGNED
+<code class="classname">java.math.BigInteger</code></td></tr>
+<tr><td scope="row"><code class="literal">FLOAT[(M,D)]</code></td>
+<td><code class="literal">FLOAT</code></td>
+<td><code class="classname">java.lang.Float</code></td></tr>
+<tr><td scope="row"><code class="literal">DOUBLE[(M,B)]</code></td>
+<td><code class="literal">DOUBLE</code></td>
+<td><code class="classname">java.lang.Double</code></td></tr>
+<tr><td scope="row"><code class="literal">DECIMAL[(M[,D])]</code></td>
+<td><code class="literal">DECIMAL</code></td>
+<td><code class="classname">java.math.BigDecimal</code></td></tr>
+<tr><td scope="row"><code class="literal">DATE</code></td>
+<td><code class="literal">DATE</code></td>
+<td><code class="classname">java.sql.Date</code></td></tr>
+<tr><td scope="row"><code class="literal">DATETIME</code></td>
+<td><code class="literal">DATETIME</code></td>
+<td><code class="classname">java.sql.Timestamp</code></td></tr>
+<tr><td scope="row"><code class="literal">TIMESTAMP[(M)]</code></td>
+<td><code class="literal">TIMESTAMP</code></td>
+<td><code class="classname">java.sql.Timestamp</code></td></tr>
+<tr><td scope="row"><code class="literal">TIME</code></td>
+<td><code class="literal">TIME</code></td>
+<td><code class="classname">java.sql.Time</code></td></tr>
+<tr><td scope="row"><code class="literal">YEAR[(2|4)]</code></td>
+<td><code class="literal">YEAR</code></td>
+<td>Если свойство конфигурации <code class="literal">yearIsDateType</code>
+установлено в <code class="literal">false</code>, тогда тип возвращенного
+объекта <code class="classname">java.sql.Short</code>. Если установлено в
+<code class="literal">true</code> (по умолчанию), тогда возвращенный объект
+имеет тип <code class="classname">java.sql.Date</code>
+с установкой даты 1 января в полночь</td></tr>
+<tr><td scope="row"><code class="literal">CHAR(M)</code></td>
+<td><code class="literal">CHAR</code></td>
+<td><code class="classname">java.lang.String</code> (если набор символов для
+столбца не <code class="literal">BINARY</code>, вернется
+<code class="classname">byte[]</code>)</td></tr>
+<tr><td scope="row"><code class="literal">VARCHAR(M) [BINARY]</code></td>
+<td><code class="literal">VARCHAR</code></td>
+<td><code class="classname">java.lang.String</code>
+(если набор символов для столбца не <code class="literal">BINARY</code>,
+вернется <code class="classname">byte[]</code>)</td></tr>
+<tr><td scope="row"><code class="literal">BINARY(M)</code></td>
+<td><code class="literal">BINARY</code></td>
+<td><code class="classname">byte[]</code></td></tr>
+<tr><td scope="row"><code class="literal">VARBINARY(M)</code></td>
+<td><code class="literal">VARBINARY</code></td>
+<td><code class="classname">byte[]</code></td></tr>
+<tr><td scope="row"><code class="literal">TINYBLOB</code></td>
+<td><code class="literal">TINYBLOB</code></td>
+<td><code class="classname">byte[]</code></td></tr>
+<tr><td scope="row"><code class="literal">TINYTEXT</code></td>
+<td><code class="literal">VARCHAR</code></td>
+<td><code class="classname">java.lang.String</code></td></tr>
+<tr><td scope="row"><code class="literal">BLOB</code></td>
+<td><code class="literal">BLOB</code></td>
+<td><code class="classname">byte[]</code></td></tr>
+<tr><td scope="row"><code class="literal">TEXT</code></td>
+<td><code class="literal">VARCHAR</code></td>
+<td><code class="classname">java.lang.String</code></td></tr>
+<tr><td scope="row"><code class="literal">MEDIUMBLOB</code></td>
+<td><code class="literal">MEDIUMBLOB</code></td>
+<td><code class="classname">byte[]</code></td></tr>
+<tr><td scope="row"><code class="literal">MEDIUMTEXT</code></td>
+<td><code class="literal">VARCHAR</code></td>
+<td><code class="classname">java.lang.String</code></td></tr>
+<tr><td scope="row"><code class="literal">LONGBLOB</code></td>
+<td><code class="literal">LONGBLOB</code></td>
+<td><code class="classname">byte[]</code></td></tr>
+<tr><td scope="row"><code class="literal">LONGTEXT</code></td>
+<td><code class="literal">VARCHAR</code></td>
+<td><code class="classname">java.lang.String</code></td></tr>
+<tr><td scope="row"><code class="literal">ENUM('value1','value2',...)
+</code></td><td><code class="literal">CHAR</code></td>
+<td><code class="classname">java.lang.String</code></td></tr>
+<tr><td scope="row"><code class="literal">SET('value1','value2',...)</code>
+</td><td><code class="literal">CHAR</code></td>
+<td><code class="classname">java.lang.String</code></td></tr></tbody></table>
+<br class="table-break">
+
+<h2><a name="connector-j-reference-charsets"></a>
+6.6. Использование наборов символов и Unicode</h2>
+<a class="indexterm" name="idm45064739978592"></a>
+<a class="indexterm" name="idm45064739977200"></a>
+<a class="indexterm" name="idm45064739975808"></a>
+<p>Все последовательности, посланные от драйвера JDBC
+серверу, преобразовываются автоматически из родной формы Java Unicode
+к кодировке символов клиента, включая все запросы, посланные, используя
+<code class="literal">Statement.execute()</code>,
+<code class="literal">Statement.executeUpdate()</code> и
+<code class="literal">Statement.executeQuery()</code>, а также все параметры
+<code class="interfacename">PreparedStatement</code> и
+<code class="interfacename">CallableStatement</code>,
+исключая использование параметров, установленных
+<code class="function">setBytes()</code>,
+<code class="function">setBinaryStream()</code>,
+<code class="function">setAsciiStream()</code>,
+<code class="function">setUnicodeStream()</code> и
+<code class="function">setBlob()</code>.</p>
+
+<h3><a name="idm45064739968048"></a>
+Количество кодировок для каждого подключения</h3>
+<p>Connector/J яподдерживает односимвольное кодирование между клиентом и
+сервером и любое количество кодировок символов для данных, возвращенных
+сервером клиенту в <code class="classname">ResultSets</code>.</p>
+
+<h3><a name="idm45064739966448"></a>Урегулирование кодировки символов</h3>
+<p>Кодировка символов между клиентом и сервером автоматически обнаружена
+после установления связи (при условии, что свойства связи Connector/J
+<code class="literal">characterEncoding</code> и
+<code class="literal">connectionCollation</code> не заданы).
+Вы определяете кодировку на сервере, используя системную переменную
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_character_set_server"
+target="_top"><code class="literal">character_set_server</code></a>
+(fдля получения дополнительной информации посмотрите
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/charset-server.html"
+target="_top">Server Character Set and Collation</a>).
+Драйвер автоматически использует кодировку, определенную сервером.
+Например, чтобы использовать
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/charset-unicode-utf8mb4.html"
+target="_top">4-byte UTF-8 character set</a> с Connector/J, формируйте сервер MySQL
+с <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_character_set_server"
+target="_top"><code class="literal">character_set_server=utf8mb4</code></a>,
+и уберите <code class="literal">characterEncoding</code> и
+<code class="literal">connectionCollation</code> из строки подключения
+Connector/J. Connector/J тогда опознает автоматически UTF-8.</p>
+
+<p>Чтобы отвергнуть автоматически обнаруженную кодировку
+на клиентской стороне, используйте свойство
+<code class="literal">characterEncoding</code> в связи URL к серверу.
+Используйте имена стиля Java, определяя кодировки символов.
+В следующей таблице перечислены имена набора символов MySQL и их
+соответствующие имена в стиле Java:</p>
+
+<a name="idm45064739957328"></a>
+<p><b>Таблица 6.3. Соответствие имен кодировок MySQL и Java</b></p>
+<table border="1">
+<tbody><tr><td scope="row"><code class="literal">ascii</code></td>
+<td><code class="literal">US-ASCII</code></td></tr>
+<tr><td scope="row"><code class="literal">big5</code></td>
+<td><code class="literal">Big5</code></td></tr>
+<tr><td scope="row"><code class="literal">gbk</code></td>
+<td><code class="literal">GBK</code></td></tr>
+<tr><td scope="row"><code class="literal">sjis</code></td>
+<td><code class="literal">SJIS или Cp932 </code></td></tr>
+<tr><td scope="row"><code class="literal">cp932</code></td>
+<td><code class="literal">Cp932 или MS932 </code></td></tr>
+<tr><td scope="row"><code class="literal">gb2312</code></td>
+<td><code class="literal">EUC_CN</code></td></tr>
+<tr><td scope="row"><code class="literal">ujis</code></td>
+<td><code class="literal">EUC_JP</code></td></tr>
+<tr><td scope="row"><code class="literal">euckr</code></td>
+<td><code class="literal">EUC_KR</code></td></tr>
+<tr><td scope="row"><code class="literal">latin1</code></td>
+<td><code class="literal">Cp1252</code></td></tr>
+<tr><td scope="row"><code class="literal">latin2</code></td>
+<td><code class="literal">ISO8859_2</code></td></tr>
+<tr><td scope="row"><code class="literal">greek</code></td>
+<td><code class="literal">ISO8859_7</code></td></tr>
+<tr><td scope="row"><code class="literal">hebrew</code></td>
+<td><code class="literal">ISO8859_8</code></td></tr>
+<tr><td scope="row"><code class="literal">cp866</code></td>
+<td><code class="literal">Cp866</code></td></tr>
+<tr><td scope="row"><code class="literal">tis620</code></td>
+<td><code class="literal">TIS620</code></td></tr>
+<tr><td scope="row"><code class="literal">cp1250</code></td>
+<td><code class="literal">Cp1250</code></td></tr>
+<tr><td scope="row"><code class="literal">cp1251</code></td>
+<td><code class="literal">Cp1251</code></td></tr>
+<tr><td scope="row"><code class="literal">cp1257</code></td>
+<td><code class="literal">Cp1257</code></td></tr>
+<tr><td scope="row"><code class="literal">macroman</code></td>
+<td><code class="literal">MacRoman</code></td></tr>
+<tr><td scope="row"><code class="literal">macce</code></td>
+<td><code class="literal">MacCentralEurope</code></td></tr>
+<tr><td scope="row"><p><span class="emphasis"><em>Для 8.0.12 и раньше</em>
+</span>:<code class="literal">utf8</code></p>
+<p><span class="emphasis"><em>Для 8.0.13 и позже</em></span>:
+<code class="literal">utf8mb4</code></p></td>
+<td><code class="literal">UTF-8</code></td></tr>
+<tr><td scope="row"><code class="literal">ucs2</code></td>
+<td><code class="literal">UnicodeBig</code></td></tr></tbody></table>
+
+<p><span class="emphasis"><em>Для Connector/J 8.0.12 и ранее: </em></span>
+Чтобы использовать набор символов
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/charset-unicode-utf8mb4.html"
+target="_top"><code class="literal">utf8mb4</code></a>
+для связи, сервер ДОЛЖЕН БЫТЬ настроен с
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_character_set_server"
+target="_top"><code class="literal">character_set_server=utf8mb4</code></a>,
+если это не так, когда <code class="literal">UTF-8</code> используется для
+<code class="literal">characterEncoding</code> в строке подключения это
+отображается к имени набора символов MySQL <code class="literal">utf8</code>,
+который является псевдонимом для
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/charset-unicode-utf8.html"
+target="_top"><code class="literal">utf8mb3</code></a>.</p>
+
+<p><span class="emphasis"><em>Для Connector/J 8.0.13 и позже: </em></span>
+</p><ul><li><p>Когда <code class="literal">UTF-8</code> используется для
+<code class="literal">characterEncoding</code> в строке подключения это
+отображается к имени набора символов MySQL
+<code class="literal">utf8mb4</code>.</p></li>
+
+<li><p>Если опция связи <code class="literal">connectionCollation</code>
+также установлена с <code class="literal">characterEncoding</code>
+и несовместима с ней, <code class="literal">characterEncoding</code>
+будет отвергнута с соответствием кодировки
+<code class="literal">connectionCollation</code>.</p></li>
+
+<li><p>Поскольку нет никакого названия набора символов стиля Java для
+<code class="literal">utfmb3</code>, который можно использовать с опцией
+связи <code class="literal">charaterEncoding</code>, единственный способ
+использовать <code class="literal">utf8mb3</code> как ваш набор символов
+связи, это использовать сопоставление <code class="literal">utf8mb3</code>
+(например, <code class="literal">utf8_general_ci</code>) для выбора связи
+<code class="literal">connectionCollation</code>, который принудительно
+вызывает набор символов <code class="literal">utf8mb3</code>,
+который будет использоваться.</p></li></ul>
+
+<p>Не делайте запрос
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/set-names.html"
+target="_top">SET NAMES</a> с Connector/J, так как драйвер не обнаружит, что
+набор символов был изменен запросом и продолжит использовать набор символов,
+формируемый, когда связь была настроена.</p>
+
+<h2><a name="connector-j-reference-using-ssl"></a>
+6.7. Соединение безопасно, используя SSL</h2>
+<a class="indexterm" name="idm45064739888736"></a>
+<p>Connector/J может зашифровать все данные драйвером JDBC
+и сервером (за исключением начального рукопожатия) используя SSL.
+Есть потеря производительности для предоставления возможности шифрования
+связи, серьезность которой зависит от многих факторов включая (но не
+ограничивая) размер запроса, возвращенный объем данных, серверное
+оборудование, использовавшаяся библиотека SSL, сетевая пропускная
+способность и так далее.</p>
+
+<p>Система работает через два файла Java keystore:
+один файл содержит информацию о сертификате для сервера
+(<code class="filename">truststore</code> в примерах ниже), другой содержит
+ключи и сертификат для клиента (<code class="filename">keystore</code>
+в примерах ниже). Все файлы Java keystore защищены паролем, поставляемым
+<span class="command"><strong>keytool</strong></span>, когда вы создали
+файлы. Вам нужны имена файлов и связанные пароли, чтобы создать связь SSL.</p>
+
+<p>Для работы с SSL у вас должно быть следующее:</p>
+<ul><li><p>Сервер MySQL, который поддерживает SSL,
+собранный и формируемый, чтобы нормально работать с SSL.
+Для получения дополнительной информации посмотрите
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/encrypted-connections.html"
+target="_top">Using Encrypted Connections</a> и
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/source-ssl-library-configuration.html"
+target="_top">Configuring SSL Library Support</a>.</p></li>
+
+<li><p>Подписанный сертификат клиента, если используется
+<a href="#connector-j-2-way-authentication">
+mutual (two-way) authentication</a>.</p></li></ul>
+
+<p>По умолчанию Connector/J устанавливает безопасные соединения с серверами
+MySQL. Обратите внимание на то, что серверы MySQL 5.7 и 8.0,
+когда собраны с OpenSSL, могут автоматически произвести
+файлы SSL при запуске и формировать связь SSL соответственно.</p>
+
+<p><span class="emphasis"><em>8.0.12 и раньше:</em></span> пока сервер
+правильно формируется, чтобы использовать SSL, нет никакой потребности
+формировать что-либо на клиенте Connector/J, чтобы использовать зашифрованные
+связи (исключение: когда Connector/J соединяется с очень старыми версиями
+сервера, такими как 5.6.25 и ранее или 5.7.5 и ранее, в этом случае клиент
+должен установить свойство связи <code class="literal">useSSL=true</code>,
+чтобы использовать зашифрованные связи). Клиент может потребовать SSL,
+который будет использоваться, устанавливая свойство связи
+<code class="literal">requireSSL=true</code>, связь тогда прерывается, если
+сервер не формируется, чтобы использовать SSL.
+Без <code class="literal">requireSSL=true</code> связь просто отступает к
+незашифрованному способу, если сервер не формируется, чтобы использовать SSL.
+</p>
+
+<p><span class="emphasis"><em>8.0.13 и позже:</em></span> пока сервер
+правильно формируется, чтобы использовать SSL, нет никакой потребности
+формировать что-либо на клиенте Connector/J, чтобы использовать зашифрованные
+связи. Клиент может потребовать SSL, который будет использоваться,
+устанавливая свойства связи <code class="literal">sslMode=REQUIRED</code>,
+<code class="literal">VERIFY_CA</code> или
+<code class="literal">VERIFY_IDENTITY</code>, связь тогда прерывается, если
+сервер не формируется, чтобы использовать SSL. С
+<code class="literal">sslMode=PREFERRED</code> связь просто отступает к
+незашифрованному способу, если сервер не формируется, чтобы использовать SSL.
+Для связей X-протокола, значение свойства
+<code class="literal">xdevapi.ssl-mode</code> определяет режим SSL, точно так
+же, как <code class="literal">sslMode</code> для связей MySQL-протокола
+(за исключением того, что <code class="literal">PREFERRED</code>
+не поддерживается X-протоколом), если не задано явно
+<code class="literal">xdevapi.ssl-mode</code> берет значение
+<code class="literal">sslMode</code> (если не задано
+<code class="literal">xdevapi.ssl-mode</code>, а
+<code class="literal">sslMode</code>=<code class="literal">PREFERRED</code>,
+<code class="literal">xdevapi.ssl-mode</code>=<code class="literal">REQUIRED
+</code>).</p>
+
+<p>Для дополнительной безопасности вы можете настроить клиент для
+односторонней (сервер или клиент) или двухсторонней (сервер и клиент)
+аутентификация SSL, позволяя клиенту или серверу подтверждать подлинность
+идентичности друг друга.</p>
+
+<p><span class="emphasis"><em>Версии TLS:</em></span> допустимые версии
+протокола TLS могут быть ограничены, используя свойства связи
+<code class="literal">enabledTLSProtocols</code> и для X DevAPI (только
+для выпуска 8.0.19 и позже)
+<code class="literal">xdevapi.tls-versions</code> (когда
+<code class="literal">xdevapi.tls-versions</code> не задано, берется
+значение <code class="literal">enabledTLSProtocols</code>).
+Если никакие ограничения не были определены, Connector/J пытается соединиться
+с сервером со следующими версиями TLS:</p>
+
+<ul><li><p><code class="literal">TLSv1,TLSv1.1,TLSv1.2,TLSv1.3</code> для
+MySQL Community Server 8.0, 5.7.28 и выше, 5.6.46 и выше и всех
+коммерческих версий MySQL Server.</p></li>
+<li><p><code class="literal">TLSv1,TLSv1.1</code> для всех других
+версий MySQL Server.</p></li></ul>
+
+<p><span class="emphasis"><em>Connector/J 8.0.18 и ранее соединяясь с
+MySQL Community Server 5.6 и 5.7 используют JDBC API:</em></span> из-за
+проблем совместимости с MySQL Server, собранным с yaSSL, Connector/J не
+позволяет связи с TLSv1.2 и выше по умолчанию. Соединяясь с серверами,
+которые ограничивают связи, чтобы использовать поздние версии TLS, позвольте
+им явно, установив свойство связи Connector/J
+<code class="literal">enabledTLSProtocols</code> (например, установив
+<code class="literal">enabledTLSProtocols=TLSv1,TLSv1.1,TLSv1.2</code>).</p>
+
+<p><span class="emphasis"><em>Наборы шифров:</em></span> С версии 8.0.19
+шифры, применимые Connector/J, предварительно ограничиваются файлом, который
+может быть найден в
+<code class="filename">src/main/resources/com/mysql/cj/TlsSettings.properties
+</code> в каталоге <code class="filename">src</code> на исходном дереве или
+в независимом от платформы архиве (формат
+<code class="filename">.tar.gz</code> или <code class="filename">.zip</code>)
+для Connector/J. Файл содержит четыре секции, перечисляющие в каждой
+обязательные, одобренные, устаревшие и недопустимые шифры.
+Только шифры, перечисленные в первых трех секциях, могут использоваться.
+Последняя (недопустимая) секция определяет образцы или маски, которые
+помещают в черный список небезопасные шифры. Практически, с белым списком,
+уже данным в первых трех секциях, образцы черного списка избыточны,
+но они там как дополнительная гарантия против нежелательных шифров.
+Белый список и черный список относятся к JDBC и к связям X DevAPI.</p>
+
+<p>Допустимые шифры для связей SSL могут быть ограничены, используя свойства
+связи <code class="literal">enabledSSLCipherSuites</code> и для X DevAPI
+(для выпуска 8.0.19 и позже) <code class="literal">xdevapi.tls-ciphersuites
+</code> (если <code class="literal">xdevapi.tls-ciphersuites</code> не задан,
+это принимает значение <code class="literal">enabledSSLCipherSuites</code>).
+Если никакие такие ограничения не были определены, Connector/J пытается
+установить связи SSL с любыми шифрами в белом списке,
+которые принимает сервер.</p>
+
+<h3><a name="connector-j-server-authentication"></a>
+Подготовка аутентификации сервера</h3>
+<p><span class="emphasis"><em>8.0.12 и ранее:</em></span> Аутентификация
+сервера через проверку сертификата сервера позволена, когда свойства связи
+Connector/J <code class="literal">useSSL</code> И
+<code class="literal">verifyServerCertificate</code> = true вместе.
+Проверка имени хоста не поддерживается: идентификация
+хоста только сертификатами.</p>
+
+<p><span class="emphasis"><em>8.0.13 и позже:</em></span> Аутентификация
+сервера через проверку сертификата сервера позволена, когда свойство связи
+Connector/J <code class="literal">sslMode</code> =
+<code class="literal">VERIFY_CA</code> или
+<code class="literal">VERIFY_IDENTITY</code>. Если не задано
+<code class="literal">sslMode</code>, аутентификация сервера через проверку
+сертификата сервера позволена, когда устаревшие свойства
+<code class="literal">useSSL</code> И
+<code class="literal">verifyServerCertificate</code> = true вместе.</p>
+
+<p><b>Сертификаты, подписанные доверяемым CA. </b>Когда аутентификация
+сервера через проверку сертификата сервера позволена, если никакие
+дополнительные конфигурации не сделаны относительно аутентификации сервера,
+Java проверяет сертификат сервера, используя его по умолчанию доверенный
+сертификат CA обычно из
+<code class="filename">$JAVA_HOME/lib/security/cacerts</code>.</p>
+
+<p><b>Использование самоподписанных сертификатов. </b>
+Сертификатам сервера MySQL довольно свойственно быть самоподписанными или
+подписанными самоподписанным сертификатом CA, сгенерированные сертификаты
+и ключи, созданные сервером MySQL, основаны на последнем то есть, сервер
+производит все необходимые ключи и самоподписанный сертификат CA, который
+используется, чтобы подписать сертификаты сервера и клиента.
+Сервер тогда настраивается, чтобы использовать сертификат CA и сертификат
+сервера. Хотя файл сертификата клиента помещается в тот же самый каталог, он
+не используется сервером.</p>
+
+<p>Чтобы проверить сертификат сервера, Connector/J должен быть в состоянии
+прочитать сертификат, который подписал его, то есть, сертификат сервера,
+который подписал или самоподписанный сертификат CA. Это может быть достигнуто
+любым импортированием сертификата (<code class="filename">ca.pem</code>
+или любой другой сертификат) в базу Java доверенных сертификатов по умолчанию
+(хотя вмешиваться в базу доверенных сертификатов по умолчанию не
+рекомендуется) или импортируя его в файл базы Java доверенных сертификатов и
+формируя драйвер Connector/J соответственно. Используйте Java keytool
+(как правило, расположенный в подкаталоге <code class="filename">bin</code>
+вашего JDK или JRE), чтобы импортировать сертификата сервера:</p>
+
+<pre class="programlisting">
+shell&gt; keytool -importcert -alias MySQLCACert -file ca.pem \
+                  -keystore truststore -storepass mypassword
+</pre>
+
+<p>Поставляйте надлежащие аргументы команды. Если файл базы доверенных
+сертификатов еще существует, новый будет создан, иначе сертификат будет
+добавлен к существующему файлу. Взаимодействие с <span class="command">
+<strong>keytool</strong></span> похоже на это:</p>
+
+<pre class="programlisting">
+Owner: CN=MySQL_Server_5.7.17_Auto_Generated_CA_Certificate
+Issuer: CN=MySQL_Server_5.7.17_Auto_Generated_CA_Certificate
+Serial number: 1
+Valid from: Thu Feb 16 11:42:43 EST 2017 until: Sun Feb 14 11:42:43 EST 2027
+Certificate fingerprints:
+  MD5:18:87:97:37:EA:CB:0B:5A:24:AB:27:76:45:A4:78:C1
+  SHA1: 2B:0D:D9:69:2C:99:BF:1E:2A:25:4E:8D:2D:38:B8:70:66:47:FA:ED
+  SHA256: C3:29:67:1B:E5:37:06:F7:A9:93:DF:C7:B3:27:5E:09:C7:FD:EE:2D:18:86:F4:9C:40:D8:26:CB:DA:95:A0:24
+Signature algorithm name: SHA256 with RSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 1
+Trust this certificate? [no]:yes
+Certificate was added to keystore
+</pre>
+
+<p>Вывод команды показывает все детали об импортированном сертификатов.
+Удостоверьтесь, что вы помните пароль, который вы задали.
+Кроме того, обратите внимание, что пароль должен будет быть написан как
+простой текст в вашем конфигурационном файле Connector/J или
+исходном коде приложения.</p>
+
+<p>Следующий шаг должен формировать Java или Connector/J, чтобы прочитать
+базу доверенных сертификатов, которую вы просто создали или изменили.
+Это может быть сделано при помощи одного из следующих трех методов:</p>
+
+<ul><li><p>Используя параметры командной строки Java:</p>
+<pre class="programlisting">
+-Djavax.net.ssl.trustStore=<em class="replaceable"><code>path_to_truststore_file</code></em>
+-Djavax.net.ssl.trustStorePassword=<em class="replaceable"><code>mypassword</code></em>
+</pre></li>
+
+<li><p>Указание системных свойств непосредственно в коде клиента:</p>
+<pre class="programlisting">
+System.setProperty("javax.net.ssl.trustStore","<em class="replaceable"><code>path_to_truststore_file</code></em>");
+System.setProperty("javax.net.ssl.trustStorePassword","<em class="replaceable"><code>mypassword</code></em>");
+</pre></li>
+
+<li><p>Определение нужных свойств связи Connector/J:</p>
+<pre class="programlisting">
+clientCertificateKeyStoreUrl=file:<em class="replaceable"><code>path_to_truststore_file</code></em>
+clientCertificateKeyStorePassword=<em class="replaceable"><code>mypassword</code></em>
+</pre></li></ul>
+
+<p>Заметьте, что когда используются вместе, свойства связи отвергают
+значения, установленные другими двумя методами.
+Кроме того, значения свойств связи используются только в той связи в то
+время, как указание значений в масштабе всей системы используется для всех
+связей (если не отвергнуто свойствами связи).</p>
+
+<p>С вышеупомянутой установкой и позволенной аутентификацией сервера
+все установленные связи будут SSL-зашифрованными с сервером, заверяемым в
+процессе рукопожатия SSL, клиент может теперь безопасно доверять серверу,
+с которым это соединяется.</p>
+
+<p>Для X-Protocol свойства связи
+<code class="literal">xdevapi.ssl-truststore</code>,
+<code class="literal">xdevapi.ssl-truststore-type</code> и
+<code class="literal">xdevapi.ssl-truststore-password</code>
+определяют параметры настройки базы доверенных сертификатов, точно так же,
+как <code class="literal">trustCertificateKeyStoreUrl</code>,
+<code class="literal">trustCertificateKeyStoreType</code> и
+<code class="literal">trustCertificateKeyStorePassword</code>
+связей MySQL-протокола, если не заданы явно
+<code class="literal">xdevapi.ssl-truststore</code>,
+<code class="literal">xdevapi.ssl-truststore-type</code> и
+<code class="literal">xdevapi.ssl-truststore-password</code> берут значения
+<code class="literal">trustCertificateKeyStoreUrl</code>,
+<code class="literal">trustCertificateKeyStoreType</code> и
+<code class="literal">trustCertificateKeyStorePassword</code>.</p>
+
+<p><b>Сервисная проверка идентичности. </b>
+<span class="emphasis"><em>8.0.13 и позже:</em></span> Вне аутентификации
+сервера через проверку сертификата сервера, когда
+<code class="literal">sslMode</code> =
+<code class="literal">VERIFY_IDENTITY</code>, Connector/J
+также выполняет проверку идентичности имени хоста, проверяя имя хоста,
+которое использует для соединения, на совпадение со значением Common
+Name в сертификате сервера.</p>
+
+<h3><a name="connector-j-client-authentication"></a>
+Подготовка аутентификации клиента</h3>
+<p>Сервер может хотеть подтвердить подлинность клиента и потребовать, чтобы
+клиент предоставил сертификат SSL ему, который он проверяет по известным
+центрам сертификации или выполняет дополнительные проверки на личность
+клиента в случае необходимости (см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/create-user.html#create-user-tls"
+target="_top">CREATE USER SSL/TLS Options</a>).
+В этом случае у Connector/J должен быть доступ к сертификату клиента, таким
+образом, это можно послать в сервер, устанавливая новые соединения с базой
+данных. Это сделано, используя файлы Java keystore.</p>
+
+<p>Чтобы позволить аутентификацию клиента, у клиента, соединяющегося с
+сервером, должен быть его собственный набор ключей и сертификат SSL.
+Сертификат клиента должен быть подписан так, чтобы сервер мог проверить его.
+В то время как можно подписать сертификат клиента в официальных центрах
+сертификации, более распространено использование промежуточных, частных,
+сертификатов CA, чтобы подписать сертификат клиента.
+Такой промежуточный сертификат CA может быть самоподписан или подписан
+доверенным корневым CA. Требование в том, что сервер знает сертификат CA,
+который способен к утверждению сертификата клиента.</p>
+
+<p>Некоторые серверы MySQL в состоянии произвести ключи SSL и сертификаты для
+коммуникационного шифрования, включая сертификат и закрытый ключ
+(содержавшийся в файлах <code class="filename">client-cert.pem</code> и
+<code class="filename">client-key.pem</code>), который может использоваться
+любым клиентом. Этот сертификат SSL уже подписан самоподписанным сертификатом
+CA <code class="filename">ca.pem</code>, который сервер, возможно, уже
+настроил, чтобы использовать.</p>
+
+<p>Если вы не хотите использовать ключи клиента и файлы сертификата,
+произведенные сервером, можно также произвести новые,
+используя процедуры, описанные в
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/creating-ssl-rsa-files.html"
+target="_top">Creating SSL and RSA Certificates and Keys</a>.
+Заметьте, что, согласно установке сервера, вам, вероятно, придется снова
+использовать уже существующий сертификат CA, с которым сервер настроен для
+работы, чтобы подписать новый сертификат клиента, вместо того,
+чтобы создать новый.</p>
+
+<p>Как только у вас есть закрытый ключ клиента и файлы сертификата, которые
+вы хотите использовать, необходимо импортировать их в Java keystore
+так, чтобы они могли использоваться библиотекой Java SSL и Connector/J.
+Следующие инструкции объясняют, как создать файл keystore:</p>
+
+<ul><li><p>Преобразуйте ключ клиента и файлы сертификата в архив PKCS #12:</p>
+<pre class="programlisting">
+shell&gt; openssl pkcs12 -export -in client-cert.pem -inkey client-key.pem \
+                  -name "mysqlclient" -passout pass:mypassword \
+                  -out client-keystore.p12
+</pre></li>
+
+<li><p>Импортируйте ключ клиента и сертификат в Java keystore:</p>
+<pre class="programlisting">
+shell&gt; keytool -importkeystore -srckeystore client-keystore.p12 \
+                  -srcstoretype pkcs12 -srcstorepass mypassword \
+                  -destkeystore keystore -deststoretype JKS \
+                  -deststorepass mypassword
+</pre>
+
+<p>Поставляйте надлежащие аргументы команды. Если файла keystore нет,
+новый будет создан, иначе сертификат будет добавлен к существующему файлу.
+Вывод <span class="command"><strong>keytool</strong></span> примерно такой:
+</p>
+<pre class="programlisting">
+Entry for alias mysqlclient successfully imported.
+Import command completed: 1 entries successfully imported,
+                          0 entries failed or cancelled
+</pre>
+
+<p>Удостоверьтесь, что вы помните пароль, который вы выбрали.
+Кроме того, обратите внимание, что пароль должен будет быть написан как
+простой текст в вашем конфигурационном файле Connector/J или
+исходном коде приложения.</p></li></ul>
+
+<p>После этого шага можно удалить архив PKCS #12
+(<code class="filename"><em class="replaceable"><code>client-keystore.p12
+</code></em></code> в этом примере).</p>
+
+<p>Следующий шаг должен формировать Java или Connector/J, чтобы это прочитало
+базу доверенных сертификатов, которую вы просто создали или изменили.
+Это может быть сделано при помощи одного из следующих трех методов:</p>
+
+<ul><li><p>Используя параметры командной строки Java:</p>
+<pre class="programlisting">
+-Djavax.net.ssl.keyStore=<em class="replaceable"><code>path_to_keystore_file</code></em>
+-Djavax.net.ssl.keyStorePassword=<em class="replaceable"><code>mypassword</code></em>
+</pre></li>
+
+<li><p>Установкой системных свойств непосредственно в коде клиента:</p>
+<pre class="programlisting">
+System.setProperty("javax.net.ssl.keyStore","path_to_keystore_file");
+System.setProperty("javax.net.ssl.keyStorePassword","mypassword");
+</pre></li>
+
+<li><p>Через свойства связи Connector/J:</p>
+<pre class="programlisting">
+clientCertificateKeyStoreUrl=file:<em class="replaceable"><code>path_to_truststore_file</code></em>
+clientCertificateKeyStorePassword=<em class="replaceable"><code>mypassword</code></em>
+</pre></li></ul>
+
+<p>Заметьте, что, когда используется вместе, свойства связи отвергают
+значения, установленные другими двумя методами. Кроме того,
+значения, установленные свойствами связи используются только в этой связи в
+то время, как значения в масштабе всей системы используются для всех связей
+(если не отвергнуты свойствами связи).</p>
+
+<p>С вышеупомянутыми установками все установленные связи будут
+SSL-зашифрованными с клиентом, заверяемым в процессе рукопожатия SSL, сервер
+может теперь безопасно доверять клиенту, который просит связь с ним.</p>
+
+<h3><a name="connector-j-2-way-authentication"></a>
+Подготовка двухсторонней идентификации</h3>
+<p>Примените шаги, обрисованные в общих чертах
+<a href="#connector-j-server-authentication">здесь</a> и
+<a href="#connector-j-client-authentication">здесь</a>,
+чтобы настроить взаимный процесс двусторонней аутентификации, в котором
+сервер и клиент подтверждают подлинность друг друга прежде,
+чем установить связь.</p>
+
+<p>Хотя типичная установка применяет тот же самый сертификат CA на обоих
+концоах для взаимной аутентификации, это не должно иметь место.
+Единственное требование: сертификат CA, формируемый в сервере, должен быть в
+состоянии утвердить сертификат клиента, а сертификат CA, импортированный в
+базу доверенных сертификатов клиента, должен быть в состоянии утвердить
+сертификат сервера, два сертификата CA, используемые на двух концах,
+могут быть различными.</p>
+
+<h3><a name="idm45064739776304"></a>Отладка связи SSL</h3>
+<p>JSSE предоставляет отладочную информацию через
+<code class="literal">stdout</code>, когда вы устанавливаете системное
+свойство <code class="literal">-Djavax.net.debug=all</code>.
+Java говорит вам, какой keystores и базы доверенных сертификатов
+используются, а также что происходит во время рукопожатия SSL и обмена
+сертификатами. Это будет полезно, когда вы попытаетесь отладить
+неудавшуюся связь SSL.</p>
+
+<h2><a name="connector-j-unix-socket"></a>
+6.8. Связь через сокеты Unix</h2>
+<a class="indexterm" name="idm45064739772768"></a>
+<a class="indexterm" name="idm45064739771760"></a>
+<p>Connector/J не поддерживает связи с MySQL Server через сокеты Unix.
+Однако есть способ для того, чтобы пользоваться сторонними библиотеками,
+которые поставляют функцию через подключаемый модуль. Такой модуль должен
+осуществить интерфейс <code class="literal">
+com.mysql.cj.protocol.SocketFactory</code> или старый интерфейс
+<code class="literal">com.mysql.jdbc.SocketFactory</code> Connector/J.
+Следуйте за этими требованиями, когда вы будете использовать такой модуль
+для сокетов Unix:</p>
+
+<ul><li><p>MySQL Server должен формироваться с системной переменной
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_socket"
+target="_top"><code class="literal">--socket</code></a> (для родных связей
+протокола, используя API JDBC) или
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/x-plugin-options-system-variables.html#sysvar_mysqlx_socket"
+target="_top"><code class="literal">--mysqlx-socket</code></a> (для связей
+X Protocol, используя X DevAPI), которая должна содержать путь к
+файлу сокета Unix.</p></li>
+
+<li><p>Полностью квалифицированное имя класса должно быть передано к
+Connector/J через свойство связи <code class="literal">socketFactory</code>.
+Например, с библиотекой junixsocket:</p>
+
+<pre class="programlisting">
+socketFactory=org.newsclub.net.mysql.AFUNIXDatabaseSocketFactory
+</pre>
+
+<p>Вы, возможно, также должны были бы передать другие параметры в модуль
+как свойства связи. Например, для библиотеки junixsocket обеспечьте путь к
+файлу сокеты свойством <code class="literal">junixsocket.file</code>:</p>
+
+<pre class="programlisting">
+junixsocket.file=<em class="replaceable"><code>path_to_socket_file</code></em>
+</pre></li>
+
+<li><p>Используя X Protocol, задайте свойство связи
+<code class="literal">xdevapi.useAsyncProtocol=false</code> (что является
+настройкой по умолчанию для Connector/J 8.0.12 и позже). Unix сокеты не
+поддерживается для асинхронных каналов.
+Когда <code class="literal">xdevapi.useAsyncProtocol=true</code>,
+<code class="literal">socketFactory</code> игнорируется.</p></li></ul>
+<p>Для X Protocol возможность использовать сокеты Unix
+доступна только для Connector/J 8.0.12 и позже.</p>
+
+<h2><a name="connector-j-named-pipe"></a>
+6.9. Соединение используя именованные каналы</h2>
+<a class="indexterm" name="idm45064739755568"></a>
+<a class="indexterm" name="idm45064739754560"></a>
+<p><span class="emphasis"><em>Для MySQL 8.0.14 и раньше, 5.7.25 и раньше и
+5.6.43 и раньше</em></span>, минимальные разрешения на именованных каналах
+даны клиентам, которые используют их, чтобы соединиться с сервером.
+Connector/J, однако, может использовать именованные каналы только когда
+предоставлен полный доступ на них. Сервер MySQL, с которым Connector/J хочет
+соединиться, должен быть запущен с системной переменной
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_named_pipe_full_access_group"
+target="_top"><code class="literal">named_pipe_full_access_group</code></a>,
+который определяет группу в Windows, содержащую пользователя, который
+выполняет клиентское приложение  JVM (и таким образом Connector/J),
+см. описание для
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_named_pipe_full_access_group"
+target="_top"><code class="literal">named_pipe_full_access_group
+</code></a>.</p>
+
+<p>Поддержка именованных каналов недоступна для связей X-протокола.</p>
+<p>Connector/J также поддерживает доступ к MySQL, используя именованные
+каналы на платформах Windows с
+<code class="literal">NamedPipeSocketFactory</code> как доплнительный модуль.
+Если вы не используете <code class="literal">namedPipePath</code>,
+по умолчанию применяется <code class="literal">'\\.\pipe\MySQL'</code>.
+При использовании <code class="literal">NamedPipeSocketFactory</code>,
+имя хоста и значение номера порта в URL JDBC проигнорированы.
+Чтобы активировать эту опцию, установите свойство
+<code class="literal">socketFactory</code>:</p>
+
+<pre class="programlisting">
+socketFactory=com.mysql.cj.protocol.NamedPipeSocketFactory
+</pre>
+
+<p>Установите это свойство, а также путь именованного канала, со
+следующей связью URL:</p>
+<pre class="programlisting">
+jdbc:mysql:///test?socketFactory=com.mysql.cj.protocol.NamedPipeSocketFactory&amp;namedPipePath=\\.\pipe\MySQL80
+</pre>
+
+<p>Чтобы создать ваши собственные модули сокетов, следуйте за примером кода в
+<code class="classname">com.mysql.cj.protocol.NamedPipeSocketFactory</code>
+или <code class="classname">com.mysql.cj.protocol.StandardSocketFactory
+</code>.</p>
+
+<p>Дополнительный подход должен использовать следующие два свойства в связи
+URL для установления связей именованного канала на платформах Windows:</p>
+<ul><li><p><code class="literal">(protocol=pipe)</code>
+для именованных каналов (значение по умолчанию для значения
+<code class="literal">tcp</code>).</p></li>
+
+<li><p><code class="literal">(path=<em class="replaceable"><code>
+path_to_pipe</code></em>)</code> для пути именованных каналов.
+Значение по умолчанию для пути <code class="filename">\\.\pipe\MySQL</code>.
+</p></li></ul>
+
+<p>Форма <span class="quote">address-equals</span> или
+<span class="quote">key-value</span> спецификации хоста (см.
+<a href="#connector-j-url-single-host">здесь</a>)
+значительно упрощает URL для связи именованного канала на Windows.
+Например, чтобы использовать именованный канал по умолчанию
+<span class="quote"><code class="filename">\\.\pipe\MySQL</code>,</span>:</p>
+
+<pre class="programlisting">
+jdbc:mysql://address=(protocol=pipe)/test
+</pre>
+
+<p>Чтобы использовать именованный канал
+<span class="quote"><code class="filename">\\.\pipe\MySQL80</code></span>:</p>
+<pre class="programlisting">
+jdbc:mysql://address=(protocol=pipe)(path=\\.\pipe\MySQL80)/test
+</pre>
+
+<p>С <code class="literal">(protocol=pipe)</code>
+<code class="literal">NamedPipeSocketFactory</code> автоматически выбран.</p>
+<p>Именованные каналы работают только соединяясь с сервером MySQL на той же
+самой физической машине, где работает драйвер JDBC.
+В простых тестах производительности доступ именованного канала
+на 30%-50% быстрее, чем стандартный доступ TCP/IP. Однако это варьируется в
+зависимости от системы, и именованные каналы медленнее, чем TCP/IP, во
+многих конфигурациях Windows.</p>
+
+<h2><a name="connector-j-using-pam"></a>
+6.10. Соединение используя идентификацию PAM</h2>
+<a class="indexterm" name="idm45064739727360"></a>
+<p>Java-приложения используя Connector/J могут соединиться с серверами MySQL,
+которые используют схему аутентификации pluggable authentication module (PAM).
+</p>
+
+<p>Для идентификации PAM у вас должно быть следующее:</p>
+<ul><li><p>Сервер MySQL, который поддерживает идентификацию PAM. См.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/pam-pluggable-authentication.html"
+target="_top">PAM Pluggable Authentication</a>. Connector/J осуществляет тот же
+самый метод аутентификации открытого текста как в
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/cleartext-pluggable-authentication.html"
+target="_top">Client-Side Cleartext Pluggable Authentication</a>.</p></li>
+
+<li><p>SSL как объяснено в
+<a href="#connector-j-reference-using-ssl">разделе 6.7</a>.
+Поскольку схема аутентификации PAM посылает оригинальный пароль серверу,
+связь с сервером должна быть зашифрована.</p></li></ul>
+
+<p>Поддержка аутентификации PAM позволена по умолчанию в Connector/J 8.0,
+таким образом, никакая дополнительная конфигурация не необходима.</p>
+<p>Чтобы отключить функцию аутентификации PAM, надо определить
+<code class="literal">mysql_clear_password</code> (метод) или
+<code class="literal">com.mysql.cj.protocol.a.authentication.MysqlClearPasswordPlugin
+</code> (имя класса) в списке разделенных запятой значений аргументов в
+опции связи <code class="literal">disabledAuthenticationPlugins</code>, см.
+<a href="#connector-j-reference-configuration-properties">раздел
+6.3</a>.</p>
+
+<h2><a name="connector-j-reference-replication-connection"></a>
+6.11. Использование репликации Master/Slave с ReplicationConnection</h2>
+<p>См. <a href="multi.htm#connector-j-master-slave-replication-connection">
+раздел 9.4</a>.</p>
+
+<h2><a name="connector-j-reference-dns-srv"></a>
+6.12. Поддержка записей DNS SRV</h2>
+<a class="indexterm" name="idm45064739713968"></a>
+<p>Connector/J поддерживает использование записи DNS SRV для
+связей начиная с выпуска 8.0.19.</p>
+
+<p>Если несколько экземпляров MySQL предоставляют ту же самую услугу для
+ваших запросов, DNS SRV записи может использоваться, чтобы обеспечить
+отказоустойчивость, выравнивание нагрузки и службы репликации.
+Они устраняют необходимость клиентов опознать каждый возможный хост в строке
+подключения или для связей, которые будут обработаны дополнительным
+компонентом программного обеспечения. Вот резюме для поддержки
+Connector/J DNS SRV:</p>
+
+<ul><li><p>Эти новые схемы в связи URL позволяют DNS SRV:</p>
+<ul><li><p><code class="literal">jdbc:mysql+srv:</code> Для основной
+отказоустойчивости связей JDBC, которые используют записи DNS SRV.</p></li>
+
+<li><p><code class="literal">jdbc:mysql+srv:loadbalance:</code> Для
+выравнивания нагрузки связи JDBC, которые используют записи DNS SRV.</p></li>
+<li><p><code class="literal">jdbc:mysql+srv:replication:</code> Для связей
+репликации JDBC, которые используют записи DNS SRV.</p></li>
+
+<li><p><code class="literal">mysqlx+srv:</code> Для связей X DevAPI, которые
+используют записи DNS SRV.</p></li></ul></li>
+<li><p>Помимо использования новых схем в связи URL, поддержка DNS SRV
+быть включена или отключена использованием двух новых свойств связи,
+<code class="literal">dnsSrv</code> и
+<code class="literal">xdevapi.dns-srv</code>, для JDBC и X DevAPI,
+соответственно. Например, эта связь URL позволяет поддержку DNS SRV:</p>
+
+<pre class="programlisting">
+mysqlx://johndoe:secret@_mysql._tcp.mycompany.local/db?xdevapi.dns-srv=true
+</pre>
+
+<p>Однако используя схему DNS SRV со свойством связи =
+<code class="literal">false</code> будет ошибка, например:</p>
+<pre class="programlisting">
+mysqlx+srv://johndoe:secret@_mysql._tcp.mycompany.local/db?xdevapi.dns-srv=false
+# The connection URL causes Connector/J to throw an error
+</pre></li></ul>
+
+<p>Вот некоторые требования и ограничения на DNS SRV Connector/J:</p>
+<ul><li><p>Connection/J бросает исключение, если многие хосты определяются в
+связи URL для DNS SRV (за исключением настроенной репликации, создаваемой
+через <code class="literal">jdbc:mysql+srv:replication</code>, которая
+требует, чтобы были определены точно один мастер и один подчиненный сервер).
+</p></li>
+
+<li><p>Connection/J бросает исключение, если номер порта определяется в связи
+URL для DNS SRV.</p></li>
+<li><p>Записи DNS SRV поддерживаются только для связей TCP/IP.
+Connection/J бросает исключение, при попытке позволить DNS SRV на
+связи именованного канала Windows.</p></li></ul>
+
+<p><b>Поддержка DNS SRV для выравнивания нагрузки и Отказоустойчивости. </b>
+Для выравнивания нагрузки и связей отказоустойчивости, Connector/J использует
+поле <code class="literal">priority</code> записей DNS SRV, чтобы выбрать
+приоритеты для попыток подключения для хостов.</p>
+
+<p><b>DNS SRV для объединения связи. </b>В установке объединения связи X
+DevAPI Connector/J повторно запрашивает записи DNS SRV регулярно и постепенно
+сокращают любые связи, хосты которых больше не появляются в записях, и
+повторно допускает связи в пул, когда их хосты вновь появляются в записях.</p>
+
+<p><b>Поиск записей DNS SRV. </b>Обязанность пользователей обеспечить имя
+хоста полного сервиса, Connector/J не добавляет префикс и не утверждает
+структуру имени хоста. Ниже приводятся примеры действительных сервисных
+образцов имени хоста:</p>
+
+<ul><li><p><code class="code">foo.domain.local</code></p></li>
+<li><p><code class="code">_mysql._tcp.foo.domain.local</code></p></li>
+<li><p><code class="code">_mysqlx._tcp.foo.domain.local</code></p></li>
+<li><p><code class="code">_readonly._tcp.foo.domain.local</code></p></li>
+<li><p><code class="code">_readwrite._tcp.foo.domain.local</code>
+</p></li></ul>
+
+<p>См. <span class="emphasis"><em>Connections Using DNS SRV Records</em>
+</span> в <a href="../../../https@dev.mysql.com/doc/x-devapi-userguide/en/default.htm"
+target="_top">X DevAPI User Guide</a>.</p>
+
+<h2><a name="connector-j-reference-error-sqlstates"></a>
+6.13. Отображение кодов ошибок MySQL к кодам JDBC SQLState</h2>
+<p>Приведенная ниже таблица обеспечивает отображение кодов ошибок MySQL
+к значениям JDBC <code class="literal">SQLState</code>.</p>
+
+<a name="idm45064739539664"></a>
+<p><b>Таблица 6.4. Отображение кодов ошибок MySQL к кодам JDBC SQLState
+</b></p>
+<table border="1">
+<thead><tr><th scope="col">MySQL Error Number</th>
+<th scope="col">Имя ошибки в MySQL</th>
+<th scope="col">SQL Standard SQLState</th></tr></thead>
+<tbody><tr><td scope="row">1022</td><td>ER_DUP_KEY</td><td>23000</td></tr>
+<tr><td scope="row">1037</td><td>ER_OUTOFMEMORY</td><td>HY001</td></tr>
+<tr><td scope="row">1038</td><td>ER_OUT_OF_SORTMEMORY</td><td>HY001</td></tr>
+<tr><td scope="row">1040</td><td>ER_CON_COUNT_ERROR</td><td>08004</td></tr>
+<tr><td scope="row">1042</td><td>ER_BAD_HOST_ERROR</td><td>08S01</td></tr>
+<tr><td scope="row">1043</td><td>ER_HANDSHAKE_ERROR</td><td>08S01</td></tr>
+<tr><td scope="row">1044</td><td>ER_DBACCESS_DENIED_ERROR</td><td>42000</td></tr>
+<tr><td scope="row">1045</td><td>ER_ACCESS_DENIED_ERROR</td><td>28000</td></tr>
+<tr><td scope="row">1046</td><td>ER_NO_DB_ERROR</td><td>3D000</td></tr>
+<tr><td scope="row">1047</td><td>ER_UNKNOWN_COM_ERROR</td><td>08S01</td></tr>
+<tr><td scope="row">1048</td><td>ER_BAD_NULL_ERROR</td><td>23000</td></tr>
+<tr><td scope="row">1049</td><td>ER_BAD_DB_ERROR</td><td>42000</td></tr>
+<tr><td scope="row">1050</td><td>ER_TABLE_EXISTS_ERROR</td><td>42S01</td></tr>
+<tr><td scope="row">1051</td><td>ER_BAD_TABLE_ERROR</td><td>42S02</td></tr>
+<tr><td scope="row">1052</td><td>ER_NON_UNIQ_ERROR</td><td>23000</td></tr>
+<tr><td scope="row">1053</td><td>ER_SERVER_SHUTDOWN</td><td>08S01</td></tr>
+<tr><td scope="row">1054</td><td>ER_BAD_FIELD_ERROR</td><td>42S22</td></tr>
+<tr><td scope="row">1055</td><td>ER_WRONG_FIELD_WITH_GROUP</td><td>42000</td></tr>
+<tr><td scope="row">1056</td><td>ER_WRONG_GROUP_FIELD</td><td>42000</td></tr>
+<tr><td scope="row">1057</td><td>ER_WRONG_SUM_SELECT</td><td>42000</td></tr>
+<tr><td scope="row">1058</td><td>ER_WRONG_VALUE_COUNT</td><td>21S01</td></tr>
+<tr><td scope="row">1059</td><td>ER_TOO_LONG_IDENT</td><td>42000</td></tr>
+<tr><td scope="row">1060</td><td>ER_DUP_FIELDNAME</td><td>42S21</td></tr>
+<tr><td scope="row">1061</td><td>ER_DUP_KEYNAME</td><td>42000</td></tr>
+<tr><td scope="row">1062</td><td>ER_DUP_ENTRY</td><td>23000</td></tr>
+<tr><td scope="row">1063</td><td>ER_WRONG_FIELD_SPEC</td><td>42000</td></tr>
+<tr><td scope="row">1064</td><td>ER_PARSE_ERROR</td><td>42000</td></tr>
+<tr><td scope="row">1065</td><td>ER_EMPTY_QUERY</td><td>42000</td></tr>
+<tr><td scope="row">1066</td><td>ER_NONUNIQ_TABLE</td><td>42000</td></tr>
+<tr><td scope="row">1067</td><td>ER_INVALID_DEFAULT</td><td>42000</td></tr>
+<tr><td scope="row">1068</td><td>ER_MULTIPLE_PRI_KEY</td><td>42000</td></tr>
+<tr><td scope="row">1069</td><td>ER_TOO_MANY_KEYS</td><td>42000</td></tr>
+<tr><td scope="row">1070</td><td>ER_TOO_MANY_KEY_PARTS</td><td>42000</td></tr>
+<tr><td scope="row">1071</td><td>ER_TOO_LONG_KEY</td><td>42000</td></tr>
+<tr><td scope="row">1072</td><td>ER_KEY_COLUMN_DOES_NOT_EXITS</td>
+<td>42000</td></tr>
+<tr><td scope="row">1073</td><td>ER_BLOB_USED_AS_KEY</td><td>42000</td></tr>
+<tr><td scope="row">1074</td><td>ER_TOO_BIG_FIELDLENGTH</td><td>42000</td></tr>
+<tr><td scope="row">1075</td><td>ER_WRONG_AUTO_KEY</td><td>42000</td></tr>
+<tr><td scope="row">1080</td><td>ER_FORCING_CLOSE</td><td>08S01</td></tr>
+<tr><td scope="row">1081</td><td>ER_IPSOCK_ERROR</td><td>08S01</td></tr>
+<tr><td scope="row">1082</td><td>ER_NO_SUCH_INDEX</td><td>42S12</td></tr>
+<tr><td scope="row">1083</td><td>ER_WRONG_FIELD_TERMINATORS</td><td>42000</td></tr>
+<tr><td scope="row">1084</td><td>ER_BLOBS_AND_NO_TERMINATED</td><td>42000</td></tr>
+<tr><td scope="row">1090</td><td>ER_CANT_REMOVE_ALL_FIELDS</td><td>42000</td></tr>
+<tr><td scope="row">1091</td><td>ER_CANT_DROP_FIELD_OR_KEY</td><td>42000</td></tr>
+<tr><td scope="row">1101</td><td>ER_BLOB_CANT_HAVE_DEFAULT</td><td>42000</td></tr>
+<tr><td scope="row">1102</td><td>ER_WRONG_DB_NAME</td><td>42000</td></tr>
+<tr><td scope="row">1103</td><td>ER_WRONG_TABLE_NAME</td><td>42000</td></tr>
+<tr><td scope="row">1104</td><td>ER_TOO_BIG_SELECT</td><td>42000</td></tr>
+<tr><td scope="row">1106</td><td>ER_UNKNOWN_PROCEDURE</td><td>42000</td></tr>
+<tr><td scope="row">1107</td><td>ER_WRONG_PARAMCOUNT_TO_PROCEDURE</td>
+<td>42000</td></tr>
+<tr><td scope="row">1109</td><td>ER_UNKNOWN_TABLE</td><td>42S02</td></tr>
+<tr><td scope="row">1110</td><td>ER_FIELD_SPECIFIED_TWICE</td><td>42000</td></tr>
+<tr><td scope="row">1112</td><td>ER_UNSUPPORTED_EXTENSION</td><td>42000</td></tr>
+<tr><td scope="row">1113</td><td>ER_TABLE_MUST_HAVE_COLUMNS</td><td>42000</td></tr>
+<tr><td scope="row">1115</td><td>ER_UNKNOWN_CHARACTER_SET</td><td>42000</td></tr>
+<tr><td scope="row">1118</td><td>ER_TOO_BIG_ROWSIZE</td><td>42000</td></tr>
+<tr><td scope="row">1120</td><td>ER_WRONG_OUTER_JOIN</td><td>42000</td></tr>
+<tr><td scope="row">1121</td><td>ER_NULL_COLUMN_IN_INDEX</td><td>42000</td></tr>
+<tr><td scope="row">1131</td><td>ER_PASSWORD_ANONYMOUS_USER</td><td>42000</td></tr>
+<tr><td scope="row">1132</td><td>ER_PASSWORD_NOT_ALLOWED</td><td>42000</td></tr>
+<tr><td scope="row">1133</td><td>ER_PASSWORD_NO_MATCH</td><td>42000</td></tr>
+<tr><td scope="row">1136</td><td>ER_WRONG_VALUE_COUNT_ON_ROW</td><td>21S01</td></tr>
+<tr><td scope="row">1138</td><td>ER_INVALID_USE_OF_NULL</td><td>22004</td></tr>
+<tr><td scope="row">1139</td><td>ER_REGEXP_ERROR</td><td>42000</td></tr>
+<tr><td scope="row">1140</td><td>ER_MIX_OF_GROUP_FUNC_AND_FIELDS</td>
+<td>42000</td></tr>
+<tr><td scope="row">1141</td><td>ER_NONEXISTING_GRANT</td><td>42000</td></tr>
+<tr><td scope="row">1142</td><td>ER_TABLEACCESS_DENIED_ERROR</td><td>42000</td></tr>
+<tr><td scope="row">1143</td><td>ER_COLUMNACCESS_DENIED_ERROR</td><td>42000</td></tr>
+<tr><td scope="row">1144</td><td>ER_ILLEGAL_GRANT_FOR_TABLE</td><td>42000</td></tr>
+<tr><td scope="row">1145</td><td>ER_GRANT_WRONG_HOST_OR_USER</td><td>42000</td></tr>
+<tr><td scope="row">1146</td><td>ER_NO_SUCH_TABLE</td><td>42S02</td></tr>
+<tr><td scope="row">1147</td><td>ER_NONEXISTING_TABLE_GRANT</td><td>42000</td></tr>
+<tr><td scope="row">1148</td><td>ER_NOT_ALLOWED_COMMAND</td><td>42000</td></tr>
+<tr><td scope="row">1149</td><td>ER_SYNTAX_ERROR</td><td>42000</td></tr>
+<tr><td scope="row">1152</td><td>ER_ABORTING_CONNECTION</td><td>08S01</td></tr>
+<tr><td scope="row">1153</td><td>ER_NET_PACKET_TOO_LARGE</td><td>08S01</td></tr>
+<tr><td scope="row">1154</td><td>ER_NET_READ_ERROR_FROM_PIPE</td><td>08S01</td></tr>
+<tr><td scope="row">1155</td><td>ER_NET_FCNTL_ERROR</td><td>08S01</td></tr>
+<tr><td scope="row">1156</td><td>ER_NET_PACKETS_OUT_OF_ORDER</td>
+<td>08S01</td></tr>
+<tr><td scope="row">1157</td><td>ER_NET_UNCOMPRESS_ERROR</td><td>08S01</td></tr>
+<tr><td scope="row">1158</td><td>ER_NET_READ_ERROR</td><td>08S01</td></tr>
+<tr><td scope="row">1159</td><td>ER_NET_READ_INTERRUPTED</td><td>08S01</td></tr>
+<tr><td scope="row">1160</td><td>ER_NET_ERROR_ON_WRITE</td><td>08S01</td></tr>
+<tr><td scope="row">1161</td><td>ER_NET_WRITE_INTERRUPTED</td><td>08S01</td></tr>
+<tr><td scope="row">1162</td><td>ER_TOO_LONG_STRING</td><td>42000</td></tr>
+<tr><td scope="row">1163</td><td>ER_TABLE_CANT_HANDLE_BLOB</td><td>42000</td></tr>
+<tr><td scope="row">1164</td><td>ER_TABLE_CANT_HANDLE_AUTO_INCREMENT</td>
+<td>42000</td></tr>
+<tr><td scope="row">1166</td><td>ER_WRONG_COLUMN_NAME</td><td>42000</td></tr>
+<tr><td scope="row">1167</td><td>ER_WRONG_KEY_COLUMN</td><td>42000</td></tr>
+<tr><td scope="row">1169</td><td>ER_DUP_UNIQUE</td><td>23000</td></tr>
+<tr><td scope="row">1170</td><td>ER_BLOB_KEY_WITHOUT_LENGTH</td><td>42000
+</td></tr>
+<tr><td scope="row">1171</td><td>ER_PRIMARY_CANT_HAVE_NULL</td><td>42000</td></tr>
+<tr><td scope="row">1172</td><td>ER_TOO_MANY_ROWS</td><td>42000</td></tr>
+<tr><td scope="row">1173</td><td>ER_REQUIRES_PRIMARY_KEY</td><td>42000</td></tr>
+<tr><td scope="row">1176</td><td>ER_KEY_DOES_NOT_EXITS</td><td>42000</td></tr>
+<tr><td scope="row">1177</td><td>ER_CHECK_NO_SUCH_TABLE</td><td>42000</td></tr>
+<tr><td scope="row">1178</td><td>ER_CHECK_NOT_IMPLEMENTED</td><td>42000</td></tr>
+<tr><td scope="row">1179</td><td>ER_CANT_DO_THIS_DURING_AN_TRANSACTION</td>
+<td>25000</td></tr>
+<tr><td scope="row">1184</td><td>ER_NEW_ABORTING_CONNECTION</td><td>08S01</td></tr>
+<tr><td scope="row">1189</td><td>ER_MASTER_NET_READ</td><td>08S01</td></tr>
+<tr><td scope="row">1190</td><td>ER_MASTER_NET_WRITE</td><td>08S01</td></tr>
+<tr><td scope="row">1203</td><td>ER_TOO_MANY_USER_CONNECTIONS</td><td>42000</td></tr>
+<tr><td scope="row">1205</td><td>ER_LOCK_WAIT_TIMEOUT</td><td>40001</td></tr>
+<tr><td scope="row">1207</td><td>ER_READ_ONLY_TRANSACTION</td><td>25000</td></tr>
+<tr><td scope="row">1211</td><td>ER_NO_PERMISSION_TO_CREATE_USER</td>
+<td>42000</td></tr>
+<tr><td scope="row">1213</td><td>ER_LOCK_DEADLOCK</td><td>40001</td></tr>
+<tr><td scope="row">1216</td><td>ER_NO_REFERENCED_ROW</td><td>23000</td></tr>
+<tr><td scope="row">1217</td><td>ER_ROW_IS_REFERENCED</td><td>23000</td></tr>
+<tr><td scope="row">1218</td><td>ER_CONNECT_TO_MASTER</td><td>08S01</td></tr>
+<tr><td scope="row">1222</td><td>ER_WRONG_NUMBER_OF_COLUMNS_IN_SELECT</td>
+<td>21000</td></tr>
+<tr><td scope="row">1226</td><td>ER_USER_LIMIT_REACHED</td><td>42000</td></tr>
+<tr><td scope="row">1227</td><td>ER_SPECIFIC_ACCESS_DENIED_ERROR</td>
+<td>42000</td></tr>
+<tr><td scope="row">1230</td><td>ER_NO_DEFAULT</td><td>42000</td></tr>
+<tr><td scope="row">1231</td><td>ER_WRONG_VALUE_FOR_VAR</td><td>42000</td></tr>
+<tr><td scope="row">1232</td><td>ER_WRONG_TYPE_FOR_VAR</td><td>42000</td></tr>
+<tr><td scope="row">1234</td><td>ER_CANT_USE_OPTION_HERE</td><td>42000</td></tr>
+<tr><td scope="row">1235</td><td>ER_NOT_SUPPORTED_YET</td><td>42000</td></tr>
+<tr><td scope="row">1239</td><td>ER_WRONG_FK_DEF</td><td>42000</td></tr>
+<tr><td scope="row">1241</td><td>ER_OPERAND_COLUMNS</td><td>21000</td></tr>
+<tr><td scope="row">1242</td><td>ER_SUBQUERY_NO_1_ROW</td><td>21000</td></tr>
+<tr><td scope="row">1247</td><td>ER_ILLEGAL_REFERENCE</td><td>42S22</td></tr>
+<tr><td scope="row">1248</td><td>ER_DERIVED_MUST_HAVE_ALIAS</td>
+<td>42000</td></tr>
+<tr><td scope="row">1249</td><td>ER_SELECT_REDUCED</td><td>01000</td></tr>
+<tr><td scope="row">1250</td><td>ER_TABLENAME_NOT_ALLOWED_HERE</td>
+<td>42000</td></tr>
+<tr><td scope="row">1251</td><td>ER_NOT_SUPPORTED_AUTH_MODE</td>
+<td>08004</td></tr>
+<tr><td scope="row">1252</td><td>ER_SPATIAL_CANT_HAVE_NULL</td>
+<td>42000</td></tr>
+<tr><td scope="row">1253</td><td>ER_COLLATION_CHARSET_MISMATCH</td>
+<td>42000</td></tr>
+<tr><td scope="row">1261</td><td>ER_WARN_TOO_FEW_RECORDS</td>
+<td>01000</td></tr>
+<tr><td scope="row">1262</td><td>ER_WARN_TOO_MANY_RECORDS</td>
+<td>01000</td></tr>
+<tr><td scope="row">1263</td><td>ER_WARN_NULL_TO_NOTNULL</td>
+<td>22004</td></tr>
+<tr><td scope="row">1264</td><td>ER_WARN_DATA_OUT_OF_RANGE</td>
+<td>22003</td></tr>
+<tr><td scope="row">1265</td><td>ER_WARN_DATA_TRUNCATED</td><td>01000</td></tr>
+<tr><td scope="row">1280</td><td>ER_WRONG_NAME_FOR_INDEX</td><td>42000</td></tr>
+<tr><td scope="row">1281</td><td>ER_WRONG_NAME_FOR_CATALOG</td>
+<td>42000</td></tr>
+<tr><td scope="row">1286</td><td>ER_UNKNOWN_STORAGE_ENGINE</td>
+<td>42000</td></tr>
+<tr><td scope="row">1292</td><td>ER_TRUNCATED_WRONG_VALUE</td>
+<td>22007</td></tr>
+<tr><td scope="row">1303</td><td>ER_SP_NO_RECURSIVE_CREATE</td>
+<td>2F003</td></tr>
+<tr><td scope="row">1304</td><td>ER_SP_ALREADY_EXISTS</td><td>42000</td></tr>
+<tr><td scope="row">1305</td><td>ER_SP_DOES_NOT_EXIST</td><td>42000</td></tr>
+<tr><td scope="row">1308</td><td>ER_SP_LILABEL_MISMATCH</td><td>42000</td></tr>
+<tr><td scope="row">1309</td><td>ER_SP_LABEL_REDEFINE</td><td>42000</td></tr>
+<tr><td scope="row">1310</td><td>ER_SP_LABEL_MISMATCH</td><td>42000</td></tr>
+<tr><td scope="row">1311</td><td>ER_SP_UNINIT_VAR</td><td>01000</td></tr>
+<tr><td scope="row">1312</td><td>ER_SP_BADSELECT</td><td>0A000</td></tr>
+<tr><td scope="row">1313</td><td>ER_SP_BADRETURN</td><td>42000</td></tr>
+<tr><td scope="row">1314</td><td>ER_SP_BADSTATEMENT</td><td>0A000</td></tr>
+<tr><td scope="row">1315</td><td>ER_UPDATE_LOG_DEPRECATED_IGNORED</td>
+<td>42000</td></tr>
+<tr><td scope="row">1316</td><td>ER_UPDATE_LOG_DEPRECATED_TRANSLATED</td>
+<td>42000</td></tr>
+<tr><td scope="row">1317</td><td>ER_QUERY_INTERRUPTED</td><td>70100</td></tr>
+<tr><td scope="row">1318</td><td>ER_SP_WRONG_NO_OF_ARGS</td><td>42000</td></tr>
+<tr><td scope="row">1319</td><td>ER_SP_COND_MISMATCH</td><td>42000</td></tr>
+<tr><td scope="row">1320</td><td>ER_SP_NORETURN</td><td>42000</td></tr>
+<tr><td scope="row">1321</td><td>ER_SP_NORETURNEND</td><td>2F005</td></tr>
+<tr><td scope="row">1322</td><td>ER_SP_BAD_CURSOR_QUERY</td>
+<td>42000</td></tr>
+<tr><td scope="row">1323</td><td>ER_SP_BAD_CURSOR_SELECT</td>
+<td>42000</td></tr>
+<tr><td scope="row">1324</td><td>ER_SP_CURSOR_MISMATCH</td><td>42000</td></tr>
+<tr><td scope="row">1325</td><td>ER_SP_CURSOR_ALREADY_OPEN</td>
+<td>24000</td></tr>
+<tr><td scope="row">1326</td><td>ER_SP_CURSOR_NOT_OPEN</td><td>24000</td></tr>
+<tr><td scope="row">1327</td><td>ER_SP_UNDECLARED_VAR</td><td>42000</td></tr>
+<tr><td scope="row">1329</td><td>ER_SP_FETCH_NO_DATA</td><td>02000</td></tr>
+<tr><td scope="row">1330</td><td>ER_SP_DUP_PARAM</td><td>42000</td></tr>
+<tr><td scope="row">1331</td><td>ER_SP_DUP_VAR</td><td>42000</td></tr>
+<tr><td scope="row">1332</td><td>ER_SP_DUP_COND</td><td>42000</td></tr>
+<tr><td scope="row">1333</td><td>ER_SP_DUP_CURS</td><td>42000</td></tr>
+<tr><td scope="row">1335</td><td>ER_SP_SUBSELECT_NYI</td><td>0A000</td></tr>
+<tr><td scope="row">1336</td><td>ER_STMT_NOT_ALLOWED_IN_SF_OR_TRG</td>
+<td>0A000</td></tr>
+<tr><td scope="row">1337</td><td>ER_SP_VARCOND_AFTER_CURSHNDLR</td>
+<td>42000</td></tr>
+<tr><td scope="row">1338</td><td>ER_SP_CURSOR_AFTER_HANDLER</td>
+<td>42000</td></tr>
+<tr><td scope="row">1339</td><td>ER_SP_CASE_NOT_FOUND</td><td>20000</td></tr>
+<tr><td scope="row">1365</td><td>ER_DIVISION_BY_ZERO</td><td>22012</td></tr>
+<tr><td scope="row">1367</td><td>ER_ILLEGAL_VALUE_FOR_TYPE</td>
+<td>22007</td></tr>
+<tr><td scope="row">1370</td><td>ER_PROCACCESS_DENIED_ERROR</td>
+<td>42000</td></tr>
+<tr><td scope="row">1397</td><td>ER_XAER_NOTA</td><td>XAE04</td></tr>
+<tr><td scope="row">1398</td><td>ER_XAER_INVAL</td><td>XAE05</td></tr>
+<tr><td scope="row">1399</td><td>ER_XAER_RMFAIL</td><td>XAE07</td></tr>
+<tr><td scope="row">1400</td><td>ER_XAER_OUTSIDE</td><td>XAE09</td></tr>
+<tr><td scope="row">1401</td><td>ER_XA_RMERR</td><td>XAE03</td></tr>
+<tr><td scope="row">1402</td><td>ER_XA_RBROLLBACK</td><td>XA100</td></tr>
+<tr><td scope="row">1403</td><td>ER_NONEXISTING_PROC_GRANT</td>
+<td>42000</td></tr>
+<tr><td scope="row">1406</td><td>ER_DATA_TOO_LONG</td><td>22001</td></tr>
+<tr><td scope="row">1407</td><td>ER_SP_BAD_SQLSTATE</td><td>42000</td></tr>
+<tr><td scope="row">1410</td><td>ER_CANT_CREATE_USER_WITH_GRANT</td>
+<td>42000</td></tr>
+<tr><td scope="row">1413</td><td>ER_SP_DUP_HANDLER</td><td>42000</td></tr>
+<tr><td scope="row">1414</td><td>ER_SP_NOT_VAR_ARG</td><td>42000</td></tr>
+<tr><td scope="row">1415</td><td>ER_SP_NO_RETSET</td><td>0A000</td></tr>
+<tr><td scope="row">1416</td><td>ER_CANT_CREATE_GEOMETRY_OBJECT</td>
+<td>22003</td></tr>
+<tr><td scope="row">1425</td><td>ER_TOO_BIG_SCALE</td><td>42000</td></tr>
+<tr><td scope="row">1426</td><td>ER_TOO_BIG_PRECISION</td><td>42000</td></tr>
+<tr><td scope="row">1427</td><td>ER_M_BIGGER_THAN_D</td><td>42000</td></tr>
+<tr><td scope="row">1437</td><td>ER_TOO_LONG_BODY</td><td>42000</td></tr>
+<tr><td scope="row">1439</td><td>ER_TOO_BIG_DISPLAYWIDTH</td><td>42000</td></tr>
+<tr><td scope="row">1440</td><td>ER_XAER_DUPID</td><td>XAE08</td></tr>
+<tr><td scope="row">1441</td><td>ER_DATETIME_FUNCTION_OVERFLOW</td>
+<td>22008</td></tr>
+<tr><td scope="row">1451</td><td>ER_ROW_IS_REFERENCED_2</td><td>23000</td></tr>
+<tr><td scope="row">1452</td><td>ER_NO_REFERENCED_ROW_2</td><td>23000</td></tr>
+<tr><td scope="row">1453</td><td>ER_SP_BAD_VAR_SHADOW</td><td>42000</td></tr>
+<tr><td scope="row">1458</td><td>ER_SP_WRONG_NAME</td><td>42000</td></tr>
+<tr><td scope="row">1460</td><td>ER_SP_NO_AGGREGATE</td><td>42000</td></tr>
+<tr><td scope="row">1461</td><td>ER_MAX_PREPARED_STMT_COUNT_REACHED</td>
+<td>42000</td></tr>
+<tr><td scope="row">1463</td><td>ER_NON_GROUPING_FIELD_USED</td>
+<td>42000</td></tr>
+<tr><td scope="row">1557</td><td>ER_FOREIGN_DUPLICATE_KEY</td>
+<td>23000</td></tr>
+<tr><td scope="row">1568</td><td>ER_CANT_CHANGE_TX_ISOLATION</td>
+<td>25001</td></tr>
+<tr><td scope="row">1582</td><td>ER_WRONG_PARAMCOUNT_TO_NATIVE_FCT</td>
+<td>42000</td></tr>
+<tr><td scope="row">1583</td><td>ER_WRONG_PARAMETERS_TO_NATIVE_FCT</td>
+<td>42000</td></tr>
+<tr><td scope="row">1584</td><td>ER_WRONG_PARAMETERS_TO_STORED_FCT</td>
+<td>42000</td></tr>
+<tr><td scope="row">1586</td><td>ER_DUP_ENTRY_WITH_KEY_NAME</td>
+<td>23000</td></tr>
+<tr><td scope="row">1613</td><td>ER_XA_RBTIMEOUT</td><td>XA106</td></tr>
+<tr><td scope="row">1614</td><td>ER_XA_RBDEADLOCK</td><td>XA102</td></tr>
+<tr><td scope="row">1630</td><td>ER_FUNC_INEXISTENT_NAME_COLLISION</td>
+<td>42000</td></tr>
+<tr><td scope="row">1641</td><td>ER_DUP_SIGNAL_SET</td><td>42000</td></tr>
+<tr><td scope="row">1642</td><td>ER_SIGNAL_WARN</td><td>01000</td></tr>
+<tr><td scope="row">1643</td><td>ER_SIGNAL_NOT_FOUND</td><td>02000</td></tr>
+<tr><td scope="row">1645</td><td>ER_RESIGNAL_WITHOUT_ACTIVE_HANDLER</td>
+<td>0K000</td></tr>
+<tr><td scope="row">1687</td><td>ER_SPATIAL_MUST_HAVE_GEOM_COL</td>
+<td>42000</td></tr>
+<tr><td scope="row">1690</td><td>ER_DATA_OUT_OF_RANGE</td><td>22003</td></tr>
+<tr><td scope="row">1698</td><td>ER_ACCESS_DENIED_NO_PASSWORD_ERROR</td>
+<td>28000</td></tr>
+<tr><td scope="row">1701</td><td>ER_TRUNCATE_ILLEGAL_FK</td><td>42000</td></tr>
+<tr><td scope="row">1758</td><td>ER_DA_INVALID_CONDITION_NUMBER</td>
+<td>35000</td></tr>
+<tr><td scope="row">1761</td><td>ER_FOREIGN_DUPLICATE_KEY_WITH_CHILD_INFO</td>
+<td>23000</td></tr>
+<tr><td scope="row">1762</td>
+<td>ER_FOREIGN_DUPLICATE_KEY_WITHOUT_CHILD_INFO</td><td>23000</td></tr>
+<tr><td scope="row">1792</td>
+<td>ER_CANT_EXECUTE_IN_READ_ONLY_TRANSACTION</td><td>25006</td></tr>
+<tr><td scope="row">1845</td><td>ER_ALTER_OPERATION_NOT_SUPPORTED</td>
+<td>0A000</td></tr>
+<tr><td scope="row">1846</td><td>ER_ALTER_OPERATION_NOT_SUPPORTED_REASON</td>
+<td>0A000</td></tr>
+<tr><td scope="row">1859</td><td>ER_DUP_UNKNOWN_IN_INDEX</td><td>23000</td></tr>
+<tr><td scope="row">1873</td><td>ER_ACCESS_DENIED_CHANGE_USER_ERROR</td>
+<td>28000</td></tr>
+<tr><td scope="row">1887</td><td>ER_GET_STACKED_DA_WITHOUT_ACTIVE_HANDLER</td>
+<td>0Z002</td></tr>
+<tr><td scope="row">1903</td><td>ER_INVALID_ARGUMENT_FOR_LOGARITHM</td>
+<td>2201E</td></tr></tbody></table><br class="table-break">
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

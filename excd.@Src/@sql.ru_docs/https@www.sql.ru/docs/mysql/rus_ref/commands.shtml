@@ -1,0 +1,989 @@
+<HTML>
+<HEAD>
+<TITLE>Команды пакета MySQL. [SQL.RU]</TITLE>
+<META http-equiv="Content-Type" CONTENT="text/html; charset=windows-1251">
+<META HTTP-EQUIV="Window-target" CONTENT="_top">
+<META HTTP-EQUIV="Last-Modified" CONTENT="29-03-2001">
+<META NAME="Description" CONTENT="Использование языка SQL, создание клиент-серверных систем. Конференция по MSSQL, Oracle, Interbase, MySQL. Полезные ссылки, документация, рекомендации по разработке информационных систем, сертификация, заказ книг и многое другое.">
+<META NAME="Keywords" CONTENT="SQL, конференция, Database Server, Oracle, Interbase, MySQL, документация, статьи, примеры, книги, ссылки, сертификация, работа, СУБД">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER=0 CELLSPACING=10><TR><TD>
+<CENTER>
+<H2 class="headline">Команды пакета MySQL</H2></CENTER>
+<UL type=disc><LI><B>Команды пакета MySQL:</B>
+<UL type=circle><LI><A HREF="#Overview">Коротко о главном</A>
+</LI>
+<LI><A HREF="#Core">Основные команды</A></LI>
+<UL type=disc><LI><A HREF="#Mysql">mysql</A></LI>
+<LI><A HREF="#Mysqlaccess">mysqlaccess</A></LI>
+<LI><A HREF="#Mysqladmin">mysqladmin</A></LI>
+<LI><A HREF="#Mysqld">mysqld</A></LI>
+<LI><A HREF="#Mysqldump">mysqldump</A></LI>
+<LI><A HREF="#Mysqlshow">mysqlshow</A></LI>
+<LI><A HREF="#Isamchk">isamchk</A></LI>
+<LI><A HREF="#Isamlog">isamlog</A></LI>
+<LI><A HREF="#Safe_mysqld">safe_mysqld</A></LI></UL>
+
+<LI><A HREF="#NonCore">Дополнительные команды</A></LI>
+<UL type=disc><LI><A HREF="#Comp_Err">comp_err</A></LI>
+<LI><A HREF="#Msql2mysql">msql2mysql</A></LI>
+<LI><A HREF="#Mysqlbug">mysqlbug</A></LI>
+<LI><A HREF="#Perror">perror</A></LI>
+<LI><A HREF="#Replace">replace</A></LI>
+<LI><A HREF="#Which1">which1</A></LI>
+<LI><A HREF="#Zap">zap</A></LI></UL></UL></LI></UL><HR>
+
+<CENTER><H2><A NAME="Overview">Коротко о главном</A></H2></CENTER>
+<P>СУБД MySQL поставляется приходит со следующими основными программами и
+скриптами.
+
+<P><UL><LI>mysql</LI>
+<LI>mysqlaccess</LI>
+<LI>mysqladmin</LI>
+<LI>mysqld</LI>
+<LI>mysqldump</LI>
+<LI>mysqlshow</LI>
+<LI>isamchk</LI>
+<LI>isamlog</LI>
+<LI>safe_mysqld</LI></UL>
+
+<P>Еще есть несколько утилит. Они не жизненно важны для MySQL, но
+обеспечивают полезные дополнительные функциональные возможности.
+<P><UL><LI>comp_err</LI>
+<LI>msql2mysql</LI>
+<LI>mysqlbug</LI>
+<LI>perror</LI>
+<LI>replace</LI>
+<LI>which1</LI>
+<LI>zap</LI></UL>
+
+<HR WIDTH="100%">
+<CENTER><H2><A NAME="Core">Основные команды</A></H2></CENTER>
+
+<P><CENTER><H2><A NAME="Mysql">MySQL</A></H2></CENTER>
+<P>Клиентская программа MySQL.
+
+<P><B>Запуск:</B>
+<P><UL><SAMP>mysql [OPTIONS] database</SAMP></UL>
+
+<P><B>ОПИСАНИЕ:</B>
+<P><UL>Клиентская часть СУБД MySQL названа MySQL. Она обеспечивает
+интерфейс командной строки с СУБД MySQL, и возможность неинтерактивной
+пакетной обработки.</UL>
+
+<P>Программой mysql поддерживаются следующие опции. Вы можете использовать
+или "короткий" одиночный символ или более подробную версию.
+
+<P><TABLE border=1><TR>
+<TD><SAMP>-\?, --help</SAMP></TD>
+<TD>Справка.</TD></TR>
+<TR><TD><SAMP>-d, <NOBR>--debug=[options]</NOBR></SAMP></TD>
+<TD>Вывести в протокол отладочную информацию. В общем виде 'd:t:o,filename`.
+Подробности в главе о <A HREF="app2.shtml">библиотеке отладки</A>.</TD></TR>
+<TR><TD><SAMP>-d, <NOBR>--debug-info</NOBR></SAMP></TD>
+<TD>Вывести отладочную информацию при выходе из программы.</TD></TR>
+<TR><TD><SAMP>-e, --exec</SAMP></TD>
+<TD>Выполнить команду и выйти, неявная форма опции --batch.</TD></TR>
+<TR><TD><SAMP>-f, --force</SAMP></TD>
+<TD>Продолжить, даже если мы сталкиваемся с SQL ошибкой.</TD></TR>
+<TR><TD><SAMP>-h, --hostname=[hostname]</SAMP></TD>
+<TD>Задает имя сервера, с которым Вы желаете соединиться.</TD></TR>
+<TR><TD><SAMP>-P, --port=[port]</SAMP></TD>
+<TD>Порт, для соединения с сервером MySQL.</TD></TR>
+<TR><TD><SAMP>-p, --password=[password] </SAMP></TD>
+<TD>Пароль пользователя, для соединения с сервером MySQL. Обратите внимание,
+    что не должно быть пробела между -p и паролем.</TD></TR>
+<TR><TD><SAMP>-q, --quick</SAMP></TD>
+<TD>Быстрый (небуферизованный вывод), может замедлить сервер, если вывод
+    приостановлен.</TD></TR>
+<TR><TD><SAMP>-s, --silent</SAMP></TD>
+<TD>Работать молча (подавить вывод).</TD></TR>
+<TR><TD><SAMP>-u, --user=[user] </SAMP></TD>
+<TD>Имя пользователя для соединения с сервером MySQL. Необязательно, если имя
+    пользователя такое же, как ваш логин. По умолчанию именно ваш логин
+    используется в качестве имени пользователя, что облегчает настройку.
+    </TD></TR>
+<TR><TD><SAMP>-v, --verbose</SAMP></TD>
+<TD>Подробный вывод. -v опция может быть удвоена или утроена для более
+    подробного вывода. В программах русских авторов обычно именуется "уровнем
+    болтливости программы".</TD></TR>
+<TR><TD><SAMP>-w, --wait</SAMP></TD>
+<TD>Если подключение терпит неудачу, то подождать и повторить попытку.</TD>
+</TR>
+<TR><TD><SAMP>-B, --batch</SAMP></TD>
+<TD>Выполнить в пакетном режиме. Никаких запросов и никаких ошибок в STDOUT.
+    Устанавливается автоматически при чтении из/записи в канал (пайп).
+    Результаты будут выведены в формате с разделением табуляцией. Одна строка
+    результата соответствует одной строке вывода.</TD></TR>
+<TR><TD><SAMP>-I, --help</SAMP></TD>
+<TD>Справка, эквивалент <SAMP>-\?</SAMP>.</TD></TR>
+<TR><TD><SAMP>-V, --version</SAMP></TD>
+<TD>Вывести информацию о версии пакета.</TD></TR></TABLE></UL>
+
+<P>В интерактивном режиме mysql будет печатать результаты в таблице
+подобно примеру, приведенному ниже. Если не задан пароль или имя пользователя
+mysql попробует зайти в систему на сервере базы данных с использованием
+вашего логина и НУЛЕВОГО (ПУСТОГО) пароля. Если ваш mysql логин отличается от
+вашего логина в unix, или если вы имеете пароль, то это провалится.
+
+<p><B>ПРИМЕР:</B>
+<P><TABLE border=0 cellpadding=10 bgcolor=black><TR><TD>
+<PRE>
+<FONT COLOR=green>$ mysql mysql</FONT><FONT COLOR=white>
+
+Welcome to the mysql monitor.  Commands ends with ; or \g.
+Type 'help' for help.
+
+<FONT COLOR=green>mysql> select * from host;</FONT>
+1 rows in set (0.25 sec)
+
+  +-----------+----+--------+--------+--------+--------+--------+------+
+  | host      | db | select | insert | update | delete | create | drop |
+  +-----------+----+--------+--------+--------+--------+--------+------+
+  | localhost | %  | Y      | Y      | Y      | Y      | Y      | Y    |
+  +-----------+----+--------+--------+--------+--------+--------+------+
+
+</FONT><FONT COLOR=green>mysql></FONT>
+</PRE></TD></TR></TABLE>
+
+<P>Переведу этот пример на русский:
+<P><TABLE border=0 cellpadding=10 bgcolor=black><TR><TD>
+<PRE>
+<FONT COLOR=green>$ mysql mysql</FONT><FONT COLOR=white>
+
+Добро пожаловать в монитор mysql. Команды кончаются на ; или \g.
+Наберите 'help' для получения справки.
+
+<FONT COLOR=green>mysql> select * from host;</FONT>
+1 строка в наборе (0.25 секунды)
+
+  +-----------+----+--------+--------+--------+--------+--------+------+
+  | host      | db | select | insert | update | delete | create | drop |
+  +-----------+----+--------+--------+--------+--------+--------+------+
+  | localhost | %  | Y      | Y      | Y      | Y      | Y      | Y    |
+  +-----------+----+--------+--------+--------+--------+--------+------+
+
+</FONT><FONT COLOR=green>mysql></FONT>
+</PRE></TD></TR></TABLE>
+
+<P>В режиме командной строки Вы должны иметь возможность работать с историей
+ввода и редактировать предыдущие команды. Это сильно облегчит работу.
+
+<P>В пакетном режиме результаты выводятся в виде полей, разделенных
+символами табуляции.
+
+<P><B>ПРИМЕР:</B>
+<P>Создайте файл /tmp/test, который содержит следующую строку:
+<PRE>
+
+select * from host
+
+</PRE>
+
+В командной строке введите:
+<TABLE border=0 cellpadding=10 bgcolor=black><TR><TD>
+<PRE>
+
+<FONT COLOR=green>$ mysql mysql &lt;/tmp/test</FONT>
+
+</PRE></TD></TR></TABLE>
+Вы получите что-то вроде:
+
+<TABLE border=0 cellpadding=10 bgcolor=black><TR><TD>
+<PRE><FONT COLOR=white>
+
+host            db      select  insert  update  delete  create  drop
+localhost       %       Y       Y       Y       Y       Y       Y
+</FONT></PRE></TD></TR></TABLE>
+Вы можете писать довольно сложные SQL программы, используя этот метод.</UL>
+
+<HR WIDTH="100%">
+<CENTER><H2><A NAME="Mysqlaccess">mysqlaccess</A></H2></CENTER>
+
+<P>Проверка прав доступа пользователя.
+<P><B>СИНТАКСИС:</B>
+<UL><SAMP>mysqlaccess [host] [user] [db] OPTIONS</SAMP></UL>
+
+<P><B>ОПИСАНИЕ:</B>
+<P><UL>Скрипт mysqlaccess используется, чтобы внести в список привилегии
+       пользователя для конкретной базы данных. Это дает информацию, которая
+       может быть полезна при диагностировании проблем с доступом
+       пользователей к данной базе данных. Не забудьте, что всегда надо
+       скомандовать:
+<PRE>
+
+$ 'mysqladmin reload'
+
+</PRE>
+после внесения изменений в таблицы базы данных MySQL.</UL>
+
+<P>Скрипт mysqlaccess поддерживает следующие параметры (Вы можете
+использовать "короткий" одиночный символ или более подробную версию):
+
+<P><TABLE border=1>
+<TR><TD><SAMP> -?, --help</SAMP></TD>
+<TD>Справка.</TD></TR>
+<TR><TD><SAMP> -v, --version</SAMP></TD>
+<TD>Информация о версии</TD></TR>
+<TR><TD><SAMP>-u, --user=...</SAMP></TD>
+<TD>Имя пользователя для доступа к базе данных.</TD></TR>
+<TR><TD><SAMP>-p, --password=...</SAMP></TD>
+<TD>Пароль пользователя, для соединения с сервером MySQL. Обратите внимание,
+    что не должно быть пробела между -p и паролем.</TD></TR>
+<TR><TD><SAMP>-h, --host=...</SAMP></TD>
+<TD>Имя сервера, используется для проверки прав доступа.</TD></TR>
+<TR><TD><SAMP>-d, --db=...</SAMP></TD>
+<TD>Имя базы данных, используется для проверки прав доступа.</TD></TR>
+<TR><TD><SAMP>-U, --superuser=...</SAMP></TD>
+<TD>Логин администратора.</TD></TR>
+<TR><TD><SAMP>-P, --spassword=...</SAMP></TD>
+<TD>Пароль администратора.</TD></TR>
+<TR><TD><SAMP>-b, --brief</SAMP></TD>
+<TD>Вывести краткие сведения о таблице.</TD></TR>
+<TR><TD><SAMP>--relnotes</SAMP></TD>
+<TD>Вывести заметки по реализации.</TD></TR>
+<TR><TD><SAMP>--plan</SAMP></TD>
+<TD>Вывести идеи для будущих реализаций.</TD></TR>
+<TR><TD><SAMP>--howto</SAMP></TD>
+<TD>Вывести примеры использования `mysqlaccess'</TD></TR>
+<TR><TD><SAMP>--debug=N</SAMP></TD>
+<TD>Уровень отладки N (0..3)</TD></TR></TABLE>
+
+<P>Вы должны указать по крайней мере имя пользователя и имя базы данных,
+   которые Вы желаете проверить. Если имя сервера не задано, то
+   подразумевается имя 'localhost'.
+
+<P>"Групповые символы" (*,?, %, _) могут применяться при указании сервера,
+пользователя и db (базы данных). Убедитесь, что они не будут перехвачены
+вашей командной оболочкой unix.
+
+<HR WIDTH="100%">
+<CENTER><H2><A NAME="Mysqladmin">mysqladmin</A></H2></CENTER>
+Выполняет административные функции.
+
+<P><B>СИНТАКСИС:</B>
+<P><UL><SAMP>mysqladmin [OPTIONS] command command...</SAMP></UL>
+
+<P><B>ОПИСАНИЕ:</B>
+
+<P><UL>Программа mysqladmin используется, для управления различными аспектами
+функционирования СУБД MySQL. Допустимы следующие опции (Вы можете
+использовать "короткий" одиночный символ или более подробную версию):</UL>
+
+<TABLE border=1>
+<TR><TD><SAMP>-\?, --help</SAMP></TD>
+<TD>Справка.</TD></TR>
+<TR><TD><SAMP>-d, --debug=[options]</SAMP></TD>
+<TD>Вывести в протокол отладочную информацию. В общем виде 'd:t:o,filename`.
+    Подробности в главе о <A HREF="app2.shtml">библиотеке отладки</A>.</TD>
+    </TR>
+<TR><TD><SAMP>-f, --force</SAMP></TD>
+<TD>Не спрашивать подтверждения при пропуске таблицы.</TD></TR>
+<TR><TD><SAMP>-h, --host=[hostname]</SAMP></TD>
+<TD>Имя сервера, если не localhost.</TD></TR>
+<TR><TD><SAMP>-i, --sleep=[seconds]</SAMP></TD>
+<TD>Выполнить команды несколько раз с паузой в [секунд] между ними.</TD></TR>
+<TR><TD><SAMP>-p, --password[password]</SAMP></TD>
+<TD>Пароль пользователя, для соединения с сервером MySQL. Обратите внимание,
+    что не должно быть пробела между -p и паролем.</TD></TR>
+<TR><TD><SAMP>-u, --user=[user]</SAMP></TD>
+<TD>Имя пользователя. Если не указано, используется текущий логин.</TD></TR>
+<TR><TD><SAMP>-P,  --port=[port]</SAMP></TD>
+<TD>Порт, для соединения с сервером MySQL.</TD></TR>
+<TR><TD><SAMP>-V, --version</SAMP></TD>
+<TD>Вывести информацию о версии.</TD></TR></TABLE>
+
+<BR>Кроме этого программа mysqladmin поддерживает следующие команды:
+
+<P><TABLE border=1>
+<TR><TD><SAMP>create [имя базы данных]</SAMP></TD>
+<TD>Создать базу данных.</TD></TR>
+<TR><TD><SAMP>drop [имя базы данных]</SAMP></TD>
+<TD>Удалить базу данных (вместе со всеми таблицами).</TD></TR>
+<TR><TD><SAMP>processlist</SAMP></TD>
+<TD>Вывести сведения о работающих потоках MySQL.</TD></TR>
+<TR><TD><SAMP>reload</SAMP></TD>
+<TD>Перечитать настройки и очистить все кэши.</TD></TR>
+<TR><TD><SAMP>shutdown</SAMP></TD>
+<TD>Завершить работу СУБД MySQL. Все запущенные MySQL-сессии помечаются как
+    'killed'. Это означает, что все потоки, которые простаивают в настоящее
+    время, будут закрыты немедленно, а управление потоками будет закрыто,
+    когда они достигнут точек завершения, определенных сервером. Клиенты
+    получат сообщение об ошибке 'mysql server has gone away'.</TD></TR>
+<TR><TD><SAMP>status</SAMP></TD>
+<TD>Вывести короткое сообщение о статусе сервера.</TD></TR>
+<TR><TD><SAMP>version</SAMP></TD>
+<TD>Вывести информацию о версии.</TD></TR></TABLE>
+
+<P><B>Обратите внимание:</B> mysqladmin понимает сокращения. Например, Вы
+могли бы написать следующее:
+<pre>
+
+$ mysqladmin v p
+
+</pre>
+Это вывело бы версию mysqld и список всех активных в настоящее время потоков.
+
+<P>Вы можете использовать опцию <KBD>-i=[секунд]</KBD> для повтора команды
+каждые [секунд]. Это наиболее полезно с командой processlist.
+
+<P>Обратите внимание, что Вы можете использовать вышеупомянутые команды,
+только если Вы имеете соответствующие права доступа.
+
+<P><HR WIDTH="100%">
+<CENTER><H2><A NAME="Mysqld">mysqld</A></H2></CENTER>
+<P>Серверная часть пакета MySQL (mysqld).
+
+<P><B>СИНТАКСИС:</B>
+<P><UL><SAMP>mysqld [OPTIONS]</SAMP><P></UL>
+
+<P><B>ОПИСАНИЕ:</B>
+<UL>Программа mysqld является ядром СУБД MySQL. Она запускается как демон в
+системе и принимает подключения из клиентских программ, выполняя запросы и
+возвращая результаты. Она многопоточная, то есть обработает больше чем один
+запрос одновременно.
+
+<p>Может наблюдаться спад производительности при использовании опции
+<NOBR><SAMP>--log-isam</SAMP></NOBR>, поскольку при этом очень многое пишется
+в файл протокола. Непериодические изменения, обновления и удаления могут
+уменьшить производительность на 5-10%. Производительность может сильно
+понизиться на обновлениях, требующих большого числа одновременных изменений.
+
+<P>Опция <NOBR><SAMP>--log-isam</SAMP></NOBR> может использоваться, для
+копирования базы данных. Обратите внимание, что ISAM журналы могут стать
+ОЧЕНЬ большими.
+
+<P>Каждая операция UPDATE, DELETE и INSERT имеет заголовок в 13 байтов
+дополнительно к команде.
+
+<P>Каждая открытая таблица требует девять байтов плюс длина имени файла
+таблицы. Это необходимо только для таблиц, которые еще не в кэше таблиц.
+
+<P> Кроме того будут иметься одиннадцать байтов дополнительно для любых
+команд, которые кэшируют/блокируют таблицы. Эти события обычно вызваны
+внутренними командами mysql. Наиболее часто, когда используется SELECT.
+
+<P>В большинстве случаев нужно выполнять mysqld из скрипта <SAMP>safe_mysqld
+</SAMP>.</UL>
+
+<P>Программа mysqld поддерживает следующие опции командной строки:<BR>
+<TABLE border=1>
+<TR><TD><SAMP>-\?, --help</SAMP></TD>
+<TD>Справка</TD></TR>
+<TR><TD><SAMP>-#, --debug=[options]</SAMP></TD>
+<TD>Вывести в протокол отладочную информацию. В общем виде 'd:t:o,filename`.
+    Подробности в главе о <A HREF="app2.shtml">библиотеке отладки</A>.</TD>
+    </TR>
+<TR><TD><SAMP>-b, --basedir=[path]</SAMP></TD>
+<TD>Полное имя каталога в который установлен пакет.</TD></TR>
+<TR><TD><SAMP>-h, --datadir [homedir]</SAMP></TD>
+<TD>Полное имя каталога в котором хранятся базы данных.</TD></TR>
+<TR><TD><SAMP>-l, <NOBR>--log=[filename]</NOBR></SAMP></TD>
+<TD>Имя файла протокола запросов к базам данных и подключений.</TD></TR>
+<TR><TD><SAMP><NOBR>--log-isam=[filename]</NOBR></SAMP></TD>
+<TD>Имя файла протокола изменений isam.</TD></TR>
+<TR><TD><SAMP>-O, <NOBR>--set-variable</NOBR> var=option</SAMP></TD>
+<TD>Установить переменную. См. ниже.</TD></TR>
+<TR><TD><SAMP>-L, --language=[language] </SAMP></TD>
+<TD>Значение по умолчанию 'english/'. Может быть так же 'swedish/',
+    'germany/','french/' или 'czech/'. Текущий список можно посмотреть в
+    подкаталог share/mysql каталога, в который установлен MySQL.</TD></TR>
+<TR><TD><SAMP>-P, --port=[port]</SAMP></TD>
+<TD>Порт для соединения.<TR></TD></TR>
+<TR><TD><SAMP>-T, <NOBR>--debug-info</NOBR></SAMP></TD>
+<TD>Вывести отладочную информацию.</TD></TR>
+<TR><TD><NOBR><SAMP>--skip-new-routines</SAMP></NOBR></TD>
+<TD>Не использовать новые (возможно, глючные) возможности этой версии.</TD>
+</TR>
+<TR><TD><NOBR><SAMP>--skip-grant-tables</SAMP></NOBR></TD>
+<TD>Игнорировать таблицы предоставления доступа. Это дает любому ПОЛНЫЙ
+    доступ ко всем таблицам.</TD></TR>
+<TR><TD><NOBR><SAMP>--skip-locking</SAMP></NOBR></TD>
+<TD>Не использовать блокировку системы. Может дать лучшую эффективность, но
+не должен использоваться вместе с isamchk. ТО ЕСТЬ, сначала остановите сервер.
+</TD></TR>
+<TR><TD><NOBR><SAMP>--skip-name-resolve</NOBR></SAMP></TD>
+<TD>Эта опция заставит mysqld принимать адреса IP только тех серверов,
+    которые явно указаны в базе данных привилегий mysql. DNS можно более
+    или менее просто хакнуть, а эта опция позволяет избежать ряда проблем,
+    если прикладная программа требует высокого уровня защиты.</TD></TR>
+<TR><TD><NOBR><SAMP>--skip-networking</SAMP></NOBR></TD>
+<TD>Использовать подключения только через интерфейс localhost. Эта опция не
+    будет работать с MIT потоками. Если подключения к базе данных будут
+    только локальные, то использование этой опции защитит от создания
+    удаленных подключений.</TD></TR>
+<TR><TD><NOBR><SAMP>--skip-unsafe-select</SAMP></NOBR></TD>
+<TD>Пропустить возможно опасные оптимизации.</TD></TR>
+<TR><TD><SAMP>--socket=[socket]</SAMP></TD>
+<TD>Имя сокет-файла для MySQL. Недоступно при использовании версии MySQL,
+    скомпилированной с MIT потоками.
+    <P><B>ПРИМЕР:</B><BR>
+    <NOBR><SAMP>mysqld --socket=/tmp/mysql.sock</SAMP></NOBR></TD></TR>
+<TR><TD><SAMP>-V, --version</SAMP></TD>
+<TD>Вывести информацию о версии.</TD></TR></TABLE>
+
+<P>Если опция <KBD>-h</KBD> не определена, mysql будет считать, что основной
+каталог = <SAMP>"/my/data/sql/mysql"</SAMP>.
+
+<P>Все базы данных размещены в каталоге <SAMP>[homedir]/[имя базы данных]
+</SAMP>.
+
+<P>Опция <KBD>-l</KBD> должна использоваться осторожно. Когда используется
+сервер, с большим объемом транзакций, этот файл может стать большим очень
+быстро. Если Вы не определяете имя logfile, при использовании опции -l mysqld
+будет писать протокол в файл <SAMP>[homedir]/[hostname].log</SAMP>.
+
+<P>Опция -O позволяет Вам определять значения для следующих параметров:
+
+<P><TABLE border=1>
+<TR><TH>Имя</TH><TH>Значение по умолчанию</TH></TR>
+<TR><TD>back_log</TD><TD>5</TD></TR>
+<TR><TD>keybuffer</TD><TD>1048568</TD></TR>
+<TR><TD>max_allowed_packet</TD><TD>65536</TD></TR>
+<TR><TD>net_buffer_length</TD><TD>8192</TD></TR>
+<TR><TD>max_connections</TD><TD>90</TD></TR>
+<TR><TD>table_cache</TD><TD>64</TD></TR>
+<TR><TD>recordbuffer</TD><TD>131072</TD></TR>
+<TR><TD>sortbuffer</TD><TD>2097144</TD></TR>
+<TR><TD>max_sort_length</TD><TD>1024</TD></TR></TABLE>
+
+<P>Информация относительно того, что эти значения делают, и как поднять
+эффективность mysqld, находится <A HREF="admin.shtml#tuning">здесь</A>.
+
+<P><HR WIDTH="100%">
+<CENTER><H2><A NAME="Mysqldump">mysqldump</A></H2></CENTER>
+Дамп содержания базы данных.
+
+<P><B>СИНТАКСИС:</B>
+<P><UL><SAMP>mysqldump [OPTIONS] [database [table [field]]]</SAMP></UL>
+
+<P><B>ОПИСАНИЕ:</B>
+<P><UL>Программа mysqldump используется для создания дампа содержания базы
+данных MySQL. Она пишет инструкции SQL в стандартный вывод. Эти инструкции
+SQL могут быть переназначены в файл. Можно резервировать базу данных MySQL,
+используя mysqldump, но при этом Вы должны убедиться, что в этот момент с
+базой данных не выполняется никаких других действий. А то mysqldump Вам
+такого нарезервирует...</UL>
+
+<P>Программа <SAMP>mysqldump</SAMP> поддерживает следующие параметры (Вы
+можете использовать короткую или подробную версию):
+
+<P><TABLE border=1>
+<TR><TD><SAMP>-#, --debug=[options]</SAMP></TD>
+<TD>Вывести в протокол отладочную информацию. В общем виде 'd:t:o,filename`.
+    Подробности в главе о <A HREF="app2.shtml">библиотеке отладки</A>.</TD>
+    </TR>
+<TR><TD><SAMP>-?, --help</SAMP></TD>
+<TD>Справка.</TD></TR>
+<TR><TD><SAMP>-c, <NOBR>--compleat-insert</NOBR></SAMP></TD>
+<TD>Генерируйте полные инструкции insert (не исключая значений, которые
+    соответствуют значениям столбца по умолчанию).</TD></TR>
+<TR><TD><SAMP>-h, --host=[hostname]</SAMP></TD>
+<TD>Соединиться с сервером hostname.</TD></TR>
+<TR><TD><SAMP>-d, <NOBR>--no-data</NOBR></SAMP></TD>
+<TD>Экспорт только схемы информации (исключая данные).</TD></TR>
+<TR><TD><SAMP>-t, <NOBR>--no-create-info</NOBR></SAMP></TD>
+<TD>Экспорт только данных, исключая информацию для создания таблицы.
+    Противоположность -d.</TD></TR>
+<TR><TD><SAMP>-p, --password=[password]</SAMP></TD>
+<TD>Пароль пользователя, для соединения с сервером MySQL. Обратите внимание,
+    что не должно быть пробела между -p и паролем.</TD></TR>
+<TR><TD><SAMP>-q, --quick</SAMP></TD>
+<TD>Не буферизовать результаты запроса, дамп выдать непосредственно к STDOUT.
+</TD></TR>
+<TR><TD><SAMP>-u, --user=[username]</SAMP></TD>
+<TD>Имя пользователя. Если не задано, используется текущий логин.</TD></TR>
+<TR><TD><SAMP>-v, --verbose</SAMP></TD>
+<TD>Вывести подробную информацию относительно различных стадий выполнения
+    mysqldump.</TD></TR>
+<TR><TD><SAMP>-P, --port=[port]</SAMP></TD>
+<TD>Порт для связи.</TD></TR>
+<TR><TD><SAMP>-V, --version</SAMP></TD>
+<TD>Информация о версии.</TD></TR></TABLE>
+
+<P>Вы можете направить вывод mysqldump в клиентскую программу MySQL, чтобы
+   копировать базу данных. ПРИМЕЧАНИЕ: Вы должны убедиться, что база данных
+   не изменяется в это время, иначе Вы получите противоречивую копию!
+
+<P><B>ПРИМЕР:</B><p>
+<SAMP>mysqladmin create foo<BR>
+mysqldump mysql | mysql foo</SAMP>
+
+<P><HR WIDTH="100%">
+<CENTER><H2><A NAME="Mysqlshow">mysqlshow</A></H2></CENTER>
+Показать информацию о сервере, базе данных или таблице.
+
+<P><B>СИНТАКСИС:</B>
+<P><UL><SAMP>mysqlshow [OPTIONS] [database [table [field]]]</SAMP></UL>
+
+<P><B>ОПИСАНИЕ:</B>
+<P><UL>Программа <SAMP>mysqlshow</SAMP> может использоваться, чтобы показать,
+с какими базами данных MySQL работает, какие таблицы данная база данных
+содержит, и какие поля есть в таблице в данной базе данных.</UL>
+
+<P>Программа <SAMP>mysqlshow</SAMP> поддерживает следующие параметры (Вы
+можете использовать короткую или подробную версию):
+
+<P><TABLE border=1>
+<TR><TD><SAMP>-#, --debug=[options] </SAMP></TD>
+<TD>Вывести в протокол отладочную информацию. В общем виде 'd:t:o,filename`.
+    Подробности в главе о <A HREF="app2.shtml">библиотеке отладки</A>.
+    <FONT SIZE=-1>Как мне надоела эта опция...</FONT></TD></TR>
+<TR><TD><SAMP>-?, --help</SAMP></TD>
+<TD>Справка.</TD></TR>
+<TR><TD><SAMP>-h, --host=[hostname]</SAMP></TD>
+<TD>Связаться с сервером hostname.</TD></TR>
+<TR><TD><SAMP>-k, --key</SAMP></TD>
+<TD>Вывести ключ(и) для таблиц(ы).</TD></TR>
+<TR><TD><SAMP>-p, --password=[password]</SAMP></TD>
+<TD>Пароль пользователя, для соединения с сервером MySQL. Обратите внимание,
+    что не должно быть пробела между -p и паролем.</TD></TR>
+<TR><TD><SAMP>-u, --user=[username]</SAMP></TD>
+<TD>Имя пользователя. Если не задано, используется текущий логин.</TD></TR>
+<TR><TD><SAMP>-P, --port=[port]</SAMP></TD>
+<TD>Порт для связи.</TD></TR>
+<TR><TD><SAMP>-V, --version</SAMP></TD>
+<TD>Информация о версии.</TD></TR></TABLE><BR>
+
+<SAMP>mysqlshow</SAMP> без аргументов покажет все базы данных.
+<SAMP>mysqlshow</SAMP> с именем базы данных покажет все таблицы в ней.
+<SAMP>mysqlshow</SAMP> с именем базы данных и именем таблицы покажет схему
+этой таблицы.
+
+<P>Если последний параметр содержит '?' или '*', то они используются как
+   подстановочные знаки.
+
+<P><B>ПРИМЕР:</B>
+<P><SAMP>mysqlshow test 'a*'</SAMP><BR>
+показать список всех таблиц в базе данных test, начиная с 'a'.
+
+<P><SAMP>mysqlshow</SAMP> по существу идентичен программе mSQL msqlshow. СУБД
+MySQL обеспечивает, подобные функциональные возможности посредством команд
+языка SQL <A HREF="sql.shtml#Show">SHOW</A> и <A HREF="sql.shtml#Desc">DESCRIBE
+</A>.
+
+<HR WIDTH="100%">
+<CENTER><H2><A NAME="Isamchk">isamchk</H2></A></CENTER>
+Проверка, восстановление, управление и сбор статистики по таблицам MySQL.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+isamchk [-?adeiqrsvwzIV] [-k #] [-O xxxx=size] [-Si] [-Sr #]
+        [-O keybuffer=#] [-O readbuffer=#] [-O writebuffer=#]
+        [-O sortbuffer=#] [-O sort_key_blocks=#] files
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P><UL>Программа <SAMP>isamchk</SAMP> используется для проверки
+непротиворечивости таблиц и устранения любых проблем, которые это может
+вызвать. Isamchk может также использоваться, чтобы усилить таблицы в базах
+данных, которые содержат BLOB или поля символов переменной длины. Это
+необходимо только, если Вы часто добавляете и удаляете записи из этих таблиц.
+
+<P>Необходимо остановить СУБД MySQL перед запуском isamchk с единственным
+переключателем <SAMP>-r</SAMP>.
+
+<P>Вообще, используйте переключатель <SAMP>-rq</SAMP> для ремонта таблицы,
+потому что он выполняет "оперативный" ремонт. Для такого ремонта не нужно
+временного места в памяти, таким образом он проходит быстро, так как isamchk
+не копирует файл данных.
+
+<P>Перед началом работы, надо перейти в каталог с таблицей, которая нуждается
+в проверке и/или ремонте. В общем случае, это $DATADIR/DBNAME.</UL>
+
+<P>Опции программы <SAMP>isamchk</SAMP>:
+<P><TABLE border=1>
+<TR><TD><SAMP>-# </SAMP></TD>
+<TD>Вывести в протокол отладочную информацию. В общем виде 'd:t:o,filename`.
+    Подробности в главе о <A HREF="app2.shtml">библиотеке отладки</A>.</TD>
+    </TR>
+<TR><TD><SAMP>-?</SAMP></TD>
+<TD>Справка.</TD></TR>
+<TR><TD><SAMP>-a</SAMP></TD>
+<TD>Анализ. Используется для для оптимизации размещения таблиц.</TD></TR>
+<TR><TD><SAMP>-d</SAMP></TD>
+<TD>Информация о таблице.</TD></TR>
+<TR><TD><SAMP>-e</SAMP></TD>
+<TD>Расширенная проверка. При запуске с этой опцией надо остановить демон
+    mysqld.</TD></TR>
+<TR><TD><SAMP>-f</SAMP></TD>
+<TD>Принудительно создать временный файл. Эта опция вызовет <NOBR>
+    'isamchk -r'</NOBR>, если таблица разрушена.</TD></TR>
+<TR><TD><SAMP>-k#</SAMP></TD>
+<TD>Используемые ключи.</TD></TR>
+<TR><TD><SAMP>-i</SAMP></TD>
+<TD>Дополнительная информация.</TD></TR>
+<TR><TD><SAMP>-q</SAMP></TD>
+<TD>Быстрая проверка.</TD></TR>
+<TR><TD><SAMP>-r[o]</SAMP></TD>
+<TD>Восстановление, Эта опция также уплотнит внутренние индексы B-Tree,
+    используемые MySQL. Используйте эту опцию, чтобы уменьшить место,
+    занимаемое таблицей, за счет удаления неиспользуемых индексов.</TD></TR>
+<TR><TD><SAMP>-s</SAMP></TD>
+<TD>Работать молча.</TD></TR>
+<TR><TD><SAMP>-u</SAMP></TD>
+<TD>Распаковать упакованный файл.</TD></TR>
+<TR><TD><SAMP>-v</SAMP></TD>
+<TD>Подробный вывод. Используется вместе с другими параметрами, чтобы
+    получить большее количество информации. Можно задать большее количество
+    символов v для повышения объема выдаваемой информации (например, vv).
+    </TD></TR>
+<TR><TD><SAMP>-w</SAMP></TD>
+<TD>Ждать, если таблица заблокирована.</TD></TR>
+<TR><TD><SAMP>-I</SAMP></TD>
+<TD>Справка.</TD></TR>
+<TR><TD><SAMP>-S[ir]#</SAMP></TD>
+<TD>Сортировать индекс/записи по ключу #. Эта опция оптимизирует размещение
+    данных в таблице.</TD></TR>
+<TR><TD><SAMP>-V</SAMP></TD>
+<TD>Информация о версии.</TD></TR>
+<TR><TD><SAMP>-O var=#</SAMP></TD>
+<TD>Опция оптимизации var=#[k][m]</TD></TR></TABLE>
+
+<BR>Можно использовать вторую опцию '<SAMP>-q</SAMP>', чтобы использовать
+старый файл данных. <SAMP>-ro</SAMP> использует старый метод восстановления:
+медленнее, но надежнее <SAMP>-r</SAMP>. <SAMP>-r</SAMP> может исправить
+почти все ошибки, кроме уникальных ключей, которые оказались все же не
+уникальными. УБЕДИТЕСЬ, ЧТО ДЕМОН MYSQLD НЕ ЗАПУЩЕН, ЕСЛИ ИСПОЛЬЗУЕТЕ ЭТУ
+ОПЦИЮ! Если <SAMP>-f</SAMP> задан при проверке таблицы, то таблицы с ошибками
+будут автоматически исправлены.
+
+<P>Имеется несколько примеров. См. <A HREF="admin.shtml#Table_Details">Подробно
+о таблицах</A>.
+
+<P><B>ПРИМЕРЫ:</B>
+<P><TABLE border=1>
+<TR><TD><SAMP>isamchk -r [table_name]</SAMP></TD>
+<TD>Убрать все дырки, которые сформировались из-за использования BLOBS или
+    VARCHARS. Также установить какие еще есть проблемы.</TD></TR>
+<TR><TD><SAMP>isamchk -ei [table_name]</SAMP></TD>
+<TD>Проверить таблицу и отобразить статистику.</TD></TR>
+<TR><TD><SAMP>isamchk [table_name]</SAMP></TD>
+<TD>Найти большинство ошибок.</TD></TR>
+<TR><TD><SAMP>isamchk -rq [table_name]</SAMP></TD>
+<TD>Обновить только индексный файл. Быстро, но не исправляет ошибки в файле
+    данных.</TD></TR>
+<TR><TD><NOBR><SAMP>isamchk -d -v [table_name]</SAMP></TD>
+<TD>Описание таблицы.</TD></TR>
+<TR><TD><SAMP>isamchk -rq -Si [table_name]</SAMP></TD>
+<TD>Полная оптимизация таблицы [table_name]. Надолго...</TD></TR></TABLE>
+
+<P><HR WIDTH="100%">
+<CENTER><H2><A NAME="Isamlog">isamlog</H2></A></CENTER>
+Получение статистики, и использование isam-журналов.
+
+<P><B>СИНТАКСИС:</B>
+<PRE>
+isamlog [-?iruvIV] [-c #] [-f #] [-p #] [-F filepath/] [-o #]
+        [-R file recordpos] [-w write_file] [log-filename]
+</PRE>
+
+<B>ОПИСАНИЕ:</B><P>
+<UL>Эта программа используется вместе с опцией <NOBR><SAMP>
+--log-isam=file_name</SAMP></NOBR> демона <CODE>mysqld</CODE>.
+
+<P>Файл <SAMP>file_name</SAMP> будет хранить протокол всех изменений для
+всех таблиц. Программа isamlog может быть использована для получения
+информации об этом файле и обновить все таблицы и базы данных.
+
+<P>Чтобы восстановить базу данных, нужна копия, которая содержит вашу базу
+данных до того, как mysqld сгенерировал ISAM журнал, или полный набор
+ISAM журналов с начала работы вашей базы данных.</UL>
+
+<P><TABLE border=1>
+<TR><TD>-? or -I</TD>
+<TD>Справка.</TD></TR>
+<TR><TD>-V </TD>
+<TD>Информация о версии.</TD></TR>
+<TR><TD>-c # </TD>
+<TD>Выполнить только # команд.</TD></TR>
+<TR><TD>-f #</TD>
+<TD>Максимальное число открытых файлов. Если откроется больше чем # файлов,
+    то лишние будут автоматически закрыты и вновь открыты по мере
+    необходимости.</TD></TR>
+<TR><TD>-F [path]</TD>
+<TD>Файл протокола ISAM содержит полный путь к таблицам. Вы можете
+    использовать эту опцию, чтобы отменить сохраненный путь.
+
+<P><B>ПРИМЕР:</B>
+<P>-F '/var/mirror/' заставит isamlog работать с файлами в /var/mirror, а не
+с теми, которые указаны в сохраненном пути.</TD></TR>
+<TR><TD>-i</TD>
+<TD>Вывести более детальную информацию.</TD></TR>
+<TR><TD>-o #</TD>
+<TD>Начать со смещения #.</TD></TR>
+<TR><TD>-p #</TD>
+<TD>Удалить # компонент из пути.</TD></TR>
+<TR><TD>-r</TD>
+<TD>Игнорировать все ошибки, с которыми сталкиваемся в течение модификаций.
+</TD></TR>
+<TR><TD>-R</TD>
+<TD>Указать позицию в файле ISAM, о которой надо выдать сведения.
+
+<P><B>ПРИМЕР:</B><P>
+<CODE>isamlog -R /usr/local/data/mysql/user.ISM 1234</CODE>
+<P>Выведет все изменения в таблице /usr/local/data/mysql/user, которые
+найдены в позиции 1234. Это полезно для ситуаций, в которых Вы имеете
+разрушенную запись в известной позиции. Вы, возможно, получили эту
+информацию посредством <NOBR>isamlog -vvv</NOBR> или из isamchk.
+
+<P>Если Вы укажете позицию -1, будут обработаны все записи.</TD></TR>
+<TR><TD>-u</TD>
+<TD>Пытаться модифицировать все таблицы. Остановиться, если встречена ошибка.
+</TD></TR>
+<TR><TD>-v </TD>
+<TD>Подробный вывод. Можно задать большее количество символов v для повышения
+    объема выдаваемой информации (например, vv).</TD></TR>
+<TR><TD>-w [filename]</TD>
+<TD>Записать все записи вставленные или измененные опцией -R в [filename].
+    Эта опция может использоваться, чтобы получить двоичный файл всех
+    вставок и модификаций конкретной таблицы для использования в отладке.
+</TD></TR></TABLE>
+
+<HR WIDTH="100%">
+<CENTER><H2><A NAME="Safe_mysqld">safe_mysqld</H2></A></CENTER>
+Скрипт для запуска демона mysqld.
+
+<P><B>СИНТАКСИС:</B>
+<P><UL><SAMP>safe_mysqld [options to mysqld]</SAMP></UL>
+
+<P><B>ОПИСАНИЕ:</B>
+<P><UL>Этот скрипт обычно выполняется при начальной загрузке, чтобы запустить
+mysqld. Если Вы не хотите, чтобы ваш DATADIR был помещен в иерархии каталога
+MySQL, что и mysqld, Вы должны подправить DATADIR в этом скрипте.</UL>
+
+<HR WIDTH="100%">
+<CENTER><H2><A NAME="NonCore">Дополнительные команды</A></H2></CENTER>
+
+<P><CENTER><H2><A NAME="Comp_Err">comp_err</A></H2></CENTER>
+Генерирует файлы сообщений об ошибках на национальном языке.
+
+<P><B>СИНТАКСИС:</B>
+<P><SAMP>comp_err [-?] [-I] [-V] fromfile[s] tofile</SAMP>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Эта программа используется для компиляции текстовых файлов которые
+содержат соответствие между кодами ошибок mysql и текстовыми сообщениями об
+этих ошибках в формат, который понимает mysql. Это нужно для изменения уже
+существующего файла сообщений или генерации такого файла для другого языка.
+
+<P><B>ПРИМЕР:</B>
+<P><SAMP>comp_err share/english/errmsg.txt share/english/errmsg.sys</SAMP>
+
+<P><HR WIDTH="100%">
+<CENTER><H2><A NAME="Msql2mysql">msql2mysql</A></H2></CENTER>
+Выполняет начальное преобразование mSQL скрипта в MySQL.
+
+<P><B>СИНТАКСИС:</B>
+<P><UL><SAMP>msql2mysql [filename]</SAMP></UL>
+
+<B>ОПИСАНИЕ:</B>
+<P><UL>Скрипт msql2mysql используется как первый шаг при портировании msql
+скриптов в MySQL. Просто введите:
+<BR><KBD>msql2mysql something.c >something.mysql.c'</KBD>
+
+<BR>Вам придется, конечно, многое исправить, но это хорошее начало. Подробнее
+о портировании mSQL-кода в MySQL рассказано <A HREF="app3.shtml">здесь</A>.
+
+<P>Программа <SAMP>msql2mysql</SAMP> - фактически довольно простой скрипт,
+который использует команду <SAMP>replace</SAMP>, которая поставляется с СУБД
+MySQL, чтобы заменить mSQL обращения к функции на их MySQL эквиваленты.
+Меняются только имена, дополнительные параметры не добавляются.</UL>
+
+<HR WIDTH="100%">
+<CENTER><H2><A NAME="Mysqlbug">mysqlbug</A></H2></CENTER>
+Генерирует отчет об ошибках.
+
+<P><B>СИНТАКСИС:</B>
+<P><UL><SAMP>mysqlbug [address]</SAMP></UL>
+
+<P><B>ОПИСАНИЕ:</B>
+<P><UL>Пожалуйста используйте этот скрипт при сообщении об ошибках в MySQL.
+Он генерирует форму для Вас, которую для заполнения помещает в любой
+текстовый редактор, указанный в переменной $VISUAL (Vi по умолчанию). Форма
+будет содержать автоматически сгенерированную информацию относительно вашей
+системы, включая версии OS и MySQL и архитектуру. Когда Вы закончите, форма
+будет отправлена по почте в список рассылки MySQL. Вы можете факультативно
+определять альтернативный адрес на который следует послать сообщение об
+ошибке, определяя [адрес].</UL>
+
+<CENTER><H2><A NAME="Perror">perror</A></H2></CENTER>
+Выводит короткое текстовое объяснение числового кода ошибки.
+
+<P><B>СИНТАКСИС:</B>
+<P><PRE>
+
+$ perror [-?vIV] [errorcodes]
+
+</PRE>
+
+<P><B>ОПИСАНИЕ:</B>
+<P><UL>Программа perror предоставляет короткие текстовые объяснения числовых
+кодов ошибок, возвращаемых системой или СУБД MySQL.</UL>
+
+<P>Программа perror поддерживает опции:
+<P><TABLE border=1>
+<TR><TD>-? or -I</TD>
+<TD>Справка.</TD></TR>
+<TR><TD>-v</TD>
+<TD>Подробная информация.</TD></TR>
+<TR><TD>-V</TD>
+<TD>Информация о версии.</TD></TR></TABLE>
+
+<P><HR WIDTH="100%">
+<CENTER><H2><A NAME="Replace">replace</H2></A></CENTER>
+<P><B>СИНТАКСИС:</B>
+<P><UL><SAMP>replace [-?svIV] from to from to ... -- [files]</SAMP></UL>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Программа program используется скриптом msql2mysql. Replace может быть
+использована для замены строки на месте в файле или получать строку через
+канал (пайп), производить замену и выводить результат в STDOUT.
+
+<P>Допустимы следующие опции:
+<P><TABLE border=2>
+<TR><TD><SAMP>-?</SAMP></TD>
+<TD>Справка.</TD></TR>
+<TR><TD><SAMP>-s</SAMP></TD>
+<TD>Работать молча (никаких статусных сообщений).</TD></TR>
+<TR><TD><SAMP>-v</SAMP></TD>
+<TD>Подробная информация о ходе работы (выводить дополнительные сообщения).
+</TD></TR></TABLE>
+
+<P><B>ПРИМЕРЫ:</B>
+<P><KBD>replace Apple Orange somefile</KBD>
+<P>Заменит все вхождения Apple на Orange в файле somefile.
+
+<P><KBD>cat INFILE | replace Apple Orange Blimp Train &gt; OUTFILE</KBD>
+<P>Все вхождения Apple в файле INFILE будут заменены на Orange и результат
+выведен в файл OUTFILE. В то же время, все вхождения Blimp в файле INFILE
+будут заменены на Train и тоже выведены в файл OUTFILE. Таким образом,
+можно заменять более чем одно выражение за один проход.
+
+<P>Вы можете использовать специальные символы во входных строках:
+<P><TABLE border=1>
+<TR><TD>\^</TD>
+<TD>Соответствует началу строки.</TD></TR>
+<TR><TD>\$</TD>
+<TD>Соответствует концу строки.</TD></TR>
+<TR><TD>\b</TD>
+<TD>Соответствует пробелу. Может появляться или отдельно, или в начале,
+    или в конце лексемы. Если \b используется в конце лексемы, следующие
+    замены начнутся после пробела. \b соответствует только пробелу.</TD></TR>
+</TABLE>
+
+<P>Replace простая и очень полезная утилита с большими потенциальными
+   возможностями использования в MySQL.
+
+<P><HR WIDTH="100%">
+<CENTER><H2><A NAME="which1">which1</H2></A></CENTER>
+<P>Найти команду.
+
+<P><B>СИНТАКСИС:</B>
+<P><UL><SAMP>which1 [cmd]</SAMP></UL>
+
+<P><B>ОПИСАНИЕ:</B>
+<P><UL>Эта команда, вероятно, полезна только на системах, которые не имеют,
+команды which, встроенной в оболочку, или доступной как команда. Выводит
+только первую найденную команду.</P></UL>
+
+<HR WIDTH="100%">
+<CENTER><H2><A NAME="zap">zap</H2></A></CENTER>
+Послать сигнал процессу, который соответствует образцу.
+
+<P><B>СИНТАКСИС:</B>
+<P><UL><SAMP>zap [-signal] [-?Ift] pattern</SAMP></UL>
+
+<P><B>ОПИСАНИЕ:</B>
+<P><UL>По умолчанию <CODE>zap</CODE> запросит подтверждение для каждого
+подходящего процесса.</UL>
+
+<P><B>ПРИМЕР:</B>
+<P><TABLE border=0 cellpadding=10 bgcolor=black><TR><TD>
+<PRE>
+
+<FONT COLOR=green>prompt> zap -t "my"</FONT><FONT COLOR=white>
+UID   PID  PPID  C    STIME TTY      TIME CMD
+root  1217     1  1 15:21:30 pts/4    0:00 /bin/sh /usr/local/pkg/mysql-3.20.15/bin/safe_mysqld
+root  1224  1217  3 15:21:32 pts/4    0:01 /usr/local/pkg/mysql-3.20.15/libexec/mysqld -b /usr/local/pkg/mysql-3.20.15 -h
+</FONT></PRE></TD></TR></TABLE>
+
+<P>Программа zap поддерживает опции:
+<P><TABLE border=1>
+<TR><TD>-I or -? </TD>
+<TD>Справка.</TD></TR>
+<TR><TD>-f</TD>
+<TD>Послать сигнал без запроса подтверждения.</TD></TR>
+<TR><TD>-t</TD>
+<TD>Вывести список процессов, соответствующих образцу, но не сигнал им не
+    посылать.</TD></TR></TABLE>
+
+<P>В качестве сигнала допускается любой сигнал системы unix. По умолчанию
+   сигнал = 9 (завершить процесс).
+
+<P>В заключение хочется попросить Вас, если Вам понравилась эта страничка или
+пригодилась изложенная здесь информация,
+<A href="mailto:rldp@ftp.botik.ru?subject=Спасибо!&body=Спасибо за
+работу!">послать благодарность автору.</A> Это поможет мне
+вести статистику того, скольким людям пригодилось хоть что-то из моих трудов.
+
+<P><A href="commands.shtml">Локальное оглавление.</A>
+<P><A href="mysqlrus.shtml">На главную страничку.</A>
+
+</TD></TR></TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>
+

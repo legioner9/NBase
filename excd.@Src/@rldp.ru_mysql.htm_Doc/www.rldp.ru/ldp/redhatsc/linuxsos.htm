@@ -1,0 +1,486 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <title>Безопасность и оптимизация Linux. Редакция для Red Hat.</title>
+</head>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1>Безопасность и оптимизация Linux. Редакция для Red Hat</h1>
+<p><strong>Copyright 1999-2000 Gerhard Mourani,
+Open Network Arglavaitecture and OpenDocs Publishing</strong>
+<p><table width=75%><tr><td valign=bottom><b>
+<font size="-1">Title: Securing and Optimizing Linux:<br>
+Red Hat Edition<br>
+ISBN: 0-9700330-0-1<br>
+Author's: Gerhard Mourani<br>
+Mail: <a href="mailto: gmourani@openna.com">gmourani@openna.com</a><br>
+Page Count: 486<br>
+Version: 1.3<br>
+Last Revised: June 07, 2000<br>
+Перевод: <a href="rldp_40ftp.botik.ru">Алексей Паутов</a> в рамках
+проекта Russian LDP.<br>
+Оригинал перевода лежит на сервере <a href="../../../www.botik.ru/~rldp">
+http://www.botik.ru/~rldp</a></font></b></td></tr></table>
+
+<h3>От переводчика</h3>
+<p>Ваши замечания и предложения по переводу этой книги я приму по e-mail
+<a href="mailto:rldp@ftp.botik.ru">rldp@ftp.botik.ru</a>. Примеры
+конфигурационных файлов, приведенные в этой книге, лежат на оригинальном
+сервере этой книги (<a href="../../../www.openna.com/books/floppy.tgz">
+http://www.openna.com/books/floppy.tgz</a>). Вы можете свободно копировать
+перевод этой книги, но при этом обязательно нужно оставить ссылку на сервер
+проекта Russian LDP (<a href="../../../www.botik.ru/~rldp">
+http://www.botik.ru/~rldp</a>), как место хранения его оригинала. Английскую
+версию книги можно получить на сервере <a href="../../../www.openna.com/default.htm">
+http://www.openna.com</a>.</p>
+
+<h1>Оглавление</h1>
+<h2><a href="introd.htm" name="intr">Введение</a></h2>
+<a href="introd.htm#1">Кому предназначена эта книга</a><br>
+<a href="introd.htm#2">На чем основываются все инструкции по инсталляции</a>
+<br>
+<a href="introd.htm#3">О программах, представленных в книге</a><br>
+<a href="introd.htm#4">Получение книги и файлов конфигурации</a><br>
+<a href="introd.htm#5">Замечание об авторском праве</a><br>
+<a href="introd.htm#6">Уведомление</a><br>
+<a href="introd.htm#7">GPG Public Key для Gerhard Mourani</a>
+
+<h2>Часть I. Рекомендации, связанные с инсталляция</h2>
+<h3>Глава 1. <a href="glava01.htm" name="1">Введение в Linux</a></h3>
+<a href="glava01.htm#1">Что такое Linux</a><br>
+<a href="glava01.htm#2">Несколько причин использовать Linux</a><br>
+<a href="glava01.htm#3">Позвольте рассеять несколько опасений и
+сомнений относительно Linux</a>
+
+<h3>Глава 2. <a href="glava02.htm" name="2">Инсталляция Вашего Linux-сервера
+</a></h3>
+<a href="glava02.htm#1">Определите Ваше аппаратное обеспечение</a><br>
+<a href="glava02.htm#2">Создайте загрузочный и корневой диски</a><br>
+<a href="glava02.htm#3">Классы и методы инсталляции</a><br>
+<a href="glava02.htm#4">Разбиение диска (Disk Druid)</a><br>
+<a href="glava02.htm#5">Компоненты инсталляции (выбор пакетов для инсталляции)
+</a><br>
+<a href="glava02.htm#6">Выбор индивидуальных пакетов</a><br>
+<a href="glava02.htm#7">Описания программ, которые должны быть
+деинсталлированы из соображений безопасности</a><br>
+<a href="glava02.htm#8">Как использовать команды RPM</a><br>
+<a href="glava02.htm#9">Запуск и остановка демонов</a><br>
+<a href="glava02.htm#10">Описание программы, которые должны быть удалены
+после инсталляции сервера</a><br>
+<a href="glava02.htm#11">Программы, которые должны быть установлены
+после инсталляции сервера</a><br>
+<a href="glava02.htm#12">Программы установленные на Вашем сервере.</a><br>
+<a href="glava02.htm#13">Добавьте цветов на Ваш терминал</a><br>
+<a href="glava02.htm#14">Обновление программ до их последних версий</a>
+
+<h2>Часть II. Рекомендации, связанные с безопасностью и оптимизацией</h2>
+<h3>Глава 3. <a href="glava03.htm" name="3">Общая системная безопасность.
+Общие вопросы безопасности Linux</a></h3>
+
+<h3>Глава 4. <a href="glava04.htm" name="4">Общая системная оптимизация.
+Общие вопросы оптимизации Linux</a></h3>
+<h3>Глава 5. <a href="glava05.htm" name="5">Конфигурирование и создание
+оптимизированных, безопасных ядер</a></h3>
+<a href="glava05.htm#1">Создание аварийной загрузочной дискеты</a><br>
+<a href="glava05.htm#2">Безопасность ядра</a><br>
+<a href="glava05.htm#3">Компиляция ядра</a><br>
+<a href="glava05.htm#4">Инсталляция нового ядра</a><br>
+<a href="glava05.htm#5">Удаление программ, файлов и
+строк, связанных с модулями</a><br>
+<a href="glava05.htm#6">Создание новой аварийной дискеты</a><br>
+<a href="glava05.htm#7">Создание аварийного загрузочного флоппи-диска</a><br>
+<a href="glava05.htm#8">Обновление /dev-входов</a>
+
+<h2>Часть III. Рекомендации, связанные с сетью</h2>
+<h3>Глава 6. <a href="glava06.htm" name="6">Управление TCP/IP-сетями</a></h3>
+<a href="glava06.htm#1">Инсталляция более одной Ethernet-карты
+на одной машине</a><br>
+<a href="glava06.htm#2">Файлы, связанные с функционированием сети</a><br>
+<a href="glava06.htm#3">Настройка TCP/IP-сети вручную из командной строки</a>
+
+<h3>Глава 7. <a href="glava07.htm" name="7">Сетевой брандмауэр</a></h3>
+<a href="glava07.htm#1">Linux IPCHAINS</a><br>
+<a href="glava07.htm#2">Создание ядра с поддержкой IPCHAINS</a><br>
+<a href="glava07.htm#3">Разъяснения некоторых правил, используемых в
+скриптах настройки брандмауэра</a><br>
+<a href="glava07.htm#4">Скрипт для настройки брандмауэра</a><br>
+<a href="glava07.htm#5">Конфигурация скрипта /etc/rc.d/init.d/firewall
+для веб-сервера</a><br>
+<a href="glava07.htm#6">Конфигурация скрипта /etc/rc.d/init.d/firewall
+для почтового сервера</a>
+
+<h3>Глава 8. <a href="glava08.htm" name="8">Сетевой брандмауэр с поддержкой
+маскарадинга и форвардинга</a></h3>
+<a href="glava08.htm#1">Маскарадинг и форвардинг в Linux</a><br>
+<a href="glava08.htm#2">Создание ядра с поддержкой маскарадинга и форвардинга
+</a><br>
+<a href="glava08.htm#3">Конфигурация скрипта /etc/rc.d/init.d/firewall
+для шлюза</a><br>
+<a href="glava08.htm#4">Запрещение доступа к некоторым адресам</a><br>
+<a href="glava08.htm#5">Административная утилита IPCHAINS</a>
+
+<h2>Часть IV. Рекомендации, связанные с программным обеспечением</h2>
+<h3>Глава 9. <a href="glava09.htm#0">Функциональные возможности компилятора
+</a></h3>
+<a href="glava09.htm#1">Необходимые пакеты</a><br>
+<a href="glava09.htm#2">Почему мы выбираем использование архивов?</a><br>
+<a href="glava09.htm#3">Компиляция программного обеспечения на Вашей системе
+</a><br>
+<a href="glava09.htm#4">Создание и инсталляция программ на Вашей системе</a>
+<br>
+<a href="glava09.htm#5">Редактирование файлов с помощью vi</a><br>
+<a href="glava09.htm#6">Некоторые последние комментарии</a>
+
+<h3>Глава 10. <a href="glava10.htm" name="10">Программы обеспечения
+безопасности (утилиты контроля)</a></h3>
+<b><a href="glava10.htm#1">Linux sXid</a></b><br>
+<a href="glava10.htm#2">Конфигурация</a><br>
+<a href="glava10.htm#3">Административная утилита sXid</a><br>
+<b><a href="glava10.htm#4">Linux Logglavaeck</a></b><br>
+<a href="glava10.htm#5">Конфигурация</a><br>
+<b><a href="glava10.htm#6">Linux PortSentry</a></b><br>
+<a href="glava10.htm#7">Конфигурация</a><br>
+<a href="glava10.htm#8">Запуск PortSentry</a>
+
+<h3>Глава 11. <a href="glava11.htm" name="11">Программы обеспечения
+безопасности (сетевые сервисы)</a></h3>
+<b><a href="glava11.htm#1">Linux OpenSSH клиент/сервер</a></b><br>
+<a href="glava11.htm#2">Конфигурация</a><br>
+<a href="glava11.htm#3">Настройка OpenSSH для использования с
+TCP-Wrappers inetd суперсервером</a><br>
+<a href="glava11.htm#4">Конфигурирование OpenSSH для каждого пользователя</a>
+<br>
+<a href="glava11.htm#5">Утилиты пользователя OpenSSH</a><br>
+<b><a href="glava11.htm#6">Linux SSH2 клиент/сервер</a></b><br>
+<a href="glava11.htm#7">Конфигурации</a><br>
+<a href="glava11.htm#8">Настройка SSH2 для использования с
+TCP-Wrappers inetd суперсервером</a><br>
+<a href="glava11.htm#9">Конфигурирование SSH2 для каждого пользователя</a>
+<br><a href="glava11.htm#10">Утилиты пользователя SSH2</a>
+
+<h3>Глава 12. <a href="glava12.htm" name="12">Программы обеспечения
+безопасности (целостность системы)</a></h3>
+<b><a href="glava12.htm#1">Linux Tripwire 2.2.1</a></b><br>
+<a href="glava12.htm#2">Конфигурации</a><br>
+<a href="glava12.htm#3">Организация защиты Tripwire для Linux</a><br>
+<a href="glava12.htm#4">Команды</a><br>
+<b><a href="glava12.htm#5">Linux Tripwire ASR 1.3.1</a></b><br>
+<a href="glava12.htm#6">Конфигурации</a><br>
+<a href="glava12.htm#7">Организация защиты Tripwire</a><br>
+<a href="glava12.htm#8">Команды</a>
+
+<h3>Глава 13. <a href="glava13.htm" name="13">Программы обеспечения
+безопасности (управление и ограничения)</a></h3>
+<b><a href="glava13.htm#1">Linux GnuPG</a></b><br>
+<a href="glava13.htm#2">Команды</a><br>
+<b><a href="glava13.htm#3">Установка поддержки квот на Вашей Linux-системе
+</a></b><br>
+<a href="glava13.htm#4">Создание ядра с поддержкой квот</a><br>
+<a href="glava13.htm#5">Модификация файла /etc/fstab</a><br>
+<a href="glava13.htm#6">Создание файлов quota.user и quota.group</a><br>
+<a href="glava13.htm#7">Назначение квот для пользователей и групп</a><br>
+<a href="glava13.htm#8">Команды</a>
+
+<h3>Глава 14. <a href="glava14.htm" name="14">Серверное программное
+обеспечение (BIND/сервис DNS)</a></h3>
+<a href="glava14.htm#2">Конфигурации</a><br>
+<a href="glava14.htm#3">Кэширующий сервер имен</a><br>
+<a href="glava14.htm#4">Основной сервер имен</a><br>
+<a href="glava14.htm#5">Вторичный сервер имен</a><br>
+<a href="glava14.htm#6">Организация защиты ISC BIND/DNS</a><br>
+<a href="glava14.htm#7">Административные средства DNS</a><br>
+<a href="glava14.htm#8">Утилиты пользователя DNS</a>
+
+<h3>Глава 15. <a href="glava15.htm" name="15">Серверное программное
+обеспечение (почтовый сервис)</a></h3>
+<b><a href="glava15.htm#1">Linux Sendmail сервер</a></b><br>
+<a href="glava15.htm#2">Конфигурации</a><br>
+<a href="glava15.htm#3">Организация защиты Sendmail</a><br>
+<a href="glava15.htm#4">Утилиты администратора Sendmail</a><br>
+<a href="glava15.htm#5">Утилиты пользователя Sendmail</a><br>
+<b><a href="glava15.htm#6">Linux Imap и Pop-сервер</a></b><br>
+<a href="glava15.htm#7">Конфигурации</a><br>
+<a href="glava15.htm#8">Настройка Imap и POP для использования с
+TCP-Wrappers inetd суперсервером</a><br>
+<a href="glava15.htm#9">Организация защиты IMAP/POP</a>
+
+<h3>Глава 16. <a href="glava16.htm" name="16">Серверное программное
+обеспечение (сетевой сервис шифрования)</a></h3>
+<b><a href="glava16.htm#1">Linux OPENSSL-сервер</a></b><br>
+<a href="glava16.htm#2">Конфигурации</a><br>
+<a href="glava16.htm#3">Команды</a><br>
+<a href="glava16.htm#4">Организация защиты Openssl</a><br>
+<b><a href="glava16.htm#5">Linux FreeS/WAN VPN</a></b><br>
+<a href="glava16.htm#6">Настройка секретного ключа RSA</a><br>
+<a href="glava16.htm#7">Требования по настройки сети для IPSec</a><br>
+<a href="glava16.htm#8">Тестирование инсталляции</a>
+
+<h3>Глава 17. <a href="glava17.htm" name="17">Серверное программное
+обеспечение (сервис баз данных)</a></h3>
+<b><a href="glava17.htm#1">Linux OpenLDAP-сервер</b></a><br>
+<a href="glava17.htm#2">Конфигурации</a><br>
+<a href="glava17.htm#3">Организация защиты OpenLDAP</a><br>
+<a href="glava17.htm#4">Утилиты создания и поддержки OpenLDAP</a><br>
+<a href="glava17.htm#5">Утилиты пользователя OpenLDAP</a><br>
+<a href="glava17.htm#6">Netscape Address Book клиент для LDAP</a><br>
+<b><a href="glava17.htm#7">Linux PostgreSQL Database Server</a></b><br>
+<a href="glava17.htm#8">Создание и инсталляция базы данных из-под
+пользователя Postgres</a><br>
+<a href="glava17.htm#9">Конфигурации</a><br>
+<a href="glava17.htm#10">Команды</a>
+
+<h3>Глава 18. <a href="glava18.htm" name="18">Серверное программное
+обеспечение (прокси-сервис)</a></h3>
+<b><a href="glava18.htm#1">Linux Squid Proxy Server</a></b><br>
+<a href="glava18.htm#2">Использование библиотеки GNU malloc для
+улучшения производительности Squid</a><br>
+<a href="glava18.htm#3">Конфигурации</a><br>
+<a href="glava18.htm#4">Организация защиты Squid</a><br>
+<a href="glava18.htm#5">Оптимизация Squid</a><br>
+<a href="glava18.htm#6">Утилита caglavaemgr.cgi</a><br>
+<a href="glava18.htm#7">Конфигурация Netscape для работы с
+прокси-сервером Squid</a>
+
+<h3>Глава 19. <a href="glava19.htm" name="19">Серверное программное
+обеспечение (веб-сервис)</a></h3>
+<a href="glava19.htm#1">Linux MM: библиотека совместно используемой памяти
+</a><br>
+<a href="glava19.htm#2">Веб-сервер Apache</a><br>
+<a href="glava19.htm#3">Конфигурации</a><br>
+<a href="glava19.htm#4">PHP4 язык скриптов стороны сервера</a><br>
+<a href="glava19.htm#5">Perl-библиотека CGI.pm</a><br>
+<a href="glava19.htm#6">Организация защиты Apache</a><br>
+<a href="glava19.htm#7">Запуск Apache с использованием chroot</a><br>
+<a href="glava19.htm#8">Оптимизация Apache</a>
+
+<h3>Глава 20. <a href="glava20.htm" name="20">Опциональные компоненты,
+устанавливаемые с веб-сервером Apache</a></h3>
+<b><a href="glava20.htm#1">Linux Webalizer</a></b><br>
+<a href="glava20.htm#2">Конфигурации</a><br>
+<a href="glava20.htm#3">Информирование Apache о выходном каталоге Webalizer
+</a><br>
+<a href="glava20.htm#4">Запуск Webalizer вручную в первый раз</a><br>
+<a href="glava20.htm#5">Запуск Webalizer автоматически при помощи cron</a>
+<br><b><a href="glava20.htm#6">Linux FAQ-O-Matic</a></b><br>
+<a href="glava20.htm#7">Информирование Apaglavae о месте расположения файлов
+Faq-O-Matic</a><br>
+<a href="glava20.htm#8">Настройка Вашей программы FAQ-O-Matic</a><br>
+<b><a href="glava20.htm#9">Linux Webmail IMP</a></b><br>
+<a href="glava20.htm#10">Установка PHPLib, который требуется программе Horde
+из Webmail IMP</a><br>
+<a href="glava20.htm#11">Настройка и создание SQL-базы данных Webmail IMP</a>
+<br>
+<a href="glava20.htm#12">Настройка Вашего конфигурационного файла php.ini из
+PHP4</a><br>
+<a href="glava20.htm#13">Настройка Apache на работу с Webmail IMP</a><br>
+<a href="glava20.htm#14">Настройка Webmail IMP из Вашего веб-браузера</a>
+
+<h3>Глава 21. <a href="glava21.htm" name="21">Серверное программное
+обеспечение (файловый сервис)</a></h3>
+<b><a href="glava21.htm#1">Linux Samba-сервер</a></b><br>
+<a href="glava21.htm#2">Конфигурации</a><br>
+<a href="glava21.htm#3">Создание файла с зашифрованными паролями для
+пользователей</a><br>
+<a href="glava21.htm#4">Организация защиты Samba</a><br>
+<a href="glava21.htm#5">Оптимизация Samba</a><br>
+<a href="glava21.htm#6">Административные средства Samba</a><br>
+<a href="glava21.htm#7">Утилиты пользователя Samba</a><br>
+<b><a href="glava21.htm#8">Linux FTP-сервер</b></a><br>
+<a href="glava21.htm#9">Настройка логина пользователя FTP без shell</a><br>
+<a href="glava21.htm#10">Настройка окружения пользователя под chroot</a><br>
+<a href="glava21.htm#11">Конфигурации</a><br>
+<a href="glava21.htm#12">Настройка ftpd для использования с
+TCP-Wrappers inetd суперсервером</a><br>
+<a href="glava21.htm#13">Административные средства FTP</a><br>
+<a href="glava21.htm#14">Организация защиты FTP</a>
+
+<h2>Часть V. Рекомендации, связанные с резервным копированием</h2>
+<h3>Глава 22. <a href="glava22.htm" name="22">Процедуры резервирования и
+восстановления данных</a></h3>
+<a href="glava22.htm#1">Резервное копирование и восстановление в Linux</a>
+<br>
+<b><a href="glava22.htm#2">Программа резервного копирования tar</a></b><br>
+<a href="glava22.htm#3">Создание резервных копий с помощью tar</a><br>
+<a href="glava22.htm#4">Автоматизация задачи резервного копирования с tar</a>
+<br><a href="glava22.htm#5">Восстановление файлов с tar</a><br>
+<b><a href="glava22.htm#6">Программа резервного копирования dump</a></b><br>
+<a href="glava22.htm#7">Создание резервных копий с dump</a><br>
+<a href="glava22.htm#8">Восстановление файлов с dump</a><br>
+<a href="glava22.htm#9">Резервное копирование и восстановление через сеть</a>
+
+<h2>Часть VI. Приложения</h2>
+<font size="+1">Приложение A. <a href="cha1.htm#1" name="a1">
+Советы, рекомендации и задачи администрирования</a></font><br>
+<font size="+1">Приложение B. <a href="cha2.htm#2" name="a2">
+Requests for Comments (RFC), упомянутые в книге</a></font>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</html>

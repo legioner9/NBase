@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Chaining-master\cat.Chaining-master\dir.Chaining-master.md">Chaining-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Chaining-master\README.md">README.md</a>
+        - *# Chaining with classes, ptototypes and functors

@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\abstraction\cat.abstraction\dir.abstraction.md">abstraction</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\abstraction\abstraction.md">abstraction.md</a>
+        - *##### [Abstraction](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/abstraction.html)

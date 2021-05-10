@@ -1,0 +1,1447 @@
+<HTML>
+<HEAD>
+  <TITLE>Манипуляции с данными: SELECT, INSERT, UPDATE, DELETE</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1><A NAME="Data_Manipulation">8 Манипуляции с данными: <CODE>SELECT</CODE>,
+<CODE>INSERT</CODE>, <CODE>UPDATE</CODE>, <CODE>DELETE</CODE></A></H1>
+
+<H2><A NAME="SELECT">8.1 Синтаксис <CODE>SELECT</CODE></A></H2>
+<PRE>
+SELECT [STRAIGHT_JOIN] [SQL_SMALL_RESULT] [SQL_BIG_RESULT]
+       [SQL_BUFFER_RESULT] [HIGH_PRIORITY] [DISTINCT|DISTINCTROW|ALL]
+       select_expression,...
+       [INTO {OUTFILE|DUMPFILE} 'file_name' export_options]
+       [FROM table_references [WHERE where_definition]
+       [GROUP BY {unsigned_integer|col_name|formula} [ASC|DESC], ...]
+       [HAVING where_definition]
+       [ORDER BY {unsigned_integer|col_name|formula} [ASC|DESC] ,...]
+       [LIMIT [offset,] rows] [PROCEDURE procedure_name]
+       [FOR UPDATE|LOCK IN SHARE MODE]]
+</PRE>
+
+<P><CODE>SELECT</CODE> используется, чтобы отыскать строки, выбранные из
+одной или большего количества таблиц. <CODE>select_expression</CODE>
+указывает столбцы, которые Вы хотите получить. <CODE>SELECT</CODE> может
+также использоваться, чтобы получить строки, вычисленные независимо от
+любой таблицы. Например:</P>
+<PRE>
+mysql&#62; SELECT 1 + 1;
+    -&#62; 2
+</PRE>
+
+<P>Все используемые ключевые слова должны быть даны точно в порядке,
+показанном выше. Например, предложение <CODE>HAVING</CODE> должно прийти
+после любого предложения <CODE>GROUP BY</CODE> и перед любым предложением
+<CODE>ORDER BY</CODE>.</P>
+
+<UL><LI><A NAME="IDX1317"></A><A NAME="IDX1318"></A>Выражение
+<CODE>SELECT</CODE> может применять псевдоним, используя <CODE>AS</CODE>.
+Псевдоним используется при задании в выражении имени столбца и может быть
+указан с предложениями <CODE>ORDER BY</CODE> или <CODE>HAVING</CODE>. Пример:
+<PRE>
+mysql&#62; select concat(last_name,', ',first_name) AS full_name
+                  from mytable ORDER BY full_name;
+</PRE>
+
+<LI>Предложение <CODE>FROM table_references</CODE> указывает таблицы, из
+которых надо отыскать строки. Если Вы называете больше, чем одну таблицу, Вы
+выполняете объединение. Для получения информации относительно синтаксиса
+объединения обратитесь к разделу "<A HREF="#JOIN">8.1.1 Синтаксис
+<CODE>JOIN</CODE></A>".
+
+<LI>Вы можете обратиться к столбцу как <CODE>col_name</CODE>,
+<CODE>tbl_name.col_name</CODE> или <CODE>db_name.tbl_name.col_name</CODE>. Вы
+не должны определять префикс <CODE>tbl_name</CODE> или
+<CODE>db_name.tbl_name</CODE> для ссылки столбца в инструкции
+<CODE>SELECT</CODE>, если ссылка однозначна. Подробности в разделе
+"<A HREF="glava03.htm#Legal_names">3.2 Имена баз данных, таблиц, индексов,
+столбцов и псевдонимов</A>", там есть примеры неоднозначности, которые
+требуют более явных форм ссылки.
+
+<LI><A NAME="IDX1319"></A><A NAME="IDX1320"></A>Ссылка таблицы может быть
+представлена псевдонимом <CODE>tbl_name [AS] alias_name</CODE>:
+<PRE>
+mysql&#62; select t1.name, t2.salary from employee AS t1, info AS t2
+           where t1.name = t2.name;
+mysql&#62; select t1.name, t2.salary from employee t1, info t2
+           where t1.name = t2.name;
+</PRE>
+
+<LI>Столбцы, выбранные для вывода, могут упоминаться в предложениях
+<CODE>ORDER BY</CODE> и <CODE>GROUP BY</CODE> использующими имена столбца,
+псевдонимы столбца или позицию столбца. Позиции столбца начинаются с 1:
+<PRE>
+mysql&#62; select college, region, seed from tournament
+           ORDER BY region, seed;
+mysql&#62; select college, region AS r, seed AS s from tournament
+           ORDER BY r, s;
+mysql&#62; select college, region, seed from tournament
+           ORDER BY 2, 3;
+</PRE>
+
+Чтобы сортировать в обратном порядке, добавьте к имени столбца в предложении
+<CODE>ORDER BY</CODE>, которым Вы сортируете, ключевое слово
+<CODE>DESC</CODE>. Значение по умолчанию: порядок возрастания, это может быть
+определено, явно используя ключевое слово <CODE>ASC</CODE>.
+
+<LI>Вы можете в предложении <CODE>WHERE</CODE> использовать любую из функций
+MySQL. Подробности в разделе "<A HREF="glava06.htm#Functions">6 Функции для
+использования в предложениях <CODE>SELECT</CODE> и <CODE>WHERE</CODE></A>".
+
+<LI>Предложение <CODE>HAVING</CODE> может обратиться к любому столбцу или
+псевдониму, именованному в <CODE>select_expression</CODE>. Это применяется в
+последнюю очередь прежде, чем элементы будут посланы пользователю, без
+оптимизации. Не используйте <CODE>HAVING</CODE> для элементов, которые должны
+быть в предложении <CODE>WHERE</CODE>. Например, не пишите это:
+<PRE>
+mysql&#62; select col_name from tbl_name HAVING col_name &#62; 0;
+</PRE>
+
+Пишите это взамен:
+<PRE>
+mysql&#62; select col_name from tbl_name WHERE col_name &#62; 0;
+</PRE>
+
+В MySQL Version 3.22.5 или позже Вы можете также писать запросы подобно этому:
+<PRE>
+mysql&#62; select user,max(salary) from users
+                  group by user HAVING max(salary)&#62;10;
+</PRE>
+
+В старых версиях MySQL Вы можете писать взамен это:
+<PRE>
+mysql&#62; select user,max(salary) AS sum from users
+           group by user HAVING sum&#62;10;
+</PRE>
+
+<LI><CODE>SQL_SMALL_RESULT</CODE>, <CODE>SQL_BIG_RESULT</CODE>,
+<CODE>SQL_BUFFER_RESULT</CODE>, <CODE>STRAIGHT_JOIN</CODE> и
+<CODE>HIGH_PRIORITY</CODE> представляют собой MySQL-расширения ANSI SQL92.
+
+<LI><CODE>HIGH_PRIORITY</CODE> даст <CODE>SELECT</CODE> более высокий
+приоритет, чем инструкциям, которые модифицируют таблицу. Вы должны
+использовать это только для запросов, которые являются очень быстрыми и
+должны быть выполнены сразу. Запрос <CODE>SELECT HIGH_PRIORITY</CODE>
+выполнится, если таблица блокирована для чтения, даже если имеется инструкция
+модификации, которая ждет таблицу.
+
+<LI><CODE>SQL_BIG_RESULT</CODE> может использоваться с <CODE>GROUP BY</CODE>
+или <CODE>DISTINCT</CODE>, чтобы сообщить оптимизатору, что набор результатов
+будет иметь много строк. В этом случае MySQL использует дисковые временные
+таблицы если необходимо. MySQL будет также, в этом случае, предпочитать
+сортировку временной таблицы с ключом на элементах <CODE>GROUP BY</CODE>.
+
+<LI><A NAME="IDX1321"></A>Если Вы используете <CODE>GROUP BY</CODE>, строки
+вывода будут сортироваться согласно <CODE>GROUP BY</CODE>, как будто Вы имели
+<CODE>ORDER BY</CODE> над всеми полями в <CODE>GROUP BY</CODE>. MySQL
+расширил <CODE>GROUP BY</CODE> так, что Вы можете также определять
+<CODE>ASC</CODE> и <CODE>DESC</CODE> для <CODE>GROUP BY</CODE>:
+<PRE>
+SELECT a,COUNT(b) FROM test_table GROUP BY a DESC
+</PRE>
+
+<LI>MySQL расширил использование <CODE>GROUP BY</CODE> так, чтобы позволить
+Вам выбирать поля, которые не упомянуты в предложении <CODE>GROUP BY</CODE>.
+Если Вы не получаете те результаты, которых Вы ожидаете от Вашего запроса,
+пожалуйста, прочитайте описание на <CODE>GROUP BY</CODE>. Подробности в
+разделе "<A HREF="glava14.htm#Group_by_functions">14 Функции для
+использования с предложением <CODE>GROUP BY</CODE></A>".
+
+<LI><CODE>SQL_BUFFER_RESULT</CODE> принудительно поместит результат во
+временную таблицу. Это поможет MySQL освободить блокированную таблицу
+пораньше и пригодится в случаях, где требуется длительное время, чтобы
+послать набор результатов пользователю.
+
+<LI><CODE>SQL_SMALL_RESULT</CODE> опция, специфичная для MySQL, может
+использоваться с <CODE>GROUP BY</CODE> или <CODE>DISTINCT</CODE>, чтобы
+сообщить оптимизатору, что набор результатов будет маленький. В этом случае
+MySQL использует быстрые временные таблицы, чтобы сохранить возникающую в
+результате таблицу вместо того, чтобы использовать сортировку.
+
+<LI><CODE>STRAIGHT_JOIN</CODE> заставляет оптимизатор соединять таблицы в том
+порядке, в котором они перечислены в предложении <CODE>FROM</CODE>. Вы можете
+использовать это, чтобы ускорить запрос, если оптимизатор соединяет таблицы в
+неоптимальном порядке.
+
+<LI>Предложение <CODE>LIMIT</CODE> может использоваться, чтобы ограничить
+число строк, возвращенных инструкцией <CODE>SELECT</CODE>. <CODE>LIMIT</CODE>
+берет один или два числовых параметра. Если два параметра заданы, первый
+определяет смещение первой строки, которая будет возвращена, второй
+определяет максимальное число строк. Смещение начальной строки 0 (не 1!):
+<PRE>
+mysql&#62; select * from table LIMIT 5,10;  # Вернуть строки 6-15
+</PRE>
+
+Если один параметр задан, он указывает максимальное число строк:
+<PRE>
+mysql&#62; select * from table LIMIT 5;     # Вернуть первые 5 строк
+</PRE>
+
+Другими словами, <CODE>LIMIT n</CODE> эквивалентно <CODE>LIMIT 0,n</CODE>.
+
+<LI><A NAME="IDX1322"></A>Форма <CODE>SELECT ... INTO OUTFILE
+'file_name'</CODE> пишет выбранные строки в файл. Он будет создан на сервере
+и не может уже существовать (среди других полезных свойств, это защищает от
+разрушения некоторыми шутниками файлов типа <TT>/etc/passwd</TT>). Вы должны
+иметь привилегию <STRONG>file</STRONG> на сервере, чтобы использовать эту
+форму вызова <CODE>SELECT</CODE>.
+
+<CODE>SELECT ... INTO OUTFILE</CODE> главным образом предназначен для того,
+чтобы позволить Вам очень быстро сделать дамп таблицы на сервере. Если Вы
+хотите создавать возникающий в результате файл на некотором другом
+компьютере, Вы не можете использовать <CODE>SELECT ... INTO OUTFILE</CODE>. В
+этом случае Вы должны взамен использовать какую-нибудь программу-клиента,
+подобную <CODE>mysqldump --tab</CODE> или <CODE>mysql -e "SELECT ..." &#62;
+outfile</CODE>, чтобы генерировать файл.
+
+<CODE>SELECT ...  INTO OUTFILE</CODE> дополнение синтаксиса <CODE>LOAD DATA
+INFILE</CODE>. Синтаксис для части инструкции <CODE>export_options</CODE>
+состоит из тех же самых предложений <CODE>FIELDS</CODE> и <CODE>LINES</CODE>,
+которые используются с инструкцией <CODE>LOAD DATA INFILE</CODE>. Подробности
+в разделе "<A HREF="#LOAD_DATA">8.9 Синтаксис <CODE>LOAD DATA
+INFILE</CODE></A>". В возникающем в результате текстовом файле только
+следующие символы закодированы через символ <CODE>ESCAPED BY</CODE>:
+
+<UL><LI>Сам символ <CODE>ESCAPED BY</CODE>
+<LI>Первый символ в <CODE>FIELDS TERMINATED BY</CODE>
+<LI>Первый символ в <CODE>LINES TERMINATED BY</CODE></UL>
+
+Дополнительно <CODE>ASCII 0</CODE> будет преобразован в <CODE>ESCAPED
+BY</CODE>, сопровождаемый 0 (<CODE>ASCII 48</CODE>).
+
+Причина для вышеупомянутого в том, что Вы ДОЛЖНЫ выйти из любых символов
+<CODE>FIELDS TERMINATED BY</CODE>, <CODE>ESCAPED BY</CODE> или <CODE>LINES
+TERMINATED BY</CODE>, чтобы надежно читать файл обратно. <CODE>ASCII 0</CODE>
+экранирован, чтобы сделать это проще. Поскольку возникающий в результате файл
+не должен соответствовать SQL-синтаксису, ничто иное не должно
+экранироваться. Пример получения файла в формате, используемом многими
+довольно старыми программами:
+<PRE>
+SELECT a,b,a+b INTO OUTFILE "/tmp/result.text"
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY "\n"
+FROM test_table;
+</PRE>
+
+<LI><A NAME="IDX1323"></A>Если Вы используете <CODE>INTO DUMPFILE</CODE>
+вместо <CODE>INTO OUTFILE</CODE>, MySQL будет только писать одну строку в
+файл, без любого выравнивания или экранировки управляющих символов. Это
+полезно, если Вы хотите сохранять blob в файле.
+
+<LI>Обратите внимание, что любой файл, созданный <CODE>INTO OUTFILE</CODE> и
+<CODE>INTO DUMPFILE</CODE> будет читаемым для всех пользователей! Причина в
+том, что сервер MySQL не может создавать файл, который принадлежит кому-либо
+другому, а не пользователю, который запустил сервер. Вы не должны никогда
+выполнять <CODE>mysqld</CODE> как root!), файл должен быть доступен на чтение
+всем желающим, чтобы Вы могли получать из него строки.
+
+<LI>Если Вы используете <CODE>FOR UPDATE</CODE> с драйвером таблиц,
+поддерживающем блокировки страницы/столбца, нужные столбцы будут
+заблокированы для записи.</UL>
+
+<H4><A NAME="JOIN">8.1.1 Синтаксис <CODE>JOIN</CODE></A></H4>
+<P>MySQL поддерживает следующие синтаксисы <CODE>JOIN</CODE> для применения в
+операторе выбора <CODE>SELECT</CODE>:</P>
+<PRE>
+table_reference, table_reference
+table_reference [CROSS] JOIN table_reference
+table_reference INNER JOIN table_reference join_condition
+table_reference STRAIGHT_JOIN table_reference
+table_reference LEFT [OUTER] JOIN table_reference join_condition
+table_reference LEFT [OUTER] JOIN table_reference
+table_reference NATURAL [LEFT [OUTER]] JOIN table_reference
+{ oj table_reference LEFT OUTER JOIN table_reference ON conditional_expr }
+table_reference RIGHT [OUTER] JOIN table_reference join_condition
+table_reference RIGHT [OUTER] JOIN table_reference
+table_reference NATURAL [RIGHT [OUTER]] JOIN table_reference
+</PRE>
+
+<P>Здесь <CODE>table_reference</CODE> определен как:</P>
+<PRE>
+table_name [[AS] alias] [USE INDEX (key_list)] [IGNORE INDEX (key_list)]
+</PRE>
+
+<P>а <CODE>join_condition</CODE> как:</P>
+<PRE>
+ON conditional_expr |
+USING (column_list)
+</PRE>
+
+<P>Вы никогда не должны иметь никаких условий в части <CODE>ON</CODE>,
+которые используются, чтобы ограничить то, какие строки Вы получите в наборе
+результатов. Если Вы хотите оговорить то, которые строки должны быть в
+результате, Вы должны делать это в предложении <CODE>WHERE</CODE>.</P>
+
+<P>Обратите внимание, что в версиях до Version 3.23.17 <CODE>INNER
+JOIN</CODE> не обрабатывал <CODE>join_condition</CODE>!</P>
+
+<P><A NAME="IDX1336"></A><A NAME="IDX1337"></A>Последний синтаксис <CODE>LEFT
+OUTER JOIN</CODE>, показанный выше, существует только для совместимости с ODBC:
+</P>
+
+<UL><LI>Ссылка таблицы может быть оснащена псевдонимом с использованием
+<CODE>tbl_name AS alias_name</CODE> или <CODE>tbl_name alias_name</CODE>:
+<PRE>
+mysql&#62; select t1.name, t2.salary from employee AS t1, info AS t2
+           where t1.name = t2.name;
+</PRE>
+
+<LI>Условное выражение <CODE>ON</CODE> представляет собой любое условное
+выражение формы, которое может использоваться в предложении
+<CODE>WHERE</CODE>.
+
+<LI>Если не имеется никакой записи соответствия для правой таблицы в части
+<CODE>ON</CODE> или <CODE>USING</CODE> в <CODE>LEFT JOIN</CODE>, используется
+строка со всем набором столбцов, выставленным в <CODE>NULL</CODE>. Вы можете
+использовать этот факт, чтобы найти записи в таблице, которые не имеют
+никакого дубликата в другой таблице:
+<PRE>
+mysql&#62; select table1.* from table1
+           LEFT JOIN table2 ON table1.id=table2.id
+           where table2.id is NULL;
+</PRE>
+
+Этот пример находит все строки в <CODE>table1</CODE> со значением
+идентификатора <CODE>id</CODE>, которое не представлено в <CODE>table2</CODE>
+(то есть, все строки в <CODE>table1</CODE> без соответствующей строки в
+<CODE>table2</CODE>). Это подразумевает, что <CODE>table2.id</CODE> объявлен
+как <CODE>NOT NULL</CODE>.
+
+<LI><CODE>USING</CODE> <CODE>(column_list)</CODE> объявляет список столбцов,
+которые должны существовать в обеих таблицах. Предложение типа
+<CODE>USING</CODE>:
+<PRE>
+A LEFT JOIN B USING (C1,C2,C3,...)
+</PRE>
+
+Определено, чтобы быть семантически идентичным выражению <CODE>ON</CODE>:
+<PRE>
+A.C1=B.C1 AND A.C2=B.C2 AND A.C3=B.C3,...
+</PRE>
+
+<LI><CODE>NATURAL [LEFT] JOIN</CODE> двух таблиц определено семантически
+эквивалентно <CODE>INNER JOIN</CODE> или <CODE>LEFT JOIN</CODE> с
+предложением <CODE>USING</CODE> с именами всех столбцов, которые существуют в
+обеих таблицах.
+
+<LI><CODE>RIGHT JOIN</CODE> работает аналогично <CODE>LEFT JOIN</CODE>. Чтобы
+сохранить код переносимым между базами данных, рекомендует использовать
+<CODE>LEFT JOIN</CODE> вместо <CODE>RIGHT JOIN</CODE>.
+
+<LI><CODE>STRAIGHT_JOIN</CODE> идентичен <CODE>JOIN</CODE>, за исключением
+того, что левая таблица всегда читается перед правой таблицей. Это может
+использоваться для тех немногих случаев, когда оптимизатор объединения
+помещает таблицы в неправильном порядке.
+
+<LI>С MySQL Version 3.23.12 Вы можете давать советы относительно того, как
+MySQL должен использовать индекс при получении информации из таблицы. Это
+полезно, если <CODE>EXPLAIN</CODE> показывает, что MySQL использует
+неправильный индекс. Определяя <CODE>USE INDEX (key_list)</CODE>, Вы можете
+сообщать, чтобы MySQL использовал только один из определенных индексов, чтобы
+найти строки в таблице. Альтернативный синтаксис <CODE>IGNORE INDEX
+(key_list)</CODE> может использоваться, чтобы сообщить, чтобы MySQL не
+использовал некоторый специфический индекс.</UL>
+
+<P>Вот некоторые примеры:</P>
+<PRE>
+mysql&#62; select * from table1,table2 where table1.id=table2.id;
+mysql&#62; select * from table1 LEFT JOIN table2 ON table1.id=table2.id;
+mysql&#62; select * from table1 LEFT JOIN table2 USING (id);
+mysql&#62; select * from table1 LEFT JOIN table2 ON table1.id=table2.id
+           LEFT JOIN table3 ON table2.id=table3.id;
+mysql&#62; select * from table1 USE INDEX (key1,key2) WHERE key1=1 and
+                    key2=2 AND key3=3;
+mysql&#62; select * from table1 IGNORE INDEX (key3) WHERE key1=1 and
+                    key2=2 AND key3=3;
+</PRE>
+
+<H3><A NAME="UNION">8.2 Синтаксис <CODE>UNION</CODE></A></H3>
+<PRE>
+SELECT ....
+UNION [ALL]
+SELECT ....
+  [UNION
+   SELECT ...]
+</PRE>
+
+<P><CODE>UNION</CODE> реализован только в версии MySQL 4.0.0 и выше.</P>
+
+<P><CODE>UNION</CODE> используется, чтобы объединить результаты из многих
+инструкций <CODE>SELECT</CODE> в один набор результатов.</P>
+
+<P>Команды <CODE>SELECT</CODE> представляют собой нормальные команды выбора,
+но со следующими ограничениями:</P>
+
+<UL><LI>Только последняя команда <CODE>SELECT</CODE> может иметь <CODE>INTO
+OUTFILE</CODE>.
+
+<LI>Только последняя команда <CODE>SELECT</CODE> может иметь <CODE>ORDER
+BY</CODE>.</UL>
+
+<P>Если Вы не используете ключевое слово <CODE>ALL</CODE> для
+<CODE>UNION</CODE>, все возвращенные строки будут уникальны, подобно тому,
+как если бы Вы сделали <CODE>DISTINCT</CODE> для общего набора результатов.
+Если Вы определяете <CODE>ALL</CODE>, то Вы получите все строки соответствий
+из всех используемых инструкций <CODE>SELECT</CODE>.</P>
+
+<H3><A NAME="INSERT">8.3 Синтаксис <CODE>INSERT</CODE></A></H3>
+<PRE>
+INSERT [LOW_PRIORITY | DELAYED] [IGNORE]
+       [INTO] tbl_name [(col_name,...)]
+       VALUES (expression,...),(...),...
+INSERT [LOW_PRIORITY | DELAYED] [IGNORE]
+       [INTO] tbl_name [(col_name,...)] SELECT ...
+INSERT [LOW_PRIORITY | DELAYED] [IGNORE] [INTO] tbl_name
+       SET col_name=expression, col_name=expression, ...
+</PRE>
+
+<P><CODE>INSERT</CODE> вставляет новые строки в существующую таблицу. Форма
+<CODE>INSERT ... VALUES</CODE> вставляет строки, основываясь на явно
+определенных значениях. <CODE>INSERT ... SELECT</CODE> вставляет строки,
+выбранные из другой таблицы или таблиц. Форма <CODE>INSERT ... VALUES</CODE>
+с несколькими списками значений поддержана в MySQL Version 3.22.5 или позже.
+Синтаксис <CODE>col_name=expression</CODE> введен, начиная с MySQL Version
+3.22.10 или выше.</P>
+
+<P><CODE>tbl_name</CODE> таблица, в которую строки должны быть вставлены.
+Список имен столбцов или предложение <CODE>SET</CODE> указывает, для которых
+столбцов инструкция определяет значения:</P>
+
+<UL><LI>Если Вы не определяете никакого списка столбцов для <CODE>INSERT ...
+VALUES</CODE> или <CODE>INSERT ... SELECT</CODE>, значения для всех столбцов
+нужно обеспечить в списке <CODE>VALUES()</CODE> или через
+<CODE>SELECT</CODE>. Если Вы не знаете порядка столбцов в таблице,
+используйте <CODE>DESCRIBE tbl_name</CODE>, чтобы выяснить.
+
+<LI>Любой столбец, для которого значение явно не задано, будет установлен в
+значение по умолчанию. Например, если Вы определяете список столбцов, который
+не называет все столбцы в таблице, неназванные столбцы будут установлены в их
+значения по умолчанию. Задание значений по умолчанию описано в разделе
+"<A HREF="glava07.htm#CREATE_TABLE">7.3 Синтаксис <CODE>CREATE TABLE</CODE>
+</A>".
+
+<LI>Выражение <CODE>expression</CODE> может обратиться к любому столбцу,
+который был установлен ранее в списке значения. Например, можно задать:
+<PRE>
+mysql&#62; INSERT INTO tbl_name (col1,col2) VALUES(15,col1*2);
+</PRE>
+
+Но нельзя скомандовать:
+<PRE>
+mysql&#62; INSERT INTO tbl_name (col1,col2) VALUES(col2*2,15);
+</PRE>
+
+<LI>Если Вы определяете ключевое слово <CODE>LOW_PRIORITY</CODE>, выполнение
+<CODE>INSERT</CODE> будет отложено до тех пор, пока другая клиентура не
+прекратит читать из таблицы. В этом случае пользователь должен ждать, пока
+инструкция вставки не будет завершена, что может занять немало времени, если
+таблица находится в тяжелом использовании. Это отличие от <CODE>INSERT
+DELAYED</CODE>, которая позволяет пользователю продолжать работу сразу же.
+Подробности в разделе "<A HREF="#INSERT_DELAYED">8.4 Синтаксис
+<CODE>INSERT DELAYED</CODE></A>". Обратите внимание, что
+<CODE>LOW_PRIORITY</CODE> обычно не должен использоваться с таблицами
+<CODE>MyISAM</CODE>, поскольку это отключает параллельные вставки.
+
+<LI>Если Вы определяете ключевое слово <CODE>IGNORE</CODE> в
+<CODE>INSERT</CODE> со многими строками значений, любые строки, которые
+дублируют существующий ключ <CODE>PRIMARY</CODE> или <CODE>UNIQUE</CODE> в
+таблице, игнорируются и не будут вставлены. Если Вы не определяете
+<CODE>IGNORE</CODE>, вставка будет прервана, если имеется любая строка,
+которая дублирует существующее значение ключа. Вы можете определять в функции
+C API <CODE>mysql_info()</CODE>, сколько строк были вставлены в таблицу.
+
+<LI>Если MySQL был конфигурирован, используя опцию
+<CODE>DONT_USE_DEFAULT_FIELDS</CODE>, инструкции <CODE>INSERT</CODE>
+генерируют ошибку, если Вы явно не определяете значения для всех столбцов,
+которые требуют значения, отличного от <CODE>NULL</CODE>.</UL>
+
+<P><A NAME="IDX1340"></A>Если Вы используете <CODE>INSERT ... SELECT</CODE>
+или <CODE>INSERT ... VALUES</CODE> со многими списками значений, Вы можете
+использовать функцию C API <CODE>mysql_info()</CODE>, чтобы получить
+информацию относительно запроса. Формат информационной строки показан ниже:
+</P>
+<PRE>
+Records: 100 Duplicates: 0 Warnings: 0
+</PRE>
+
+<P><CODE>Duplicates</CODE> указывает число строк, которые не могли быть
+вставлены потому, что они дублируют некоторое существующее уникальное
+индексное значение. <CODE>Warnings</CODE> показывает число попыток вставить
+значения столбца, которые были проблематичны по какой-либо причине.
+Предупреждения могут происходить при любом из следующих условий:</P>
+
+<UL><LI>Вставка <CODE>NULL</CODE> в столбец, который был объявлен как
+<CODE>NOT NULL</CODE>. Столбец установлен в значение по умолчанию.
+
+<LI>Установка числового столбца в значение, которое находится вне диапазона
+столбца. Значение отсечено к соответствующей границе диапазона.
+
+<LI>Установка числового столбца к значению типа <CODE>10.34 a</CODE>.
+Конечный будет мусор удален, и остающаяся числовая часть будет вставлена.
+Если значение не имеет смысла как число вообще, столбец установлен в
+<CODE>0</CODE>.
+
+<LI>Вставка строки, которая превышает максимальную длину столбца, в столбец
+типов <CODE>CHAR</CODE>, <CODE>VARCHAR</CODE>, <CODE>TEXT</CODE> или
+<CODE>BLOB</CODE>. Значение усечено к максимальной длине столбца.
+
+<LI>Вставка значения, которое является запрещенным для этого типа столбца, в
+столбец даты или времени. Столбец установлен к соответствующему нулевому
+значению для типа.</UL>
+
+<H4><A NAME="INSERT_SELECT">8.3.1 Синтаксис <CODE>INSERT ... SELECT</CODE>
+</A></H4>
+<PRE>
+INSERT [LOW_PRIORITY] [IGNORE] [INTO] tbl_name [(column list)] SELECT ...
+</PRE>
+
+<P>Командой <CODE>INSERT ... SELECT</CODE> Вы можете быстро вставлять много
+строк в таблицу из одной или нескольких таблиц.</P>
+<PRE>
+INSERT INTO tblTemp2 (fldID) SELECT tblTemp1.fldOrder_ID FROM tblTemp1
+       WHERE tblTemp1.fldOrder_ID &#62; 100;
+</PRE>
+
+<P>Следующие условия работают для команды <CODE>INSERT ... SELECT</CODE>:</P>
+
+<UL><LI>Целевая таблица инструкции <CODE>INSERT</CODE> не может появляться в
+предложении <CODE>FROM</CODE> части <CODE>SELECT</CODE> запроса потому, что
+в ANSI SQL запрещено выполнять <CODE>SELECT</CODE> над той же самой таблицей,
+в которую Вы вставляете. Проблема состоит в том, что <CODE>SELECT</CODE>,
+возможно, нашел бы записи, которые были вставлены ранее в течение той же
+самой операции. При использовании предложений sub-select, ситуация могла бы
+очень легко запутаться!
+
+<LI>Столбцы <CODE>AUTO_INCREMENT</CODE> работают как обычной.
+
+<LI>Вы можете использовать функцию C API <CODE>mysql_info()</CODE>, чтобы
+получить информацию относительно запроса. Подробности в разделе
+"<A HREF="#INSERT">8.3 Синтаксис <CODE>INSERT</CODE></A>".
+
+<LI>Чтобы гарантировать, что модификации регистрируются и могут
+использоваться, чтобы пересоздать первоначальные таблицы, MySQL не будет
+позволять параллельные вставки в течение выполнения
+<CODE>INSERT ... SELECT</CODE>.</UL>
+
+<P>Вы можете, конечно, также использовать <CODE>REPLACE</CODE> вместо
+<CODE>INSERT</CODE>, чтобы перезаписать старые строки.</P>
+
+<H3><A NAME="INSERT_DELAYED">8.4 Синтаксис <CODE>INSERT DELAYED</CODE></A>
+</H3>
+<PRE>
+INSERT DELAYED ...
+</PRE>
+
+<P>Опция <CODE>DELAYED</CODE> для инструкции <CODE>INSERT</CODE> специфична
+для MySQL и является очень полезной, если Вы имеете клиентуру, которая не
+может ждать завершения <CODE>INSERT</CODE>. Это общая проблема, когда Вы
+используете MySQL для регистрации и также периодически выполняете инструкции
+<CODE>SELECT</CODE> и <CODE>UPDATE</CODE>, которые занимают много времени.
+<CODE>DELAYED</CODE> введен в MySQL Version 3.22.15. Это MySQL-расширение для
+стандарта ANSI SQL92.</P>
+
+<P><CODE>INSERT DELAYED</CODE> работает только с таблицами <CODE>ISAM</CODE>
+и <CODE>MyISAM</CODE>. Обратите внимание, что таблицы <CODE>MyISAM</CODE>
+поддерживают параллельные <CODE>SELECT</CODE> и <CODE>INSERT</CODE>, если не
+имеется никаких свободных блоков в середине файла данных, Вы очень редко
+должны использовать <CODE>INSERT DELAYED</CODE> с таблицами типа
+<CODE>MyISAM</CODE>.
+
+<P>Когда Вы используете <CODE>INSERT DELAYED</CODE>, клиент получит сообщение
+OK сразу, а вот строка будет вставлена, когда таблица не будет использоваться
+любым другим потоком.</P>
+
+<P>Другая польза от применения <CODE>INSERT DELAYED</CODE> в том, что вставки
+многих клиентов будут связаны вместе и записаны в одном блоке. Это намного
+быстрее, чем выполнение многих отдельных вставок.</P>
+
+<P>Обратите внимание, что в настоящее время поставленные в очередь строки
+сохранены только в памяти, пока они не вставлены в таблицу. Это означает,
+что, если Вы уничтожаете <CODE>mysqld</CODE> крутыми мерами
+(<CODE>kill -9</CODE>), или если <CODE>mysqld</CODE> рухнет неожиданно, любые
+поставленные в очередь строки, которые не были записаны на диск, потеряются!
+</P>
+
+<P>Следующее описывает подробно, что случается, когда Вы используете опцию
+<CODE>DELAYED</CODE> вместе с командами <CODE>INSERT</CODE> или
+<CODE>REPLACE</CODE>. В этом описании "поток" представляет собой поток,
+который получил команду <CODE>INSERT DELAYED</CODE>, и "драйвер" обозначает
+поток, который обрабатывает все инструкции <CODE>INSERT DELAYED</CODE>
+для специфической таблицы.</P>
+
+<UL><LI>Когда поток выполняет инструкцию <CODE>DELAYED</CODE> для таблицы,
+будет создан драйвер: чтобы обработать все инструкции <CODE>DELAYED</CODE>
+для этой таблицы, если никакого такого драйвера еще не существует.
+
+<LI>Поток проверяет, приобрел или нет драйвер блокировку
+<CODE>DELAYED</CODE>. Если нет, он сообщает, чтобы драйвер это сделал.
+Блокировка <CODE>DELAYED</CODE> может быть получена, даже если другие потоки
+имеют блокировку <CODE>READ</CODE> или <CODE>WRITE</CODE> на таблице. Однако,
+драйвер будет ждать <CODE>ALTER TABLE</CODE> или <CODE>FLUSH TABLES</CODE>,
+чтобы гарантировать, что текущая структура таблицы современна.
+
+<LI>Поток выполняет инструкцию <CODE>INSERT</CODE>, но вместо того, чтобы
+записать строку в таблицу, он помещает копию конечной строки в очередь,
+которая управляется драйвером. Любые ошибки синтаксиса будут отмечены потоком
+и сообщены программе пользователя.
+
+<LI>Пользователь не может сообщать число дубликатов или значения
+<CODE>AUTO_INCREMENT</CODE> для возникающей в результате строки. Он не может
+получить эти данные с сервера, поскольку возвраты <CODE>INSERT</CODE> перед
+операцией вставки был завершены.
+
+<LI>Файл регистрации модификаций обновляется драйвером, когда строка будет
+реально вставлена в таблицу. В случае вставки нескольких строк файл
+регистрации модификаций меняется, когда вставлена первая строка.
+
+<LI>После того, как каждые <CODE>delayed_insert_limit</CODE> строк написаны,
+драйвер проверяет, являются или нет любые инструкции <CODE>SELECT</CODE>
+ждущими своей очереди. Если это так, драйвер позволяет им выполниться перед
+продолжением своей работы.
+
+<A NAME="IDX1346"></A><A NAME="IDX1347"></A><LI>Когда драйвер больше не имеет
+строк в очереди, он разблокирует таблицу. Если никакая новая команда
+<CODE>INSERT DELAYED</CODE> не появилась в течение последних
+<CODE>delayed_insert_timeout</CODE> секунд, драйвер завершается.
+
+<LI>Если больше, чем <CODE>delayed_queue_size</CODE> строк, ждущих обработки,
+уже в специфической очереди драйверов, поток, запрашивающий <CODE>INSERT
+DELAYED</CODE> ждет до появления участка памяти в очереди. Это выполнено,
+чтобы гарантировать, что сервер <CODE>mysqld</CODE> не использует всю память
+для отсроченной очереди.
+
+<LI>Поток драйвера обнаружится в списке процесса MySQL с меткой
+<CODE>delayed_insert</CODE> в столбце <CODE>Command</CODE>. Это будет
+уничтожаться, если Вы выполняете команду <CODE>FLUSH TABLES</CODE> или
+уничтожаете поток с помощью <CODE>KILL thread_id</CODE>. Однако, драйвер
+сначала сохранит все поставленные в очередь строки в таблицу перед выходом. В
+это время система не будет принимать никакие новые команды
+<CODE>INSERT</CODE> от других потоков. Если Вы выполняете команду
+<CODE>INSERT DELAYED</CODE> после того, как это было выполнено, новый поток
+драйвера будет создан.
+
+<LI>Обратите внимание, что вышеупомянутое означает, что команды <CODE>INSERT
+DELAYED</CODE> имеют более высокий приоритет, чем нормальные команды
+<CODE>INSERT</CODE>, если уже имеется драйвер <CODE>INSERT DELAYED</CODE>!
+Другие команды модификации должны будут ждать до опустошения очереди
+<CODE>INSERT DELAYED</CODE>, уничтожения драйвера (через <CODE>KILL
+thread_id</CODE>) или выполнения <CODE>FLUSH TABLES</CODE>.
+
+<LI>Следующие переменные состояния обеспечивают информацию относительно
+выполнения команд <CODE>INSERT DELAYED</CODE>:
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Переменная</STRONG></TD><TD><STRONG>Значение</STRONG></TD>
+</TR>
+<TR><TD><CODE>Delayed_insert_threads</CODE></TD><TD>Число обработчиков
+потоков</TD></TR>
+<TR><TD><CODE>Delayed_writes</CODE></TD><TD>Число строк, вставленных с
+помощью <CODE>INSERT DELAYED</CODE></TD></TR>
+<TR><TD><CODE>Not_flushed_delayed_rows</CODE></TD><TD>Число строк, ждущих
+записи</TD></TR></TABLE>
+
+Вы можете рассматривать эти переменные, выдавая инструкцию <CODE>SHOW
+STATUS</CODE> или выполняя команду <CODE>mysqladmin extended-status</CODE>.
+</UL>
+
+<P>Обратите внимание, что <CODE>INSERT DELAYED</CODE> медленнее, чем
+нормальная INSERT, если таблица сейчас не используется. Имеется также
+дополнительная нагрузка для сервера, чтобы обработать отдельный поток для
+каждой таблицы, на которой Вы используете <CODE>INSERT DELAYED</CODE>. Это
+означает, что Вы должны использовать <CODE>INSERT DELAYED</CODE> только
+тогда, когда Вы, действительно, уверены, что нуждаетесь в этом!</P>
+
+<H3><A NAME="UPDATE">8.5 Синтаксис <CODE>UPDATE</CODE></A></H3>
+<PRE>
+UPDATE [LOW_PRIORITY] [IGNORE] tbl_name
+       SET col_name1=expr1, [col_name2=expr2, ...]
+       [WHERE where_definition] [LIMIT #]
+</PRE>
+
+<P><CODE>UPDATE</CODE> модифицирует столбцы в существующих строках таблиц с
+новыми значениями. Предложение <CODE>SET</CODE> указывает, какие столбцы
+изменять, и значения, которые им должны быть заданы. Предложение
+<CODE>WHERE</CODE>, если задано, определяет, какие строки должны
+модифицироваться. Иначе модифицируются все строки. Если определено
+предложение <CODE>ORDER BY</CODE>, строки будут модифицироваться в том
+порядке, который определен.</P>
+
+<P>Если Вы определяете ключевое слово <CODE>LOW_PRIORITY</CODE>, выполнение
+<CODE>UPDATE</CODE> будет отсрочено до наступления момента, когда никакие
+клиенты не читают из таблицы.</P>
+
+<P>Если Вы определяете ключевое слово <CODE>IGNORE</CODE>, инструкция
+модификации не будет прерываться, даже если мы получаем ошибки дублирования
+ключа в течение модификации. Строки, которые могли бы вызвать конфликты, не
+будут модифицироваться вообще.</P>
+
+<P>Если Вы обращаетесь к столбцу из <CODE>tbl_name</CODE> в выражении,
+<CODE>UPDATE</CODE> использует текущее значение столбца. Например, следующая
+инструкция устанавливает столбец <CODE>age</CODE> к следующему за его текущим
+значением:</P>
+<PRE>
+mysql&#62; UPDATE persondata SET age=age+1;
+</PRE>
+
+<P>Назначения <CODE>UPDATE</CODE> оценены слева направо. Например, следующая
+инструкция удваивает столбец <CODE>age</CODE>, затем увеличивает его на 1:
+</P>
+<PRE>
+mysql&#62; UPDATE persondata SET age=age*2, age=age+1;
+</PRE>
+
+<P>Если Вы устанавливаете столбец к значению, которое он в настоящее время
+имеет, MySQL не обращает внимания на это и не модифицирует столбец!</P>
+
+<P><A NAME="IDX1349"></A><CODE>UPDATE</CODE> возвращает число строк, которые
+были фактически изменены. В MySQL Version 3.22 или позже функция C API
+<CODE>mysql_info()</CODE> возвращает число строк, которые были согласованы и
+модифицировались, и число предупреждений, которые произошли в течение
+<CODE>UPDATE</CODE>.</P>
+
+<P>В MySQL Version 3.23 Вы можете использовать <CODE>LIMIT #</CODE>, чтобы
+гарантировать, что только заданное число строк будет изменено.</P>
+
+<H3><A NAME="DELETE">8.6 Синтаксис <CODE>DELETE</CODE></A></H3>
+<PRE>
+DELETE [LOW_PRIORITY | QUICK] FROM table_name
+       [WHERE where_definition]
+       [ORDER BY ...] [LIMIT rows]
+DELETE [LOW_PRIORITY | QUICK] table_name[.*] [table_name[.*] ...] FROM
+       table-references [WHERE where_definition]
+</PRE>
+
+<P><CODE>DELETE</CODE> удаляет строки, которые удовлетворяют условию,
+заданному в <CODE>where_definition</CODE> из таблицы <CODE>table_name</CODE>
+и возвращает число удаленных записей.</P>
+
+<P>Если Вы выдаете <CODE>DELETE</CODE> без предложения <CODE>WHERE</CODE>,
+все строки будут удалены. Если Вы делаете это в режиме
+<CODE>AUTOCOMMIT</CODE>, это сработает аналогично <CODE>TRUNCATE</CODE>.
+Подробности в разделе "<A HREF="#TRUNCATE">8.7 Синтаксис
+<CODE>TRUNCATE</CODE></A>". В MySQL 3.23 <CODE>DELETE</CODE> без предложения
+<CODE>WHERE</CODE> возвратит ноль как число обработанных записей.</P>
+
+<P>Если Вы действительно хотите знать, сколько записей удалены, когда Вы
+удаляете все строки из таблицы, Вы можете использовать инструкцию
+<CODE>DELETE</CODE> этой формы:</P>
+<PRE>
+mysql&#62; DELETE FROM table_name WHERE 1&#62;0;
+</PRE>
+
+<P>Обратите внимание, что это НАМНОГО медленнее, чем <CODE>DELETE FROM
+table_name</CODE> без предложения <CODE>WHERE</CODE> потому, что эта команда
+удаляет строки по одной.</P>
+
+<P>Если Вы определяете ключевое слово <CODE>LOW_PRIORITY</CODE>, выполнение
+<CODE>DELETE</CODE> будет отсрочено до наступления момента, когда никакие
+клиенты не читают из таблицы.</P>
+
+<P>Если Вы определяете слово <CODE>QUICK</CODE>, то драйвер таблицы не будет
+объединять индексные листья в течение процесса удаления, что может ускорять
+некоторые виды удаления.</P>
+
+<P>В MyISAM-таблицах удаленные записи поддерживаются в связанном списке, и
+старые позиции записей повторно используются вызовом <CODE>INSERT</CODE>.
+Чтобы освободить неиспользуемое место и уменьшить размеры файла, используйте
+команду <CODE>OPTIMIZE TABLE</CODE> или утилиту <CODE>myisamchk</CODE>, чтобы
+реорганизовать таблицы. <CODE>OPTIMIZE TABLE</CODE> проще, но
+<CODE>myisamchk</CODE> быстрее. Подробности в разделе
+"<A HREF="glava04.htm#OPTIMIZE_TABLE">4.6 Синтаксис <CODE>OPTIMIZE
+TABLE</CODE></A>".</P>
+
+<P>Вы можете удалять строки из многих таблиц в то же самое время, а также
+иметь дополнительные таблицы, которые используются для поиска.</P>
+
+<P>Символ <CODE>.*</CODE> после имени таблицы появился для совместимости с
+<CODE>Access</CODE>:</P>
+<PRE>
+DELETE t1,t2 FROM t1,t2,t3 WHERE t1.id=t2.id AND t2.id=t3.id
+</PRE>
+
+<P>В вышеупомянутом случае мы удаляем строки соответствий только из таблиц
+<CODE>t1</CODE> и <CODE>t2</CODE>.</P>
+
+<P><CODE>ORDER BY</CODE> и использование нескольких таблиц в DELETE
+реализовано, начиная с MySQL 4.0.</P>
+
+<P>Если предложение <CODE>ORDER BY</CODE> используется, строки будут удалены
+в заданном порядке. Это удобно в сочетании с <CODE>LIMIT</CODE>. Например:
+</P>
+<PRE>
+DELETE FROM somelog WHERE user='jcole' ORDER BY timestamp LIMIT 1
+</PRE>
+
+<P>Это удалит самую старую запись (по <CODE>timestamp</CODE>), где строка
+соответствует предложению <CODE>WHERE</CODE>.</P>
+
+<P>MySQL-специфичная опция <CODE>LIMIT rows</CODE> функции
+<CODE>DELETE</CODE> сообщает серверу максимальное число строк, которые будут
+удалены прежде, чем управление будет возвращено пользователю. Это может
+использоваться, чтобы гарантировать, что специфическая команда
+<CODE>DELETE</CODE> не займет слишком много времени. Вы можете просто
+повторять команду <CODE>DELETE</CODE>, пока число обрабатываемых строк не
+меньше, чем значение <CODE>LIMIT</CODE>.</P>
+
+<H3><A NAME="TRUNCATE">8.7 Синтаксис <CODE>TRUNCATE</CODE></A></H3>
+<PRE>
+TRUNCATE TABLE table_name
+</PRE>
+
+<P>В версии 3.23 <CODE>TRUNCATE TABLE</CODE> отображен на вызов <CODE>COMMIT;
+DELETE FROM table_name</CODE>. Подробности в разделе
+"<A HREF="#DELETE">8.6 Синтаксис <CODE>DELETE</CODE></A>".</P>
+
+<P>Разница между <CODE>TRUNCATE TABLE</CODE> и <CODE>DELETE FROM ..</CODE>:
+</P>
+
+<UL><LI>Truncate удаляет и пересоздает таблицу, что намного быстрее, чем
+удаление строк одну за другой.
+
+<LI>Не транзакционно-безопасно: Вы получите ошибку, если имеете активную
+транзакцию или активную блокировку таблицы.
+
+<LI>Не возвращает число удаленных строк.
+
+<LI>Пока файл определения таблицы <TT>table_name.frm</TT> корректен, таблица
+может быть пересоздана, даже если данные или индексный файл повреждены.</UL>
+
+<P><CODE>TRUNCATE</CODE> представляет собой Oracle-расширение языка SQL.</P>
+
+<H3><A NAME="REPLACE">8.8 Синтаксис <CODE>REPLACE</CODE></A></H3>
+<PRE>
+REPLACE [LOW_PRIORITY | DELAYED]
+        [INTO] tbl_name [(col_name,...)]
+        VALUES (expression,...),(...),...
+REPLACE [LOW_PRIORITY | DELAYED]
+        [INTO] tbl_name [(col_name,...)] SELECT ...
+REPLACE [LOW_PRIORITY | DELAYED] [INTO] tbl_name
+        SET col_name=expression, col_name=expression,...
+</PRE>
+
+<P><CODE>REPLACE</CODE> работает в точности подобно <CODE>INSERT</CODE>, за
+исключением того, что, если старая запись в таблице имеет то же самое
+значение, что и новая запись на уникальном индексе, старая запись будет
+удалена прежде, чем новая запись вставлена в таблицу. Подробности в разделе
+"<A HREF="#INSERT">8.3 Синтаксис <CODE>INSERT</CODE></A>".</P>
+
+<P>Другими словами, Вы не можете обращаться к значениям старой строки из
+инструкции <CODE>REPLACE</CODE>. В некоторых старых версиях MySQL могли, но
+это было ошибкой, которая исправлена.</P>
+
+<P>При использовании вызова <CODE>REPLACE</CODE>
+<CODE>mysql_affected_rows()</CODE> возвратит 2, если новая строка заменила
+старую. Это потому, что в этом случае одна строка была вставлена, а затем
+дубликат был удален.</P>
+
+<H3><A NAME="LOAD_DATA">8.9 Синтаксис <CODE>LOAD DATA INFILE</CODE></A></H3>
+<PRE>
+LOAD DATA [LOW_PRIORITY | CONCURRENT] [LOCAL] INFILE 'file_name.txt'
+          [REPLACE | IGNORE] INTO TABLE tbl_name
+          [FIELDS
+            [TERMINATED BY '\t']
+            [[OPTIONALLY] ENCLOSED BY '']
+            [ESCAPED BY '\\' ]
+          ]
+          [LINES TERMINATED BY '\n'] [IGNORE number LINES]
+          [(col_name,...)]
+</PRE>
+
+<P>Команда <CODE>LOAD DATA INFILE</CODE> читает строки из текстового файла в
+таблицу. Если ключевое слово <CODE>LOCAL</CODE> определено, файл читается с
+компьютера пользователя. Если <CODE>LOCAL</CODE> не определено, файл должен
+быть размещен на сервере. <CODE>LOCAL</CODE> доступен в MySQL Version 3.22.6
+или более поздней.</P>
+
+<P>По соображениям безопасности, при чтении текстовых файлов, размещенных на
+сервере, файлы должны находиться в каталоге баз данных или быть читаемыми
+всеми. Также, чтобы использовать <CODE>LOAD DATA INFILE</CODE> на файлах
+сервера, Вы должны иметь привилегию <STRONG>file</STRONG>. Подробности в
+разделе "<A HREF="glava10.htm#Privileges_provided">10.6 Привилегии,
+предоставляемые MySQL</A>".</P>
+
+<P>Если Вы определяете ключевое слово <CODE>LOW_PRIORITY</CODE>, выполнение
+<CODE>LOAD DATA</CODE> будет отложено до тех пор, пока другая клиентура не
+прекратит читать из таблицы.</P>
+
+<P>Если Вы определяете ключевое слово <CODE>CONCURRENT</CODE> с таблицей типа
+<CODE>MyISAM</CODE>, то другие потоки могут получать данные из таблицы в то
+время, как выполняется <CODE>LOAD DATA</CODE>. Использование этой опции
+будет, конечно, воздействовать на эффективность <CODE>LOAD DATA</CODE>, даже
+если никакой другой поток не использует таблицу в то же самое время.</P>
+
+<P>Использование <CODE>LOCAL</CODE> будет немного медленнее, чем разрешение
+серверу обращаться к файлам непосредственно потому, что содержание файла
+должно пропутешествовать с компьютера пользователя на сервер. С другой
+стороны, Вы не нуждаетесь в привилегии <STRONG>file</STRONG>, чтобы загрузить
+свои локальные файлы.</P>
+
+<P>Если Вы используете MySQL ниже 3.23.24, Вы не можете читать из FIFO с
+помощью <CODE>LOAD DATA INFILE</CODE>. Если Вы должны читать из FIFO
+(например, вывод из gunzip), используйте вместо этого команду <CODE>LOAD
+DATA LOCAL INFILE</CODE>.</P>
+
+<P><A NAME="IDX1354"></A>Вы можете также загружать файлы данных, используя
+полезность <CODE>mysqlimport</CODE>. Она функционирует, посылая команду
+<CODE>LOAD DATA INFILE</CODE> на сервер. Опция <CODE>--local</CODE>
+заставляет <CODE>mysqlimport</CODE> читать файлы данных с компьютера
+пользователя. Вы можете определять опцию <CODE>--compress</CODE>, чтобы
+получить лучшую эффективность при работе с медленными сетями, если
+пользователь и сервер поддерживают сжатый протокол.</P>
+
+<P>При размещении файлов на компьютере сервера, он использует правила:</P>
+
+<UL><LI>Если абсолютное имя пути задано, сервер использует его как есть.
+<LI>Если относительное имя пути с одним или более ведущими компонентами
+задано, поиск файла выполняется относительно каталога данных сервера.
+<LI>Если имя файла без ведущих компонентов задано, сервер ищет файл в
+каталоге текущей базы данных.</UL>
+
+<P>Обратите внимание, что эти правила означают, что файл, заданный как
+<TT>./myfile.txt</TT>, читается из каталога данных сервера в то время, как
+файл <TT>myfile.txt</TT> читается из каталога текущей базы данных. Например,
+следующая инструкция <CODE>LOAD DATA</CODE> читает файл <TT>data.txt</TT> из
+каталога базы данных для <CODE>db1</CODE> потому, что <CODE>db1</CODE>
+текущая база данных, даже при том, что инструкция явно загружает файл в
+таблицу в базе данных <CODE>db2</CODE>:</P>
+<PRE>
+mysql&#62; USE db1;
+mysql&#62; LOAD DATA INFILE "data.txt" INTO TABLE db2.my_table;
+</PRE>
+
+<P>Ключевые слова <CODE>REPLACE</CODE> и <CODE>IGNORE</CODE> контролируют
+обработку записей, которые дублируют существующие записи на уникальных
+значениях ключа. Если Вы определяете <CODE>REPLACE</CODE>, новые строки
+заменяют существующие, которые имеют то же самое уникальное значение ключа.
+Если Вы определяете <CODE>IGNORE</CODE>, строки, которые дублируют
+существующие на уникальном значении ключа, будут пропущены. Если Вы не
+определяете никакую опцию, ошибка происходит, когда будет найдено двойное
+значение ключа, и остальная часть текстового файла игнорируется.</P>
+
+<P>Если Вы загружаете данные из локального файла, используя ключевое слово
+<CODE>LOCAL</CODE>, сервер не имеет никакого способа остановить передачу
+файла в середине операции, так что значение по умолчанию такое же, как если
+определена опция <CODE>IGNORE</CODE>.</P>
+
+<P>Если Вы используете <CODE>LOAD DATA INFILE</CODE> на пустой таблице
+<CODE>MyISAM</CODE>, все неуникальные индексы будут созданы в отдельном
+пакете (подобно <CODE>REPAIR</CODE>). Это обычно делает <CODE>LOAD DATA
+INFILE</CODE> намного быстрее, когда Вы имеете много индексов.</P>
+
+<P><CODE>LOAD DATA INFILE</CODE> представляет собой дополнение к <CODE>SELECT
+... INTO OUTFILE</CODE>. Подробности в разделе
+"<A HREF="#SELECT">8.1 Синтаксис <CODE>SELECT</CODE></A>". Чтобы
+писать данные из базы данных в файл, используйте <CODE>SELECT ... INTO
+OUTFILE</CODE>. Чтобы читать файл обратно в базу данных, используйте
+<CODE>LOAD DATA INFILE</CODE>. Синтаксис предложений <CODE>FIELDS</CODE> и
+<CODE>LINES</CODE> тот же самый для обеих команд. Оба предложения
+факультативные, но <CODE>FIELDS</CODE> должно предшествовать
+<CODE>LINES</CODE>, если оба определены.</P>
+
+<P>Если Вы определяете предложение <CODE>FIELDS</CODE>, каждое из
+подпредложений (<CODE>TERMINATED BY</CODE>, <CODE>[OPTIONALLY] ENCLOSED
+BY</CODE> и <CODE>ESCAPED BY</CODE>) также факультативны за исключением того,
+что Вы должны определить по крайней мере одно из них.</P>
+
+<P>Если Вы не определяете предложение <CODE>FIELDS</CODE>, значения по
+умолчанию были бы такие же, как если бы Вы написали это:</P>
+<PRE>
+FIELDS TERMINATED BY '\t' ENCLOSED BY '' ESCAPED BY '\\'
+</PRE>
+
+<P>Если Вы не определяете предложение <CODE>LINES</CODE>, значения по
+умолчанию были бы такие же, как если бы Вы написали это:</P>
+<PRE>
+LINES TERMINATED BY '\n'
+</PRE>
+
+<P>Другими словами, значения по умолчанию заставляют <CODE>LOAD DATA
+INFILE</CODE> действовать следующим образом при чтении ввода:</P>
+
+<UL><LI>Найти границы строки по newlines.
+<LI>Разделить строки на поля через символы табуляции.
+<LI>Не ожидать, что поля будут заключены внутрь любых символов цитирования.
+<LI>Интерпретировать местонахождения позиций табуляции, newline или
+<SAMP>\</SAMP> предшествующего <SAMP>\</SAMP> как литеральные символы,
+которые являются частью значений поля.</UL>
+
+<P><CODE>SELECT ... INTO OUTFILE</CODE> по умолчанию должен действовать
+следующим образом при записи вывода:</P>
+
+<UL><LI>Записать позиции табуляции между полями.
+<LI>Не включать поля внутрь любых символов цитирования.
+<LI>Использовать <SAMP>\</SAMP>, чтобы выйти из позиций табуляции, newline
+или символов <SAMP>\</SAMP>, которые происходят внутри значений поля.
+<LI>Записать newlines в конце строк.</UL>
+
+<P>Обратите внимание, что, чтобы писать <CODE>FIELDS ESCAPED BY '\\'</CODE>,
+Вы должны определить две наклонных черты влево для любого значения, которое
+нужно читать как одиночную наклонную черту влево.</P>
+
+<P>Опция <CODE>IGNORE number LINES</CODE> может использоваться, чтобы
+игнорировать заголовок столбца в начале файла:</P>
+<PRE>
+mysql&#62; LOAD DATA INFILE "/tmp/file_name" into table
+                            test IGNORE 1 LINES;
+</PRE>
+
+<P>Когда Вы используете <CODE>SELECT ... INTO OUTFILE</CODE> в тандеме с
+<CODE>LOAD DATA INFILE</CODE>, чтобы записать данные из базы данных в файл, а
+затем читаете файл обратно в базу данных позже, параметры обработки поля и
+строк для обеих команд должны соответствовать. Иначе <CODE>LOAD DATA
+INFILE</CODE> не будут интерпретировать содержание файла правильно.
+Предположите, что Вы используете <CODE>SELECT ... INTO OUTFILE</CODE>, чтобы
+записать файл с полями, разграниченными запятыми:</P>
+<PRE>
+mysql&#62; SELECT * INTO OUTFILE 'data.txt'
+           FIELDS TERMINATED BY ','
+           FROM ...;
+</PRE>
+
+<P>Чтобы прочитать разграниченный запятыми файл обратно в базу данных,
+правильная инструкция была бы такой:</P>
+<PRE>
+mysql&#62; LOAD DATA INFILE 'data.txt' INTO TABLE table2
+           FIELDS TERMINATED BY ',';
+</PRE>
+
+<P>Если взамен Вы пробовали читать файл инструкцией, показанной ниже, это не
+будет работать потому, что это инструктирует <CODE>LOAD DATA INFILE</CODE>
+искать позиции табуляции между полями:</P>
+<PRE>
+mysql&#62; LOAD DATA INFILE 'data.txt' INTO TABLE table2
+           FIELDS TERMINATED BY '\t';
+</PRE>
+
+<P>Вероятный результат: каждая входная строка интерпретируется как одиночное
+поле без разделения на поля.</P>
+
+<P><CODE>LOAD DATA INFILE</CODE> может использоваться, чтобы читать файлы,
+полученные из внешних источников. Например, файл в формате dBASE будет иметь
+поля, разделяемые запятыми и заключенные в двойные кавычки. Если строки в
+файле завершены newlines, команда, показанная ниже, иллюстрирует параметры
+обработки, которые Вы использовали бы, чтобы загрузить файл:</P>
+<PRE>
+mysql&#62; LOAD DATA INFILE 'data.txt' INTO TABLE tbl_name
+           FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+           LINES TERMINATED BY '\n';
+</PRE>
+
+<P>Любое из поля или параметров обработки может определять пустую строку
+(<CODE>''</CODE>). Если она не пустая, значения <CODE>FIELDS [OPTIONALLY]
+ENCLOSED BY</CODE> и <CODE>FIELDS ESCAPED BY</CODE> должны быть одиночным
+символом. Значения <CODE>FIELDS TERMINATED BY</CODE> и <CODE>LINES TERMINATED
+BY</CODE> могут быть больше, чем одним символом. Например, чтобы писать
+строки, которые завершены парами carriage return-linefeed, или читать файл,
+содержащий такие строки, определите <CODE>LINES TERMINATED BY '\r\n'</CODE>.
+</P>
+
+<P>Например, чтобы читать файл записей, которые отделяются строкой
+<CODE>%%</CODE>, в таблицу SQL, Вы можете сделать:</P>
+<PRE>
+create table jokes (a int not null auto_increment primary key,
+                   joke text not null);
+load data infile "/tmp/jokes.txt" into table jokes
+          fields terminated by "" lines terminated by "\n%%\n" (joke);
+</PRE>
+
+<P><CODE>FIELDS [OPTIONALLY] ENCLOSED BY</CODE> управляет цитированием полей.
+Для вывода (<CODE>SELECT ... INTO OUTFILE</CODE>), если Вы опускаете слово
+<CODE>OPTIONALLY</CODE>, все поля включены символом <CODE>ENCLOSED BY</CODE>.
+Пример такого вывода (использование запятой как разделителя поля) ниже:</P>
+<PRE>
+"1","a string","100.20"
+"2","a string containing a , comma","102.20"
+"3","a string containing a \" quote","102.20"
+"4","a string containing a \", quote and comma","102.20"
+</PRE>
+
+<P>Если Вы определяете <CODE>OPTIONALLY</CODE>, символ
+<CODE>ENCLOSED BY</CODE> используется только для того, чтобы включить поля
+типов <CODE>CHAR</CODE> и <CODE>VARCHAR</CODE>:</P>
+<PRE>
+1,"a string",100.20
+2,"a string containing a , comma",102.20
+3,"a string containing a \" quote",102.20
+4,"a string containing a \", quote and comma",102.20
+</PRE>
+
+<P>Обратите внимание, что местонахождение символа <CODE>ENCLOSED BY</CODE>
+внутри значения поля экранируется приписыванием символа
+<CODE>ESCAPED BY</CODE>. Также обратите внимание, что, если Вы определяете
+пустое значение <CODE>ESCAPED BY</CODE>, возможно генерировать вывод, который
+не может читаться правильно средствами <CODE>LOAD DATA INFILE</CODE>.
+Например, вывод, показанный выше, появился бы как показано ниже, если бы
+символ ESC был пустым. Заметьте, что второе поле в четвертой строке содержит
+запятую после кавычки, которая ошибочно появляется и завершает поле:</P>
+<PRE>
+1,"a string",100.20
+2,"a string containing a , comma",102.20
+3,"a string containing a " quote",102.20
+4,"a string containing a ", quote and comma",102.20
+</PRE>
+
+<P>Для ввода символ <CODE>ENCLOSED BY</CODE>, если он вообще задан, будет
+удален с концов значений поля. Это истинно, определен или нет
+<CODE>OPTIONALLY</CODE>. <CODE>OPTIONALLY</CODE> не имеет никакого эффекта на
+входной интерпретации. Местонахождения символа <CODE>ENCLOSED BY</CODE>,
+которому предшествует символ <CODE>ESCAPED BY</CODE>, интерпретируются как
+часть текущего значения поля. Кроме того, дублированные символы
+<CODE>ENCLOSED BY</CODE>, встречающиеся внутри полей, интерпретируются как
+одиночные символы <CODE>ENCLOSED BY</CODE>, если поле непосредственно
+начинается этим символом. Например, если определено
+<CODE>ENCLOSED BY '"'</CODE>, кавычки будут обработаны как показано ниже:</P>
+<PRE>
+"The ""BIG"" boss"  -&#62; The "BIG" boss
+The "BIG" boss      -&#62; The "BIG" boss
+The ""BIG"" boss    -&#62; The ""BIG"" boss
+</PRE>
+
+<P><CODE>FIELDS ESCAPED BY</CODE> контролирует, как писать или читать
+специальные символы. Если символ <CODE>FIELDS ESCAPED BY</CODE> не пуст, он
+использует для префикса следующие символы на выводе:
+
+<UL><LI>Символ <CODE>FIELDS ESCAPED BY</CODE>.
+<LI>Символ <CODE>FIELDS [OPTIONALLY] ENCLOSED BY</CODE>.
+<LI>Первый символ значений <CODE>FIELDS TERMINATED BY</CODE> и
+<CODE>LINES TERMINATED BY</CODE>.
+<LI>ASCII <CODE>0</CODE> (что фактически написано после символа ASCII
+<CODE>0</CODE>, не нулевой байт).</UL>
+
+<P>Если символ <CODE>FIELDS ESCAPED BY</CODE> пуст, никакие символы не
+экранируются вовсе. Не стоит определять пустой символ ESC, особенно, если
+значения полей в Ваших данных содержат любой из символов в списке выше.</P>
+
+<P>Для ввода, если символ <CODE>FIELDS ESCAPED BY</CODE> не пуст,
+местонахождения этого символа будут удалены, и следующий символ принимается
+буквально как часть значения поля. Исключительные ситуации: <SAMP>0</SAMP>
+или <SAMP>N</SAMP> (например, <CODE>\0</CODE> или <CODE>\N</CODE>, если
+символ ESC задан как <SAMP>\</SAMP>). Эти последовательности интерпретируются
+как <CODE>0</CODE> и <CODE>NULL</CODE> соответственно. Ниже изложены правила
+для обработки <CODE>NULL</CODE>.</P>
+
+<P>За подробностями относительно синтаксиса экранировки с символом
+<SAMP>\</SAMP> отсылаю Вас к разделу "<A HREF="glava03.htm#Literals">3.1
+Литералы: как писать строки и числа</A>".</P>
+
+<P>В некоторых случаях параметры обработки полей и строк взаимодействуют:</P>
+
+<UL><LI>Если <CODE>LINES TERMINATED BY</CODE> пустая строка, а <CODE>FIELDS
+TERMINATED BY</CODE> не пустая, строки также будут завершены
+<CODE>FIELDS TERMINATED BY</CODE>.
+
+<LI>Если обе строки <CODE>FIELDS TERMINATED BY</CODE> и
+<CODE>FIELDS ENCLOSED BY</CODE> пусты (<CODE>''</CODE>), используется
+фиксированный формат. С этим форматом никакие разделители не используются
+между полями. Вместо этого, значения столбцов пишутся и читаются, используя
+"экранную" ширину. Например, если столбец объявлен как <CODE>INT(7)</CODE>,
+значения для столбца будут написаны, используя 7-символьные поля. На вводе
+значения для столбца будут получены, читая 7 символов. Формат фиксированной
+строки также воздействует на обработку значений <CODE>NULL</CODE> (см. ниже).
+Обратите внимание, что этот формат не будет работать, если Вы используете
+многобайтный набор символов.</UL>
+
+<P>Обработка значений <CODE>NULL</CODE> изменяется, в зависимости от
+параметров <CODE>FIELDS</CODE> и <CODE>LINES</CODE>, которые Вы используете:
+</P>
+
+<UL><LI>Для заданных по умолчанию значений <CODE>FIELDS</CODE> и
+<CODE>LINES</CODE> <CODE>NULL</CODE> будет написан как <CODE>\N</CODE> для
+вывода, а <CODE>\N</CODE> читается как <CODE>NULL</CODE> для ввода
+(подразумевается, что символ <CODE>ESCAPED BY</CODE> определен как
+<SAMP>\</SAMP>).
+
+<LI>Если <CODE>FIELDS ENCLOSED BY</CODE> не пуст, поле, содержащее
+литеральное слово <CODE>NULL</CODE>, читается как значение <CODE>NULL</CODE>
+(это отличается от слова <CODE>NULL</CODE>, заключенного внутри символов
+<CODE>FIELDS ENCLOSED BY</CODE>, которое читается как строка
+<CODE>'NULL'</CODE>).
+
+<LI>Если <CODE>FIELDS ESCAPED BY</CODE> пустое, <CODE>NULL</CODE> будет
+написан как слово <CODE>NULL</CODE>.
+
+<LI>С форматом фиксированной строки (когда <CODE>FIELDS TERMINATED BY</CODE>
+и <CODE>FIELDS ENCLOSED BY</CODE> оба пусты), <CODE>NULL</CODE> будет записан
+как пустая строка. Обратите внимание, что это делает неразличимыми значения
+<CODE>NULL</CODE> и пустые строки в таблице, когда они записаны в файл
+потому, что и то и другое пишется как как пустые строки. Если Вы должны при
+чтении файла иметь возможность разобраться что есть что, не следует применять
+фиксированный формат строки.</UL>
+
+<P>Некоторые случаи не поддержаны <CODE>LOAD DATA INFILE</CODE>:
+<UL><LI>Строки фиксированной длины (<CODE>FIELDS TERMINATED BY</CODE> и
+<CODE>FIELDS ENCLOSED BY</CODE> вместе пустые) в сочетании со столбцами
+<CODE>BLOB</CODE> или <CODE>TEXT</CODE>.
+
+<LI>Если Вы определяете один разделитель, который является префиксом другого,
+команда <CODE>LOAD DATA INFILE</CODE> не будет способна интерпретировать ввод
+правильно. Например, следующее предложение <CODE>FIELDS</CODE> проблемное:
+<PRE>
+FIELDS TERMINATED BY '"' ENCLOSED BY '"'
+</PRE>
+
+<LI>Если параметр <CODE>FIELDS ESCAPED BY</CODE> пуст, значение поля, которое
+содержит <CODE>FIELDS ENCLOSED BY</CODE> или <CODE>LINES TERMINATED
+BY</CODE>, сопровождаемое значением <CODE>FIELDS TERMINATED BY</CODE>,
+заставит <CODE>LOAD DATA INFILE</CODE> перестать читать поле или строку
+слишком рано. Это случается потому, что <CODE>LOAD DATA INFILE</CODE> не
+может правильно определять, где заканчивается поле.</UL>
+
+<P>Следующий пример загружает все столбцы таблицы <CODE>persondata</CODE>:
+</P>
+<PRE>
+mysql&#62; LOAD DATA INFILE 'persondata.txt' INTO TABLE persondata;
+</PRE>
+
+<P>Никакой список полей не определен, так что <CODE>LOAD DATA INFILE</CODE>
+ожидает строки, содержащие поле для каждого столбца таблицы. Используются
+заданные по умолчанию значения <CODE>FIELDS</CODE> и <CODE>LINES</CODE>.</P>
+
+<P>Если Вы желаете загрузить только некоторые из столбцов таблицы, определите
+список полей:</P>
+<PRE>
+mysql&#62; LOAD DATA INFILE 'persondata.txt'
+           INTO TABLE persondata (col1,col2,...);
+</PRE>
+
+<P>Вы должны также определить список полей, если порядок полей во входном
+файл отличается от порядка столбцов в таблице. Иначе MySQL не может выяснить,
+как совмещать входные поля со столбцами таблицы.</P>
+
+<P>Если строка имеет слишком мало полей, столбцы, для которых никакого
+входного поля не присутствует, будут установлены в значения по умолчанию.
+Задание этих значений по умолчанию подробно описано в разделе
+"<A HREF="glava07.htm#CREATE_TABLE">7.3 Синтаксис <CODE>CREATE TABLE</CODE>
+</A>".</P>
+
+<P>Пустое значение поля интерпретируется не так, как если бы оно
+отсутствовало вовсе, а именно:</P>
+
+<UL><LI>Для строковых типов, столбец установлен в пустую строку.
+<LI>Для числовых типов, столбец установлен в <CODE>0</CODE>.
+<LI>Для типов даты и времени, столбец установлен к соответствующему нулю для
+типа. Подробности в разделе "<A HREF="glava05.htm#Date_and_time_types">5.2
+Типы Date и Time</A>".</UL>
+
+<P>Обратите внимание, что здесь все происходит точно так же, как если Вы
+назначаете пустую стргоку явно как значение соответствующего поля с помощью
+вызовов <CODE>INSERT</CODE> или <CODE>UPDATE</CODE>.</P>
+
+<P>Столбцы <CODE>TIMESTAMP</CODE> будут установлены только к текущей дате и
+времени, если для столбца имеется значение <CODE>NULL</CODE>, или (только для
+первого столбца <CODE>TIMESTAMP</CODE>) если столбец типа
+<CODE>TIMESTAMP</CODE> не учтен в списке полей, когда такой список определен.
+Если входная строка имеет слишком много полей, лишние поля игнорируются.</P>
+
+<P><CODE>LOAD DATA INFILE</CODE> расценивает весь ввод как строки, так что Вы
+не можете использовать числовые значения для столбцов типов <CODE>ENUM</CODE>
+или <CODE>SET</CODE>, как Вы можете это делать инструкциями
+<CODE>INSERT</CODE>. Все значения <CODE>ENUM</CODE> и <CODE>SET</CODE> должны
+быть определены как строки!</P>
+
+<P><A NAME="IDX1355"></A>Если Вы используете C API, Вы можете получать
+информацию относительно запроса, вызывая функцию <CODE>mysql_info()</CODE>
+когда запрос <CODE>LOAD DATA INFILE</CODE> обработан. Формат информационной
+строки показывается ниже:</P>
+<PRE>
+Records: 1  Deleted: 0  Skipped: 0  Warnings: 0
+</PRE>
+
+<P>Предупреждения происходят при тех же самых обстоятельствах, что и с
+командой <CODE>INSERT</CODE> (подробности в разделе
+"<A HREF="#INSERT">8.3 Синтаксис <CODE>INSERT</CODE></A>"), за
+исключением того, что <CODE>LOAD DATA INFILE</CODE> также генерирует
+предупреждения, когда имеется слишком мало или слишком много полей во входной
+строке. Предупреждения не сохранены где-нибудь. Число предупреждений может
+использоваться только как индикация, если все пошло нормально. Если Вы
+получаете предупреждения и хотите знать точно, почему Вы их получили, один
+способ сделать это состоит в том, чтобы использовать <CODE>SELECT ... INTO
+OUTFILE</CODE> в другой файл и сравнить его с первоначальным входным файлом.
+</P>
+
+<P>Если Вы нуждаетесь в <CODE>LOAD DATA</CODE>, чтобы читать из канала, Вы
+можете использовать следующий прием:
+<PRE>
+mkfifo /mysql/db/x/x
+chmod 666 /mysql/db/x/x
+cat &#60; /dev/tcp/10.1.1.12/4711 &#62; /nt/mysql/db/x/x
+mysql -e "LOAD DATA INFILE 'x' INTO TABLE x" x
+</PRE></P>
+
+<P>Если Вы используете версию MySQL до 3.23.25, Вы можете делать
+вышеупомянутое только с помощью <CODE>LOAD DATA LOCAL INFILE</CODE>.</P>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

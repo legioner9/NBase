@@ -1,0 +1,429 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=">
+  <title>Глава 8. Объединение связи в Connector/J</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-j-usagenotes-j2ee-concepts-connection-pooling"></a>
+Глава 8. Объединение связи в Connector/J</h1>
+<a class="indexterm" name="idm45064739070464"></a>
+<a class="indexterm" name="idm45064739068976"></a>
+<p>Объединение связи это метод создания и управления пулом связей, которые
+готовы к употреблению любым
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_thread"
+target="_top">потоком</a>, которому они нужны.
+Объединение связи может значительно увеличить производительность
+приложения, уменьшая полное использование ресурсов. </p>
+
+<h2><a name="idm45064739066544"></a>Как объединение связи работает</h2>
+<p>Для большинства запросов нужен только поток, чтобы иметь доступ к связи
+JDBC, когда они активно обрабатывают
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_transaction"
+target="_top">транзакции</a>, которая часто занимает только миллисекунды.
+Если не обрабатывает транзакцию, связь простаивает. Объединение связи
+позволяет неработающей связи использоваться некоторым другим потоком, чтобы
+сделать полезную работу.</p>
+
+<p>На практике, когда поток должен сделать работу с JDBC, это просит связь из
+пула. Когда поток закончит использование связи, он возвращает ее в пул, чтобы
+она могла использоваться любыми другими потоками.</p>
+
+<p>Когда связь дана из пула, она используется исключительно потоком, который
+запросил ее. С программной точки зрения это аналогично тому, что поток
+каждый раз вызвал <code class="literal">DriverManager.getConnection()</code>,
+когда была нужна связь JDBC. С объединением связи ваш поток может
+использовать новую или уже существующую связь.</p>
+
+<h2><a name="idm45064739062112"></a>Выгода объединения связи</h2>
+<p>Главные преимущества для объединения связи:</p>
+<ul><li><p>Уменьшенное время создания связи.</p>
+<p>Хотя это обычно не проблема с быстрой установкой связи, которую MySQL
+предлагает по сравнению с другими базами данных, создание новых связей JDBC
+все еще требует издержек в драйвере JDBC и сетевом слое, которых можно
+избежать, если связи будут переработаны.</p></li>
+
+<li><p>Упрощенная модель программирования.</p>
+<p>Используя объединение связи, каждый отдельный поток может действовать, как
+будто это создало свою собственную связь JDBC, позволив вам использовать
+прямые методы программирования JDBC.</p></li>
+
+<li><p>Использование ресурсов грамотно.</p>
+<p>Если вы создаете новую связь каждый раз, когда она нужна потоку вместо
+того, чтобы использовать объединение связи, использование ресурсов вашего
+запроса может быть расточительным, а это может привести к непредсказуемым
+поведениям для вашего запроса, когда он находится под большой нагрузкой.
+</p></li></ul>
+
+<h2><a name="idm45064739056080"></a>Используя объединение связи с Connector/J
+</h2>
+<p>Понятие объединения связи в JDBC было стандартизировано через
+дополнительные интерфейсы JDBC 2.0, и у всех серверов основного приложения
+есть реализация их API, которая работает с MySQL Connector/J.</p>
+
+<p>Обычно вы формируете пул связи в своих конфигурационных файлах сервера
+приложений и получаете доступ к нему через Java Naming and Directory
+Interface (JNDI). Следующий код показывает, как вы могли бы использовать пул
+связи от приложения, развернутого в сервере приложений J2EE:</p>
+
+<a name="connector-j-examples-connectionpool-j2ee"></a>
+<p><b>Пример 8.1. Connector/J: Использование пула связи
+с сервером приложений J2EE</b></p>
+<pre class="programlisting">
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
+public class MyServletJspOrEjb {
+  public void doSomething() throws Exception {
+    /*
+     * Create a JNDI Initial context to be able to
+     * lookup the Data Source
+     *
+     * In production-level code, this should be cached as
+     * an instance or static variable, as it can
+     * be quite expensive to create a JNDI context.
+     *
+     * Note: This code only works when you are using servlets
+     * or EJBs in a J2EE application server. If you are
+     * using connection pooling in standalone Java code, you
+     * will have to create/configure datasources using whatever
+     * mechanisms your particular connection pooling library provides.
+     */
+    InitialContext ctx = new InitialContext();
+    /*
+     * Lookup the DataSource, which will be backed by a pool
+     * that the application server provides. DataSource instances
+     * are also a good candidate for caching as an instance
+     * variable, as JNDI lookups can be expensive as well.
+     */
+    DataSource ds = (DataSource)ctx.lookup("java:comp/env/jdbc/MySQLDB");
+    /*
+     * The following code is what would actually be in your
+     * Servlet, JSP or EJB 'service' method...where you need
+     * to work with a JDBC connection.
+     */
+    Connection conn = null;
+    Statement stmt = null;
+    try {
+      conn = ds.getConnection();
+      /*
+       * Now, use normal JDBC programming to work with
+       * MySQL, making sure to close each resource when you're
+       * finished with it, which permits the connection pool
+       * resources to be recovered as quickly as possible
+       */
+      stmt = conn.createStatement();
+      stmt.execute("SOME SQL QUERY");
+      stmt.close();
+      stmt = null;
+      conn.close();
+      conn = null;
+    } finally {
+      /*
+       * close any jdbc instances here that weren't
+       * explicitly closed during normal code path, so
+       * that we don't 'leak' resources...
+       */
+      if (stmt != null) {
+         try {
+           stmt.close();
+         } catch (sqlexception sqlex) {
+           // ignore, as we can't do anything about it here
+         }
+         stmt = null;
+      }
+      if (conn != null) {
+         try {
+           conn.close();
+         } catch (sqlexception sqlex) {
+           // ignore, as we can't do anything about it here
+         }
+         conn = null;
+      }
+    }
+  }
+}
+</pre>
+
+<p>Как показано в примере выше, после получения JNDI
+<code class="literal">InitialContext</code> и поиска
+<code class="literal">DataSource</code> остальная часть кода следует
+знакомым соглашениям JDBC.</p>
+
+<p>Используя объединение связи, всегда удостоверяйтесь, что закрываются связи
+и что-либо созданное ими (запросы или наборы результатов). Это правило
+применяет, неважно, что происходит в вашем коде (исключения, поток контроля и
+т.д.). Когда эти объекты закрываются, они могут быть снова использованы,
+иначе они будут переплетены, что означает, что ресурсы сервера MySQL, которые
+они представляют (такие как буфера, блокировки или сокеты) заняты в течение
+некоторого времени или в худшем случае могут быть заняты навсегда.</p>
+
+<h2><a name="idm45064739045968"></a>Калибровка пула связи</h2>
+<p>У каждой связи с MySQL есть накладные расходы (память, CPU, контекстные
+переключения и т.д.) на обоих сторонах клиент-сервера. Каждая связь
+ограничивает, сколько ресурсов там доступно вашему запросу, а также серверу
+MySQL. Многие из этих ресурсов будут использоваться безотносительно того,
+делает ли связь на самом деле какую-либо полезную работу! Пулы связи могут
+быть настроены, чтобы максимизировать работу, держа использование ресурса
+ниже пункта, где ваш запрос начнет терпеть неудачу, а не
+просто работать медленнее.</p>
+
+<p>Оптимальный размер для пула связи зависит от ожидаемой нагрузки
+и среднего времени транзакции базы данных. На практике оптимальный размер
+пула связи может быть меньшим, чем вы могли бы ожидать. Если вы берете
+приложение Oracle's Java Petstore, например, пул связи в 15-20 связей может
+служить относительно умеренной нагрузке (600 параллельных пользователей) с
+использованием MySQL и Tomcat с приемлемым временем отклика.</p>
+
+<p>Чтобы правильно измерить пул связи для вашего запроса,
+создайте скрипты нагрузочного теста такими инструментами, как Apache JMeter
+или The Grinder и проведите нагрузочный тест вашего приложения.</p>
+
+<p>Легкий способ определить отправную точку состоит в том, чтобы формировать
+неограниченный максимальный размер пула связи,
+выполнить нагрузочный тест и измерить самый большой объем одновременно
+используемых связей. Можно тогда работать, чтобы определить
+минимальное и максимальное количества объединенных связей, которые дают
+лучшей эффект для конкретного приложения.</p>
+
+<h2><a name="idm45064739042000"></a>Утверждение связей</h2>
+<p>MySQL Connector/J может проверить связь, выполнив пинг сервера.
+В случае уравновешенных по нагрузке связей это выполняется для всех активных
+объединенных внутренних связей, которые сохраняются. Это выгодно для
+приложений Java, используя пулы связи, поскольку пул может использовать эту
+функцию, чтобы утвердить связи. В зависимости от вашего пула связи и
+конфигурации, эта проверка может быть выполнена в разное время:</p>
+
+<ol type="1"><li><p>Прежде чем пул возвращает связь приложению.</p></li>
+<li><p>Когда приложение возвращает связь в пул.</p></li>
+<li><p>Во время периодических проверок неработающих связей.</p></li></ol>
+
+<p>Чтобы использовать эту функцию, определите запрос проверки в своем пуле
+связи, который начинается с <code class="literal">/* ping */</code>.
+Обратите внимание на то, что синтаксис должен быть точно как определен.
+Это предписывает драйверу послать пинг в сервер и возвращает фиктивный легкий
+набор результатов. Используя <code class="literal">ReplicationConnection
+</code> или <code class="literal">LoadBalancedConnection</code>, пинг
+пошлют через все активные связи.</p>
+
+<p>Очень важно, что синтаксис определяется правильно.
+Синтаксис должен быть точным по причинам эффективности, поскольку этот тест
+сделан для каждого запроса, который выполняется:</p>
+
+<pre class="programlisting">
+protected static final String PING_MARKER = "/* ping */";
+...
+if (sql.charAt(0) == '/') {
+   if (sql.startsWith(PING_MARKER)) {
+      doPingInstead();
+      ...
+   }
+}
+</pre>
+
+<p>Ни один из следующих отрывков не будет работать, потому что синтаксис
+пинга чувствителен к пробелам, регистру и размещению:</p>
+<pre class="programlisting">
+sql = "/* PING */ SELECT 1";
+sql = "SELECT 1 /* ping*/";
+sql = "/*ping*/ SELECT 1";
+sql = " /* ping */ SELECT 1";
+sql = "/*to ping or not to ping*/ SELECT 1";
+</pre>
+
+<p>Все предыдущие запросы выпустят нормальный
+<code class="literal">SELECT</code>, но
+<span class="bold"><strong>НЕ</strong></span> будут преобразованы в пинг.
+Далее для уравновешенных по нагрузке связей, запрос будет выполнен для одной
+связи во внутреннем пуле, вместо того, чтобы проверить каждую основную
+физическую связь. Это приводит к неактивным физическим связям, принимающим
+несвежее состояние. Если Connector/J позже повторно балансирует, он мог бы
+выбрать неактивную связь, приводящую к исключению, передаваемому к
+приложению. Чтобы помочь предотвратить это, можно использовать
+<code class="literal">loadBalanceValidateConnectionOnSwapServer</code>,
+чтобы проверить связь перед использованием.</p>
+
+<p>Если ваше развертывание Connector/J использует пул связи, который
+позволяет вам определять запрос проверки, надо использовать в своих интересах
+его, но гарантировать, что запрос начинается
+<span class="emphasis"><em>точно</em></span> с
+<code class="literal">/* ping */</code>.
+Это особенно важно, если вы используете выравнивание нагрузки или
+репликацию с Connector/J, поскольку это поможет поддержать связи, которые
+иначе отвалятся, вызвав проблемы позже.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

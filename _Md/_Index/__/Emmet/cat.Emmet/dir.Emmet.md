@@ -1,0 +1,7 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\__\Emmet\cat.Emmet\dir.Emmet.md">Emmet</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\__\Emmet\webdesign-master.ru.md">webdesign-master.ru.md</a>
+        - *# [webdesign-master.ru](https://webdesign-master.ru/blog/html-css/2.html)
+        - *## Дочерний: >
+        - *## Соединение: +
+        - *## Поместить выше (в дереве HTML): ^
+        - *@@ emmet continue far

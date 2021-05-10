@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlelements\umlelementsstructural\artifact_element\cat.artifact_element\dir.artifact_element.md">artifact_element</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlelements\umlelementsstructural\artifact_element\artifact_element.md">artifact_element.md</a>
+        - *#### [Artifact](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/artifact_element.html) Артефакт

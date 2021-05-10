@@ -1,0 +1,7 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\3.ОСНОВЫ.dir\3.5.Хороший_коммит.dir\cat.3.5.Хороший_коммит.dir\dir.3.5.Хороший_коммит.dir.md">3.5.Хороший_коммит.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\3.ОСНОВЫ.dir\3.5.Хороший_коммит.dir\3.5.Хороший_коммит.md">3.5.Хороший_коммит.md</a>
+        - *## commit : atomic and consistent
+        - *## stile of commit 
+        - *### Message : from uppercase + \#(Number 0f Fiches)
+        - *### Action + comment : [(fix|build|test|refactor|...)(item to act): comment]
+        - *## fastCommits for as => reducting all history (for example git rebase -i)

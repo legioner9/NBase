@@ -1,0 +1,12 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\EventEmitter-master\cat.EventEmitter-master\dir.EventEmitter-master.md">EventEmitter-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\EventEmitter-master\README.md">README.md</a>
+        - *## EventEmitter Examples
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\EventEmitter-master\Rust\cat.Rust\dir.Rust.md">Rust</a>
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\EventEmitter-master\Rust\README.md">README.md</a>
+            - *# EventEmitter Example in Rust
+            - *## Installing Rust
+            - *## Running examples
+            - *## Running tests
+            - *## Building documentation
+            - *## Contributing
+    

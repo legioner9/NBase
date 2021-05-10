@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\thetaggedvaluestab\modify_tagged_values\cat.modify_tagged_values\dir.modify_tagged_values.md">modify_tagged_values</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\thetaggedvaluestab\modify_tagged_values\modify_tagged_values.md">modify_tagged_values.md</a>
+        - *### [Modify Tagged Values](https://sparxsystems.com/enterprise_architect_user_guide/15.1/modeling/modify_tagged_values.html) Изменить значения с тегами

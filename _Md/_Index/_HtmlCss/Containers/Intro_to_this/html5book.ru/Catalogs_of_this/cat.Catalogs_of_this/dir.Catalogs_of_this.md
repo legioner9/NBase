@@ -1,0 +1,13 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\Catalogs_of_this\cat.Catalogs_of_this\dir.Catalogs_of_this.md">Catalogs_of_this</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\Catalogs_of_this\html_tags.md">html_tags.md</a>
+        - *# THML groups HTML 5.2. теги (имя тега, описание, значение свойства display)
+        - *## Метаданные документа
+        - *## Секционные элементы
+        - *## Группировка содержимого
+        - *## Табличные данные
+        - *## Интерактивные элементы
+        - *## Скрипты
+        - *## Встроенное содержимое
+        - *## Семантика текста
+        - *## Правки в тексте
+        - *## Формы

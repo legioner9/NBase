@@ -1,0 +1,245 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=">
+  <title>Глава 2. Версии Connector/J, MySQL и Java</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-j-versions"></a>
+Глава 2. Версии Connector/J, MySQL и Java</h1>
+<a class="indexterm" name="idm45064747111904"></a>
+<p>В настоящее время есть две доступные версии MySQL Connector/J:</p>
+
+<ul><li><p>Connector/J 8.0 (раньше Connector/J 6.0, см.
+<a href="../../../https@dev.mysql.com/doc/relnotes/connector-j/8.0/en/news-8-0-7.html"
+target="_top">Changes in MySQL Connector/J 8.0.7</a> для объяснения изменения
+номера версии) это Type 4 чистый драйвер Java JDBC 4.2 для Java 8.
+Это предоставляет совместимость со всей функциональностью MySQL 5.6, 5.7 и
+8.0. Connector/J 8.0 обеспечивает все особенности развития, включая
+авторегистрацию с Driver Manager, стандартизированные проверки достоверности,
+категоризированные SQLExceptions, поддержку большого количества обновлений,
+поддержку вариантов даты и времени из пакета
+<code class="literal">java.time</code>, поддержку для обработки XML JDBC-4.x,
+поддержку информации о клиенте для каждого подключения и поддержку типов
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/char.html" target="_top">
+<code class="literal">NCHAR</code></a>,
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/char.html" target="_top">
+<code class="literal">NVARCHAR</code></a> и
+<code class="literal">NCLOB</code>.</p></li>
+
+<li><p>Connector/J 5.1 тоже Type 4 чистый Java JDBC драйвер,
+который соответствует спецификации JDBC 4.2. Это предоставляет совместимость
+со всей функциональностью MySQL 5.6, 5.7 и 8.0. Connector/J 5.1 описан
+<a href="../../../https@dev.mysql.com/doc/connector-j/5.1/en/default.htm" target="_top">здесь
+</a>.</p></li></ul>
+
+<p>Следующая таблица суммирует доступные версии Connector/J, наряду с
+информацией о совместимости для различных версий JDBC, сервера MySQL и Явы, а
+также статуса поддержки для каждой из версий Connector/J:</p>
+
+<a name="idm45064747101920"></a>
+<p><b>Таблица 2.1. Обзор версий Connector/J</b></p>
+<table border="1">
+<thead><tr><th scope="col">Версия Connector/J</th>
+<th scope="col">Версия JDBC</th>
+<th scope="col">Версия MySQL Server</th>
+<th scope="col">Требует JRE</th>
+<th scope="col">JDK для компиляции</th>
+<th scope="col">Статус</th></tr></thead>
+
+<tbody><tr><td scope="row">8.0</td><td>4.2 <sup>1</sup></td>
+<td>5.6, 5.7, 8.0</td><td>JRE 8 или выше</td>
+<td>JDK 8.0 или выше<sup>3</sup></td>
+<td>Общедоступность. Рекомендуемая версия.</td></tr>
+<tr><td scope="row">5.1</td><td>3.0, 4.0, 4.1, 4.2</td>
+<td>5.6<sup>2</sup>, 5.7<sup>2</sup>, 8.0<sup>2</sup></td>
+<td>JRE 5 или выше<sup>2</sup></td>
+<td>JDK 5.0 И JDK 8.0 или выше<sup>3</sup></td>
+<td>Общедоступность.</td></tr></tbody></table>
+
+<ul><li><p><sup>1</sup> Connector/J 8.0 реализует JDBC 4.2.
+В то время как Connector/J 8.0 работает с библиотеками версий JDBC выше, он
+возвращает <code class="literal">SQLFeatureNotSupportedException</code>
+для любых вызовов методов, поддержанных только JDBC 4.3 и выше.</p></li>
+
+<li><p><sup>2</sup> JRE 8 или выше требуются для работы Connector/J 5.1 с
+MySQL 5.6, 5.7 и 8.0 с SSL/TLS, используя некоторые шифры.</p></li>
+<li><p><sup>3</sup> настроенный поставщик JSSE мог бы быть обязан
+использовать некоторые более поздние версии TLS и шифры,
+соединяясь с серверами MySQL. Например, потому что Oracle Java 8
+идет с внедрением JSSE, которое поддерживает только TLS v1.2 и ниже, вам
+нужна настроенная реализация JSSE, чтобы использовать TLS v1.3 на
+платформе Яве Oracle 8.</p></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

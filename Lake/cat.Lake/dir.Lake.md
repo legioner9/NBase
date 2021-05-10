@@ -1,0 +1,66 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\Lake\cat.Lake\dir.Lake.md">Lake</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\Lake\V1\cat.V1\dir.V1.md">V1</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\Lake\V1\V1.md">V1.md</a>
+            - *## teach clean code
+            - *%% WalkToSea [Clean Code in js](https://www.youtube.com/watch?v=XT6XkIJIVbA&ab_channel=webDev)
+            - *## Переменные
+            - *### Избегайте интуитивных маппингов
+            - *### Не добавляйте ненужный контекст
+            - *### Используйте условия по умолчанию вместо коротких замыканий или условных выражений
+            - *## Функции
+            - *### Функция должна решать только одну задачу
+            - *### Имена должны описывать что функция делает
+            - *### Не используйте флаги, как аргументы функций
+            - *### Инкапсулируйте условия
+            - *### Избегайте негативных условий
+            - *### Идеальное количество аргументов для функций два и меньше
+            - *### Не переопределяйте глобальные функции
+            - *### Удаляйте мёртвый код
+            - *## Объекты
+            - *### Используйте приватные свойства
+            - *### Используйте геттеры и сеттеры
+            - *## Классы
+            - *### Используйте метод цепочки
+            - *## Тестирование
+            - *### Один тест - одно описание
+            - *## Асинхронность
+            - *### Используйте промисы вместо колбеков
+            - *### Async/Await делает код чище, чем промисы
+            - *### Не игнорируйте отловленные ошибки
+            - *## Форматирование
+            - *### Используйте один вариант именования
+            - *### Коментируйте только код, содержащий сложную бизнес-логику
+            - *### Не комментируйте ненужный код
+            - *### Никогда не ведите журнал комментариев
+            - *### Не используйте позиционные маркеры
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\Lake\V2\cat.V2\dir.V2.md">V2</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\Lake\V2\V2.md">V2.md</a>
+            - *## Принципы SOLID: объяснение человеческим языком
+            - *%% WalkToSea [Принципы SOLID: объяснение человеческим языком](https://techrocks.ru/2020/08/26/solid-principles-in-plain-russian/)
+            - *### Single Responsibility Principle («Принцип единой ответственности», SRP)
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\Lake\V3\cat.V3\dir.V3.md">V3</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\Lake\V3\V3.md">V3.md</a>
+            - *## [Функциональное программирование в мире JavaScript](https://www.youtube.com/watch?v=2QAUAZ5qgJM&ab_channel=%D0%A4%D1%80%D0%BE%D0%BD%D1%82%D0%B5%D0%BD%D0%B4)
+            - *%% _WTS functionl programming
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\Lake\V4\cat.V4\dir.V4.md">V4</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\Lake\V4\V4.md">V4.md</a>
+            - *## [Node.js основное](https://www.youtube.com/watch?v=qZ5xzkEdkhg&t=7479s&ab_channel=%D0%A4%D1%80%D0%BE%D0%BD%D1%82%D0%B5%D0%BD%D0%B4)
+            - *%% _WTS functionl programming
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\Lake\V5\cat.V5\dir.V5.md">V5</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\Lake\V5\V5.md">V5.md</a>
+            - *## ILK new [Node.js: подробный курс (2021, в процессе)](https://www.youtube.com/watch?v=gYU0pFtbNAw&list=PLDyvV36pndZEs5ZKs7ckHoZNcTjUOSVWi&ab_channel=JavaScript.ru)
+            - *%% WTS Nodejs доходчиво
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\Lake\V6\cat.V6\dir.V6.md">V6</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\Lake\V6\V6.md">V6.md</a>
+            - *## [Моделирование бизнес-процессов](https://www.youtube.com/playlist?list=PLEU6YIHP1uoQJ64mjlXQSlfM0sH83Gx0I)
+            - *@@ WTS BPM sistems
+            - *### 1 lecure
+            - *#### object of modeling is process
+            - *#### model is discribing
+            - *#### process is action ANYWAY - result is FECK
+    

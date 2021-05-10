@@ -1,0 +1,431 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r" />
+  <title>Глава 8. Что нового в MySQL for Excel</title>
+  <meta name="generator" content="DocBook XSL Stylesheets + chunker.py v1.9.2" />
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="mysql-for-excel-what-is-new"></a>
+Глава 8. Что нового в MySQL for Excel</h1>
+<p>Эта секция суммирует прогресс развития MySQL for Excel.</p>
+
+<h2><a name="mysql-for-excel-what-is-new-1-3"></a>8.1.
+Что нового в MySQL for Excel 1.3</h2>
+<p>Большинство новых опций, добавленных в MySQL for Excel 1.3.x включает
+улучшения функциональности <span class="guilabel">Data Import</span>.</p>
+
+<ul><li class="listitem"><p>
+Начиная с MySQL for Excel 1.3.8, поддержка безопасных соединений была
+добавлена. Зашифрованные связи могут быть в форме сертификатов SSL или
+туннелирования SSH без требования наличия промежуточного программного
+обеспечения, чтобы создать тоннель. Зашифрованные связи могут формироваться
+непосредственно из MySQL for Excel или они могут формироваться с
+MySQL Workbench и затем использоваться, чтобы открыть связь из дополнения.
+</p></li>
+
+<li class="listitem"><p>Новый глобальный выбор
+<code class="literal">Tolerance for FLOAT and DOUBLE comparisons in WHERE
+clause</code> обеспечивает способ отредактировать данные типов
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/floating-point-types.html"
+target="_top"><code class="literal">FLOAT</code></a> и
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/floating-point-types.html"
+target="_top"><code class="literal">DOUBLE</code></a>,
+это позволяет надлежащее соответствие строки в базе данных, когда это
+используется вместе с оптимистическими обновлениями (см.
+<a href="config.htm#mysql-for-excel-global-options-edit-sessions">здесь</a>).
+</p></li>
+
+<li class="listitem"><p>
+Import Data для хранимых процедур теперь позволяет выбирать
+отдельные столбцы из каждого возвращенного набора результатов, что
+подобно импортированию данных столбцов для таблиц и представлений.</p></li>
+
+<li class="listitem"><p>
+Import Data добавляет цифры к числам с плавающей запятой. Например, вместо
+того, чтобы отдать такое значение, как 5.3 от базы данных точно, операция
+показывает 5.0000019073486 после импорта. Это поведение влияет на типы
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/floating-point-types.html"
+target="_top"><code class="literal">FLOAT</code></a> и
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/floating-point-types.html"
+target="_top"><code class="literal">DOUBLE</code></a>, которые придерживаются
+стандарта IEEE 754 и сохранены как приближенные значения.</p>
+
+<p>Новый выбор теперь обеспечивает способ импортировать числа с плавающей
+запятой, используя тип
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/fixed-point-types.html"
+target="_top"><code class="literal">DECIMAL</code></a>, который хранит и
+показывает точное значение от базы данных (см.
+<a href="import.htm#mysql-for-excel-import-advanced-format">здесь</a>).
+</p></li>
+
+<li class="listitem"><p>
+Удалена поддержка MySQL Fabric. Соединения Fabric, созданные в
+MySQL Workbench, больше не будут появляться в MySQL for Excel.</p></li>
+<li class="listitem"><p>MySQL for Excel разделяет редактирующие данные сессии
+среди пользователей и между компьютерами, чтобы способствовать максимальной
+мобильности. Рабочую книгу Excel с таблицами из MySQL можно теперь послать
+коллеге или просто переместить на иной компьютер, данные MySQL могут быть
+освежены и любые сессии редактирования данных могут быть восстановлены
+автоматически, когда книга открыта.</p>
+
+<p>Эта новая функциональность требует, чтобы книга Excel поддерживала
+части XML, которые имеют место для следующих форматов файлов:</p>
+<ul><li class="listitem"><p>Excel Workbook (.xlsx)</p></li>
+<li class="listitem"><p>Excel Macro-Enabled Workbook (*xlsm)</p></li>
+<li class="listitem"><p>Excel Binary Workbook (*xlsb)</p></li>
+<li class="listitem"><p>Excel 97-2003 Workbook (*.xls)</p></li>
+<li class="listitem"><p>Excel Template (*.xltx)</p></li>
+<li class="listitem"><p>Excel Macro-Enabled Template (*.xltm)</p></li>
+<li class="listitem"><p>Excel 97-2003 Template (*.xlt)</p></li>
+<li class="listitem"><p>Microsoft Excel 5.0/95 Workbook (*.xls)</p></li>
+<li class="listitem"><p>Strict Open XML Spreadsheet (*.xlsx)</li></ul></li>
+
+<li class="listitem"><p>Глобальные варианты были перестроены в закладки
+для более легкой навигации. Нажмите <span class="guibutton">Options</span>
+на панели задач MySQL for Excel, чтобы открыть диалог Global Options.</li>
+
+<li class="listitem"><p>Добавлен новый глобальный выбор форматирования
+пространственных данных. Форматы: Well-Known Text, Keyhole Markup Language,
+Geography Markup Language или GeoJSON.</p></li>
+
+<li class="listitem"><p>Добавлен новый глобальный выбор
+(вкладка <span class="guilabel">Imported Tables</span>), чтобы восстановить
+импортированные данные MySQL в таблицах Excel, когда открыта книга Excel
+или панель задач MySQL for Excel.</p></li>
+
+<li class="listitem"><p>Добавлено действие <span class="guisubmenu">Reset to
+auto-detected</span> к контекстному меню поля <span class="guilabel">Data
+Type</span> области <span class="guilabel">Column Options</span> в диалоге
+Export Data to MySQL.</p></li>
+
+<li class="listitem"><p>Диалог <span class="guilabel">Connections Migration
+</span> теперь предлагает способ отложить миграцию связей с
+MySQL Workbench на час, день, неделю, месяц или совсем.
+Для получения дополнительной информации см.
+<a href="config.htm#mysql-for-excel-global-options-connections">здесь
+</a>.</p></li>
+
+<li class="listitem"><p>
+Действие <span class="guilabel">Append Excel Data to Table</span>
+обновлено с новыми расширенными настройками, чтобы управлять поведением
+строк, содержащих значения уникального ключа, которые являются дубликатами
+в базе данных. Следующие новые варианты расположены во вкладке
+<span class="guilabel">SQL Queries</span> диалога
+Advanced Append Data Options:</p>
+
+<ul><li class="listitem"><p>
+<span class="guilabel">Error out and abort the append
+operation</span> (по умолчанию).</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Ignore rows with duplicate unique key
+values</span>.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Replace the values in the old rows with the ones
+in new rows</span>.</p></li></ul></li>
+
+<li class="listitem"><p>Можно теперь освежить импортированные данные из
+исходной базы данных MySQL при нажатии
+<span class="guimenuitem">Refresh</span> из контекстного меню или
+<span class="guibutton">Refresh All</span> из навигационного меню.
+Эти действия проверяют на изменения в исходной базе данных MySQL и
+обновляют ваши импортированные данные MySQL соответственно.</p>
+
+<p>Вариант использования: коллега посылает вам рабочий лист MySQL Excel с
+данными, экспортируемыми из базы данных MySQL. Вы открываете файл несколько
+дней спустя и волнуетесь, что данные устарели, таким образом, вы нажимаете
+<span class="guimenuitem">Refresh</span>.</p></li>
+
+<li class="listitem"><p>
+Новая кнопка <span class="guibutton">Refresh To Defaults</span>
+была добавлена к  страницам параметров. Это изменяет каждый выбор на значение
+по умолчанию, и вы подтверждаете (или отмените), применение этих изменений.
+</p></li>
+
+<li class="listitem"><p>Предоставление возможности новой опции
+<span class="guilabel">Add Summary Fields for Numeric Columns</span>
+добавляет итоговую область к концу каждой числовой колонки в Excel.
+Отсюда вы выбираете желаемую функцию для колонки, такую как
+total или average.</p></li>
+
+<li class="listitem"><p>Можно теперь импортировать данные из многих
+объектов в единственной операции. Используйте
+<span class="keycap"><strong>Control</strong></span> или
+<span class="keycap"><strong>Shift</strong></span>, чтобы выбрать
+многие объекты из панели задач MySQL for Excel и нажмите
+<span class="guibutton">Import</span>, чтобы открыть новый диалог для отбора
+дополнительных объектов, у которых есть непосредственные связи с
+объектами, которые вы выбрали. Каждый объект открывается в его
+собственном рабочем листе.</p>
+
+<p>Из этого нового диалога можно также произвести модель
+<span class="guilabel">Relationships</span> в Excel. Это требует
+Excel 2013 и выше или Excel 2010 с PowerPivot add-in.</p></li>
+
+<li class="listitem"><p>
+Новая опция <span class="guilabel">Create a PivotTable with the Imported
+Data</span>. Требует Pivot Table в Excel.</p></li>
+
+<li class="listitem"><p>У всех вариантов теперь есть описательная подсказка.
+Наведите курсор и прочитайте пояснение.</p></li>
+<li class="listitem"><p>Можно теперь определить сопоставление для созданных
+схем. По умолчанию тип сопоставления "Server Default".
+Эти запросы могут быть рассмотрены перед выполнением.</p></li>
+
+<li class="listitem"><p>Все типы данных MySQL теперь доступны, выполняя
+<span class="guilabel">Data Export</span>. По умолчанию только обычно
+используемые типы данных перечисляются. Можно все еще ввести тип вместо того,
+чтобы выбрать его.</p></li></ul>
+
+<h2><a name="mysql-for-excel-what-is-new-1-2"></a>8.2.
+Что нового в MySQL for Excel 1.2</h2>
+<ul><li class="listitem"><p>
+<code class="literal">Edit Connections</code>: Связи MySQL
+могут теперь быть отредактированы из MySQL for Excel
+щелкнув правой кнопкой мыши, и выбрав
+<span class="guilabel">Edit Connection</span>. Прежде эти связи могли быть
+отредактированы только в MySQL Workbench.</p></li>
+
+<li class="listitem"><p>
+<code class="literal">Optimistic Updates</code>:
+Ранее только пессимистические обновления использовались, что означает, что
+нажим <span class="guilabel">Commit Changes</span> переписал бы изменения,
+выполненные за пределами MySQL для Excel для отредактированных ячеек.</p>
+
+<p>Сегодня оба варианта остаются доступными, и оптимистические обновления
+позволены по умолчанию. Этот тип обновления может быть установлен как
+предпочтение или для сессии.</p></li>
+
+<li class="listitem"><p>Диалог <span class="guilabel">Append Data</span>
+теперь уведомит вас относительно несовместимых типов
+(с визуальными предупреждениями) при отображении исходных колонок
+Excel на столбцы MySQL.</p>
+
+<p>Если несоответствие обнаружено, то колонка в исходной сетке, которая
+содержит отображенные данные Excel, покраснела, и при выборе этого
+столбца появится предупреждение с текстом, объясняя, что исходные данные не
+подходят для типа данных целевого столбца.</p></li>
+
+<li class="listitem"><p>Новые предпочтения предварительного просмотра
+позволяют вам позволять один из следующих трех вариантов:</p>
+<ul><li class="listitem"><p>
+<span class="guilabel">Preview SQL statements before they are sent
+to the Server</span>: просмотр (и необязательно) редактирование запросов
+MySQL UPDATE/INSERT прежде, чем они будут переданы.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Show executed SQL statements along with the results
+</span>: просмотр запросов после того, как они передаются, это
+является текущим поведением.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Do not show the MySQL statements</span>:
+только показать итоговую информацию, такую как количество затронутых
+строк, но не запросы. Это включено по умолчанию.</p></li></ul></li>
+
+<li class="listitem"><p>Функция <span class="guilabel">Data Export</span>
+теперь предоставляет вариант только составить таблицу, не вставляя данные.
+</p>
+<p>Для этого нажмите кнопку <span class="guibutton">Export Data</span> в
+диалоге <span class="guibutton">Create Table</span>.</p></li>
+<li class="listitem"><p>Выбранное название схемы теперь показано вверху
+окна MySQL for Excel Database Object Selection.</p></li>
+
+<li class="listitem"><p>Диалоги <span class="guilabel">Advanced Options
+</span> из окон Import, Export and Append Data
+теперь немедленно применяют изменения выбора, раньше диалог
+<span class="guilabel">Advanced Options</span> должен был быть вновь открыт,
+прежде, чем изменения могли быть предварительно просмотрены.</p></li>
+
+<li class="listitem"><p>Сессии <span class="guilabel">Edit Data</span>
+теперь могут быть сохранены: используя новые предпочтения
+<span class="guilabel">Edit Session</span>, эти сессии были автоматически
+закрыты после закрытия рабочей книги Excel.
+Такие данные, как Workbench connection ID, схема MySQL и имя таблицы MySQL,
+могут теперь быть сохранен, если рабочая книга Excel
+сохраняется на диск и доступны, когда она вновь открыта.</p></li>
+
+<li class="listitem"><p>Таблицы Excel автоматически составлены для любых
+данных, импортированных из MySQL в Excel с именем
+"Schema.DB-Object-name". Имя объекта может быть таблицей MySQL,
+представлением или хранимой процедурой. Возможности для этой особенности
+перечисляются в <span class="guilabel">Import Data</span>,
+<span class="guilabel">Advanced Options</span>.
+На недавно составленные таблицы Excel можно сослаться для анализа данных
+в сводных таблицах или отчетах.</p></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</body>
+</html>

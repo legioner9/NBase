@@ -1,0 +1,25 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Learn_this\Live_learn\cat.Live_learn\dir.Live_learn.md">Live_learn</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Learn_this\Live_learn\_Common_this\cat._Common_this\dir._Common_this.md">_Common_this</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Learn_this\Live_learn\_Common_this\Intro\cat.Intro\dir.Intro.md">Intro</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Learn_this\Live_learn\_Common_this\Intro\intro.md">intro.md</a>
+                - *## Bash Commands
+                - *## file git config
+                - *### Настройка ветки по умолчанию
+                - *### Проверка настроек
+                - *## Как получить помощь?
+                - *## commit [create commit from HEAD]
+                - *## make branch [create branch from HEAD]
+                - *## checkout [transfer HEAD to arg1]
+                - *### checkout -b [transfer HEAD to new branch]
+                - *## merge [create & transfer HEAD to commit new(HEAD+arg1)']
+                - *## rebase
+                - *## ^
+                - *## ~ 
+                - *## remote
+                - *### -v
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\contaners\Learn_this\Live_learn\_Common_this\Intro\password.md">password.md</a>
+                - *# <a href="https://ru.stackoverflow.com/questions/420040/%D0%9E%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D1%80%D0%B5%D0%BF%D0%BE%D0%B7%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D1%8F-git-%D0%B1%D0%B5%D0%B7-%D0%B2%D0%B2%D0%BE%D0%B4%D0%B0-%D0%BF%D0%B0%D1%80%D0%BE%D0%BB%D0%B5%D0%B9" target="_blank">Password</a>
+                - *## https
+                - *# <a href="https://stackoverflow.com/questions/35942754/how-to-save-username-and-password-in-git-gitextension" target="_blank">Как сохранить имя пользователя и пароль в GIT [GitExtension]?</a>
+        
+    

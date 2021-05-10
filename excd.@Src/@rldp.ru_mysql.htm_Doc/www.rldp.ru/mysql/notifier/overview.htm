@@ -1,0 +1,621 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=koi8-r" />
+<title>Глава 1. Обзор MySQL Notifier</title>
+<meta name="generator" content="DocBook XSL Stylesheets + chunker.py v1.9.2" />
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="mysql-notifier-overview"></a>Глава 1. Обзор MySQL Notifier</h1>
+<p>MySQL Notifier это инструмент, который позволяет вам контролировать и
+приспособить статус своих экземпляров MySQL через индикатор, который
+находится в панели задач Microsoft Windows. MySQL Notifier также
+предоставляет быстрый доступ к MySQL Workbench через контекстное меню.</p>
+
+<p>MySQL Notifier устанавливается при помощи MySQL Installer.
+Это может быть загружено автоматически, когда запускается Microsoft Windows.
+</p>
+
+<p>Для установки скачайте и выполните
+<a href="../../../https@dev.mysql.com/downloads/installer/default.htm" target="_top">MySQL
+Installer</a>. Выберите MySQL Notifier из Applications.
+См. подробности на
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/mysql-installer.html"
+target="_top">MySQL Installer manual</a>.</p>
+
+<p>Для примечаний, детализирующих изменения в каждом выпуске MySQL Notifier,
+см. <a href="../../../https@dev.mysql.com/doc/relnotes/mysql-notifier/en/default.htm"
+target="_top">MySQL Notifier Release Notes</a>.</p>
+<p>См. <a href="../../../forums.mysql.com/list.php@173" target="_top">MySQL
+Notifier forum</a> для дополнительной помощи с MySQL Notifier.</p>
+
+<h2><a name="idm140272241547648"></a>Возможности включают:</h2>
+<ul><li class="listitem"><p>Запуск, остановку и рестарт сервера MySQL.
+</p></li>
+
+<li class="listitem"><p>Автоматически обнаруживает (и добавляет) новые
+серверные службы MySQL. Они перечисляются под
+<span class="guimenu">Manage Monitored Items</span>, и их можно настроить.
+</p></li>
+
+<li class="listitem"><p>Значок панели задач изменяется, в зависимости от
+статуса. Это указывающий направо зеленый треугольник, если все контролируемые
+серверы MySQL работают, или красный квадрат, если по крайней мере один
+сервис остановлен. Значок панели задач обновляется на основе опции
+статуса сервера, который диктует это поведение, и включен по умолчанию
+для каждого сервиса.</p></li>
+
+<li class="listitem"><p>Связи с другими приложениями, например, MySQL
+Workbench, MySQL Installer и MySQL Utilities.
+Например, выбор <span class="guimenu">Manage Instance</span>
+загрузит окно MySQL Workbench Server Administration
+для этого конкретного экземпляра.</p></li>
+
+<li class="listitem"><p>Если также установлен
+MySQL Workbench, то опции <span class="guimenu">Manage Instance</span> и
+<span class="guimenu">SQL Editor</span> доступны для местного
+(но не удаленного) сервера MySQL.</p></li>
+<li class="listitem"><p>Отслеживаются местные и удаленные серверы MySQL.
+</p></li></ul>
+
+<h2><a name="mysql-notifier-usage"></a>1.1. Задачи MySQL Notifier</h2>
+<p>MySQL Notifier обеспечивает визуальную информацию о статусе для серверов
+MySQL, которые проверены на локальном или удаленных компьютерах.
+Символ MySQL Notifier в панели задач изменяет цвет, чтобы указать
+на текущий статус: Running или Stopped.</p>
+
+<p>MySQL Notifier автоматически добавляет сервисы MySQL
+на локальном компьютере. По умолчанию опция
+<span class="guilabel">Automatically add new services
+whose name contains</span> включена и установлена в
+<code class="literal">mysql</code>. Связанные варианты уведомления включают
+сообщение, когда новые сервисы обнаружены или изменяют статус и также
+позволены по умолчанию. Деинсталлирование сервиса удаляет его
+из MySQL Notifier.</p>
+
+<p>Нажатие на символ MySQL Notifier в панели задач Windows показывает главное
+меню MySQL Notifier, которое перечисляет каждый сервер MySQL отдельно и
+показывает его текущий статус. Можно запустить, остановить или перезапустить
+каждый сервер MySQL из меню как показано ниже. Когда локально установлен
+MySQL Workbench, пункты меню <span class="guimenuitem">Manage Instance</span>
+и <span class="guimenuitem">SQL Editor</span> запускают приложение.</p>
+
+<a name="mysql-notifier-server-instance"></a>
+<p><b>Рис. 1.1. Меню MySQL Notifier Service Instance</b></p>
+<img src="images/mysql-notifier-server-instance.png" width="469" height="246"
+alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Меню <span class="guimenu">Actions</span> включает следующие пункты:</p>
+<ul><li class="listitem"><p>
+<span class="guilabel">Manage Monitored Items</span></p></li>
+
+<li class="listitem"><p><span class="guilabel">Launch MySQL Installer</span>
+(только при наличии пакета).</p></li>
+<li class="listitem"><p><span class="guilabel">Check for Updates</span>
+(только при наличии MySQL Installer).</p></li>
+
+<li class="listitem"><p><span class="guilabel">MySQL Utilities Shell</span>
+(только при наличии пакета).</p></li>
+<li class="listitem"><p><span class="guilabel">Refresh Status</span>
+</p></li>
+
+<li class="listitem"><p><span class="guilabel">Options</span></p></li>
+<li class="listitem"><p><span class="guilabel">About</span></p></li>
+<li class="listitem"><p><span class="guilabel">Close MySQL Notifier</span>
+</p></li></ul>
+<p>Главное меню не показывает меню <span class="guimenu">Actions</span>,
+когда нет никаких сервисов, проверяемых MySQL Notifier.</p>
+
+<h2><a name="mysql-notifier-options"></a>1.2. Опции MySQL Notifier</h2>
+<p>Меню <span class="guimenu">Actions</span>,
+<span class="guimenu">Options</span> предоставляет ряд возможностей, которые
+формируют операции MySQL Notifier. Варианты сгруппированы в следующие
+категории: <span class="guilabel">General Options</span>,
+<span class="guilabel">Notification Options</span> и
+<span class="guilabel">MySQL Server Connections Options</span>.</p>
+
+<p>Нажмите <span class="guibutton">Accept</span>, чтобы позволить выбранные
+опции или <span class="guibutton">Cancel</span>, чтобы проигнорировать все
+изменения. Нажмите <span class="guibutton">Reset to Defaults</span> и
+<span class="guibutton">Accept</span>, чтобы применить опции по умолчанию.
+</p>
+
+<p><b>General Options. </b>Группа включает:</p>
+<ul><li class="listitem"><p><span class="guilabel">Use colorful status icons
+</span>: Позволяет красочный стиль символов в трее для MySQL Notifier.
+Включена по умолчанию.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Run at Windows Startup</span>: Запуск приложения
+вместе с Microsoft Windows. Выключена по умолчанию.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Automatically Check For Updates Every</span> #
+<span class="guilabel">Days</span>: Проверки на новую версию MySQL Notifier
+каждые # дней (от 1 до 365). Включена по умолчанию.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Automatically add new services whose name contains:
+</span> текст, используемый, чтобы отфильтровать сервисы и добавить их
+автоматически к проверенному списку MySQL Notifier на локальном
+и удаленных компьютерах. Выбран по умолчанию для имен, содержащих
+<code class="literal">mysql</code>.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Ping monitored MySQL Server instances
+every</span> # <span class="guilabel">seconds</span>:
+интервал (в секундах), чтобы проверять экземпляры MySQL Server
+для изменений статуса. Более длинные интервалы могли бы быть необходимыми,
+если список проверенных удаленных экземпляров большой.
+30 секунд по умолчанию.</p></li></ul>
+
+<p><b>Notification Options. </b>Группа включает:</p>
+<ul><li class="listitem"><p>
+<span class="guilabel">Notify me when a service is automatically
+added</span>: Покажите уведомление в панели задач, когда недавно обнаруженный
+сервис будет добавлен к проверенному сервисному списку.
+Включена по умолчанию.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Notify me when a service changes status</span>:
+Показывает уведомление в панели задач, когда наблюдаемый сервис
+изменяет статус. Включена по умолчанию.</p></li></ul>
+
+<p><b>MySQL Server Connections Options. </b>Группа включает:</p>
+<ul><li class="listitem"><p>
+<span class="guilabel">Automatic connections migration delayed until:</span>
+Когда есть связи для миграции в MySQL Workbench, эта опция
+откладывает миграцию на один час, день, неделю, месяц или вообще.
+</p></li></ul>
+
+<h2><a name="mysql-notifier-monitor-items"></a>1.3.
+Управление проверенными пунктами</h2>
+<p><span class="guimenu">Manage Monitored Items</span> в меню
+<span class="guimenu">Actions</span> позволяет вам добавить, настроить
+и удалить сервисы MySQL, которые вы намереваетесь контролировать.
+У окна Manage Items есть две вкладки: <span class="guilabel">Services</span>
+и <span class="guilabel">Instances</span>.</p>
+
+<h3><a name="mysql-notifier-monitor-items-services"></a>Вкладка Services</h3>
+<p>Когда MySQL формируется как локальная служба, MySQL Notifier
+добавляет сервис к вкладке <span class="guilabel">Services</span>
+автоматически. С открытой вкладкой <span class="guilabel">Services</span>
+можно выбрать следующие варианты, которые относятся ко
+всем проверяемым сервисам:</p>
+
+<ul><li class="listitem"><p>
+<span class="guilabel">Notify me when status changes</span></p></li>
+<li class="listitem"><p>
+<span class="guilabel">Update MySQL Notifier tray icon based
+on service status</span></p></li></ul>
+
+<p>Например, вот так:</p>
+<a name="mysql-notifier-manage-services"></a>
+<p><b>Рис. 1.2. MySQL Notifier: Manage Monitored Services</b></p>
+<img src="images/mysql-notifier-manage-services.png" width="598" height="533"
+alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Чтобы прекратить контролировать сервис, выберите его из списка проверенных
+сервисов и нажмите <span class="guibutton">Delete</span>.</p>
+<p>Чтобы начать контролировать сервис, нажмите
+<span class="guibutton">Add</span>, чтобы открыть окно Add Service.
+Выберите компьютер из выпадающего списка, определите местонахождение и
+выберите сервис, который будет проверен, из списка, затем нажмите
+<span class="guibutton">OK</span>. Используйте поле
+<span class="guilabel">Filter</span>, чтобы уменьшить набор сервисов
+в списке или выберите <span class="guilabel">Only show services that match
+auto-add filter</span>, чтобы снова использовать фильтр общих вариантов
+из меню <span class="guimenuitem">Options</span>.</p>
+
+<p>Множество служб Windows (включая MySQL) может быть отобрано как показано
+ниже. В дополнение к сервисному названию список показывает текущий статус
+каждой службы Windows для выбранного компьютера.</p>
+
+<a name="mysql-notifier-add-services"></a>
+<p><b>Рис. 1.3 Окно Add New Services</b></p>
+<img src="images/mysql-notifier-manage-services-add.png" width="532"
+height="576" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="mysql-notifier-monitor-items-instances"></a>Вкладка Instances
+</h3>
+<p>Когда MySQL формируется как экземпляр MySQL, то MySQL Notifier
+добавляет его к вкладке <span class="guilabel">Instances</span>
+автоматически. С открытой вкладкой <span class="guilabel">Instances</span>
+можно выбрать следующие варианты, которые относятся к
+каждому проверяемому экземпляру:</p>
+
+<ul><li class="listitem"><p>
+<span class="guilabel">Notify me when status changes</span></p></li>
+<li class="listitem"><p>
+<span class="guilabel">Update MySQL Notifier tray icon based
+on service status</span></p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Monitor MySQL Instance status every</span> [ #
+] [ seconds | minutes | hours | days ]</p></li></ul>
+
+<p>Контроль статуса экземпляра установлен в каждые две минуты в этом примере.
+Эта вкладка показывает имя экземпляра, драйвер базы данных и
+текущий статус экземпляра.</p>
+
+<a name="mysql-notifier-manage-instances"></a>
+<p><b>Рис. 1.4. Экземпляры MySQL</b></p>
+<img src="images/mysql-notifier-manage-instances.png" width="598"
+height="533" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Чтобы прекратить контролировать экземпляр, выберите его из списка
+проверенных и нажмите <span class="guibutton">Delete</span>.</p>
+<p>Чтобы начать контролировать экземпляр, нажмите
+<span class="guibutton">Add</span>, чтобы открыть окно
+Monitor MySQL Server Instance. Используйте поле <span class="guilabel">Filter
+</span>, чтобы уменьшить набор серверов в списке или выберите
+<span class="guilabel">Show MySQL instances already being monitored</span>,
+чтобы показать только проверенные пункты.</p>
+
+<p>Дополнительно можно выбрать связь из MySQL Workbench,
+чтобы контролировать. Нажмите <span class="guibutton">Add New Connection
+</span>, чтобы создать новую связь.</p>
+
+<a name="mysql-notifier-add-instances"></a>
+<p><b>Рис. 1.5. Окно Adding New Instances</b></p>
+<img src="images/mysql-notifier-manage-instances-add.png" width="713"
+height="607" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="mysql-notifier-monitor-items-connections"></a>
+Связи сервера MySQL</h3>
+<p>Новые связи сервера формируются в окне MySQL Server Connection.
+Имена подключений должны быть уникальными. Значок предупреждения (!)
+указывает, что значение опции требуется.</p>
+
+<a name="mysql-notifier-server-connection"></a>
+<p><b>Рис. 1.6. MySQL Server Connection</b></p>
+<img src="images/mysql-notifier-server-connection.png" width="750"
+height="450" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Для каждой связи предоставьте подробную информацию о связи, нажмите
+<span class="guibutton">Test Connection</span>, чтобы подтвердить, что
+подключение MySQL работает, и нажмите <span class="guibutton">OK</span>,
+чтобы сохранить новую связь. Тип связи, которую вы создаете, может измениться
+в зависимости от конфигурации сервера, компьютера хоста клиента и уровня
+безопасности, который вы хотите. MySQL Notifier поддерживает
+следующие типы подключения:</p>
+
+<p><b>Basic connections. </b>
+Основная связь не зашифрована или зашифрована (в MySQL 8.0 SSL включен по
+умолчанию), связь установлена, используя стандартный TPC/IP, который является
+методом связи по умолчанию в MySQL Notifier, чтобы соединиться с MySQL RDBMS.
+Основные связи легко формировать, особенно если MySQL Notifier и сервер MySQL
+находятся на том же самом компьютере или работают в той же самой локальной
+сети. Чтобы сформировать основную связь, установите опцию
+<span class="guilabel">Connection Method</span> в
+<code class="literal">TCP/IP (standard)</code> и используйте вкладку
+<span class="guilabel">Parameters</span>, чтобы сформировать связь.</p>
+
+<p><b>SSL connections. </b>
+Сервер MySQL и клиент должны быть настроены, чтобы позволить шифрование SSL
+(см. <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/encrypted-connections.html">
+Using Encrypted Connections</a>). Чтобы сформировать этот тип связи,
+установите опцию <span class="guilabel">Connection Method</span> в
+<code class="literal">TCP/IP (standard)</code> и используйте вкладку
+<span class="guilabel">Parameters</span>, чтобы сформировать основную связь.
+Затем выберите вкладку <span class="guilabel">SSL</span>, чтобы определить
+соответствующие файлы. Сервер MySQL использует формат PEM для сертификатов
+и закрытых ключей. В дополнение к обеспечению путей к файлам можно
+определить способ SSL, чтобы использовать для связи.
+Следующая таблица описывает каждое значение опции
+<span class="guilabel">Use SSL</span> и указывает, какие файлы требуются.</p>
+
+<a name="mysql-notifier-ssl-mode-table"></a>
+<p><b>Таблица 1.1. Значения опции Use SSL</b></p>
+<table border="1">
+<thead><tr><th scope="col">Значение опции</th>
+<th scope="col">Смысл</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">No</code></td>
+<td>Не используйте SSL. Никакие файлы SSL не требуются.</td></tr>
+<tr><td scope="row"><code class="literal">If Available</code></td>
+<td>Используйте SSL, если сервер поддерживает его, но позволить связь во всех
+случаях. Никакие файлы SSL не требуются, однако, обеспечение файла CA SSL
+является наиболее успешной практикой для связей,
+установленных с серверами MySQL 8.0.</td></tr>
+<tr><td scope="row"><code class="literal">Require</code></td>
+<td>Всегда используйте SSL и отклонить связь, если сервер не поддерживает
+SSL. Не выполняйте проверку сертификата сервера.
+Никакие файлы SSL не требуются.</td></tr>
+<tr><td scope="row"><code class="literal">Require and Verify CA</code></td>
+<td>Всегда используйте SSL. Проверяет центры сертификации (CA), но терпит
+несоответствие имени. Требует файла CA SSL.</td></tr>
+<tr><td scope="row"><code class="literal">Require and Verify Identity</code>
+</td><td>Всегда используйте SSL и потерпит неудачу, если имя хоста не
+правильно. Требует действительного CA SSL, SSL Cert и файлов ключей SSL.
+</td></tr></tbody></table><br class="table-break">
+
+<p><b>SSH connections. </b>Тоннели SSH разрешают вам соединяться с базой
+данных MySQL из-за брандмауэра, когда порт сервера MySQL заблокирован.
+Чтобы сформировать этот тип связи, установите опцию
+<span class="guilabel">Connection Method</span> в
+<code class="literal">Standard TCP/IP over SSH</code>
+используйте вкладку <span class="guilabel">Parameters</span>,
+чтобы сформировать связь.</p>
+
+<p>Дополнительные соображения:</p>
+<ul><li class="listitem"><p>Сервер SSH общается с
+сервером MySQL незашифрованным или зашифрованным способом, на основе
+значения для способа SSL (см.
+<a href="mysql-notifier-overview.html#mysql-notifier-ssl-mode-table">
+таблицу 1.1</a>). Выберите вкладку <span class="guilabel">SSL</span>,
+чтобы определить значение для опции
+<span class="guilabel">Use SSL</span>.</p></li>
+
+<li class="listitem"><p>Логин, который вы используете, чтобы управлять
+MySQL Notifier, должен быть разрешен на сервере SSH заранее.
+Подтверждать подлинность логина
+(указанного <code class="literal">SSH User Name</code>)
+можно, используя одну из следующих стратегий:</p>
+
+<ul><li class="listitem"><p>
+<code class="literal">SSH User Name</code> и <code class="literal">SSH
+Password</code>.</p></li>
+<li class="listitem"><p>
+<code class="literal">SSH User Name</code> и
+<code class="literal">SSH Key File</code>.</p>
+
+<p>Ваш сервер SSH может потребовать, чтобы вы также обеспечивали
+<code class="literal">SSH Passphrase</code>, используя файл ключей.
+Недействительный пароль производит исключение.</p></li>
+
+<li class="listitem"><p>
+<code class="literal">SSH User Name</code> и <code class="literal">SSH Key
+File</code> (<code class="literal">SSH Passphrase</code>) и
+<code class="literal">SSH Password</code></p>
+
+<p>Комбинация имени пользователя + файл ключей (пароль) + пароль может
+выполнить идентификацию, когда файл ключей и пароль действительны, но ошибка
+происходит на сервере. Первая попытка соединиться использует файл ключей, и
+если это терпит неудачу, следующая попытка соединиться использует пароль
+вместо этого. Если файл ключей SSH пустой, но пароль SSH обеспечивается,
+MySQL Notifier пытается соединиться только с использованием пароля SSH.
+</p></li></ul></li></ul>
+
+<h2><a name="mysql-notifier-troubleshooting"></a>1.4. Проблемы</h2>
+<p>Для проблем, которые не зарегистрированы здесь, посетите
+<a href="../../../forums.mysql.com/list.php@173" target="_top">MySQL Notifier
+Support Forum</a> для помощи и поддержки с MySQL Notifier.</p>
+
+<ul><li class="listitem"><p>
+<span class="emphasis"><em>Проблема</em></span>: попытка
+запустить/остановить/перезапустить сервис MySQL выдает ошибку, подобную
+"The Service <span class="bold"><strong>MySQL<em class="replaceable"><code>
+VERSION</code></em></strong></span> failed the most recent status change
+request with the message "The service
+<span class="bold"><strong>mysql<em class="replaceable"><code>VERSION
+</code></em></strong></span> was not found in the Windows Services".</p>
+
+<p><span class="emphasis"><em>Объяснение</em></span>: это проблема
+чувствительности к регистру. Имя сервиса
+<span class="bold"><strong>MySQL<em class="replaceable"><code>VERSION
+</code></em></strong></span> по сравнению с наличием
+<span class="bold"><strong>mysql<em class="replaceable"><code>VERSION</code>
+</em></strong></span> в конфигурационном файле.</p>
+
+<p><span class="emphasis"><em>Решение</em></span>: обновите свой
+конфигурационный файл MySQL Notifier с правильной информацией или остановите
+MySQL Notifier и удалите этот конфигурационный файл. Конфигурационный файл
+MySQL Notifier расположен в
+<code class="filename">%APPDATA%\Oracle\MySQL
+Notifier\settings.config</code>, где
+<code class="literal">%APPDATA%</code> переменная и зависит от вашей системы.
+Типичное местоположение это "C:\Users\<em class="replaceable"><code>
+YourUsername</code></em>\AppData\Roaming\Oracle\MySQL
+Notifier\settings.config", где
+<em class="replaceable"><code>YourUsername</code></em> ваше имя пользователя
+системы. В этом файле, в части ServerList, поменяйте в значении
+ServerName буквы в имени на фактически используемые. Например, измените
+<span class="bold"><strong>mysql<em class="replaceable"><code>VERSION</code>
+</em></strong></span> на
+<span class="bold"><strong>MySQL<em class="replaceable"><code>VERSION</code>
+</em></strong></span>, сохраните файл и перезапустите MySQL Notifier.
+Альтернативно, остановите MySQL Notifier,
+удалите этот файл, затем перезапустите MySQL Notifier.</p></li>
+
+<li class="listitem"><p>
+<span class="emphasis"><em>Проблема</em></span>: соединяясь с удаленным
+компьютером в целях контроля удаленного сервиса Windows окно Add Service
+не всегда показывает все сервисы из консоли Windows Services.</p>
+
+<p><span class="emphasis"><em>Объяснение</em></span>: этим поведением
+управляет операционная система, и результат ожидается, работая с учетными
+записями пользователей не в домене. Для полного описания поведения см. статью
+<a href="../../../https@msdn.microsoft.com/en-us/library/aa826699(VS.85).aspx"
+target="_top">User Account Control and WMI</a> на сайте Microsoft.</p>
+
+<p><span class="emphasis"><em>Решение</em></span>: когда удаленный компьютер
+находится в совместимом домене, рекомендуется, чтобы пользователь домена
+использовался, чтобы соединиться через WMI с удаленным компьютером.
+Для подробных инструкций по установке, используя WMI, см.
+<a href="remote.htm">главу 2</a>.</p>
+
+<p>Альтернативно, когда пользователь домена недоступен, Microsoft
+обеспечивает менее безопасную работу, которая должна быть осуществлена с
+осторожностью. Для получения дополнительной информации см.
+<a href="../../../https@support.microsoft.com/en-us/kb/951016" target="_top">
+Description of User Account Control and remote restrictions in Windows
+Vista</a> в KB на сайте Microsoft.
+</p></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

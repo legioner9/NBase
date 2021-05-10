@@ -1,0 +1,894 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 11. Определения CRUD EBNF</title>
+  <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="mysql-x-crud-ebnf-definitions"></a>
+Глава 11. Определения CRUD EBNF</h1>
+<p>Эта глава предоставляет визуальный справочник по
+объектам и функциям, доступным в X DevAPI.</p>
+
+<h2><a name="session-objects-and-functions"></a>
+11.1. Объекты сессии и функции</h2>
+<h3><a name="crud-ebnf-session"></a>Session</h3>
+<p>Синтаксис для этого объекта в EBNF:</p>
+<pre class="programlisting">
+Session
+    ::= '.getSchema(' StringLiteral ')'
+        | '.getSchemas()'
+        | '.createSchema(' StringLiteral ')'
+        | '.dropSchema(' StringLiteral ')'
+        | '.getDefaultSchema()'
+        | '.startTransaction()'
+        | '.commit()'
+        | '.rollback()'
+        | '.setSavepoint()'
+        | '.setSavepoint(' StringLiteral ')'
+        | '.releaseSavePoint(' StringLiteral ')'
+        | '.rollbackTo(' StringLiteral ')'
+        | '.close()'
+        | SqlExecute
+</pre>
+
+<a name="fig-crud-ebnf-session"></a><p><b>Рис. 11.1. Session</b></p>
+<img src="images/session.png" width="438" height="608"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-sqlexecute"></a>SqlExecute</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+SqlExecute
+    ::= '.sql(' SqlStatementStr ')'
+        ( '.bind(' Literal (',' Literal)* ')')*
+        ( '.execute()' )?
+</pre>
+
+<a name="fig-crud-ebnf-sqlexecute"></a><p><b>Рис. 11.2. SqlExecute</b></p>
+<img src="images/sqlexecute.png" width="624" height="156"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-sqlplaceholdervalues"></a>SQLPlaceholderValues</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+SQLPlaceholderValues
+  ::= '{' SQLPlaceholderName ':' ( SQLLiteral ) '}'
+</pre>
+
+<a name="fig-crud-ebnf-sqlplaceholdervalues"></a>
+<p><b>Рис. 11.3. SQLPlaceholderValues</b></p>
+<img src="images/sqlplaceholdervalues.png" width="322" height="36"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-sqlplaceholdername"></a>SQLPlaceholderName</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+SQLPlaceholderName
+  ::= '?'
+</pre>
+
+<a name="fig-crud-ebnf-sqlplaceholdername"></a>
+<p><b>Рис. 11.4. SQLPlaceholderName</b></p>
+<img src="images/sqlplaceholdername.png" width="84" height="36"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-sqlliteral"></a>SQLLiteral</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+SQLLiteral
+  ::= '"' StringLiteral '"' | Number | Document
+</pre>
+
+<a name="fig-crud-ebnf-sqlliteral"></a><p><b>Рис. 11.5. SQLLiteral</b></p>
+<img src="images/sqlliteral.png" width="280" height="124"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h2><a name="crud-ebnf-schema-objects-and-functions"></a>
+11.2. Объекты схемы и функции</h2>
+<h3><a name="crud-ebnf-schema"></a>Schema</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+
+<pre class="programlisting">
+Schema
+    ::= '.getName()'
+        | '.existsInDatabase()'
+        | '.getSession()'
+        | '.getCollection(' StringLiteral ')'
+        | '.getCollections()'
+        | '.getCollectionAsTable(' StringLiteral ')'
+        | '.dropCollection(' StringLiteral ')'
+        | '.getTable(' StringLiteral ')'
+        | '.getTables()'
+        | '.createCollection(' StringLiteral ')'
+</pre>
+
+<a name="figcrud-ebnf-schema-"></a><p><b>Рис. 11.6. Schema</b></p>
+<img src="images/schema.png" width="428" height="520"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-collection"></a>Collection</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+Collection
+    ::= '.getSchema()'
+        | '.getName()'
+        | '.getSession()'
+        | '.existsInDatabase()'
+        | '.replaceOne(' DocumentId ',' DocumentOrJSON  ')'
+        | '.addOrReplaceOne(' DocumentId ',' DocumentOrJSON  ')'
+        | '.getOne(' DocumentId ')'
+        | '.removeOne(' DocumentId ')'
+        | CollectionFindFunction
+        | CollectionModifyFunction
+        | CollectionAddFunction
+        | CollectionRemoveFunction
+        | CollectionCreateIndex
+        | CollectionDropIndex
+</pre>
+
+<a name="fig-crud-ebnf-collection"></a><p><b>Рис. 11.7. Collection</b></p>
+<img src="images/collection.png" width="282" height="388"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-table"></a>Table</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+Table
+    ::= '.getSchema()'
+        | '.getName()'
+        | '.getSession()'
+        | '.existsInDatabase()'
+        | '.isView()'
+        | TableSelectFunction
+        | TableUpdateFunction
+        | TableInsertFunction
+        | TableDeleteFunction
+</pre>
+
+<a name="fig-crud-ebnf-table"></a><p><b>Рис. 11.8. Table</b></p>
+<img src="images/table.png" width="250" height="300"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h2><a name="crud-ebnf-collection-crud-functions"></a>
+11.3. Функции CRUD для коллекций</h2>
+<h3><a name="crud-ebnf-collectionfindfunction"></a>CollectionFindFunction</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+CollectionFindFunction
+  ::= '.find(' SearchConditionStr? ')' ( '.fields(' ProjectedDocumentExprStr ')' )?
+      ( '.groupBy(' SearchExprStrList ')' )? ( '.having(' SearchConditionStr ')' )?
+      ( '.sort(' SortExprStrList ')' )? ( '.limit(' NumberOfRows ')' ( '.offset(' NumberOfRows ')' )? )?
+      ( '.lockExclusive(' LockContention ')' | '.lockShared(' LockContention ')' )?
+      ( '.bind(' PlaceholderValues ')' )*
+      ( '.execute()' )?
+</pre>
+
+<a name="fig-crud-ebnf-collectionfindfunction"></a>
+<p><b>Рис. 11.9. CollectionFindFunction</b></p>
+<img src="images/collectionfindfunction.png" width="986" height="422"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h3><a name="crud-ebnf-collectionmodifyfunction"></a>
+CollectionModifyFunction</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+CollectionModifyFunction
+  ::= '.modify(' SearchConditionStr ')'
+      ( '.set(' CollectionField ',' ExprOrLiteral ')' |
+        '.unset(' CollectionFields ')' |
+        '.arrayInsert(' CollectionField ',' ExprOrLiteral ')' |
+        '.arrayAppend(' CollectionField ',' ExprOrLiteral ')' |
+        '.arrayDelete(' CollectionField ')' |
+        '.patch(' DocumentOrJSON ')'
+      )+
+      ( '.sort(' SortExprStrList ')' )? ( '.limit(' NumberOfRows ')' )?
+      ( '.bind(' PlaceholderValues ')' )*
+      ( '.execute()' )?
+</pre>
+
+<a name="fig-crud-ebnf-collectionmodifyfunction"></a>
+<p><b>Рис. 11.10. CollectionModifyFunction</b></p>
+<img src="images/collectionmodifyfunction.png" width="966" height="472"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-collectionaddfunction"></a>CollectionAddFunction</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+CollectionAddFunction
+    ::= ( '.add(' ( DocumentOrJSON | '[' DocumentOrJSON ( ',' DocumentOrJSON )* ']' )? ')' )+
+        ( '.execute()' )?
+</pre>
+
+<a name="fig-crud-ebnf-collectionaddfunction"></a>
+<p><b>Рис. 11.11. CollectionAddFunction</b></p>
+<img src="images/collectionaddfunction.png" width="665" height="172"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h3><a name="crud-ebnf-collectionremovefunction"></a>
+CollectionRemoveFunction</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+CollectionRemoveFunction
+    ::= '.remove(' SearchConditionStr ')'
+        ( '.sort(' SortExprStrList ')' )? ( '.limit(' NumberOfRows ')' )?
+        ( '.bind(' PlaceholderValues ')' )*
+        ( '.execute()' )?
+</pre>
+
+<a name="fig-crud-ebnf-collectionremovefunction"></a>
+<p><b>Рис. 11.12. CollectionRemoveFunction</b></p>
+<img src="images/collectionremovefunction.png" width="922" height="182"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h2><a name="crud-ebnf-collection-index-management-functions"></a>
+11.4. Функции управления индексом коллекции</h2>
+<h3><a name="crud-ebnf-collectioncreateindex"></a>
+Collection.createIndex() Function</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+CollectionCreateIndex
+    ::= '.createIndex(' StringLiteral ',' DocumentOrJSON ')'
+</pre>
+
+<a name="fig-crud-ebnf-collectioncreateindexfunction"></a>
+<p><b>Рис. 11.13. CollectionCreateIndexFunction</b></p>
+<img src="images/collectioncreateindex.png" width="516" height="36"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-collectiondropindex"></a>CollectionDropIndex</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+CollectionDropIndex
+    ::= '.dropIndex(' StringLiteral ')'
+</pre>
+
+<a name="fig-crud-ebnf-collectiondropindex"></a>
+<p><b>Рис. 11.14. CollectionDropIndex</b></p>
+<img src="images/collectiondropindex.png" width="312" height="36"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h2><a name="crud-ebnf-table-crud-functions"></a>
+11.5. Функции Table CRUD</h2>
+<h3><a name="crud-ebnf-tableselectfunction"></a>TableSelectFunction</h3>
+<p><code class="literal">Table.select()</code> и
+<code class="literal">collection.find()</code>
+используют различные методы для сортировки результатов.
+<code class="literal">Table.select()</code>
+следует за языковым обозначением SQL и вызывает метод сортировки
+<code class="literal">orderBy()</code>.
+<code class="literal">Collection.find()</code> так не делает.
+Используйте метод <code class="literal">sort()</code>, чтобы
+сортировать результаты, возвращенные
+<code class="literal">Collection.find()</code>.
+Близость со стандартом SQL считают более важной, чем однородность API.</p>
+
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+TableSelectFunction
+  ::= '.select(' ProjectedSearchExprStrList? ')' ( '.where(' SearchConditionStr ')' )?
+      ( '.groupBy(' SearchExprStrList ')' )? ( '.having(' SearchConditionStr ')' )?
+      ( '.orderBy(' SortExprStrList ')' )? ( '.limit(' NumberOfRows ')' ( '.offset(' NumberOfRows ')' )? )?
+      ( '.lockExclusive(' LockContention ')' | '.lockShared(' LockContention ')' )?
+      ( '.bind(' ( PlaceholderValues ) ')' )*
+      ( '.execute()' )?
+</pre>
+
+<a name="fig-crud-ebnf-tableselectfunction"></a>
+<p><b>Рис. 11.15. TableSelectFunction</b></p>
+<img src="images/tableselectfunction.png" width="950" height="422"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-tableinsertfunction"></a>TableInsertFunction</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+TableInsertFunction
+  ::= '.insert(' ( TableFields )? ')'
+        ( '.values(' Literal (',' Literal)* ')' )+
+        ( '.execute()' )?
+</pre>
+
+<a name="fig-crud-ebnf-tableinsertfunction"></a>
+<p><b>Рис. 11.16. TableInsertFunction</b></p>
+<img src="images/tableinsertfunction.png" width="754" height="128"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-tableupdatefunction"></a>TableUpdateFunction</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+TableUpdateFunction
+  ::= '.update()'
+      ( '.set(' TableField ',' ExprOrLiteral ')' )+ '.where(' SearchConditionStr ')'
+      ( '.orderBy(' SortExprStrList ')' )? ( '.limit(' NumberOfRows ')' )?
+      ( '.bind(' ( PlaceholderValues ) ')' )*
+      ( '.execute()' )?
+</pre>
+
+<a name="fig-crud-ebnf-tableupdatefunction"></a>
+<p><b>Рис. 11.17. TableUpdateFunction</b></p>
+<img src="images/tableupdatefunction.png" width="992" height="252"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-tabledeletefunction"></a>TableDeleteFunction</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+TableDeleteFunction
+  ::= '.delete()' '.where(' SearchConditionStr ')'
+      ( '.orderBy(' SortExprStrList ')' )? ( '.limit(' NumberOfRows ')' )?
+      ( '.bind(' ( PlaceholderValues ) ')' )*
+      ( '.execute()' )?
+</pre>
+
+<a name="fig-crud-ebnf-tabledeletefunction"></a>
+<p><b>Рис. 11.18. TableDeleteFunction</b></p>
+<img src="images/tabledeletefunction.png" width="828" height="182"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h2><a name="crud-ebnf-result-functions"></a>11.6. Функции Result</h2>
+<h3><a name="crud-ebnf-result"></a>Result</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+Result
+    ::= '.getAffectedItemsCount()'
+        | '.getAutoIncrementValue()'
+        | '.getGeneratedIds()'
+        | '.getWarningCount()'
+        | '.getWarnings()'
+</pre>
+
+<a name="fig-crud-ebnf-result"></a><p><b>Рис. 11.19. Result</b></p>
+<img src="images/result.png" width="292" height="212"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-docresult"></a>DocResult</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+DocResult
+    ::= '.getWarningCount()'
+        | '.getWarnings()'
+        | '.fetchAll()'
+        | '.fetchOne()'
+</pre>
+
+<a name="fig-crud-ebnf-docresult"></a><p><b>Рис. 11.20. DocResult</b></p>
+<img src="images/docresult.png" width="248" height="168"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-rowresult"></a>RowResult</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+RowResult
+    ::= '.getWarningCount()'
+        | '.getWarnings()'
+        | '.fetchAll()'
+        | '.fetchOne()'
+        | '.getColumns()'
+</pre>
+
+<a name="fig-crud-ebnf-rowresult"></a><p><b>Рис. 11.21. RowResult</b></p>
+<img src="images/rowresult.png" width="248" height="212"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-column"></a>Column</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+Column
+    ::= '.getSchemaName()'
+        | '.getTableName()'
+        | '.getTableLabel()'
+        | '.getColumnName()'
+        | '.getColumnLabel()'
+        | '.getType()'
+        | '.getLength()'
+        | '.getFractionalDigits()'
+        | '.isNumberSigned()'
+        | '.getCollationName()'
+        | '.getCharacterSetName()'
+        | '.isPadded()'
+</pre>
+
+<a name="fig-crud-ebnf-column"></a><p><b>Рис. 11.22. Column</b></p>
+<img src="images/column.png" width="280" height="520"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-sqlresult"></a>SqlResult</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+SqlResult
+    ::= '.getWarningCount()'
+        | '.getWarnings()'
+        | '.fetchAll()'
+        | '.fetchOne()'
+        | '.getColumns()'
+        | '.getAutoIncrementValue()'
+        | '.hasData()'
+        | '.nextResult()'
+</pre>
+
+<a name="fig-crud-ebnf-sqlresult"></a><p><b>Рис. 11.23. SqlResult</b></p>
+<img src="images/sqlresult.png" width="298" height="520"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h2><a name="crud-ebnf-other-definitions"></a>11.7. Другие определения EBNF
+</h2>
+<h3><a name="crud-ebnf-searchconditionstr"></a>SearchConditionStr</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+SearchConditionStr
+  ::= '"' Expression '"'
+</pre>
+
+<a name="fig-crud-ebnf-searchconditionstr"></a>
+<p><b>Рис. 11.24. SearchConditionStr</b></p>
+<img src="images/searchconditionstr.png" width="234" height="36"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-searchexprstrlist"></a>SearchExprStrList</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+SearchExprStrList
+  ::= '[' '"' Expression '"' ( ',' '"' Expression '"' )* ']'
+</pre>
+
+<a name="fig-crud-ebnf-searchexprstrlist"></a>
+<p><b>Рис. 11.25. SearchExprStrList</b></p>
+<img src="images/searchexprstrlist.png" width="366" height="80"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-projecteddocumentexprstr"></a>
+ProjectedDocumentExprStr</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+ProjectedDocumentExprStr
+  ::= ProjectedSearchExprStrList | 'expr("' JSONDocumentExpression '")'
+</pre>
+
+<a name="fig-crud-ebnf-projecteddocumentexprstr"></a>
+<p><b>Рис. 11.26. ProjectedDocumentExprStr</b></p>
+<img src="images/projecteddocumentexprstr.png" width="412" height="80"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-projectedsearchexprstrlist"></a>
+ProjectedSearchExprStrList</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+ProjectedSearchExprStrList
+  ::= '[' '"' Expression ( 'AS' Alias )? '"' ( ',' '"' Expression ( 'AS' Alias )? '"' )* ']'
+</pre>
+
+<a name="fig-crud-ebnf-projectedsearchexprstrlist"></a>
+<p><b>Рис. 11.27. ProjectedSearchExprStrList</b></p>
+<img src="images/projectedsearchexprstrlist.png" width="530" height="112"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-sortexprstrlist"></a>SortExprStrList</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+SortExprStrList
+  ::= '[' '"' Expression ( 'ASC' | 'DESC' )? '"' ( ',' '"' Expression ( 'ASC' | 'DESC' )? '"' )* ']'
+</pre>
+
+<a name="fig-crud-ebnf-sortexprstrlist"></a>
+<p><b>Рис. 11.28. SortExprStrList</b></p>
+<img src="images/sortexprstrlist.png" width="480" height="156"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-exprorliteral"></a>ExprOrLiteral</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+ExprOrLiteral
+  ::= 'expr("' Expression '")' | Literal
+</pre>
+
+<a name="fig-crud-ebnf-exprorliteral"></a>
+<p><b>Рис. 11.29. ExprOrLiteral</b></p>
+<img src="images/exprorliteral.png" width="318" height="80"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-exprorliterals"></a>ExprOrLiterals</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+ExprOrLiterals
+  ::= ExprOrLiteral ( ',' ExprOrLiteral )*
+</pre>
+
+<a name="fig-crud-ebnf-exprorliterals"></a>
+<p><b>Рис. 11.30. ExprOrLiterals</b></p>
+<img src="images/exprorliterals.png" width="194" height="80"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-exprorliteraloroperand"></a>ExprOrLiteralOrOperand</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+ExprOrLiteralOrOperand
+  ::= ExprOrLiteral
+</pre>
+
+<a name="fig-crud-ebnf-exprorliteraloroperand"></a>
+<p><b>Рис. 11.31. ExprOrLiteralOrOperand</b></p>
+<img src="images/exprorliteraloroperand.png" width="154" height="36"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-placeholdervalues"></a>PlaceholderValues</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+PlaceholderValues
+  ::= '{' PlaceholderName ':' ( ExprOrLiteral ) '}'
+</pre>
+
+<a name="fig-"></a><p><b>Рис. 11.32. PlaceholderValues</b></p>
+<img src="images/placeholdervalues.png" width="436" height="36"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-placeholdername"></a>PlaceholderName</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+PlaceholderName
+  ::= NamedPlaceholderNotQuestionmarkNotNumbered
+</pre>
+
+<a name="fig-crud-ebnf-placeholdername"></a>
+<p><b>Рис. 11.33. PlaceholderName</b></p>
+<img src="images/placeholdername.png" width="376" height="36"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-collectionfields"></a>CollectionFields</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+CollectionFields
+  ::= ( '[' CollectionField ( ',' CollectionField )* ']' )
+</pre>
+
+<a name="fig-crud-ebnf-collectionfields"></a>
+<p><b>Рис. 11.34. CollectionFields</b></p>
+<img src="images/collectionfields.png" width="294" height="80"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-collectionfield"></a>CollectionField</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+CollectionField
+  ::= '@'? DocPath
+</pre>
+
+<a name="fig-crud-ebnf-collectionfield"></a>
+<p><b>Рис. 11.35. CollectionField</b></p>
+<img src="images/collectionfield.png" width="218" height="68"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-docpath"></a>DocPath</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+DocPath
+  ::= ( '[*]' | ( '[' Index ']' ) | '.*' | ( '.' StringLiteral ) | '**' )+
+</pre>
+
+<a name="fig-crud-ebnf-docpath"></a><p><b>Рис. 11.36. DocPath</b></p>
+<img src="images/docpath.png" width="282" height="228"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-literal"></a>Literal</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+Literal
+  ::= '"' StringLiteral '"' | Number | true | false | Document
+</pre>
+
+<a name="fig-crud-ebnf-literal"></a><p><b>Рис. 11.37. Literal</b></p>
+<img src="images/literal.png" width="280" height="212"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-expression"></a>Выражения</h3>
+<a name="fig-crud-ebnf-expression"></a><p><b>Рис. 11.38. Expression</b></p>
+<img src="images/expression.png" width="440" height="344"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h3><a name="crud-ebnf-document"></a>Document</h3>
+<p>Вызов API, ожидающий документ JSON, позволяет использование
+многих типов данных, чтобы описывать документ. В зависимости от реализации
+X DevAPI и языка может использоваться любой из следующих типов данных:</p>
+
+<ul><li class="listitem"><p>String</p></li>
+<li class="listitem"><p>Native JSON</p></li>
+<li class="listitem"><p>Эквивалентный синтаксис JSON</p></li>
+<li class="listitem"><p>DbDoc</p></li>
+<li class="listitem"><p>Generated Doc Classes</p></li></ul>
+<p>Все реализации X DevAPI позволяют выражать документ специальным типом
+DbDoc и как последовательность.</p>
+
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+Document
+  ::= JSONDocument | JSONEquivalentDocument | DbDoc | GeneratedDocumentClasses
+</pre>
+
+<a name="fig-ebnf-document"></a><p><b>Рис. 11.39. Document</b></p>
+<img src="images/document.png" width="286" height="168"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-jsonexpression"></a>JSONExpression</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+JSONExpression
+  ::= JSONDocumentExpression | '[' Expression ( ',' Expression )* ']'
+</pre>
+
+<a name="fig-crud-ebnf-jsonexpression"></a>
+<p><b>Рис. 11.40. JSONExpression</b></p>
+<img src="images/jsonexpression.png" width="314" height="124"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-jsondocumentexpression"></a>JSONDocumentExpression</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+JSONDocumentExpression
+  ::= '{' StringLiteral ':' JSONExpression (',' StringLiteral ':' JSONExpression)* '}'
+</pre>
+
+<a name="fig-crud-ebnf-jsondocumentexpression"></a>
+<p><b>Рис. 11.41. JSONDocumentExpression</b></p>
+<img src="images/jsondocumentexpression.png" width="464" height="80"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-functionname"></a>FunctionName</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+FunctionName
+  ::= StringLiteral | StringLiteral '.' StringLiteral
+</pre>
+
+<a name="fig-crud-ebnf-functionname"></a><p><b>Рис. 11.42. FunctionName</b>
+</p>
+<img src="images/functionname.png" width="342" height="68"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-documentorjson"></a>DocumentOrJSON</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+DocumentOrJSON
+  ::= Document | 'expr("' JSONDocumentExpression '")'
+</pre>
+
+<a name="fig-crud-ebnf-documentorjson"></a>
+<p><b>Рис. 11.43. DocumentOrJSON</b></p>
+<img src="images/documentorjson.png" width="412" height="80"
+alt="Content shows the syntax in EBNF form as described in
+the preceding text."><br class="figure-break">
+
+<h3><a name="crud-ebnf-tablefield"></a>TableField</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+TableField
+  ::= ( StringLiteral '.' )? ( StringLiteral '.' )? StringLiteral ( '@' DocPath )?
+</pre>
+
+<a name="fig-crud-ebnf-tablefield"></a><p><b>Рис. 11.44. TableField</b></p>
+<img src="images/tablefield.png" width="716" height="68"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+<h3><a name="crud-ebnf-tablefields"></a>TableFields</h3>
+<p>Синтаксис для этой функции в EBNF:</p>
+<pre class="programlisting">
+TableFields
+  ::= ( '[' TableField ( ',' TableField )* ']' )
+</pre>
+
+<a name="fig-crud-ebnf-tablefields"></a>
+<p><b>Рис. 11.45. TableFields</b></p>
+<img src="images/tablefields.png" width="266" height="80"
+alt="Content shows the syntax in EBNF form as described in the preceding text.">
+<br class="figure-break">
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\3.ОСНОВЫ.dir\3.4.Добавление_файлов_и_директорий,_git_status.dir\cat.3.4.Добавление_файлов_и_директорий,_git_status.dir\dir.3.4.Добавление_файлов_и_директорий,_git_status.dir.md">3.4.Добавление_файлов_и_директорий,_git_status.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\3.ОСНОВЫ.dir\3.4.Добавление_файлов_и_директорий,_git_status.dir\3.4.Добавление_файлов_и_директорий,_git_status.md">3.4.Добавление_файлов_и_директорий,_git_status.md</a>
+        - *## git add

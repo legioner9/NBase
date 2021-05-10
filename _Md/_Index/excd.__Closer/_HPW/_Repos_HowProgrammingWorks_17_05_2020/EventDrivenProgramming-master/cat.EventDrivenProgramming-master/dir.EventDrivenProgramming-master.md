@@ -1,0 +1,5 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\EventDrivenProgramming-master\cat.EventDrivenProgramming-master\dir.EventDrivenProgramming-master.md">EventDrivenProgramming-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\EventDrivenProgramming-master\README.md">README.md</a>
+        - *## Событийно-ориентированное программирование
+        - *## Задания
+        - *## Дополнительные задания

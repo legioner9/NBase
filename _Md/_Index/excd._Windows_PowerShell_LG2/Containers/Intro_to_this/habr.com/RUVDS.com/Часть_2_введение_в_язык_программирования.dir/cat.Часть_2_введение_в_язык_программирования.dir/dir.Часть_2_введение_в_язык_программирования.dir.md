@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\_Windows_PowerShell_LG2\Containers\Intro_to_this\habr.com\RUVDS.com\Часть_2_введение_в_язык_программирования.dir\cat.Часть_2_введение_в_язык_программирования.dir\dir.Часть_2_введение_в_язык_программирования.dir.md">Часть_2_введение_в_язык_программирования.dir</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\_Windows_PowerShell_LG2\Containers\Intro_to_this\habr.com\RUVDS.com\Часть_2_введение_в_язык_программирования.dir\Часть_2_введение_в_язык_программирования.md">Часть_2_введение_в_язык_программирования.md</a>
+        - *# [Что такое Windows PowerShell и с чем его едят? Часть 2: введение в язык программирования](https://habr.com/ru/company/ruvds/blog/490924/)

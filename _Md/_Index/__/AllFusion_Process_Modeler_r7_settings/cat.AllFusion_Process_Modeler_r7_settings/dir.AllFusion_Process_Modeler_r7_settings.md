@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\__\AllFusion_Process_Modeler_r7_settings\cat.AllFusion_Process_Modeler_r7_settings\dir.AllFusion_Process_Modeler_r7_settings.md">AllFusion_Process_Modeler_r7_settings</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\__\AllFusion_Process_Modeler_r7_settings\fiches.md">fiches.md</a>
+        - *## Ru 

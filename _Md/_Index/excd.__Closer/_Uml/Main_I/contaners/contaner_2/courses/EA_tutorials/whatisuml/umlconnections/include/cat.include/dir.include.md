@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\include\cat.include\dir.include.md">include</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\include\include.md">include.md</a>
+        - *##### [Include](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/include.html)  содержать в себе

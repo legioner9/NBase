@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\AsyncAdapter-master\cat.AsyncAdapter-master\dir.AsyncAdapter-master.md">AsyncAdapter-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\AsyncAdapter-master\README.md">README.md</a>
+        - *# Contract Adapters for Asynchronous Programming

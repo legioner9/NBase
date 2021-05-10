@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\mdastyletransforms\cat.mdastyletransforms\dir.mdastyletransforms.md">mdastyletransforms</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\mdastyletransforms\mdastyletransforms.md">mdastyletransforms.md</a>
+        - *# <a href="https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/mdastyletransforms.html" target="_blank">Model Transformation</a>  Преобразование модели

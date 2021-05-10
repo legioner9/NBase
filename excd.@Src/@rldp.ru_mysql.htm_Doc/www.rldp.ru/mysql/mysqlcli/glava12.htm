@@ -1,0 +1,1312 @@
+<HTML>
+<HEAD>
+  <TITLE>Клиентские скрипты и утилиты MySQL</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1><A NAME="Client-Side_Scripts">12 Клиентские скрипты и утилиты MySQL</A>
+</H1>
+
+<H2><A NAME="Client-Side_Overview">12.1 Обзор клиентских скриптов и утилит
+</A></H2>
+<P>Все клиенты MySQL, которые связываются с сервером, используя библиотеку
+<CODE>mysqlclient</CODE>, применяет следующие системные переменные:</P>
+
+<P><TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Имя</STRONG></TD><TD><STRONG>Описание</STRONG></TD></TR>
+<TR><TD><CODE>MYSQL_UNIX_PORT</CODE></TD><TD>Сокет по умолчанию. Используется
+для связи с <CODE>localhost</CODE></TD></TR>
+<TR><TD><CODE>MYSQL_TCP_PORT</CODE></TD><TD>TCP/IP порт по умолчанию</TD>
+</TR>
+<TR><TD><CODE>MYSQL_PWD</CODE></TD><TD>Пароль по умолчанию</TD></TR>
+<TR><TD><CODE>MYSQL_DEBUG</CODE></TD><TD>Опции для трассировки, если
+используется режим отладки</TD></TR>
+<TR><TD><CODE>TMPDIR</CODE></TD><TD>Каталог для временных файлов и таблиц
+</TD></TR></TABLE></P>
+
+<P>Применение <CODE>MYSQL_PWD</CODE> опасно. Подробности в разделе
+"<A HREF="glava02.htm#Connecting">2.1 Соединение с сервером</A>".</P>
+
+<P>Клиент <TT>mysql</TT> использует файл, именованный в системной переменной
+<CODE>MYSQL_HISTFILE</CODE>, чтобы сохранить хронологию командной строки.
+Значение по умолчанию для файла хронологии: <TT>$HOME/.mysql_history</TT>,
+здесь <CODE>$HOME</CODE> представляет собой значение системной переменной
+<CODE>HOME</CODE>. Подробности в разделе
+"<A HREF="appl2.htm#Environment_variables">Приложение 2. Переменные окружения
+</A>".</P>
+
+<P>Все программы MySQL имеют много различных параметров. Однако, каждая
+программа MySQL обеспечивает опцию <CODE>--help</CODE>, которую Вы можете
+использовать, чтобы получить полное описание различных параметров программы.
+Например, <CODE>mysql --help</CODE>.</P>
+
+<P>Вы можете отменять заданные по умолчанию параметры для всех стандартных
+программ пользователя с помощью файла опций.</P>
+
+<P>Список ниже кратко описывает программы MySQL:</P>
+
+<DL COMPACT>
+<DT><CODE>myisamchk</CODE>
+<DD><A NAME="IDX686"></A>Утилита, чтобы описывать, проверять, оптимизировать
+и ремонтировать MySQL таблицы. Потому, что <CODE>myisamchk</CODE> имеет много
+функций, он описан в собственной главе. Подробности в разделе
+"<A HREF="glava04.htm#MySQL_Database_Administration">4 Администрирование СУБД
+MySQL</A>".
+
+<DT><CODE>make_binary_distribution</CODE>
+<DD>Делает двоичный выпуск из откомпилированного MySQL. Готовая версия может
+быть выложена по FTP в каталог <TT>/pub/mysql/Incoming</TT> на машине
+<CODE>support.mysql.com</CODE> для удобства других пользователей MySQL.
+
+<A NAME="IDX688"></A><DT><CODE>msql2mysql</CODE>
+<DD>Скрипт оболочки, который преобразовывает программы <CODE>mSQL</CODE> в
+MySQL. Не обрабатывает все случаи, но дает хорошее начало при преобразовании.
+
+<A NAME="IDX689"></A><DT><CODE>mysqlaccess</CODE>
+<DD>Скрипт, который проверяет привилегии доступа для компьютера, пользователя
+и комбинации баз данных.
+
+<A NAME="IDX690"></A><DT><CODE>mysqladmin</CODE>
+<DD>Утилита для выполнения административных операций, типа создания или
+удаления баз данных, перезагрузки таблиц предоставления, сброса таблиц на
+диск и повторного открытия журналов. Программа <CODE>mysqladmin</CODE> может
+также использоваться, чтобы узнавать версию, данные о процессах и информацию
+о текущем состоянии сервера.
+
+<A NAME="IDX691"></A><DT><CODE>mysqlbug</CODE>
+<DD>Скрипт для сообщения об ошибках MySQL. Этот скрипт всегда должен
+использоваться, когда готовится сообщение об ошибке в список рассылки MySQL.
+
+<A NAME="IDX692"></A><DT><CODE>mysqld</CODE>
+<DD>Сервер SQL. Должен всегда работать.
+
+<A NAME="IDX693"></A><DT><CODE>mysqldump</CODE>
+<DD>Сбрасывает базы данных MySQL в файл как инструкции SQL или как отделяемые
+табуляцией текстовые файлы. Подробности в разделе
+"<A HREF="#mysqldump">12.5 mysqldump, Сброс в дамп структур
+таблицы и ее данных</A>".
+
+<A NAME="IDX694"></A><DT><CODE>mysqlimport</CODE>
+<DD>Импортирует текстовые файлы в соответствующие таблицы, используя
+<CODE>LOAD DATA INFILE</CODE>. Подробности в разделе
+"<A HREF="#mysqlimport">12.7 mysqlimport, импортирование данных из
+текстовых файлов</A>".
+
+<A NAME="IDX695"></A><DT><CODE>mysqlshow</CODE>
+<DD>Отображает подробную сводную информацию относительно баз данных, таблиц,
+столбцов и их индексов.
+
+<A NAME="IDX696"></A><DT><CODE>mysql_install_db</CODE>
+<DD>Создает таблицы предоставления привилегий MySQL с заданными по умолчанию
+привилегиями. Это обычно выполняется только однажды, при первой установке
+MySQL на систему.
+
+<A NAME="IDX697"></A><DT><CODE>replace</CODE>
+<DD>Утилита, которая используется <CODE>msql2mysql</CODE>, но имеет более
+общую применимость. <CODE>replace</CODE> меняет строки в файлах или на
+стандартном вводе. Использует специальный алгоритм, чтобы сначала
+соответствовать более длинным строкам. Может использоваться, чтобы менять
+строки. Например, эта команда меняет <CODE>a</CODE> и <CODE>b</CODE> в файлах:
+<PRE>
+shell&#62; replace a b b a -- file1 file2 ...
+</PRE>
+</DL>
+
+<H3><A NAME="mysql">12.2 Инструмент командной строки</A></H3>
+<P><CODE>mysql</CODE> простая SQL оболочка (с возможностями GNU
+<CODE>readline</CODE>). Это поддерживает интерактивное и не интерактивное
+использование. Когда используется в интерактивном режиме, результаты запроса
+будут представлены в формате ASCII-таблицы. Когда используется в не
+интерактивном режиме (например, как фильтр), результат будет выведен в
+разделяемом табуляциями формате. Выходной формат может быть изменен,
+используя параметры командной строки. Вы можете выполнять скрипты так:</P>
+<PRE>
+shell&#62; mysql database &#60; script.sql &#62; output.tab
+</PRE>
+
+<P>Если Вы имеете проблемы из-за недостаточной памяти у клиента, используйте
+опцию <CODE>--quick</CODE>! Это вынуждает клиент <CODE>mysql</CODE>
+использовать <CODE>mysql_use_result()</CODE> вместо вызова
+<CODE>mysql_store_result()</CODE>, чтобы отыскать набор результатов.</P>
+
+<P>Использование <CODE>mysql</CODE> очень просто. Только запустите его
+следующим образом: <CODE>mysql database</CODE> или <CODE>mysql
+--user=user_name --password=your_password database</CODE>. Напечатайте
+инструкцию SQL, закончите ее <SAMP>`;'</SAMP>, <SAMP>`\g'</SAMP> или
+<SAMP>`\G'</SAMP> и нажмите RETURN/ENTER.</P>
+
+<P><A NAME="IDX702"></A><A NAME="IDX703"></A><A NAME="IDX704"></A>
+<A NAME="IDX705"></A><CODE>mysql</CODE> поддерживает следующие параметры:</P>
+
+<DL COMPACT>
+<DT><CODE>-?, --help</CODE>
+<DD><A NAME="IDX706"></A>Отобразить справку и завершится.
+
+<A NAME="IDX707"></A><DT><CODE>-A, --no-auto-rehash</CODE>
+<DD>Никакого автоматического перехеширования. Каждый должен использовать
+'rehash', чтобы получить завершение поля и таблицу. Это дает более быстрый
+запуск клиента mysql.
+
+<A NAME="IDX708"></A><DT><CODE>-B, --batch</CODE>
+<DD>Печатать результаты, используя табуляцию как разделитель, каждая строка
+таблицы начинается на новой строке вывода. Не использует файл хронологии.
+
+<A NAME="IDX709"></A><DT><CODE>--character-sets-dir=...</CODE>
+<DD>Каталог, где размещены наборы символов.
+
+<A NAME="IDX710"></A><DT><CODE>-C, --compress</CODE>
+<DD>Использовать сжатие в протоколе клиент-сервер.
+
+<A NAME="IDX711"></A><DT><CODE>-#, --debug[=...]</CODE>
+<DD>Файл регистрации отладки. Значение по умолчанию 'd:t:o,/tmp/mysql.trace'.
+
+<A NAME="IDX712"></A><DT><CODE>-D, --database=...</CODE>
+<DD>База данных, которую надлежит использовать. Это, главным образом, полезно
+в файле <CODE>my.cnf</CODE>.
+
+<A NAME="IDX713"></A><DT><CODE>--default-character-set=...</CODE>
+<DD>Заданный по умолчанию набор символов.
+
+<A NAME="IDX714"></A><DT><CODE>-e, --execute=...</CODE>
+<DD>Выполнить команду и завершиться. Вывод как в случае --batch.
+
+<A NAME="IDX715"></A><DT><CODE>-E, --vertical</CODE>
+<DD>Печатать вывод запроса (строки) вертикально. Без этой опции Вы можете
+также достичь такого вывода, заканчивая команду сочетанием <CODE>\G</CODE>.
+
+<A NAME="IDX716"></A><DT><CODE>-f, --force</CODE>
+<DD>Продолжить, даже если мы получаем ошибку SQL.
+
+<A NAME="IDX717"></A><DT><CODE>-g, --no-named-commands</CODE>
+<DD>Именованные команды заблокированы. Используйте форму только \*. Можно
+применять именованные команды только в начале строки, оканчивающейся точкой с
+запятой (;). Начиная с Version 10.9, клиент теперь запускается с этой опцией
+по умолчанию! С опцией -g, длинный формат команд, однако, все еще будет
+работать из первой строки.
+
+<A NAME="IDX718"></A><DT><CODE>-G, --enable-named-commands</CODE>
+<DD>Именованные команды <STRONG>допускаются</STRONG>. Длинный формат команд
+позволяются также как сокращение команд \*.
+
+<A NAME="IDX719"></A><DT><CODE>-i, --ignore-space</CODE>
+<DD>Игнорировать пробелы после имен функций.
+
+<A NAME="IDX720"></A><DT><CODE>-h, --host=...</CODE>
+<DD>Соединиться с данным компьютером.
+
+<A NAME="IDX721"></A><DT><CODE>-H, --html</CODE>
+<DD>Производить вывод HTML.
+
+<A NAME="IDX722"></A><DT><CODE>-L, --skip-line-numbers</CODE>
+<DD>Не писать номер строки для ошибок. Полезно, когда надо сравнить
+результирующие файлы с ошибками.
+
+<A NAME="IDX723"></A><DT><CODE>--no-pager</CODE>
+<DD>Отключить pager и выводить наstdout. Подробности в интерактивной справке
+(\h).
+
+<A NAME="IDX724"></A><DT><CODE>--no-tee</CODE>
+<DD>Отключить outfile. Подробности в интерактивной справке (\h).
+
+<A NAME="IDX725"></A><DT><CODE>-n, --unbuffered</CODE>
+<DD>Сбрасывать буфер после каждого запроса.
+
+<A NAME="IDX726"></A><DT><CODE>-N, --skip-column-names</CODE>
+<DD>Не писать имена столбцов в результатах.
+
+<A NAME="IDX727"></A><DT><CODE>-O, --set-variable var=option</CODE>
+<DD>Задать переменной значение. Список переменных доступен через
+<CODE>--help</CODE>.
+
+<A NAME="IDX728"></A><DT><CODE>-o, --one-database</CODE>
+<DD>Модифицировать только заданную по умолчанию базу данных. Это полезно для
+пропуска модификаций другой базы данных в файле регистрации модификации.
+
+<A NAME="IDX729"></A><DT><CODE><CODE>--pager[=...]</CODE></CODE>
+<DD>Тип вывода. Значение по умолчанию: Ваша переменная окружения
+<CODE>PAGER</CODE>. Допустимые значения: less, more, cat [&#62; filename],
+etc. Подробности в интерактивной справке (\h). Эта опция не работает в
+пакетном режиме. Pager работает только в UNIX.
+
+<A NAME="IDX730"></A><DT><CODE>-p[password], --password[=...]</CODE>
+<DD>Пароль, чтобы использовать при соединении с сервером. Если пароль не
+задан в командной строке, Вы будете запрошены относительно него. Обратите
+внимание, что, если Вы используете короткую форму <CODE>-p</CODE>, Вы не
+можете иметь пробелов между этой опцией и паролем.
+
+<A NAME="IDX731"></A><DT><CODE>-P  --port=...</CODE>
+<DD>TCP/IP порт, чтобы использовать для подключения.
+
+<A NAME="IDX732"></A><DT><CODE>-q, --quick</CODE>
+<DD>Не кэшировать результат, печатать его строка в строку. Это может
+замедлять сервер, если вывод приостановлен. Не использует файл хронологии.
+
+<A NAME="IDX733"></A><DT><CODE>-r, --raw</CODE>
+<DD>Писать значения столбца без преобразования управляющих символов.
+Использован в режиме <CODE>--batch</CODE>.
+
+<A NAME="IDX734"></A><DT><CODE>-s, --silent</CODE>
+<DD>Быть более тихим.
+
+<A NAME="IDX735"></A><DT><CODE>-S  --socket=...</CODE>
+<DD>Файл сокета, который надо использовать для подключения.
+
+<A NAME="IDX736"></A><DT><CODE>-t  --table</CODE>
+<DD>Вывод в формате таблицы. Это задано по умолчанию в не пакетном режиме.
+
+<A NAME="IDX737"></A><DT><CODE>-T, --debug-info</CODE>
+<DD>Печатать информацию отладки при выходе.
+
+<A NAME="IDX738"></A><DT><CODE>--tee=...</CODE>
+<DD>Добавить все в outfile. Не работает в пакетном режиме.
+
+<A NAME="IDX739"></A><DT><CODE>-u, --user=#</CODE>
+<DD>Пользователь для входа в систему, если не текущий пользователь.
+
+<A NAME="IDX740"></A>
+<DT><CODE>-U, --safe-updates[=#], --i-am-a-dummy[=#]</CODE>
+<DD>Позволить только <CODE>UPDATE</CODE> и <CODE>DELETE</CODE>, которые
+используют ключи. Вы можете сбрасывать эту опцию, если Вы имеете ее в Вашем
+файле <CODE>my.cnf</CODE>, используя параметр <CODE>--safe-updates=0</CODE>.
+
+<A NAME="IDX741"></A><DT><CODE>-v, --verbose</CODE>
+<DD>Более подробный вывод (-v -v -v дает выходной формат таблицы).
+
+<A NAME="IDX742"></A><DT><CODE>-V, --version</CODE>
+<DD>Вывести информацию о версии и завершиться.
+
+<A NAME="IDX743"></A><DT><CODE>-w, --wait</CODE>
+<DD>Ждать и повторять попытки связаться, если подключение свалилось.</DL>
+
+<P>Вы можете также устанавливать следующие переменные через <CODE>-O</CODE>
+или <CODE>--set-variable</CODE>:</P>
+
+<P><A NAME="IDX744"></A><A NAME="IDX745"></A><A NAME="IDX746"></A>
+<A NAME="IDX747"></A><A NAME="IDX748"></A><A NAME="IDX749"></A>
+<TABLE BORDER WIDTH="100%">
+<TR><TD>Имя переменной</TD><TD>Значение по умолчанию</TD><TD>Описание</TD>
+</TR>
+<TR><TD>connect_timeout</TD><TD>0</TD><TD>Число секунд перед завершением
+подключения по тайм-ауту.</TD></TR>
+<TR><TD>max_allowed_packet</TD><TD>16777216</TD><TD>Максимальная длина
+пакетов для обмена с сервером.</TD></TR>
+<TR><TD>net_buffer_length</TD><TD>16384</TD><TD>Буфер для связи через сокет
+или TCP/IP.</TD></TR>
+<TR><TD>select_limit</TD><TD>1000</TD><TD>Автоматическое ограничение для
+SELECT при использовании --i-am-a-dummy</TD></TR>
+<TR><TD>max_join_size</TD><TD>1000000</TD><TD>Автоматическое ограничение для
+строк в объединении при использовании --i-am-a-dummy.</TD></TR></TABLE></P>
+
+<P>Если Вы напечатаете 'help' в командной строке, <CODE>mysql</CODE>
+распечатает команды, которые он поддерживает:</P>
+<P><A NAME="IDX750"></A>
+<PRE>
+mysql&#62; help
+
+MySQL commands:
+help    (\h)    Display this text.
+?       (\h)    Synonym for `help'.
+clear   (\c)    Clear command.
+connect (\r)    Reconnect to the server. Optional arguments are db and host.
+edit    (\e)    Edit command with $EDITOR.
+ego     (\G)    Send command to mysql server, display result vertically.
+exit    (\q)    Exit mysql. Same as quit.
+go      (\g)    Send command to mysql server.
+nopager (\n)    Disable pager, print to stdout.
+notee   (\t)    Don't write into outfile.
+pager   (\P)    Set PAGER [to_pager]. Print the query results via PAGER.
+print   (\p)    Print current command.
+quit    (\q)    Quit mysql.
+rehash  (\#)    Rebuild completion hash.
+source  (\.)    Execute a SQL script file. Takes a file name as an argument.
+status  (\s)    Get status information from the server.
+tee     (\T)    Set outfile [to_outfile]. Append everything into given outfile.
+use     (\u)    Use another database. Takes database name as argument.
+</PRE>
+
+<P>Внимание: pager работает только в UNIX.</P>
+
+<P><A NAME="IDX751"></A>Команда <CODE>status</CODE> дает Вам некоторую
+информацию относительно подключения и сервера, который Вы используете. Если
+Вы работаете в режиме <CODE>--safe-updates</CODE>, <CODE>status</CODE> будет
+также печатать значения для переменных <CODE>mysql</CODE>, которые
+воздействуют на Ваши запросы.</P>
+
+<P><A NAME="IDX752"></A>Полезная опция запуска для новичков (появилась в
+MySQL Version 3.23.11): <CODE>--safe-updates</CODE> (или
+<CODE>--i-am-a-dummy</CODE> для пользователей, которые скомандовали
+<CODE>DELETE FROM table_name</CODE>, но забыли указать предложение
+<CODE>WHERE</CODE>). При использовании этой опции, <CODE>mysql</CODE>
+посылает следующую команду серверу MySQL при открытии подключения:</P>
+<PRE>
+SET SQL_SAFE_UPDATES=1,SQL_SELECT_LIMIT=#select_limit#,
+    SQL_MAX_JOIN_SIZE=#max_join_size#"
+</PRE>
+
+<P>Здесь <CODE>#select_limit#</CODE> и <CODE>#max_join_size#</CODE> являются
+переменными, которые могут быть заданы в командной строке <CODE>mysql</CODE>.
+
+<P>Эффект вышеупомянутой команды:</P>
+
+<UL><LI>Вам не позволяют давать инструкции <CODE>UPDATE</CODE> или
+<CODE>DELETE</CODE>, если Вы не имеете ограничения ключа в части
+<CODE>WHERE</CODE>. Можно, однако, выполнить <CODE>UPDATE/DELETE</CODE>,
+используя слово <CODE>LIMIT</CODE>:
+<PRE>
+UPDATE table_name SET not_key_column=# WHERE not_key_column=# LIMIT 1;
+</PRE>
+
+<LI>Все большие результаты автоматически ограничены строками
+<CODE>#select_limit#</CODE>.
+
+<LI><CODE>SELECT</CODE>, который, вероятно, должен будет исследовать больше,
+чем <CODE>#max_join_size</CODE> комбинаций строк, будет прерван.</UL>
+
+<P>Некоторые полезные советы относительно применения клиента
+<CODE>mysql</CODE>:</P>
+
+<P>Некоторые данные намного более читаемы, когда отображаются вертикально,
+вместо обычного горизонтального вывода, типа блока. Например, более длинный
+текст, который включает новые строки, часто намного проще читать с
+вертикальным выводом. Например:</P>
+<PRE>
+mysql&#62; select * from mails where length(txt) &#60; 300 limit 300,1\G
+*************************** 1. row ***************************
+  msg_nro: 3068
+     date: 2000-03-01 23:29:50
+time_zone: +0200
+mail_from: Monty
+    reply: monty@no.spam.com
+  mail_to: "Thimble Smith" &#60;tim@no.spam.com&#62;
+      sbj: UTF-8
+      txt: &#62;&#62;&#62;&#62;&#62; "Thimble" == Thimble Smith writes:
+
+Thimble&#62; Hi. I think this is a good idea. Is anyone familiar with
+Thimble&#62; UTF-8 or Unicode? Otherwise I'll put this on my TODO list
+Thimble&#62; and see what happens.
+
+Yes, please do that.
+
+Regards,
+Monty
+     file: inbox-jani-1
+     hash: 190402944
+1 row in set (0.09 sec)
+</PRE>
+
+<UL><LI>Для регистрации Вы можете использовать опцию <CODE>tee</CODE>. Режим
+<CODE>tee</CODE> может быть начат с помощью опции <CODE>--tee=...</CODE> или
+из командной строки в интерактивном режиме с помощью команды
+<CODE>tee</CODE>. Все данные, отображаемые на экране, будут также добавляться
+в заданный файл. Это может быть очень полезно для отладки. Режим может быть
+заблокирован из командной строки командой <CODE>notee</CODE>. Выполнение
+<CODE>tee</CODE> второй раз снова начинает регистрировать вывод. Без
+параметра будет использоваться предыдущий файл. Обратите внимание, что
+<CODE>tee</CODE> сбрасывает результаты в файл после каждой команды прежде,
+чем появляется командная строка.
+
+<LI>Просмотр или поиск результатов в интерактивном режиме в UNIX с помощью
+less, more или любой другой подобной программы, является теперь возможным с
+опцией <CODE>--pager[=...]</CODE>. Без параметра клиент <CODE>mysql</CODE>
+будет искать системную переменную PAGER и соответственно устанавливать свой
+параметр <CODE>pager</CODE>. Этот режим может быть запущен из интерактивной
+командной строки командой <CODE>pager</CODE> и заблокирован командой
+<CODE>nopager</CODE>. Команда факультативно берет параметр, и
+<CODE>pager</CODE> будет установлен в заданное им значение. Команда
+<CODE>pager</CODE> может быть вызвана без параметра, но это требует, чтобы
+использовалась опция <CODE>--pager</CODE>, или <CODE>pager</CODE> будет
+значением по умолчанию (stdout). <CODE>pager</CODE> работает только в UNIX,
+так как это использует функцию popen(), которая не существует в Windows. Под
+ОС Windows опция <CODE>tee</CODE> может использоваться вместо этого, хотя она
+не может быть столь же удобна, как <CODE>pager</CODE> в некоторых ситуациях.
+
+<LI>Несколько советов относительно <CODE>pager</CODE>: Вы можете использовать
+его, чтобы писать в файл:
+<PRE>
+mysql&#62; pager cat &#62; /tmp/log.txt
+</PRE>
+
+И результаты будут переданы только в этот файл. Вы можете также передавать
+любые параметры для программ, которые Вы хотите использовать с
+<CODE>pager</CODE>:
+<PRE>
+mysql&#62; pager less -n -i -S
+</PRE>
+
+Из вышеупомянутого обратите внимание на опцию '-S'. Вы можете посчитать ее
+очень полезной при просмотре результатов. Попробуйте опцию с горизонтальным
+выводом (команды заканчиваются на '\g' или ';') и с вертикальным выводом
+(команды заканчиваются на '\G'). Иногда очень широкий набор результатов
+должен быстро читаться с экрана, с опцией -S и программой less Вы сможете
+просмотреть результаты внутри интерактивного less слева направо без строк,
+более длинных, чем Ваш экран. Это может сделать результат намного более
+читаемым. Вы можете переключать режим внутри интерактивного less с помощью
+'-S'. Подробности в описании на 'h'.
+
+<LI>Вы можете объединять очень сложные способы обрабки результатов, например,
+следующее пошлет результаты двум файлам в двух различных каталогах, на двух
+различных жестких дисках, /dr1 и /dr2, и на экран через less:
+
+<PRE>
+mysql&#62; pager cat|tee /dr1/tmp/res.txt|tee /dr2/tmp/res2.txt| \
+                 less -n -i -S
+</PRE>
+
+<LI>Вы можете также объединять две функции: включить <CODE>tee</CODE>,
+<CODE>pager</CODE> установить на 'less', и Вы будете способны просмотреть
+результаты в unix 'less' и все еще копировать весь вывод в файл. Различие
+между <CODE>UNIX tee</CODE>, используемом с <CODE>pager</CODE> и клиентом
+<CODE>mysql</CODE> то, что встроенный режим <CODE>tee</CODE> работает, даже
+если Вы не имеете <CODE>UNIX tee</CODE>.</UL>
+
+<H3><A NAME="mysqladmin">12.3 mysqladmin, Администрирование сервера MySQL</A>
+</H3>
+<P>Утилита для выполнения административных операций. Синтаксис:</P>
+<PRE>
+shell&#62; mysqladmin [OPTIONS] command [command-option] command ...
+</PRE>
+
+<P>Вы можете получить список параметров, которые Ваша версия
+<CODE>mysqladmin</CODE> поддерживает, выполняя <CODE>mysqladmin
+--help</CODE>.</P>
+
+<P>Текущая версия <CODE>mysqladmin</CODE> поддерживает следующие команды:</P>
+
+<DL COMPACT>
+<DT><CODE>create databasename</CODE>
+<DD>Создать новую базу данных.
+
+<DT><CODE>drop databasename</CODE>
+<DD>Удалить базу данных и все таблицы.
+
+<DT><CODE>extended-status</CODE>
+<DD>Дает расширенное сообщение состояния сервера.
+
+<DT><CODE>flush-hosts</CODE>
+<DD>Сбрасывает все кэшируемые хосты.
+
+<DT><CODE>flush-logs</CODE>
+<DD>Сбрасывает все протоколы.
+
+<DT><CODE>flush-tables</CODE>
+<DD>Сбрасывает все таблицы на диск.
+
+<DT><CODE>flush-privileges</CODE>
+<DD>Перезагружает таблицы предоставления привилегий (то же, что и reload).
+
+<DT><CODE>kill id,id,...</CODE>
+<DD>Уничтожает поток mysql.
+
+<DT><CODE>password</CODE>
+<DD>Устанавливает новый пароль. Изменяет старый пароль на новый.
+
+<DT><CODE>ping</CODE>
+<DD>Проверяет, является ли mysqld действующим.
+
+<DT><CODE>processlist</CODE>
+<DD>Показывает список активных потоков сервера.
+
+<DT><CODE>reload</CODE>
+<DD>Перезагружает таблицы предоставления привилегий
+
+<DT><CODE>refresh</CODE>
+<DD>Сбрасывает на диск все таблицы и открытые файлы протоколов.
+
+<DT><CODE>shutdown</CODE>
+<DD>Завершает работу сервера.
+
+<DT><CODE>slave-start</CODE>
+<DD>Запускает подчиненный процесс репликации.
+
+<DT><CODE>slave-stop</CODE>
+<DD>Завершает подчиненный процесс репликации.
+
+<DT><CODE>status</CODE>
+<DD>Дает короткое сообщение состояния сервера.
+
+<DT><CODE>variables</CODE>
+<DD>Печатает доступные переменные.
+
+<DT><CODE>version</CODE>
+<DD>Выдает краткую информацию о версии сервера.</DL>
+
+<P>Все команды могут быть сокращены к их уникальному префиксу. Например:</P>
+<PRE>
+shell&#62; mysqladmin proc stat
++----+-------+-----------+----+-------------+------+-------+------+
+| Id | User  | Host      | db | Command     | Time | State | Info |
++----+-------+-----------+----+-------------+------+-------+------+
+| 6  | monty | localhost |    | Processlist | 0    |       |      |
++----+-------+-----------+----+-------------+------+-------+------+
+Uptime: 10077  Threads: 1  Questions: 9  Slow queries: 0  Opens: 6  Flush tables: 1  Open tables: 2  Memory in use: 1092K  Max memory used: 1116K
+</PRE>
+
+<P><A NAME="IDX756"></A>Результат команды <CODE>mysqladmin status</CODE>
+имеет следующие столбцы:</P>
+
+<P><A NAME="IDX757"></A><TABLE BORDER WIDTH="100%">
+<TR><TD>Uptime</TD><TD>Число секунд, которые прошли с момента запуска сервера
+</TD></TR>
+<TR><TD>Threads</TD><TD>Число активных потоков (клиентов)<A NAME="IDX758">
+</A></TD></TR>
+<TR><TD>Questions</TD><TD>Число запросов от клиентуры с тех пор, как
+<CODE>mysqld</CODE> был запущен.<A NAME="IDX759"></A></TD></TR>
+<TR><TD>Slow queries</TD><TD>Запросы, которые заняли больше, чем
+<CODE>long_query_time</CODE> секунд.<A NAME="IDX760"></TD></TR>
+<TR><TD>Opens</TD><TD>Сколько таблиц открылись в <CODE>mysqld</CODE>.
+<A NAME="IDX761"></A></TD></TR>
+<TR><TD>Flush tables</TD><TD>Сколько выполнено команд <CODE>flush ...</CODE>,
+<CODE>refresh</CODE> и <CODE>reload</CODE>.<A NAME="IDX762"></A>
+<A NAME="IDX763"></A></TD></TR>
+<TR><TD>Open tables</TD><TD>Число таблиц, которые открыты СЕЙЧАС.
+<A NAME="IDX764"></A></TD></TR>
+<TR><TD>Memory in use</TD><TD>Память, распределенная непосредственно кодом
+<CODE>mysqld</CODE> (доступно только, когда MySQL компилируется с опцией
+--with-debug=full).<A NAME="IDX765"></A></TD></TR>
+<TR><TD>Max memory used</TD><TD>Максимальная память, распределенная
+непосредственно кодом <CODE>mysqld</CODE> (доступно только, когда MySQL
+компилируется с опцией --with-debug=full).<A NAME="IDX766"></A></TD>
+</TR></TABLE></P>
+
+<P>Если Вы делаете <CODE>myslqadmin shutdown</CODE> на сокете (другими
+словами, на компьютере, где запущен <CODE>mysqld</CODE>),
+<CODE>mysqladmin</CODE> будет ждать, пока не будет удален MySQL
+<CODE>pid-file</CODE>, чтобы гарантировать, что сервер <CODE>mysqld</CODE>
+был завершен правильно.</P>
+
+<H3><A NAME="Using_mysqlcheck">12.4 Использование <CODE>mysqlcheck</CODE> для
+поддержания таблиц и восстановления</A></H3>
+<P>Начиная с MySQL version 3.23.38, Вы можете использовать новый инструмент
+для проверки и ремонта таблиц <CODE>MyISAM</CODE>. Отличие от
+<CODE>myisamchk</CODE> в том, что <CODE>mysqlcheck</CODE> должен
+использоваться, когда сервер <CODE>mysqld</CODE> работает, а
+<CODE>myisamchk</CODE> работает только, когда сервер выключен.</P>
+
+<P><CODE>mysqlcheck</CODE> использует команды сервера MySQL
+<CODE>CHECK</CODE>, <CODE>REPAIR</CODE>, <CODE>ANALYZE</CODE> и
+<CODE>OPTIMIZE</CODE> удобным для пользователя способом.</P>
+
+<P>Имеются три альтернативных способа вызвать <CODE>mysqlcheck</CODE>:</P>
+<PRE>
+shell&#62; mysqlcheck [OPTIONS] database [tables]
+shell&#62; mysqlcheck [OPTIONS] --databases DB1 [DB2 DB3...]
+shell&#62; mysqlcheck [OPTIONS] --all-databases
+</PRE>
+
+<P><CODE>mysqlcheck</CODE> имеет специальное свойство, сравнимое с другой
+клиентурой: заданное по умолчанию поведение при проверке таблиц (-c) может
+быть изменено переименованием. Так, если Вы хотите иметь инструмент для
+ремонта таблиц по умолчанию, Вы должны только скопировать
+<CODE>mysqlcheck</CODE> под именем <CODE>mysqlrepair</CODE> или создать
+символическую связь <CODE>mysqlrepair</CODE>.</P>
+
+<P>Имена, которые Вы можете использовать, чтобы изменить заданное по
+умолчанию поведение <CODE>mysqlcheck</CODE>:</P>
+<PRE>
+mysqlrepair:   По умолчанию опция -r
+mysqlanalyze:  По умолчанию опция -a
+mysqloptimize: По умолчанию опция -o
+</PRE>
+
+<P>Параметры, доступные для <CODE>mysqlcheck</CODE>, перечислены здесь,
+пожалуйста, проверьте, что Ваша версия поддерживает вызов
+<CODE>mysqlcheck --help</CODE>.</P>
+
+<DL COMPACT>
+<DT><CODE>-A, --all-databases</CODE>
+<DD>Проверить все базы данных. Это будет то же самое, что и --databases с
+выбором всех баз данных.
+<DT><CODE>-1, --all-in-1</CODE>
+<DD>Вместо того, чтобы делать один запрос для каждой таблицы, выполнить все
+запросы в одном запросе отдельно для каждой базы данных. Имена таблиц будут
+переданы в списке через запятую.
+<DT><CODE>-a, --analyze</CODE>
+<DD>Анализировать данные таблицы.
+<DT><CODE>--auto-repair</CODE>
+<DD>Если проверяемая таблица разрушена, автоматически исправить ее.
+Восстановление будет выполнено после того, как все таблицы проверятся.
+<DT><CODE>-#, --debug=...</CODE>
+<DD>Файл регистрации отладки. Часто это 'd:t:o,filename'.
+<DT><CODE>--character-sets-dir=...</CODE>
+<DD>Каталог, где искать наборы символов.
+<DT><CODE>-c, --check</CODE>
+<DD>Проверить таблицу на ошибки.
+<DT><CODE>-C, --check-only-changed</CODE>
+<DD>Проверить только те таблицы, которые изменились с последней проверки или
+не были закрыты правильно.
+<DT><CODE>--compress</CODE>
+<DD>Использовать сжатие в протоколе клиент-сервер.
+<DT><CODE>-?, --help</CODE>
+<DD>Отобразить сообщение справки.
+<DT><CODE>-B, --databases</CODE>
+<DD>Проверять несколько баз данных. Обратите внимание на различие в
+использовании: в этом случае никакие таблицы не даны. Все параметры будут
+расценены как имена баз данных.
+<DT><CODE>--default-character-set=...</CODE>
+<DD>Заданный по умолчанию набор символов.
+<DT><CODE>-F, --fast</CODE>
+<DD>Проверить только те таблицы, которые не были закрыты правильно.
+<DT><CODE>-f, --force</CODE>
+<DD>Продолжить, даже если мы получаем sql-ошибку.
+<DT><CODE>-e, --extended</CODE>
+<DD>Если Вы используете эту опцию с CHECK TABLE, это гарантирует, что таблица
+на 100% непротиворечива, но займет длительное время. Если Вы используете эту
+опцию с REPAIR TABLE, она выполнит расширенный ремонт таблицы, который может
+занять немало времени и породить много строк мусора в таблице!
+<DT><CODE>-h, --host=...</CODE>
+<DD>Связаться с указанным хостом.
+<DT><CODE>-m, --medium-check</CODE>
+<DD>Быстрее, чем extended-check, но находит только 99.99% всех ошибок. Режим
+должен быть достаточно хорошим для большинства случаев.
+<DT><CODE>-o, --optimize</CODE>
+<DD>Оптимизировать таблицу.
+<DT><CODE>-p, --password[=...]</CODE>
+<DD>Пароль, чтобы использовать при соединении с сервером. Если пароль не
+задан, он будет запрошен.
+<DT><CODE>-P, --port=...</CODE>
+<DD>Номер порта, который надлежит использовать для подключения.
+<DT><CODE>-q, --quick</CODE>
+<DD>Если Вы используете эту опцию с CHECK TABLE, это не дает просматривать
+строки, чтобы проверить неправильные связи. Это самая быстрая проверка. Если
+Вы используете эту опцию с REPAIR TABLE, ремонту будет подвергнуто только
+индексное дерево. Это самый быстрый метод ремонта для таблицы.
+<DT><CODE>-r, --repair</CODE>
+<DD>Может выправить почти все, что угодно, за исключением уникальных ключей,
+которые стали не уникальными.
+<DT><CODE>-s, --silent</CODE>
+<DD>Выводить только сообщения об ошибках.
+<DT><CODE>-S, --socket=...</CODE>
+<DD>Файл сокета, который надо использовать для подключения.
+<DT><CODE>--tables</CODE>
+<DD>Отменяет опцию --databases (-B).
+<DT><CODE>-u, --user=#</CODE>
+<DD>Пользователь для входа в систему, если не текущий пользователь.
+<DT><CODE>-v, --verbose</CODE>
+<DD>Печатать информацию относительно различных стадий.
+<DT><CODE>-V, --version</CODE>
+<DD>Вывести информацию о версии.</DL>
+
+<H3><A NAME="mysqldump">12.5 mysqldump, Сброс в дамп структуры
+таблицы и ее данных</A></H3>
+<P>Утилита позволяет сбросить в дамп одну или несколько баз данных для
+резервирования или транспортировки на другой сервер SQL (необязательно
+MySQL). Дамп будет содержать инструкции SQL, чтобы создать и
+заполнять таблицу данными.</P>
+
+<P>Если Вы делаете копию на сервер, Вы должны рассмотреть использование
+вместо этой утилиты <CODE>mysqlhotcopy</CODE>. Подробности в разделе
+"<A HREF="#mysqlhotcopy">12.6 mysqlhotcopy, копирование баз
+данных и таблиц MySQL</A>".</P>
+<PRE>
+shell&#62; mysqldump [OPTIONS] database [tables]
+           mysqldump [OPTIONS] --databases [OPTIONS] DB1 [DB2 DB3...]
+           mysqldump [OPTIONS] --all-databases [OPTIONS]
+</PRE>
+
+<P>Если Вы не задаете таблицы или используете <CODE>--databases</CODE> или
+<CODE>--all-databases</CODE>, целая база данных будет сброшена в дамп.</P>
+
+<P>Вы можете получить список параметров, которые поддерживает Ваша версия
+<CODE>mysqldump</CODE>, выполняя <CODE>mysqldump --help</CODE>.</P>
+
+<P>Обратите внимание, что, если Вы выполняете <CODE>mysqldump</CODE> без
+опций <CODE>--quick</CODE> или <CODE>--opt</CODE>, <CODE>mysqldump</CODE>
+загрузит целый набор результатов в память перед дампингом. Это будет,
+вероятно, проблемой, если Вы обрабатываете большую базу данных.</P>
+
+<P>Обратите внимание, что, если Вы используете новую копию программы
+<CODE>mysqldump</CODE> и собираетесь делать дамп, который будет читаться
+очень старым сервером MySQL, Вы не должны использовать параметры
+<CODE>--opt</CODE> или <CODE>-e</CODE>.</P>
+
+<P><CODE>mysqldump</CODE> поддерживает следующие параметры:</P>
+
+<DL COMPACT>
+<DT><CODE>--add-locks</CODE>
+<DD>Добавить <CODE>LOCK TABLES</CODE> перед и <CODE>UNLOCK TABLE</CODE> после
+каждого дампа таблицы, чтобы получить быстрые вставки в MySQL.
+<DT><CODE>--add-drop-table</CODE>
+<DD>Добавить <CODE>drop table</CODE> перед каждой инстукцией создания.
+<DT><CODE>-A, --all-databases</CODE>
+<DD>Дамп всех баз данных. Это будет то же самое, что и
+<CODE>--databases</CODE> со всеми выбранными базами данных.
+<DT><CODE>-a, --all</CODE>
+<DD>Включить все MySQL-специфичные параметры create.
+<DT><CODE>--allow-keywords</CODE>
+<DD>Позволить создание имен столбцов, которые являются ключевыми словами. Это
+реализовано путем приписывания имен столбцов к имени таблицы.
+<DT><CODE>-c, --complete-insert</CODE>
+<DD>Использовать полный формат инструкций вставки (с именами столбца).
+<DT><CODE>-C, --compress</CODE>
+<DD>Сжимать всю информацию, передаваемую между клиентом и сервером, если они
+оба поддерживают сжатие.
+<DT><CODE>-B, --databases</CODE>
+<DD>Сбросить в дамп несколько баз данных. Обратите внимание на различие в
+использовании. В этом случае никакие таблицы не могут быть заданы. Все
+параметры имени будут расценены как имена базы данных. <CODE>USE
+db_name;</CODE> будет включен в вывод перед каждой новой базой данных.
+<DT><CODE>--delayed</CODE>
+<DD>Вставлять строки командой <CODE>INSERT DELAYED</CODE>.
+<DT><CODE>-e, --extended-insert</CODE>
+<DD>Использовать новый синтаксис <CODE>INSERT</CODE>. Дает более компактные и
+быстрые инструкции вставок.
+<DT><CODE>-#, --debug[=option_string]</CODE>
+<DD>Использовать трассировку (для отладки).
+<DT><CODE>--help</CODE>
+<DD>Отобразить справку о параметрах.
+<DT><CODE>--fields-terminated-by=...</CODE>
+<DD>
+<DT><CODE>--fields-enclosed-by=...</CODE>
+<DD>
+<DT><CODE>--fields-optionally-enclosed-by=...</CODE>
+<DD>
+<DT><CODE>--fields-escaped-by=...</CODE>
+<DD>
+<DT><CODE>--lines-terminated-by=...</CODE>
+<DD>Эти параметры используются с опцией <CODE>-T</CODE> и имеют то же самое
+значение, что и соответствующие предложения для <CODE>LOAD DATA
+INFILE</CODE>. Подробности в разделе "<A HREF="glava08.htm#LOAD_DATA">8.9
+Синтаксис <CODE>LOAD DATA INFILE</CODE></A>".
+<DT><CODE>-F, --flush-logs</CODE>
+<DD>Сбросить файл протокола сервера MySQL на диск перед стартом дампа.
+<DT><CODE>-f, --force,</CODE>
+<DD>Продолжать, даже если мы получаем SQL ошибку в течение дампа таблицы.
+<DT><CODE>-h, --host=...</CODE>
+<DD>Сбросить данные в дамп с сервера MySQL на указанном хосте. Заданный по
+умолчанию хост: <CODE>localhost</CODE>.
+<DT><CODE>-l, --lock-tables</CODE>
+<DD>Блокировать все таблицы перед стартом дампа. Таблицы будут заблокированы
+с опцией <CODE>READ LOCAL</CODE>, чтобы позволить параллельные вставки в
+случае таблиц <CODE>MyISAM</CODE>.
+<DT><CODE>-n, --no-create-db</CODE>
+<DD>Запись 'CREATE DATABASE /*!32312 IF NOT EXISTS*/ db_name;' не будет
+помещена в вывод. Вышеупомянутая строка будет добавлена иначе, если была дана
+опция --databases или --all-databases.
+<DT><CODE>-t, --no-create-info</CODE>
+<DD>Не писать информацию для создания таблицы (инструкция <CODE>CREATE TABLE
+</CODE>).
+<DT><CODE>-d, --no-data</CODE>
+<DD>Не писать любую информацию строк для таблицы. Это очень полезно, если Вы
+хотите получить только дамп структуры для таблицы!
+<DT><CODE>--opt</CODE>
+<DD>То же самое, что и задать <CODE>--quick --add-drop-table --add-locks
+--extended-insert --lock-tables</CODE>. Опция должна дать Вам самый быстрый
+возможный дамп для чтения на сервере MySQL.
+<DT><CODE>-pyour_pass, --password[=your_pass]</CODE>
+<DD>Пароль, чтобы использовать при соединении с сервером. Если Вы не
+определяете никакой части <SAMP>`=your_pass'</SAMP>, Вы будете запрошены
+относительно ввода пароля.
+<DT><CODE>-P port_num, --port=port_num</CODE>
+<DD>TCP/IP порт, чтобы использовать для соединения с удаленным компьютером.
+Это используется для подключений к системам, отличным от
+<CODE>localhost</CODE>, там применяются Unix-сокеты.
+<DT><CODE>-q, --quick</CODE>
+<DD>Не буферизовать запрос, дамп непосредственно направляется на stdout. Для
+этого используется вызов <CODE>mysql_use_result()</CODE>.
+<DT><CODE>-r, --result-file=...</CODE>
+<DD>Прямой вывод в заданный файл. Эта опция должна использоваться в MSDOS,
+поскольку не превращает '\n' в '\n\r'.
+<DT><CODE>-S /path/to/socket, --socket=/path/to/socket</CODE>
+<DD>Файл сокета, чтобы использовать при соединении с <CODE>localhost</CODE>.
+Он является заданным по умолчанию компьютером.
+<DT><CODE>--tables</CODE>
+<DD>Отменяет опцию --databases (-B).
+<DT><CODE>-T, --tab=path-to-some-directory</CODE>
+<DD>Создает файл <CODE>table_name.sql</CODE>, который содержит команды SQL
+CREATE, и файл <CODE>table_name.txt</CODE>, который содержит данные для
+каждой указанной таблицы. <STRONG>ОБРАТИТЕ ВНИМАНИЕ</STRONG>: Это работает
+только, если <CODE>mysqldump</CODE> выполнен на той же самой машине, что и
+сервер <CODE>mysqld</CODE>. Формат файла <CODE>.txt</CODE> соответствует
+опциям <CODE>--fields-xxx</CODE> и <CODE>--lines--xxx</CODE>.
+<DT><CODE>-u user_name, --user=user_name</CODE>
+<DD>Пользователь MySQL, чтобы применить при соединении с сервером. Значение
+по умолчанию: Ваше Unix-имя входа в систему.
+<DT><CODE>-O var=option, --set-variable var=option</CODE>
+<DD>Установить значение переменной. Возможные переменные перечислены ниже.
+<DT><CODE>-v, --verbose</CODE>
+<DD>Подробный режим. Распечатать большее количество информации относительно
+того, что делает программа.
+<DT><CODE>-V, --version</CODE>
+<DD>Вывести информацию о версии.
+<DT><CODE>-w, --where='where-condition'</CODE>
+<DD>Дамп только выбранных записей. Обратите внимание, что КАВЫЧКИ обязательны:
+<PRE>
+"--where=user='jimf'" "-wuserid&#62;1" "-wuserid&#60;1"
+</PRE>
+<DT><CODE>-O net_buffer_length=#, where # &#60; 16M</CODE>
+<DD>При создании мультистрочных инструкций (как с опцией
+<CODE>--extended-insert</CODE> или <CODE>--opt</CODE>),
+<CODE>mysqldump</CODE> создаст строки длины до <CODE>net_buffer_length</CODE>.
+Если Вы увеличиваете эту переменную, Вы должны также гарантировать, что
+переменная <CODE>max_allowed_packet</CODE> в сервере MySQL больше, чем
+<CODE>net_buffer_length</CODE>.</DL>
+
+<P>Наиболее нормальное использование <CODE>mysqldump</CODE>: создание копий
+целых баз данных. Подробности в разделе "<A HREF="glava04.htm#Backup">4.1
+Резервирование баз данных</A>":</P>
+<PRE>
+mysqldump --opt database &#62; backup-file.sql
+</PRE>
+
+<P>Вы можете прочитать этот файл обратно в MySQL:</P>
+<PRE>
+mysql database &#60; backup-file.sql
+</PRE>
+
+<P>или:</P>
+<PRE>
+mysql -e "source /patch-to-backup/backup-file.sql" database
+</PRE>
+
+<P>Однако, утилита также очень полезна, когда надо заполнить другой сервер
+MySQL информацией из базы данных:</P>
+<PRE>
+mysqldump --opt database|mysql --host=remote-host -C database
+</PRE>
+
+<P>Возможно выполнить дамп нескольких баз данных одной командой:</P>
+<PRE>
+mysqldump --databases database1 [database2 database3...] &#62; my_databases.sql
+</PRE>
+
+<P>Если требуются все базы данных, можно использовать:</P>
+<PRE>
+mysqldump --all-databases &#62; all_databases.sql
+</PRE>
+
+<H3><A NAME="mysqlhotcopy">12.6 mysqlhotcopy, копирование баз
+данных и таблиц MySQL</A></H3>
+<P><CODE>mysqlhotcopy</CODE> представляет собой perl-скрипт, который
+использует <CODE>LOCK TABLES</CODE>, <CODE>FLUSH TABLES</CODE> и
+<CODE>cp</CODE> или <CODE>scp</CODE>, чтобы быстро сделать копию базы данных.
+Это самый быстрый способ сделать копию с базы данных или одиночной таблицы,
+но это может быть выполнено только на той же самой машине, где находятся
+каталоги баз данных.</P>
+
+<PRE>
+mysqlhotcopy db_name [/path/to/new_directory]
+mysqlhotcopy db_name_1 ... db_name_n /path/to/new_directory
+mysqlhotcopy db_name./regex/
+</PRE>
+
+<P><CODE>mysqlhotcopy</CODE> поддерживает следующие параметры:</P>
+<DL COMPACT>
+<DT><CODE>-?, --help</CODE>
+<DD>Отобразить экран справки.
+<DT><CODE>-u, --user=#</CODE>
+<DD>Пользователь для входа в систему.
+<DT><CODE>-p, --password=#</CODE>
+<DD>Пароль для входа в систему.
+<DT><CODE>-P, --port=#</CODE>
+<DD>Порт, чтобы использовать при соединении с локальным сервером.
+<DT><CODE>-S, --socket=#</CODE>
+<DD>Сокет, который надо использовать при соединении с локальным сервером.
+<DT><CODE>--allowold</CODE>
+<DD>Не прерывать процесс копирования, если файл-адресат уже существует
+(переименовать его в его же имя с добавлением суффикса _old).
+<DT><CODE>--keepold</CODE>
+<DD>Не удалять предыдущего (теперь переименованного) адресата, когда процесс
+копирования будет выполнен.
+<DT><CODE>--noindices</CODE>
+<DD>Не включать полные индексные файлы в копию, чтобы сделать копию меньше.
+Индексы могут позже быть восстановлены с помощью <CODE>myisamchk -rq</CODE>.
+<DT><CODE>--method=#</CODE>
+<DD>Метод для получения копии (<CODE>cp</CODE> или <CODE>scp</CODE>).
+<DT><CODE>-q, --quiet</CODE>
+<DD>Сообщать только об ошибках.
+<DT><CODE>--debug</CODE>
+<DD>Включить режим отладки.
+<DT><CODE>-n, --dryrun</CODE>
+<DD>Только сообщать о действиях, но не выполнять их.
+<DT><CODE>--regexp=#</CODE>
+<DD>Копировать все базы данных с именами, соответствующими regexp.
+<DT><CODE>--suffix=#</CODE>
+<DD>Суффикс для добавления к именам скопированных баз данных.
+<DT><CODE>--checkpoint=#</CODE>
+<DD>Вставить запись контрольной точки в определенный db.table.
+<DT><CODE>--flushlog</CODE>
+<DD>Сбросить протоколы на диск при блокировке таблиц.
+<DT><CODE>--tmpdir=#</CODE>
+<DD>Временный каталог (вместо /tmp).</DL>
+
+<P>Вы можете использовать <CODE>perldoc mysqlhotcopy</CODE>, чтобы получить
+более полную документацию для <CODE>mysqlhotcopy</CODE>.</P>
+
+<P><CODE>mysqlhotcopy</CODE> читает группы <CODE>[client]</CODE> и
+<CODE>[mysqlhotcopy]</CODE> из файлов опций.</P>
+
+<P>Чтобы выполнить <CODE>mysqlhotcopy</CODE>, Вы нуждаетесь в доступе к
+резервному каталогу для записи, в привилегии <CODE>SELECT</CODE> для таблиц,
+которые Вы собираетесь копировать, и в привилегии MySQL <CODE>Reload</CODE>,
+чтобы выполнить команду <CODE>FLUSH TABLES</CODE>.</P>
+
+<H3><A NAME="mysqlimport">12.7 mysqlimport, импорт данных
+из текстовых файлов</A></H3>
+<P><CODE>mysqlimport</CODE> интерфейс командной строки к инструкции SQL
+<CODE>LOAD DATA INFILE</CODE>. Большинство параметров
+<CODE>mysqlimport</CODE> непосредственно соответствует тем же самым
+параметрам <CODE>LOAD DATA INFILE</CODE>. Подробности в разделе
+"<A HREF="glava08.htm#LOAD_DATA">8.9 Синтаксис <CODE>LOAD DATA INFILE</CODE>
+</A>".</P>
+
+<P><CODE>mysqlimport</CODE> вызывается подобно этому:</P>
+<PRE>
+shell&#62; mysqlimport [options] database textfile1 [textfile2....]
+</PRE>
+
+<P>Для каждого текстового файла, указанного в командной строке,
+<CODE>mysqlimport</CODE> отделяет любое расширение от имени файла и
+использует результат, чтобы определить, в которую таблицу импортировать
+содержание файла. Например, файлы с именами <TT>patient.txt</TT>,
+<TT>patient.text</TT> и <TT>patient</TT> будут все вместе импортированы в
+одну таблицу <CODE>patient</CODE>.</P>
+
+<P><CODE>mysqlimport</CODE> поддерживает следующие параметры:</P>
+<DL COMPACT>
+<DT><CODE>-c, --columns=...</CODE>
+<DD>Эта опция берет разделяемый запятыми список имен полей как параметр. Он
+используется, чтобы создать соответствующую команду <CODE>LOAD DATA
+INFILE</CODE>, которая затем будет передана MySQL. Подробности в разделе
+"<A HREF="glava08.htm#LOAD_DATA">8.9 Синтаксис <CODE>LOAD DATA INFILE</CODE>
+</A>".
+<DT><CODE>-C, --compress</CODE>
+<DD>Сжать всю информацию, передаваемую между клиентом и сервером.
+<DT><CODE>-#, --debug[=option_string]</CODE>
+<DD>Использовать трассировку программы (для отладки).
+<DT><CODE>-d, --delete</CODE>
+<DD>Очистить таблицу перед импортированием в нее текстового файла.
+<DT><CODE>--fields-terminated-by=...</CODE>
+<DD>
+<DT><CODE>--fields-enclosed-by=...</CODE>
+<DD>
+<DT><CODE>--fields-optionally-enclosed-by=...</CODE>
+<DD>
+<DT><CODE>--fields-escaped-by=...</CODE>
+<DD>
+<DT><CODE>--lines-terminated-by=...</CODE>
+<DD>Эти параметры имеют то же самое значение, что и соответствующие
+предложения для <CODE>LOAD DATA INFILE</CODE>. Подробности в разделе
+"<A HREF="glava08.htm#LOAD_DATA">8.9 Синтаксис <CODE>LOAD DATA INFILE</CODE>
+</A>".
+<DT><CODE>-f, --force</CODE>
+<DD>Игнорировать ошибки. Например, если таблица для текстового файла не
+существует, продолжить обрабатывать все оставшиеся файлы. Без
+<CODE>--force</CODE> <CODE>mysqlimport</CODE> прерывает работу, если нужная
+таблица не существует.
+<DT><CODE>--help</CODE>
+<DD>Отобразить экран справки.
+<DT><CODE>-h host_name, --host=host_name</CODE>
+<DD>Импортировать данные на сервер MySQL на указанном компьютере. Заданный по
+умолчанию компьютер: <CODE>localhost</CODE>.
+<DT><CODE>-i, --ignore</CODE>
+<DD>Подробности в описании для опции <CODE>--replace</CODE>.
+<DT><CODE>-l, --lock-tables</CODE>
+<DD>Блокировать <STRONG>ВСЕ</STRONG> таблицы на запись перед обработкой любых
+текстовых файлов. Это гарантирует, что все таблицы синхронизированы.
+<DT><CODE>-L, --local</CODE>
+<DD>Читать входные файл с клиента. По умолчанию считается, что текстовые
+файлы хранятся на сервере, если Вы соединяетесь с хостом
+<CODE>localhost</CODE> (который является заданным по умолчанию компьютером).
+<DT><CODE>-pyour_pass, --password[=your_pass]</CODE>
+<DD>Пароль, чтобы использовать при соединении с сервером. Если Вы не
+определяете часть <SAMP>=your_pass</SAMP>, <CODE>mysqlimport</CODE> запросит
+Вас относительно пароля.
+<DT><CODE>-P port_num, --port=port_num</CODE>
+<DD>Порт TCP/IP, чтобы использовать для соединения с сервером. Это
+используется для подключений к системам, отличным от <CODE>localhost</CODE>,
+там применены сокеты Unix.
+<DT><CODE>-r, --replace</CODE>
+<DD>Опции <CODE>--replace</CODE> и <CODE>--ignore</CODE> контролируют
+обработку управления параметров входных записей, которые дублируют
+существующие записи на уникальных значениях ключа. Если Вы определяете
+<CODE>--replace</CODE>, новые строки заменят существующие, которые имеют то
+же самое уникальное значение ключа. Если Вы определяете
+<CODE>--ignore</CODE>, они будут пропущены. Если Вы не определяете никакой
+опции вообще, происходит ошибка, когда найдено двойное значение ключа, а
+остальная часть текстового файла игнорируется.
+<DT><CODE>-s, --silent</CODE>
+<DD>Тихий режим работы. На вывод подается информация только тогда, когда
+происходят ошибки в работе.
+<DT><CODE>-S /path/to/socket, --socket=/path/to/socket</CODE>
+<DD>Файл сокета, чтобы использовать при соединении с <CODE>localhost</CODE>
+(является заданным по умолчанию компьютером).
+<DT><CODE>-u user_name, --user=user_name</CODE>
+<DD>MySQL-пользователь под именем которого надо соединяться с сервером.
+Значение по умолчанию: Ваше Unix-имя входа в систему.
+<DT><CODE>-v, --verbose</CODE>
+<DD>Подробный режим. Выводит большее количество информации относительно того,
+что программа делает.
+<DT><CODE>-V, --version</CODE>
+<DD>Выводит информацию о версии.</DL>
+
+<P>Имеется типовой образец выполнения <CODE>mysqlimport</CODE>:</P>
+<PRE>
+$ mysql --version
+mysql  Ver 9.33 Distrib 3.22.25, for pc-linux-gnu (i686)
+$ uname -a
+Linux xxx.com 2.2.5-15 #1 Mon Apr 19 22:21:09 EDT 1999 i586 unknown
+$ mysql -e 'CREATE TABLE imptest(id INT, n VARCHAR(30))' test
+$ ed
+a
+100     Max Sydow
+101     Count Dracula
+.
+w imptest.txt
+32
+q
+$ od -c imptest.txt
+0000000   1   0   0  \t   M   a   x       S   y   d   o   w  \n   1   0
+0000020   1  \t   C   o   u   n   t       D   r   a   c   u   l   a  \n
+0000040
+$ mysqlimport --local test imptest.txt
+test.imptest: Records: 2  Deleted: 0  Skipped: 0  Warnings: 0
+$ mysql -e 'SELECT * FROM imptest' test
++------+---------------+
+| id   | n             |
++------+---------------+
+|  100 | Max Sydow     |
+|  101 | Count Dracula |
++------+---------------+
+</PRE>
+
+<H3><A NAME="mysqlshow">12.8 Показ баз данных таблиц и столбцов</A></H3>
+<P><CODE>mysqlshow</CODE> может использоваться, чтобы быстро посмотреть,
+какие базы данных существуют, их таблицы и столбцы этих таблиц.</P>
+
+<P>Программой <CODE>mysql</CODE> Вы можете получать ту же самую информацию
+командой <CODE>SHOW</CODE>. Подробности в разделе
+"<A HREF="glava04.htm#SHOW">4.10 Синтаксис <CODE>SHOW</CODE></A>".</P>
+
+<P><CODE>mysqlshow</CODE> вызывается подобно этому:</P>
+<PRE>
+shell&#62; mysqlshow [OPTIONS] [database [table [column]]]
+</PRE>
+
+<UL><LI>Если никакая база данных не задана, показываются все базы данных.
+<LI>Если никакая таблица не задана, показываются все таблицы в базе данных.
+<LI>Если никакой столбец не задан, показываются все столбцы и типы столбцов в
+таблице, соответствующие запросу.</UL>
+
+<P>Обратите внимание, что в более новых версиях MySQL, Вы только видите те
+базы данных/таблицы/столбцы, для которых Вы имеете некоторые привилегии.</P>
+
+<P>Если последний параметр содержит подстановочные знаки оболочки или SQL
+(<CODE>*</CODE>, <CODE>?</CODE>, <CODE>%</CODE> или <CODE>_</CODE>),
+показывается только то, что согласовано групповым символом. Это может вызвать
+некоторый беспорядок, когда Вы пробуете отображать столбцы для таблицы с
+символом <CODE>_</CODE> в имени, поскольку в этом случае
+<CODE>mysqlshow</CODE> показывает Вам имена, соответствующие образцу. Это
+легко устранимо добавлением в конце командной строки символа <CODE>%</CODE>
+(как отдельный параметр).</P>
+
+<H3><A NAME="perror">12.9 perror, объяснение кодов ошибок</A></H3>
+<P><CODE>perror</CODE> может использоваться, чтобы печатать сообщения об
+ошибках. <CODE>perror</CODE> может вызываться подобно этому:</P>
+<PRE>
+shell&#62; perror [OPTIONS] [ERRORCODE [ERRORCODE...]]
+
+например:
+
+shell&#62; perror 64 79
+Error code  64:  Machine is not on the network
+Error code  79:  Can not access a needed shared library
+</PRE>
+
+<P><CODE>perror</CODE> может использоваться, чтобы отобразить описание для
+кода ошибки системы или драйвера таблицы MyISAM/ISAM. Сообщения об ошибках
+обычно зависят от системы.</P>
+
+<H3><A NAME="Batch_Commands">12.10 Как выполнить команды SQL
+из текстового файла</A></H3>
+<P>Клиент <CODE>mysql</CODE> обычно используется в интерактивном режиме:</P>
+<PRE>
+shell&#62; mysql database
+</PRE>
+
+<P>Однако, также возможно поместить Ваши команды SQL в файл и сообщить, чтобы
+<CODE>mysql</CODE> читал ввод из того файла. Чтобы сделать так, создайте
+текстовый файл <TT>text_file</TT>, хранящий команды, которые Вы желаете
+выполнить. Затем вызовите <CODE>mysql</CODE> как показано ниже:</P>
+<PRE>
+shell&#62; mysql database &#60; text_file
+</PRE>
+
+<P>Вы можете также запустить Ваш текстовый файл с помощью инструкции
+<CODE>USE db_name</CODE>. В этом случае, не нужно определять имя базы данных
+на командной строке:
+<PRE>
+shell&#62; mysql &#60; text_file
+</PRE></P>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

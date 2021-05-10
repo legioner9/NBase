@@ -1,0 +1,1338 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 9. Работа с наборами результатов</title>
+  <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="working-with-result-sets"></a>
+Глава 9. Работа с наборами результатов</h1>
+<p>Этот раздел объясняет, как работать с результатами обработки.</p>
+
+<h2><a name="result-set-classes"></a>9.1. Классы набора результатов</h2>
+<p>Все операции по базе данных возвращают результат.
+Тип возвращенного результата зависит от операции, которая была выполнена.
+Различные типы возвращенных результатов обрисованы в общих
+чертах в следующей таблице.</p>
+
+<table border="1">
+<thead><tr><th scope="col"><p>Класс результата</p></th>
+<th scope="col"><p>Возвращен</p></th>
+<th scope="col"><p>Обеспечивает</p></th></tr></thead>
+<tbody><tr><td scope="row"><p><code class="literal">Result</code></p></td>
+<td><p><code class="literal">add().execute()</code>,
+<code class="literal">insert().execute()</code>, ...</p></td>
+<td><p><code class="literal">affectedRows</code>,
+<code class="literal">lastInsertId</code>, предупреждения</p></td></tr>
+<tr><td scope="row"><p><code class="literal">SqlResult</code></p></td>
+<td><p><code class="literal">session.sql()</code></p></td>
+<td><p><code class="literal">affectedRows</code>,
+<code class="literal">lastInsertId</code>, предупреждения,
+принесенный набор данных</p></td></tr>
+<tr><td scope="row"><p><code class="literal">DocResult</code></p></td>
+<td><p><code class="literal">find().execute()</code></p></td>
+<td><p>Принесенный набор данных</p></td></tr>
+<tr><td scope="row"><p><code class="literal">RowResult</code></p></td>
+<td><p><code class="literal">select.execute()</code></p></td>
+<td><p>Принесенный набор данных</p></td></tr></tbody></table>
+
+<p>Следующая диаграмма классов дает основной обзор обработки результата.</p>
+<a name="fig-results-class-diagram"></a>
+<p><b>Рис. 9.1. Диаграмма классов</b></p>
+<img src="images/plantuml-5bcab8ffb77749c228b0b872041a9d1adaf45349.png"
+width="667" height="552"><br class="figure-break">
+
+<h2><a name="working-with-auto-increment-values"></a>
+9.2. Работа со значениями <code class="literal">AUTO-INCREMENT</code></h2>
+<p>Общая задача MySQL состоит в том, чтобы использовать столбцы
+<code class="literal">AUTO_INCREMENT</code>, например производя значения
+первичного ключа. Эта секция объясняет, как восстановить значения
+<code class="literal">AUTO_INCREMENT</code>, добавляя строки через X DevAPI.
+Для большего количества справочной информации посмотрите
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/example-auto-increment.html"
+target="_top">Using AUTO_INCREMENT</a>. X DevAPI предоставляет следующие
+методы, чтобы возвратить значение столбцов
+<code class="literal">AUTO_INCREMENT</code> от возвращаемого значения
+<code class="literal">table.insert():</code></p>
+
+<ul><li class="listitem"><p>
+<code class="literal">getFirstAutoIncrementValue()</code></p></li>
+<li class="listitem"><p><code class="literal">getAutoIncrementValues()</code>
+</p></li></ul>
+
+<p>В следующих примерах предполагается, что таблица содержит столбец
+для которого атрибут <code class="literal">AUTO_INCREMENT</code> установлен.
+Кроме того, предполагается, что все вставки имеют успех. Функция
+<code class="literal">getFirstAutoIncrementValue()</code>
+используется, добавляя строки индивидуально, или другими словами не
+формируя цепочку вызовов <code class="literal">table.insert()</code>:</p>
+
+<pre class="programlisting">
+res = tab.insert(['name']).values('Sakila'}.execute();
+print(res.getFirstAutoIncrementValue());
+</pre>
+
+<p>Когда вы связываете много вызовов
+<code class="literal">table.insert()</code>,
+там потенциально будут возвращены многократные значения
+<code class="literal">AUTO_INCREMENT</code>. Функция
+<code class="literal">getAutoIncrementValues()</code> возвращает список из
+всех значений <code class="literal">AUTO_INCREMENT</code>,
+вставляя многократные строки:</p>
+
+<pre class="programlisting">
+res = tab.insert(['name']).values('Sakila').values('Otto').execute();
+print(res.getAutoIncrementValues());
+// prints a list of values for 'Sakila' and 'Otto'
+</pre>
+
+<p>Отметьте, что столбцы <code class="literal">AUTO_INCREMENT</code>
+могут использоваться для создания первичного ключа или значений
+<code class="literal">id</code>, но не ограничиваются ими.</p>
+
+<h2><a name="working-with-data-sets"></a>9.3. Работа с наборами данных</h2>
+<p>Операции, которые приносят элементы данных, возвращают набор данных в
+противоположность операциям, которые изменяют данные и возвращают набор
+результатов. Элементы данных могут быть прочитаны из базы данных через
+<code class="literal">Collection.find()</code>,
+<code class="literal">Table.select()</code> и
+<code class="literal">Session.sql()</code>.
+Все три метода возвращают наборы данных, которые заключают в капсулу элементы
+данных. <code class="literal">Collection.find()</code>
+возвращает набор данных с документами, а
+<code class="literal">Table.select()</code> и
+<code class="literal">Session.sql()</code> возвратят набор
+данных со строками.</p>
+
+<p>Все наборы данных осуществляют единый способ повторить их элементы данных.
+Объединенный синтаксис получения элементов поштучно, используя
+<code class="literal">fetchOne()</code> или всего списка через
+<code class="literal">fetchAll()</code>.
+<code class="literal">fetchOne()</code> и
+<code class="literal">fetchAll()</code> используют итеративную семантику
+"только вперед". Соединители, реализующие X DevAPI, могут предложить более
+продвинутые итеративные образцы, чтобы соответствовать общим
+образцам соответствующего языка.</p>
+
+<p>Следующий пример показывает, как получить доступ к документам,
+возвращенным <code class="literal">Collection.find()</code>
+при помощи <code class="literal">fetchOne()</code> при проходе
+по всем документам.</p>
+
+<p>Первый вызов <code class="literal">fetchOne()</code> возвращает первый
+найденный документ. Все последующие увеличивают внутренний элемент данных
+на одну позицию и возвращают найденный элемент. Когда последний элемент
+данных был прочитан и <code class="literal">fetchOne()</code> вызван
+снова, вернется NULL.</p>
+
+<p>Используя <code class="literal">fetchOne()</code> невозможно
+переустановить внутренний курсор элемента данных к первому элементу данных,
+чтобы начать читать элементы данных снова. Элемент данных это Document,
+который был принесен однажды с использованием
+<code class="literal">fetchOne()</code>. Время жизни элемента данных
+отделено от набора данных. Перспективные пункты потребляются вызывающим
+по мере поступления. Этот пример предполагает, что
+испытательная схема существует.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+var myColl = db.getCollection('my_collection');
+var res = myColl.find('name like :name').bind('name','S%').execute();
+
+var doc;
+while (doc = res.fetchOne()) {
+  print(doc);
+}
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+myColl = db.get_collection('my_collection')
+res = myColl.find('name like :name').bind('name','S%').execute()
+
+doc = res.fetch_one()
+while doc:
+print(doc)
+doc = res.fetch_one()
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+var myColl = db.GetCollection("my_collection");
+var res = myColl.Find("name like :name").Bind("name", "S%").Execute();
+
+DbDoc doc;
+while ((doc = res.FetchOne()) != null)
+{
+  Console.WriteLine(doc);
+}
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+my_coll = my_schema.get_collection('my_collection')
+res = my_coll.find('name like :name').bind('name', 'S%').execute()
+
+doc = res.fetch_one()
+while doc:
+print(doc)
+doc = res.fetch_one()
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+Collection myColl = db.getCollection("my_collection");
+DocResult res = myColl.find("name like :name").bind("name", "S%").execute();
+
+DbDoc doc;
+while ((doc = res.fetchOne()) != null) {
+  System.out.println(doc);
+}
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+Collection myColl = db.getCollection("my_collection");
+DocResult res = myColl.find("name like :name").bind("name", "S%").execute();
+DbDoc doc;
+while ((doc = res.fetchOne()))
+{
+  cout &lt;&lt; doc &lt;&lt;endl;
+}
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+var myColl = db.getCollection('my_collection');
+myColl.find('name like :name').bind('name', 'S%').execute().then(res =&gt;
+{
+  while (doc = res.fetchOne()) {
+    console.log(doc);
+  }
+});
+myColl.find('name like :name').bind('name', 'S%').
+execute(function (doc) {
+  console.log(doc);
+});
+</pre>
+
+<p>Результаты могут также быть возвращены функции обратного вызова, которая
+передается к <code class="literal">execute()</code> асинхронным
+способом каждый раз, когда сервер передает результаты.</p>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+var myColl = db.getCollection('my_collection');
+myColl.find('name like :name').bind('name', 'S%').
+execute(function (doc) {
+  console.log(doc);
+});
+</pre>
+
+<p>Следующий пример показывает, как непосредственно получить доступ к
+строкам, возвращенным <code class="literal">Table.select()</code>.</p>
+<p>Образец кода для повторения результата тот же. Различие между следующим и
+предыдущим примером в обработке элемента данных. Здесь
+<code class="literal">fetchOne()</code> вернет Rows.
+Точный синтаксис, чтобы получить доступ к значениям столбцов Row зависит от
+языка. Пример предполагает, что испытательная схема существует, и что список
+сотрудников существует в myTable.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+var myRows = myTable.select(['name', 'age']).
+                     where('name like :name').bind('name','S%').execute();
+var row;
+while (row = myRows.fetchOne()) {
+  // Accessing the fields by array
+  print('Name: ' + row['name'] + '\n');
+  // Accessing the fields by dynamic attribute
+  print(' Age: ' + row.age + '\n');
+}
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+myRows = myTable.select(['name', 'age']).where('name like :name').
+                 bind('name','S%').execute()
+row = myRows.fetch_one()
+while row:
+# Accessing the fields by array
+print('Name: %s\n' % row[0])
+
+# Accessing the fields by dynamic attribute
+print('Age: %s\n' % row.age)
+row = myRows.fetch_one()
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+var myRows = myTable.select(['name', 'age']).where('name like :name').
+                     bind('name','S%').execute(function (row)
+{
+  // Connector/Node.js does not support referring to row columns by their name yet.
+  // One needs to access fields by their array index.
+  console.log('Name: ' + row[0]);
+  console.log(' Age: ' + row[1]);
+});
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+var myRows = myTable.Select("name", "age").Where("name like :name").
+                     Bind("name", "S%").Execute();
+
+Row row;
+while ((row = myRows.FetchOne()) != null)
+{
+  // Accessing the fields by array
+  Console.WriteLine("Name: " + row[0]);
+  // Accessing the fields by name
+  Console.WriteLine("Age: " + row["age"]);
+}
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+rows = my_table.select(['name', 'age']).where('name like :name').
+                bind('name','S%').execute()
+row = rows.fetch_one()
+while row:
+# Accessing the fields by array
+print('Name: {0}'.format(row[0]))
+
+# Accessing the fields by dynamic attribute
+print('Age: {0}'.format(row['age'])
+row = rows.fetch_one()
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+RowResult myRows = myTable.select("name, age").where("name like :name").
+                           bind("name", "S%").execute();
+Row row;
+while ((row = myRows.fetchOne()) != null)
+{
+  // Accessing the fields
+  System.out.println(" Age: " + row.getInt("age") + "\n");
+}
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+RowResult myRows = myTable.select("name", "age").where("name like :name").
+                           bind("name", "S%").execute();
+Row row;
+while ((row = myRows.fetchOne()))
+{
+  // Connector/C++ does not support referring to row columns by their name yet.
+  cout &lt;&lt;"Name: " &lt;&lt; row[0] &lt;&lt;endl;
+  cout &lt;&lt;" Age: " &lt;&lt; row[1] &lt;&lt;endl;
+  int age = row[1];
+
+  // One needs explicit .get&lt;int&gt;() as otherwise operator&lt;() is ambiguous
+  bool youth = row[age].get&lt;int&gt;() &lt; 18;
+  // Alternative formulation
+  bool youth = (int)row[age] &lt; 18;
+}
+</pre>
+
+<h2><a name="fetching-all-data-items-at-once"></a>9.4.
+Установка всех элементов данных сразу</h2>
+<p>В дополнение к образцу использования
+<code class="literal">fetchOne()</code>, изученному в
+<a href="#working-with-data-sets">разделе 9.3</a>,
+который позволяет запросам потреблять элементы данных поштучно, X DevAPI
+также обеспечивает использование образца
+<code class="literal">fetchAll()</code>, который передает все элементы данных
+из набора данных как список. Разные реализации X DevAPI
+используют соответствующие типы данных для своего языка программирования для
+списка. Поскольку различные типы данных используются, родные конструкции
+языка поддерживаются, чтобы получить доступ к элементам списка.
+Следующий пример предполагает, что испытательная схема существует, и что
+список сотрудников существует в myTable.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+var myResult = myTable.select(['name', 'age']).
+                       where('name like :name').bind('name','S%').execute();
+var myRows = myResult.fetchAll();
+for (index in myRows)
+{
+  print (myRows[index].name + " is " + myRows[index].age + " years old.");
+}
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+myResult = myTable.select(['name', 'age']) \
+.where('name like :name').bind('name','S%') \
+.execute()
+
+myRows = myResult.fetch_all()
+for row in myRows:
+  print("%s is %s years old." % (row.name, row.age))
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+myTable.select(['name', 'age'])
+  .where('name like :name')
+  .bind('name', 'S%').execute()
+.then(myResult =&gt; {
+  var myRows = myResult.fetchAll();
+  myRows.forEach(row =&gt; {
+    console.log(`${row[0]} is ${row[1]} years old.`);
+  });
+});
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+var myRows = myTable.Select("name", "age")
+.Where("name like :name").Bind("name", "S%")
+.Execute();
+var rows = myRows.FetchAll();
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+result = myTable.select(['name', 'age']) \
+         .where('name like :name').bind('name', 'S%') \
+         .execute()
+
+rows = result.fetch_all()
+for row in rows:
+  print("{0} is {1} years old.".format(row["name"], row["age"]))
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+RowResult myRows = myTable.select("name, age")
+.where("name like :name").bind("name", "S%")
+.execute();
+
+List&lt;Row&gt; rows = myRows.fetchAll();
+for (Row row : rows) {
+  // Accessing the fields
+  System.out.println(" Age: " + row.getInt("age") + "\n");
+}
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+RowResult myRows = myTable.select("name, age")
+.where("name like :name")
+.bind("name", "S%")
+.execute();
+
+std::list&lt;Row&gt; rows = myRows.fetchAll();
+for (Row row : rows)
+{
+  cout &lt;&lt; row[1] &lt;&lt; endl;
+}
+
+// Directly iterate over rows, without stroing them in a container
+for (Row row : myRows.fetchAll())
+{
+  cout &lt;&lt; row[1] &lt;&lt; endl;
+}
+</pre>
+
+<p>Смешивая <code class="literal">fetchOne()</code> и
+<code class="literal">fetchAll()</code>, чтобы читать из одного набора
+данных, имейте в виду, что каждый вызов
+<code class="literal">fetchOne()</code> или
+<code class="literal">fetchAll()</code> потребляет возвращенные элементы
+данных. Использованные элементы нельзя затребовать снова. Если, например,
+приложение вызывает <code class="literal">fetchOne()</code>, чтобы получить
+первый элемент из набора данных, затем
+<code class="literal">fetchAll()</code> вернет элементы от второго до
+последнего. Первый элемент не часть списка элементов данных, возвращенных
+<code class="literal">fetchAll()</code>. Точно так же, вызывая
+<code class="literal">fetchAll()</code> снова для набора данных после запроса
+его ранее, второй вызов возвращает пустую коллекцию.</p>
+
+<p>Использование <code class="literal">fetchAll()</code> вынуждает
+Connector построить список всех пунктов в памяти, прежде чем список в целом
+сможет быть передан приложению. Время жизни списка независимо от жизни набора
+данных, который произвел его.</p>
+
+<p>Асинхронное выполнение запроса работает с момента запроса и до получения
+любого ответа от сервера. Запрос <code class="literal">fetchAll()</code>,
+чтобы прочитать элементы данных, произведенные асинхронным выполнением
+запроса, может заблокировать вызывающего.
+<code class="literal">fetchAll()</code> не может вернуть управление прежде,
+чем закончит чтение результатов с сервера.</p>
+
+<h2><a name="working-with-sql-result-sets"></a>9.5.
+Работа с наборами результатов SQL</h2>
+<p>Когда вы выполняете операцию SQL в сессии, используя метод
+<code class="literal">sql()</code>, вернется SqlResult.
+Повторение SqlResult идентично работе с результатами операций CRUD.
+Следующий пример предполагает, что пользовательская таблица существует.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+var res = mySession.sql('SELECT name, age FROM users').execute();
+var row;
+while (row = res.fetchOne()) {
+  print('Name: ' + row['name'] + '\n');
+  print(' Age: ' + row.age + '\n');
+}
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+res = mySession.sql('SELECT name, age FROM users').execute()
+row = res.fetch_one()
+
+while row:
+print('Name: %s\n' % row[0])
+print(' Age: %s\n' % row.age)
+row = res.fetch_one()
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+mySession.sql('SELECT name, age FROM users')
+.execute()
+.then(res =&gt; {
+  while (row = res.fetchOne()) {
+    console.log('Name: ' + row[0] + '\n');
+    console.log(' Age: ' + row[1] + '\n');
+  }
+});
+
+// Alternatively, you can use callbacks
+session.sql('SELECT name, age FROM users').execute(function (row) {
+  console.log('Name: ' + row[0] + '\n');
+  console.log(' Age: ' + row[1] + '\n');
+});
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+var res = Session.SQL("SELECT name, age FROM users").Execute();
+
+while (res.Next())
+{
+  Console.WriteLine("Name: " + res.Current["name"]);
+  Console.WriteLine("Age: " + res.Current["age"]);
+}
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+# Connector/Python
+res = mySession.sql('SELECT name, age FROM users').execute()
+
+row = res.fetch_one()
+while row:
+print('Name: %s\n' % row[0])
+print(' Age: %s\n' % row.age)
+row = res.fetch_one()
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+SqlResult res = mySession.sql("SELECT name, age FROM users").execute();
+
+Row row;
+while ((row = res.fetchOne()) != null) {
+  System.out.println(" Name: " + row.getString("name") + "\n");
+  System.out.println(" Age: " + row.getInt("age") + "\n");
+}
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+RowResult res = mysession.sql("SELECT name, age FROM users").execute();
+
+Row row;
+while ((row = res.fetchOne())) {
+  cout &lt;&lt; "Name: " &lt;&lt; row[0] &lt;&lt; endl;
+  cout &lt;&lt; " Age: " &lt;&lt; row[1] &lt;&lt; endl;
+}
+</pre>
+
+<p>SqlResult отличается от результатов, возвращенных операциями CRUD тем, как
+представляются наборы результатов и наборы данных. SqlResult объединяет набор
+результатов, произведенный, например,
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html" target="_top">
+<code class="literal">INSERT</code></a> и набор данных, произведенный,
+например, <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/select.html"
+target="_top"><code class="literal">SELECT</code></a>.
+В отличие от этого, с операциями CRUD между двумя типами нет никакого
+различия. SqlResult экспортирует методы для доступа к данным и получения
+последнего вставленного id или количества затронутых строк.</p>
+
+<p>Используйте метод <code class="literal">hasData()</code>, чтобы понять,
+является ли SqlResult набором данных или результатом. Метод полезен, когда
+должен быть написан код, который не знает о происхождении SqlResult.
+Это может иметь место, сочиняя функцию универсального приложения, чтобы
+напечатать результаты запроса или обрабатывая результаты хранимой процедуры.
+Если <code class="literal">hasData()</code> вернет true, SqlResult происходит
+из <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/select.html" target="_top">
+<code class="literal">SELECT</code></a> или подобной команды, которая
+может возвратить строки.</p>
+
+<p>Возвращаемое значение true не указывает, содержит ли набор данных
+какие-либо строки. Набор данных может быть пустым, например это пусто, если
+<code class="literal">fetchOne()</code> вернет NULL или
+<code class="literal">fetchAll()</code> вернет пустой список.
+Следующий пример предполагает, что процедура
+<code class="literal">my_proc</code> существует.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+var res = mySession.sql('CALL my_proc()').execute();
+if (res.hasData())
+{
+   var row = res.fetchOne();
+   if (row)
+   {
+      print('List of row available for fetching.');
+      do
+      {
+        print(row);
+      } while (row = res.fetchOne());
+   } else {
+     print('Empty list of rows.');
+   }
+} else {
+  print('No row result.');
+}
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+res = mySession.sql('CALL my_proc()').execute()
+if res.has_data():
+   row = res.fetch_one()
+   if row:
+      print('List of row available for fetching.')
+      while row:
+        print(row)
+      row = res.fetch_one()
+   else:
+   print('Empty list of rows.')
+else:
+  print('No row result.')
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+mySession.sql('CALL my_proc()')
+.execute()
+.then(function (res) {
+  if (!res.hasData()) {
+     return console.log('No row result.');
+  }
+  var row = res.fetchOne();
+  if (!row) {
+     console.log('Empty list of rows.');
+  }
+  console.log('List of row available for fetching.');
+  do {
+     console.log(row);
+  } while (row = res.fetchOne());
+})
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+var res = Session.SQL("CALL my_proc()").Execute();
+if (res.HasData)
+{
+   var row = res.FetchOne();
+   if (row != null) {
+      Console.WriteLine("List of row available for fetching.");
+      do {
+         PrintResult(row);
+      } while ((row = res.FetchOne()) != null);
+   } else {
+     Console.WriteLine("Empty list of rows.");
+   }
+} else {
+  Console.WriteLine("No row result.");
+}
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+# Connector/Python
+res = mySession.sql('CALL my_proc()').execute()
+
+if res.has_data():
+   row = res.fetch_one()
+   if row:
+      print('List of row available for fetching.')
+      while row:
+        print(row)
+      row = res.fetch_one()
+   else:
+     print('Empty list of rows.')
+else:
+  print('No row result.')
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+SqlResult res = mySession.sql("CALL my_proc()").execute();
+if (res.hasData()) {
+   Row row = res.fetchOne();
+   if (row != null) {
+      System.out.println("List of rows available for fetching.");
+      do {
+         for (int c = 0; c &lt; res.getColumnCount(); c++) {
+           System.out.println(row.getString(c));
+         }
+      } while ((row = res.fetchOne()) != null);
+   } else {
+     System.out.println("Empty list of rows.");
+   }
+} else {
+  System.out.println("No row result.");
+}
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+SqlResult res = mysession.sql("CALL my_proc()").execute();
+
+if (res.hasData()) {
+   Row row = res.fetchOne();
+   if (row) {
+      cout &lt;&lt; "List of row available for fetching." &lt;&lt; endl;
+      do {
+         cout &lt;&lt; "next row: ";
+         for (unsigned i=0 ; i &lt; row.colCount(); ++i)
+           cout &lt;&lt; row[i] &lt;&lt; ", ";
+         cout &lt;&lt; endl;
+      } while ((row = res.fetchOne()));
+   } else {
+     cout &lt;&lt; "Empty list of rows." &lt;&lt; endl;
+   }
+} else {
+  cout &lt;&lt; "No row result." &lt;&lt; endl;
+}
+</pre>
+
+<p>Неправильно вызывать <code class="literal">fetchOne()</code> или
+<code class="literal">fetchAll()</code>, когда
+<code class="literal">hasResult()</code> указывает, что SqlResult это
+не набор данных.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+function print_result(res)
+{
+  if (res.hasData()) {
+     // SELECT
+     var columns = res.getColumns();
+     var record = res.fetchOne();
+     while (record) {
+       for (index in columns) {
+         print (columns[index].getColumnName() + ": " + record[index]+"\n");
+       }
+       // Get the next record
+       record = res.fetchOne();
+     }
+  } else {
+    // INSERT, UPDATE, DELETE, ...
+    print('Rows affected: ' + res.getAffectedRowCount());
+  }
+}
+print_result(mySession.sql('DELETE FROM users WHERE age &lt; 18').execute());
+print_result(mySession.sql('SELECT * FROM users WHERE age = 40').execute());
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+def print_result(res):
+if res.has_data():
+   # SELECT
+columns = res.get_columns()
+record = res.fetch_one()
+
+while record:
+  index = 0
+for column in columns:
+  print("%s: %s \n" % (column.get_column_name(), record[index]))
+  index = index + 1
+  # Get the next record
+  record = res.fetch_one()
+else:
+  #INSERT, UPDATE, DELETE, ...
+  print('Rows affected: %s' % res.get_affected_items_count())
+  print_result(mySession.sql('DELETE FROM users WHERE age &lt; 18').execute())
+  print_result(mySession.sql('SELECT * FROM users WHERE age = 40').execute())
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+function print_result(res)
+{
+  if (res.hasData()) {
+     // SELECT
+     var columns = res.getColumns();
+     var record = res.fetchOne();
+     while (record) {
+       for (index in columns) {
+         console.log(columns[index].getColumnName() + ": " + record[index]);
+       }
+       // Get the next record
+       record = res.fetchOne();
+     }
+  } else {
+    // INSERT, UPDATE, DELETE, ...
+    console.log('Rows affected: ' + res.getAffectedRowsCount());
+  }
+}
+
+mySession.sql(`DELETE FROM users WHERE age &lt; 18`)
+.execute()
+.then(function (res) {
+  print_result(res);
+});
+
+mySession.sql(`SELECT * FROM users WHERE age = 40`)
+.execute()
+.then(function (res) {
+  print_result(res);
+});
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+private void print_result(SqlResult res)
+{
+  if (res.HasData) {
+     // SELECT
+  } else {
+    // INSERT, UPDATE, DELETE, ...
+    Console.WriteLine("Rows affected: " + res.RecordsAffected);
+  }
+}
+print_result(Session.SQL("DELETE FROM users WHERE age &lt; 18").Execute());
+print_result(Session.SQL("SELECT COUNT(*) AS forty FROM users WHERE age = 40").Execute());
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+# Connector/Python
+def print_result(res):
+if res.has_data():
+# SELECT
+columns = res.get_columns()
+record = res.fetch_one()
+
+while record:
+  index = 0
+for column in columns:
+  print("%s: %s \n" % (column.get_column_name(), record[index]))
+  index = index + 1
+  # Get the next record
+  record = res.fetch_one()
+else:
+  #INSERT, UPDATE, DELETE, ...
+  print('Rows affected: %s' % res.get_affected_items_count())
+  print_result(mySession.sql('DELETE FROM users WHERE age &lt; 18').execute())
+  print_result(mySession.sql('SELECT * FROM users WHERE age = 40').execute())
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+private void print_result(SqlResult res)
+{
+  if (res.hasData()) {
+     // SELECT
+     Row row;
+     while ((row = res.fetchOne()) != null)
+     {
+       for (int c = 0; c &lt; res.getColumnCount(); c++)
+       {
+         System.out.println(row.getString(c));
+       }
+     }
+  } else {
+    // INSERT, UPDATE, DELETE, ...
+    System.out.println("Rows affected: " + res.getAffectedItemsCount());
+  }
+}
+print_result(mySession.sql("DELETE FROM users WHERE age &lt; 18").execute());
+print_result(mySession.sql("SELECT COUNT(*) AS forty FROM users WHERE age = 40").execute());
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+void print_result(SqlResult &amp;&amp;_res)
+{
+  // Note: We need to store the result somewhere to be able to process it.
+  SqlResult res(std::move(_res));
+  if (res.hasData())
+  {
+     // SELECT
+     const Columns &amp;columns = res.getColumns();
+     Row record = res.fetchOne();
+     while (record)
+     {
+       for (unsigned index=0; index &lt; res.getColumnCount(); ++index)
+       {
+         cout &lt;&lt; columns[index].getColumnName() &lt;&lt; ": "
+              &lt;&lt; record[index] &lt;&lt; endl;
+       }
+       // Get the next record
+       record = res.fetchOne();
+     }
+  } else {
+    // INSERT, UPDATE, DELETE, ...
+    // Note: getAffectedRowCount() not yet implemented in Connector/C++.
+    cout &lt;&lt; "No rows in the result" &lt;&lt; endl;
+  }
+}
+print_result(mysession.sql("DELETE FROM users WHERE age &lt; 18").execute());
+print_result(mysession.sql("SELECT * FROM users WHERE age = 40").execute());
+</pre>
+
+<p>Запрос хранимой процедуры мог бы привести к необходимости иметь дело с
+многократными наборами результатов как часть единственного выполнения.
+В результате для выполнения запросов возвращен объект SqlResult, который
+заключает в капсулу первый набор результатов. После обработки набора
+результатов можно вызвать <code class="literal">nextResult()</code>, чтобы
+продвигаться к следующему результату, если таковой имеется. Как только вы
+продвинулись к следующему набору результатов, он заменяет ранее загруженный
+результат, который становится недоступным.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+function print_result(res)
+{
+  if (res.hasData())
+  {
+     // SELECT
+     var columns = res.getColumns();
+     var record = res.fetchOne();
+     while (record)
+     {
+       for (index in columns)
+       {
+         print (columns[index].getColumnName() + ": " + record[index] + "\n");
+       }
+       // Get the next record
+       record = res.fetchOne();
+     }
+  } else {
+    // INSERT, UPDATE, DELETE, ...
+    print('Rows affected: ' + res.getAffectedRowCount());
+  }
+}
+var res = mySession.sql('CALL my_proc()').execute();
+// Prints each returned result
+var more = true;
+while (more)
+{
+  print_result(res);
+  more = res.nextResult();
+}
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+def print_result(res):
+if res.has_data():
+# SELECT
+columns = res.get_columns()
+record = res.fetch_one()
+
+while record:
+index = 0
+for column in columns:
+print("%s: %s \n" % (column.get_column_name(), record[index]))
+index = index + 1
+
+# Get the next record
+record = res.fetch_one()
+else:
+#INSERT, UPDATE, DELETE, ...
+print('Rows affected: %s' % res.get_affected_items_count())
+
+res = mySession.sql('CALL my_proc()').execute()
+# Prints each returned result
+more = True
+while more:
+print_result(res)
+more = res.next_result()
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+function print_result(res)
+{
+  if (res.hasData())
+  {
+     // SELECT
+     var columns = res.getColumns();
+     var record = res.fetchOne();
+     while (record)
+     {
+       for (index in columns)
+       {
+         console.log(columns[index].getColumnName() + ": " + record[index]);
+       }
+       // Get the next record
+       record = res.fetchOne();
+     }
+  } else {
+    // INSERT, UPDATE, DELETE, ...
+    console.log('Rows affected: ' + res.getAffectedRowsCount());
+  }
+}
+
+mySession.sql('CALL my_proc()')
+.execute()
+.then(function (res) {
+  // Prints each returned result
+  var more = true;
+  while (more) {
+    print_result(res);
+    more = res.nextResult();
+  }
+})
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+var res = Session.SQL("CALL my_proc()").Execute();
+if (res.HasData)
+{
+   do {
+      Console.WriteLine("New resultset");
+      while (res.Next())
+      {
+        Console.WriteLine(res.Current);
+      }
+  } while (res.NextResult());
+}
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+# Connector/Python
+def print_result(res):
+if res.has_data():
+# SELECT
+columns = res.get_columns()
+record = res.fetch_one()
+
+while record:
+index = 0
+for column in columns:
+print("%s: %s \n" % (column.get_column_name(), record[index]))
+index = index + 1
+
+# Get the next record
+record = res.fetch_one()
+else:
+#INSERT, UPDATE, DELETE, ...
+print('Rows affected: %s' % res.get_affected_row_count())
+res = mySession.sql('CALL my_proc()').execute()
+
+# Prints each returned result
+more = True
+while more:
+print_result(res)
+more = res.next_result()
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+SqlResult res = mySession.sql("CALL my_proc()").execute();
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+SqlResult res = mysession.sql("CALL my_proc()").execute();
+while (true)
+{
+  if (res.hasData())
+  {
+     cout &lt;&lt; "List of rows in the resultset." &lt;&lt; endl;
+     for (Row row; (row = res.fetchOne());)
+     {
+       cout &lt;&lt; "next row: ";
+       for (unsigned i = 0; i &lt; row.colCount(); ++i)
+         cout &lt;&lt; row[i] &lt;&lt; ", ";
+       cout &lt;&lt; endl;
+     }
+  } else {
+    cout &lt;&lt; "No rows in the resultset." &lt;&lt; endl;
+  }
+  if (!res.nextResult()) break;
+  cout &lt;&lt; "Next resultset." &lt;&lt; endl;
+}
+</pre>
+
+<p>При применении Node.js отдельные строки могут быть немедленно
+возвращены, используя отзыв, который должен быть предоставлен методом
+<code class="literal">execute()</code>. Чтобы определить отдельные наборы
+результатов, можно обеспечить второй отзыв, который вызывают для метаданных,
+которые отмечают начало набора результатов.</p>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+var resultcount = 0;
+var res = session
+.sql('CALL my_proc()')
+.execute(
+  function (row) {
+    console.log(row);
+  },
+  function (meta) {
+    console.log('Begin of result set number ', resultCount++);
+  }
+);
+</pre>
+
+<p>Количество наборов результатов не известно немедленно после выполнения
+запроса. Результаты запроса могут подаваться клиенту или буферизоваться в
+клиенте. При этом клиент не может сказать, вернет ли запрос больше, чем
+один набор результатов.</p>
+
+<h2><a name="working-with-metadata"></a>9.6. Работа с метаданными</h2>
+<p>Результаты содержат метаданные, связанные с происхождением и типами
+результатов запросов. Эти метаданные могут использоваться запросами, которые
+должны иметь дело с динамическими результатами запроса или форматированием
+результата для преобразования или показа. Метаданные результата доступны
+через экземпляры <code class="literal">Column</code>. Множество столбцов
+может быть получено из любого RowResult, используя
+метод <code class="literal">getColumns()</code>.</p>
+
+<p>Например, следующие метаданные возвращены в ответ на запрос
+<code class="literal">SELECT 1+1 AS a, b
+FROM mydb.some_table_with_b AS b_table</code>.</p>
+
+<pre class="programlisting">
+Column[0].databaseName = NULL
+Column[0].tableName = NULL
+Column[0].tableLabel = NULL
+Column[0].columnName = NULL
+Column[0].columnLabel = "a"
+Column[0].type = BIGINT
+Column[0].length = 3
+Column[0].fractionalDigits = 0
+Column[0].numberSigned = TRUE
+Column[0].collationName = "binary"
+Column[0].characterSetName = "binary"
+Column[0].padded = FALSE
+
+Column[1].databaseName = "mydb"
+Column[1].tableName = "some_table_with_b"
+Column[1].tableLabel = "b_table"
+Column[1].columnName = "b"
+Column[1].columnLabel = "b"
+Column[1].type = STRING
+Column[1].length = 20 (e.g.)
+Column[1].fractionalDigits = 0
+Column[1].numberSigned = TRUE
+Column[1].collationName = "utf8mb4_general_ci"
+Column[1].characterSetName = "utf8mb4"
+Column[1].padded = FALSE
+</pre>
+
+<h2><a name="support-for-language-native-iterators"></a>
+9.7. Поддержка языковых итераторов</h2>
+<p>Все реализации DevAPI показывают методы, показанные в диаграмме UML в
+начале этой главы. Все реализации позволяют итеративное использование набора
+результатов через <code class="literal">fetchOne()</code>,
+<code class="literal">fetchAll()</code> и
+<code class="literal">nextResult()</code>.
+В дополнение к объединенному API драйверы должны осуществить языковые
+итеративные образцы. Это относится к любому типу набора данных
+(DocResult, RowResult, SqlResult) и к списку элементов, возвращенных
+<code class="literal">fetchAll()</code>. Можно выбрать, хотите ли вы, чтобы
+код вашего приложения X DevAPI предложил тот же самый стиль на всех
+используемых языках программирования или выбрал естественный
+стиль языка программирования.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

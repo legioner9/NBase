@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\thetaggedvaluestab\addtaggedvalues\cat.addtaggedvalues\dir.addtaggedvalues.md">addtaggedvalues</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\thetaggedvaluestab\addtaggedvalues\addtaggedvalues.md">addtaggedvalues.md</a>
+        - *### [Quick Start - Add Tagged Value To Elements](https://sparxsystems.com/enterprise_architect_user_guide/15.1/modeling/addtaggedvalues.html) Быстрый старт - добавление значений с тегами к элементам

@@ -1,0 +1,5 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_C++\Containers\Point_learn\pointers\SFML_lib\cat.SFML_lib\dir.SFML_lib.md">SFML_lib</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_C++\Containers\Point_learn\pointers\SFML_lib\Common_this.md">Common_this.md</a>
+        - *# Clion и SFML
+        - *## https://habr.com/ru/sandbox/130510/
+        - *## youtube.com/watch?v=I774yQRaINc&ab_channel=УчимСиплюсплюс%2Cсоздаваяигры

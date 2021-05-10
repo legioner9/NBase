@@ -1,0 +1,569 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 4. Установка Connector/Python</title>
+  <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-python-installation"></a>
+Глава 4. Установка Connector/Python</h1>
+<p>Connector/Python работает на любой платформе, где устанавливается Python.
+Python предварительно установлен на большую часть Unix и подобных Unix
+систем, таких как Linux, macOS и FreeBSD. На Microsoft Windows инсталлятор
+Python доступен с <a href="../../../python.org/download/default.htm"
+target="_top">Python Download website</a>. Если необходимо, загрузите и
+установите Python for Windows прежде, чем попытаться
+установить Connector/Python.</p>
+
+<p>Connector/Python требует, чтобы
+<span class="command"><strong>python</strong></span> был в системной
+переменной <code class="literal">PATH</code> и установка терпит неудачу, если
+<span class="command"><strong>python</strong></span> не может быть найден.
+В Unix <span class="command"><strong>python</strong></span> обычно
+располагается в каталоге, включенном в <code class="literal">PATH</code>.
+В Windows, если вы устанавливаете Python, включите <span class="guilabel">Add
+python.exe to Path</span> во время процесса установки, или вручную добавьте
+каталог, содержащий <span class="command"><strong>python.exe</strong></span>.
+</p>
+
+<p>Для получения дополнительной информации об установке и конфигурации
+Python в Windows см.
+<a href="../../../docs.python.org/using/windows.html" target="_top">Using
+Python on Windows</a> в документации на Python.</p>
+
+<p>Connector/Python осуществляет протокол клиент-сервер
+MySQL двумя путями:</p>
+<ul><li><p>Как чистый Пайтон. Это внедрение протокола не требует никаких
+других библиотек клиента MySQL или других компонентов.</p></li>
+
+<li><p>Как расширение C, которое взаимодействует с библиотекой MySQL C
+клиента. Это внедрение протокола зависит от библиотеки клиента, но может
+пользоваться библиотекой, обеспеченной пакетами MySQL Server (см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/c-api-implementations.html"
+target="_top">MySQL C API Implementations</a>).
+Расширение C доступно с Connector/Python 2.1.1.</p></li></ul>
+
+<p>Ни у какого внедрения протокола клиент-сервер нет сторонних зависимостей.
+Однако, если вы нуждаетесь в поддержке SSL, проверьте, что ваша установка
+Python была собрана, пользуясь библиотеками
+<a href="../../../www.openssl.org/default.htm" target="_top">OpenSSL</a>.</p>
+
+<p>Установка Connector/Python подобна на каждой платформе и следует
+стандартным <a href="../../../docs.python.org/install/index.html#install-index"
+target="_top">Python Distribution Utilities</a> или
+<a href="../../../docs.python.org/distutils/default.htm" target="_top">Distutils</a>.
+Дистрибутивы доступны в собственном формате для некоторых платформ, таких как
+пакеты RPM для Linux.</p>
+
+<p>Терминология относительно дистрибутивов:</p>
+<ul><li><p><span class="bold"><strong>Собранный дистрибутив</strong></span>:
+пакет, созданный в родном упаковочном формате, предназначается для данной
+платформы. Это содержит независимый от платформы bytecode и исходный текст.
+Двоичные дистрибутивы все именно такие.</p></li>
+
+<li><p><span class="bold"><strong>Исходные тексты</strong></span>:
+дистрибутив, который содержит только исходные файлы и вообще
+независим от платформы.</p></li></ul>
+
+<h2><a name="connector-python-obtaining"></a>
+4.1. Получение Connector/Python</h2>
+<p>Пакеты доступны на
+<a href="../../../https@dev.mysql.com/downloads/connector/python/default.htm" target="_top">
+Connector/Python download site</a>. Для некоторых упаковочных форматов есть
+различные пакеты для различных версий, выберите один подходящий для версии
+Python, установленной на вашей системе.</p>
+
+<h2><a name="connector-python-installation-binary"></a>
+4.2. Установка Connector/Python из двоичного дистрибутива</h2>
+<p>Инсталляторы Connector/Python в родных форматах пакета доступны для
+Windows и Unix-систем:</p>
+
+<ul><li><p>Windows: MSI installer package.</p></li>
+<li><p>Linux: Yum для EL6, EL7 и Fedora, RPM для
+Oracle Linux, Red Hat и SuSE, Debian-пакеты для Debian и Ubuntu.</p></li>
+<li><p>macOS: пакет образа диска с инсталлятором PKG.</p></li></ul>
+<p>Вам, возможно, понадобится <code class="literal">root</code>
+или права администратора, чтобы выполнить инсталляционную операцию.</p>
+
+<p>С Connector/Python 2.1.1 двоичные дистрибутивы доступны, которые включают
+расширение C, которое взаимодействует с библиотекой клиента C MySQL.
+У некоторых упаковочных типов есть единственный файл, который включает код
+Connector/Python чистого Python с расширением C. Windows MSI и macOS Disk
+Image попадают в эту категорию. У других упаковочных типов есть два связанных
+файла: один с Connector/Python чистого Python, другой, который включает
+только расширение C. Для упаковки типов, у которых есть отдельные файлы,
+установите один или оба пакета. Эти два файла имеют связанные имена, но
+у того, который содержит расширение C, есть метка
+<span class="quote">cext</span> в имени.</p>
+
+<p>Двоичный дистрибутив, которые обеспечивают расширение C, собраны с уже
+установленной библиотекой клиента C, обеспеченной установкой MySQL Server.
+Для тех дистрибутивов, которые статически не скомпонованы, необходимо
+установить Сервер MySQL, если он еще не присутствует в системе.
+Чтобы получить его, посетите
+<a href="../../../https@dev.mysql.com/downloads/default.htm" target="_top">MySQL download site
+</a>.</p>
+
+<h3><a name="idm45244849716688"></a>Установка Connector/Python с pip</h3>
+<p>Используйте <span class="command"><strong>pip</strong></span>, чтобы
+установить Connector/Python на большей части операционных систем:</p>
+
+<pre class="programlisting">
+shell&gt; pip install mysql-connector-python
+</pre>
+
+<h3><a name="idm45244849714000"></a>
+Установка Connector/Python в Microsoft Windows</h3>
+<p>Управление всеми вашими продуктами MySQL, включая MySQL Connector/Python,
+с MySQL Installer это рекомендованный метож. Это адекватно обращается со
+всеми требованиями и предпосылками, конфигурациями и модернизациями.</p>
+
+<p><b>Предпосылка. </b>
+<a href="../../../https@www.microsoft.com/en-us/download/details.aspx@id=52685"
+target="_top">Microsoft Visual C++ 2015 Redistributable</a>
+должен быть установлен на вашей системе.</p>
+
+<ul><li><p>MySQL Installer (рекомендуется): При выполнении
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/mysql-installer.html"
+target="_top">MySQL Installer</a> выберите MySQL Connector/Python
+в качестве одного из продуктов, чтобы
+установить. Инсталлятор MySQL устанавливает Windows MSI Installer,
+описанный в этой документации.</p></li>
+
+<li><p>Windows MSI Installer (файл <code class="filename">.msi</code>):
+Чтобы использовать MSI Installer, запустите его и следуйте инструкциям,
+чтобы установить Connector/Python куда надо.</p>
+
+<p>Как с MySQL Installer, последующим выполнением Connector/Python MSI
+позволяет вам восстановить или удалить существующую
+установку Connector/Python.</p>
+
+<p>Connector/Python Windows MSI Installers (файлы
+<code class="filename">.msi</code>) доступны с
+Connector/Python download site (см.
+<a href="#connector-python-obtaining">раздел 4.1</a>).
+Выберите инсталлятор, подходящий для версии Python, установленного на вашей
+системе. С Connector/Python 2.1.1 MSI Installers включают расширение C, это
+не должно быть установлено отдельно.</p></li></ul>
+
+<p>Альтернативно, чтобы управлять инсталлятором из командной строки,
+используйте эту команду в консоли, где
+<em class="replaceable"><code>VER</code></em> и
+<em class="replaceable"><code>PYVER</code></em>
+соответствующие номера версий Connector/Python и Python
+в имени файла инсталлятора:</p>
+
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>msiexec /i mysql-connector-python-<em class="replaceable"><code>VER</code></em>-py<em class="replaceable"><code>PYVER</code></em>.msi</code></strong>
+</pre>
+
+<p>Последующее выполнение Connector/Python, используя MSI installer,
+разрешает вам восстанавливать или удалять существующую
+установку Connector/Python.</p>
+
+<h3><a name="idm45244849700480"></a>Установка Connector/Python в Linux,
+использщуя репозитарий MySQL Yum</h3>
+<p>Для EL6, EL7 и Fedora 19 или 20 можно установить Connector/Python,
+используя хранилище MySQL Yum (см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/linux-installation-yum-repo.html#yum-install-components"
+target="_top">Installing Additional MySQL Products and Components with Yum
+</a>). У вас должно быть хранилище MySQL Yum в списке хранилищ вашей системы
+(для получения дополнительной информации посмотрите
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/linux-installation-yum-repo.html#yum-repo-setup"
+target="_top">Adding the MySQL Yum Repository</a>).
+Чтобы удостовериться, что ваше хранилище Yum актуально,
+используйте эту команду:</p>
+
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>sudo yum update mysql-community-release</code></strong>
+</pre>
+
+<p>Тогда установите Connector/Python следующим образом:</p>
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>sudo yum install mysql-connector-python</code></strong>
+</pre>
+
+<h3><a name="idm45244849693200"></a>Установка Connector/Python в Linux,
+используя пакет RPM</h3>
+<p>Connector/Python Linux RPM (файлы <code class="filename">.rpm</code>)
+доступен на Connector/Python download site (см.
+<a href="#connector-python-obtaining">раздел 4.1</a>).</p>
+
+<p>Чтобы установить пакет RPM Connector/Python (обозначенный здесь как
+<code class="filename"><em class="replaceable"><code>PACKAGE</code></em>.rpm
+</code>), используйте эту команду:</p>
+
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>rpm -i <em class="replaceable"><code>PACKAGE</code></em>.rpm</code></strong>
+</pre>
+
+<p>Чтобы установить расширение C (доступно Connector/Python 2.1.1),
+установите соответствующий пакет с
+<span class="quote">cext</span> в имени пакета.</p>
+
+<p>RPM обеспечивает особенность, чтобы проверить целостность и подлинность
+пакетов прежде, чем установить их. Чтобы узнать больше, посмотрите
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/verifying-package-integrity.html"
+target="_top">Verifying Package Integrity Using MD5 Checksums or GnuPG</a>.
+</p>
+
+<h3><a name="idm45244849685328"></a>Установка Connector/Python в Linux,
+используя пакет Debian</h3>
+<p>Пакеты Connector/Python Debian (файлы <code class="filename">.deb</code>)
+доступны для Debian Linux и подобных систем на Connector/Python
+download site (см. <a href="#connector-python-obtaining">раздел
+4.1</a>).</p>
+
+<p>Чтобы поставить пакет Debian Connector/Python (обозначенный здесь как
+<code class="filename"><em class="replaceable"><code>PACKAGE</code></em>.deb
+</code>), используйте эту команду:</p>
+
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>dpkg -i <em class="replaceable"><code>PACKAGE</code></em>.deb</code></strong>
+</pre>
+
+<p>Чтобы установить расширение C (доступно с Connector/Python 2.1.1),
+установите соответствующий пакет с <span class="quote">cext</span> в имени.
+</p>
+
+<h3><a name="idm45244849678768"></a>Установка Connector/Python в macOS,
+используя образ диска</h3>
+<p>Образ диска Connector/Python macOS (файл
+<code class="filename">.dmg</code>) доступен на
+Connector/Python download site (см.
+<a href="#connector-python-obtaining">раздел 4.1</a>).
+С Connector/Python 2.1.1 образ диска включает расширение C, это не должно
+быть установлено отдельно.</p>
+
+<p>Загрузите файл  <code class="filename">.dmg</code> и поставьте
+Connector/Python, открывая его и дважды щелкая по получающемуся файлу
+<code class="filename">.pkg</code>.</p>
+
+<h2><a name="connector-python-installation-source"></a>
+4.3. Установка Connector/Python из исходных текстов</h2>
+<p>Исходные тексты Connector/Python независимы от платформы и могут
+использоваться на любой платформе. Исходные тексты упакованы в два формата:
+</p>
+
+<ul><li><p>Формат Zip (файл <code class="filename">.zip</code>).</p></li>
+<li><p>Сжатый формат <span class="command"><strong>tar</strong></span>
+(файл <code class="filename">.tar.gz</code>).</p></li></ul>
+<p>Любой упаковочный формат может использоваться на любой платформе, но
+архивы Zip чаще всего используются на системах Windows.</p>
+
+<h3><a name="connector-python-installation-source-cext-prereqs"></a>
+Предпосылки для компилирования Connector/Python с расширением C</h3>
+<p>С Connector/Python 2.1.1 исходные тексты включают расширение C, которое
+взаимодействует с библиотекой MySQL C клиента. Можно построить дистрибутив
+с или без поддержки этого расширения. Чтобы построить Connector/Python с
+поддержкой расширения C, необходимо удовлетворить следующие предпосылки.</p>
+
+<ul><li><p>Linux: компилятор C/C++, например,
+<span class="command"><strong>gcc</strong></span>.</p>
+<p>Windows: Правильная версия Visual Studio: VS 2009 для Python 2.7,
+VS 2010 для Python 3.3.</p></li>
+<li><p>Protobuf C++ (version &gt;= 3.0.0).</p></li>
+<li><p>Файлы для разработчика Python.</p></li>
+<li><p>MySQL Server, включая файлы для разработчика, чтобы собрать
+дополнительное расширение C, которое взаимодействует с
+библиотекой MySQL C клиента.</p></li></ul>
+
+<p>Необходимо установить MySQL Server, если он еще не присутствует в системе.
+Чтобы получить его, посетите
+<a href="../../../https@dev.mysql.com/downloads/default.htm" target="_top">
+MySQL download site</a>.</p>
+<p>Для определенных платформ файлы для разработчика MySQL обеспечиваются в
+отдельных пакетах. Это верно для пакетов RPM и Debian, например.</p>
+
+<h3><a name="connector-python-installation-source-windows"></a>
+Установка Connector/Python из исходных текстов в Microsoft Windows</h3>
+<p>Connector/Python Zip-архив есть на Connector/Python download site (см.
+<a href="#connector-python-obtaining">раздел 4.1</a>).</p>
+
+<p>Чтобы установить Connector/Python из архива Zip,
+загрузите его последнюю версию и выполните эти шаги:</p>
+<ol type="1"><li><p>Распакуйте архив в намеченном инсталляционном каталоге
+(например, <code class="filename">C:\mysql-connector\</code>), используя
+<span class="command"><strong>WinZip</strong></span> или другой инструмент,
+который может читать файлы <code class="filename">.zip</code>.</p></li>
+
+<li><p>Запустите консоль и измените местоположение к каталогу, где вы
+распаковали архив Zip:</p>
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>cd C:\mysql-connector\</code></strong>
+</pre></li>
+
+<li><p>В каталоге Connector/Python выполните установку,
+используя эту команду:</p>
+<pre class="programlisting">shell&gt; <strong class="userinput"><code>python setup.py install</code></strong>
+</pre>
+
+<p>Чтобы включать расширение C (доступно с Connector/Python 2.1.1),
+используйте вместо нее эту команду:</p>
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>python setup.py install --with-mysql-capi="<em class="replaceable"><code>path_name</code></em>"</code></strong>
+</pre>
+
+<p>Аргумент <code class="option">--with-mysql-capi</code> это путь к
+инсталляционному каталогу MySQL Server.</p></li></ol>
+<p>Чтобы увидеть все варианты и команды, поддержанные
+<code class="filename">setup.py</code>:</p>
+
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>python setup.py --help</code></strong>
+</pre>
+
+<h3><a name="connector-python-installation-source-unix"></a>
+Установка Connector/Python из исходных текстов в Unix</h3>
+<p>Для Unix-систем вроде Linux, Solaris, macOS и FreeBSD, архив
+Connector/Python <span class="command"><strong>tar</strong></span> есть на
+Connector/Python download site (см.
+<a href="#connector-python-obtaining">раздел 4.1</a>).</p>
+
+<p>Чтобы поставить Connector/Python из архива
+<span class="command"><strong>tar</strong></span>, скачайте
+последнюю версию (обозначенную здесь как
+<em class="replaceable"><code>VER</code></em>)
+и выполните эти команды:</p>
+
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>tar xzf mysql-connector-python-<em class="replaceable"><code>VER</code></em>.tar.gz</code></strong>
+shell&gt; <strong class="userinput"><code>cd mysql-connector-python-<em class="replaceable"><code>VER</code></em></code></strong>
+shell&gt; <strong class="userinput"><code>sudo python setup.py install --with-protobuf-include-dir=<em class="replaceable"><code>/dir/to/protobuf/include</code></em> --with-protobuf-lib-dir=<em class="replaceable"><code>/dir/to/protobuf/lib</code></em> --with-protoc=<em class="replaceable"><code>/path/to/protoc/binary</code></em></code></strong>
+</pre>
+
+<p>Чтобы включить расширение C (доступно с Connector/Python 2.1.1), который
+взаимодействует с библиотекой MySQL C клиента, также добавьте
+<code class="option">--with-mysql-capi</code>:</p>
+
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>sudo python setup.py install --with-protobuf-include-dir=<em class="replaceable"><code>/dir/to/protobuf/include</code></em> --with-protobuf-lib-dir=<em class="replaceable"><code>/dir/to/protobuf/lib</code></em> --with-protoc=<em class="replaceable"><code>/path/to/protoc/binary</code></em></code></strong>
+</pre>
+
+<p>Аргумент <code class="option">--with-mysql-capi</code> это
+путь к инсталляционному каталогу MySQL Server или путь к команде
+<span class="command"><strong>mysql_config</strong></span>.</p>
+
+<p>Чтобы увидеть все варианты и команды, поддержанные
+<code class="filename">setup.py</code>:</p>
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>python setup.py --help</code></strong>
+</pre>
+
+<h2><a name="connector-python-verification"></a>4.4.
+Подтверждение Вашей установки Connector/Python</h2>
+<p>В Windows инсталляционное местоположение Connector/Python по умолчанию это
+<code class="filename">C:\Python<em class="replaceable"><code>X.Y</code></em>\Lib\site-packages\</code>,
+где <em class="replaceable"><code>X.Y</code></em> это версия Python
+для установки соединителя.</p>
+
+<p>В Unix-системах инсталляционное местоположение Connector/Python
+по умолчанию это
+<code class="filename">/<em class="replaceable"><code>prefix</code></em>
+/python<em class="replaceable"><code>X.Y</code></em>/site-packages/</code>,
+где <em class="replaceable"><code>prefix</code></em> место, где Python
+устанавливается и <em class="replaceable"><code>X.Y</code></em>
+версия Python. См.
+<a href="../../../docs.python.org/install/index.html#how-installation-works"
+target="_top">How installation works</a>.</p>
+
+<p>Расширение C устанавливается как
+<code class="filename">_mysql_connector.so</code> в каталог
+<code class="filename">site-packages</code>, а не в каталог
+<code class="filename">mysql/connector</code>.</p>
+
+<p>В зависимости от вашей платформы инсталляционный путь мог бы отличаться от
+умолчания. Если вы не уверены, где устанавливается Connector/Python,
+сделайте следующее, чтобы определить его местоположение.
+Вывод здесь показывает инсталляционные местоположения как в macOS:</p>
+
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>python</code></strong>
+&gt;&gt;&gt; from distutils.sysconfig import get_python_lib
+
+&gt;&gt;&gt; print get_python_lib()# Python v2.x
+/Library/Python/2.7/site-packages
+
+&gt;&gt;&gt; print(get_python_lib()) # Python v3.x
+/Library/Frameworks/Python.framework/Versions/3.1/lib/python3.1/site-packages
+</pre>
+
+<p>Чтобы проверить, что ваша установка Connector/Python
+работает и способна соединиться с MySQL Server, можно воспользоваться очень
+простой программой, где вы поставляете параметры авторизации и принимаете
+информацию, запрошенную для связи. Для примера посмотрите
+<a href="example.htm#connector-python-example-connecting">раздел 5.1</a>.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

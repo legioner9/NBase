@@ -1,0 +1,5 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Fedora\Containers\Intro_to_this\Common_this\gnome\cat.gnome\dir.gnome.md">gnome</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Fedora\Containers\Intro_to_this\Common_this\gnome\hot_keys.md">hot_keys.md</a>
+        - *## [Сочетания клавиш Fedora GNOME](https://solutics.ru/linux/sochetaniya-klavish-fedora-gnome/)
+        - *## [Буфер обмена в Linux (копирование и вставка)](https://pingvinus.ru/note/copy-paste-linux)
+        - *### Копирование и вставка в терминале Gnome

@@ -1,0 +1,1188 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <title>Глава 8. Планировщик событий</title>
+</head>
+
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084"
+      alink="#0000FF">
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+
+<h2><a name="events"></a>Глава 8. Планировщик событий</h2>
+<p>Эта глава описывает планировщик событий MySQL, поддержка которого была
+добавлена в MySQL 5.1.6.</p>
+
+<h2><a name="events-overview"></a>8.1. Обзор планировщика событий</h2>
+<p>События MySQL представляют собой задачи, которые выполняются согласно
+плану. Следовательно, мы иногда обращаемся к ним как к планируемым событиям.
+Когда Вы создаете событие, Вы создаете именованный объект базы данных,
+содержащий одну или большее количество инструкций SQL, которые будут
+выполнены в одном или более регулярных интервалах, начиная и заканчивая в
+специфическую дату и время. Концептуально, это подобно идее Unix
+<code>crontab</code> (также известно как <span class="quote">cron job</span>)
+или Windows Task Scheduler.</p>
+
+<p>Регламентная работа этого типа также иногда известна как
+<span class="quote">временный триггер</span>, подразумевая, что она является
+объектом, который вызван приходом времени. В то время, как это по существу
+правильно, мы предпочитаем использовать термин <span class="emphasis"><em>
+"события"</em></span>, чтобы избежать беспорядка с понятием триггера.</p>
+
+<p>В то время как не имеется никакого средства в стандарте SQL для
+планирования события, есть прецеденты в других системах баз данных, и Вы
+можете обратить внимание на некоторые подобия между этими реализациями.</p>
+
+<p>События MySQL имеют следующие главные свойства и реквизиты:</p>
+<ul type="disc"><li><p>В MySQL 5.1.12 и позже событие уникально
+идентифицировано именем и схемой, к которой оно назначено. Ранее событие было
+также уникально для definer.</p></li>
+
+<li><p>Событие выполняет специфическое действие согласно плану. Это действие
+состоит из инструкции SQL, которая может быть составной. Синхронизация
+события может быть одноразовая или текущая. Одноразовое событие выполняется
+только один раз. Текущее событие повторяет действие в регулярном интервале, и
+план для события может быть назначено специфическое начало (день и время),
+конечный день и время, оба момента или ни один из них. По умолчанию событие
+начинается, как только создано, и продолжается неопределенно, пока оно не
+будет заблокировано или удалено.</p></li>
+
+<li><p>Пользователи могут создавать, изменять и удалять планируемые события,
+используя инструкции SQL, предназначенные для этих целей. Синтаксически
+недопустимое создание события и инструкции модификации терпят неудачу с
+соответствующим сообщением об ошибках. Пользователь может включать в действие
+события инструкции, которые требуют привилегий, которых пользователь
+фактически не имеет. Создание события или инструкция модификации пройдет
+нормально, но сбой вызовет действие события.</p></li>
+
+<li><p>Многие из реквизитов события могут быть установлены или изменяться,
+используя инструкции SQL. Эти реквизиты включают имя события, синхронизацию,
+постоянство (то есть, сохраняется ли событие после окончания плана),
+состояние (включено или заблокировано), действие, которое нужно выполнить, и
+схема, к которой событие назначено.</p>
+
+<p>definer события представляет собой пользователя, который создал событие,
+если событие не было изменено, тогда definer становится пользователь, который
+выдал последнюю инструкцию <code>ALTER EVENT</code>, производящую это
+событие. Событие может изменяться любым пользователем, имеющим привилегию
+<code>EVENT</code> на базе данных, для которой событие определено. До MySQL
+5.1.12 только definer события или пользователь, имеющий привилегии на таблице
+<code>mysql.event</code>, мог изменять данное событие.</p></li>
+
+<li><p>Инструкция действия события может включать большинство инструкций SQL,
+разрешенных внутри сохраненных подпрограмм.</p></li></ul>
+
+<p>События выполнены специальным потоком планировщика событий. При выполнении
+поток планировщика события и текущее состояние могут быть замечены
+пользователями, имеющими привилегию <code>SUPER</code> в выводе <code>SHOW
+PROCESSLIST</code>, как показано ниже.</p>
+
+<p><a name="events-event-scheduler-option"></a>Глобальная переменная
+<code>event_scheduler</code> определяет, включен ли планировщику событий на
+сервере. При запуске MySQL 5.1.12 это имеет одно из этих 3 значений, которые
+воздействуют на планируемые события, как описано здесь:</p>
+
+<ul type="disc"><li><p><code>OFF</code>: Планировщик остановлен. Поток
+планировщика события не выполняется, не показывается в выводе <code>SHOW
+PROCESSLIST</code> и никакие планируемые события не выполнены.
+<code>OFF</code> является значением по умолчанию
+для <code>event_scheduler</code>.</p>
+
+<p>Когда планировщик событий остановлен (<code>event_scheduler</code>
+установлено в <code>OFF</code>), он может быть запущен, устанавливая значение
+<code>event_scheduler</code> в <code>ON</code>.</p></li>
+
+<li><p><code>ON</code>: Планировщик работает: поток планировщика событий
+выполняется сам и выполняет все планируемые события. Поток планировщика
+событий перечислен в выводе <code>SHOW PROCESSLIST</code> как фоновый
+процесс, и его состояние представляется как показано здесь:</p>
+
+<pre>
+mysql&gt; SHOW PROCESSLIST \G
+*************************** 1. row ***************************
+Id: 1
+User: root
+Host: localhost
+db: NULL
+Command: Query
+Time: 0
+State: NULL
+Info: show processlist
+*************************** 2. row ***************************
+Id: 2
+User: event_scheduler
+Host: localhost
+db: NULL
+Command: Daemon
+Time: 3
+State: Waiting for next activation
+Info: NULL
+2 rows in set (0.00 sec)
+</pre></p></li>
+
+<li><p><code>DISABLED</code>: значение делает планировщик событий неактивным.
+Когда планировщик событий заблокирован, его поток не выполняется (и не
+появляется в выводе <code>SHOW PROCESSLIST</code>).</p></li></ul>
+
+<p>Когда сервер запущен, <code>event_scheduler</code> может переключаться
+<code>ON</code> и <code>OFF</code> (используя <code>SET</code>). Также
+возможно использовать <code>0</code> для <code>OFF</code> и
+<code>1</code> для <code>ON</code> при установке этой переменной. Таким
+образом, любая из следующих 4 инструкций может использоваться в клиенте
+<span><strong class="command">mysql</strong></span>, чтобы
+включить планировщик событий:</p>
+
+<pre>
+SET GLOBAL event_scheduler = ON;
+SET @@global.event_scheduler = ON;
+SET GLOBAL event_scheduler = 1;
+SET @@global.event_scheduler = 1;
+</pre>
+
+<p>Точно так же любая из этих 4 инструкций может использоваться, чтобы
+выключить планировщик событий:</p>
+
+<pre>
+SET GLOBAL event_scheduler = OFF;
+SET @@global.event_scheduler = OFF;
+SET GLOBAL event_scheduler = 0;
+SET @@global.event_scheduler = 0;
+</pre>
+
+<p>Хотя <code>ON</code> и <code>OFF</code> имеет числовые эквиваленты,
+значение, отображаемое для <code>event_scheduler</code> вызовом
+<code>SELECT</code> или <code>SHOW VARIABLES</code> всегда <code>OFF</code>,
+<code>ON</code> или <code>DISABLED</code>. Значение
+<span class="emphasis"><em><code>DISABLED</code> не имеет никакого числового
+эквивалента</em></span>. По этой причине <code>ON</code> и <code>OFF</code>
+обычно предпочитаются <code>1</code> и <code>0</code> при
+установке этой переменной.</p>
+
+<p>Обратите внимание, что делая попытку устанавливать
+<code>event_scheduler</code> без того, чтобы определять ее как глобальную
+переменную, вы получите ошибку:</p>
+
+<pre>
+mysql&lt; SET @@event_scheduler = OFF;
+<span class="errortext">ERROR 1229 (HY000): Variable 'event_scheduler' is a
+GLOBAL variable and should be set with SET GLOBAL</span>
+</pre>
+
+<p><span class="bold"><strong>Важно</strong></span>: нельзя включать или
+выключать планировщик, если сервер работает. То есть, Вы можете изменять
+значение <code>event_scheduler</code> на <code>DISABLED</code> или с
+<code>DISABLED</code> на одно из других разрешенных значений для этой опции
+только, когда сервер остановлен. Попытка это сделать, когда он выполняется,
+вызовет сбой с ошибкой.</p>
+
+<p>Чтобы отключить планировщик событий, используйте один из
+следующих двух методов:</p>
+<ul type="disc"><li><p>Как опция командной строки при старте сервера:</p>
+
+<pre>
+--event-scheduler=DISABLED
+</pre></li>
+
+<li><p>В файле конфигурации (<code class="filename">my.cnf</code>,
+или <code class="filename">my.ini</code> в Windows) включите строку
+(например, в раздел <code>[mysqld]</code>):</p>
+
+<pre>
+event_scheduler=DISABLED
+</pre></li></ul>
+
+<p>Чтобы включить планировщик, перезапустите сервер без параметра
+<code>--event-scheduler=<em><code>DISABLED</code></em></code> или после
+удаления (или комментирования) строки, содержащей
+<code>event_scheduler=DISABLED</code> в файле конфигурации. В качестве
+альтернативы Вы можете использовать <code>ON</code> (или <code>1</code>),
+либо <code>OFF</code> (или <code>0</code>) вместо значения
+<code>DISABLED</code> при старте сервера.</p>
+
+<p><span class="bold"><strong>Обратите внимание</strong></span>: Вы можете
+выдавать инструкции манипулирования событиями, когда
+<code>event_scheduler</code> установлен в <code>DISABLED</code>. Никакие
+предупреждения или ошибки не будут сгенерированы в таких случаях (если
+инструкции самостоятельно допустимы). Однако, планируемые события не могут
+выполняться, пока эта переменная не установлена в <code>ON</code> (или
+<code>1</code>). Как только это было выполнено, поток планировщика выполняет
+все события, чьи планирующие условия удовлетворены.</p>
+
+<p>В MySQL 5.1.11 <code>event_scheduler</code> вела себя следующим образом:
+эта переменная могла брать одно из значений <code>0</code> (или
+<code>OFF</code>), <code>1</code> (или <code>ON</code>) или
+<code>2</code>. Установка в <code>0</code> отключала планировщик. Установка в
+<code>1</code> запускала планировщик и выполняла планируемые события. В этом
+состоянии поток планировщика события, казалось, бездействовала когда
+просматривалась с <code>SHOW PROCESSLIST</code>. Когда
+<code>event_scheduler</code> была установлена в <code>2</code> (что и было
+значением по умолчанию), планировщик событий был приостановлен: поток
+планировщика событий выполнялся и мог быть найден в выводе
+<code>SHOW PROCESSLIST</code> (где в столбце <code>State</code> отображалось
+<code>Suspended</code>), но не выполнялись никакие планируемые события.
+Значение <code>event_scheduler</code> могло быть изменено только между
+<code>1</code> (или <code>ON</code>) и <code>2</code> во время работы
+сервера. Установка в <code>OFF</code> или изменение из <code>OFF</code>)
+требовала рестарта сервера.</p>
+
+<p>До MySQL 5.1.11 <code>event_scheduler</code> мог брать только одно из 2
+значений: <code>0</code>|<code>OFF</code> (по умолчанию) или
+<code>1</code>|<code>ON</code> без перезапуска сервера.</p>
+
+<p>MySQL 5.1.6 и позже обеспечивает таблицу <code>EVENTS</code> в базе данных
+<code>INFORMATION_SCHEMA</code>. Эта таблица может делать запрос к информации
+относительно планируемых событий, которые были определены на сервере.</p>
+
+<h2><a name="events-syntax"></a>8.2. Синтаксис планировщика событий</h2>
+<p>MySQL 5.1.6 и позже обеспечивает несколько инструкций SQL для
+работы с планируемыми событиями:</p>
+
+<ul type="disc"><li><p>Новые события определены, используя
+инструкцию <code>CREATE EVENT</code>.</p></li>
+<li><p>Определение существующего события может быть изменено посредством
+инструкции <code>ALTER EVENT</code>.</p></li>
+
+<li><p>Когда планируемое событие больше не требуется, оно может быть удалено
+с сервера использованием инструкции <code>DROP EVENT</code>. Сохраняется ли
+событие после конца плана, также зависит от предложения <code>ON
+COMPLETION</code>, если оно имеется.</p>
+
+<p> Событие может быть удалено любым пользователем, имеющим привилегию
+<code>EVENT</code> для базы данных, в которой событие определено. До
+MySQL 5.12 пользователь, который не создавал это событие, требовал привилегий
+на таблице <code>mysql.event</code>.</p></li></ul>
+
+<h3><a name="create-event"></a>8.2.1. Синтаксис <code>CREATE EVENT</code>
+</h3>
+<pre>
+CREATE EVENT [IF NOT EXISTS] <em><code>event_name</code></em>
+       ON SCHEDULE <em><code>schedule</code></em>
+       [ON COMPLETION [NOT] PRESERVE] [ENABLE | DISABLE]
+       [COMMENT '<em><code>comment</code></em>']
+       DO <em><code>sql_statement</code></em>;
+
+<code>schedule</code>:
+AT <code>timestamp</code> [+ INTERVAL <code>interval</code>]
+| EVERY <code>interval</code> [STARTS <code>timestamp</code>]
+[ENDS <code>timestamp</code>]
+
+<code>interval</code>:
+<code>quantity</code> {YEAR | QUARTER | MONTH | DAY | HOUR |
+                       MINUTE | WEEK | SECOND | YEAR_MONTH | DAY_HOUR |
+                       DAY_MINUTE | DAY_SECOND | HOUR_MINUTE | HOUR_SECOND |
+                       MINUTE_SECOND}
+</pre>
+
+<p>Эта инструкция создает и планирует новое событие. Минимальные требования
+для допустимой инструкции <code>CREATE EVENT</code> следующие:</p>
+<ul type="disc"><li><p>Ключевые слова <code>CREATE EVENT</code> плюс имя
+события, которое уникально идентифицирует событие в текущей схеме.</p>
+
+<p>До MySQL 5.1.12 имя события должно было быть уникальным только среди
+событий, созданных тем же самым пользователем в этой базе данных.</p></li>
+<li><p>Предложение <code>ON SCHEDULE</code>, которое определяет, когда и как
+часто событие выполняется.</p></li>
+<li><p>Предложение <code>DO</code>, которое содержит инструкцию SQL, которая
+будет выполнена событием.</p></li></ul>
+
+<p>Это пример минимальной инструкции</p>
+<pre>
+CREATE EVENT myevent
+       ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 1 HOUR
+       DO UPDATE myschema.mytable SET mycol = mycol + 1;
+</pre>
+
+<p>Предыдущая инструкция создает событие <code>myevent</code>. Это событие
+выполняется один раз в час после создания, выполняя инструкцию SQL, которая
+увеличивает значение столбца <code>mycol</code>
+таблицы <code>myschema.mytable</code> на 1.</p>
+
+<p>Имя <em><code>event_name</code></em> должно быть допустимым
+идентификатором MySQL с максимальной длиной в 64 символа. Это может быть
+разграничено, используя обратные импульсы сигнала времени, и может быть
+квалифицировано с именем схемы базы данных. Событие связано с пользователем
+MySQL (definer) и схемой, так что имя должно быть уникальным среди имен
+событий внутри этой схемы. Вообще, правила, управляющие именами событий,
+такие же, как для имен сохраненных подпрограмм, поскольку события по сути и
+являются такими подпрограммами, только особыми.</p>
+
+<p>Если никакая схема не обозначена как часть
+<em><code>event_name</code></em>, то принята заданная по умолчанию схема.
+Definer всегда текущий пользователь MySQL.</p>
+
+<p>До MySQL 5.1.12 было возможно для двух различных пользователей создать
+различные события, имеющие то же самое имя в той же самой
+схеме базы данных.</p>
+
+<p><span class="bold"><strong>Обратите внимание</strong></span>: MySQL
+использует сравнения без учета регистра при прверке уникальности имен
+события. Это означает, что, например, Вы не можете иметь два события
+events named <code>myevent</code> и <code>MyEvent</code> в той же самой
+схеме базы данных.</p>
+
+<p>Функция <code>IF NOT EXISTS</code> с инструкцией <code>CREATE EVENT</code>
+работает полностью аналогично варианту с <code>CREATE TABLE</code>: если
+событие <em><code>event_name</code></em> уже существует в той же самой схеме,
+никаких действий не предпринимается, и никакой ошибки не будет. Однако,
+предупреждение будет сгенерировано.</p>
+
+<p>Предложение <code>ON SCHEDULE</code> определяет, когда, как часто и как
+долго <em><code>sql_statement</code></em> определено для повторения события.
+Это предложение берет одну из двух форм:</p>
+
+<ul type="disc"><li><p><code>AT <em><code>timestamp</code></em></code>
+используется для одноразового события. Это определяет, что событие
+выполняется только однократно, а именно в дату и время, заданные как
+<em><code>timestamp</code></em>, причем надо указать вместе дату и время,
+либо задать выражение, которое раскрывается в однозначный тип datetime. Вы
+можете использовать значение, которое имеет тип <code>DATETIME</code> или
+<code>TIMESTAMP</code> для этой цели. Указанный
+<em><code>timestamp</code></em> должен также быть в будущем. Вы не можете
+планировать событие, которое должно было произойти в прошлом. Попытка это
+сделать приведет к ошибке:</p>
+
+<pre>
+mysql&gt; SELECT NOW();
++---------------------+
+|               NOW() |
++---------------------+
+| 2006-02-10 23:59:01 |
++---------------------+
+1 row in set (0.04 sec)
+
+mysql&gt; CREATE EVENT e_totals
+    -&gt;        ON SCHEDULE AT '2006-02-10 23:59:00'
+    -&gt;        DO INSERT INTO test.totals VALUES (NOW());
+<span class="errortext">ERROR 1522 (HY000): Activation (AT)
+time is in the past</span>
+</pre>
+<p>Инструкции <code>CREATE EVENT</code>, которые являются самостоятельно
+недопустимыми по любой причине, также завершаются ошибкой.</p>
+
+<p>Вы можете использовать <code>CURRENT_TIMESTAMP</code>, чтобы определить
+текущую дату и время. В таком случае событие действует, как только оно
+будет полностью создано.</p>
+
+<p>Чтобы создавать событие, которое происходит в некоторой отметке в будущем
+относительно текущей даты и времени Вы можете использовать факультативное
+предложение <code>+ INTERVAL <em><code>interval</code></em></code>. Часть
+<em><code>interval</code></em> состоит из двух кусков: количества и модуля
+времени, и следует тем же самым правилам синтаксиса, которые управляют
+интервалами, используемыми в функции <code>DATE_ADD()</code>. Ключевые слова
+модулей также те же самые за исключением того, что Вы не можете использовать
+любые модули, включающие микросекунды, при определении события.</p>
+
+<p>Вы можете также объединять интервалы. Например,
+<code>AT CURRENT_TIMESTAMP + INTERVAL 3 WEEK + INTERVAL 2 DAY</code>
+эквивалентно "три недели и два дня с этого времени". Каждая часть такого
+предложения должна начинаться с <code>+ INTERVAL</code>.</p></li>
+
+<li><p>Для действий, которые должны быть повторены в регулярном интервале, Вы
+можете использовать предложение <code>EVERY</code>. Ключевое слово
+<code>EVERY</code> сопровождается интервалом, как описано выше.
+(<code>+ INTERVAL</code> <span class="emphasis"><em>не</em></span>
+используется с <code>EVERY</code>). Например, <code>EVERY 6 WEEK</code>
+означает "каждые шесть недель".</p>
+
+<p>Невозможно объединить предложения <code>+ INTERVAL</code> в одиночном
+предложении <code>EVERY</code>. Однако, Вы можете использовать те же самые
+сложные модули времени, позволенные в <code>+ INTERVAL</code>. Например,
+каждые две минуты и десять секунд можно задать как
+<code>EVERY '2:10' MINUTE_SECOND</code>.</p>
+
+<p>Предложение <code>EVERY</code> может также содержать факультативное
+предложение <code>STARTS</code>. Оно сопровождается значением
+<em><code>timestamp</code></em>, которое указывает, когда действие должно
+начать повторяться, и может также использовать <code>+ INTERVAL
+<em><code>interval</code></em></code>, чтобы определить количество времени
+<span class="quote">с этого момента</span>. Например,
+<code>EVERY 3 MONTH STARTS CURRENT_TIMESTAMP + 1 WEEK</code> означает
+"каждые три месяца, начиная спустя одну неделю с этого времени". Точно так же
+Вы можете выражать "каждые две недели, начиная через шесть часов и пятнадцать
+минут с этого времени" с помощью <code>EVERY 2 WEEK STARTS
+CURRENT_TIMESTAMP + '6:15' HOUR_MINUTE</code>. Не определение
+<code>STARTS</code> аналогично <code>STARTS CURRENT_TIMESTAMP</code>, то есть
+действие, определенное для события, начинает повторяться немедленно
+после создания события.</p>
+
+<p>Предложение <code>EVERY</code> может также содержать факультативное
+предложение <code>ENDS</code>. Это ключевое слово сопровождается значением
+<em><code>timestamp</code></em>, которое сообщает MySQL, когда событие должно
+перестать повторяться. Вы можете также использовать
+<code>+ INTERVAL <em><code>interval</code></em></code> с <code>ENDS</code>.
+Например: <code>EVERY 12 HOUR STARTS CURRENT_TIMESTAMP + INTERVAL 30 MINUTE
+ENDS CURRENT_TIMESTAMP + INTERVAL 4 WEEK</code> означает "каждые двенадцать
+часов, начиная спустя тридцать минут с этого времени, и заканчивая через
+четыре недели тоже с этого времени". Не использование <code>ENDS</code>
+означает, что событие продолжает выполняться неопределенно долго.</p>
+
+<p><code>ENDS</code> поддерживает тот же самый синтаксис для сложных модулей
+времени, что и <code>STARTS</code>. Вы можете использовать
+<code>STARTS</code>, <code>ENDS</code> вместе или порознь (либо вовсе не
+использовать их) в предложении <code>EVERY</code>.</p>
+
+<p><span class="bold"><strong>Обратите внимание</strong></span>: где
+<code>STARTS</code> или <code>ENDS</code> заданы как значение datetime,
+используется местное время на сервере. Однако, значения для обоих значений в
+настоящее время сообщены, используя Universal Time в таблицах
+<code>INFORMATION_SCHEMA.EVENTS</code> и <code>mysql.event</code>, также как
+в выводе <code>SHOW EVENTS</code>. Это неправильное поведение, и Ваша
+прикладная программа не должна полагаься на это, поскольку ситуация
+изменится (<a href="../../../bugs.mysql.com/16420" target="_top">Глюк #16420
+</a>).</p></li></ul>
+
+<p>Предложение <code>ON SCHEDULE</code> может использовать выражения,
+включающие встроенные функции MySQL и переменные пользователя, чтобы получить
+любое значение <em><code>timestamp</code></em> или
+<em><code>interval</code></em>. Вы не можете использовать сохраненные
+подпрограммы или определяемые пользователем функции в таких выражениях, и при
+этом Вы не можете использовать любые ссылки на таблицы, однако, Вы можете
+<code>SELECT FROM DUAL</code>. Это истинно для инструкций
+<code>CREATE EVENT</code> и <code>ALTER EVENT</code>. Начиная с MySQL 5.1.13,
+ссылки на сохраненные подпрограммы, определяемые пользователем функции и
+таблицы в таких случаях специально отвергнуты и вызывают сбой с ошибкой
+(<a href="../../../bugs.mysql.com/22830" target="_top">Глюк #22830</a>).</p>
+
+<p>Обычно, как только событие истекло, оно немедленно уничтожается. Вы можете
+отменять это поведение,  определяя <code>ON COMPLETION PRESERVE</code>.
+Использование <code>ON COMPLETION NOT PRESERVE</code> просто делает заданное
+по умолчанию поведение явным.</p>
+
+<p>Вы можете создавать событие и сохранить его неактивным для дальнейшего
+неспешного потребления, используя ключевое слово <code>DISABLE</code>.
+В качестве альтернативы Вы можете использовать <code>ENABLE</code>, чтобы
+сделать явным заданное по умолчанию состояние, которое является активным.
+Это наиболее полезно вместе с <code>ALTER EVENT</code>.</p>
+
+<p>Вы можете обеспечивать комментарий для события, используя предложение
+<code>COMMENT</code>. Здесь <em><code>comment</code></em> может быть любой
+строкой до 64 символов, которые Вы желаете использовать для описания события.
+Текст комментария, являющийся строковым литералом, должен
+быть окружен кавычками.</p>
+
+<p>Предложение <code>DO</code> определяет действие, которое несет событие, и
+состоит из инструкции SQL. Почти любая допустимая инструкция MySQL, которая
+может использоваться в сохраненной подпрограмме, может также использоваться
+как инструкция действия для планируемого события. Например, следующее событие
+<code>e_hourly</code> удаляет все строки из таблицы <code>sessions</code>
+раз в час, если только эта таблица часть схемы <code>site_activity</code>:
+</p>
+
+<pre>
+CREATE EVENT e_hourly ON SCHEDULE
+       EVERY 1 HOUR COMMENT 'Clears out sessions table each hour.'
+       DO DELETE FROM site_activity.sessions;
+</pre>
+
+<p>Инструкция <code>CREATE EVENT</code>, которая содержит инструкцию
+<code>ALTER EVENT</code> в предложении <code>DO</code>, появляется, однако,
+когда сервер пытается выполнить возникающее в результате планируемое событие,
+получается сбой выполнения с ошибкой.</p>
+
+<p>
+<span class="bold"><strong>Обратите внимание</strong></span>: инструкции
+<code>SHOW</code> и <code>SELECT</code>, которые просто возвращают набор
+результатов, не имеют никакого эффекта, когда используются в событии, вывод
+из них не будет послан MySQL Monitor. Однако, Вы можете использовать
+инструкции типа <code>SELECT INTO</code> и <code>INSERT ... SELECT</code>,
+которые сохраняют результат.</p>
+
+<p>Любая ссылка в предложении <code>DO</code> к таблице в другой схеме базы
+данных должна быть квалифицирована с именем схемы, в которой таблица
+находится. В MySQL 5.1.6 все таблицы, вызванные в предложениях
+<code>DO</code> событий должны были включать ссылку на базу данных.</p>
+
+<p>Как и в случае с сохраненными подпрограммами, Вы можете использовать много
+инструкций в предложении <code>DO</code> заключением их в слова
+<code>BEGIN</code> и <code>END</code>, как показано здесь:</p>
+
+<pre>
+DELIMITER |
+CREATE EVENT e_daily ON SCHEDULE
+       EVERY 1 DAY
+       COMMENT 'Saves total number of sessions then clears the table each day.'
+       DO BEGIN
+   INSERT INTO site_activity.totals (when, total)
+   SELECT CURRENT_TIMESTAMP, COUNT(*)
+   FROM site_activity.sessions;
+   DELETE FROM site_activity.sessions;
+END |
+DELIMITER ;
+</pre>
+
+<p>Обратите внимание на использование инструкции <code>DELIMITER</code>,
+чтобы изменить операторный разделитель, как с сохраненными подпрограммами.
+</p>
+
+<p>Более сложные составные инструкции, типа тех, что используюся в
+сохраненных подпрограммах, возможны в событии. Этот пример использует
+локальные переменные, драйвер ошибки и конструкцию управления потоком данных:
+</p>
+
+<pre>
+DELIMITER |
+CREATE EVENT e ON SCHEDULE
+       EVERY 5 SECOND DO BEGIN
+   DECLARE v INTEGER;
+   DECLARE CONTINUE HANDLER FOR SQLEXCEPTION BEGIN END;
+   SET v = 0;
+   WHILE v &lt; 5 DO
+     INSERT INTO t1 VALUES (0);
+     UPDATE t2 SET s1 = s1 + 1;
+     SET v = v + 1;
+   END WHILE;
+END |
+DELIMITER ;
+</pre>
+
+<p>Не имеется никакого способа передать параметры непосредственно событию,
+однако, возможно вызвать сохраненную подпрограмму с параметрами:</p>
+<pre>
+CREATE EVENT e_call_myproc ON SCHEDULE
+       AT CURRENT_TIMESTAMP + 1 DAY
+       DO CALL myproc(5, 27);
+</pre>
+
+<p>Кроме того, если definer события имеет привилегию <code>SUPER</code>, то
+событие может читать и записывать глобальные переменные. Так как
+предоставление этой привилегии влечет за собой потенциал для неправильного
+обращения, критическая осторожность должна быть проявлена.</p>
+
+<p>Вообще, любые инструкции, которые являются допустимыми в сохраненных
+подпрограммах, могут использоваться для инструкций действия, выполненных
+событиями. Вы можете создавать событие как часть сохраненной подпрограммы, но
+событие не может быть создано другим событием.</p>
+
+<h3><a name="alter-event"></a>8.2.2. Синтаксис <code>ALTER EVENT</code></h3>
+<pre>
+ALTER EVENT <em><code>event_name</code></em>
+      [ON SCHEDULE <em><code>schedule</code></em>]
+      [RENAME TO <em><code>new_event_name</code></em>]
+      [ON COMPLETION [NOT] PRESERVE] [ENABLE | DISABLE]
+      [COMMENT '<em><code>comment</code></em>']
+      [DO <em><code>sql_statement</code></em>]
+</pre>
+
+<p>Инструкция <code>ALTER EVENT</code> используется, чтобы изменить одну или
+большее количество характеристик существующего события. Синтаксис для каждого
+из предложений <code>ON SCHEDULE</code>, <code>ON COMPLETION</code>,
+<code>COMMENT</code>, <code>ENABLE</code> / <code>DISABLE</code> и
+<code>DO</code> точно такой же, как когда они
+используются с <code>CREATE EVENT</code>.</p>
+
+<p>Начиная с MySQL 5.1.12, любой пользователь может изменять событие,
+определенное в базе данных, для которой этот пользователь имеет привилегию
+<code>EVENT</code>. Когда пользователь выполняет успешную инструкцию
+<code>ALTER EVENT</code> он становится definer для произведенного события.
+</p>
+
+<p>В MySQL 5.1.11 и ранее событие могло быть изменено только definer или
+пользователем, имеющим привилегию <code>SUPER</code>. <code>ALTER
+EVENT</code> работает только с существующим событием:</p>
+
+<pre>
+mysql&gt; ALTER EVENT no_such_event
+     &gt;       ON SCHEDULE
+     &gt;       EVERY '2:3' DAY_HOUR;
+<span class="errortext">ERROR 1517 (HY000): Unknown event
+'no_such_event'</span>
+</pre>
+
+<p>В каждом из следующих примеров считайте, что событие
+<code>myevent</code> определено, как показано здесь:</p>
+<pre>
+CREATE EVENT myevent ON SCHEDULE
+       EVERY 6 HOUR COMMENT 'A sample comment.'
+       DO UPDATE myschema.mytable SET mycol = mycol + 1;
+</pre>
+
+<p>Следующая инструкция изменяет план для <code>myevent</code> с одного раза
+каждые шесть часов (запуск немедленно) на один раз каждые двенадцать часов,
+запуская четыре часа со времени выполнения инструкции:</p>
+
+<pre>
+ALTER EVENT myevent ON SCHEDULE
+      EVERY 12 HOUR STARTS
+      CURRENT_TIMESTAMP + 4 HOUR;
+</pre>
+
+<p>Чтобы отключить <code>myevent</code> используйте эту
+инструкцию <code>ALTER EVENT</code>:</p>
+<pre>
+ALTER EVENT myevent DISABLE;
+</pre>
+
+<p>Предложение <code>ON SCHEDULE</code> может использовать выражения,
+включающие встроенные функции MySQL и переменные пользователя, чтобы получить
+любой <em><code>timestamp</code></em> или <em><code>interval</code></em>.
+Вы не можете использовать сохраненные подпрограммы или определяемые
+пользователем функции в таких выражениях, и при этом Вы не можете
+использовать любые ссылки на таблицы, однако, Вы можете использовать
+<code>SELECT FROM DUAL</code>.</p>
+
+<p>Инструкция <code>ALTER EVENT</code>, которая содержит другую инструкцию
+<code>ALTER EVENT</code> в предложении <code>DO</code>, допустима. Однако,
+когда сервер пытается выполнять возникающее в результате планируемое событие,
+произойдет сбой с ошибкой.</p>
+
+<p>Возможно изменить много характеристик события в одиночной инструкции. Этот
+пример изменяет инструкцию SQL, выполненную <code>myevent</code>, а также
+план для события:</p>
+
+<pre>
+ALTER TABLE myevent ON SCHEDULE
+      AT CURRENT_TIMESTAMP + INTERVAL 1 DAY
+      DO TRUNCATE TABLE myschema.mytable;
+</pre>
+
+<p>Чтобы переименовывать событие, используйте предложение <code>RENAME
+TO</code> инструкции <code>ALTER EVENT</code>, как показано здесь:</p>
+<pre>
+ALTER EVENT myevent RENAME TO yourevent;
+</pre>
+
+<p>Предыдущая инструкция переименовывает событие <code>myevent</code> в
+<code>yourevent</code>. <span class="bold"><strong>Примечание</strong>
+</span>: не имеется никакой инструкции <code>RENAME EVENT</code>.</p>
+
+<p>Вы можете также переместить событие в другую схему, используя
+<code>ALTER EVENT ... RENAME TO ...</code> и запись в формате
+<code><em><code>schema_name.table_name</code></em></code>,
+как показано здесь:</p>
+
+<pre>
+ALTER EVENT oldschema.myevent RENAME TO newschema.myevent;
+</pre>
+
+<p>Чтобы выполнять предыдущую инструкцию, пользователь, выполняющий это,
+должен иметь привилегию <code>EVENT</code> на схемах
+<code>oldschema</code> и <code>newschema</code> базы данных.</p>
+
+<p>Необходимо включить только те параметры в инструкцию <code>ALTER
+EVENT</code>, которые соответствуют характеристикам, которые Вы фактически
+желаете изменить, параметры, которые опущены, сохраняют их существующие
+значения. Это включает любые значения по умолчанию для <code>CREATE
+EVENT</code>, например, <code>ENABLE</code>.</p>
+
+<h3><a name="drop-event"></a>8.2.3. Синтаксис <code>DROP EVENT</code></h3>
+<pre>
+DROP EVENT [IF EXISTS] <em><code>event_name</code></em>
+</pre>
+
+<p>Эта инструкция удаляет событие <em><code>event_name</code></em>. Событие
+немедленно прекращает активность и будет удалено полностью с сервера.
+</p>
+
+<p>Если событие не существует, произойдет ошибка <span class="errortext">
+ERROR 1517 (HY000): Unknown event '<em><code>event_name</code></em>'</span>.
+Вы можете поменять это и заставить инструкцию провалиться тихо, используя
+опцию <code>IF EXISTS</code>.</p>
+
+<p>Начиная с MySQL 5.1.12, событие может быть удалено любым пользователем,
+имеющим привилегию <code>EVENT</code> на схеме базы данных, событие в которой
+должно быть удалено. В MySQL 5.1.11 и ранее событие могло быть удалено
+только definer или пользователем, имеющим привилегию <code>SUPER</code>.</p>
+
+<h2><a name="events-metadata"></a>8.3. Метаданные события</h2>
+<p>Информация относительно событий может быть получена следующим образом:</p>
+<ul type="disc"><li><p>Запрос таблицы <code>EVENTS</code> базы данных
+<code>INFORMATION_SCHEMA</code></p></li>
+
+<li><p>Использование инструкции <code>SHOW EVENTS</code>.</p></li>
+<li><p>Использование инструкции <code>SHOW CREATE EVENT</code>.</p></li>
+<li><p>Запись событий, выполненных на сервере, может читаться из файла
+регистрации ошибок MySQL.</p></li></ul>
+
+<h2><a name="events-status-info"></a>8.4. Состояние планировщика событий
+</h2>
+<p>Информация относительно состояния планировщика события для отладки и целей
+поиска неисправностей может быть получена следующим образом:</p>
+
+<ul type="disc"><li><p>В MySQL 5.1.11 версиях <code>-debug</code> Вы можете
+использовать инструкцию <code>SHOW SCHEDULER STATUS</code>.</p>
+<p><span class="bold"><strong>Важно</strong></span>: эта инструкция была
+удалена в MySQL 5.1.12. Предполагается сделать инструкцию SQL, обеспечивающую
+подобные функциональные возможности, в будущем выпуске MySQL.</p></li>
+
+<li><p>Начиная с MySQL 5.1.12, информация состояния планировщика событий
+может быть получена, выполняя <span><strong>mysqladmin debug</strong></span>.
+После выполнения этой команды, файл регистрации ошибок содержит
+вывод в отношении планировщика событий, подобный тому,
+что показывается здесь:</p>
+
+<pre>
+Events status:
+LLA = Last Locked AtLUA = Last Unlocked At
+WOC = Waiting On ConditionDL = Data Locked
+
+Event scheduler status:
+State: INITIALIZED
+Thread id: 0
+LLA: init_scheduler:313
+LUA: init_scheduler:318
+WOC: NO
+Workers: 0
+Executed : 0
+Data locked: NO
+
+Event queue status:
+Element count : 1
+Data locked : NO
+Attempting lock : NO
+LLA : init_queue:148
+LUA : init_queue:168
+WOC : NO
+Next activation : 0000-00-00 00:00:00
+</pre></li></ul>
+
+<h2><a name="events-privileges"></a>8.5.
+Планировщик событий и привилегии MySQL</h2>
+<p>Чтобы включить или отключить выполнение планируемых событий, необходимо
+установить значение глобальной переменной <code>event_scheduler</code>.
+Это требует привилегии <code>SUPER</code>.</p>
+
+<p>MySQL 5.1.6 представляет привилегию <code>EVENT</code>, управляя
+созданием, модификацией и стиранием событий. Эта привилегия может быть
+подарена, используя <code>GRANT</code>. Например, эта инструкция
+<code>GRANT</code> предоставляет привилегию <code>EVENT</code> для схемы
+<code>myschema</code> на пользователя <code>jon@ghidora</code>:</p>
+
+<pre>
+GRANT EVENT ON myschema.* TO jon@ghidora;
+</pre>
+
+<p>Чтобы предоставлять этому пользователю привилегию <code>EVENT</code> на
+всех схемах, требуется следующая инструкция:</p>
+<pre>
+GRANT EVENT ON *.* TO jon@ghidora;
+</pre>
+
+<p>Привилегия <code>EVENT</code> имеет контекст уровня схемы. Следовательно,
+попытка предоставлять ее на одиночной таблице приводит к ошибке,
+как показано здесь:</p>
+
+<pre>
+mysql&gt; GRANT EVENT ON myschema.mytable TO jon@ghidora;
+<span class="errortext">ERROR 1144 (42000): Illegal GRANT/REVOKE command;
+please consult the manual to see which privileges can be used</span>
+</pre>
+
+<p>Важно понять, что событие выполнено с привилегиями definer, и что оно не
+может выполнять любые действия, для которых definer не имеет необходимых
+привилегий. Например, предположим, что <code>jon@ghidora</code> имеет
+привилегию <code>EVENT</code> для <code>myschema</code>. Предположим также,
+что этот пользователь имеет привилегию <code>SELECT</code> для
+<code>myschema</code>, но никаких других привилегий для этой схемы он не
+имеет. Возможно для <code>jon@ghidora</code> создать новое
+событие типа этого:</p>
+
+<pre>
+CREATE EVENT e_store_ts ON SCHEDULE
+       EVERY 10 SECOND DO
+       INSERT INTO myschema.mytable VALUES (UNIX_TIMESTAMP());
+</pre>
+
+<p>Пользователь ждет в течение минуты или более, а затем выполняет запрос
+<code>SELECT * FROM mytable;</code>, ожидая, что увидит несколько новых строк
+в таблице. Вместо этого он находит, что таблица пуста: так как он не имеет
+привилегии <code>INSERT</code> для рассматриваемой таблицы, событие не
+имеет никакого эффекта.</p>
+
+<p>Если Вы осматриваете файл регистрации ошибок MySQL
+(<code class="filename"><em><code>hostname</code></em>.err</code>),
+Вы можете видеть, что событие-то выполняется, но действие это вызывает сбой,
+как обозначено <code>RetCode=0</code>:</p>
+
+<pre>
+060209 22:39:44 [Note] EVEX EXECUTING event newdb.e [EXPR:10]
+060209 22:39:44 [Note] EVEX EXECUTED event newdb.e[EXPR:10]. RetCode=0
+060209 22:39:54 [Note] EVEX EXECUTING event newdb.e [EXPR:10]
+060209 22:39:54 [Note] EVEX EXECUTED event newdb.e[EXPR:10]. RetCode=0
+060209 22:40:04 [Note] EVEX EXECUTING event newdb.e [EXPR:10]
+060209 22:40:04 [Note] EVEX EXECUTED event newdb.e[EXPR:10]. RetCode=0
+</pre>
+
+<p>Так как этот пользователь, очень вероятно, не имеет доступа к файлу
+регистрации ошибок, он может проверять, является ли инструкция действия
+события допустимой, выполняя ее непосредственно:</p>
+
+<pre>
+mysql&gt; INSERT INTO myschema.mytable VALUES (UNIX_TIMESTAMP());
+<span class="errortext">ERROR 1142 (42000): INSERT command denied to user
+'jon'@'ghidora' for table 'mytable'</span>
+</pre>
+
+<p>Проверка таблицы <code>INFORMATION_SCHEMA.EVENTS</code> показывает, что
+<code>e_store_ts</code> существует и включен, но столбец
+<code>LAST_EXECUTED</code> записан <code>NULL</code>:</p>
+
+<pre>
+mysql&gt; SELECT * FROM INFORMATION_SCHEMA.EVENTS
+     &gt;          WHERE EVENT_NAME='e_store_ts'
+     &gt;          AND EVENT_SCHEMA='myschema'\G
+*************************** 1. row ***************************
+EVENT_CATALOG: NULL
+EVENT_SCHEMA: myschema
+EVENT_NAME: e_store_ts
+DEFINER: jon@ghidora
+EVENT_BODY: SQL
+EVENT_DEFINITION: INSERT INTO myschema.mytable VALUES (UNIX_TIMESTAMP())
+EVENT_TYPE: RECURRING
+EXECUTE_AT: NULL
+INTERVAL_VALUE: 5
+INTERVAL_FIELD: INTERVAL_SECOND
+SQL_MODE: NULL
+STARTS: 0000-00-00 00:00:00
+ENDS: 0000-00-00 00:00:00
+STATUS: ENABLED
+ON_COMPLETION: NOT PRESERVE
+CREATED: 2006-02-09 22:36:06
+LAST_ALTERED: 2006-02-09 22:36:06
+LAST_EXECUTED: NULL
+EVENT_COMMENT:
+1 row in set (0.00 sec)
+</pre>
+
+<p>(<span class="bold"><strong>Обратите внимание</strong></span>: до MySQL
+5.1.12 не было столбца <code>EVENT_DEFINITION</code>, по причине чего
+<code>EVENT_BODY</code> содержал инструкцию SQL или инструкции,
+которые будут выполнены.</p>
+
+<p>Чтобы отменить привилегию <code>EVENT</code>, используйте инструкцию
+<code>REVOKE</code>. В этом примере привилегия <code>EVENT</code> на схеме
+<code>myschema</code> удалена из логина пользователя
+<code>jon@ghidora</code>:</p>
+
+<pre>
+REVOKE EVENT ON myschema.* FROM jon@ghidora;
+</pre>
+
+<p><span class="bold"><strong>Важно</strong></span>: отмена привилегии
+<code>EVENT</code> пользователя не удаляет и не отключает никакие события,
+которые, возможно, были им созданы!</p>
+
+<p>Например, предположим, что пользователю <code>jon@ghidora</code>
+предоставили привилегии <code>EVENT</code> и <code>INSERT</code> на схеме
+<code>myschema</code>. Этот пользователь затем создает следующее событие:</p>
+
+<pre>
+CREATE EVENT e_insert ON SCHEDULE
+       EVERY 7 SECOND DO
+       INSERT INTO myschema.mytable;
+</pre>
+
+<p>После того, как это событие было создано, <code>root</code> отменяет
+привилегию <code>EVENT</code> для <code>jon@ghidora</code>. Однако,
+<code>e_insert</code> продолжает выполняться, вставляя новую строку в
+<code>mytable</code> каждые семь секунд.</p>
+
+<p>Определения событий сохранены в таблице <code>mysql.event</code>, которая
+была добавлена в MySQL 5.1.6. Чтобы удвлить событие, созданное другим
+пользователем, MySQL-пользователь <code>root</code> (или другой пользователь
+с необходимыми привилегиями) может удалять строки из этой таблицы. Например,
+чтобы удалить событие <code>e_insert</code>, показанное выше,
+<code>root</code> может использовать следующую инструкцию:</p>
+
+<pre>
+DELETE FROM mysql.event
+       WHERE db = 'myschema' AND
+             definer = 'jon@ghidora' AND name = 'e_insert';
+</pre>
+
+<p>Очень важно соответствовать имени события, имени схемы базы данных и
+логину пользователя при удалении строк из таблицы <code>mysql.event</code>.
+Это потому, что тот же самый пользователь может создавать различные события
+с тем же самым именем в различных схемах.</p>
+
+<p><span class="bold"><strong>Обратите внимание</strong></span>: пространство
+имен для планируемых событий изменено в MySQL 5.1.12. До этого MySQL
+различные пользователи могли создавать различные события, имеющие то же самое
+имя в той же самой базе данных, в MySQL 5.1.12 и позже это не так. При
+обновлении на MySQL 5.1.12 или позже с MySQL 5.1.11 или ранее до выполнения
+обновления чрезвычайно важно удостовериться, что никакие события в той же
+самой базе данных не используют совместно то же самое имя.</p>
+
+<p>Привилегии <code>EVENT</code> пользователей сохранены в столбцах
+<code>Event_priv</code> таблиц <code>mysql.user</code> и
+<code>mysql.db</code>. В обоих случаях этот столбец хранит одно из значений
+'<code>Y</code>' или '<code>N</code>' (по умолчанию '<code>N</code>').
+<code>mysql.user.Event_priv</code> установлен в '<code>Y</code>' для данного
+пользователя только, если этот пользователь имеет глобальную привилегию
+<code>EVENT</code> (то есть, если привилегия была подарена, используя
+<code>GRANT EVENT ON *.*</code>). Для привилегии <code>EVENT</code> уровня
+схемы <code>GRANT</code> создает строку в <code>mysql.db</code> и
+устанавливает столбец <code>Db</code> той строки к имени схемы, столбец
+<code>User</code> к имени пользователя и <code>Event_priv</code> столбца в
+'<code>Y</code>'. Никогда не должно быть никакой потребности управлять этими
+таблицами непосредственно, так как <code>GRANT EVENT</code> и инструкция
+<code>REVOKE EVENT</code> выполняют требуемые операции на них.</p>
+
+<p>MySQL 5.1.6 представляет пять переменных состояния, обеспечивающих
+подсчет связанных с событием операций (но не инструкций,
+выполненных событиями). Они:</p>
+
+<ul type="disc"><li><p><code>Com_create_event</code>: число инструкций
+<code>CREATE EVENT</code>, выполненных начиная с
+последнего рестарта сервера.</p></li>
+
+<li><p><code>Com_alter_event</code>: число инструкций <code>ALTER
+EVENT</code>, выполненных начиная с последнего рестарта сервера.
+</p></li>
+
+<li><p><code>Com_drop_event</code>: число инструкций <code>DROP
+EVENT</code>, выполненных начиная с последнего рестарта сервера.</p></li>
+<li><p><code>Com_show_create_event</code>: число инструкций <code>SHOW CREATE
+EVENT</code>, выполненных начиная с последнего рестарта сервера.</p></li>
+
+<li><p><code>Com_show_events</code>: число инструкций <code>SHOW
+EVENTS</code>, выполненных начиная с последнего рестарта сервера.
+</p></li></ul>
+<p>Вы можете просматривать текущие значения для все них в одно время,
+выполняя инструкцию <code>SHOW STATUS LIKE '%event%';</code>.</p>
+
+<h2><a name="events-limitations-restrictions"></a>8.6.
+Ограничения планировщика событий</h2>
+<p>Этот раздел вносит в список ограничения планирования событий в MySQL.</p>
+
+<p>В MySQL любая таблица, вызванная в инструкции действия события должна быть
+полностью квалифицирована именем схемы, в которой это происходит (то есть,
+как <code><em><code>schema_name</code></em>.<em><code>table_name</code>
+</em></code>).</p>
+
+<p>Событие не может быть создано, изменено или удалено триггером, сохраненной
+подпрограммой или другим событием. Событие также не может создавать,
+изменять или удалять триггеры или сохраненные подпрограммы
+(<a href="../../../bugs.mysql.com/16409" target="_top">Глюк #16409</a> и
+<a href="../../../bugs.mysql.com/18896" target="_top">Глюк #18896</a>).</p>
+
+<p>Синхронизации события, использующие интервалы <code>YEAR</code>,
+<code>QUARTER</code>, <code>MONTH</code> и <code>YEAR_MONTH</code>
+отсчитываются в месяцах, любой другой интервал отсчитывается в секундах. Не
+имеется никакого способа заставить планируемые события, происходящие в тот же
+самый момент, выполниться в заданном порядке. Кроме того, из-за округления,
+характера прикладных программ и того факта, что ненулевой отрезок времени
+требуется, чтобы создать событие и сообщить о выполнении, события могут быть
+отсрочены на целых 1 или 2 секунды. Однако, время, показанное в
+столбце <code>LAST_EXECUTED</code> таблицы
+<code>INFORMATION_SCHEMA.EVENTS</code> или столбце <code>last_executed</code>
+таблицы <code>mysql.event</code> является всегда точным до секунды
+относительно момента, когда событие было фактически выполнено
+(<a href="../../../bugs.mysql.com/16522" target="_top">Глюк #16522</a>).</p>
+
+<p>Выполнение инструкций события не воздействует на серверные счетчики, вроде
+<code>Com_select</code> и <code>Com_insert</code>, которые отображаются
+командой <code>SHOW STATUS</code>.</p>
+
+<p>До MySQL 5.1.12 Вы не могли просматривать события другого пользователя в
+таблице <code>INFORMATION_SCHEMA.EVENTS</code>. Другими словами, любой
+запрос, сделанный к этой таблицы обрабатывался, как если бы содержал
+<code>DEFINER = CURRENT_USER()</code> в предложении <code>WHERE</code>.</p>
+
+<p>События не могут быть созданы с временем старта,
+которое находится в прошлом.</p>
+<p>События не поддерживают времена позже, чем конец Unix Epoch, это
+приблизительно конец 2037 года. До MySQL 5.1.8 обработка в планируемых
+событиях дат позже чем, эта вызывала сбой, теперь такие даты специально
+отвергнуты планировщиком событий
+(<a href="../../../bugs.mysql.com/16396" target="_top">Глюк #16396</a>).</p>
+
+<p>В MySQL 5.1.6 <code>INFORMATION_SCHEMA.EVENTS</code> показывает
+<code>NULL</code> в столбце <code>SQL_MODE</code>. Начиная с 5.1.7,
+<code>SQL_MODE</code> отображает то, что было в действительности, когда
+событие было создано.</p>
+
+<p>В MySQL 5.1.6 единственным способом удалять или менять событие, созданное
+пользователем, который не был definer этого события, было манипулирование
+таблицей системы <code>mysql.event</code> MySQL-пользователем
+<code>root</code> или другим пользователем с привилегиями на этой таблице.
+В MySQL 5.1.7 и выше <code>DROP USER</code> удаляет все события, для которых
+этот пользователь был definer, также <code>DROP SCHEMA</code> удаляет все
+события, связанные с удаляемой схемой.</p>
+
+<p>Как с сохраненными подпрограммами, события не перенесены к новой схеме
+инструкцией <code>RENAME SCHEMA</code> (или <code>RENAME DATABASE</code>).
+</p>
+<p>Начиная с MySQL 5.1.8, имена событий обработаны в нечувствительном к
+регистру режиме. Например, это означает, что Вы не можете иметь два события в
+той же самой базе данных с именами <code>anEvent</code> и
+<code>AnEvent</code> (а до MySQL 5.1.12 еще и с тем же самым definer).
+<span class="bold"><strong>Важно</strong></span>: если Вы имеете события,
+созданные в MySQL 5.1.7 или ранее, которые назначены к той же самой базе
+данных, имеют тот же самый definer, и чьи имена отличаются только регистром
+символов, то Вы бы переименовали эти события, чтобы избежать проблем с
+обработкой учета регистра перед обновлением до MySQL 5.1.8 или позже.</p>
+
+<p>Ссылки на сохраненные подпрограммы, определяемые пользователем функции и
+таблицы в предложениях <code>ON SCHEDULE</code> инструкций <code>CREATE
+EVENT</code> и <code>ALTER EVENT</code> не обеспечиваются
+(<a href="../../../bugs.mysql.com/22830" target="_top">Глюк #22830</a>).</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</html>

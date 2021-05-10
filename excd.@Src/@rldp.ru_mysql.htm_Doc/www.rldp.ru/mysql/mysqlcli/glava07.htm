@@ -1,0 +1,1088 @@
+<HTML>
+<HEAD>
+  <TITLE>Определение данных: CREATE, DROP, ALTER</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H2><A NAME="Data_Definition">7 Определение данных: <CODE>CREATE</CODE>,
+<CODE>DROP</CODE>, <CODE>ALTER</CODE></A></H2>
+
+<H3><A NAME="CREATE_DATABASE">7.1 Синтаксис <CODE>CREATE DATABASE</CODE></A>
+</H3>
+<PRE>
+CREATE DATABASE [IF NOT EXISTS] db_name
+</PRE>
+
+<P><CODE>CREATE DATABASE</CODE> создает базу данных с указанным именем.
+Правила для допустимых имен баз данных приведены в разделе
+"<A HREF="glava03.htm#Legal_names">3.2 Имена баз данных, таблиц, индексов,
+столбцов и псевдонимов</A>". Ошибка происходит, если база данных уже
+существует, и Вы не определяли <CODE>IF NOT EXISTS</CODE>.</P>
+
+<P>Базы данных в MySQL выполнены как каталоги, содержащие файлы, которые
+соответствуют таблицам в базе данных. Поскольку нет никаких таблиц в базе
+данных, когда она первоначально создана, инструкция <CODE>CREATE
+DATABASE</CODE> только создает каталог под каталогом данных MySQL.</P>
+
+<P><A NAME="IDX1357"></A>Вы можете также создавать базы данных с помощью
+программы <CODE>mysqladmin</CODE>. Подробности в разделе
+"<A HREF="glava12.htm#Client-Side_Scripts">12 Клиентские скрипты и утилиты
+MySQL</A>".</P>
+
+<H3><A NAME="DROP_DATABASE">7.2 Синтаксис <CODE>DROP DATABASE</CODE></A></H3>
+<PRE>
+DROP DATABASE [IF EXISTS] db_name
+</PRE>
+
+<P><CODE>DROP DATABASE</CODE> удаляет все таблицы в базе данных и удаляет
+саму базу данных. Если выполнили <CODE>DROP DATABASE</CODE> на символически
+связанной базе данных, связь и первоначальная база данных будут удалены.
+<STRONG>Будьте ОЧЕНЬ осторожны с этой командой!</STRONG></P>
+
+<P><CODE>DROP DATABASE</CODE> возвращает число файлов, которые были удалены
+из каталога баз данных. Обычно это кратное трем число потому, что каждая
+таблица соответствует файлам <TT>.MYD</TT>, <TT>.MYI</TT> и <TT>.frm</TT>.
+</P>
+
+<P>Команда <CODE>DROP DATABASE</CODE> удаляет из заданного каталога базы
+данных все найденные файлы со следующими расширениями:</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD>.BAK</TD><TD>.DAT</TD><TD>.HSH</TD><TD>.ISD</TD></TR>
+<TR><TD>.ISM</TD><TD>.ISM</TD><TD>.MRG</TD><TD>.MYD</TD></TR>
+<TR><TD>.MYI</TD><TD>.db</TD><TD>.frm</TD></TR></TABLE>
+
+<P>Все подкаталоги, имена которых состоят из 2 цифр (каталоги
+<CODE>RAID</CODE>), также будут удалены.</P>
+
+<P>В MySQL Version 3.22 или позже Вы можете использовать ключевые слова
+<CODE>IF EXISTS</CODE>, чтобы предотвратить ошибку, если база
+данных не существует.</P>
+
+<P><A NAME="IDX1359"></A>Вы можете также удалять базы данных с помощью
+команды <CODE>mysqladmin</CODE>. Подробности в разделе
+"<A HREF="glava12.htm#Client-Side_Scripts">12 Клиентские скрипты и утилиты
+MySQL</A>".</P>
+
+<H3><A NAME="CREATE_TABLE">7.3 Синтаксис <CODE>CREATE TABLE</CODE></A></H3>
+<PRE>
+CREATE [TEMPORARY] TABLE [IF NOT EXISTS] tbl_name [(create_definition,...)]
+[table_options] [select_statement]
+
+create_definition:
+  col_name type [NOT NULL | NULL] [DEFAULT default_value] [AUTO_INCREMENT]
+            [PRIMARY KEY] [reference_definition]
+  or    PRIMARY KEY (index_col_name,...)
+  or    KEY [index_name] (index_col_name,...)
+  or    INDEX [index_name] (index_col_name,...)
+  or    UNIQUE [INDEX] [index_name] (index_col_name,...)
+  or    FULLTEXT [INDEX] [index_name] (index_col_name,...)
+  or    [CONSTRAINT symbol] FOREIGN KEY index_name (index_col_name,...)
+            [reference_definition]
+  or    CHECK (expr)
+
+type:
+        TINYINT[(length)] [UNSIGNED] [ZEROFILL]
+  or    SMALLINT[(length)] [UNSIGNED] [ZEROFILL]
+  or    MEDIUMINT[(length)] [UNSIGNED] [ZEROFILL]
+  or    INT[(length)] [UNSIGNED] [ZEROFILL]
+  or    INTEGER[(length)] [UNSIGNED] [ZEROFILL]
+  or    BIGINT[(length)] [UNSIGNED] [ZEROFILL]
+  or    REAL[(length,decimals)] [UNSIGNED] [ZEROFILL]
+  or    DOUBLE[(length,decimals)] [UNSIGNED] [ZEROFILL]
+  or    FLOAT[(length,decimals)] [UNSIGNED] [ZEROFILL]
+  or    DECIMAL(length,decimals) [UNSIGNED] [ZEROFILL]
+  or    NUMERIC(length,decimals) [UNSIGNED] [ZEROFILL]
+  or    CHAR(length) [BINARY]
+  or    VARCHAR(length) [BINARY]
+  or    DATE
+  or    TIME
+  or    TIMESTAMP
+  or    DATETIME
+  or    TINYBLOB
+  or    BLOB
+  or    MEDIUMBLOB
+  or    LONGBLOB
+  or    TINYTEXT
+  or    TEXT
+  or    MEDIUMTEXT
+  or    LONGTEXT
+  or    ENUM(value1,value2,value3,...)
+  or    SET(value1,value2,value3,...)
+
+index_col_name:
+        col_name [(length)]
+
+reference_definition:
+        REFERENCES tbl_name [(index_col_name,...)]
+                   [MATCH FULL | MATCH PARTIAL]
+                   [ON DELETE reference_option]
+                   [ON UPDATE reference_option]
+
+reference_option:
+        RESTRICT | CASCADE | SET NULL | NO ACTION | SET DEFAULT
+
+table_options:
+        TYPE = {BDB | HEAP | ISAM | InnoDB | MERGE | MYISAM }
+or      AUTO_INCREMENT = #
+or      AVG_ROW_LENGTH = #
+or      CHECKSUM = {0 | 1}
+or      COMMENT = "string"
+or      MAX_ROWS = #
+or      MIN_ROWS = #
+or      PACK_KEYS = {0 | 1}
+or      PASSWORD = "string"
+or      DELAY_KEY_WRITE = {0 | 1}
+or      ROW_FORMAT= { default | dynamic | fixed | compressed }
+or      RAID_TYPE= {1 | STRIPED | RAID0 } RAID_CHUNKS=#  RAID_CHUNKSIZE=#
+or      UNION = (table_name,[table_name...])
+or      DATA DIRECTORY="directory"
+or      INDEX DIRECTORY="directory"
+
+select_statement:
+        [IGNORE | REPLACE] SELECT ...  (Some legal select statement)
+</PRE>
+
+<P><CODE>CREATE TABLE</CODE> создает таблицу с заданным именем в текущей базе
+данных. Правила для допустимых имен таблицы даны в разделе
+"<A HREF="glava03.htm#Legal_names">3.2 Имена баз данных, таблиц, индексов,
+столбцов и псевдонимов</A>". Ошибка происходит, если не имеется никакой
+текущей базы данных, или если таблица уже существует.</P>
+
+<P>В MySQL Version 3.22 или позже имя таблицы может быть определено как
+<CODE>db_name.tbl_name</CODE>. Это работает независимо от того, имеется или
+нет текущая база данных.</P>
+
+<P>В MySQL Version 3.23 или позже Вы можете использовать ключевое слово
+<CODE>TEMPORARY</CODE>, когда Вы создаете таблицу. Временная таблица будет
+автоматически удалена, если подключение завершается. Причем, имя связано с
+подключением. Это означает, что два различных подключения могут оба
+использовать то же самое имя временной таблицы без того, чтобы войти в
+противоречие друг с другом или с существующей таблицей с тем же самым именем.
+Существующая таблица будет скрыта, пока временная таблица не удалена.</P>
+
+<P>В MySQL Version 3.23 или позже Вы можете использовать ключевые слова
+<CODE>IF NOT EXISTS</CODE>, чтобы ошибка не произошла, если таблица уже
+существует. Обратите внимание, что не имеется никакой проверки, что структуры
+таблиц идентичны.</P>
+
+<P>Каждая таблица <CODE>tbl_name</CODE> представляется некоторыми файлами в
+каталоге баз данных. В случае таблиц MyISAM-типа Вы получите:</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Файл</STRONG></TD><TD><STRONG>Назначение</STRONG></TD></TR>
+<TR><TD><CODE>tbl_name.frm</CODE></TD><TD>Определение таблицы (форма)</TD>
+</TR>
+<TR><TD><CODE>tbl_name.MYD</CODE></TD><TD>Данные таблицы</TD></TR>
+<TR><TD><CODE>tbl_name.MYI</CODE></TD><TD>Индекс таблицы</TD></TR></TABLE>
+
+<P>Для получения большего количества информации относительно свойств
+различных типов столбцов обратитесь к разделу
+"<A HREF="glava05.htm#Column_types">5 Типы столбцов</A>":</P>
+
+<UL><LI>Если <CODE>NULL</CODE> или <CODE>NOT NULL</CODE> не определены,
+столбец обрабатывается, как если бы был определен <CODE>NULL</CODE>.
+
+<LI>Целочисленный столбец может иметь дополнительный атрибут
+<CODE>AUTO_INCREMENT</CODE>. Когда Вы вставляете значение <CODE>NULL</CODE>
+(рекомендуется) или <CODE>0</CODE> в столбец с атрибутом
+<CODE>AUTO_INCREMENT</CODE>, столбец будет установлен в значение
+<CODE>value+1</CODE>, где <CODE>value</CODE> представляет собой самое большое
+значение для столбца в настоящее время в данной таблице.
+<CODE>AUTO_INCREMENT</CODE>-последовательности начинаются с <CODE>1</CODE>.
+Если Вы удаляете строку, содержащую максимальное значение для столбца
+<CODE>AUTO_INCREMENT</CODE>, значение будет многократно использоваться для
+таблиц <CODE>ISAM</CODE> или <CODE>BDB</CODE>, но не для таблиц типов
+<CODE>MyISAM</CODE> или <CODE>InnoDB</CODE>. Если Вы удаляете все строки в
+таблице с помощью вызова <CODE>DELETE FROM table_name</CODE> (без
+<CODE>WHERE</CODE>) в режиме <CODE>AUTOCOMMIT</CODE>, последовательность
+начинается сначала для всех типов таблицы. <STRONG>ОБРАТИТЕ ВНИМАНИЕ:
+</STRONG> может иметься только один столбец <CODE>AUTO_INCREMENT</CODE> на
+таблицу, и он должен быть индексирован. MySQL Version 3.23 будет также
+работать правильно, только если столбец auto_increment имеет только
+положительные значения. Вставка отрицательного числа будет расценена как
+вставка очень большого положительного номера. Это выполнено, чтобы избежать
+проблем точности, когда числа переходят от положительного к отрицательному и
+также гарантировать, что случайно не получается столбец
+auto_increment, который содержит 0.
+
+<A NAME="IDX1361"></A><A NAME="IDX1362"></A>Чтобы сделать MySQL совместимым с
+некоторыми прикладными программами ODBC, Вы можете находить последнюю
+вставленную строку следующим запросом:
+<PRE>
+SELECT * FROM tbl_name WHERE auto_col IS NULL
+</PRE>
+
+<LI>Значения <CODE>NULL</CODE> для столбцов <CODE>TIMESTAMP</CODE> будут
+обработаны иначе, чем для других типов столбцов. Вы не можете сохранять
+литеральный <CODE>NULL</CODE> в столбце <CODE>TIMESTAMP</CODE>. Установка
+столбца в <CODE>NULL</CODE> приведет его к текущей (актуальной) дате и
+времени. Поскольку столбцы <CODE>TIMESTAMP</CODE> ведут себя именно так,
+атрибуты <CODE>NULL</CODE> и <CODE>NOT NULL</CODE> не применяются нормальным
+способом и игнорируются, если Вы определяете их. С другой стороны, чтобы
+сделать это проще для MySQL-клиентуры, сервер сообщает, что таким столбцам
+могут быть назначены значения <CODE>NULL</CODE> (это и правда так), даже при
+том, что <CODE>TIMESTAMP</CODE> никогда фактически не будет содержать
+значение <CODE>NULL</CODE>. Вы можете видеть это, когда Вы используете
+<CODE>DESCRIBE tbl_name</CODE>, чтобы получить описание Вашей таблицы.
+Обратите внимание, что установка столбца <CODE>TIMESTAMP</CODE> в
+<CODE>0</CODE> не устанавливает его в <CODE>NULL</CODE>, поскольку
+<CODE>0</CODE> имеющее силу значение <CODE>TIMESTAMP</CODE>.
+
+<LI>Если никакое значение <CODE>DEFAULT</CODE> не определено для столбца,
+MySQL автоматически назначает его. Если столбец может брать как значение
+<CODE>NULL</CODE>, значением по умолчанию будет именно <CODE>NULL</CODE>.
+Если столбец объявлен как <CODE>NOT NULL</CODE>, значение по умолчанию
+зависит от типа столбца:
+
+<UL><LI>Для числовых типов, не объявленных с атрибутом
+<CODE>AUTO_INCREMENT</CODE>, значение по умолчанию <CODE>0</CODE>. Для
+столбцов <CODE>AUTO_INCREMENT</CODE> значением по умолчанию будет следующее
+значение в последовательности.
+
+<LI>Для типов даты и времени, но не для <CODE>TIMESTAMP</CODE>, значением по
+умолчанию будет соответствующее нулевое значение для типа. Для первого в
+таблице столбца <CODE>TIMESTAMP</CODE> значением по умолчанию будет текущая
+(актуальная) дата и время. Подробности в разделе
+"<A HREF="glava05.htm#Date_and_time_types">5.2 Типы Date и Time</A>".
+
+<LI>Для строк, но не для <CODE>ENUM</CODE>, значением по умолчанию является
+пустая строка. Для типа <CODE>ENUM</CODE> первое значение перечисления.</UL>
+
+Значения по умолчанию должны быть константами. Это означает, например, что Вы
+не можете устанавливать значение по умолчанию для столбца даты в виде
+значения функции, типа <CODE>NOW()</CODE> или <CODE>CURRENT_DATE</CODE>.
+
+<LI><CODE>KEY</CODE> представляет собой синоним для <CODE>INDEX</CODE>.
+
+<LI>В MySQL ключ <CODE>UNIQUE</CODE> может иметь только различные значения.
+Ошибка происходит, если Вы пробуете добавлять новую строку с ключом, который
+соответствует существующей строке.
+
+<LI><A NAME="IDX1363"></A><CODE>PRIMARY KEY</CODE> является уникальным
+<CODE>KEY</CODE>, причем все столбцы ключа должны быть определены как
+<CODE>NOT NULL</CODE>. В MySQL такой ключ именован как <CODE>PRIMARY</CODE>.
+Таблица может иметь только один <CODE>PRIMARY KEY</CODE>. Если Вы не имеете
+<CODE>PRIMARY KEY</CODE>, а некоторые прикладные программы просят о
+<CODE>PRIMARY KEY</CODE> в Ваших таблицах, MySQL возвратит первый ключ
+<CODE>UNIQUE</CODE>, который не имеет столбцов <CODE>NULL</CODE>.
+
+<LI><CODE>PRIMARY KEY</CODE> может быть многостолбцовым индексом. Однако, Вы
+не можете создавать такой индекс, использующий атрибут <CODE>PRIMARY
+KEY</CODE> в спецификации столбца. Выполнение этого отметит только один
+столбец как первичный. Вы должны использовать вызов
+<CODE>PRIMARY KEY(index_col_name, ...)</CODE>.
+
+<LI>Если ключи <CODE>PRIMARY</CODE> или <CODE>UNIQUE</CODE> состоят только из
+одного столбца, и он имеет тип integer, Вы можете также обратиться к нему как
+<CODE>_rowid</CODE> (нововведение в Version 3.23.11).
+
+<LI>Если Вы не назначаете имя индексу, будет назначено то же самое имя, какое
+имеет первый <CODE>index_col_name</CODE>, с факультативным суффиксом
+(<CODE>_2</CODE>, <CODE>_3</CODE>, <CODE>...</CODE>): чтобы сделать его
+уникальным. Вы можете видеть индексные имена для таблицы, используя
+<CODE>SHOW INDEX FROM tbl_name</CODE>. Подробности в разделе
+"<A HREF="glava.htm#SHOW">4.5.5 Синтаксис <CODE>SHOW</CODE></A>".
+
+<LI>Только тип таблицы <CODE>MyISAM</CODE> поддерживает индексы на столбцах,
+которые могут иметь значения <CODE>NULL</CODE>. В других случаях Вы должны
+объявить такие столбцы как <CODE>NOT NULL</CODE>.
+
+<LI>С помощью инструкции <CODE>col_name(length)</CODE> Вы можете определять
+индекс, который использует только часть столбца типа <CODE>CHAR</CODE> или
+<CODE>VARCHAR</CODE>. Это может сделать индексный файл намного меньше.
+
+<LI><A NAME="IDX1366"></A><A NAME="IDX1367"></A><A NAME="IDX1368"></A>
+<A NAME="IDX1369"></A>Только тип таблицы <CODE>MyISAM</CODE> поддерживает
+индексы на столбцах типов <CODE>BLOB</CODE> и <CODE>TEXT</CODE>. При
+помещении индекса на столбце <CODE>BLOB</CODE> или <CODE>TEXT</CODE> Вы
+ДОЛЖНЫ всегда определять длину индекса:
+<PRE>
+CREATE TABLE test (blob_col BLOB, index(blob_col(10)));
+</PRE>
+
+<LI>Когда Вы используете <CODE>ORDER BY</CODE> или <CODE>GROUP BY</CODE> со
+столбцом <CODE>TEXT</CODE> или <CODE>BLOB</CODE>, используется только первые
+<CODE>max_sort_length</CODE> байт. Подробности в разделе
+"<A HREF="glava05.htm#BLOB">5.3.2 Типы <CODE>BLOB</CODE> и <CODE>TEXT</CODE>
+</A>".
+
+<LI>В MySQL Version 3.23.23 или позже Вы можете также создавать специальные
+индексы <STRONG>FULLTEXT</STRONG>. Они используются для полнотекстового
+поиска. Только тип таблицы <CODE>MyISAM</CODE> поддерживает индексы
+<CODE>FULLTEXT</CODE>. Они могут быть созданы только из столбцов типов
+<CODE>VARCHAR</CODE> и <CODE>TEXT</CODE>. Индексация всегда выполняется над
+всем столбцом, частичная индексация пока не поддержана. Подробности в разделе
+"<A HREF="glava09.htm#Fulltext_Search">9.4 Полнотекстовый поиск в MySQL</A>".
+
+<LI>Определения <CODE>FOREIGN KEY</CODE>, <CODE>CHECK</CODE> и
+<CODE>REFERENCES</CODE> фактически не делают ничего. Синтаксис для них
+обеспечивается только для совместимости, чтобы сделать проще портирование
+кода из других SQL-серверов и выполнять прикладные программы, которые создают
+таблицы со ссылками. Подробности в разделе
+"<A HREF="glava01.htm#Missing_functions">1.4.4 Функциональные возможности,
+отсутствующие в MySQL</A>".
+
+<LI>Каждый столбец со значением <CODE>NULL</CODE> берет один бит, округляя
+занятое им место до самого близкого байта.
+
+<LI>Максимальная длина записи в байтах может быть вычислена следующим образом:
+<PRE>
+row length = 1+(sum of column lengths)+
+             (number of NULL columns+7)/8+
+             (number of variable-length columns)
+</PRE>
+
+<LI>Опции <CODE>table_options</CODE> и <CODE>SELECT</CODE> выполнены только в
+MySQL Version 3.23 и выше.
+
+<P>Различные типы таблиц:
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD>BDB или Berkeley_db</TD><TD>Транзакционно-безопасные таблицы с
+блокировкой страниц.</TD></TR>
+<TR><TD>HEAP</TD><TD>Данные для этих таблиц сохранены только в памяти.</TD>
+</TR>
+<TR><TD>ISAM</TD><TD>Первоначальный драйвер таблицы.</TD></TR>
+<TR><TD>InnoDB</TD><TD>Транзакционно-безопасные таблицы с блокировкой строки.
+</TD></TR>
+<TR><TD>MERGE</TD><TD>Совокупность таблиц MyISAM, используемых как одна.</TD>
+</TR>
+<TR><TD>MyISAM</TD><TD>Новый двоично-независимый драйвер таблицы, который
+заменяет формат ISAM.</TD></TR></TABLE>
+
+Если тип таблицы определен, и этот специфический тип недоступен, MySQL
+выберет тип таблицы самый близкий к тому, который Вы определили. Например,
+если определен <CODE>TYPE=BDB</CODE>, но этот дистрибутив MySQL не
+поддерживает таблицы типа <CODE>BDB</CODE>, таблица будет создана как
+<CODE>MyISAM</CODE>. Другие параметры таблицы используются, чтобы
+оптимизировать поведение таблицы. В большинстве случаев, Вы не должны их
+определять. Параметры всегда работают для всех типов таблицы, если не
+оговорено обратное явно.
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><CODE>AUTO_INCREMENT</CODE></TD><TD>Установить следующее значение
+auto_increment для Вашей таблицы (только MyISAM).</TD></TR>
+<TR><TD><CODE>AVG_ROW_LENGTH</CODE></TD><TD>Приближенное значение средней
+длины строки для Вашей таблицы. Вы должны установить это только для больших
+таблиц с записями переменного размера.</TD></TR>
+<TR><TD><CODE>CHECKSUM</CODE></TD><TD>Установите это в 1, если Вы хотите,
+чтобы MySQL поддержал контрольную сумму для всех строк (делает таблицу
+немного медленнее, чтобы модифицировать, но делает проще поиск повреждений
+таблицы, только для MyISAM).</TD></TR>
+<TR><TD><CODE>COMMENT</CODE></TD><TD>60-символьный комментарий к таблице.
+</TD></TR>
+<TR><TD><CODE>MAX_ROWS</CODE></TD><TD>Максимальное число строк, которое Вы
+планируете сохранять в таблице.</TD></TR>
+<TR><TD><CODE>MIN_ROWS</CODE></TD><TD>Минимальное число строк, которое Вы
+планируете сохранять в таблице.</TD></TR>
+<TR><TD><CODE>PACK_KEYS</CODE></TD><TD>Установите это в 1, если Вы хотите
+иметь меньший индекс. Это обычно делает модификации медленнее, зато чтения
+быстрее (только для MyISAM и ISAM).</TD></TR>
+<TR><TD><CODE>PASSWORD</CODE></TD><TD>Зашифровать файл <CODE>.frm</CODE>
+паролем. Эта опция не делает ничего в стандартной версии MySQL.</TD></TR>
+<TR><TD><CODE>DELAY_KEY_WRITE</CODE></TD><TD>Установите это в 1, если Вы
+хотите задержать обновление ключей таблицы до ее закрытия (только MyISAM).
+</TD></TR>
+<TR><TD><CODE>ROW_FORMAT</CODE></TD><TD>Определяет, как строки должны быть
+сохранены. В настоящее время Вы можете использовать только опции DYNAMIC и
+STATIC для таблиц типа MyISAM.</TD></TR></TABLE>
+
+Когда Вы применяете таблицу <CODE>MyISAM</CODE>, MySQL использует результат
+<CODE>max_rows*avg_row_length</CODE>, чтобы решить насколько большой будет
+возникающая в результате таблица. Если Вы не определяете любые из
+вышеупомянутых параметров, максимальный размер для таблицы будет 4G (или 2G,
+если Ваша операционная система поддерживают только таблицы 2G). Причина для
+этого: надо уменьшить размеры указателя, чтобы сделать индекс меньше и
+быстрее, если Вы действительно не нуждаетесь в больших файлах.
+
+Если Вы не используете <CODE>PACK_KEYS</CODE>, по умолчанию будут упакованы
+только строки, но не числа. Если Вы используете <CODE>PACK_KEYS=1</CODE>,
+числа будут упакованы также. При упаковке двоичных цифровых ключей MySQL
+использует префиксное сжатие. Это означает, что Вы получите большую пользу от
+этого только, если Вы имеете много чисел, которые являются теми же самыми.
+Префиксное сжатие означает, что каждый ключ нуждается в одном байте
+дополнительного пространства, чтобы указать, сколько байтов предыдущего ключа
+совпадают с текущим. Обратите внимание, что указатель на строку сохранен в
+порядке со старшим первым байтом непосредственно после ключа, чтобы улучшить
+сжатие. Это означает, что, если Вы имеете много равных ключей в строке, все
+последующие те же самые ключи будет обычно только брать 2 байта (включая
+указатель на строку). Сравните это с обычным случаем, где следующие ключи
+будут брать storage_size_for_key+pointer_size (обычно 4) байта. С другой
+стороны, если все ключи полностью различны, Вы будете терять 1 байт на ключ,
+если он не может иметь значения <CODE>NULL</CODE> (в этом случае, упакованная
+длина ключа будет сохранена в том же самом байте, который используется, чтобы
+отметить, что этот ключ имеет значение <CODE>NULL</CODE>).
+
+<LI>Если Вы определяете <CODE>SELECT</CODE> после инструкции
+<CODE>CREATE</CODE>, MySQL создаст новые поля для всех элементов в
+<CODE>SELECT</CODE>. Например:
+<PRE>
+mysql&#62; CREATE TABLE test (a int not null auto_increment,
+           primary key (a), key(b))
+           TYPE=MyISAM SELECT b,c from test2;
+</PRE>
+
+Это создаст таблицу типа <CODE>MyISAM</CODE> с тремя столбцами: a, b и c.
+Обратите внимание, что столбцы из инструкции <CODE>SELECT</CODE> будут
+добавлены к правой стороне таблицы. Пример:
+<PRE>
+mysql&#62; select * from foo;
++---+
+| n |
++---+
+| 1 |
++---+
+
+mysql&#62; create table bar (m int) select n from foo;
+Query OK, 1 row affected (0.02 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql&#62; select * from bar;
++------+---+
+| m    | n |
++------+---+
+| NULL | 1 |
++------+---+
+1 row in set (0.00 sec)
+</PRE>
+
+Для каждой строки в таблице <CODE>foo</CODE>, строка будет вставлена в
+область <CODE>bar</CODE> со значениями из <CODE>foo</CODE> и значениями по
+умолчанию для новых столбцов.
+
+<CODE>CREATE TABLE ... SELECT</CODE> автоматически не будет создавать никаких
+индексов для Вас. Это должно быть выполнено преднамеренно, чтобы сделать
+команду настолько гибкой, насколько это вообще возможно. Если Вы хотите иметь
+индексы в созданной таблице, Вы должны определить их перед инструкцией
+<CODE>SELECT</CODE>:
+<PRE>
+mysql&#62; create table bar (unique (n)) select n from foo;
+</PRE>
+
+Если происходят ошибки при копировании данных в таблицу, они будут
+автоматически удалены. Чтобы гарантировать, что файл регистрации модификаций
+может использоваться, чтобы освежить первоначальные таблицы, MySQL не будет
+позволять параллельные вставки в течение выполнения <CODE>CREATE
+TABLE .... SELECT</CODE>.
+
+<LI>Опция <CODE>RAID_TYPE</CODE> поможет Вам обойти 2G/4G ограничение для
+файла данных MyISAM (но не индексного файла) на операционных системах,
+которые не поддерживают большие файлы. Вы можете получать также большее
+быстродействие, помещая каталоги <CODE>RAID</CODE> на различных физических
+дисках. <CODE>RAID_TYPE</CODE> будет работать с любой OS, если Вы
+сконфигурировали MySQL с опцией <CODE>--with-raid</CODE>. Пока единственный
+позволенный <CODE>RAID_TYPE</CODE> называется <CODE>STRIPED</CODE>
+(псевдонимы для него: <CODE>1</CODE> и <CODE>RAID0</CODE>). Если Вы
+определяете <CODE>RAID_TYPE=STRIPED</CODE> для таблицы <CODE>MyISAM</CODE>,
+<CODE>MyISAM</CODE> создаст каталоги <CODE>RAID_CHUNKS</CODE> с именами 00,
+01, 02 в каталоге базы данных. В каждом из этих каталогов <CODE>MyISAM</CODE>
+создаст файл <CODE>table_name.MYD</CODE>. При записи данных в файл данных,
+драйвер <CODE>RAID</CODE> отобразит первые <CODE>RAID_CHUNKSIZE</CODE>*1024
+байт на первый файл, второй кусок длиной в <CODE>RAID_CHUNKSIZE</CODE>*1024
+байт на второй и так далее.
+
+<LI><CODE>UNION</CODE> используется, когда Вы хотите использовать
+совокупность идентичных таблиц как одну целую. Это работает только с
+таблицами типа MERGE.
+
+Вы должны иметь привилегии <CODE>SELECT</CODE>, <CODE>UPDATE</CODE> и
+<CODE>DELETE</CODE> на таблицах, которые Вы отображаете к таблице
+<CODE>MERGE</CODE>. Все отображенные таблицы должны быть в той же самой базе
+данных, что и таблица <CODE>MERGE</CODE>.
+
+<LI>В созданной таблице ключ <CODE>PRIMARY</CODE> будет помещен в начало, за
+ним расположатся ключи <CODE>UNIQUE</CODE>, а за ними нормальные ключи. Это
+помогает оптимизатору MySQL располагать по приоритетам, который ключ
+использовать, а также более быстро обнаруживает дублированные ключи
+<CODE>UNIQUE</CODE>.
+
+<LI>Используя <CODE>DATA DIRECTORY="directory"</CODE> или <CODE>INDEX
+DIRECTORY="directory"</CODE> Вы можете определять, где драйвер таблицы должен
+поместить файлы таблицы и индекса. Это работает только для таблиц
+<CODE>MyISAM</CODE> в <CODE>MySQL</CODE> 4.0, когда Вы не используете опцию
+<CODE>--skip-symlink</CODE>.</UL>
+
+<H4><A NAME="Silent_column_changes">7.3.1
+Тихие изменения спецификации столбца</A></H4>
+<P>В некоторых случаях MySQL тихо изменяет спецификацию столбца, заданную в
+инструкции <CODE>CREATE TABLE</CODE>. Это может также происходить с
+<CODE>ALTER TABLE</CODE>:</P>
+
+<UL><LI><CODE>VARCHAR</CODE>-столбцы с длиной меньше, чем четыре, будут
+изменены на <CODE>CHAR</CODE>.
+
+<LI>Если любой столбец в таблице имеет переменную длину, вся строка будет в
+результате переменной длины. Следовательно, если таблица содержит любые
+столбцы переменной длины (<CODE>VARCHAR</CODE>, <CODE>TEXT</CODE> или
+<CODE>BLOB</CODE>), все столбцы <CODE>CHAR</CODE> длиной более, чем три
+символа, будут изменены на <CODE>VARCHAR</CODE>. В MySQL <CODE>VARCHAR</CODE>
+всего лишь иной способ хранить символы. MySQL выполняет это преобразование
+потому, что оно экономит место и делает операции с таблицей быстрее.
+
+<LI><CODE>TIMESTAMP</CODE> должен быть четный и в диапазоне от 2 до 14. Если
+Вы определяете 0 или больше, чем 14, размер принудительно выставится в 14.
+Нечетно-оцененные размеры в диапазоне от 1 до 13 принудительно выставятся в
+следующее более высокое четное число.
+
+<LI>Вы не можете сохранять литеральный <CODE>NULL</CODE> в столбце
+<CODE>TIMESTAMP</CODE>. Установка его в <CODE>NULL</CODE> реально
+устанавливает его к текущей (актуальной) дате и времени. Потому, что столбцы
+<CODE>TIMESTAMP</CODE> ведут себя именно так, атрибуты <CODE>NULL</CODE> и
+<CODE>NOT NULL</CODE> не применяются нормальным способом и игнорируются, если
+Вы определяете их. <CODE>DESCRIBE tbl_name</CODE> всегда сообщает, что
+столбцу <CODE>TIMESTAMP</CODE> может быть назначено значение
+<CODE>NULL</CODE>.
+
+<LI>MySQL отображает некоторые типы столбца, используемые другими
+SQL-серверами баз данных к типам MySQL. Подробности в разделе
+"<A HREF="glava05.htm#Other-vendor_column_types">5.5 Использование типов
+столбцов из других баз данных</A>".</UL>
+
+<P>Если Вы хотите видеть, использовал или нет MySQL столбец не того типа,
+какой Вы определили, выдайте инструкцию <CODE>DESCRIBE tbl_name</CODE> после
+создания или изменения Вашей таблицы.</P>
+
+<P><A NAME="IDX1371"></A>Некоторые другие изменения типа столбца могут
+происходить, если Вы сжимаете таблицу, используя <CODE>myisampack</CODE>.
+
+<H3><A NAME="ALTER_TABLE">7.4 Синтаксис <CODE>ALTER TABLE</CODE></A></H3>
+<PRE>
+ALTER [IGNORE] TABLE tbl_name alter_spec [, alter_spec ...]
+
+alter_specification:
+        ADD [COLUMN] create_definition [FIRST | AFTER column_name ]
+        ADD [COLUMN] (create_definition, create_definition,...)
+        ADD INDEX [index_name] (index_col_name,...)
+        ADD PRIMARY KEY (index_col_name,...)
+        ADD UNIQUE [index_name] (index_col_name,...)
+        ADD FULLTEXT [index_name] (index_col_name,...)
+        ADD [CONSTRAINT symbol] FOREIGN KEY index_name
+            (index_col_name,...)
+            [reference_definition]
+        ALTER [COLUMN] col_name {SET DEFAULT literal|DROP DEFAULT}
+        CHANGE [COLUMN] old_col_name create_definition
+        MODIFY [COLUMN] create_definition
+        DROP [COLUMN] col_name
+        DROP PRIMARY KEY
+        DROP INDEX index_name
+        DISABLE KEYS
+        ENABLE KEYS
+        RENAME [TO] new_tbl_name
+        ORDER BY col
+        table_options
+</PRE>
+
+<P><CODE>ALTER TABLE</CODE> позволяет Вам изменять структуру существующей
+таблицы. Например, Вы можете добавлять или удалять столбцы, создавать или
+уничтожать индексы, изменять тип существующих столбцов, переименовывать
+столбцы или непосредственно таблицу. Вы можете также изменять комментарий для
+таблицы и тип таблицы. Подробности в разделе
+"<A HREF="#CREATE_TABLE">7.3 Синтаксис <CODE>CREATE TABLE</CODE>
+</A>".</P>
+
+<P>Если Вы используете <CODE>ALTER TABLE</CODE>, чтобы изменить спецификацию
+столбца, но <CODE>DESCRIBE tbl_name</CODE> указывает, что Ваш столбец не был
+изменен, возможно, что MySQL игнорировал Вашу модификацию по одной из причин,
+описанных в разделе "<A HREF="#Silent_column_changes">7.3.1 Тихие
+изменения спецификации столбца</A>". Например, если Вы пробуете изменять
+столбец <CODE>VARCHAR</CODE> на <CODE>CHAR</CODE>, MySQL будет все же
+использовать именно <CODE>VARCHAR</CODE>, если таблица содержит другие
+столбцы переменной длины.</P>
+
+<P><CODE>ALTER TABLE</CODE> работает, делая временную копию первоначальной
+таблицы. Перенастройка выполняется на копии, затем первоначальная таблица
+будет удалена, а новая переименована в старую. Это выполнено таким способом,
+чтобы все модификации были автоматически переназначены к новой таблице. В то
+время, как выполняется <CODE>ALTER TABLE</CODE>, первоначальная таблица
+читаема другой клиентурой. Модификации и записи остановлены, пока новая
+таблица не будет готова.</P>
+
+<P>Обратите внимание, что, если Вы используете любую другую опцию
+<CODE>ALTER TABLE</CODE>, чем <CODE>RENAME</CODE>, MySQL будет всегда
+создавать временную таблицу, даже если данные не должны быть строго
+скопированы (подобно тому, когда Вы изменяете имя столбца). Авторы планируют
+исправить это в будущем, но поскольку <CODE>ALTER TABLE</CODE> вызывается
+относительно редко, это не имеет высокого приоритета в TODO.</P>
+
+<UL><LI>Чтобы использовать <CODE>ALTER TABLE</CODE>, Вы должны иметь
+привилегии <STRONG>ALTER</STRONG>, <STRONG>INSERT</STRONG> и
+<STRONG>CREATE</STRONG> на таблице.
+
+<LI><CODE>IGNORE</CODE> представляет собой MySQL-расширение ANSI SQL92. Это
+управляет тем, как работает <CODE>ALTER TABLE</CODE>, если имеются дубликаты
+на уникальных ключах в новой таблице. Если <CODE>IGNORE</CODE> не определен,
+копия прервана и прокручена обратно. Если <CODE>IGNORE</CODE> определен, то
+для строк с дубликатами на уникальном ключе используется только первая
+строка, другие удалены.
+
+<LI>Вы можете выдавать несколько команд <CODE>ADD</CODE>, <CODE>ALTER</CODE>,
+<CODE>DROP</CODE> и <CODE>CHANGE</CODE> в одной инструкции <CODE>ALTER
+TABLE</CODE>. Это MySQL-расширение ANSI SQL92, который позволяет только одну
+команду на инструкцию <CODE>ALTER TABLE</CODE>.
+
+<LI><CODE>CHANGE col_name</CODE>, <CODE>DROP col_name</CODE> и <CODE>DROP
+INDEX</CODE> тоже MySQL-расширения ANSI SQL92.
+
+<LI><CODE>MODIFY</CODE> представляет собой Oracle-расширение <CODE>ALTER
+TABLE</CODE>.
+
+<LI>Факультативное слово <CODE>COLUMN</CODE> реально не работает и может
+быть свободно пропущено.
+
+<LI>Если Вы используете <CODE>ALTER TABLE tbl_name RENAME TO new_name</CODE>
+без любых других параметров, MySQL просто переименовывает файлы, которые
+соответствуют таблице <CODE>tbl_name</CODE>. Нет никакой потребности
+создавать временную таблицу. Подробности в разделе
+"<A HREF="#RENAME_TABLE">7.5 Синтаксис <CODE>RENAME TABLE</CODE>
+</A>".
+
+<LI>Начиная с <STRONG>MySQL 4.0</STRONG> вышеупомянутое свойство может быть
+активизировано явно. <CODE>ALTER TABLE ... DISABLE KEYS</CODE> предписывает
+прекратить модифицировать неуникальные индексы для таблиц
+<CODE>MyISAM</CODE>. <CODE>ALTER TABLE ... ENABLE KEYS</CODE> затем должен
+использоваться, чтобы освежить отсутствующие индексы. MySQL делает это
+специальным алгоритмом, который намного быстрее, чем вставка ключей один за
+другим, блокировка обработки ключей может давать значительное ускорение
+работы системы на оптовых вставках.
+
+<LI>Предложение <CODE>create_definition</CODE> используют тот же самый
+синтаксис для <CODE>ADD</CODE> и <CODE>CHANGE</CODE>, что и <CODE>CREATE
+TABLE</CODE>. Обратите внимание, что этот синтаксис включает имя столбца, а
+не только тип столбца. Подробности в разделе
+"<A HREF="#CREATE_TABLE">7.3 Синтаксис <CODE>CREATE TABLE</CODE>
+</A>".
+
+<LI>Вы можете переименовывать столбец, используя <CODE>CHANGE old_col_name
+create_definition</CODE>. Чтобы сделать так, определите старые и новые
+имена столбца и тип, который столбец в настоящее время имеет. Например, чтобы
+переименовать столбец типа <CODE>INTEGER</CODE> из <CODE>a</CODE> в
+<CODE>b</CODE>, Вы можете сделать:
+<PRE>
+mysql&#62; ALTER TABLE t1 CHANGE a b INTEGER;
+</PRE>
+
+Если Вы хотите изменять тип столбца, но не имя, синтаксис <CODE>CHANGE</CODE>
+все еще требует имен двух столбцов, даже если это тот же самый столбец:
+<PRE>
+mysql&#62; ALTER TABLE t1 CHANGE b b BIGINT NOT NULL;
+</PRE>
+
+Однако, начиная с MySQL Version 3.22.16a, Вы можете также использовать
+<CODE>MODIFY</CODE>, чтобы изменить тип столбца без переименования:
+<PRE>
+mysql&#62; ALTER TABLE t1 MODIFY b BIGINT NOT NULL;
+</PRE>
+
+<LI>Если Вы используете <CODE>CHANGE</CODE> или <CODE>MODIFY</CODE>, чтобы
+сократить столбец, для которого индекс существует как часть столбца
+(например, если Вы имеете индекс на первых 10 символах столбца
+<CODE>VARCHAR</CODE>), Вы не можете делать столбец короче, чем число
+символов, которые индексированы.
+
+<LI>Когда Вы изменяете тип столбца, используя <CODE>CHANGE</CODE> или
+<CODE>MODIFY</CODE>, MySQL пробует преобразовывать данные к новому типу.
+
+<LI>В MySQL Version 3.22 или позже Вы можете использовать
+<CODE>FIRST</CODE> или <CODE>ADD ... AFTER col_name</CODE>, чтобы добавить
+столбец в специфической позиции внутри строки таблиц. Значение по умолчанию
+должно добавить столбец в последнюю позицию.
+
+<A NAME="IDX1373"></A><LI><CODE>ALTER COLUMN</CODE> определяет новое значение
+по умолчанию для столбца или удаляет старое значение по умолчанию. Если
+старое значение по умолчанию удалено, и столбец может быть <CODE>NULL</CODE>,
+новое значение по умолчанию будет <CODE>NULL</CODE>. Если столбец не может
+быть <CODE>NULL</CODE>, MySQL назначает значение по умолчанию, как описано в
+разделе "<A HREF="#CREATE_TABLE">7.3 Синтаксис <CODE>CREATE TABLE
+</CODE></A>".
+
+<A NAME="IDX1374"></A><LI><CODE>DROP INDEX</CODE> удаляет индекс. Это
+расширение MySQL для ANSI SQL92. Подробности в разделе
+"<A HREF="#DROP_INDEX">7.8 Синтаксис <CODE>DROP INDEX</CODE></A>".
+
+<LI>Если столбцы удалены из таблицы, столбцы будут также удалены из любого
+индекса, частью которого они являются. Если все столбцы, которые составляют
+индекс, удалены, то будет удален и сам индекс.
+
+<LI>Если таблица содержит только один столбец, он не может быть удален.
+
+<A NAME="IDX1375"></A><LI><CODE>DROP PRIMARY KEY</CODE> удаляет первичный
+индекс. Если такой индекс не существует, это удаляет первый
+<CODE>UNIQUE</CODE>-индекс в таблице (MySQL отмечает первый ключ
+<CODE>UNIQUE</CODE> как <CODE>PRIMARY KEY</CODE>, если никакой <CODE>PRIMARY
+KEY</CODE> не был определен явно).
+
+<A NAME="IDX1376"></A><A NAME="IDX1377"></A>Если Вы добавляете <CODE>UNIQUE
+INDEX</CODE> или <CODE>PRIMARY KEY</CODE> к таблице, он будет сохранен перед
+любым не-<CODE>UNIQUE</CODE> индексом так, чтобы MySQL мог обнаружить двойные
+ключи как можно раньше.
+
+<A NAME="IDX1378"></A><LI><CODE>ORDER BY</CODE> позволяет Вам создавать новую
+таблицу со строками в специфическом порядке. Обратите внимание, что таблица
+не будет оставаться в этом порядке после вставок и удалений. В некоторых
+случаях это может сделать сортировку проще для MySQL, если таблица сделана
+так, как Вы желаете упорядочить ее позже. Эта опция главным образом полезна,
+когда Вы знаете, что Вы обычно собираетесь сделать запрос строк в некотором
+порядке. Используя эту опцию после больших изменений для таблицы, Вы можете
+получить более высокую эффективность.
+
+<A NAME="IDX1379"></A><LI>Если Вы используете <CODE>ALTER TABLE</CODE> на
+таблице <CODE>MyISAM</CODE>, все неуникальные индексы будут созданы в
+отдельном пакете (подобно тому, как это происходит в <CODE>REPAIR</CODE>).
+Это ускорит <CODE>ALTER TABLE</CODE>, когда Вы имеете много индексов.</UL>
+
+<P>Имеется пример, который показывает, некоторые из способов применения
+<CODE>ALTER TABLE</CODE>. Мы начинаем с таблицы <CODE>t1</CODE>, которая
+создана как показано ниже:</P>
+<PRE>
+mysql&#62; CREATE TABLE t1 (a INTEGER,b CHAR(10));
+</PRE>
+
+<P>Чтобы переименовывать таблицу из <CODE>t1</CODE> в <CODE>t2</CODE>, надо:
+</P>
+<PRE>
+mysql&#62; ALTER TABLE t1 RENAME t2;
+</PRE>
+
+<P>Чтобы изменить столбец <CODE>a</CODE> с типа <CODE>INTEGER</CODE> на тип
+<CODE>TINYINT NOT NULL</CODE> (имя оставим прежнее), и столбец <CODE>b</CODE>
+переделать с типа <CODE>CHAR(10)</CODE> на <CODE>CHAR(20)</CODE> с
+одновременным переименованием <CODE>b</CODE> в <CODE>c</CODE>, надо сделать:
+</P>
+<PRE>
+mysql&#62; ALTER TABLE t2 MODIFY a TINYINT NOT NULL, CHANGE b c CHAR(20);
+</PRE>
+
+<P>Чтобы добавить новый столбец типа <CODE>TIMESTAMP</CODE> с именем
+<CODE>d</CODE>, надо сделать:</P>
+<PRE>
+mysql&#62; ALTER TABLE t2 ADD d TIMESTAMP;
+</PRE>
+
+<P>Чтобы добавить индекс на столбце <CODE>d</CODE>, и сделать столбец
+<CODE>a</CODE> первичным ключом, надо:</P>
+<PRE>
+mysql&#62; ALTER TABLE t2 ADD INDEX (d), ADD PRIMARY KEY (a);
+</PRE>
+
+<P>Чтобы удалить столбец <CODE>c</CODE>:</P>
+<PRE>
+mysql&#62; ALTER TABLE t2 DROP COLUMN c;
+</PRE>
+
+<P>Чтобы добавить новый целочисленный столбец <CODE>c</CODE> с поддержкой
+<CODE>AUTO_INCREMENT</CODE>, надо:</P>
+<PRE>
+mysql&#62; ALTER TABLE t2 ADD c INT UNSIGNED NOT NULL AUTO_INCREMENT,
+           ADD INDEX (c);
+</PRE>
+
+<P>Обратите внимание, что мы индексировали <CODE>c</CODE> потому, что столбец
+<CODE>AUTO_INCREMENT</CODE> должен быть индексирован, а также мы объявляем
+<CODE>c</CODE> как <CODE>NOT NULL</CODE> потому, что индексированные столбцы
+не могут быть <CODE>NULL</CODE>.</P>
+
+<P>Когда Вы добавляете столбец <CODE>AUTO_INCREMENT</CODE>, значения столбца
+будут заполнены числами последовательности для Вас автоматически. Вы можете
+устанавливать первый номер последовательности, выполняя <CODE>SET
+INSERT_ID=#</CODE> перед <CODE>ALTER TABLE</CODE> или используя опцию
+<CODE>AUTO_INCREMENT=#</CODE>.</P>
+
+<P>С таблицами MyISAM, если Вы не изменяете столбец на
+<CODE>AUTO_INCREMENT</CODE>, номер последовательности не будут изменен. Если
+Вы удаляете столбец с поддержкой <CODE>AUTO_INCREMENT</CODE>, а затем
+добавляете другой с <CODE>AUTO_INCREMENT</CODE>, числа снова начнутся с 1.
+</P>
+
+<P>Подробности в разделе "<A HREF="glava11.htm#ALTER_TABLE_problems">11.6.1
+Проблемы с <CODE>ALTER TABLE</CODE></A>".</P>
+
+<H3><A NAME="RENAME_TABLE">7.5 Синтаксис <CODE>RENAME TABLE</CODE></A></H3>
+<PRE>
+RENAME TABLE tbl_name TO new_table_name[, tbl_name2 TO new_table_name2,...]
+</PRE>
+
+<P>Переименование выполняется атомно, что означает, что никакой другой поток
+не может обращаться к любой из таблиц в то время, как выполняется
+переименование. Это делает возможным заменить таблицу на пустую:</P>
+<PRE>
+CREATE TABLE new_table (...);
+RENAME TABLE old_table TO backup_table, new_table TO old_table;
+</PRE>
+
+<P>Переименование выполняется слева направо, это означает, что, если Вы
+хотите менять два имени таблицы, Вы должны сделать так:</P>
+<PRE>
+RENAME TABLE old_table    TO backup_table,
+             new_table    TO old_table,
+             backup_table TO new_table;
+</PRE>
+
+<P>Таблицы можно не только переименовывать, но еще и перемещать между разными
+базами данных. Например:</P>
+<PRE>
+RENAME TABLE current_database.table_name TO other_database.table_name;
+</PRE>
+
+<P>Когда Вы выполняете <CODE>RENAME</CODE>, Вы не можете иметь блокированные
+таблицы или активные транзакции. Вы должны также иметь привилегии
+<CODE>ALTER</CODE> и <CODE>DROP</CODE> на первоначальной таблице и привилегии
+<CODE>CREATE</CODE> и <CODE>INSERT</CODE> на новой таблице.</P>
+
+<P>Если MySQL сталкивается с любыми ошибками в процессе переименования, он
+будет делать обратное переименование для всех переименованных таблиц, чтобы
+вернуть все обратно в первоначальное состояние.</P>
+
+<H3><A NAME="DROP_TABLE">7.6 Синтаксис <CODE>DROP TABLE</CODE></A></H3>
+<PRE>
+DROP TABLE [IF EXISTS] tbl_name [, tbl_name,...] [RESTRICT | CASCADE]
+</PRE>
+
+<P><CODE>DROP TABLE</CODE> удаляет одну или большее количество таблиц. Все
+данные таблицы и определение таблицы будут <EM>удалены</EM>, так что будьте
+<STRONG>внимательны</STRONG> с этой командой!</P>
+
+<P>В MySQL Version 3.22 или позже Вы можете использовать ключевые слова
+<CODE>IF EXISTS</CODE>, чтобы предотвратить ошибку для таблиц, которых нет.
+</P>
+
+<P><CODE>RESTRICT</CODE> и <CODE>CASCADE</CODE> ничего не делают и нужны лишь
+для совместимости с другими СУБД.</P>
+
+<P><STRONG>ОБРАТИТЕ ВНИМАНИЕ</STRONG>: <CODE>DROP TABLE</CODE> не
+транзакционно-безопасна и автоматически завершает любые активные транзакции.
+</P>
+
+<H3><A NAME="CREATE_INDEX">7.7 Синтаксис <CODE>CREATE INDEX</CODE></A></H3>
+<PRE>
+CREATE [UNIQUE|FULLTEXT] INDEX index_name ON tbl_name (col_name[(length)],... )
+</PRE>
+
+<P>Инструкция <CODE>CREATE INDEX</CODE> ничего не делает до Version 3.22. В
+Version 3.22 или позже <CODE>CREATE INDEX</CODE> она отображена к инструкции
+<CODE>ALTER TABLE</CODE>, чтобы создать индексы. Подробности в разделе
+"<A HREF="#ALTER_TABLE">7.4 Синтаксис <CODE>ALTER TABLE</CODE>
+</A>".</P>
+
+<P>Обычно Вы создаете все индексы на таблице во время непосредственного
+создания таблицы с помощью вызова <CODE>CREATE TABLE</CODE>. Подробности в
+разделе "<A HREF="#CREATE_TABLE">7.3 Синтаксис <CODE>CREATE TABLE
+</CODE></A>". <CODE>CREATE INDEX</CODE> позволяет Вам добавлять индексы к
+существующим в базе таблицам.</P>
+
+<P>Список столбцов в форме <CODE>(col1,col2,...)</CODE> создает индекс по
+многим столбцам. Индексные значения будут сформированы, связывая значения из
+заданных для индексации столбцов.</P>
+
+<P>Для столбцов <CODE>CHAR</CODE> и <CODE>VARCHAR</CODE> индексы могут быть
+созданы с использованием только части столбца, применяя синтаксис
+<CODE>col_name(length)</CODE>. На столбцах <CODE>BLOB</CODE> и
+<CODE>TEXT</CODE> длина требуется обязательно. Инструкция, показанная ниже,
+создает индекс с использованием первых 10 символов из столбца
+<CODE>name</CODE>:</P>
+<PRE>
+mysql&#62; CREATE INDEX part_of_name ON customer (name(10));
+</PRE>
+
+<P>Поскольку большинство имен обычно отличается по первым 10 символам, этот
+индекс не должен быть намного медленнее, чем индекс, созданный из всего
+столбца <CODE>name</CODE>. Также использование частичных столбцов для
+индексов может делать индексный файл намного меньше, что сохранит много
+дискового пространства и ускорит операции <CODE>INSERT</CODE>!</P>
+
+<P>Обратите внимание, что Вы можете добавлять индекс на столбце, который
+может иметь значения <CODE>NULL</CODE>, и на столбцах типов
+<CODE>BLOB</CODE> и <CODE>TEXT</CODE> только, если Вы используете
+MySQL Version 3.23.2 или более новую и применяете тип таблицы
+<CODE>MyISAM</CODE>.</P>
+
+<P>Индексы <CODE>FULLTEXT</CODE> могут индексировать только столбцы типов
+<CODE>VARCHAR</CODE> и <CODE>TEXT</CODE> в таблицах типа <CODE>MyISAM</CODE>.
+Индексы <CODE>FULLTEXT</CODE> доступны в MySQL Version 3.23.23 и более новых.
+Подробности в разделе "<A HREF="glava09.htm#Fulltext_Search">9.4
+Полнотекстовый поиск в MySQL</A>".</P>
+
+<H3><A NAME="DROP_INDEX">7.8 Синтаксис <CODE>DROP INDEX</CODE></A></H3>
+<PRE>
+DROP INDEX index_name ON tbl_name
+</PRE>
+
+<P><CODE>DROP INDEX</CODE> удаляет индекс с именем <CODE>index_name</CODE> из
+таблицы <CODE>tbl_name</CODE>. <CODE>DROP INDEX</CODE> ничего не делает до
+версии Version 3.22, а начиная с нее, этот вызов перенацелен на
+соответствующий вызов <CODE>ALTER TABLE</CODE> для удаления индекса.
+Подробности в разделе "<A HREF="#ALTER_TABLE">7.4
+Синтаксис <CODE>ALTER TABLE</CODE></A>".</P>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

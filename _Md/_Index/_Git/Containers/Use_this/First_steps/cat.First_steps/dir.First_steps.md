@@ -1,0 +1,41 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Use_this\First_steps\cat.First_steps\dir.First_steps.md">First_steps</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Use_this\First_steps\7_советов_по.md">7_советов_по.md</a>
+        - *# [Как стать Git-мастером: 7 советов по повышению производительности](https://nuancesprog.ru/p/5142/)
+        - *## Автозаполнение команд Git в терминале
+        - *## Локальное удаление ветки в удаленном репозитории
+        - *## Force Push без рисков
+        - *## Отмена изменений в Git
+        - *## Сохранение незафиксированных изменений с помощью stash
+        - *## Выборочная фиксация изменений из файла
+        - *## Обработка больших файлов с помощью Git LFS
+        - *## Бонусный совет: отладка с помощью Git
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Use_this\First_steps\backcommit.md">backcommit.md</a>
+        - *# [Как вернуться (откатиться) к более раннему коммиту?](https://ru.stackoverflow.com/questions/431520/%D0%9A%D0%B0%D0%BA-%D0%B2%D0%B5%D1%80%D0%BD%D1%83%D1%82%D1%8C%D1%81%D1%8F-%D0%BE%D1%82%D0%BA%D0%B0%D1%82%D0%B8%D1%82%D1%8C%D1%81%D1%8F-%D0%BA-%D0%B1%D0%BE%D0%BB%D0%B5%D0%B5-%D1%80%D0%B0%D0%BD%D0%BD%D0%B5%D0%BC%D1%83-%D0%BA%D0%BE%D0%BC%D0%BC%D0%B8%D1%82%D1%83)
+        - *## 1. Временно переключиться на другой коммит
+        - *## 2. Переключиться на коммит и продолжить работу с него
+        - *## 3. Удалить изменения в рабочей области и вернуть ее к состоянию как при последнем коммите.
+        - *### 3.1 Безопасно — с помощью кармана (stash)
+        - *#### 3.1.1 Только неиндексированные
+        - *#### 3.1.2 Индексированные и нет
+        - *### 3.2 Опасный способ
+        - *## 4. Перейти к более раннему коммиту в текущей ветке и удалить из нее все последующие (неопубликованные)
+        - *### 4.1 При этом сохранить изменения в индекс репозитория:
+        - *### 4.2 Сохранить изменения в рабочей области, но не в индексе.
+        - *### 4.3 Просто выбросить изменения.
+        - *## 5. Отменить уже опубликованные коммиты с помощью новых коммитов
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Use_this\First_steps\custom.md">custom.md</a>
+        - *## Установка из исходников
+        - *## Первоначальная настройка Git
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Use_this\First_steps\Индексирование_коммитов_с_Git_Add_Patch.md">Индексирование_коммитов_с_Git_Add_Patch.md</a>
+        - *# [Индексирование коммитов с Git Add Patch](https://nuancesprog.ru/p/7502/)
+        - *## Что такое git add -patch?
+        - *## Для чего это нужно?
+        - *## Заключение
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Use_this\First_steps\Отмена_действий_в_Git.md">Отмена_действий_в_Git.md</a>
+        - *# [Отмена действий в Git](https://nuancesprog.ru/p/7659/)
+        - *## Отмена Git Add
+        - *## Как откатить Git Merge
+        - *## Как откатить Git Reset
+        - *## Отмена последних коммитов в Git
+        - *## Отмена Git Rebase
+        - *## Заключение

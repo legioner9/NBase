@@ -1,0 +1,320 @@
+<html>
+<head>
+  <title>MySQL Cluster Manual</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r>
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+</head>
+
+<body>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1>Руководство по MySQL Cluster</H1>
+<P>Данное руководство подготовлено Алексеем Паутовым в рамках
+некоммерческого проекта RussianLDP:MySQL
+(<A href="../../../www.botik.ru/~rldp/mysql.htm">
+http://www.botik.ru/~rldp/mysql.htm</a>). Именно по этому адресу
+публикуются новые версии, а также другие материалы по MySQL.
+
+<ul><li><a href="#Overview">1 Обзор MySQL Cluster</a></li>
+<li><a href="#Basics">2 Основные концепции MySQL Cluster</a></li>
+<li><a href="config.htm">3 Настройка MySQL Cluster</a></li>
+<li><a href="procm.htm">4 Управление процессами в MySQL Cluster</a></li>
+<li><a href="procm.htm#manag">5 Управление кластером MySQL</a></li>
+<li><a href="procm.htm#intercon">6 Использование высокоскоростных
+межсоединений в MySQL Cluster</a></li>
+<li><a href="procm.htm#limit">7 Ограничения MySQL Cluster в версии 4.1</a>
+</li>
+<li><a href="faq.htm">8 MySQL Cluster FAQ</a></li></ul>
+
+<A name="Overview"><H2>1 Обзор MySQL Cluster</H2>
+<P>MySQL Cluster использует новый способ хранения <code>NDB Cluster</code>,
+чтобы сделать возможным выполнение нескольких серверов MySQL в кластере.
+Способ <code>NDB Cluster</code> доступен в BitKeeper для MySQL 4.1.2 и в
+двоичных дистрибутивах MySQL-Max 4.1.3.</P>
+
+<P>В настоящее время поддерживаются операционные системы Linux, Mac OS X и
+Solaris. Ведутся работы по поддержке <code>NDB Cluster</code> на всех
+операционных системах, поддерживаемых MySQL, включая Windows.</P>
+
+<P>Вы можете подписаться на список рассылки MySQL Cluster. Подробности на
+<a HREF="../../../lists.mysql.com/default.htm">http://lists.mysql.com</a>. Вы можете также
+обратиться к форумам MySQL на <a HREF="../../../forums.mysql.com/default.htm">
+http://forums.mysql.com</a>.</P>
+
+<P><code>MySQL Cluster</code> представляет собой новую технологию, созданную
+чтобы использовать кластеризацию в оперативной памяти баз данных в системе,
+совместно не использующей ничего. Архитектура таких систем позволяет системе
+работать с очень недорогими аппаратными средствами, и без любых специфических
+требований к аппаратным средствам или программному обеспечению. Это также не
+имеет никакой общей точки для сбоев потому, что каждый компонент имеет
+собственную память и диск.</P>
+
+<P>MySQL Cluster интегрирует в оперативной памяти стандартный сервер MySQL с
+кластеризуемым способом хранения по имени <code>NDB</code>. В нашей
+документации термин <code>NDB</code> относится к части установки, которая
+является специфической для способа хранения, в то время как
+<code>MySQL Cluster</code> относится к комбинации MySQL и
+нового способа хранения.</P>
+
+<P>MySQL Cluster состоит из набора компьютеров, каждый выполняет ряд
+процессов, включая сервер MySQL, узлы хранения для NDB, сервер управления и
+(возможно) специализированные программы доступа к данным. Все эти программы
+работают вместе, чтобы формировать MySQL Cluster. Когда данные сохранены в
+NDB Cluster, таблицы сохранены в узлах памяти для NDB Cluster. Такие таблицы
+непосредственно доступны со всех других серверов MySQL в кластере. Таким
+образом, в прикладной программе, сохраняющей данные в кластере, если одна
+прикладная программа что-то модифицирует, все другие серверы, которые сделают
+запрос, эти данные могут увидеть измененными немедленно.</P>
+
+<P>Данные, сохраненные в узлах памяти для MySQL Cluster могут быть
+зеркалированы, кластер может обрабатывать сбои индивидуальных узлов памяти,
+теряя только тот ряд транзакций, которые прерваны из-за потери состояния
+транзакции. С тех пор как транзакционные программы (как должно быть)
+обрабатывают сбой транзакции, это не должно быть источником проблем.</P>
+
+<A name="Basics"><H2>2 Основные концепции MySQL Cluster</H2>
+<P><code>NDB</code> представляет собой сочетание свойств постоянства данных и
+их высокой доступности.</P>
+
+<P>Способ хранения <code>NDB</code> может быть конфигурирован с большим
+числом параметров, в том числе балансирующих загрузку, но самое простое
+начать с уровня кластера. MySQL Cluster <code>NDB</code> содержит полный
+набор данных, зависимых только от других данных внутри кластера.</P>
+
+<P>Теперь опишем, как установить MySQL Cluster, состоящий из <code>NDB</code>
+и нескольких серверов MySQL.</P>
+
+<P>Кластерная часть MySQL Cluster в настоящее время конфигурируется
+независимо от серверов MySQL. В MySQL Cluster каждая часть кластера
+именуется <code>node (узел)</code>.</P>
+
+<P><strong>Обратите внимание</strong>: узел встречается во многих контекстах,
+но для MySQL Cluster он является процессом. Может иметься любое число узлов
+на одном компьютере.</P>
+
+<P>Каждый узел имеет тип, и может быть несколько узлов каждого типа в
+MySQL Cluster. В минимальной конфигурации кластера MySQL будут по крайней
+мере три узла:</P>
+
+<UL><LI>Управляющий (<code>MGM</code>). Роль этого типа узла: управлять
+другими узлами внутри MySQL Cluster, типа обеспечения данных конфигурации,
+старта и остановки узлов, выполнение резервного копирования и т.д. Поскольку
+этот тип узла управляет конфигурацией других узлов, узел этого типа должен
+быть запущен перед любым другим узлом. При работе кластера узел MGM не
+обязательно должен выполняться все время. MGM-узел запускается командой
+<code>ndb_mgmd</code>, по этой причине NDB_MGMD обеспечивается как псевдоним
+для MGM при конфигурировании кластера.
+
+<LI>Память или узел базы данных (<code>DB</code>). Это тип узла, который
+управляет и сохраняет базу данных непосредственно. Имеется столько DB-узлов,
+сколько имеется фрагментов для репликаций. Например, с двумя репликациями по
+два фрагмента каждая, надо четыре DB-узла. Вполне достаточно одной
+репликации, стало быть минимальный кластер может содержать только один
+DB-узел. DB-узел запускается командой <code>ndbd</code> и NDBD обеспечивается
+как псевдоним для DB при конфигурировании кластера.
+
+<LI>Клиентский (<code>API</code>) узел. Это узел пользователя, который
+обратится к кластеру. В случае кластера MySQL, узел пользователя традиционный
+сервер MySQL, который использует тип хранения <code>NDB Cluster</code>,
+допуская доступ к кластеризуемым таблицам. В основном, сервер MySQL действует
+как пользователь кластера NDB. Прикладные программы, использующие NDB API
+непосредственно, также рассматриваются как узлы API. Так как сервер MySQL
+обычно запускается командами <code>mysqld</code> или
+<code>mysqld_safe</code>, MYSQLD обеспечивается как псевдоним
+для API при конфигурировании кластера.</UL>
+
+<P>Процессы кластера также упоминаются как узлы кластера. Конфигурация
+кластера включает конфигурирование каждого индивидуального узла в кластере и
+устанавку индивидуальных связей между узлами. Кластер MySQL в настоящее время
+разработан с учетом того, что узлы памяти гомогенные в терминах мощности
+процессора, пространства памяти и ширины каналов связи. Кроме того, чтобы
+обеспечивать одиночную точку конфигурации, все данные конфигурации для
+кластера в целом размещены в одном файле конфигурации.</P>
+
+<P>Сервер управления управляет файлом конфигурации кластера и файлом
+регистрации кластера. Каждый узел в кластере получает данные конфигурации с
+сервера управления, так что требуется способ определить, где сервер
+управления постоянно находится. Когда интересные события происходят в узлах
+памяти, узлы передают информацию относительно этих событий на сервер
+управления, который затем записывает информацию в файл регистрации кластера.
+</P>
+
+<P>Кроме того, может иметься любое число клиентуры. Она имеет два типа.</P>
+<UL><LI><strong>Стандартные клиенты MySQL</strong>. Они никак не отличают
+кластер и обвчный (некластерный) MySQL. Другими словами, к кластеру можно
+обращаться из существующих прикладных программ MySQL, написанных на PHP,
+Perl, C, C++, Java, Python, Ruby и любом другом языке.
+
+<LI><strong>Клиенты управления</strong>. Эта клиентура соединяется с сервером
+управления и обеспечивает команды для запуска и остановки узлов элегантно,
+пуска и остановки рассмотрения сообщений (только отладочные версии), показ
+версии и состояния узла и так далее.</UL>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</html>

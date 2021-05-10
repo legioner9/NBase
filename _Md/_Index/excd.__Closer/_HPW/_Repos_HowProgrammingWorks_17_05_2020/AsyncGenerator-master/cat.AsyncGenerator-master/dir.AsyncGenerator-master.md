@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\AsyncGenerator-master\cat.AsyncGenerator-master\dir.AsyncGenerator-master.md">AsyncGenerator-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\AsyncGenerator-master\README.md">README.md</a>
+        - *## Asynchronous Generators

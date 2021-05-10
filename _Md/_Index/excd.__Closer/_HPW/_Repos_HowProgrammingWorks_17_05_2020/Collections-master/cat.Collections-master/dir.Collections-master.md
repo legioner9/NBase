@@ -1,0 +1,7 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Collections-master\cat.Collections-master\dir.Collections-master.md">Collections-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Collections-master\JavaScript\cat.JavaScript\dir.JavaScript.md">JavaScript</a>
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Collections-master\JavaScript\README.md">README.md</a>
+            - *# Collections in JavaScript
+    
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Collections-master\README.md">README.md</a>
+        - *# Different types of Associative Collections

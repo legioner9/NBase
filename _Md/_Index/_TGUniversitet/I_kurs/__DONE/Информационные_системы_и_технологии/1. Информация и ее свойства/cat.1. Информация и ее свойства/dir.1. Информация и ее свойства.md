@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\__DONE\Информационные_системы_и_технологии\1. Информация и ее свойства\cat.1. Информация и ее свойства\dir.1. Информация и ее свойства.md">1. Информация и ее свойства</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\__DONE\Информационные_системы_и_технологии\1. Информация и ее свойства\ReadMe.md">ReadMe.md</a>
+        - *# 1. Информация и ее свойства

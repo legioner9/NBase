@@ -1,0 +1,6 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\InversionOfControl-master\dependencyInjection\cat.dependencyInjection\dir.dependencyInjection.md">dependencyInjection</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\InversionOfControl-master\dependencyInjection\README.md">README.md</a>
+        - *## Описание
+        - *## Файлы
+        - *## Запуск
+        - *## Задания

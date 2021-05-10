@@ -1,0 +1,760 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 7. Ссылки по Connector/ODBC</title>
+  <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-odbc-reference"></a>
+Глава 7. Ссылки по Connector/ODBC</h1>
+<p>Эта глава обеспечивает справочный материал для API Connector/ODBC,
+показывая поддержанные функции и методы, поддерживаемые типы столбца MySQL и
+соответствующий родной тип в Connector/ODBC и коды ошибок, возвращенные
+Connector/ODBC, когда ошибка происходит.</p>
+
+<h2><a name="connector-odbc-reference-api"></a>7.1. Connector/ODBC API</h2>
+<p>Этот раздел суммирует установленный порядок
+ODBC, категоризированный функциональностью.</p>
+
+<p>Для полной справки по API ODBC, пожалуйста, обратитесь к ODBC
+Programmer's Reference на
+<a href="../../../msdn.microsoft.com/en-us/library/ms714177.aspx" target="_top">
+http://msdn.microsoft.com/en-us/library/ms714177.aspx</a>.</p>
+
+<p>Приложение может вызвать функцию <code class="literal">SQLGetInfo</code>,
+чтобы получить информацию о соответствии Connector/ODBC.
+Чтобы получить информацию о поддержке определенной функции в драйвере, надо
+вызвать функцию <code class="literal">SQLGetFunctions</code>.</p>
+
+<p>Для обратной совместимости Connector/ODBC
+поддерживает все устаревшие функции.</p>
+<p>Следующие таблицы приводят вызовы API
+Connector/ODBC, сгруппированные задачей:</p>
+
+<a name="idm139746780009600"></a>
+<p><b>Таблица 7.1. Вызовы ODBC API для соединения с источником данных</b></p>
+<table><thead><tr><th scope="col">Имя</th>
+<th scope="col">Поддержка Connector/ODBC?</th>
+<th scope="col">Стандарт</th>
+<th scope="col">Цель</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">SQLAllocHandle</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Получает окружающую среду, связь, запрос или дескриптор.</td></tr>
+<tr><td scope="row"><code class="literal">SQLConnect</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Соединяется с драйвером, определенным именем источника данных,
+идентификатором пользователя и паролем.</tr>
+<tr><td scope="row"><code class="literal">SQLDriverConnect</code></td>
+<td>Да</td><td>ODBC</td>
+<td>Соединяется с драйвером, определенным
+строкой подключения или просит, чтобы менеджер драйверов и драйвер
+показали диалоговые окна связи для пользователя.</td></tr>
+<tr><td scope="row"><code class="literal">SQLAllocEnv</code></td>
+<td>Да</td><td>Устаревшая</td>
+<td>Получает дескриптор окружающей среды из драйвера.</td></tr>
+<tr><td scope="row"><code class="literal">SQLAllocConnect</code></td>
+<td>Да</td><td>Устаревшая</td>
+<td>Получает дескриптор соединения.</td>
+</tr></tbody></table><br class="table-break">
+
+<a name="idm139746779977712"></a>
+<p><b>Таблица 7.2. Вызовы ODBC API для получения информации о
+драйвере и источнике данных</b></p>
+<table><thead><tr><th scope="col">Имя</th>
+<th scope="col">Поддержка Connector/ODBC</th>
+<th scope="col">Стандарт</th>
+<th scope="col">Цель</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">SQLDataSources</code></td>
+<td>Нет</td><td>ISO 92</td>
+<td>Возвращает список доступных источников данных,
+обработанных менеджером драйверов.</td></tr>
+<tr><td scope="row"><code class="literal">SQLDrivers</code></td>
+<td>Нет</td><td>ODBC</td>
+<td>Возвращает список установленных драйверов и их признаков,
+обработанных менеджером драйверов.</td></tr>
+<tr><td scope="row"><code class="literal">SQLGetInfo</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Информация об определенном драйвере и источнике данных.</td></tr>
+<tr><td scope="row"><code class="literal">SQLGetFunctions</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Информация о поддерживаемых функциях драйвера.</td></tr>
+<tr><td scope="row"><code class="literal">SQLGetTypeInfo</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Информация о поддерживаемых типах данных.</td>
+</tr></tbody></table><br class="table-break">
+
+<a name="idm139746779945824"></a>
+<p><b>Таблица 7.3. Вызовы ODBC API для работы с атрибутами драйвера</b></p>
+<table><thead><tr><th scope="col">Имя</th>
+<th scope="col">Поддержка Connector/ODBC</th>
+<th scope="col">Стандарт</th>
+<th scope="col">Цель</th></tr></thead>
+<tbody><tr><td scope="row">
+<code class="literal">SQLSetConnectAttr</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Устанавливает атрибуты соединения.</td></tr>
+<tr><td scope="row"><code class="literal">SQLGetConnectAttr</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Возвращает значение атрибута соединения.</td></tr>
+<tr><td scope="row"><code class="literal">SQLSetConnectOption</code></td>
+<td>Да</td><td>Устаревшая</td>
+<td>Устанавливает атрибуты соединения.</td></tr>
+<tr><td scope="row"><code class="literal">SQLGetConnectOption</code></td>
+<td>Да</td><td>Устаревшая</td>
+<td>Возвращает значение атрибута соединения.</td></tr>
+<tr><td scope="row"><code class="literal">SQLSetEnvAttr</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Устанавливает атрибуты окружения.</td></tr>
+<tr><td scope="row"><code class="literal">SQLGetEnvAttr</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Возвращает значение атрибута окружения.</td></tr>
+<tr><td scope="row"><code class="literal">SQLSetStmtAttr</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Устанавливает атрибуты запроса.</td></tr>
+<tr><td scope="row"><code class="literal">SQLGetStmtAttr</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Возвращает значение атрибута запроса.</td></tr>
+<tr><td scope="row"><code class="literal">SQLSetStmtOption</code></td>
+<td>Да</td><td>Устаревшая</td>
+<td>Устанавливает атрибуты запроса.</td></tr>
+<tr><td scope="row"><code class="literal">SQLGetStmtOption</code></td>
+<td>Да</td><td>Устаревшая</td>
+<td>Возвращает значение атрибута запроса.</td></tr>
+</tbody></table><br class="table-break">
+
+<a name="idm139746779891984"></a>
+<p><b>Таблица 7.4. Вызовы ODBC API для подготовки запросов SQL</b></p>
+<table><thead><tr><th scope="col">Имя</th>
+<th scope="col">Поддержка Connector/ODBC</th>
+<th scope="col">Стандарт</th>
+<th scope="col">Цель</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">SQLAllocStmt</code></td>
+<td>Да</td><td>Устаревшая</td>
+<td>Размещает обработчик запроса.</td></tr>
+<tr><td scope="row"><code class="literal">SQLPrepare</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Готовит SQL-оператор к более позднему выполнению.</td></tr>
+<tr><td scope="row"><code class="literal">SQLBindParameter</code></td>
+<td>Да</td><td>ODBC</td>
+<td>Назначает хранение для параметра в SQL-операторе. Connector/ODBC 5.2
+добавляет поддержку параметров <span class="quote">out</span> и
+<span class="quote">inout</span> через спецификаторы типа
+<code class="literal">SQL_PARAM_OUTPUT</code> и
+<code class="literal">SQL_PARAM_INPUT_OUTPUT</code>.
+Параметры <span class="quote">Out</span> и <span class="quote">inout</span>
+не поддерживаются для столбцов <code class="literal">LONGTEXT</code> и
+<code class="literal">LONGBLOB</code>.</td></tr>
+<tr><td scope="row"><code class="literal">SQLGetCursorName</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Возвращает имя курсора, связанное с обработчиком запроса.</td></tr>
+<tr><td scope="row"><code class="literal">SQLSetCursorName</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Определяет имя курсора.</td></tr>
+<tr><td scope="row"><code class="literal">SQLSetScrollOptions</code></td>
+<td>Да</td><td>ODBC</td>
+<td>Устанавливает поведение курсора.</td></tr>
+</tbody></table><br class="table-break">
+
+<a name="idm139746779851792"></a>
+<p><b>Таблица 7.5. Вызовы ODBC API для подачи запросов</b></p>
+<table><thead><tr><th scope="col">Имя</th>
+<th scope="col">Поддержка Connector/ODBC</th>
+<th scope="col">Стандарт</th>
+<th scope="col">Цель</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">SQLExecute</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Выполняет подготовленный запрос.</td></tr>
+<tr><td scope="row"><code class="literal">SQLExecDirect</code></td>
+<td>Да</td><td>ISO 92</td><td>Выполняет запрос.</td></tr>
+<tr><td scope="row"><code class="literal">SQLNativeSql</code></td>
+<td>Да</td><td>ODBC</td>
+<td>Возвращает текст SQL-оператора, как переведено драйвером</td></tr>
+<tr><td scope="row"><code class="literal">SQLDescribeParam</code></td>
+<td>Нет</td><td>ODBC</td>
+<td>Возвращает описание для определенного параметра в запросе.
+Не поддержан Connector/ODBC: возвращенным результатам нельзя доверять.
+</td></tr>
+<tr><td scope="row"><code class="literal">SQLNumParams</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Возвращает количество параметров в запросе.</td></tr>
+<tr><td scope="row"><code class="literal">SQLParamData</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Используется вместе с <code class="literal">SQLPutData</code>, чтобы
+снабжать данными параметра во время выполнения.
+Полезно для больших значений данных.</td></tr>
+<tr><td scope="row"><code class="literal">SQLPutData</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Посылает часть или все значение данных для параметра.
+Полезно для больших значений данных.</td></tr>
+</tbody></table><br class="table-break">
+
+<a name="idm139746779810096"></a>
+<p><b>Таблица 7.6. Вызовы ODBC API для получения
+результатов и информации о результатах</b></p>
+<table><thead><tr><th scope="col">Имя</th>
+<th scope="col">Поддержка Connector/ODBC</th>
+<th scope="col">Стандарт</th>
+<th scope="col">Цель</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">SQLRowCount</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Возвращает количество строк, затронутых вставкой,
+обновлением или удалением.</td></tr>
+<tr><td scope="row"><code class="literal">SQLNumResultCols</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Возвращает количество столбцов в наборе результатов.</td></tr>
+<tr><td scope="row"><code class="literal">SQLDescribeCol</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Описывает столбец в наборе результатов.</td></tr>
+<tr><td scope="row"><code class="literal">SQLColAttribute</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Описывает признаки столбца в наборе результатов.</td></tr>
+<tr><td scope="row"><code class="literal">SQLColAttributes</code></td>
+<td>Да</td><td>Устаревшая</td>
+<td>Описывает признаки столбца в наборе результатов.</td></tr>
+<tr><td scope="row"><code class="literal">SQLFetch</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Возвращает многократные строки результата.</td></tr>
+<tr><td scope="row"><code class="literal">SQLFetchScroll</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Возвращает прокручиваемые строки результата.</td></tr>
+<tr><td scope="row"><code class="literal">SQLExtendedFetch</code></td>
+<td>Да</td><td>Устаревшая</td>
+<td>Возвращает прокручиваемые строки результата.</td></tr>
+<tr><td scope="row"><code class="literal">SQLSetPos</code></td>
+<td>Да</td><td>ODBC</td>
+<td>Помещает курсор в блоке данных и позволяет запросу
+освежить данные в наборе строк или обновить (или удалить)
+данные в наборе результатов.</td></tr>
+<tr><td scope="row"><code class="literal">SQLBulkOperations</code></td>
+<td>Да</td><td>ODBC</td>
+<td>Выполняет оптовые вставки и оптовые операции по закладке, включая
+обновление, удаление и получение по закладке.</td></tr></tbody>
+</table><br class="table-break">
+
+<a name="idm139746779755824"></a>
+<p><b>Таблица 7.7. Вызовы ODBC API для получения
+ошибки или диагностической информации</b></p>
+<table><thead><tr><th scope="col">Имя</th>
+<th scope="col">Поддержка Connector/ODBC</th>
+<th scope="col">Стандарт</th>
+<th scope="col">Цель</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">SQLError</code></td>
+<td>Да</td><td>Устаревшая</td>
+<td>Возвращает дополнительную ошибку или информацию о статусе.</td></tr>
+<tr><td scope="row"><code class="literal">SQLGetDiagField</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Возвращает дополнительную диагностическую информацию (единственная
+область диагностической структуры данных).</td></tr>
+<tr><td scope="row"><code class="literal">SQLGetDiagRec</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Возвращает дополнительную диагностическую информацию (многократные
+области диагностической структуры данных).</td></tr>
+</tbody></table><br class="table-break">
+
+<a name="idm139746779732864"></a>
+<p><b>Таблица 7.8. Вызовы ODBC API для получения информации о системных
+таблицах источника данных (функции каталога)</b></p>
+<table><thead><tr><th scope="col">Имя</th>
+<th scope="col">Поддержка Connector/ODBC</th>
+<th scope="col">Стандарт</th>
+<th scope="col">Цель</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">SQLColumnPrivileges</code>
+</td><td>Да</td><td>ODBC</td>
+<td>Возвращает список столбцов и связанных привилегий для одной
+или более таблиц.</td></tr>
+<tr><td scope="row"><code class="literal">SQLColumns</code></td>
+<td>Да</td><td>X/Open</td>
+<td>Возвращает список имен столбцов в указанных таблицах.</td></tr>
+<tr><td scope="row"><code class="literal">SQLForeignKeys</code></td>
+<td>Да</td><td>ODBC</td>
+<td>Возвращает список имен столбцов, которые составляют внешние ключи, если
+они существуют для указанной таблицы.</td></tr>
+<tr><td scope="row"><code class="literal">SQLPrimaryKeys</code></td>
+<td>Да</td><td>ODBC</td>
+<td>Возвращает список имен столбцов, которые составляют первичный
+ключ для таблицы.</td></tr>
+<tr><td scope="row"><code class="literal">SQLSpecialColumns</code></td>
+<td>Да</td><td>X/Open</td>
+<td>Информация об оптимальном наборе столбцов, который однозначно определяет
+строку в указанной таблице или столбцах, которые автоматически обновляются,
+когда любое значение в строке обновляется транзакцией.</td></tr>
+<tr><td scope="row"><code class="literal">SQLStatistics</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Статистика о единственной таблице и списке индексов, связанных с ней.
+</td></tr>
+<tr><td scope="row"><code class="literal">SQLTablePrivileges</code></td>
+<td>Да</td><td>ODBC</td>
+<td>Возвращает список таблиц и привилегий, связанных с каждой таблицей.
+</td></tr>
+<tr><td scope="row"><code class="literal">SQLTables</code></td>
+<td>Да</td><td>X/Open</td>
+<td>Возвращает список имен таблиц, сохраненных в
+определенном источнике данных.</td></tr>
+</tbody></table><br class="table-break">
+
+<a name="idm139746779686960"></a>
+<p><b>Таблица 7.9. Вызовы ODBC API для выполнения транзакций</b></p>
+<table><thead><tr><th scope="col">Имя</th>
+<th scope="col">Поддержка Connector/ODBC</th>
+<th scope="col">Стандарт</th>
+<th scope="col">Цель</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">SQLTransact</code></td>
+<td>Да</td><td>Устаревшая</td>
+<td>Передает или откатывает транзакцию.</td></tr>
+<tr><td scope="row"><code class="literal">SQLEndTran</code></td>
+<td>Да</td><td>ISO 92</td>
+<td><a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_commit"
+target="_top">Передает</a> или
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_rollback"
+target="_top">отменяет</a>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_transaction"
+target="_top">транзакцию</a>.</td></tr>
+</tbody></table><br class="table-break">
+
+<a name="idm139746779666800"></a><p><b>
+Таблица 7.10. Вызовы ODBC API для завершения запроса</b></p>
+<table><thead><tr><th scope="col">Имя</th>
+<th scope="col">Поддержка Connector/ODBC</th>
+<th scope="col">Стандарт</th>
+<th scope="col">Цель</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">SQLFreeStmt</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Завершает обработку запроса, сбрасывает ожидающие результаты и,
+произвольно, освобождает все ресурсы, связанные с дескриптором запроса.
+</td></tr>
+<tr><td scope="row"><code class="literal">SQLCloseCursor</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Закрывает курсор, который был открыт обработчиком запроса.</td></tr>
+<tr><td scope="row"><code class="literal">SQLCancel</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Отменяет SQL-оператор.</td></tr></tbody></table><br class="table-break">
+
+<a name="idm139746779643936"></a><p><b>
+Таблица 7.11. Вызовы ODBC API для завершения связи</b></p>
+<table><thead><tr><th scope="col">Имя</th>
+<th scope="col">Поддержка Connector/ODBC</th>
+<th scope="col">Стандарт</th>
+<th scope="col">Цель</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">SQLDisconnect</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Закрывает связь.</td></tr>
+<tr><td scope="row"><code class="literal">SQLFreeHandle</code></td>
+<td>Да</td><td>ISO 92</td>
+<td>Освобождает окружающую среду, связь, запрос или дескриптор.</td></tr>
+<tr><td scope="row"><code class="literal">SQLFreeConnect</code></td>
+<td>Да</td><td>Устаревшая</td>
+<td>Освобождает обработчик соединения.</td></tr>
+<tr><td scope="row"><code class="literal">SQLFreeEnv</code></td>
+<td>Да</td><td>Устаревшая</td>
+<td>Освобождает обработчик окружения.</td></tr>
+</tbody></table><br class="table-break">
+
+<h2><a name="connector-odbc-reference-datatypes"></a>
+7.2. Типы данных в Connector/ODBC</h2>
+<p>Следующая таблица иллюстрирует, как Connector/ODBC отображает
+типы данных сервера для типов данных SQL и C.</p>
+
+<a name="idm139746779615248"></a>
+<p><b>Таблица 7.12. Отображение типов данных MySQL в SQL и C</b></p>
+<table><thead><tr><th scope="col">Исходное значение</th>
+<th scope="col">Тип в SQL</th>
+<th scope="col">Тип в C</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">bigint unsigned</code></td>
+<td><code class="literal">SQL_BIGINT</code></td>
+<td><code class="literal">SQL_C_UBIGINT</code></td></tr>
+<tr><td scope="row"><code class="literal">bigint</code></td>
+<td><code class="literal">SQL_BIGINT</code></td>
+<td><code class="literal">SQL_C_SBIGINT</code></td></tr>
+<tr><td scope="row"><code class="literal">bit</code></td>
+<td><code class="literal">SQL_BIT</code></td>
+<td><code class="literal">SQL_C_BIT</code></td></tr>
+<tr><td scope="row"><code class="literal">bit</code></td>
+<td><code class="literal">SQL_CHAR</code></td>
+<td><code class="literal">SQL_C_CHAR</code></td></tr>
+<tr><td scope="row"><code class="literal">blob</code></td>
+<td><code class="literal">SQL_LONGVARBINARY</code></td>
+<td><code class="literal">SQL_C_BINARY</code></td></tr>
+<tr><td scope="row"><code class="literal">bool</code></td>
+<td><code class="literal">SQL_CHAR</code></td>
+<td><code class="literal">SQL_C_CHAR</code></td></tr>
+<tr><td scope="row"><code class="literal">char</code></td>
+<td><code class="literal">SQL_CHAR</code></td>
+<td><code class="literal">SQL_C_CHAR</code></td></tr>
+<tr><td scope="row"><code class="literal">date</code></td>
+<td><code class="literal">SQL_DATE</code></td>
+<td><code class="literal">SQL_C_DATE</code></td></tr>
+<tr><td scope="row"><code class="literal">datetime</code></td>
+<td><code class="literal">SQL_TIMESTAMP</code></td>
+<td><code class="literal">SQL_C_TIMESTAMP</code></td></tr>
+<tr><td scope="row"><code class="literal">decimal</code></td>
+<td><code class="literal">SQL_DECIMAL</code></td>
+<td><code class="literal">SQL_C_CHAR</code></td></tr>
+<tr><td scope="row"><code class="literal">double precision</code></td>
+<td><code class="literal">SQL_DOUBLE</code></td>
+<td><code class="literal">SQL_C_DOUBLE</code></td></tr>
+<tr><td scope="row"><code class="literal">double</code></td>
+<td><code class="literal">SQL_FLOAT</code></td>
+<td><code class="literal">SQL_C_DOUBLE</code></td></tr>
+<tr><td scope="row"><code class="literal">enum</code></td>
+<td><code class="literal">SQL_VARCHAR</code></td>
+<td><code class="literal">SQL_C_CHAR</code></td></tr>
+<tr><td scope="row"><code class="literal">float</code></td>
+<td><code class="literal">SQL_REAL</code></td>
+<td><code class="literal">SQL_C_FLOAT</code></td></tr>
+<tr><td scope="row"><code class="literal">int unsigned</code></td>
+<td><code class="literal">SQL_INTEGER</code></td>
+<td><code class="literal">SQL_C_ULONG</code></td></tr>
+<tr><td scope="row"><code class="literal">int</code></td>
+<td><code class="literal">SQL_INTEGER</code></td>
+<td><code class="literal">SQL_C_SLONG</code></td></tr>
+<tr><td scope="row"><code class="literal">integer unsigned</code></td>
+<td><code class="literal">SQL_INTEGER</code></td>
+<td><code class="literal">SQL_C_ULONG</code></td></tr>
+<tr><td scope="row"><code class="literal">integer</code></td>
+<td><code class="literal">SQL_INTEGER</code></td>
+<td><code class="literal">SQL_C_SLONG</code></td></tr>
+<tr><td scope="row"><code class="literal">long varbinary</code></td>
+<td><code class="literal">SQL_LONGVARBINARY</code></td>
+<td><code class="literal">SQL_C_BINARY</code></td></tr>
+<tr><td scope="row"><code class="literal">long varchar</code></td>
+<td><code class="literal">SQL_LONGVARCHAR</code></td>
+<td><code class="literal">SQL_C_CHAR</code></td></tr>
+<tr><td scope="row"><code class="literal">longblob</code></td>
+<td><code class="literal">SQL_LONGVARBINARY</code></td>
+<td><code class="literal">SQL_C_BINARY</code></td></tr>
+<tr><td scope="row"><code class="literal">longtext</code></td>
+<td><code class="literal">SQL_LONGVARCHAR</code></td>
+<td><code class="literal">SQL_C_CHAR</code></td></tr>
+<tr><td scope="row"><code class="literal">mediumblob</code></td>
+<td><code class="literal">SQL_LONGVARBINARY</code></td>
+<td><code class="literal">SQL_C_BINARY</code></td></tr>
+<tr><td scope="row"><code class="literal">mediumint unsigned</code></td>
+<td><code class="literal">SQL_INTEGER</code></td>
+<td><code class="literal">SQL_C_ULONG</code></td></tr>
+<tr><td scope="row"><code class="literal">mediumint</code></td>
+<td><code class="literal">SQL_INTEGER</code></td>
+<td><code class="literal">SQL_C_SLONG</code></td></tr>
+<tr><td scope="row"><code class="literal">mediumtext</code></td>
+<td><code class="literal">SQL_LONGVARCHAR</code></td>
+<td><code class="literal">SQL_C_CHAR</code></td></tr>
+<tr><td scope="row"><code class="literal">numeric</code></td>
+<td><code class="literal">SQL_NUMERIC</code></td>
+<td><code class="literal">SQL_C_CHAR</code></td></tr>
+<tr><td scope="row"><code class="literal">real</code></td>
+<td><code class="literal">SQL_FLOAT</code></td>
+<td><code class="literal">SQL_C_DOUBLE</code></td></tr>
+<tr><td scope="row"><code class="literal">set</code></td>
+<td><code class="literal">SQL_VARCHAR</code></td>
+<td><code class="literal">SQL_C_CHAR</code></td></tr>
+<tr><td scope="row"><code class="literal">smallint unsigned</code></td>
+<td><code class="literal">SQL_SMALLINT</code></td>
+<td><code class="literal">SQL_C_USHORT</code></td></tr>
+<tr><td scope="row"><code class="literal">smallint</code></td>
+<td><code class="literal">SQL_SMALLINT</code></td>
+<td><code class="literal">SQL_C_SSHORT</code></td></tr>
+<tr><td scope="row"><code class="literal">text</code></td>
+<td><code class="literal">SQL_LONGVARCHAR</code></td>
+<td><code class="literal">SQL_C_CHAR</code></td></tr>
+<tr><td scope="row"><code class="literal">time</code></td>
+<td><code class="literal">SQL_TIME</code></td>
+<td><code class="literal">SQL_C_TIME</code></td></tr>
+<tr><td scope="row">
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_timestamp"
+target="_top"><code class="literal">timestamp</code></a></td>
+<td><code class="literal">SQL_TIMESTAMP</code></td>
+<td><code class="literal">SQL_C_TIMESTAMP</code></td></tr>
+<tr><td scope="row"><code class="literal">tinyblob</code></td>
+<td><code class="literal">SQL_LONGVARBINARY</code></td>
+<td><code class="literal">SQL_C_BINARY</code></td></tr>
+<tr><td scope="row"><code class="literal">tinyint unsigned</code></td>
+<td><code class="literal">SQL_TINYINT</code></td>
+<td><code class="literal">SQL_C_UTINYINT</code></td></tr>
+<tr><td scope="row"><code class="literal">tinyint</code></td>
+<td><code class="literal">SQL_TINYINT</code></td>
+<td><code class="literal">SQL_C_STINYINT</code></td></tr>
+<tr><td scope="row"><code class="literal">tinytext</code></td>
+<td><code class="literal">SQL_LONGVARCHAR</code></td>
+<td><code class="literal">SQL_C_CHAR</code></td></tr>
+<tr><td scope="row"><code class="literal">varchar</code></td>
+<td><code class="literal">SQL_VARCHAR</code></td>
+<td><code class="literal">SQL_C_CHAR</code></td></tr>
+<tr><td scope="row"><code class="literal">year</code></td>
+<td><code class="literal">SQL_SMALLINT</code></td>
+<td><code class="literal">SQL_C_SHORT</code></td>
+</tr></tbody></table><br class="table-break">
+
+<h2><a name="connector-odbc-reference-errorcodes"></a>
+7.3. Коды ошибок Connector/ODBC</h2>
+<p>Следующие таблицы приводят коды ошибок, возвращенные Connector/ODBC,
+кроме ошибок сервера.</p>
+
+<a name="idm139746779432928"></a>
+<p><b>Таблица 7.13. Специальные коды ошибок,
+возвращенные Connector/ODBC</b></p>
+<table><thead><tr><th scope="col">Исходный код</th>
+<th scope="col">SQLSTATE 2</th><th scope="col">SQLSTATE 3</th>
+<th scope="col">Сообщение об ошибке</th></tr></thead>
+<tbody><tr><td scope="row">500</td><td>01000</td><td>01000</td>
+<td>Общее предупреждение.</td></tr>
+<tr><td scope="row">501</td><td>01004</td><td>01004</td>
+<td>Строка обрезана справа.</td></tr>
+<tr><td scope="row">502</td><td>01S02</td><td>01S02</td>
+<td>Значение опции меняется.</td></tr>
+<tr><td scope="row">503</td><td>01S03</td><td>01S03</td>
+<td>Нет строк для обновления/удаления.</td></tr>
+<tr><td scope="row">504</td><td>01S04</td><td>01S04</td>
+<td>Больше одной строки для обновления/удаления.</td></tr>
+<tr><td scope="row">505</td><td>01S06</td><td>01S06</td>
+<td>Попытка получения прежде чем набор результатов возвратил
+первый набор строк.</td></tr>
+<tr><td scope="row">506</td><td>07001</td><td>07002</td>
+<td><code class="literal">SQLBindParameter</code> не используемый
+для всех параметров.</td></tr>
+<tr><td scope="row">507</td><td>07005</td><td>07005</td>
+<td>Подготовленный запрос не спецификация курсора.</td></tr>
+<tr><td scope="row">508</td><td>07009</td><td>07009</td>
+<td>Недействительный дескрипторный индекс.</td></tr>
+<tr><td scope="row">509</td><td>08002</td><td>08002</td>
+<td>Имя подключения занято.</td></tr>
+<tr><td scope="row">510</td><td>08003</td><td>08003</td>
+<td>Связь не существует.</td></tr>
+<tr><td scope="row">511</td><td>24000</td><td>24000</td>
+<td>Недействительный статус курсора.</td></tr>
+<tr><td scope="row">512</td><td>25000</td><td>25000</td>
+<td>Недействительный статус транзакции.</td></tr>
+<tr><td scope="row">513</td><td>25S01</td><td>25S01</td>
+<td>Неизвестный статус транзакции.</td></tr>
+<tr><td scope="row">514</td><td>34000</td><td>34000</td>
+<td>Недействительное имя курсора.</td></tr>
+<tr><td scope="row">515</td><td>S1000</td><td>HY000</td>
+<td>Общая ошибка драйвера.</td></tr>
+<tr><td scope="row">516</td><td>S1001</td><td>HY001</td>
+<td>Ошибка распределения памяти.</td></tr>
+<tr><td scope="row">517</td><td>S1002</td><td>HY002</td>
+<td>Недействительный номер столбца.</td></tr>
+<tr><td scope="row">518</td><td>S1003</td><td>HY003</td>
+<td>Недействительный тип буфера приложений.</td></tr>
+<tr><td scope="row">519</td><td>S1004</td><td>HY004</td>
+<td>Недействительный тип данных SQL.</td></tr>
+<tr><td scope="row">520</td><td>S1009</td><td>HY009</td>
+<td>Недействительное использование нулевого указателя.</td></tr>
+<tr><td scope="row">521</td><td>S1010</td><td>HY010</td>
+<td>Ошибка последовательности функции.</td></tr>
+<tr><td scope="row">522</td><td>S1011</td><td>HY011</td>
+<td>Признак не может быть установлен сейчас.</td></tr>
+<tr><td scope="row">523</td><td>S1012</td><td>HY012</td>
+<td>Недействительный операционный код транзакции.</td></tr>
+<tr><td scope="row">524</td><td>S1013</td><td>HY013</td>
+<td>Ошибка управления памятью./td></tr>
+<tr><td scope="row">525</td><td>S1015</td><td>HY015</td>
+<td>Нет доступного имени курсора.</td></tr>
+<tr><td scope="row">526</td><td>S1024</td><td>HY024</td>
+<td>Недействительное значение атрибута.</td></tr>
+<tr><td scope="row">527</td><td>S1090</td><td>HY090</td>
+<td>Недействительная последовательность или длина буфера.</td></tr>
+<tr><td scope="row">528</td><td>S1091</td><td>HY091</td>
+<td>Недействительный дескрипторный идентификатор области.</td></tr>
+<tr><td scope="row">529</td><td>S1092</td><td>HY092</td>
+<td>Недействительный идентификатор признака/опции.</td></tr>
+<tr><td scope="row">530</td><td>S1093</td><td>HY093</td>
+<td>Неправильное число параметров.</td></tr>
+<tr><td scope="row">531</td><td>S1095</td><td>HY095</td>
+<td>Тип функции вне диапазона.</td></tr>
+<tr><td scope="row">532</td><td>S1106</td><td>HY106</td>
+<td>Тип возврата вне диапазона.</td></tr>
+<tr><td scope="row">533</td><td>S1117</td><td>HY117</td>
+<td>Значение строки вне диапазона.</td></tr>
+<tr><td scope="row">534</td><td>S1109</td><td>HY109</td>
+<td>Недействительная позиция курсора.</td></tr>
+<tr><td scope="row">535</td><td>S1C00</td><td>HYC00</td>
+<td>Дополнительная опция, не реализованная.</td></tr>
+<tr><td scope="row">0</td><td>21S01</td><td>21S01</td>
+<td>Количество столбцов не соответствует количеству значений.</td></tr>
+<tr><td scope="row">0</td><td>23000</td><td>23000</td>
+<td>Нарушение ограничения целостности.</td></tr>
+<tr><td scope="row">0</td><td>42000</td><td>42000</td>
+<td>Синтаксическая ошибка или нарушение прав доступа.</td></tr>
+<tr><td scope="row">0</td><td>42S02</td><td>42S02</td>
+<td>Базовая таблица или представление не найдено.</td></tr>
+<tr><td scope="row">0</td><td>42S12</td><td>42S12</td>
+<td>Индекс не найден.</td></tr>
+<tr><td scope="row">0</td><td>42S21</td><td>42S21</td>
+<td>Столбец уже существует.</td></tr>
+<tr><td scope="row">0</td><td>42S22</td><td>42S22</td>
+<td>Столбец не найден.</td></tr>
+<tr><td scope="row">0</td><td>08S01</td><td>08S01</td>
+<td>Ошибка линии связи.</td></tr></tbody></table><br class="table-break">
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

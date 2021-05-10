@@ -1,0 +1,11 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Dictionary-master\cat.Dictionary-master\dir.Dictionary-master.md">Dictionary-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Dictionary-master\README.md">README.md</a>
+        - *# Словарь-индекс понятий со ссылками
+        - *## Базовые понятия
+        - *## Основные понятия
+        - *## Вспомогательные материалы
+        - *## Структуры данных
+        - *## Расширенные понятия
+        - *## Асинхронное программирование
+        - *## Параллельное программирование
+        - *## Парадигмы программирования

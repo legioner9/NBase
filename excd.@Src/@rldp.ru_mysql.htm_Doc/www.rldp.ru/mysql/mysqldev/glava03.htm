@@ -1,0 +1,3572 @@
+<HTML>
+<HEAD>
+  <TITLE>3.1. Введение</TITLE>
+  <META NAME="description" CONTENT="3.1. Introduction">
+  <META NAME="keywords" CONTENT="manual">
+  <META NAME="resource-type" CONTENT="document">
+  <META NAME="distribution" CONTENT="global">
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1>Глава 3. C++ API</H1>
+<H1><A NAME="SECTION02100000000000000000">3.1. Mysql++. Введение</A></H1>
+<H1><A NAME="SECTION02110000000000000000">3.1.1 Что такое Mysql++</A></H1>
+<P>Mysql++ представляет собой полноценный C++ API для Mysql (а в скором
+времени и для других баз данных на SQL также). Цель этого API: сделать работу
+с запросами столь же простой, как работа с другими STL Контейнерами
+
+<H1><A NAME="SECTION02120000000000000000">3.1.2 Получение Mysql++</A></H1>
+<P>Последняя версия Mysql++ лежит на web-сайте mysql++ по адресу
+http://www.mysql.com/download_mysql++.html
+
+<H1><A NAME="SECTION02130000000000000000">3.1.3 Список рассылки Mysql++</A>
+</H1>
+<P>Инструкции по присоединению к списку рассылки (и архив списка рассылки)
+могут быть найдены на домашней страничке Mysql++ по адресу
+http://www.mysql.com/download_mysql++.html. Если Вы желаете только задать
+вопрос, можете писать на mysql-plusplus@lists.mysql.com.
+
+<HR><H1><A NAME="SECTION02200000000000000000">3.2. Обзор</A></H1>
+<P><A NAME="Overview"></A>Mysql++ API очень сложен и обладает большой
+мощностью. В этом разделе обеспечивается краткий обзор многих различных
+компонентов этой библиотеки.
+
+<P>Подобно работе с большинством других SQL API, процесс выполнения запросов
+тот же самый: 1) Вы открываете подключение, 2) Вы формируете и выполняете
+запросы, 3) Вы выполняете итерации через набор результатов. Однако имеется
+много дополнительных функциональных возможностей.
+
+<H1><A NAME="SECTION02210000000000000000">Основной дескриптор базы данных</A>
+</H1>
+<P>Это тот класс, который обрабатывает подключение к серверу Mysql. Вы всегда
+нуждаетесь по крайней мере в одном из этих объектов, чтобы делать что-нибудь
+с сервером. Этот класс может создать отдельный объект запросов или
+непосредственно выполнять запросы. Отдельный объект запроса является
+рекомендуемым путем, поскольку это дает Вам гораздо больше мощности.
+
+<H1><A NAME="SECTION02220000000000000000">Объект запроса</A></H1>
+<P>Этот объект представляет собой рекомендуемый путь выполнения запросов. Это
+подкласс от strstream, что означает, что Вы можете писать в него данные
+подобно любому другому потоку. Это сделано, чтобы помочь Вам в гибком и
+простом формировании запросов.
+
+<P>Вы можете также устанавливать запросы Template с этим классом. Запросы
+Template представляют собой путь установки запросов с заменяемыми
+параметрами, которые Вы можете изменять через Вашу программу.
+
+<P>Вы можете также использовать специализированные структуры и даже
+динамические (на сайте разработчиков они почему-то названы драматическими)
+наборы результатов, чтобы упростить создание и обработку запросов.
+
+<P>Объект Query возвращает объект с информацией относительно успеха запроса
+для запросов не-select (запросы, которые не возвращают набор результатов).
+
+<H1><A NAME="SECTION02230000000000000000">Наборы результатов</A></H1>
+<P>Для запросов, которые возвращают набор результатов, имеются два различных
+пути обработки результатов: в динамическом наборе или в статическом.
+
+<H2><A NAME="SECTION02231000000000000000">Динамический набор результатов
+</A></H2>
+<P>Динамический набор результатов представляет собой такой набор результатов,
+в котором имена столбцов и тип информации столбцов не должны быть определены
+во времени компиляции. Набор результатов может быть полностью постоянным, в
+нем жанные будут возвращены Вам в классе constant string link class, частично
+постоянным, тогда Вы можете изменять данные по одной строке за раз, или
+полностью переменным, в этом случае Вы можете менять данные как угодно.
+
+<P>Постоянный набор результатов почти аналогичен набору результатов в C API.
+Он обеспечивает наибольшие функциональные возможности. С этим набором
+результатов Вы можете выяснять детализированную информацию относительно типа
+информации, сохраненной в каждом из столбцов. Это также самое быстрое решение
+потому, что данные не должны быть скопированы вообще.
+
+<P>Частично постоянный набор результатов подобен постоянному набору
+результатов за исключением того, что Вы можете изменять данные по одной
+строке за раз. Данные, которые Вы изменяете, фактически копия данных,
+возвращенных сервером. Это означает, что изменение данных не изменяет
+фактический набор результатов.
+
+<P>Частично постоянный набор результатов почти то же самое, что и постоянный
+набор результатов. Единственное различие в том, что когда Вы запрашиваете
+строку из результата, Вы можете объявить ее изменяемой явно. Это означает,
+что Вы можете получать некоторые строки как постоянные,
+а другие как изменчивые.
+
+<P>Полностью изменяемый набор результатов подобен постоянному за исключением
+того, что данные полностью изменчивы в том смысле, что Вы можете изменять
+данные в фактическом наборе результатов. Однако, в отличие от первого, этот
+набор результатов не связан с набором результатов из C API. Взамен это
+создается копия данных, возвращенных C API в двухмерном векторе. Из-за этого
+детализированная информация относительно каждого из столбцов в настоящее
+время не доступна, только имена столбца и тип в C++, который наиболее близко
+соответствует оригинальному типу из SQL. Кроме того, поскольку это делает
+копию данных, возвращенных из C API, быстродействие будет чуть пониже.
+
+<P>Строки во всех динамических наборах результатов очень близки к контейнеру
+произвольного доступа из Standard Template Library (STL). Это означает, что
+они имеют iterator, который может использоваться для STL-алгоритмов. Имеется
+несколько специализированных сервисных функций, чтобы помочь в использовании
+наборов результатов в STL-алгоритмах.
+
+<P>Столбцы во всем динамическом результате также очень близки к контейнеру
+произвольного доступа из STL. Однако, в дополнение к доступу к столбцам по
+по их индексным числам, Вы можете также обращаться к столбцам через
+их имена полей.
+
+<P>Кроме того, поскольку строки и столбцы подобны контейнерам, Вы можете
+также обрабатывать набор результатов как двумерный массив. Например, Вы
+можете получить 5-ый элемент в 3-ей строке простым запросом result[3][5]. А
+так как Вы можете также использовать имена полей, Вы можете написать вместо
+номера поля его имя, например, result[3][&#34;price&#34;], чтобы получить
+элемент "price" в 3-ей строке.
+
+<P>Фактические данные, возвращаемые динамическим набором результатов,
+сохранены в специальной строке подобно классу, которая имеет некоторые
+дополнительные полезные свойства. А именно: данные столбца автоматически
+преобразуются во все базисные типы данных, также как некоторые дополнительные
+типы, которые разработаны, чтобы обработать типы mysql, которые включают типы
+для обработки дат, времен, наборов и величин со значением null. Если имеется
+проблема в преобразовании, будет установлена метка предупреждения или
+возвращена исключительная ситуация в зависимости от того, как пакет настроен.
+Относительно исключительных ситуаций: MySQL++ поддерживает два различных
+метода рассмотрения исключительных ситуаций. Первый работает по
+фиксированному типу, второй (новый) представляет собой стандартный тип C++,
+использующий метод what(). Выбор методов должен быть выполнен при
+формировании библиотеки. Если скрипт выбора конфигурации выполнен с опцией
+-enable-exception, то новый метод будет использоваться. Если никакая опция не
+обеспечивается, или используется -disable-exception, всегда используется
+старый метод исключений MySQL++.
+
+<P>Динамические наборы результатов могут даже использоваться, чтобы помочь
+формировать запросы с помощью некоторого дополнительного метода. Имеются
+методы для возвратов: 1) Разделенный запятыми список данных (например: 1.5,
+10, "Dog", "Brown"), 2) Разделенный запятыми список имен полей (например:
+age, weight, what, color), 3) Список присваиваний (например: age = 1.5 AND
+weight = 10 AND what = "Dog" AND color = "Brown").
+
+<P>Изменчивые наборы результатов могут быть созданы так, чтобы Вы могли
+воспользоваться преимуществом этих методов во вставке данных в базу данных
+без необходимости писать дополнительные запросы.
+
+<H2><A NAME="SECTION02232000000000000000">Статические наборы результатов</A>
+</H2>
+<P>Результаты запроса могут также быть сохранены статически в
+специализированной структуре SQL. Эти структуры затем будут сохранены в
+некотором STL-контейнере, например, векторе или списке. В отличие от
+динамических наборов результатов принимается, что программист знает то, что
+набор результатов собирается вернуть. Из-за этого вся информация относительно
+столбцов, включая имена, будет потеряна.
+
+<P>Специализированные структуры являются термином C++ structs. Каждый элемент
+члена сохранен с уникальным именем внутри структуры. Вы никоим образом не
+можете использовать STL-алгоритмы или что-нибудь еще из STL, чтобы работать с
+индивидуальными элементами структур. Однако, поскольку эти структуры все
+равно затем будут сохранены в STL-контейнерах, Вы можете использовать
+STL-алгоритмы на контейнерах этих структур. Контейнеры представляют строки, а
+индивидуальные элементы структуры представляют столбцы. Например, Вы можете
+обращаться к элементу, именованному "price" в третьей строке как к
+result[3].price. В динамическом наборе результатов то же самое достигается
+записью result[3]["price"].
+
+<P>Если имеется проблема в преобразовании из набора результатов,
+возвращенного сервером, к специализированным структурам, возникает
+исключительная ситуация, которую нужно обработать.
+
+<P>Чтобы помочь в создании запросов, использующих эти специализированные
+структуры, тот же самый запрос, доступен для применения в динамических
+наборах результатов. Это включает методы для возврата списков данных.
+
+<H2><A NAME="SECTION02233000000000000000">
+Динамические полностью изменчивые наборы</A></H2>
+<P>Этот набор результатов будет выполнен, когда курсоры на стороне сервера
+будут поддерживаться в MySQL. Но, основываясь на приобретенном знании и
+опыте при проектирования MySQL++ и MySQLGUI, была сделана предварительная
+версия. Этот набор результатов полностью динамический в том смысле, что весь
+набор результатов сохранен в динамическом контейнере C++. Этот контейнер
+будет только кэшировать набор результатов, и он будет иметь заданный по
+умолчанию размер. Этот динамический контейнер будет окном в M строк из всего
+набора результатов в N строк, где N ограничено сервером MySQL. Этот набор
+результатов будет также полностью динамическим в том смысле, что имена
+столбцов и тип информации столбцов не должны быть определены во время
+компиляции. Но все существующие функциональные возможности статических и
+динамических наборов будут также доступны и в этом наборе. Этот набор будет
+также иметь методы для модифицирования, удаления и вставки строк, а также ряд
+специализированных макрокоманд для конструирования классов.
+
+<H1><A NAME="SECTION02240000000000000000">Дополнение</A></H1>
+<P>В дополнение к материалу, упомянутому выше, хочу заметить, что есть много
+универсальных классов, которые могут использоваться с другими программами.
+Примеры этого включают специальный класс const string, адаптер произвольного
+доступа, который будет делать контейнер произвольного доступа из класса
+только с методом size() и определенным оператором subscript ([]), а также
+универсальный класс запроса SQL, который может использоваться любым
+SQL C или C++ API.
+
+<P>Начиная с версии 1.7, имеется новое дополнение к библиотекам. Добавилось
+несколько очень полезных функций для строк STL, которые могут применяться в
+любом приложении на C++, неважно, скомпоновано оно с MySQL++ или нет. Эти
+функции содержатся в исходных файлах string_util.hh и string_util.cc.
+
+<H1><A NAME="SECTION02300000000000000000">3.3. Важные изменения</A></H1>
+<H1><A NAME="SECTION02310000000000000000">3.3.1 Текущие изменения</A></H1>
+<P><UL><LI>Синтаксис списка равенства для SSQLS сменился с <B>equal_list
+(cchar *, Manip, cchar *)</B> на <B>equal_list (cchar *, cchar *, Manip)</B>.
+</LI>
+
+<LI>Начиная с версии 1.3 mysql++, больше не может компилироваться
+транслятором GNU версии ниже, чем 2.95. Начиная с версии 1.3, mysql++ был
+изменен, чтобы учесть и обработать изменения в различных аспектах C++ в
+версии 2.95. Собственно из-за этого-то пакет и перестал компилироваться
+версиями GNU 2.7.xx, 2.8.xx и более ранними. Также не поддерживается egcs
+1.x.x. Хотя с некоторыми изменениями в коде mysql++ может быть откомпилирован
+и этими трансляторами выполнение таких программ кончится провалом.</LI>
+
+<LI>Из-за проблем совместимости нельзя использовать g++ 2.95.3 и g++ 2.96.
+</LI>
+
+<LI>Имеются отдельные версии для компиляторов Borland C++, VC++ и
+Compaq на Tru64.</LI>
+
+<LI>Было также отмечено, что на некоторых инсталляциях SPARC Solaris
+исключительные ситуации C++ не работают с gcc 2.95.2. Этот случай был
+проверен и установлено, что mysql++ формируется безукоризненно на Solaris с
+помощью gcc version 2.95 19990728 (release).</LI>
+
+<LI>Конструкторы ``connection'' для <B>Connection</B> и
+<B>Connection::connect</B> (формально известны как <B>Mysql</B>) переделаны
+так, чтобы имя базы данных было первым параметром. То же самое имеет силу
+для метода connect.</LI>
+
+<LI>Все новые свойства клиентов, реализованные в 3.22.xx как различные
+параметры на connect, поддерживаются новым конструктором и
+методом real_connect.</LI>
+
+<LI>Также поддерживаются новые параметры конфигурации в 3.23.xx.</LI>
+<LI>Mysql++ теперь может компилироваться на Win32 с использованием Cygwin
+транслятора от Cygnus Inc.</LI>
+
+<LI>Autoconf и Automake полностью выполнены.</LI>
+<LI>Specialized SQL Structures (формально известны как Custom Mysql
+Structures) изменены с mysql_ на sql_.</LI>
+
+<LI>Изменены все функции, которые возвращают ноль (false) при успехе и
+отличное от ноля значение (true) в противном случае, на bool. Это означает,
+что они теперь возвращают true при успехе и false в противном случае. Это
+означает, что Вы теперь должны отрицать Ваши выражения, которые проверяют
+вывод этих функций.</LI>
+
+<LI>Почти все методы, которые возвращали MysqlString, теперь возвращают
+нормальные строки. Поскольку объекты <B>MysqlString</B> преобразуются в
+строки, нет проблем с <TT>MysqlString&nbsp;s&nbsp;=&nbsp;mysql.host_info</TT>.
+</LI>
+<LI>Тип данных <B>MysqlRow</B> теперь возвращает <B>MysqlString</B> или
+<B>MysqlColData</B>. Он теперь подклассифицируется из специального строкового
+класса, который написан, чтобы обработать строковые константы намного более
+эффективным путем (то есть, это не копирует их). К сожалению, этот тип данных
+также более ограничен.</LI>
+<LI>Добавлены все необходимые методы, имеющие
+отношение к административным функциям.</LI>
+<LI>Mysql++ теперь цитирует и экранирует объекты автоматически, если данные
+столбца используются с оператором &lt;&lt;.</LI>
+<LI>Mysql++ теперь имеет намного более безопасное выполнение INSERT, UPDATE и
+DELETE с новым методом exec().</LI>
+<LI>Mysql++ теперь имеет лучшую конфигурацию.</LI>
+<LI>Имеется новый метод выборки строк.</LI>
+<LI>Mysql++ может работать и с двоичными данными.</LI>
+<LI>Сделана стандартная обработка исключений для C++ с методом what().</LI>
+<LI>Вся обработка преобразований 64 int в строки
+теперь переместились в libmysqlclient.</LI>
+<LI>Программы, написанные с применением MySQL++, теперь будут автоматически
+читать все релевантные файлы конфигурации MySQL.</LI></UL>
+
+<H1><A NAME="SECTION02320000000000000000">3.3.2 Что планируется сделать</A>
+</H1>
+<UL><LI>Полностью изменчивые наборы результатов</LI>
+<LI>Поведение MysqlString, когда используется с двоичными операторами,
+изменится в следующей версии. Вместо того, чтобы преобразовать в тип с другой
+стороны оператора, MysqlString будет преобразовывать данные в тот тип, какой
+указан сервером Mysql первоначально. Это будет намного безопаснее.</LI></UL>
+
+<H1><A NAME="SECTION03100000000000000000">3.4. Руководство по примерам</A>
+</H1>
+<H1><A NAME="SECTION03110000000000000000">3.4.1 Введение</A></H1>
+<P>Это описание, как предполагается, дает Вам начало использования Mysql++
+API. Пакет этот сложный, с большим количеством свойств, так что начните с
+чего-то простого.
+
+<H1><A NAME="SECTION03120000000000000000">3.4.2 Предположения</A></H1>
+<P>Этот учебник предполагает, что Вы знаете C++ довольно хорошо. Считается,
+что Вы знакомы с исключениями и Standard Template Library (STL).
+
+<H1><A NAME="SECTION03130000000000000000">3.4.3 Запуск примеров</A></H1>
+<P>Все коды примеров формируют полные программы. Однако, чтобы использовать
+их, Вы должны сначала откомпилировать их, для чего перейдите в каталог с
+примерами и наберите там <TT>make</TT>. Затем Вы должны установить базу
+данных запуском reset-db. Параметры здесь такие:
+
+<DL COMPACT>
+<DT><DD><TT>reset-db [host [user [password]]]</TT></DD></DL>
+Если Вы не указываете host, по умолчанию принимается localhost. Если Вы не
+указываете имя пользователя, по умолчанию принимается Ваше актуальное имя
+пользователя. Если Вы не указываете пароль, по умолчанию принимается, что Вы
+не нуждаетесь в нем.
+
+<P>Когда Вы выполняете программу, Вы должны иметь права доступа с разрешением
+создавать базы данных. Как только база данных создана, Вы можете использовать
+другие права доступа для полного доступа к базе данных mysql_cpp_data.
+
+<P>Вы должны также выполнить программу reset-db между примерами, которые
+изменяют данные, чтобы все работало как надо.
+
+<H1><A NAME="SECTION03140000000000000000">3.4.4 Основы</A></H1>
+<H2><A NAME="SECTION03141000000000000000">3.4.4.1 Простой пример</A></H2>
+<P>Следующий пример показывает, как открыть подключение, выполнить простой
+запрос и отобразить результаты. Код может быть найден в файле
+<TT>simple1.cc</TT>, который размещен в каталоге примеров пакета.
+<PRE>
+#include &#60;iostream&#62;
+#include &#60;iomanip&#62;
+#include &#60;sqlplus.hh&#62;
+
+int main()
+{
+  Connection con("mysql_cpp_data");
+  // The full format for the Connection constructor is
+  // Connection(cchar *db, cchar *host="", cchar *user="", cchar *passwd="")
+  // You may need to specify some of them if the database is not on
+  // the local machine or you database username is not the same as your
+  // login name, etc..
+
+  Query query = con.query();
+  // This creates a query object that is bound to con.
+
+  query &#60;&#60; "select * from stock";
+  // You can write to the query object like you would any other ostrem
+
+  Result res = query.store();
+  // Query::store() executes the query and returns the results
+
+  cout &#60;&#60; "Query: " &#60;&#60;query.preview() &#60;&#60; endl;
+  // Query::preview() simply returns a string with the current query
+  // string in it.
+  cout &#60;&#60; "Records Found: "&#60;&#60; res.size() &#60;&#60;
+       endl &#60;&#60;endl;
+  Row row;
+  cout.setf(ios::left);
+  cout &#60;&#60; setw(17) &#60;&#60; "Item" &#60;&#60; setw(4)
+       &#60;&#60;"Num" &#60;&#60; setw(7) &#60;&#60;"Weight"
+       &#60;&#60; setw(7) &#60;&#60;"Price" &#60;&#60; "Date"
+       &#60;&#60;endl &#60;&#60; endl;
+  Result::iterator i;
+  // The Result class has a read-only Random Access Iterator
+  for (i = res.begin(); i != res.end(); i++)
+  {
+    row = *i;
+    cout &#60;&#60; setw(17) &#60;&#60; row[0] &#60;&#60; setw(4)
+         &#60;&#60; row[1] &#60;&#60; setw(7) &#60;&#60; row["weight"]
+         &#60;&#60; setw(7) &#60;&#60;row[3]
+         &#60;&#60; row[4] &#60;&#60;endl;
+  }
+  return 0;
+}
+</PRE>
+
+<H2><A NAME="SECTION03142000000000000000">3.4.4.2
+Немного более сложный пример</A></H2>
+<P>Этот пример почти подобен предыдущему, однако он использует исключительные
+ситуации и автоматическое свойство преобразования <B>ColData</B>. Файл с ним
+назван <TT>complic1.cc</TT>.
+<PRE>
+#include &#60;iostream&#62;
+#include &#60;iomanip&#62;
+#include &#60;sqlplus.hh&#62;
+
+int main()
+{
+  try
+  { // its in one big try block
+    Connection con(use_exceptions);
+    con.connect("mysql_cpp_data");
+    // Here  we broke making the connection into two calls.
+    // The first one creates the Connection object with the
+    // use exceptions option turned on and the second one
+    // makes the connection
+
+    Query query = con.query();
+    query &#60;&#60; "select * from stock";
+    Result res = query.store();
+    cout &#60;&#60; "Query: " &#60;&#60;query.preview() &#60;&#60; endl;
+    cout &#60;&#60; "Records Found: "&#60;&#60; res.size() &#60;&#60;
+         endl &#60;&#60;endl;
+    Row row;
+    cout.setf(ios::left);
+    cout &#60;&#60; setw(17) &#60;&#60; "Item" &#60;&#60; setw(4)
+         &#60;&#60;"Num" &#60;&#60; setw(7) &#60;&#60;"Weight"
+         &#60;&#60; setw(7) &#60;&#60;"Price" &#60;&#60; "Date"
+         &#60;&#60;endl &#60;&#60; endl;
+    Result::iterator i;
+    cout.precision(3);
+    for (i = res.begin(); i != res.end(); i++)
+    {
+      row = *i;
+      cout &#60;&#60; setw(17) &#60;&#60;row["item"] &#60;&#60;
+           setw(4) &#60;&#60;row[1] &#60;&#60; setw(7) &#60;&#60;
+           (double)row[2] &#60;&#60; setw(7) &#60;&#60;(double)row[3];
+      Date date = row["sdate"];
+      // The ColData is implicitly converted to a date here.
+      cout.setf(ios::right);
+      cout.fill('0');
+      cout &#60;&#60; setw(2) &#60;&#60;date.month &#60;&#60; "-" &#60;&#60;
+           setw(2) &#60;&#60; date.day &#60;&#60; endl;
+      cout.fill(' ');
+      cout.unsetf(ios::right);
+    }
+    return 0;
+  } catch (BadQuery er)
+  { // handle any connection or
+    // query errors that may come up
+    cerr &#60;&#60; "Error: " &#60;&#60;er.error &#60;&#60; endl;
+    return -1;
+  } catch (BadConversion er)
+  { // handle bad conversions
+    cerr &#60;&#60; "Error: Tried to convert &#92;"" &#60;&#60; er.data
+         &#60;&#60; "&#92;" to a &#92;"" &#60;&#60; er.type_name
+         &#60;&#60;"&#92;"." &#60;&#60;endl;
+    return -1;
+  }
+}
+</PRE>
+
+<P>Все должно быть довольно очевидно. Приведу лишь несколько примечаний
+относительно исключительных ситуаций:
+
+<P><OL>Когда флажок <B>use_exceptions</B> установлен для родительского
+объекта, он также установлен для всех потомков, созданных после того, как
+флажок был установлен. Например, когда флажок <B>use_exceptions</B>
+установлен для объекта <TT>con</TT>, он также установлено и для объекта
+<TT>query</TT>. Пожалуйста, обратите внимание, что флажок
+<B>use_exceptions</B> не компонуется, а копируется. Это означает, что, когда
+Вы изменяете флажок <B>use_exceptions</B>, это воздействует только на новые
+объекты, но <I>не на старые</I>.</LI>
+
+<LI><B>ColData</B> будет всегда создавать исключительную ситуацию, когда
+сталкивается с плохим преобразованием. Плохое преобразование определено как
+преобразование в котором: a) Не все символы из строки читаются, и b) Символы
+после числа не точки (.), нули (0) или пробелы. Таким образом, когда ``1.25''
+преобразован в int, исключительная ситуация будет создана, а вот при
+обработке ``1.00'' в int все будет в порядке, поскольку символы нуль и точка.
+</LI></OL>
+
+<H2><A NAME="SECTION03143000000000000000">3.4.4.3
+Получение информации о полях</A></H2>
+<P>Следующий пример показывает, как получить некоторую базисную информацию
+относительно полей, включая имя поля и тип SQL. Файл назван fieldinfo1.cc.
+<PRE>
+#include &#60;iostream&#62;
+#include &#60;iomanip&#62;
+#include &#60;sqlplus.hh&#62;
+
+int main()
+{
+  try
+  { // its in one big try block
+    Connection con(use_exceptions);
+    con.connect("mysql_cpp_data");
+    Query query = con.query();
+    query &#60;&#60; "select * from stock";
+    Result res = query.store();
+    cout &#60;&#60; "Query: " &#60;&#60;query.preview() &#60;&#60; endl;
+    cout &#60;&#60; "Records Found: "&#60;&#60; res.size() &#60;&#60;
+         endl &#60;&#60;endl;
+    cout &#60;&#60; "Query Info:&#92;n";
+    cout.setf(ios::left);
+    for (unsigned int i = 0; i &#60; res.size(); i++)
+    {
+      cout &#60;&#60; setw(2) &#60;&#60; i &#60;&#60; setw(15) &#60;&#60;
+           res.names(i).c_str() &#60;&#60; setw(15) &#60;&#60;
+           res.types(i).sql_name() &#60;&#60; setw(20) &#60;&#60;
+           res.types(i).name() &#60;&#60; endl;
+    }
+    cout &#60;&#60; endl;
+    if (res.types(0) == typeid(string))
+       cout &#60;&#60; "Field 'item' is of an sql type which most closely resembles a&#92;n"
+            &#60;&#60; "the c++ string type&#92;n";
+    if (res.types(1) == typeid(short int))
+       cout &#60;&#60; "Field 'num' is of an sql type which most closely resembles a&#92;n"
+            &#60;&#60; "the c++ short int type&#92;n";
+    else if (res.types(1).base_type() == typeid(short int))
+      cout &#60;&#60; "Field 'num' base type is of an sql type which most closely &#92;n"
+           &#60;&#60; "resembles a the c++ short int type&#92;n";
+    return 0;
+  } catch (BadQuery er)
+  {
+    cerr &#60;&#60; "Error: " &#60;&#60; er.error &#60;&#60; endl;
+    return -1;
+  } catch (BadConversion er)
+  {
+    cerr &#60;&#60; "Error: Tried to convert &#92;"" &#60;&#60; er.data
+         &#60;&#60; "&#92;" to a &#92;"" &#60;&#60; er.type_name
+         &#60;&#60; "&#92;"." &#60;&#60; endl;
+    return -1;
+  }
+}
+</PRE>
+
+<H1><A NAME="SECTION03150000000000000000">3.4.5 Специализированные структуры
+SQL</A></H1>
+<H2><A NAME="SECTION03151000000000000000">3.4.5.1 Получение данных</A></H2>
+<P>Следующий пример показывает довольно интересное понятие, известное
+как Specialized SQL Structures (SSQLS). Имя файла для этого кода:
+<TT>custom1.cc</TT>.
+<PRE>
+#include &#60;iostream&#62;
+#include &#60;iomanip&#62;
+#include &#60;vector&#62;
+#include &#60;sqlplus.hh&#62;
+#include &#60;custom.hh&#62;
+
+sql_create_5 (stock, 1, 5, string, item, int, num, double, weight,
+              double, price, Date, sdate)
+
+// this is calling a very complex macro which will create a custom
+// struct "stock" which has the variables:
+//   string item
+//    int num
+//    ...
+//    Date sdate
+// defined as well methods to help populate the class from a mysql row
+// among other things that I'll get too in a latter example
+int main ()
+{
+  try
+  {
+    Connection con (use_exceptions);
+    con.connect ("mysql_cpp_data");
+    Query query = con.query ();
+    query &#60;&#60; "select * from stock";
+    vector &#60; stock &#62; res;
+    query.storein (res);
+    // this is storing the results into a vector of the custom struct
+    // "stock" which was created my the macro above.
+    cout.setf (ios::left);
+    cout &#60;&#60; setw (17) &#60;&#60; "Item" &#60;&#60; setw (4)
+         &#60;&#60; "Num" &#60;&#60; setw (7) &#60;&#60; "Weight"
+         &#60;&#60; setw (7) &#60;&#60; "Price" &#60;&#60; "Date"
+         &#60;&#60; endl &#60;&#60; endl;
+    cout.precision(3);
+    vector &#60;stock&#62;::iterator i;
+    for (i = res.begin (); i != res.end (); i++)
+    {
+      cout &#60;&#60; setw (17) &#60;&#60; i-&#62;item.c_str ()
+           &#60;&#60; setw (4) &#60;&#60; i-&#62;num &#60;&#60; setw (7)
+           &#60;&#60; i-&#62;weight &#60;&#60; setw (7) &#60;&#60;
+           i-&#62;price &#60;&#60; i-&#62;sdate &#60;&#60; endl;
+    }
+    return 0;
+  } catch (BadQuery er)
+  { // handle any connection
+    // or query errors that may come up
+    cerr &#60;&#60; "Error: " &#60;&#60; er.error &#60;&#60; endl;
+    return -1;
+  } catch (BadConversion er)
+  {
+    // we still need to cache bad conversions incase something goes
+    // wrong when the data is converted into stock
+    cerr &#60;&#60; "Error: Tried to convert &#92;"" &#60;&#60; er.data
+         &#60;&#60; "&#92;" to a &#92;"" &#60;&#60; er.type_name
+         &#60;&#60; "&#92;"." &#60;&#60; endl;
+    return -1;
+  }
+}
+</PRE>
+
+<P>Как Вы можете видеть, SSQLS очень мощная штука.
+
+<H2><A NAME="SECTION03152000000000000000">3.4.5.2 Добавление данных</A></H2>
+<P>SSQLS может также использоваться, чтобы добавить данные в таблицу. Имя
+файла для этого кода: custom2.cc.
+<PRE>
+#include &#60;iostream&#62;
+#include &#60;vector&#62;
+#include &#60;sqlplus.hh&#62;
+#include &#60;custom.hh&#62;
+#include "util.hh"
+
+sql_create_5(stock, 1, 5, string, item, int, num,
+             double, weight, double, price, Date, sdate)
+
+int main()
+{
+  try
+  { // its in one big try block
+    Connection con(use_exceptions);
+    con.connect("mysql_cpp_data");
+    Query query = con.query();
+    stock row;
+    /* row.item = "Hot Dogs";
+    row.num = 100;
+    row.weight = 1.5;
+    row.price = 1.75;
+    row.sdate = "1998-09-25"; */
+    row.set("Hot Dogs", 100, 1.5, 1.75, "1998-09-25");
+    // populate stock
+    query.insert(row);
+    // form the query to insert the row
+    // the table name is the name of the struct by default
+    cout &#60;&#60; "Query : " &#60;&#60; query.preview() &#60;&#60; endl;
+    // show the query about to be executed
+    query.execute();
+    // execute a query that does not return a result set
+    print_stock_table(query);
+    // now print the new table;
+  } catch (BadQuery er)
+  {
+    cerr &#60;&#60; "Error: " &#60;&#60;er.error &#60;&#60; endl;
+    return -1;
+  } catch (BadConversion er)
+  {
+    cerr &#60;&#60; "Error: Tried to convert &#92;"" &#60;&#60; er.data
+         &#60;&#60; "&#92;" to a &#92;"" &#60;&#60; er.type_name
+         &#60;&#60; "&#92;"." &#60;&#60;endl;
+    return -1;
+  }
+}
+</PRE>
+
+<P>Так как этот пример изменяет данные, Вы должны выполнить программу
+<TT>reset-db</TT> после работы примера.
+
+<H2><A NAME="SECTION03153000000000000000">3.4.5.3 Изменение данных</A></H2>
+<P>Очень просто изменять данные с помощью SSQLS. Имя файла: custom3.cc.
+<PRE>
+#include &#60;iostream&#62;
+#include &#60;vector&#62;
+#include &#60;sqlplus.hh&#62;
+#include &#60;custom.hh&#62;
+#include "util.hh"
+// util.hh/cc contains the print_stock_table function
+
+sql_create_5(stock, 1, 5, string, item, int, num,
+             double, weight, double, price, Date, sdate)
+
+int main()
+{
+  try { // its in one big try block
+    Connection con(use_exceptions);
+    con.connect("mysql_cpp_data");
+    Query query = con.query();
+    query &#60;&#60; "select * from stock where item = &#92;"Hotdogs' Buns&#92;" ";
+    Result res = query.store();
+    if (res.empty())
+       throw BadQuery("Hotdogs' Buns not found in table, run reset-db");
+    stock row = res[0];
+    stock row2 = row;
+    row.item = "Hotdog Buns";   // now change item
+    query.update(row2, row);
+    // form the query to replace the row
+    // the table name is the name of the struct by default
+    cout &#60;&#60; "Query : " &#60;&#60; query.preview() &#60;&#60; endl;
+    // show the query about to be executed
+    query.execute();
+    // execute a query that does not return a result set
+    print_stock_table(query);
+    // now print the new table;
+  } catch (BadQuery er) {
+    cerr &#60;&#60; "Error: " &#60;&#60; er.error &#60;&#60; endl;
+    return -1;
+  } catch (BadConversion er)
+  {
+    cerr &#60;&#60; "Error: Tried to convert &#92;"" &#60;&#60; er.data
+         &#60;&#60; "&#92;" to a &#92;"" &#60;&#60; er.type_name
+         &#60;&#60; "&#92;"." &#60;&#60; endl;
+    return -1;
+  }
+}
+</PRE>
+
+<P>Когда Вы выполняете пример, обратите внимание, что в предложении where
+проверено только поле <I>item</I>. Не забудьте выполнить <TT>reset-db</TT>
+после работы этого примера.
+
+<H2><A NAME="SECTION03154000000000000000">3.4.5.4 Less-Than-Comparable</A>
+</H2>
+<P>SSQLS могут также быть сделаны less-than-comparable. Это означает, что
+структуры могут сортироваться и сохраняться в наборах результатов как
+показывается в следующем примере. Имя файла: custom4.cc.
+<PRE>
+#include &#60;iostream&#62;
+#include &#60;iomanip&#62;
+#include &#60;vector&#62;
+#include &#60;sqlplus.hh&#62;
+#include &#60;custom.hh&#62;
+
+sql_create_5(stock, 1, 5, string,item, int,num, double,weight,
+             double,price, Date,sdate)
+
+int main()
+{
+  try
+  { // its in one big try block
+    Connection con(use_exceptions);
+    con.connect("mysql_cpp_data");
+    Query query = con.query();
+    query &#60;&#60; "select * from stock";
+    set &#60;stock&#62; res;
+    query.storein(res);
+    // here we are storing the elements in a set not a vector.
+    cout.setf (ios::left);
+    cout &#60;&#60; setw (17) &#60;&#60; "Item" &#60;&#60; setw (4)
+         &#60;&#60; "Num" &#60;&#60; setw (7) &#60;&#60; "Weight"
+         &#60;&#60; setw (7) &#60;&#60; "Price" &#60;&#60; "Date"
+         &#60;&#60; endl &#60;&#60; endl;
+    // Now we we iterate through the set.
+    // Since it is a set the list will
+    // naturally be in order.
+    set &#60;stock&#62;::iterator i;
+    cout.precision(3);
+    for (i = res.begin (); i != res.end (); i++)
+    {
+      cout &#60;&#60; setw (17) &#60;&#60; i-&#62;item.c_str ()
+           &#60;&#60; setw (4) &#60;&#60; i-&#62;num
+           &#60;&#60; setw (7) &#60;&#60; i-&#62;weight &#60;&#60; setw (7)
+           &#60;&#60; i->price &#60;&#60; i-&#62;sdate &#60;&#60; endl;
+    }
+    i = res.find(stock("Hamburger Buns"));
+    if (i != res.end())
+       cout &#60;&#60; "Hamburger Buns found. Currently " &#60;&#60; i->num
+            &#60;&#60; " in stock.&#92;n";
+    else cout &#60;&#60; "Sorry no Hamburger Buns found in stock&#92;n";
+    // Now we are using the set's find method to find out how many
+    // Hamburger Buns are in stock.
+    return 0;
+  } catch (BadQuery er)
+  {
+    cerr &#60;&#60; "Error: " &#60;&#60; er.error &#60;&#60; endl;
+    return -1;
+  } catch (BadConversion er)
+  {
+    cerr &#60;&#60; "Error: Tried to convert &#92;"" &#60;&#60; er.data
+         &#60;&#60; "&#92;" to a &#92;"" &#60;&#60; er.type_name
+         &#60;&#60; "&#92;"." &#60;&#60; endl;
+    return -1;
+  }
+}
+</PRE>
+
+<H1><A NAME="SECTION03160000000000000000">3.4.6 Сделаем еще лучше</A></H1>
+<P>При начале разработки MySQl++ 1.6 авторы представили три новых примера,
+чья цель состоит в том, чтобы показать некоторых из самых сильных свойств
+MySQL++, а также обеспечить решение некоторых из наиболее частых проблем.
+Эти примеры иллюстрируют превосходство C++ над другими существующими языками.
+
+<P>Поскольку эти примеры предполагаются к активному использованию (и
+применяются многими пользователями), константы, которые могут отличаться в
+разных ситуациях, были сгруппированы, чтобы упростить редактирование. Также,
+все эти примеры содержат полную ошибку, проверяющую код. Это один из тех
+редких случаев, в которых обработка исключительной ситуации, принятая в С++,
+полностью применена в MySQL++.
+
+<H2><A NAME="SECTION03161000000000000000">3.4.6.1 Загрузка двоичного файла в
+столбец типа BLOB</A></H2>
+<P>Эта функция появилась в MySQL version 3.23, но многие пользователи все еще
+используют старые версии. Пример показывает несколько свойств MySQL++. Эта
+программа требует одного параметра, который является полным путевым именем
+для двоичного файла.
+<PRE>
+#include &#60;sys/stat.h&#62;
+#include &#60;fstream&#62;
+#include &#60;mysql++&#62;
+
+extern int errno;
+const char MY_DATABASE[]="telcent";
+const char MY_TABLE[]="fax";
+const char MY_HOST[]="localhost";
+const char MY_USER[]="root";
+const char MY_PASSWORD[]="";
+const char MY_FIELD[]="fax";   // BLOB field
+
+int main(int argc, char *argv[])
+{
+  if (argc &#60; 2)
+  {
+     cerr &#60;&#60; "Usage: load_file full_file_path" &#60;&#60;
+          endl&#60;&#60; endl;
+     return -1;
+  }
+  Connection con(use_exceptions);
+  try
+  {
+    con.real_connect(MY_DATABASE,MY_HOST,MY_USER,MY_PASSWORD,3306,
+                     (int)0,60,NULL);
+    Query query = con.query();
+    ostrstream strbuf;
+    ifstream In (argv[1],ios::in| ios::binary);
+    struct stat for_len;
+    if ((In.rdbuf())-&#62;is_open())
+    {
+       if (stat (argv[1],&amp; for_len) == -1) return -1;
+       unsigned int blen = for_len.st_size;
+       if (!blen) return -1;
+       char *read_buffer= new char[blen];
+       In.read(read_buffer,blen);
+       string fill(read_buffer,blen);
+       strbuf &#60;&#60; "INSERT INTO " &#60;&#60; MY_TABLE
+              &#60;&#60;" (" &#60;&#60; MY_FIELD &#60;&#60;
+              ") VALUES(&#92;"" &#60;&#60; escape &#60;&#60;
+              fill &#60;&#60; "&#92;")";
+       query.exec(strbuf.str());
+       delete[] read_buffer;
+    }
+    else cerr &#60;&#60; "Your binary file " &#60;&#60; argv[1]
+              &#60;&#60; "could not be open, errno = " &#60;&#60; errno;
+    return 0;
+  } catch (BadQuery er)
+  {
+    cerr &#60;&#60; "Error: " &#60;&#60;er.error &#60;&#60; " "
+         &#60;&#60;con.errnum() &#60;&#60; endl;
+    return -1;
+  }
+}
+</PRE>
+
+<P>Одно из свойств, которое отображается в этом примере, манипулятор escape.
+Хотя автоматическое цитирование и экранирование появилось в версии 1.6, это
+применимо только к классам ColData, так как они содержат информацию о типе
+данных. Авторы пакета могли бы также делать цитирование и экранировку на
+общей строке типа данных, но требуется просмотреть всю строку, чтобы выявить
+все места, где нужна экранировка служебных символов. Поскольку это свойство
+замедлит код, оно не реализовано.
+
+<H2><A NAME="SECTION03162000000000000000">3.4.6.1 Отображение картинок в HTML
+из столбцов типа BLOB</A></H2>
+<P>Этот пример также очень короткий. Рассмотрим функцию, которую он
+выполняет. Хотя с версии 3.23.3 имеется команда для сброса данных из столбцов
+BLOB в двоичный файл, эта программа может использоваться не только клиентами,
+все еще использующими старые версии, но и теми, кто не хочет сбрасывать
+картинку на диск.
+<PRE>
+#include &#60;sqlplus.hh&#62;
+#define MY_DATABASE "telcent"
+#define MY_TABLE "fax"
+#define MY_HOST "localhost"
+#define MY_USER "root"
+#define MY_PASSWORD ""
+#define MY_FIELD "fax" // BLOB field
+#define MY_KEY "datet" // PRIMARY KEY
+
+int main (int argc, char *argv[])
+{
+  if (argc &#60; 2)
+  {
+     cerr &#60;&#60; "Usage: cgi_image primary_key_value" &#60;&#60;
+          endl&#60;&#60; endl;
+     return -1;
+  }
+  cout &#60;&#60; "Content-type: image/jpeg" &#60;&#60; endl;
+  Connection con(use_exceptions);
+  try
+  {
+    con.real_connect(MY_DATABASE,MY_HOST,MY_USER,MY_PASSWORD,3306,
+                     (int)0,60,NULL);
+    Query query = con.query();
+    query &#60;&#60; "SELECT" &#60;&#60; MY_FIELD &#60;&#60; "FROM "
+          &#60;&#60; MY_TABLE &#60;&#60; " WHERE " &#60;&#60; MY_KEY
+          &#60;&#60;" = " &#60;&#60; argv[1];
+    ResUse res = query.use();
+    Row row=res.fetch_row();
+    long unsigned int *jj = res.fetch_lengths();
+    cout &#60;&#60; "Content-length:" &#60;&#60; *jj &#60;&#60;
+         endl&#60;&#60; endl;
+    fwrite(row.raw_data(0),1,*jj,stdout);
+    return 0;
+  } catch (BadQuery er)
+  {
+    cerr &#60;&#60; "Error: " &#60;&#60; er.error &#60;&#60; " "
+         &#60;&#60; con.errnum() &#60;&#60; endl;
+    return -1;
+  }
+}
+</PRE>
+
+<P>Этот пример показывает обработку двоичных данных в MySQL++, которая
+появилась в версии 1.6. Гибкое использование потоков допускает легкое
+использование этого кода во многих прикладных программах.
+
+<H2><A NAME="SECTION03163000000000000000">3.4.6.2 Удаление или модификация
+из Select</A></H2>
+<P>Об этом свойстве просят многие пользователи, но пока оно не сделано на
+уровне ядра СУБД, эта программа может использоваться вместо него. Это
+маленькая программка, которая также показывает некоторые свойства MySQL++.
+<PRE>
+#include &#60;sqlplus.hh>
+#define MY_DATABASE "telcent"
+#define MY_TABLE "nazivi"
+#define MY_HOST "localhost"
+#define MY_USER "root"
+#define MY_PASSWORD ""
+#define MY_FIELD "naziv"
+#define MY_QUERY "SELECT URL from my_table as t1, my_table as t2 \\
+                 where t1.field = t2.field"
+
+int main (void)
+{
+  Connection con(use_exceptions);
+  try
+  {
+    ostrstream strbuf;
+    unsigned int i=0;
+
+    con.real_connect(MY_DATABASE,MY_HOST,MY_USER,MY_PASSWORD,3306,
+                     (int)0,60,NULL);
+    Query query = con.query();
+    query &#60;&#60; MY_QUERY;
+    ResUse res = query.use();
+    Row row;
+    strbuf &#60;&#60; "delete from " &#60;&#60; MY_TABLE &#60;&#60;
+           " where " &#60;&#60; MY_FIELD &#60;&#60; " in (";
+    // for UPDATE just replace the above DELETE FROM with UPDATE statement
+    for (;row=res.fetch_row();i++) strbuf &#60;&#60; row[0] &#60;&#60; ",";
+    if (!i) return 0;
+    string output(strbuf.str());
+    output.erase(output.size()-1,1);
+    output += ")";
+    query.exec((const string&amp;)output);
+    // cout &#60;&#60; output &#60;&#60; endl;
+    return 0;
+  } catch (BadQuery er)
+  {
+    cerr &#60;&#60; "Error: " &#60;&#60; er.error &#60;&#60; " "
+         &#60;&#60; con.errnum() &#60;&#60; endl;
+    return -1;
+  }
+}
+</PRE>
+
+<P>Пожалуйста, сообщите в поле команды конструкции запроса MY_FIELD список
+значений для вставки. Значения поля будут цитироваться или нет в зависимости
+от их типа. Пользователи должны не должны ставить кавычки (или экранировать
+их символом escape), поскольку это приведет к ошибке. Этот метод требует
+несколько больше усилий от программиста. Программист может отключать это
+свойство, устанавливая соответствующую глобальную переменную переменную в
+false. Этот пример написан для выполнения DELETE. UPDATE требует изменений.
+
+<P>Все пользователи этих примеров должны быть осторожны: еще одна проверка
+требуется, чтобы выполнить этот запрос безопасно. А именно, в некоторых
+критических случаях размер запроса может превысить значение max_allowed.
+Эта проверка должна быть добавлна.
+
+<H2><A NAME="SECTION03164000000000000000">3.4.6.2 Двинемся дальше</A></H2>
+<P>Это только общий обзор того, что SSQLS может делать. Для получения
+большего количества информации обратитесь к главе
+<A HREF="#SSQLS">3.7</A>.
+
+<H1><A NAME="SECTION03170000000000000000">3.4.7 Шаблоны запросов</A></H1>
+<P>Другое мощное свойство Mysql++: можно устанавливать шаблоны запросов.
+Следующий пример показывает, как использовать их. Этот код представляет собой
+фактический код используемый, чтобы устанавливать и/или сбрасывать типовую
+базу данных. Этот код может быть найден в файле reset-db.cc.
+<PRE>
+#include &#60;iostream&#62;
+#include &#60;sqlplus.hh&#62;
+int main (int argc, char *argv[])
+{
+  Connection connection(use_exceptions);
+  try
+  { // the entire main block is one big try block;
+    if (argc == 1) connection.connect("");
+    else if (argc == 2) connection.connect("",argv[1]);
+    else if (argc == 3) connection.connect("",argv[1],argv[2]);
+    else if (argc &#60;= 4) connection.connect("",argv[1],argv[2],argv[3]);
+    // create a new object and connect based on any (if any) arguments
+    // passed to main();
+    try
+    {
+      connection.select_db("mysql_cpp_data");
+    } catch (BadQuery er)
+    {
+      // if it couldn't connect to the database assume that it doesn't exist
+      // and try created it. If that does not work exit with an error.
+      connection.create_db("mysql_cpp_data");
+      connection.select_db("mysql_cpp_data");
+    }
+    Query query = connection.query();  // create a new query object
+    try
+    { // ignore any errors here we hope to make this simpler soon
+      query.execute("drop table stock");
+    } catch (BadQuery er) {}
+    query &#60;&#60; "create table stock (item char(20) not null,
+          num smallint," &#60;&#60; "weight double,
+          price double, sdate date)";
+    query.execute(RESET_QUERY);
+    // send the query to create the table and execute it.  The
+    // RESET_QUERY tells the query object to reset it self after
+    // execution
+    query &#60;&#60; "insert into %5:table values (%q0, %q1, %2, %3, %q4)";
+    query.parse();
+    // set up the template query  we will use to insert the data. The
+    // parse method call is important as it is what lets the query
+    // know that this is a template and not a literal string
+    query.def["table"] = "stock";
+    // This is setting the parameter named table to stock.
+    query.execute("Hamburger Buns", 56, 1.25, 1.1, "1998-04-26");
+    query.execute("Hotdogs' Buns",65, 1.1, 1.1, "1998-04-23");
+    query.execute("Dinner Roles", 75, 0.95, 0.97, "1998-05-25");
+    query.execute("White Bread", 87, 1.5, 1.75, "1998-09-04");
+    // The last parameter "table" is not specified here. Thus
+    // the default value for "table" is used which is "stock".
+  } catch (BadQuery er)
+  { // handle any errors that may come up
+    cerr &#60;&#60; "Error: " &#60;&#60;er.error &#60;&#60; endl;
+    return -1;
+  }
+}
+</PRE>
+
+<H1><A NAME="SECTION03200000000000000000">3.3.5. Обзор классов</A></H1>
+<P>Этот раздел документирует все классы для внешнего использования. Если
+некий класс не зарегистрирован здесь, не используйте кго, поскольку он
+представляет собой метод или класс для внутреннего пользования.
+
+<H1><A NAME="SECTION03210000000000000000">3.3.5.1 struct <B>BadConversion</B></A>
+</H1>
+<P>Используется для создания исключительной ситуации, когда
+происходит плохое преобразование.
+
+<H3><A NAME="SECTION03210100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION03210200000000000000">Включаемый файл</A></H3>
+coldata1.hh
+
+<H2><A NAME="SECTION03211000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION03211100000000000000">Методы public</A></H3>
+<UL><LI><B>BadConversion</B> (const char* tn, const char* d, size_t r,
+size_t a)</LI>
+<LI>size_t <B>actual_size</B></LI>
+<LI>const string <B>data</B></LI>
+<LI>size_t <B>retrieved</B></LI>
+<LI>const char* <B>type_name</B></LI></UL>
+
+<H1><A NAME="SECTION03220000000000000000">3.5.2 class <B>BadNullConversion</B>
+</A></H1>
+<P>Используется, когда значение Null пытаются преобразовать в тип, к которому
+оно не может быть преобразовано.
+
+<H3><A NAME="SECTION03220100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION03220200000000000000">Включаемый файл</A></H3>
+null1.hh
+
+<H1><A NAME="SECTION03230000000000000000">3.5.3 class <B>Connection</B></A>
+</H1>
+<P>Основной обработчик базы данных.
+
+<H3><A NAME="SECTION03230100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION03230200000000000000">Включаемый файл</A></H3>
+connection1.hh
+
+<H2><A NAME="SECTION03231000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION03231100000000000000">Методы public</A></H3>
+<UL><LI><B>Connection</B> ()</LI>
+<LI><B>Connection</B> (bool te)</LI>
+<LI><B>Connection</B> (const char *db, const char *host = "",
+const char *user = "", const char *passwd = "", bool te = true)</LI>
+<LI><B>Connection</B> (const char *db, const char *host, const char *user,
+const char *passwd, uint port, my_bool compress = 1,
+unsigned int connect_timeout = 5, bool te=true, cchar *socket_name = "")</LI>
+<LI>int  <B>affected_rows</B> ()</LI>
+<LI>operator  <B>bool</B> ()<BR><EM>возвращает success()</EM></LI>
+<LI>string  <B>clinet_info</B> ()</LI>
+<LI>void <B>close</B> ()</LI>
+<LI>bool <B>connect</B> (cchar *db = "", cchar *host = "", cchar *user = "",
+cchar *passwd = "")</LI>
+<LI>bool  <B>connected</B> () const
+<BR><EM>возвращает true, если соединение успешно установлено</EM></LI>
+<LI>bool  <B>create_db</B> (string db)</LI>
+<LI>bool  <B>drop_db</B> (string db)</LI>
+<LI>int  <B>errnum</B> ()</LI>
+<LI>string  <B>error</B> ()<BR><EM>послкднее сообщение об ошибке</EM></LI>
+<LI>bool  <B>exec</B> (const string &amp;str)</LI>
+<LI>ResNSel  <B>execute</B> (const string &amp;str)</LI>
+<LI>ResNSel  <B>execute</B> (const string &amp;str, bool te)</LI>
+<LI>st_mysql_options  <B>get_options</B> (void) const</LI>
+<LI>string  <B>host_info</B> ()</LI>
+<LI>string  <B>info</B> ()</LI>
+<LI>string  <B>infoo</B> (void)</LI>
+<LI>int  <B>insert_id</B> ()</LI>
+<LI>int  <B>kill</B> (unsigned long pid)</LI>
+<LI>bool  <B>lock</B> ()</LI>
+<LI>int  <B>ping</B> (void)</LI>
+<LI>int  <B>proto_info</B> ()</LI>
+<LI>void  <B>purge</B> (void)</LI>
+<LI>inline Query  <B>query</B> ()</LI>
+<LI>int  <B>read_options</B> (enum mysql_option option, const char *arg)</LI>
+<LI>bool  <B>real_connect</B> (cchar *db = "", cchar *host = "",
+cchar *user = "", cchar *passwd = "", uint port = 0, my_bool compress = 0,
+unsigned int connect_timeout = 60, cchar *socket_name= "")</LI>
+<LI>int  <B>refresh</B> (unsigned int refresh_options)</LI>
+<LI>bool  <B>reload</B> ()</LI>
+<LI>bool  <B>select_db</B> (const char *db)</LI>
+<LI>bool  <B>select_db</B> (string db)</LI>
+<LI>string  <B>server_info</B> ()</LI>
+<LI>bool  <B>shutdown</B> ()</LI>
+<LI>string  <B>stat</B> ()</LI>
+<LI>Result  <B>store</B> (const string &amp;str)</LI>
+<LI>Result  <B>store</B> (const string &amp;str, bool te)</LI>
+<LI>template class T void <B>storein</B> (deque T &amp;con,
+const string &amp;s)</LI>
+<LI>template class T void <B>storein</B> (list T &amp;con,
+const string &amp;s)</LI>
+<LI>template class T void <B>storein</B> (multiset T &amp;con,
+const string &amp;s)</LI>
+<LI>template class T void <B>storein</B> (set T &amp;con,
+const string &amp;s)</LI>
+<LI>template class T void <B>storein</B> (slist T &amp;con,
+const string &amp;s)</LI>
+<LI>template class T void <B>storein</B> (vector T &amp;con,
+const string &amp;s)</LI>
+<LI>template class Sequence void <B>storein_sequence</B> (Sequence &amp;,
+const string &amp;)</LI>
+<LI>template class Set void <B>storein_set</B> (Set &amp;,
+const string &amp;)
+<BR><EM>Сохраняет результаты в TYPE. TYPE может быть любым
+типом контейнера STL.</EM></LI>
+<LI>bool <B>success</B> ()<BR><EM>возвращает true, если последний
+запрос был удачным</EM></LI>
+<LI>void <B>unlock</B> ()</LI>
+<LI>ResUse <B>use</B> (const string &amp;str)</LI>
+<LI>ResUse <B>use</B> (const string &amp;str, bool te)</LI>
+<LI><B>~ Connection</B> ()</LI></UL>
+
+<H3><A NAME="SECTION03231200000000000000">Методы Friend</A></H3>
+<UL><LI>friend  <B>Query</B></LI>
+<LI>friend  <B>ResNSel</B></LI>
+<LI>friend  <B>ResUse</B></LI></UL>
+
+<H1><A NAME="SECTION03240000000000000000">3.5.4 struct <B>Date</B> </A></H1>
+<P><EM>Специальный тип для хранения дат в формате mysql.</EM>
+
+<H3><A NAME="SECTION03240100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION03240200000000000000">Суперклассы</A></H3>
+public mysql_date, public MysqlDTbase Date
+
+<H3><A NAME="SECTION03240300000000000000">Включаемый файл</A></H3>
+datetime1.hh
+
+<H3><A NAME="SECTION03240400000000000000">Детальное описание</A></H3>
+<P>Date представляет собой структуру данных для хранения типов дат mysql.
+Используется в приеме потоков и операциях вставки.
+
+<H3><A NAME="SECTION03241100000000000000">Методы public</A></H3>
+<UL><LI><B>Date</B> ()</LI>
+<LI><B>Date</B> (cchar* str)</LI>
+<LI><B>Date</B> (const string &amp;str)</LI>
+<LI><B>Date</B> (const string &amp;str)</LI>
+<LI>short int  <B>compare</B> (const Date&amp; other) const</LI></UL>
+
+<H1><A NAME="SECTION03250000000000000000">3.5.5 struct <B>DateTime</B></A></H1>
+<P><EM>Комбинация из Date и Time для хранения mysql-типа DateTime.</EM>
+
+<H3><A NAME="SECTION03250100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION03250200000000000000">Суперклассы</A></H3>
+public mysql_date, public mysql_time, public MysqlDTbase DateTime
+
+<H3><A NAME="SECTION03250300000000000000">Включаемый файл</A></H3>
+datetime1.hh
+
+<H2><A NAME="SECTION03251000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION03251100000000000000">Методы public</A></H3>
+<UL><LI><B>DateTime</B> ()</LI>
+<LI><B>DateTime</B> (cchar* str)</LI>
+<LI><B>DateTime</B> (const string &amp;str)</LI>
+<LI><B>DateTime</B> (const string &amp;str)</LI>
+<LI>short int  <B>compare</B> (const DateTime&amp; other) const</LI>
+<LI>cchar*  <B>convert</B> (cchar*)</LI>
+<LI>ostream&amp;  <B>out_stream</B> (ostream&amp;) const</LI></UL>
+
+<H1><A NAME="SECTION03260000000000000000">3.5.6 class <B>FieldNames</B></A>
+</H1>
+<P><EM>Вектор имен полей.</EM>
+
+<H3><A NAME="SECTION03260100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION03260200000000000000">Суперклассы</A></H3>
+public vector string
+
+<H3><A NAME="SECTION03260300000000000000">Включаемый файл</A></H3>
+field_names1.hh
+
+<H2><A NAME="SECTION03261000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION03261100000000000000">Методы public</A></H3>
+<UL><LI><B>FieldNames</B> ()</LI>
+<LI><B>FieldNames</B> (const ResUse *res)</LI>
+<LI><B>FieldNames</B> (int i)</LI>
+<LI>FieldNames&amp;  <B>operator = </B> (const ResUse *res)
+<BR><EM>Создает новый список из данных в res.</EM></LI>
+<LI>FieldNames&amp;  <B>operator = </B> (int i)
+<BR><EM>Создает новый список с i именами полей.</EM></LI>
+<LI>string&amp;  <B>operator </B> (int i)
+<BR><EM>Возвращает имя поля для указанного индекса в списке.</EM></LI>
+<LI>const string&amp;  <B>operator </B> (int i) const
+<BR><EM>Возвращает имя поля для указанного индекса в списке.</EM></LI>
+<LI>uint  <B>operator </B> (string i) const
+<BR><EM>Возвращает индекс поля с указанным именем.</EM></LI></UL>
+
+<H1><A NAME="SECTION03270000000000000000">3.5.7 class <B>FieldTypes</B></A>
+</H1>
+<P><EM>Вектор типов полей.</EM>
+
+<H3><A NAME="SECTION03270100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION03270200000000000000">Суперклассы</A></H3>
+public vector mysql_type_info
+
+<H3><A NAME="SECTION03270300000000000000">Включаемый файл</A></H3>
+field_types1.hh
+
+<H2><A NAME="SECTION03271000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION03271100000000000000">Методы public</A></H3>
+<UL><LI><B>FieldTypes</B> ()</LI>
+<LI><B>FieldTypes</B> (const ResUse *res)</LI>
+<LI><B>FieldTypes</B> (int i)</LI>
+<LI>FieldTypes&amp;  <B>operator = </B> (const ResUse *res)<BR>
+<EM>Создает новый список, основанный на информации в res</EM></LI>
+<LI>FieldTypes&amp;  <B>operator = </B> (int i)
+<BR><EM>Создает новый список с i полями.</EM></LI>
+<LI>mysql_type_info&amp;  <B>operator </B> (int i)
+<BR><EM>Возвращает тип поля для поля со смещением i.</EM></LI>
+<LI>const mysql_type_info&amp; <B>operator </B> (int i) const<BR><EM>
+Возвращает тип поля для поля со смещением i.</EM></LI></UL>
+
+<H1><A NAME="SECTION03280000000000000000">3.5.8 class <B>Fields</B></A></H1>
+<P><EM>Вектор, подобный контейнеру с чистыми данными mysql о поле.</EM>
+
+<H3><A NAME="SECTION03280100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION03280200000000000000">Суперклассы</A></H3>
+public const_subscript_container Fields, Field
+
+<H3><A NAME="SECTION03280300000000000000">Включаемый файл</A></H3>
+fields1.hh
+
+<H2><A NAME="SECTION03281000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION03281100000000000000">Методы public</A></H3>
+<UL><LI><B>Fields</B> ()</LI>
+<LI><B>Fields</B> (ResUse *r)</LI>
+<LI>const Field&amp;  <B>operator </B> (int i) const</LI>
+<LI>const Field&amp;  <B>operator </B> (size_type i) const</LI>
+<LI>size_type  <B>size</B> () const<BR><EM>Число полей. Возвращает
+поле со смещением i.</EM></LI></UL>
+
+<H1><A NAME="SECTION03290000000000000000">3.5.9 template class <B>MysqlCmp</B>
+class BinaryPred, class CmpТип</A></H1>
+
+<H3><A NAME="SECTION03290100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION03290200000000000000">Суперклассы</A></H3>
+public unary_function const MysqlRow&amp;, bool
+
+<H3><A NAME="SECTION03290300000000000000">Включаемый файл</A></H3>
+compare1.hh
+
+<H2><A NAME="SECTION03291000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION03291100000000000000">Методы public</A></H3>
+<UL><LI><B>MysqlCmp</B> (uint i, const BinaryPred &amp;f,
+const CmpType &amp;c)</LI>
+<LI>bool  <B>operator ()</B> (const MysqlRow&amp; cmp1) const</LI></UL>
+
+<H3><A NAME="SECTION03291200000000000000">Методы Protected</A></H3>
+<UL><LI>CmpType  <B>cmp2</B></LI>
+<LI>BinaryPred  <B>func</B></LI>
+<LI>unsigned int  <B>index</B></LI></UL>
+
+<H1><A NAME="SECTION032100000000000000000">3.5.10 template class
+<B>MysqlCmpCStr</B> class BinaryPred</A></H1>
+
+<H3><A NAME="SECTION032100100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032100200000000000000">Суперклассы</A></H3>
+public MysqlCmp BinaryPred, const char *
+
+<H3><A NAME="SECTION032100300000000000000">Включаемый файл</A></H3>
+compare1.hh
+
+<H2><A NAME="SECTION032101000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION032101100000000000000">Методы public</A></H3>
+<UL><LI><B>MysqlCmpCStr</B> (uint i, const BinaryPred &amp;f,
+const char* c)</LI>
+<LI>bool <B>operator ()</B> (const MysqlRow&amp; cmp1) const</LI></UL>
+
+<H1><A NAME="SECTION032110000000000000000">3.5.11
+template struct <B>MysqlDTbase</B> class T</A></H1>
+
+<H3><A NAME="SECTION032110100000000000000">Тип</A></H3>
+abstract
+
+<H3><A NAME="SECTION032110200000000000000">Включаемый файл</A></H3>
+datetime1.hh
+
+<H3><A NAME="SECTION032111100000000000000">Методы public</A></H3>
+<UL><LI>virtual short int <B>compare</B> (const T &amp;other) const</LI>
+<LI>bool <B>operator !=</B> (const T &amp;other) const</LI>
+<LI>bool <B>operator</B> (const T &amp;other) const</LI>
+<LI>bool <B>operator =</B> (const T &amp;other) const</LI>
+<LI>bool <B>operator ==</B> (const T &amp;other) const</LI>
+<LI>bool <B>operator</B> (const T &amp;other) const</LI>
+<LI>bool <B>operator =</B> (const T &amp;other) const</LI></UL>
+
+<H1><A NAME="SECTION032120000000000000000">3.5.12 template class
+<B>MysqlListInsert</B> class T, class value_type = typename T::value_type
+</A></H1>
+
+<H3><A NAME="SECTION032120100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032120200000000000000">Включаемый файл</A></H3>
+set1.hh
+
+<H3><A NAME="SECTION032121100000000000000">Методы public</A></H3>
+<UL><LI><B>MysqlListInsert</B> (T *o)</LI>
+<LI>void <B>operator ()</B> (const value_type &amp;data)</LI></UL>
+
+<H1><A NAME="SECTION032130000000000000000">3.5.13
+template class <B>MysqlSetInsert</B> class T, class
+key_type = typename T::key_Тип</A></H1>
+
+<H3><A NAME="SECTION032130100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032130200000000000000">Включаемый файл</A></H3>
+set1.hh
+
+<H3><A NAME="SECTION032131100000000000000">Методы public</A></H3>
+<UL><LI><B>MysqlSetInsert</B> (T *o)</LI>
+<LI>void <B>operator ()</B> (const key_type &amp;data)</LI></UL>
+
+<H1><A NAME="SECTION032140000000000000000">3.5.14 template class <B>Null</B>
+class Type, class Behavior = NullisNull</A></H1>
+<P><EM>Контейнерный класс для хранения типов с поддержкой null.</EM>
+
+<H3><A NAME="SECTION032140100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032140200000000000000">Включаемый файл</A></H3>
+null1.hh
+
+<H3><A NAME="SECTION032141100000000000000">Методы public</A></H3>
+<UL><LI><B>Null</B> ()</LI>
+<LI><B>Null</B> (Type x)</LI>
+<LI><B>Null</B> (const null_type &amp;n)
+<BR><EM>Дает Null значение null.</EM></LI>
+<LI>Type  <B>data</B></LI>
+<LI>bool  <B>is_null</B></LI>
+<LI>Null&amp;  <B>operator = </B> (const null_type &amp;n)</LI>
+<LI>Null&amp;  <B>operator = </B> (const null_type &amp;n)</LI>
+<LI>typedef Type  <B>value_type</B></LI></UL>
+
+<H1><A NAME="SECTION032150000000000000000">3.5.15 struct <B>NullisBlank</B></A>
+</H1>
+<P><EM>Тип нужный, чтобы использовать для параметра поведения для Null.</EM>
+
+<H3><A NAME="SECTION032150100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032150200000000000000">Включаемый файл</A></H3>
+null1.hh
+
+<H2><A NAME="SECTION032151000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION032151100000000000000">Методы public</A></H3>
+<UL><LI>static const char *  <B>null_is</B> ()</LI>
+<LI>static ostream&amp;  <B>null_ostr</B> (ostream &amp;o)</LI></UL>
+
+<H1><A NAME="SECTION032160000000000000000">3.5.16 struct <B>NullisNull</B></A>
+</H1>
+<P><EM>Тип нужный, чтобы использовать для параметра поведения для Null.</EM>
+
+<H3><A NAME="SECTION032160100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032160200000000000000">Включаемый файл</A></H3>
+null1.hh
+
+<H2><A NAME="SECTION032161000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION032161100000000000000">Методы public</A></H3>
+<UL><LI>static null_type  <B>null_is</B> ()</LI>
+<LI>static ostream&amp;  <B>null_ostr</B> (ostream&amp; o)</LI></UL>
+
+<H1><A NAME="SECTION032170000000000000000">3.5.17 struct <B>NullisZero</B></A>
+</H1>
+<P><EM>Тип нужный, чтобы использовать для параметра поведения для Null.</EM>
+
+<H3><A NAME="SECTION032170100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032170200000000000000">Включаемый файл</A></H3>
+null1.hh
+
+<H2><A NAME="SECTION032171000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION032171100000000000000">Методы public</A></H3>
+<UL><LI>static int  <B>null_is</B> ()</LI>
+<LI>static ostream&amp;  <B>null_ostr</B> (ostream &amp;o)</LI></UL>
+
+<H1><A NAME="SECTION032180000000000000000">3.5.18 class <B>Query</B></A></H1>
+<P><EM>Класс для выполнения запросов.</EM>
+
+<H3><A NAME="SECTION032180100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032180200000000000000">Суперклассы</A></H3>
+public SQLQuery
+
+<H3><A NAME="SECTION032180300000000000000">Включаемый файл</A></H3>
+query1.hh
+
+<H3><A NAME="SECTION032180400000000000000">Детальное описание</A></H3>
+<P>Этот класс подклассифицируется из SQLQuery. Этот класс в отличие от
+SQLQuery свободно присоединен к объекту Mysql так, чтобы он
+мог выполнять запросы.
+
+<H2><A NAME="SECTION032181000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION032181100000000000000">Методы public</A></H3>
+<UL><LI><B>Query</B> (Connection *m, bool te = false)
+<BR><EM>Создает новый объект запроса, связанный с подключением.</EM></LI>
+<LI><B>Query</B> (const Query &amp;q)</LI>
+<LI>string  <B>error</B> ()
+<BR><EM>Сообщение об ошибке, если запрос не был успешным.</EM></LI>
+<LI>bool  <B>exec</B> (const string &amp;str)
+<BR><EM>Выполняет запрос в буфере строк и возвращает структуру, которая
+содержит информацию о том, насколько успешным был запрос. Используйте это для
+запросов, которые не возвращают набор результатов, например, INSERT или
+UPDATE. Параметром может что-либо в имеющем силу SQLQuery.</EM></LI>
+<LI>template class T Query&amp;  <B>insert</B> (const T &amp;v)</LI>
+<LI>Query&amp;  <B>operator = </B> (const Query &amp;q)</LI>
+<LI>string  <B>preview</B> ()</LI>
+<LI>string  <B>preview</B> (parms &amp;p)</LI>
+<LI>template class T Query&amp;  <B>replace</B> (const T &amp;v)</LI>
+<LI>bool  <B>success</B> ()<BR><EM>Отображает строку, которая в настоящее
+время лежит в буфере. Аналогично string().</EM></LI></UL>
+
+<H1><A NAME="SECTION032190000000000000000">3.5.19 struct <B>ResNSel</B></A>
+</H1>
+<P><EM>Эта структура хранит информацию относительно успеха запросов, которые
+не возвращают наборы результатов.</EM>
+
+<H3><A NAME="SECTION032190100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032190200000000000000">Включаемый файл</A></H3>
+result1.hh
+
+<H2><A NAME="SECTION032191000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION032191100000000000000">Методы public</A></H3>
+<UL><LI><B>ResNSel</B> ()</LI>
+<LI><B>ResNSel</B> (Connection *q)</LI>
+<LI>operator  <B>bool</B> ()<BR><EM>Если запрос был успешным.</EM></LI>
+<LI>string  <B>info</B><BR><EM>Дополнительная информация о запросе.</EM></LI>
+<LI>int  <B>insert_id</B></LI>
+<LI>int  <B>rows</B><BR><EM>Число обработанных строк.</EM></LI>
+<LI>bool  <B>success</B></LI></UL>
+
+<H1><A NAME="SECTION032200000000000000000">3.5.20 class <B>ResUse</B></A></H1>
+
+<H3><A NAME="SECTION032200100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032200200000000000000">Включаемый файл</A></H3>
+result1.hh
+
+<H2><A NAME="SECTION032201000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION032201100000000000000">Методы public</A></H3>
+<UL><LI><B>ResUse</B> ()</LI>
+<LI><B>ResUse</B> (MYSQL_RES *result, Connection *m = NULL,
+bool te = false)</LI>
+<LI><B>ResUse</B> (const ResUse &amp;other)</LI>
+<LI>operator  <B>bool</B> () const</LI>
+<LI>unsigned int  <B>columns</B> () const</LI>
+<LI>bool  <B>eof</B> () const<BR><EM>Функция c api.</EM></LI>
+<LI>Field&amp;  <B>fetch_field</B> () const
+<BR><EM>Функция c api field.</EM></LI>
+<LI>long unsigned int * <B>fetch_lengths</B> () const
+<BR><EM>Функция c api.</EM></LI>
+<LI>Row  <B>fetch_row</B> ()<BR><EM>Функция c api.</EM></LI>
+<LI>inline string&amp;  <B>field_name</B> (int)
+<BR><EM>Возвращает поле со смещением i.</EM></LI>
+<LI>inline const string&amp;  <B>field_name</B> (int) const
+<BR><EM>Возвращает поле-константу со смещением i.</EM></LI>
+<LI>inline FieldNames&amp;  <B>field_names</B> ()
+<BR><EM>Возвращает ссылку на основнорй класс FieldNames.</EM></LI>
+<LI>inline const FieldNames&amp; <B>field_names</B> () const<BR><EM>
+Возвращает ссылку на основнорй класс FieldNames.</EM></LI>
+<LI>inline int  <B>field_num</B> (const string&amp;) const
+<BR><EM>Возвращает смещение регистрируемого поля, которое равняется str.</EM>
+</LI>
+<LI>void  <B>field_seek</B> (int field)
+<BR><EM>Функция c api field.</EM></LI>
+<LI>inline mysql_type_info&amp;  <B>field_type</B> (int i)
+<BR><EM>Возвращает ссылку на тип поля mysql для поля со смещением i.</EM>
+</LI>
+<LI>inline const mysql_type_info&amp;  <B>field_type</B> (int) const
+<BR><EM>Возвращает ссылку-константу на тип поля mysql для поля со смещением i.
+</EM></LI>
+<LI>inline FieldTypes&amp;  <B>field_types</B> ()
+<BR><EM>Возвращает ссылку на основной FieldTypes.</EM></LI>
+<LI>inline const FieldTypes&amp;  <B>field_types</B> () const
+<BR><EM>Возвращает ссылку-константу на основной FieldTypes.</EM></LI>
+<LI>const Fields&amp;  <B>fields</B> () const
+<BR><EM>Возвращает ссылку на структуру Fields.</EM></LI>
+<LI>const Field&amp;  <B>fields</B> (unsigned int i) const
+<BR><EM>Возвращает ссылку на информацию mysql о поле для поля со смещением i.
+</EM></LI>
+<LI>MYSQL_RES * <B>mysql_result</B> (void)</LI>
+<LI>inline FieldNames&amp;  <B>names</B> ()
+<BR><EM>Возвращает ссылку на основной класс FieldNames.</EM></LI>
+<LI>inline const FieldNames&amp;  <B>names</B> () const
+<BR><EM>Возвращает ссылку-константу на основной класс FieldNames.</EM></LI>
+<LI>inline int  <B>names</B> (const string&amp; s) const
+<BR><EM>Возвращает смещение для объекта, который равняется str.</EM></LI>
+<LI>inline string&amp;  <B>names</B> (int i)
+<BR><EM>Возвращает поле со смещением i.</EM></LI>
+<LI>inline const string&amp;  <B>names</B> (int i) const
+<BR><EM>Возвращает поле со смещением i.</EM></LI>
+<LI>int  <B>num_fields</B> () const<BR><EM>Функция c api field.</EM></LI>
+<LI>bool  <B>operator !=</B> (const ResUse &amp;other) const</LI>
+<LI>inline ResUse&amp;  <B>operator = </B> (const ResUse &amp;other)</LI>
+<LI>bool  <B>operator ==</B> (const ResUse &amp;other) const</LI>
+<LI>void  <B>parent_leaving</B> ()</LI>
+<LI>void  <B>purge</B> (void)</LI>
+<LI>inline void  <B>reset_field_names</B> ()
+<BR><EM>Сбрасывает имена полей к первоначальным значениям.</EM></LI>
+<LI>inline void  <B>reset_field_types</B> ()
+<BR><EM>Сбрасывает field_types к первоначальным значениям.</EM></LI>
+<LI>inline void  <B>reset_names</B> ()
+<BR><EM>Сбрасывает имена полей к первоначальным значениям.
+<LI>inline void  <B>reset_types</B> ()
+<BR><EM>Сбрасывает имена полей к первоначальным значениям.
+<LI>string&amp;  <B>table</B> ()<BR><EM>Имя таблицы.</EM></LI>
+<LI>const string&amp;  <B>table</B> () const<BR><EM>Имя таблицы.</EM></LI>
+<LI>inline FieldTypes&amp;  <B>types</B> ()
+<BR><EM>Возвращает ссылку на основной FieldTypes.</EM></LI>
+<LI>inline const FieldTypes&amp;  <B>types</B> () const
+<BR><EM>Возвращает ссылку-константу на основной FieldTypes.</EM></LI>
+<LI>inline mysql_type_info&amp;  <B>types</B> (int i)
+<BR><EM>Возвращает ссылку на тип поля mysql для поля со смещением i.</EM>
+</LI>
+<LI>inline const mysql_type_info&amp;  <B>types</B> (int i) const
+<BR><EM>Возвращает ссылку-константу на тип поля mysql для поля со смещением i.
+</EM></LI>
+<LI><B>~ ResUse</B> ()</LI></UL>
+
+<H3><A NAME="SECTION032201200000000000000">Методы protected</A></H3>
+<UL><LI>Fields  <B>_fields</B></LI>
+<LI>mutable FieldNames * <B>_names</B></LI>
+<LI>string  <B>_table</B></LI>
+<LI>mutable FieldTypes * <B>_types</B></LI>
+<LI>void  <B>copy</B> (const ResUse&amp; other)</LI>
+<LI>Connection * <B>mysql</B></LI>
+<LI>mutable MYSQL_RES * <B>mysql_res</B></LI>
+<LI>bool  <B>throw_exceptions, initialized</B></LI></UL>
+
+<H3><A NAME="SECTION032201300000000000000">Методы friend</A></H3>
+<UL><LI>friend  <B>Connection</B></LI></UL>
+
+<H1><A NAME="SECTION032210000000000000000">3.5.21 class <B>Result</B></A></H1>
+<P><EM>Этот класс обрабатывает набор результатов.</EM>
+
+<H3><A NAME="SECTION032210100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032210200000000000000">Суперклассы</A></H3>
+public ResUse, public const_subscript_container Result,Row,const Row
+
+<H3><A NAME="SECTION032210300000000000000">Включаемый файл</A></H3>
+result1.hh
+
+<H3><A NAME="SECTION032210400000000000000">Подробное описание</A></H3>
+<P>Это также Random Access Container, который не LessThanComparable и не
+Assignable. Будучи контейнером произвольного доступа (Random Access
+Container), это может возвращать Random Access Iterator или обратный
+Random Access Iterator.
+
+<H3><A NAME="SECTION032211100000000000000">Методы public</A></H3>
+<UL><LI><B>Result</B> ()</LI>
+<LI><B>Result</B> (MYSQL_RES *result, bool te = false)</LI>
+<LI><B>Result</B> (const Result &amp;other)</LI>
+<LI>void  <B>data_seek</B> (uint offset) const<BR><EM>Функция c api</EM></LI>
+<LI>const Row  <B>fetch_row</B> () const<BR><EM>Функция c api</EM></LI>
+<LI>int  <B>num_rows</B> () const<BR><EM>Функция c api</EM></LI>
+<LI>const Row  <B>operator </B> (size_type i) const
+<BR><EM>Возвращает строку со смещением i.</EM></LI>
+<LI>size_type  <B>rows</B> () const
+<BR><EM>Возвращает число строк.</EM></LI>
+<LI>size_type  <B>size</B> () const
+<BR><EM>Возвращает число строк.</EM></LI>
+<LI>virtual  <B>~ Result</B> ()</LI></UL>
+
+<H3><A NAME="SECTION032211200000000000000">Методы Friend</A></H3>
+<UL><LI>friend  <B>Connection</B></LI></UL>
+
+<H1><A NAME="SECTION032220000000000000000">3.5.22 class <B>Row</B> </A></H1>
+<P><EM>Этот класс обрабатывает фактические строки интеллектуальным способом.
+</EM>
+
+<H3><A NAME="SECTION032220100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032220200000000000000">Суперклассы</A></H3>
+public const_subscript_container Row,ColData,const ColData,
+public RowTemplate Row, ResUse
+
+<H3><A NAME="SECTION032220300000000000000">Включаемый файл</A></H3>
+row1.hh
+
+<H3><A NAME="SECTION032221100000000000000">Методы public</A></H3>
+<UL><LI><B>Row</B> ()</LI>
+<LI><B>Row</B> (MYSQL_ROW d, const ResUse *r, unsigned int *jj,
+bool te = false)</LI>
+<LI>operator  <B>bool</B> () const
+<BR><EM>Возвращает true, если имеются какие-либо данные в строке.</EM></LI>
+<LI>inline const ColData  <B>operator </B> (const string &amp;i) const
+<BR><EM>Возвращает значение поля с именем поля i. Этот метод не столь
+эффективен как использование индексного кода.</EM></LI>
+<LI>inline const ColData  <B>operator </B> (const string &amp;i) const
+<BR><EM>Возвращает значение поля с именем поля i. Этот метод не столь
+эффективен как использование индексного кода.</EM></LI>
+<LI>const ColData  <B>operator </B> (int i) const</LI>
+<LI>inline const ColData  <B>operator </B> (size_type i) const
+<BR><EM>Возвращает значение поля с индексом поля i.</EM></LI>
+<LI>const ResUse&amp;  <B>parent</B> () const</LI>
+<LI>const char * <B>raw_data</B> (int i) const</LI>
+<LI>Row&amp;  <B>self</B> ()</LI>
+<LI>const Row&amp;  <B>self</B> () const</LI>
+<LI>inline size_type  <B>size</B> () const
+<BR><EM>Возвращает число столбцов.</EM></LI>
+<LI><B>~ Row</B> ()</LI></UL>
+
+<H1><A NAME="SECTION032230000000000000000">3.5.23 template class <B>RowTemplate
+</B> class ThisType, class Res</A></H1>
+
+<H3><A NAME="SECTION032230100000000000000">Тип</A></H3>
+abstract
+
+<H3><A NAME="SECTION032230200000000000000">Включаемый файл</A></H3>
+row1.hh
+
+<H3><A NAME="SECTION032231100000000000000">Методы public</A></H3>
+<UL><LI>equal_list_ba FieldNames,ThisType,quote_type0
+<B>equal_list</B> (const char *d = ",", const char *e = " = ") const</LI>
+<LI>template class Manip equal_list_ba FieldNames,ThisType,Manip
+<B>equal_list</B> (const char *d, const char *e, Manip m) const</LI>
+<LI>value_list_b FieldNames,quote_type0 <B>field_list</B> (bool t0,
+bool t1=false, bool t2=false, bool t3=false, bool t4=false, bool t5=false,
+bool t6=false, bool t7=false, bool t8=false, bool t9=false, bool ta=false,
+bool tb=false, bool tc=false) const</LI>
+<LI>value_list_b FieldNames,quote_type0 <B>field_list</B> (const vector
+bool &amp;vb) const</LI>
+<LI>value_list_b FieldNames,quote_type0 <B>field_list</B> (const vector
+bool &amp;vb) const</LI>
+<LI>template class Manip value_list_ba FieldNames,Manip <B>field_list</B>
+(const char *d, Manip m) const</LI>
+<LI>template class Manip value_list_b FieldNames,Manip <B>field_list</B>
+(const char *d, Manip m, bool t0, bool t1=false, bool t2=false,
+bool t3=false, bool t4=false, bool t5=false, bool t6=false, bool t7=false,
+bool t8=false, bool t9=false, bool ta=false, bool tb=false,
+bool tc=false) const</LI>
+<LI>template class Manip value_list_b FieldNames,Manip <B>field_list</B>
+(const char *d, Manip m, const vector bool &amp;vb) const</LI>
+<LI>template class Manip value_list_b FieldNames,Manip <B>field_list</B>
+(const char *d, Manip m, string s0, string s1="", string s2="", string s3="",
+string s4="", string s5="", string s6="", string s7="", string s8="",
+string s9="", string sa="", string sb="", string sc="") const</LI>
+<LI>value_list_b FieldNames,quote_type0 <B>field_list</B> (const char *d,
+bool t0, bool t1=false, bool t2=false, bool t3=false, bool t4=false,
+bool t5=false, bool t6=false, bool t7=false, bool t8=false, bool t9=false,
+bool ta=false, bool tb=false, bool tc</LI>
+<LI>value_list_b FieldNames,quote_type0 <B>field_list</B> (const char *d,
+const vector bool &amp;vb) const</LI>
+<LI>value_list_b FieldNames,quote_type0 <B>field_list</B> (const char *d,
+string s0, string s1="", string s2="", string s3="", string s4="",
+string s5="", string s6="", string s7="", string s8="", string s9="",
+string sa="", string sb="", string sc="") const</LI>
+<LI>value_list_b FieldNames,quote_type0 <B>field_list</B> (string s0,
+string s1="", string s2="", string s3="", string s4="", string s5="",
+string s6="", string s7="", string s8="", string s9="", string sa="",
+string sb="", string sc="") const</LI>
+<LI>virtual const Res &amp; <B>parent</B> () const</LI>
+<LI>value_list_b ThisType,quote_type0 <B>value_list</B> (bool t0,
+bool t1=false, bool t2=false, bool t3=false, bool t4=false, bool t5=false,
+bool t6=false, bool t7=false, bool t8=false, bool t9=false, bool ta=false,
+bool tb=false, bool tc=false) const</LI>
+<LI>value_list_b ThisType,quote_type0 <B>value_list</B> (const vector bool
+&amp;vb) const</LI>
+<LI>value_list_b ThisType,quote_type0 <B>value_list</B> (const vector bool
+&amp;vb) const</LI>
+<LI>template class Manip value_list_ba ThisType,Manip
+<B>value_list</B> (const char *d, Manip m) const</LI>
+<LI>template class Manip value_list_b ThisType,Manip <B>value_list</B>
+(const char *d, Manip m, bool t0, bool t1=false, bool t2=false,
+bool t3=false, bool t4=false, bool t5=false, bool t6=false, bool t7=false,
+bool t8=false, bool t9=false, bool ta=false, bool tb=false,
+bool tc=false) const</LI>
+<LI>template class Manip value_list_b ThisType,Manip <B>value_list</B>
+(const char *d, Manip m, const vector bool &amp;vb) const</LI>
+<LI>template class Manip value_list_b ThisType,Manip <B>value_list</B>
+(const char *d, Manip m, string s0, string s1="", string s2="", string s3="",
+string s4="", string s5="", string s6="", string s7="", string s8="",
+string s9="", string sa="", string sb="", string sc="") const</LI>
+<LI>value_list_b ThisType,quote_type0 <B>value_list</B> (const char *d,
+bool t0, bool t1=false, bool t2=false, bool t3=false, bool t4=false,
+bool t5=false, bool t6=false, bool t7=false, bool t8=false, bool t9=false,
+bool ta=false, bool tb=false, bool tc=false) const</LI>
+<LI>value_list_b ThisType,quote_type0 <B>value_list</B> (const char *d,
+const vector bool &amp;vb) const</LI>
+<LI>value_list_b ThisType,quote_type0 <B>value_list</B>
+(const char *d, string s0, string s1="", string s2="", string s3="",
+string s4="", string s5="", string s6="", string s7="", string s8="",
+string s9="", string sa="", string sb="", string sc="") const</LI>
+<LI>value_list_b ThisType,quote_type0 <B>value_list</B> (string s0,
+string s1="", string s2="", string s3="", string s4="", string s5="",
+string s6="", string s7="", string s8="", string s9="", string sa="",
+string sb="", string sc="") const</LI>
+<LI>virtual  <B>~ RowTemplate</B> ()</LI></UL>
+
+<H2><A NAME="SECTION032233000000000000000">Методы protected</A></H2>
+<UL><LI>protected pure virtual ThisType&amp; self ()</LI>
+<LI>protected pure virtual const ThisType&amp; self () const</LI></UL>
+
+<H1><A NAME="SECTION032240000000000000000">3.5.24 struct <B>SQLParseElement</B>
+</A></H1>
+
+<H3><A NAME="SECTION032240100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032240200000000000000">Включаемый файл</A></H3>
+sql_query1.hh
+
+<H2><A NAME="SECTION032241000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION032241100000000000000">Методы public</A></H3>
+<UL><LI><B>SQLParseElement</B> (string b, char o, char n)</LI>
+<LI>string  <B>before</B></LI>
+<LI>char  <B>num</B></LI>
+<LI>char  <B>option</B></LI></UL>
+
+<H1><A NAME="SECTION032250000000000000000">3.5.25 class <B>SQLQuery</B></A>
+</H1>
+<P><EM>Чистый класс запроса.</EM>
+
+<H3><A NAME="SECTION032250100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032250200000000000000">Суперклассы</A></H3>
+public strstream
+
+<H3><A NAME="SECTION032250300000000000000">Включаемый файл</A></H3>
+sql_query1.hh
+
+<H3><A NAME="SECTION032250400000000000000">Подробное описание</A></H3>
+<P>Это чистый класс запроса. Он используется для того, чтобы формировать
+запросы, которые планируется послать объекту Connection. Класс Query может
+использоваться, если Вы желаете также выполнить запросы без того, чтобы
+посылать их объекту Connection.
+
+<P>Этот класс подклассифицируется из strstream. Это означает, что Вы можете
+писать в него подобно потоку, чтобы избежать необходимости создавать свой
+strstream или применять sprintf. Хотя Вы можете читать из запроса (потому,
+что это поток), это не рекомендуется. Я не могу гарантировать предсказуемость
+класса. Однако, можно использовать любой из методов потока, чтобы писать в
+него. Только удостоверьтесь, что буферные точки Вашего запроса записаны
+прежде, чем Вы попробуете использовать любой из специфических методов
+SQLQuery, кроме error() и success().
+
+<H3><A NAME="SECTION032251100000000000000">Методы public</A></H3>
+<UL><LI><B>SQLQuery</B> ()</LI>
+<LI><B>SQLQuery</B> (const SQLQuery &amp;q)</LI>
+<LI>operator  <B>bool</B> ()</LI>
+<LI>SQLQueryParms  <B>def</B><BR><EM>Заданный по умолчанию
+шаблон набора параметров.</EM></LI>
+<LI>string  <B>error</B> () const</LI>
+<LI>template class T SQLQuery&amp; <B>insert</B> (const T &amp;v)</LI>
+<LI><B>mysql_query_define_const1</B> (string,str)</LI>
+<LI>bool  <B>operator ! </B> ()
+<BR><EM>Возвращает полную строку запроса, заменяя ее заданными по умолчанию
+параметрами шаблона в случае необходимости. Подобно str(query_reset), но
+устанавливает параметры запроса от 0 до 11. Здесь query_reset может быть
+DONT_RESET или RESET_QUERY. Если это установлено в RESET_QUERY, то reset()
+будет вызван после того, как запрос возвращен. Если не имеется достаточно
+параметров, то это возвратит пустую строку, а success() будет равно false.
+Если любой из требуемых параметров равен null, этот метод произведет ошибку и
+возвратит пустую строку.</EM></LI>
+<LI>SQLQuery&amp;  <B>operator = </B> (const SQLQuery &amp;q)</LI>
+<LI>void  <B>parse</B> ()</LI>
+<LI>template class T SQLQuery&amp;  <B>replace</B> (const T &amp;v)</LI>
+<LI>bool  <B>success</B> () const</LI></UL>
+
+<H3><A NAME="SECTION032251200000000000000">Методы Protected</A></H3>
+<UL><LI>bool  <B>Success</B></LI>
+<LI>char*  <B>errmsg</B></LI>
+<LI>typedef SQLQueryParms  <B>parms</B></LI>
+<LI>vector SQLParseElement <B>parsed</B></LI>
+<LI>vector string <B>parsed_names</B></LI>
+<LI>map string,int <B>parsed_nums</B></LI>
+<LI>void  <B>proc</B> (parms &amp;p)</LI>
+<LI>typedef const SQLString&amp;  <B>ss</B></LI></UL>
+
+<H3><A NAME="SECTION032251300000000000000">Методы Friend</A></H3>
+<UL><LI>friend  <B>SQLQueryParms</B></LI></UL>
+
+<H1><A NAME="SECTION032260000000000000000">3.5.26 struct <B>SQLQueryNEParms</B>
+</A></H1>
+<P><EM>Исключительная ситуация, когда не задано достаточно параметров.</EM>
+
+<H3><A NAME="SECTION032260100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032260200000000000000">Включаемый файл</A></H3>
+sql_query1.hh
+
+<H3><A NAME="SECTION032260300000000000000">Подробное описание</A></H3>
+Возникает, когда не задано достаточно параметров для шаблона запроса.
+
+<H3><A NAME="SECTION032261100000000000000">Методы public</A></H3>
+<UL><LI><B>SQLQueryNEParms</B> (const char *c)</LI>
+<LI>const char*  <B>error</B></LI></UL>
+
+<H1><A NAME="SECTION032270000000000000000">3.5.27 class <B>SQLQueryParms</B>
+</A></H1>
+<P><EM>Этот класс хранит значения параметров для заполнения шаблонов запроса.
+</EM>
+
+<H3><A NAME="SECTION032270100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032270200000000000000">Суперклассы</A></H3>
+public vector SQLString
+
+<H3><A NAME="SECTION032270300000000000000">Включаемый файл</A></H3>
+sql_query1.hh
+
+<H3><A NAME="SECTION032270400000000000000">Подробное описание</A></H3>
+Это подкласс вектора SQLStrings.
+
+<H3><A NAME="SECTION032271100000000000000">Методы public</A></H3>
+<UL><LI><B>SQLQueryParms</B> ()</LI>
+<LI><B>SQLQueryParms</B> (SQLQuery *p)</LI>
+<LI>bool <B>bound</B> ()</LI>
+<LI>void <B>clear</B> ()<BR><EM>Очищает весь список.</EM></LI>
+<LI>SQLQueryParms <B>operator + </B> (const SQLQueryParms &amp;other) const
+<BR><EM>Устанавливает элементы списка: 0 в a, 1 в b и т.д. Может определять
+до дюжины элементов.</EM></LI>
+<LI>SQLQueryParms &amp; <B>operator +=</B> (const SQLString &amp;str)
+<BR><EM>Добавляет элемент в список.</EM></LI>
+<LI>SQLQueryParms &amp; <B>operator</B> (const SQLString &amp;str)
+<BR><EM>Добавляет элемент в список.</EM></LI>
+<LI>SQLString &amp; <B>operator </B> (const char *str)
+<BR><EM>Обращается к значению элемента с ключом str.</EM></LI>
+<LI>const SQLString &amp; <B>operator </B> (const char *str) const
+<BR><EM>Обращается к значению элемента с ключом str.</EM></LI>
+<LI>SQLString &amp; <B>operator </B> (size_type n)
+<BR><EM>Обращается к элементу с кодом n.</EM></LI>
+<LI>const SQLString &amp; <B>operator </B> (size_type n) const
+<BR><EM>Обращается к элементу с кодом n.</EM></LI>
+<LI>void <B>set</B> (ss a)</LI>
+<LI>void <B>set</B> (ss a, ss b)</LI>
+<LI>void <B>set</B> (ss a, ss b, ss c)</LI>
+<LI>void <B>set</B> (ss a, ss b, ss c, ss d)</LI>
+<LI>void <B>set</B> (ss a, ss b, ss c, ss d, ss e)</LI>
+<LI>void <B>set</B> (ss a, ss b, ss c, ss d, ss e, ss f)</LI>
+<LI>void <B>set</B> (ss a, ss b, ss c, ss d, ss e, ss f, ss g)</LI>
+<LI>void <B>set</B> (ss a, ss b, ss c, ss d, ss e, ss f, ss g, ss h)</LI>
+<LI>void <B>set</B> (ss a, ss b, ss c, ss d, ss e, ss f, ss g, ss h, ss i)
+</LI>
+<LI>void <B>set</B> (ss a,ss b,ss c,ss d,ss e,ss f,ss g,ss h,ss i,ss j)</LI>
+<LI>void <B>set</B> (ss a,ss b,ss c,ss d,ss e,ss f,ss g,ss h,ss i,ss j,ss k)
+</LI>
+<LI>void <B>set</B> (ss a,ss b,ss c,ss d,ss e,ss f,ss g,ss h,ss i,ss j,ss k,
+ss l)</LI></UL>
+
+<H3><A NAME="SECTION032271200000000000000">Методы friend</A></H3>
+<UL><LI>friend  <B>Query</B></LI></UL>
+
+<H1><A NAME="SECTION032280000000000000000">3.5.28 class <B>SQLString</B></A>
+</H1>
+<P><EM>Специальная строка, которая преобразуется из чего-либо.</EM>
+
+<H3><A NAME="SECTION032280100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032280200000000000000">Суперклассы</A></H3>
+public string
+
+<H3><A NAME="SECTION032280300000000000000">Включаемый файл</A></H3>
+sql_string1.hh
+
+<H3><A NAME="SECTION032280400000000000000">Подробное описание</A></H3>
+Класс, подклассифицируемый из строки, который имеет дополнительную
+способность преобразоваться из любого имеющего силу типа mysql.
+
+<H3><A NAME="SECTION032281100000000000000">Методы public</A></H3>
+<UL><LI><B>SQLString</B> ()</LI>
+<LI><B>SQLString</B> (char i)</LI>
+<LI><B>SQLString</B> (const char *str)</LI>
+<LI><B>SQLString</B> (const char *str)</LI>
+<LI><B>SQLString</B> (double i)</LI>
+<LI><B>SQLString</B> (float i)</LI>
+<LI><B>SQLString</B> (int i)</LI>
+<LI><B>SQLString</B> (short int i)</LI>
+<LI><B>SQLString</B> (unsigned int i)</LI>
+<LI><B>SQLString</B> (unsigned int i)</LI>
+<LI><B>SQLString</B> (unsigned int i)</LI>
+<LI>bool  <B>dont_escape</B></LI>
+<LI>bool  <B>is_string</B></LI>
+<LI>SQLString&amp;  <B>operator = </B> (const string&amp; str)</LI>
+<LI>SQLString&amp;  <B>operator = </B> (const string&amp; str)</LI>
+<LI>bool  <B>processed</B></LI></UL>
+
+<H1><A NAME="SECTION032290000000000000000">3.5.29 template class <B>Set</B>
+class Container = set string</A></H1>
+<P><EM>Специальный набор для хранения множеств в формате mysql.</EM>
+
+<H3><A NAME="SECTION032290100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032290200000000000000">Суперклассы</A></H3>
+public Container
+
+<H3><A NAME="SECTION032290300000000000000">Включаемый файл</A></H3>
+set1.hh
+
+<H3><A NAME="SECTION032291100000000000000">Методы public</A></H3>
+<UL><LI><B>Set</B> (const ColData &amp;str)</LI>
+<LI><B>Set</B> (const ColData &amp;str)</LI>
+<LI><B>Set</B> (const ColData &amp;str)</LI>
+<LI>ostream&amp;  <B>out_stream</B> (ostream &amp;s) const</LI>
+<LI>operator  <B>string</B> ()</LI></UL>
+
+<H1><A NAME="SECTION032300000000000000000">3.5.30 struct <B>Time</B></A></H1>
+<P><EM>Специальный тип для хранения времени в формате mysql.</EM>
+
+<H3><A NAME="SECTION032300100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032300200000000000000">Суперклассы</A></H3>
+public mysql_time, public MysqlDTbase Time
+
+<H3><A NAME="SECTION032300300000000000000">Включаемый файл</A></H3>
+datetime1.hh
+
+<H3><A NAME="SECTION032300400000000000000">Подробное описание</A></H3>
+Структура предназначена для хранения данных из типа Time. Она также
+используется при извлечении потока и в операторе insert.
+
+<H3><A NAME="SECTION032301100000000000000">Методы public</A></H3>
+<UL><LI><B>Time</B> ()</LI>
+<LI><B>Time</B> (cchar* str)</LI>
+<LI><B>Time</B> (const string &amp;str)</LI>
+<LI><B>Time</B> (const string &amp;str)</LI>
+<LI>short int  <B>compare</B> (const Time&amp; other) const</LI></UL>
+
+<H1><A NAME="SECTION032310000000000000000">3.5.31 class <B>const_string</B>
+</A></H1>
+<P><EM>Специальная строка, которая создана из существующей const char *.</EM>
+
+<H3><A NAME="SECTION032310100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032310200000000000000">Включаемый файл</A></H3>
+const_string1.hh
+
+<H3><A NAME="SECTION032310300000000000000">Подробное описание</A></H3>
+Содержит маленькое подмножество стандартного класса string. Когда объект
+создан, будет создана только связь с const char *. Данные не будут
+скопированы. Таким образом, const char * должна существовать все время
+использования данного класса.
+
+<H3><A NAME="SECTION032311100000000000000">Методы public</A></H3>
+<UL><LI>const_iterator  <B>begin</B> () const</LI>
+<LI>const char*  <B>c_str</B> () const</LI>
+<LI>typedef const char*  <B>const_iterator</B></LI>
+<LI>typedef const char*  <B>const_pointer</B></LI>
+<LI>typedef const char&amp;  <B>const_reference</B></LI>
+<LI><B>const_string</B> ()</LI>
+<LI><B>const_string</B> (const char *str)</LI>
+<LI>const char*  <B>data</B> () const</LI>
+<LI>typedef int  <B>difference_type</B></LI>
+<LI>const_iterator  <B>end</B> () const</LI>
+<LI>typedef const_iterator  <B>iterator</B><BR><EM>Также как const_iterator
+потому, что данные не могут быть изменены.</EM></LI>
+<LI>size_type  <B>length</B> () const</LI>
+<LI>size_type  <B>max_size</B> () const</LI>
+<LI>const_reference  <B>operator</B> (size_type pos) const</LI>
+<LI>typedef const_pointer  <B>pointer</B></LI>
+<LI>typedef const_reference  <B>reference</B></LI>
+<LI>typedef unsigned int  <B>size_type</B></LI>
+<LI>typedef const char  <B>value_type</B></LI></UL>
+
+<H1><A NAME="SECTION032320000000000000000">3.5.32 template class
+<B>const_subscript_container</B> class OnType, class ValueType,
+class ReturnType = const ValueType&amp;, class SizeType = unsigned int,
+class DiffType = int</A></H1>
+<P><EM>Адаптер контейнера, чтобы сделать контейнер контейнером произвольного
+доступа (Random Access Container).</EM>
+
+<H3><A NAME="SECTION032320100000000000000">Тип</A></H3>
+abstract
+
+<H3><A NAME="SECTION032320200000000000000">Включаемый файл</A></H3>
+resiter1.hh
+
+<H3><A NAME="SECTION032320300000000000000">Подробное описание</A></H3>
+Требования: контейнер имеет определенные функции-члены
+*operator[] (SizeType)* и *size()*.
+
+<H3><A NAME="SECTION032321100000000000000">Методы public</A></H3>
+<UL><LI>iterator  <B>begin</B> () const</LI>
+<LI>typedef iterator  <B>const_iterator</B></LI>
+<LI>typedef value_type*  <B>const_pointer</B></LI>
+<LI>typedef value_type&amp;  <B>const_reference</B></LI>
+<LI>typedef const ::reverse_iterator const_iterator
+<B>const_reverse_iterator</B></LI>
+<LI>typedef DiffType  <B>difference_type</B></LI>
+<LI>bool  <B>empty</B> () const</LI>
+<LI>iterator  <B>end</B> () const</LI>
+<LI>typedef subscript_iterator const this_type, ReturnType,
+SizeType, DiffType <B>iterator</B></LI>
+<LI>size_type  <B>max_size</B> () const</LI>
+<LI>virtual ReturnType  <B>operator</B> (SizeType i) const</LI>
+<LI>typedef value_type*  <B>pointer</B></LI>
+<LI>reverse_iterator  <B>rbegin</B> () const</LI>
+<LI>typedef value_type&amp;  <B>reference</B></LI>
+<LI>reverse_iterator  <B>rend</B> () const</LI>
+<LI>typedef const ::reverse_iterator iterator <B>reverse_iterator</B></LI>
+<LI>virtual size_type  <B>size</B> () const</LI>
+<LI>typedef SizeType  <B>size_type</B></LI>
+<LI>typedef const_subscript_container OnType,ValueType,ReturnType,SizeType,
+DiffType <B>this_type</B></LI>
+<LI>typedef ValueType  <B>value_type</B></LI></UL>
+
+<H1><A NAME="SECTION032330000000000000000">3.5.33 struct <B>cstr_equal_to</B>
+</A></H1>
+
+<H3><A NAME="SECTION032330100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032330200000000000000">Суперклассы</A></H3>
+bin_char_pred
+
+<H3><A NAME="SECTION032330300000000000000">Включаемый файл</A></H3>
+compare1.hh
+
+<H3><A NAME="SECTION032331100000000000000">Методы public</A></H3>
+<UL><LI>bool <B>operator ()</B> (const char *x, const char *y) const</LI>
+</UL>
+
+<H1><A NAME="SECTION032340000000000000000">3.5.34 struct <B>cstr_greater</B>
+</A></H1>
+
+<H3><A NAME="SECTION032340100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032340200000000000000">Суперклассы</A></H3>
+bin_char_pred
+
+<H3><A NAME="SECTION032340300000000000000">Включаемый файл</A></H3>
+compare1.hh
+
+<H3><A NAME="SECTION032341100000000000000">Методы public</A></H3>
+<UL><LI>bool <B>operator ()</B> (const char *x, const char *y) const</LI>
+</UL>
+
+<H1><A NAME="SECTION032350000000000000000">3.5.35 struct <B>cstr_greater_equal
+</B></A></H1>
+
+<H3><A NAME="SECTION032350100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032350200000000000000">Суперклассы</A></H3>
+bin_char_pred
+
+<H3><A NAME="SECTION032350300000000000000">Включаемый файл</A></H3>
+compare1.hh
+
+<H3><A NAME="SECTION032351100000000000000">Методы public</A></H3>
+<UL><LI>bool <B>operator ()</B> (const char *x, const char *y) const</LI>
+</UL>
+
+<H1><A NAME="SECTION032360000000000000000">3.5.36 struct <B>cstr_less</B></A>
+</H1>
+
+<H3><A NAME="SECTION032360100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032360200000000000000">Суперклассы</A></H3>
+bin_char_pred
+
+<H3><A NAME="SECTION032360300000000000000">Включаемый файл</A></H3>
+compare1.hh
+
+<H3><A NAME="SECTION032361100000000000000">Методы public</A></H3>
+<UL><LI>bool <B>operator ()</B> (const char *x, const char *y) const</LI>
+</UL>
+
+<H1><A NAME="SECTION032370000000000000000">3.5.37 struct <B>cstr_less_equal</B>
+</A></H1>
+
+<H3><A NAME="SECTION032370100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032370200000000000000">Суперклассы</A></H3>
+bin_char_pred
+
+<H3><A NAME="SECTION032370300000000000000">Включаемый файл</A></H3>
+compare1.hh
+
+<H3><A NAME="SECTION032371100000000000000">Методы public</A></H3>
+<UL><LI>bool <B>operator ()</B> (const char *x, const char *y) const</LI>
+</UL>
+
+<H1><A NAME="SECTION032380000000000000000">3.5.38 struct <B>cstr_not_equal_to
+</B></A></H1>
+
+<H3><A NAME="SECTION032380100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032380200000000000000">Суперклассы</A></H3>
+bin_char_pred
+
+<H3><A NAME="SECTION032380300000000000000">Включаемый файл</A></H3>
+compare1.hh
+
+<H2><A NAME="SECTION032381000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION032381100000000000000">Методы public</A></H3>
+<UL><LI>bool <B>operator ()</B> (const char *x, const char *y) const</LI>
+</UL>
+
+<H1><A NAME="SECTION032390000000000000000">3.5.39 struct <B>do_nothing_type1
+</B></A></H1>
+
+<H3><A NAME="SECTION032390100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032390200000000000000">Включаемый файл</A></H3>
+manip1.hh
+
+<H3><A NAME="SECTION032391100000000000000">Методы public</A></H3>
+<UL><LI><B>do_nothing_type1</B> (ostream *o)</LI>
+<LI>ostream * <B>ostr</B></LI></UL>
+
+<H1><A NAME="SECTION032400000000000000000">3.5.40 struct <B>do_nothing_type2
+</B></A></H1>
+
+<H3><A NAME="SECTION032400100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032400200000000000000">Включаемый файл</A></H3>
+manip1.hh
+
+<H3><A NAME="SECTION032401100000000000000">Методы public</A></H3>
+<UL><LI><B>do_nothing_type2</B> (SQLQueryParms *p)</LI>
+<LI>SQLQueryParms * <B>qparms</B></LI></UL>
+
+<H1><A NAME="SECTION032410000000000000000">3.5.41 template struct
+<B>equal_list_b</B> class Seq1, class Seq2, class Manip</A></H1>
+
+<H3><A NAME="SECTION032410100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032410200000000000000">Включаемый файл</A></H3>
+vallist1.hh
+
+<H3><A NAME="SECTION032411100000000000000">Методы public</A></H3>
+<UL><LI>const char * <B>delem</B></LI>
+<LI><B>equal_list_b</B> (const Seq1 &amp;s1, const Seq2 &amp;s2,
+const vector bool &amp;f, const char *d, const char *e, Manip m)</LI>
+<LI>const char * <B>equl</B></LI>
+<LI>const vector bool <B>fields</B></LI>
+<LI>const Seq1 * <B>list1</B></LI>
+<LI>const Seq2 * <B>list2</B></LI>
+<LI>Manip <B>manip</B></LI></UL>
+
+<H1><A NAME="SECTION032420000000000000000">3.5.42 template struct
+<B>equal_list_ba</B> class Seq1, class Seq2, class Manip</A></H1>
+
+<H3><A NAME="SECTION032420100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032420200000000000000">Включаемый файл</A></H3>
+vallist1.hh
+
+<H3><A NAME="SECTION032421100000000000000">Методы public</A></H3>
+<UL><LI>const char * <B>delem</B></LI>
+<LI><B>equal_list_ba</B> (const Seq1 &amp;s1, const Seq2 &amp;s2,
+const char *d, const char *e, Manip m)</LI>
+<LI>const char * <B>equl</B></LI>
+<LI>const Seq1 * <B>list1</B></LI>
+<LI>const Seq2 * <B>list2</B></LI>
+<LI>Manip <B>manip</B></LI></UL>
+
+<H1><A NAME="SECTION032430000000000000000">3.5.43 struct <B>escape_type1</B>
+</A></H1>
+
+<H3><A NAME="SECTION032430100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032430200000000000000">Включаемый файл</A></H3>
+manip1.hh
+
+<H3><A NAME="SECTION032431100000000000000">Методы public</A></H3>
+<UL><LI><B>escape_type1</B> (ostream *o)</LI>
+<LI>ostream * <B>ostr</B></LI></UL>
+
+<H1><A NAME="SECTION032440000000000000000">3.5.44 struct <B>escape_type2</B>
+</A></H1>
+
+<H3><A NAME="SECTION032440100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032440200000000000000">Включаемый файл</A></H3>
+manip1.hh
+
+<H3><A NAME="SECTION032441100000000000000">Методы public</A></H3>
+<UL><LI><B>escape_type2</B> (SQLQueryParms *p)</LI>
+<LI>SQLQueryParms * <B>qparms</B></LI></UL>
+
+<H1><A NAME="SECTION032450000000000000000">3.5.45 struct <B>ignore_type2</B>
+</A></H1>
+
+<H3><A NAME="SECTION032450100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032450200000000000000">Включаемый файл</A></H3>
+manip1.hh
+
+<H3><A NAME="SECTION032451100000000000000">Методы public</A></H3>
+<UL><LI><B>ignore_type2</B> (SQLQueryParms *p)</LI>
+<LI>SQLQueryParms * <B>qparms</B></LI></UL>
+
+<H1><A NAME="SECTION032460000000000000000">3.5.46
+template class <B>mysql_ColData</B> class Str</A></H1>
+<P><EM>Основной класс для автопреобразований данных столбца.
+Не используйте непосредственно.</EM>
+
+<H3><A NAME="SECTION032460100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032460200000000000000">Суперклассы</A></H3>
+public Str
+
+<H3><A NAME="SECTION032460300000000000000">Включаемый файл</A></H3>
+coldata1.hh
+
+<H3><A NAME="SECTION032460400000000000000">Подробное описание</A></H3>
+<P>Интеллектуальная строка. Это автоматически преобразуется в любой из
+базисных типов C. Когда используется с двоичными операторами, она
+автоматически преобразуется в тип, используемый с другой стороны оператора,
+если это базисный тип. Однако, будьте внимательным при использовании этого с
+двоичными операторами, так как MysqlStr("12.86")+2 вернет 14, поскольку 2
+является целым числом. Если это мешает, определите макрос NO_BINARY_OPERS для
+отмены такого поведения. Этот класс также имеет некоторую базисную информацию
+относительно типа данных, сохраненных в нем. Не используйте этот класс
+непосредственно. Используйте вместо этого typedef ColData или MutableColData.
+
+<H3><A NAME="SECTION032461100000000000000">Методы public</A></H3>
+<UL><LI>template class T, class B operator <B>Null T, B</B> () const</LI>
+<LI>operator <B>cchar*</B> () const</LI>
+<LI>operator unsigned <B>char</B> () const</LI>
+<LI>operator unsigned <B>char</B> () const</LI>
+<LI>template class Type Type <B>conv</B> (Type dummy) const
+<BR><EM>Преобразует данные столбца в TYPE. Если все символы не читаются в
+течение преобразования в TYPE, породит исключение BadConversion. TYPE
+определен для всего, созданного в типах. Обратите внимание: это
+не фактический шаблон.</EM></LI>
+<LI>operator  <B>double</B> () const</LI>
+<LI>bool <B>escape_q</B> () const<BR><EM>Возвращает true или false в
+зависимости от того, экранированы ли данные.</EM></LI>
+<LI>inline const string&amp; <B>get_string</B> (void) const</LI>
+<LI>operator unsigned long <B>int</B> () const</LI>
+<LI>operator unsigned long <B>int</B> () const</LI>
+<LI>operator unsigned long <B>int</B> () const</LI>
+<LI>operator unsigned long <B>int</B> () const</LI>
+<LI>operator unsigned long <B>int</B> () const</LI>
+<LI>operator unsigned long <B>int</B> () const</LI>
+<LI>inline const bool  <B>is_null</B> (void) const</LI>
+<LI>void <B>it_is_null</B> (void)</LI>
+<LI><B>mysql_ColData</B> ()</LI>
+<LI>bool <B>quote_q</B> () const<BR><EM>Возвращает true или
+false в зависимости от того, цитированы ли данные.</EM></LI>
+<LI>mysql_type_info <B>type</B> ()<BR><EM>Возвращает текущий тип mysql
+для актуального элемента.</EM></LI>
+<LI>operator <B>ulonglong</B> () const</LI></UL>
+
+<H1><A NAME="SECTION032470000000000000000">3.5.47 class <B>mysql_convert</B>
+</A></H1>
+
+<H3><A NAME="SECTION032470100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032470200000000000000">Включаемый файл</A></H3>
+convert1.hh
+
+<H1><A NAME="SECTION032480000000000000000">3.5.48 struct <B>mysql_date</B></A>
+</H1>
+
+<H3><A NAME="SECTION032480100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032480200000000000000">Суперклассы</A></H3>
+virtual public mysql_dt_base
+
+<H3><A NAME="SECTION032480300000000000000">Включаемый файл</A></H3>
+datetime1.hh
+
+<H3><A NAME="SECTION032481100000000000000">Методы public</A></H3>
+<UL><LI>cchar*  <B>convert</B> (cchar*)</LI>
+<LI>tiny_int  <B>day</B></LI>
+<LI>tiny_int  <B>month</B></LI>
+<LI>ostream&amp;  <B>out_stream</B> (ostream&amp;) const</LI>
+<LI>short int  <B>year</B></LI></UL>
+
+<H3><A NAME="SECTION032481200000000000000">Методы protected</A></H3>
+<UL><LI>short int  <B>compare</B> (const mysql_date *other) const</LI></UL>
+
+<H1><A NAME="SECTION032490000000000000000">3.5.49 struct <B>mysql_dt_base</B>
+</A></H1>
+
+<H3><A NAME="SECTION032490100000000000000">Тип</A></H3>
+abstract
+
+<H3><A NAME="SECTION032490200000000000000">Включаемый файл</A></H3>
+datetime1.hh
+
+<H3><A NAME="SECTION032491100000000000000">Методы public</A></H3>
+<UL><LI>virtual ostream&amp;  <B>out_stream</B> (ostream&amp;) const</LI>
+<LI>operator  <B>string</B> ()</LI></UL>
+
+<H1><A NAME="SECTION032500000000000000000">3.5.50
+class <B>mysql_ti_sql_type_info</B></A></H1>
+
+<H3><A NAME="SECTION032500100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032500200000000000000">Включаемый файл</A></H3>
+type_info1.hh
+
+<H3><A NAME="SECTION032501100000000000000">Методы friend</A></H3>
+<UL><LI>friend <B>mysql_ti_sql_type_info_lookup</B></LI>
+<LI>friend <B>mysql_type_info</B></LI></UL>
+
+<H1><A NAME="SECTION032510000000000000000">3.5.51
+class <B>mysql_ti_sql_type_info_lookup</B></A></H1>
+
+<H3><A NAME="SECTION032510100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032510200000000000000">Включаемый файл</A></H3>
+type_info1.hh
+
+<H3><A NAME="SECTION032511100000000000000">Методы friend</A></H3>
+<UL><LI>friend <B>mysql_type_info</B></LI></UL>
+
+<H1><A NAME="SECTION032520000000000000000">3.5.52 struct <B>mysql_time</B></A>
+</H1>
+
+<H3><A NAME="SECTION032520100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032520200000000000000">Суперклассы</A></H3>
+virtual public mysql_dt_base
+
+<H3><A NAME="SECTION032520300000000000000">Включаемый файл</A></H3>
+datetime1.hh
+
+<H3><A NAME="SECTION032521100000000000000">Методы public</A></H3>
+<UL><LI>cchar*  <B>convert</B> (cchar*)</LI>
+<LI>tiny_int  <B>hour</B></LI>
+<LI>tiny_int  <B>minute</B></LI>
+<LI>ostream&amp;  <B>out_stream</B> (ostream&amp;) const</LI>
+<LI>tiny_int  <B>second</B></LI></UL>
+
+<H3><A NAME="SECTION032521200000000000000">Методы protected</A></H3>
+<UL><LI>short int  <B>compare</B> (const mysql_time *other) const</LI></UL>
+
+<H1><A NAME="SECTION032530000000000000000">3.5.53 class <B>mysql_type_info</B>
+</A></H1>
+<P><EM>Класс, который хранит базисную информацию типа для ColData.</EM>
+
+<H3><A NAME="SECTION032530100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032530200000000000000">Включаемый файл</A></H3>
+type_info1.hh
+
+<H2><A NAME="SECTION032531000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION032531100000000000000">Методы public</A></H3>
+<UL><LI>unsigned int <B>_length</B></LI>
+<LI>unsigned int <B>_max_length</B></LI>
+<LI>inline const mysql_type_info  <B>base_type</B> () const<BR><EM>
+Возвращает type_info для внутреннего типа C++ внутри типа Null. Если тип не
+Null, работает аналогично c_type().</EM></LI>
+<LI>bool  <B>before</B> (mysql_type_info &amp;b)
+<BR><EM>Обеспечивает упорядочение данных. Вы можете также использовать id()
+для той же самой цели.</EM></LI>
+<LI>inline const type_info&amp; <B>c_type</B> () const</LI>
+<LI>bool  <B>escape_q</B> () const
+<BR><EM>Возвращает true, если тип sql представляет собой тип, который
+должен быть экранирован.</EM></LI>
+<LI>int  <B>id</B> () const<BR><EM>Возвращает id для sql_type. Обратите
+внимание: не используйте этот идентификатор непосредственно, поскольку он
+может изменяться между версиями.</EM></LI>
+<LI>inline const unsigned int  <B>length</B> () const</LI>
+<LI>inline const unsigned int  <B>max_length</B> () const
+<BR><EM>Возвращает type_info для типа C++, связанного с типом sql.</EM></LI>
+<LI><B>mysql_type_info</B> ()</LI>
+<LI><B>mysql_type_info</B> (const type_info &amp;t)</LI>
+<LI><B>mysql_type_info</B> (const type_info &amp;t)</LI>
+<LI>inline  <B>mysql_type_info</B> (const MYSQL_FIELD &amp;f)</LI>
+<LI>inline  <B>mysql_type_info</B> (enum_field_types t,
+bool _unsigned, bool _null)</LI>
+<LI><B>mysql_type_info</B> (unsigned char n)</LI>
+<LI>inline const char*  <B>name</B> () const<BR><EM>Возвращает значение,
+определяющее имя типа c++. Возвращает имя, которое было бы возвращено
+typeid().name() для типа C++, связанного с типом sql.</EM>
+<LI>mysql_type_info&amp; <B>operator = </B> (const type_info &amp;t)</LI>
+<LI>mysql_type_info&amp; <B>operator = </B> (const type_info &amp;t)</LI>
+<LI>mysql_type_info&amp; <B>operator = </B> (unsigned char n)</LI>
+<LI>bool <B>quote_q</B> () const<BR><EM>Вернет true, если этот тип sql
+должен быть цитирован.</EM></LI>
+<LI>inline const char* <B>sql_name</B> () const<BR><EM>
+Возвращает имя для типа sql.</EM></LI>
+<LI>static const unsigned char <B>string_type</B></LI></UL>
+
+<H1><A NAME="SECTION032540000000000000000">3.5.54 class <B>null_type</B></A>
+</H1>
+
+<H3><A NAME="SECTION032540100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032540200000000000000">Включаемый файл</A></H3>
+null1.hh
+
+<H3><A NAME="SECTION032541100000000000000">Методы public</A></H3>
+<UL><LI>template class Type operator <B>Type</B> ()</LI></UL>
+
+<H1><A NAME="SECTION032550000000000000000">3.5.55 struct
+<B>quote_double_only_type1</B></A></H1>
+
+<H3><A NAME="SECTION032550100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032550200000000000000">Включаемый файл</A></H3>
+manip1.hh
+
+<H3><A NAME="SECTION032551100000000000000">Методы public</A></H3>
+<UL><LI>ostream * <B>ostr</B></LI>
+<LI><B>quote_double_only_type1</B> (ostream *o)</LI></UL>
+
+<H1><A NAME="SECTION032560000000000000000">3.5.56 struct
+<B>quote_double_only_type2</B></A></H1>
+
+<H3><A NAME="SECTION032560100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032560200000000000000">Включаемый файл</A></H3>
+manip1.hh
+
+<H3><A NAME="SECTION032561100000000000000">Методы public</A></H3>
+<UL><LI>SQLQueryParms * <B>qparms</B></LI>
+<LI><B>quote_double_only_type2</B> (SQLQueryParms *p)</LI></UL>
+
+<H1><A NAME="SECTION032570000000000000000">3.5.57 struct <B>quote_only_type1
+</B></A></H1>
+
+<H3><A NAME="SECTION032570100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032570200000000000000">Включаемый файл</A></H3>
+manip1.hh
+
+<H3><A NAME="SECTION032571100000000000000">Методы public</A></H3>
+<UL><LI>ostream * <B>ostr</B></LI>
+<LI><B>quote_only_type1</B> (ostream *o)</LI></UL>
+
+<H1><A NAME="SECTION032580000000000000000">3.5.58 struct <B>quote_only_type2
+</B></A></H1>
+
+<H3><A NAME="SECTION032580100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032580200000000000000">Включаемый файл</A></H3>
+manip1.hh
+
+<H3><A NAME="SECTION032581100000000000000">Методы public</A></H3>
+<UL><LI>SQLQueryParms * <B>qparms</B></LI>
+<LI><B>quote_only_type2</B> (SQLQueryParms *p)</LI></UL>
+
+<H1><A NAME="SECTION032590000000000000000">3.5.59 struct <B>quote_type1</B></A>
+</H1>
+
+<H3><A NAME="SECTION032590100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032590200000000000000">Включаемый файл</A></H3>
+manip1.hh
+
+<H2><A NAME="SECTION032591000000000000000">Описание</A></H2>
+
+<H3><A NAME="SECTION032591100000000000000">Методы public</A></H3>
+<UL><LI>ostream * <B>ostr</B></LI>
+<LI><B>quote_type1</B> (ostream *o)</LI></UL>
+
+<H1><A NAME="SECTION032600000000000000000">3.5.60 struct <B>quote_type2</B></A>
+</H1>
+
+<H3><A NAME="SECTION032600100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032600200000000000000">Включаемый файл</A></H3>
+manip1.hh
+
+<H3><A NAME="SECTION032601100000000000000">Методы public</A></H3>
+<UL><LI>SQLQueryParms * <B>qparms</B></LI>
+<LI><B>quote_type2</B> (SQLQueryParms *p)</LI></UL>
+
+<H1><A NAME="SECTION032610000000000000000">3.5.61 template class <B>simp_list_b
+</B> class Iter</A></H1>
+
+<H3><A NAME="SECTION032610100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032610200000000000000">Включаемый файл</A></H3>
+vallist1.hh
+
+<H3><A NAME="SECTION032611100000000000000">Методы public</A></H3>
+<UL><LI>Iter <B>_begin</B></LI>
+<LI>Iter <B>_end</B></LI>
+<LI>Iter <B>begin</B> () const</LI>
+<LI>typedef Iter <B>const_iterator</B></LI>
+<LI>Iter <B>end</B> () const</LI>
+<LI><B>simp_list_b</B> (Iter b, Iter e)</LI></UL>
+
+<H1><A NAME="SECTION032620000000000000000">3.5.62 template class
+<B>subscript_iterator</B> class OnType, class ReturnType, class SizeType,
+class DiffТип</A></H1>
+
+<H3><A NAME="SECTION032620100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032620200000000000000">Суперклассы</A></H3>
+public random_access_iterator ReturnType, SizeType
+
+<H3><A NAME="SECTION032620300000000000000">Включаемый файл</A></H3>
+resiter1.hh
+
+<H3><A NAME="SECTION032621100000000000000">Методы public</A></H3>
+<UL><LI>bool <B>operator !=</B> (const subscript_iterator &amp;j) const</LI>
+<LI>ReturnType <B>operator * </B> () const</LI>
+<LI>subscript_iterator  <B>operator + </B> (SizeType n) const</LI>
+<LI>subscript_iterator&amp;  <B>operator ++</B> ()</LI>
+<LI>subscript_iterator  <B>operator ++</B> (int)</LI>
+<LI>subscript_iterator&amp;  <B>operator +=</B> (SizeType n)</LI>
+<LI>subscript_iterator <B>operator - </B> (SizeType n) const</LI>
+<LI>DiffType <B>operator - </B> (const subscript_iterator &amp;j) const</LI>
+<LI>subscript_iterator&amp;  <B>operator -</B> ()</LI>
+<LI>subscript_iterator  <B>operator -</B> (int)</LI>
+<LI>subscript_iterator&amp; <B>operator -=</B> (SizeType n)</LI>
+<LI>ReturnType <B>operator - </B> () const</LI>
+<LI>bool <B>operator </B> (const subscript_iterator &amp;j) const</LI>
+<LI>bool <B>operator =</B> (const subscript_iterator &amp;j) const</LI>
+<LI>bool <B>operator ==</B> (const subscript_iterator &amp;j) const</LI>
+<LI>bool <B>operator </B> (const subscript_iterator &amp;j) const</LI>
+<LI>bool <B>operator =</B> (const subscript_iterator &amp;j) const</LI>
+<LI>ReturnType  <B>operator </B> (SizeType n) const</LI>
+<LI><B>subscript_iterator</B> ()</LI>
+<LI><B>subscript_iterator</B> (OnType *what, SizeType pos)</LI></UL>
+
+<H1><A NAME="SECTION032630000000000000000">3.5.63 struct <B>type_info_cmp</B>
+</A></H1>
+
+<H3><A NAME="SECTION032630100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032630200000000000000">Включаемый файл</A></H3>
+type_info1.hh
+
+<H3><A NAME="SECTION032631100000000000000">Методы public</A></H3>
+<UL><LI>bool <B>operator()</B> (const type_info *lhs,
+const type_info *rhs) const</LI></UL>
+
+<H1><A NAME="SECTION032640000000000000000">3.5.64
+template struct <B>value_list_b</B> class Seq, class Manip</A></H1>
+
+<H3><A NAME="SECTION032640100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032640200000000000000">Включаемый файл</A></H3>
+vallist1.hh
+
+<H3><A NAME="SECTION032641100000000000000">Методы public</A></H3>
+<UL><LI>const char * <B>delem</B></LI>
+<LI>const vector bool <B>fields</B></LI>
+<LI>const Seq * <B>list</B></LI>
+<LI>Manip <B>manip</B></LI>
+<LI><B>value_list_b</B> (const Seq &amp;s, const vector bool &amp;f,
+const char *d, Manip m)</LI></UL>
+
+<H1><A NAME="SECTION032650000000000000000">3.5.65
+template struct <B>value_list_ba</B> class Seq, class Manip</A></H1>
+
+<H3><A NAME="SECTION032650100000000000000">Тип</A></H3>
+instantiable
+
+<H3><A NAME="SECTION032650200000000000000">Включаемый файл</A></H3>
+vallist1.hh
+
+<H3><A NAME="SECTION032651100000000000000">Методы public</A></H3>
+<UL><LI>const char * <B>delem</B></LI>
+<LI>const Seq * <B>list</B></LI>
+<LI>Manip <B>manip</B></LI>
+<LI><B>value_list_ba</B> (const Seq &amp;s, const char* d, Manip m)</LI></UL>
+
+<H1><A NAME="SECTION032660000000000000000"></A><A NAME="manip"></A>3.5.66
+Манипуляторы</H1>
+<P>Следующие манипуляторы изменяют только следующий элемент направо от них в
+цепочке <TT>&lt;&lt;</TT>. Они могут использоваться с любым ostream (который
+включает <B>SQLQuery</B> и <B>Query</B>, поскольку они также ostream) или с
+<B>SQLQueryParms</B>. Когда используются с <B>SQLQueryParms</B>, они отменят
+любой набор параметров настройки шаблона запросов для этого элемента.
+
+<P><DL><DT><STRONG>quote</STRONG></DT>
+<DD>Цитирует и экранирует следующий элемент. Может использоваться с
+<B>ostream</B> или с <B>SQLQueryParms</B>.</DD>
+
+<DT><STRONG>quote_only</STRONG></DT>
+<DD>Цитирует, но не экранирует следующий элемент. Может использоваться с
+<B>ostream</B> или с <B>SQLQueryParms</B>.</DD>
+
+<DT><STRONG>quote_only_double</STRONG></DT>
+<DD>Цитирует, но не экранирует следующий элемент. Использует `` вместо '.
+</DD>
+
+<DT><STRONG>escape</STRONG></DT>
+<DD>Экранирует следующий элемент.</DD>
+
+<DT><STRONG>do_nothing</STRONG></DT>
+<DD>Не делает ничего. Используется как фиктивный манипулятор, когда надо
+применить некоторый манипулятор. Когда используется с <B>SQLQueryParms</B>,
+всегда удостоверится, что это не перекрывает параметры шаблона запросов.</DD>
+
+<DT><STRONG>ignore</STRONG></DT>
+<DD>Используется только с <B>SQLQueryParms</B>. Подобен <B>do_nothing</B>, но
+не будет отменять набор форматирований шаблона запросов.</DD></DL>
+
+Начиная с версии 1.6, автоматическое цитирование и экранирование были
+добавлены в манипуляторы. Этот механизм применяется только к mysql_ColData.
+Автоматическое цитирование или экранирование используется только с оператором
+<I>&lt;&lt;</I>, и во всех классах, полученных потоками, объектах, включая
+strstream, а также в объектах запросов. Исключение составляют потоки cout,
+cerr и clog. Это было разработано именно так преднамеренно, поскольку внешние
+(для этих потоков) переменные не требует цитирования или экранирования. Но
+это свойство удобно при создании объекта запроса или объекта класса strstream.
+
+<P>Это свойство можно выключить, установив в Вашем коде переменную
+<I>dont_quote_auto</I> в значение true.
+
+<H1><A NAME="SECTION03300000000000000000">3.6. Шаблоны запросов</A></H1>
+<P>Идея шаблонов сводится к тому, чтобы оснастить запрос такими параметрами
+для вызова, которые могут быть изменены между обращениями без необходимости
+преобразовывать сам запрос.
+
+<H1><A NAME="SECTION03310000000000000000">3.6.1 Установка</A></H1>
+<P>Чтобы установить шаблон запроса, просто создайте обычным порядком
+нормальный запрос, например:
+<PRE>
+query &lt;&lt; &#34;select (%2:field1, %3:field2)
+      from stock where %1: wheref = %q0:what&#34;
+</PRE>
+
+А затем выполните метод Query::parse(). Например:
+<PRE>
+query.parse()
+</PRE>
+
+<H1><A NAME="SECTION03320000000000000000"></A><A NAME="template_format"></A>
+3.6.2 Формат шаблонов</H1>
+<P>Шаблон выглядит примерно так:
+<PRE>
+select (%2:field1, %3:field2) from stock where %1:wheref = %q0:what
+</PRE>
+
+<P>Числа представляют номер элемента в структуре <B>SQLQueryParms</B>
+(рассмотрена чуть ниже).
+
+<P>Формат параметров подстановки:
+<PRE>
+%(modifier)##(:name)(:)
+</PRE>
+
+<P>Здесь Modifier может быть любым из следующего перечня:
+<DL><DT><STRONG>%</STRONG></DT>
+<DD>Вывести знак &#34;%&#34;.</DD>
+<DT><STRONG>&#34;&#34;</STRONG></DT>
+<DD>&#34;&#34; Не делает ничего.</DD>
+<DT><STRONG>q</STRONG></DT>
+<DD>Это цитирует и экранирует строку, применяя для этого mysql_escape_string,
+если это строка, char *, или другие специфические для Mysql типы, которые
+должны всегда цитироваться.</DD>
+<DT><STRONG>Q</STRONG></DT>
+<DD>Цитирует, но не экранирует строку, исходя из тех же правил. Это может
+сэкономить немного времени, если Вы знаете, что строки никогда не будут
+нуждаться в экранировке спецсимволов.</DD>
+<DT><STRONG>r</STRONG></DT>
+<DD>Обязательно цитирует и экранирует, даже если это число.</DD>
+<DT><STRONG>R</STRONG></DT>
+<DD>Обязательно цитирует, но не экранирует, даже если это число.</DD></DL>
+## Представляет число длиной в две цифры.
+
+<P>``:name'' представляет собой факультативное имя, которое помогает в
+заполнении SQLQueryParms. Имя может содержать любые алфавитно-цифровые
+символы или символ подчеркивания. Если Вы используете имя, и должны ввести
+двоеточие, введите их два последовательно. Первый символ закончит имя, так
+что второй не будет обработан.
+
+<H1><A NAME="SECTION03330000000000000000">3.6.3 Задание параметров</A></H1>
+<P>Параметры могут заданы когда запрос выполнен, или раньше срока,
+используя заданные по умолчанию параметры.
+
+<H2><A NAME="SECTION03331000000000000000">3.6.3.1 При выполнении запроса</A>
+</H2>
+<P>Чтобы определять параметры, когда Вы хотите выполнять запрос, просто
+используйте <B>Query::store(const SQLString &amp;parm0, [...,
+const SQLString &amp;parm11])</B> (или выражение <B>Query::use</B> или
+<B>Query::execute</B>). Здесь определение <B>parm0</B> соответствует
+параметру 0 и так далее. Отсчет идет с нуля, так что первый параметр на самом
+деле нулевой. Вы можете определять от 1 до 12 различных параметров. Например:
+<PRE>
+Result res = query.store(&#34;Dinner Roles&#34;, &#34;item&#34;,
+                         &#34;item&#34;, &#34;price&#34;)
+</PRE>
+Для описанного в разделе 3.6.2 шаблона запроса это выведет:
+<PRE>
+select (item, price) from stock where item = &#34; Dinner Roles&#34;
+</PRE>
+Причина того, почему я не сделал шаблон более логическим:
+<PRE>
+select (%0:field1, %1:field2) from stock where %2: wheref = %q3:what
+</PRE>
+Станет очевидным быстрее.
+
+<P><H2><A NAME="SECTION03332000000000000000">3.6.3.2
+Использование значений по умолчанию</A></H2>
+<P>Вы можете также устанавливать параметры по одному посредством общего члена
+данных <B>def</B>. Чтобы сменить значения <B>def</B>, просто используйте
+подстановочные оператора. Вы можете обратиться к параметрам по номерам или
+по их именем. Например:
+<PRE>
+query.def[0] = &#34;Dinner Roles&#34;;
+query.def[1] = &#34;item&#34;;
+query.def[2] = &#34;item&#34;;
+query.def[3] = &#34;price&#34;;
+</PRE>
+Как и другой вариант:
+<PRE>
+query.def[&#34;what&#34;] = &#34;Dinner Roles&#34;;
+query.def[&#34;wheref&#34;] = &#34;item&#34;;
+query.def[&#34;field1&#34;] = &#34;item&#34;;
+query.def[&#34;field2&#34;] = &#34;price&#34;;
+</PRE>
+Имеют тот же самый эффект.
+
+<P>Как только все параметры установлены, просто выполните запрос так, как
+выполнили бы запрос без всяких шаблонов. Например так:
+<PRE>
+Result res = query.store()
+</PRE>
+
+<H2><A NAME="SECTION03333000000000000000">3.6.3.3 Комбинирование</A></H2>
+<P>Вы можете также объединять использование установки параметров во время
+выполнения и использование объекта <B>def</B>, просто применяя расширенную
+форму <B>Query::store</B> (можно также <B>use</B> или <B>execute</B>) без
+необходимых определенных параметров. Например:
+<PRE>
+query.def[&#34;field1&#34;] = &#34;item&#34;;
+query.def[&#34;field2&#34;] = &#34;price&#34;;
+Result res1 = query.store(&#34;Hamburger Buns&#34;, &#34;item&#34;);
+Result res2 = query.store(1.25, &#34;price&#34;);
+</PRE>
+Сохранит такой запрос:
+<PRE>
+select (item, price) from stock where item = &#34;Hamburger Buns&#34;
+</PRE>
+для <TT>res1</TT> и
+<PRE>
+select (item, price) from stock where price = 1.25
+</PRE>
+для <TT>res2</TT>.
+
+<P>Поскольку расширенная форма <B>Query::store</B> может работать только с
+начала списка (по номерам, но не по расположению параметров), более логично
+было бы сделать так:
+<PRE>
+select (%0:field1, %1:field2) from stock where %2: wheref = %q3:what
+</PRE>
+Но такой подход в этом случае не сработает. Более сложный вариант
+<PRE>
+select (%2:field1, %3:field2) from stock where %1: wheref = %q0:what
+</PRE>
+все же был необходим, чтобы Вы могли определять <B>wheref</B> и <B>what</B>.
+
+<P>Следует, однако, помнить, что <B>Query::store(const char* q)</B>
+также определена для выполнения запроса <TT>q</TT>. По этой причине, когда Вы
+используете <B>Query::store</B> (<B>use</B> или <B>execute</B>), только с
+одним элементом, и этот элемент <B>const char*</B>, Вы должны явно
+преобразовать это в SQLString. Например:
+<PRE>
+Result res = query.store(SQLString(&#34;Hamburger Buns&#34;)).
+</PRE>
+
+<H2><A NAME="SECTION03334000000000000000">3.6.3.4 Обработка ошибок</A></H2>
+<P>Если по некоторым причинам Вы не определяли все параметры при выполнении
+запроса, и неопределенные параметры не имеют значений по умолчанию, заданных
+через объект <TT>def</TT>, объект запроса породит объект исключения
+<B>SQLQueryNEParms</B>. Вы можете выяснить, что же случилось, проверяя
+значение <B>SQLQueryNEParms::string</B>. Например:
+<PRE>
+query.def[&#34;field1&#34;] = &#34;item&#34;;
+query.def[&#34;field2&#34;] = &#34;price&#34;;
+Result res = query.store(1.25);
+</PRE>
+породит исключение <B>SQLQueryNEParms</B> по причине того, что
+<TT>wheref</TT> не был опеределен нигде.
+
+<P>В теории эта исключительная ситуация никогда не должна быть вызвана. Если
+она все же возникла, это, вероятно, логическая ошибка на Вашей стороне
+(например, как в вышеупомянутом примере).
+
+<H1><A NAME="SECTION03400000000000000000"></A><A NAME="SSQLS"></A>3.7.
+Специализированные структуры SQL</H1>
+<P>Специализированные структуры SQL (Specialized SQL Structures, SSQLS)
+позволяют Вам создавать свои структуры для хранения данных для запросов
+mysql с дополнительными функциональными возможностями. Эти структуры никоим
+образом не связаны с контейнерами и типами из Standard Template Library
+(STL). Это именно структуры (<B>structs</B>). Каждый элемент члена сохранен
+под уникальным именем внутри структуры. Вы никоим образом не можете
+использовать STL-алгоритмы или что-то еще из STL, чтобы работать с
+индивидуальными структурами. Однако Вы можете использовать эти структуры как
+<B>value_type</B> для контейнеров STL.
+
+<H1><A NAME="SECTION03410000000000000000">3.7.1 sql_create_basic</A></H1>
+<P>Следующая команда создаст базисный запрос mysql для использования с
+типовой базой данных.
+<PRE>
+sql_create_basic_5(stock, 0, 0, string, item, int, num, double, weight,
+                   double, price, MysqlDate, date)
+</PRE>
+
+Это установит следующую структуру:
+<PRE>
+struct stock
+{
+  stock () {}
+  stock (const MysqlRow &amp;row);
+  set (const MysqlRow &amp;row);
+  string item;
+  int num;
+  double weight;
+  double price;
+  MysqlDate date;
+};
+</PRE>
+
+Как Вы можете видеть, ничего фантастического в этих структурах нет. Основное
+преимущество этой простой структуры: конструктор <B>stock
+(MysqlRow &amp;row)</B>, который позволяет Вам легко заполнять вектор
+stock таким образом:
+<PRE>
+vector&lt;stock&gt; result;
+query.storein(result);
+</PRE>
+
+Требования заключаются в том, что запрос возвращает элементы в том же самом
+порядке, в каком Вы определили их в заказной структуре.
+
+<P>Общий формат структур:
+<PRE>
+sql_create_basic_#(NAME, 0, 0, TYPE1, ITEM1, ... TYPE#, ITEM#)
+</PRE>
+Здесь # является числом переменных в векторе, NAME задает имя структуры,
+которую Вы желаете создать, TYPE1 определяет имя типа для первого элемента, а
+ITEM1 представляет собой имя переменной для первого элемента и т.д.
+
+<H1><A NAME="SECTION03420000000000000000">3.7.2
+sql_create_basic со сравнением</A></H1>
+<P>Вы можете также сделать структуру сравнимой, заменяя первый 0 в предыдущем
+примере на ненулевое значение. Это число сообщает, что если первые n чисел
+одинаковые, то и две структуры совпадают:
+<PRE>
+sql_create_basic_5(stock, 1, 0, string, item, int, num, double, weight,
+                   double, price, MysqlDate, date)
+</PRE>
+
+Создаст структуру, где только первый элемент будет проверен, чтобы увидеть
+являются ли две различных структуры действительно различными. Это также
+позволяет Вам сравнивать одну структуру с другой основываясь на значении
+элемента. Если n больше одного, это сравнит структуры в лексикографическом
+порядке. Например, если n=2, это сначала сравнило бы элемент <TT>item</TT>, и
+если он был тот же самый, затем будет сравниваться <TT>num</TT>. Если num
+был тот же самый, это объявит две структуры идентичными.
+<PRE>
+struct stock
+(
+  ...
+  stock (const string &amp;p1);
+  set (const string &amp;p1);
+  bool operator == (const stock &amp;other) const;
+  bool operator != (const stock &amp;other) const;
+  bool operator &gt; (const stock &amp;other) const;
+  bool operator &lt; (const stock &amp;other) const;
+  bool operator &gt;= (const stock &amp;other) const;
+  bool operator &lt;= (const stock &amp;other) const;
+  int cmp (const stock &amp;other) const;
+  int compare (const stock &amp;other) const;
+}
+int compare (const stock &amp;x, const stock &amp;y);
+</PRE>
+
+int compare (const stock &amp;x, const stock &amp;y) сравнивает x с y и
+возвращает значение &lt;0, если x &lt; y, 0 если x=y и значение &gt;0, если
+x &gt; y. stock::cmp и stock::compare действуют аналогично
+compare(*this, other).
+
+<P>stock::stock представляет собой конструктор, который установит элемент в
+p1 и оставит все другие переменные неопределенными. Это полезно для создания
+временных объектов, чтобы использовать для сравнений подобных такому:
+<PRE>
+x &lt;= stock(&#34;Hotdog&#34;)
+</PRE>
+
+<P>Поскольку <B>stock</B> объявлена как less-then-comparable, Вы можете
+сохранять результаты запроса в наборе:
+<PRE>
+set&lt;stock&gt; result;
+query.storein(result);
+</PRE>
+Вы можете теперь использовать это подобно любому другому набору, например:
+<PRE>
+cout &lt;&lt; result.lower_bound(stock(&#34;Hamburger&#34;))-&gt;item
+     &lt;&lt; endl;
+</PRE>
+вернет первый элемент набора, который начинается с Hamburger.
+
+<P>Вы можете также теперь использовать любой STL-алгоритм который требует,
+чтобы все значения были less-then-comparable.
+
+<P>Общий формат таков:
+<PRE>
+sql_create_base_#(NAME, CMP, 0, TYPE1, ITEM1, ... TYPE#, ITEM#)
+</PRE>
+Здесь CMP сообщает, что если первые cmp переменных являются теми же самыми,
+то две структуры одинаковы.
+
+<H1><A NAME="SECTION03430000000000000000">3.7.3
+sql_create_basic с расширенным конструктором</A></H1>
+<P>Последний ноль в последнем примере предназначен для создания другого
+конструктора. Замените этот ноль на m, и это создаст конструктор, который
+заполнит первые n переменных. Например:
+<PRE>
+sql_create_basic_5(stock, 1, 5, string, item, int, num, double,
+                   weight, double, price, MysqlDate, date)
+</PRE>
+
+Также определит следующее:
+<PRE>
+struct stock
+{
+  ...
+  stock(const string&amp;, const int&amp;, const double&amp;,
+        const double&amp;, const MysqlDate&amp;);
+  set(const string&amp;, const int&amp;, const double&amp;,
+      const double&amp;, const MysqlDate&amp;);
+}
+</PRE>
+
+<H1><A NAME="SECTION03440000000000000000">3.7.4 Основной формат
+sql_create_basic</A></H1>
+<P>Основной формат для sql_create_basic следующий:
+<PRE>
+sql_create_basic_#(NAME, CMP, CNST, TYPE1, ITEM1, ..., TYPE#, ITEM#)
+</PRE>
+
+<P><UL><LI># задает числом переменных в векторе.</LI>
+<LI>NAME определяет имя структуры, которую Вы желаете создать</LI>
+<LI>CMP указывает, что если он не равен 0, и первые cmp переменных совпадут,
+то структуры одинаковы.</LI>
+<LI>CNST указывает, что если он не равен 0, создается конструктор, который
+заполнит первые n переменных.</LI>
+<LI>TYPE1 определяет имя типа для первого элемента, ITEM1 указывает
+переменную для первого элемента и т.д.</LI></UL>
+
+<H1><A NAME="SECTION03450000000000000000">3.7.5 sql_create_basic_c_order</A>
+</H1>
+<P>Вы можете также определять альтернативный порядок, когда mysql
+заполняет структуру. Например:
+<PRE>
+sql_create_basic_c_order_5(stock, 2, 5, MysqlDate, date, 5,
+                           double, price, 4, string, item, 1,
+                           int, num, 2, double, weight, 3)
+</PRE>
+Это создаст структуру, схожую созданной в предыдущем примере за исключением
+того, что порядок элементов данных будет иным. С++ использует первые два
+элемента, чтобы сравнить с группой (date, price). Однако, так как определен
+заказной порядок, Вы можете использовать тот же самый запрос, чтобы заполнить
+набор. Это заполнит <TT>date</TT> 5-ым элементом набора результатов запроса,
+<TT>price</TT> соответственно 4-м и так далее.
+
+<H1><A NAME="SECTION03460000000000000000">3.7.6 Основной формат
+sql_create_basic_c_order</A></H1>
+<P>Таким образом, общий формат для sql_create_basic такой:
+<PRE>
+sql_create_basic_c_order_#(NAME, CMP, CNST, TYPE1, ITEM1,
+                           ORDER1, ... TYPE#, ITEM#, ORDER#)
+</PRE>
+
+<UL># задает числом переменных в векторе.</LI>
+<LI>NAME определяет имя структуры, которую Вы желаете создать</LI>
+<LI>CMP указывает, что если он не равен 0, и первые cmp переменных совпадут,
+то структуры одинаковы.</LI>
+<LI>CNST указывает, что если он не равен 0, создается конструктор, который
+заполнит первые n переменных.</LI>
+<LI>TYPE1 задает имя типа для первого элемента, ITEM1 имя переменной для
+него, ORDER1 указывает порядок для первого элемента и т.д.</LI></UL>
+
+<H1><A NAME="SECTION03470000000000000000">3.7.7 sql_create</A></H1>
+<P>В дополнение к базисным структурам Вы можете устанавливать расширенные
+структуры, которые также имеют методы определенные, чтобы помочь в создании
+запросов и во вставке данных в таблицах. Например:
+<PRE>
+sql_create_5(stock, 1, 5, string, item, int, num, double, weight,
+             double, price, MysqlDate, date)
+</PRE>
+создаст определение, эквивалентное следующему:
+<PRE>
+struct stock
+{
+  ...
+  static char *names[];
+  static char *table;
+  template &lt;class Manip&gt;
+  stock_value_list&lt;Manip&gt;
+  value_list(cchar *d = &#34;,&#34;, Manip m = mysql_quote) const;
+  template &lt;class Manip&gt;
+  stock_field_list&lt;Manip&gt;
+  field_list(cchar *d = &#34;,&#34;, Manip m = mysql_do_nothing) const;
+  template &lt;class Manip&gt;
+  stock_equal_list&lt;Manip&gt;
+  equal_list(cchar *d = &#34;,&#34;,
+  cchar *e = &#34; = &#34;,
+  Manip m = mysql_quote,
+) const;
+  template &lt;class Manip&gt;
+  stock_cus_value_list&lt;Manip&gt; value_list([cchar *d, [Manip m,]]
+                                    bool i1, bool i2 = false, ... ,
+                                    bool i5 = false) const;
+  template &lt;class Manip&gt;
+  stock_cus_value_list&lt;Manip&gt; value_list([cchar *d, [Manip m,]]
+                                    stock_enum i1, stock_enum i2=stock_NULL,
+                                    ..., stock_enum i5 = stock_NULL) const;
+  template &lt;class Manip&gt;
+  stock_cus_value_list&lt;Manip&gt;
+  value_list([cchar *d, [Manip m,]] vector&lt;bool&gt; *i) const;
+  ...(логический эквивалент для field_list и equal_list)...
+};
+</PRE>
+<B>value_list()</B> возвращает специальный класс, который при использованни
+с оператором &lt;&lt; в ostream слева вернет разделенный запятыми список
+правильно цитированных и экранированных значений.
+
+<P><B>field_list()</B> возвращает специальный класс, который делает то же
+самое, но возвращает список полей, которые хранит структура. Имена полей не
+цитируются и не экранируются.
+
+<P><B>equal_list()</B> возвращает разделенный запятыми список в формате
+<B>имя поля=значение</B>. Имена полей не цитируются и не экранируются, а
+значения цитируются и экранируются только по мере надобности. Например:
+<PRE>
+stock s(&#34;Dinner Roles&#34;,75,0.95,0.97,&#34;1998-05-25&#34;);
+cout &lt;&lt; &#34;Value List: &#34; &lt;&lt; s.comma_list() &lt;&lt; endl;
+cout &lt;&lt; &#34;Field List: &#34; &lt;&lt; s.field_list() &lt;&lt; endl;
+cout &lt;&lt; &#34;Equal List: &#34; &lt;&lt; s.equal_list() &lt;&lt; endl;
+</PRE>
+вернет нечто вроде следующего:
+</PRE>
+Value List: 'Dinner Roles',75,0.95,0.97,'1998-05-25'
+Field List: item,num,weight,price,date
+Equal List: item = 'Dinner Roles',num = 75,weight = 0.95,
+            price = 0.97,date = '1998-05-25'
+</PRE>
+Комбинация списков полей и значений может использоваться для запросов замены
+или вставки. Например:
+<PRE>
+query &lt;&lt; &#34;insert into stock (&#34; &lt;&lt; s.field_list() &#34;)
+      values &#34; &lt;&lt; s.value_list();
+</PRE>
+вставит <TT>s</TT> в таблицу stock.
+
+<P>Вы можете также использовать SQLQuery::insert или SQLQuery::replace (и
+таким образом вызвать Query::insert или Query::replace), чтобы выполнить ту
+же самую задачу:
+<PRE>
+query.insert(s);
+</PRE>
+
+Это использует s.table для имени таблицы, которое задано по
+умолчанию в имени структуры.
+
+<P>Вы можете также определять различные разделители &#34;d&#34;. Если ни один
+не определен явно, по умолчанию берется &#34;,&#34;. Вы можете использовать
+разделитель &#34; AND &#34; для equal_list, чтобы помочь в запросах
+выбора и модификации. Например:
+<PRE>
+stock s2 = s;
+s2.item = &#34;6 Dinner Roles&#34;;
+query &lt;&lt; &#34;UPDATE TABLE stock SET &#34; &lt;&lt; s2.equal_list()
+      &lt;&lt; &#34; WHERE &#34; &lt;&lt; s.equal_list(&#34; AND &#34;);
+</PRE>
+будет аналогично запросу:
+<PRE>
+UPDATE TABLE stock SET item = '6 Dinner Roles',num=75,weight = 0.95,
+             price = 0.97,date = '1998-05-25'
+       WHERE item = 'Dinner Roles' AND num = 75 AND
+             weight = 0.95 AND price = 0.97 AND date = '1998-05-25'
+</PRE>
+который изменит запись в таблице так, чтобы элемент был теперь &#34;6
+Dinner Roles&#34; вместо &#34;Dinner Roles&#34;.
+
+<P>Вы можете использовать <B>SQLQuery::update</B> (и обратиться таким образом
+к <B>Query::update</B>) для выполнения той же самой задачи:
+<PRE>
+stock s2 = s;
+s2.item = &#34;6 Dinner Roles&#34;;
+query.update(s,s2);
+</PRE>
+
+Подобно <B>SQLQuery::insert</B>, это использует s.table для имени таблицы,
+который задан по умолчанию для имени структуры.
+
+<P>Вы можете также определять манипулятор, который методами c++ цитирует или
+экранирует значения. Это может быть любой имеющий силу манипулятор потока,
+который только обрабатывает элемент справа от манипулятора. Списки
+<B>value_list</B> и <B>equal_list</B> имеют значение по умолчанию
+<B>escape</B>, а <B>field_list</B> имеет <B>do_nothing</B>. Для
+<B>equal_list</B> манипулятор обрабатывает только часть <B>value</B>, но не
+трогает часть <B>field name</B>.
+
+<P>Это может быть полезным при экспорте в файл, где Вы не хотите получить
+кавычки вокруг строк. Например:
+<PRE>
+table_out &lt;&lt; q.value_list(&#34;&#92; t&#34;,
+          mysql_escape) &lt;&lt; endl;
+</PRE>
+конкатенирует данные к файлу, который обрабатывается table_out.
+
+<P>Три не базисных формы позволяют Вам определять, которые элементы будут
+Вам возвращены. Например:
+<PRE>
+cout &lt;&lt; q.value_list(false,false,true,true,false) &lt;&lt; endl;
+cout &lt;&lt; q.value_list(stock_weight, stock_price) &lt;&lt; endl;
+</PRE>
+
+Оба варианта вернут:
+<PRE>
+0.95,0.97
+</PRE>
+
+<I>bool form</I> ожидает булевы параметры, где каждый бит представляет
+собой инструкцию, что именно надо показывать. Например:
+<PRE>
+cout &lt;&lt; q.value_list(false,false,true,true) &lt;&lt; endl;
+</PRE>
+выведет показанное в предыдущем примере.
+
+<P><I>list form</I> позволяет Вам определять то, которые элементы будут
+показываться. Значения enum созданы для каждой переменной с именем структуры
+плюс символ подчеркивания в качестве префикса, например, item обозначается
+как stock_item.
+
+<P>Эти формы могут быть полезны в запросах выбора. Например:
+<PRE>
+query &lt;&lt; &#34;SELECT * FROM stock WHERE &#34;
+      &lt;&lt; q.equal_list(&#34; AND &#34;,stock_weight,stock_price);
+</PRE>
+произведет такой запрос:
+<PRE>
+SELECT * FROM stock WHERE weight=0.95 AND price=0.97
+</PRE>
+Который выберет все строки из stock, которые имеют weight и price, заданные
+в операторе как значение <I>q</I>.
+
+<P><I>vector form</I> (не показанный выше) позволяет Вам передавать булев
+вектор, который экономит время, если Вы используете некоторый образец больше,
+чем однажды. Дело в том, что такой подохд позволяет обойти необходимость
+создавать вектор из параметров каждый раз. Если <TT>a</TT> представляет собой
+булев вектор, то <TT>a[0]</TT> хранит первую переменную, <TT>a[1]</TT>
+соответственно вторую и так далее. Например:
+<PRE>
+vector&lt;bool&gt; a;
+a[0] = false;
+a[1] = false;
+a[2] = true;
+a[3] = true;
+a[4] = false;
+query &lt;&lt; &#34;SELECT * FROM stock WHERE &#34; &lt;&lt;
+      q.equal_list(&#34; AND &#34;, a);
+</PRE>
+Произведет тот же самый запрос, что и в вышеупомянутом примере.
+
+<H1><A NAME="SECTION03480000000000000000">3.7.8 sql_create_c_names</A></H1>
+<P>Вы можете также определять альтернативные имена поля так:
+<PRE>
+sql_create_c_names_5(stock, 1, 5, string, item, &#34;item&#34;,
+                     int, num, &#34;quantity&#34;, double, weight,
+                     &#34;weight&#34;, double, price, &#34;price&#34;
+                     MysqlDate, date, &#34;shipment&#34;)
+</PRE>
+Когда <B>field_list</B> или <B>equal_list</B> применены, это использует
+данные имена поля вместо имен переменных. Например:
+<PRE>
+stock s(&#34;Dinner Roles&#34;,75,0.95,0.97,&#34;1998-05-25&#34;);
+cout &lt;&lt; &#34;Field List: &#34; &lt;&lt; s.field_list() &lt;&lt; endl;
+cout &lt;&lt; &#34;Equal List: &#34; &lt;&lt; s.equal_list() &lt;&lt; endl;
+</PRE>
+вернет нечто вроде:
+<PRE>
+Field List: item,quantity,weight,price,shipment
+Equal List: item = 'Dinner Roles',quantity = 75,weight = 0.95,
+            price = 0.97,shipment = '1998-05-25'
+</PRE>
+
+<H1><A NAME="SECTION03490000000000000000">3.7.9
+Основной формат sql_create_c_names</A></H1>
+<P>Основной формат таков:
+<PRE>
+sql_create_c_names_#(NAME, CMP, CNST, TYPE1, ITEM1, NAME1, ...
+                     TYPE#, ITEM#, NAME#) </TT>
+</PRE>
+Здесь NAME1 представляет собой имя первого поля. Все остальное так же, как и
+в формате sql_create_basic_c_order.
+
+<H1><A NAME="SECTION034100000000000000000">3.7.10 sql_create_c_order</A></H1>
+<P>Как в sql_create_basic_c_order Вы можете определять заказной порядок.
+Основная форма такая:
+<PRE>
+sql_create_c_order_#(NAME, CMP, CNST, TYPE1, ITEM1, ORDER1, ...
+                     TYPE#, ITEM#, ORDER#)
+</PRE>
+Здесь все так же, как и в основном формате sql_create_basic_c_order.
+
+<H1><A NAME="SECTION034110000000000000000">3.7.11 sql_create_complete</A></H1>
+<P>Вы можете также определять заказной порядок и заказные имена поля вместе.
+Основная форма такая:
+<PRE>
+sql_create_complete_#(NAME, CMP, CNST, TYPE1, ITEM1, NAME1, ORDER1, ...
+                      TYPE#, ITEM#, NAME#, ORDER#)
+</PRE>
+Здесь все так же, как и в основном формате sql_create_c_order и
+sql_create_c_names.
+
+<H1><A NAME="SECTION034120000000000000000">3.7.12 Изменение имени таблицы</A>
+</H1>
+<P>Вы не можете определять различные имена таблицы в фактическом
+макрообращении. Имя таблицы используется в <B>SQLQuery::insert</B>,
+<B>replace</B> и <B>update</B>. Однако Вы можете изменять заданное по
+умолчанию имя таблицы, которое является тем же самым, что и имя структуры,
+заменяя ссылку <B>NAME::table()</B> на другую <B>const char *</B>:
+<PRE>
+stock::table() = &#34;in_stock&#34;
+</PRE>
+Это заменит имя таблицы на &#34;in_stock&#34; в примерах, используемых во
+всем этом руководстве.
+
+<H1><A NAME="SECTION034130000000000000000">3.7.13
+Наблюдение фактического кода</A></H1>
+<P>Увидеть фактический код, который используют макро вставки sql++pretty,
+довольно просто. Например так:
+<PRE>
+sql++pretty &lt; test.cc | less
+</PRE>
+
+<H1><A NAME="SECTION034140000000000000000">3.7.14
+Добавление функциональных возможностей</A></H1>
+<P>Самый лучший способ добавлять функциональные возможности: через
+наследование. Даже при том, что Вы могли бы вставлять выводимый код из
+pretty.pl и изменять его, это не рекомендуется делать потому, что это не
+будет отражать будущие расширения.
+
+<H1><A NAME="SECTION034150000000000000000">3.7.15 Дополнительные замечания
+</A></H1>
+<P>Макрокоманды определены для структур длиной до 25 элементов. Если Вы
+должны использовать больше, надо изменить основной скрипт perl (custom.pl).
+Этот скрипт на perl используется, чтобы генерировать файл заголовка. Он
+никоим образом не пробует анализировать код на C++.
+
+<P>Файл заголовка, который строит скрипт custom.pl занимает около мегабайта.
+Однако, пожалуйста обратите внимание, что заголовочный файл
+(custom-macros.hh) включает ТОЛЬКО макрокоманды. Так что компилятор должен
+делать очень малый объем работ при чтении файла.
+
+<P>Также, все включенное макрообращением выполнено таким способом, что Вы
+можете безопасно включать макрокоманду в файл заголовка и не должны
+волноваться относительно двойных обращений к функции или чего-то подобного.
+
+<H1><A NAME="SECTION03500000000000000000">3.8. Длинные имена</A></H1>
+<P>По умолчанию Mysql++ API использует как короткие имена без префиксов
+<B>Mysql</B> или <B>mysql_</B>, так и их длинные версии уже с префиксами
+<B>Mysql</B> или <B>mysql_</B>. Если это вызывает проблемы, определите макрос
+<B>MYSQL_NO_SHORT_NAMES</B> перед включением <B>mysql++</B>. После этого в
+принудительном порядке будут использоваться исключительно длинные имена. Их
+соответствие коротким такое:
+
+<TABLE><TR><TD ALIGN="CENTER"><B>Короткое имя</B></TD>
+<TD ALIGN="CENTER"><B>Длинное имя</B></TD></TR>
+<TR><TD ALIGN="LEFT">BadQuery</TD><TD ALIGN="LEFT">MysqlBadQuery</TD></TR>
+<TR><TD ALIGN="LEFT">Connection</TD><TD ALIGN="LEFT">MysqlConnection</TD>
+</TR>
+<TR><TD ALIGN="LEFT">ResNSel</TD><TD ALIGN="LEFT">ResNSel</TD></TR>
+<TR><TD ALIGN="LEFT">ResUse</TD><TD ALIGN="LEFT">ResUse MysqlResUse</TD></TR>
+<TR><TD ALIGN="LEFT">Result</TD><TD ALIGN="LEFT">MysqlRes</TD></TR>
+<TR><TD ALIGN="LEFT">Field</TD><TD ALIGN="LEFT">MysqlField</TD></TR>
+<TR><TD ALIGN="LEFT">Fields</TD><TD ALIGN="LEFT">MysqlFields</TD></TR>
+<TR><TD ALIGN="LEFT">ResIter</TD><TD ALIGN="LEFT">MysqlResIter</TD></TR>
+<TR><TD ALIGN="LEFT">ResultIter</TD><TD ALIGN="LEFT">MysqlResIter</TD></TR>
+<TR><TD ALIGN="LEFT">Row</TD><TD ALIGN="LEFT">MysqlRow</TD></TR>
+<TR><TD ALIGN="LEFT">MutableRow</TD><TD ALIGN="LEFT">MysqlMutableRow</TD>
+</TR>
+<TR><TD ALIGN="LEFT">FieldNames</TD><TD ALIGN="LEFT">MysqlFieldNames</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Query</TD><TD ALIGN="LEFT">MysqlQuery</TD></TR>
+<TR><TD ALIGN="LEFT">BadConversion</TD><TD ALIGN="LEFT">MysqlBadConversion
+</TD></TR>
+<TR><TD ALIGN="LEFT">ColData</TD><TD ALIGN="LEFT">MysqlColData</TD></TR>
+<TR><TD ALIGN="LEFT">MutableColData</TD>
+<TD ALIGN="LEFT">MysqlMutableColData</TD></TR>
+<TR><TD ALIGN="LEFT">quote</TD><TD ALIGN="LEFT">mysql_quote</TD></TR>
+<TR><TD ALIGN="LEFT">quote_only</TD><TD ALIGN="LEFT">mysql_quote_only</TD>
+</TR>
+<TR><TD ALIGN="LEFT">quote_double_only</TD>
+<TD ALIGN="LEFT">mysql_quote_double_only</TD></TR>
+<TR><TD ALIGN="LEFT">escape</TD><TD ALIGN="LEFT">mysql_escape</TD></TR>
+<TR><TD ALIGN="LEFT">do_nothing</TD><TD ALIGN="LEFT">mysql_do_nothing</TD>
+</TR>
+<TR><TD ALIGN="LEFT">ignore</TD><TD ALIGN="LEFT">mysql_ignore</TD></TR>
+<TR><TD ALIGN="LEFT">Date</TD><TD ALIGN="LEFT">MysqDate</TD></TR>
+<TR><TD ALIGN="LEFT">Time</TD><TD ALIGN="LEFT">MysqlTime</TD></TR>
+<TR><TD ALIGN="LEFT">DateTime</TD><TD ALIGN="LEFT">MysqlDateTime</TD></TR>
+<TR><TD ALIGN="LEFT">Set</TD><TD ALIGN="LEFT">MysqlSet</TD></TR>
+<TR><TD ALIGN="LEFT">Null</TD><TD ALIGN="LEFT">MysqlNull</TD></TR>
+<TR><TD ALIGN="LEFT">null_type</TD><TD ALIGN="LEFT">mysql_null_type</TD></TR>
+<TR><TD ALIGN="LEFT">null</TD><TD ALIGN="LEFT">mysql_null</TD></TR>
+<TR><TD ALIGN="LEFT">NullisNull</TD><TD ALIGN="LEFT">MysqlNullisNull</TD>
+</TR>
+<TR><TD ALIGN="LEFT">NullisZero</TD><TD ALIGN="LEFT">MysqlNullisZero</TD>
+</TR>
+<TR><TD ALIGN="LEFT">NullisBlank</TD><TD ALIGN="LEFT">MysqlNullisBlank
+</TD></TR></TABLE>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

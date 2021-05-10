@@ -1,0 +1,581 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<TITLE>Доступ к XML и реляционным данным
+</TITLE>
+<META CONTENT="text/html; charset=windows-1251" http-equiv=Content-Type>
+<META NAME="Description" CONTENT="1. Введение">
+<META NAME="Keywords" CONTENT="SQL, Microsoft, Server">
+<META HTTP-EQUIV="Set-Cookie" CONTENT="cookie=set; path=/">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+
+<!--SQLComment-->
+<TABLE BORDER="0" WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top  bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<!--/SQLComment-->
+<a href="../../index.shtml">Доступ к данным</a> |
+<A HREF="index.shtml">Доступ к XML и реляционным данным</A> | 
+<b>Чтение и запись Xml
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="3.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+
+
+</TD>
+</TR>
+</TABLE>
+<TABLE border="0" cellpadding="2" cellspacing="2" >
+<TR>
+<TD>
+<div align=justify>
+<a href="#02000"><b>2. Чтение и запись Xml</b></a><br>
+<a href="#02010"><b>2.1. Чтение Xml с помощью XmlTextReader</b></a><br>
+&nbsp;<a href="#02011"><b>2.1.1. Проверка правильности Типов данных с помощью XmlTextReader</a></b><br>
+&nbsp;<a href="#02012"><b>2.1.2. Почему используется Pull-модель чтения Xml?</a></b><br>
+&nbsp;<a href="#02013"><b>2.1.3. Обработка необходимого свободного пространства в XmlTextReader</a></b><br>
+&nbsp;<a href="#02014"><b>2.1.4. Редактирование свойств XmlTextReader</a></b><br>
+&nbsp;<a href="#02015"><b>2.1.5. Матрица возможных сценариев для XmlTextReader</a></b><br>
+<a href="#02020"><b>2.2. Запись Xml средствами XmlTextWriter</a></b><br>
+&nbsp;<a href="#02021"><b>2.2.1. Как XmlTextWriter генерирует хорошо сформированный (Well Formed) XML</a></b><br>
+&nbsp;<a href="#02022"><b>2.2.2. Работа с пространствами имён средствами XmlTextWriter</a></b><br>
+
+
+<a name="02000">
+<p>
+<b>2. Чтение и запись Xml</b></p>
+<p>
+Абстрактные классы System.Xml классифицируют поддержку XmlReader и XmlWriter, 
+которые осуществляют чтение и запись XML. XmlReader обеспечивает быструю, 
+non-cached отправку исключительно только потоков доступа к XML данным. XmlWriter 
+обеспечивает быстрый, non-cached, forward-only путь генерации XML потоков, 
+содержащих XML документы, которые соответствуют спецификации W3C Extensible 
+Markup Language (XML) 1.0  и пространству имён спецификации XML. XmlTextReader 
+и XmlTextWriter - конкретная реализация XmlReader и XmlWriter в пространстве 
+имён System.Xml.</p>
+
+<a name="02010">
+<p>
+<b>2.1. Чтение Xml с помощью XmlTextReader</b></p>
+<p>
+Класс XmlTextReader получает XML данные (используя механизм forward-only) от 
+объекта поток, объекта TextReader класс или URL (который идентифицирует Web сайт 
+или локальный файл).<br>
+XmlTextReader имеет следующие методы и свойства:</p>
+<p>
+·	Чтение Xml контента, когда содержание доступно полностью, как в случае 
+текстового Xml файла.<br>
+·	Чтение Xml контента, поскольку он стал доступен (например, открылся поток на 
+активную выдачу последних изменений).<br>
+·	Чтение индивидуальных компонент Xml текста, основанное на типе данных этих 
+компонент. Например, есть строго типизированные методы, которые читают: 16/32/64 
+битные целые числа, символы, boolean, даты, валюты, и другие типы.<br>
+·	Чтение атрибут узла.<br> 
+·	Перемещение по входному тексту или потоку.<br>
+·	Тэги заголовка, пространства имён, и объекты.<br>
+·	Исполнение схем и DTD проверок правильности ввода.</p>
+
+<a name="02011">
+<p>
+<b>2.1.1. Проверка правильности Типов данных с помощью XmlTextReader</b></p>
+<p>
+Проверка правильности типов данных выполняется в течение синтаксического анализа  
+XDR или XSD схем, а также для DTD. Если это доступно, используется XmlUrlResolver, 
+чтобы загрузить внешний DTD или схемы, которые требуются для такой проверки.<br>
+DTD или схема могут определять значения по умолчанию для атрибутов. Например:</p>
+<p>
+&lt;!ATTLIST e a CDATA "123"&gt;</p>
+<p>
+Если атрибут &quot;a&quot; у элемента &quot;e&quot; не определен в Xml потоке, то 
+ему нужно дать значение по умолчанию &quot;123&quot;. 
+Заданные по умолчанию атрибуты возвращаются так же, как и обычные атрибуты с тем 
+отличием, что являющийся заданным по умолчанию атрибут возвратит &quot;true&quot; 
+из свойства IsDefault.
+
+<a name="02012">
+<p>
+<b>2.1.2. Почему используется Pull-модель чтения Xml?</b></p>
+<p>
+XmlReader использует &quot;pull&quot; модель для чтения XML. &quot;Pull&quot; 
+представляет &quot;Simple API for XML&quot; (SAX) или event-driven модель, которая 
+также является наиболее типичной в применении.<br>
+Синтаксический анализатор, использующий push-модель, размещает события прикладной 
+программы, определяющие наименование элементов, атрибут, комментарии и так далее. 
+Если синтаксический анализатор использует pull-модель, прикладная программа перемещает 
+узлы механизма чтения, аналогично чтению потока. Pull-модель обеспечивает следующие 
+преимущества:</p>
+<p>
+<table border=1 cellspacing=2 cellpadding=2>
+<tr><td valign=top><b>Характеристика</b></td>
+<td valign=top><b>Описание</b></td></tr>
+<tr><td valign=top>Упрощенное управление состоянием (Simplified state management)</td>
+<td valign=top>Обработчик контента Push-model должны применять очень сложное 
+состояние своего механизма, которое при использовании Pull-model очень упрощается, 
+за счёт управления состоянием естественным, сверху вниз, путём исполнения процедур.</td></tr>
+<tr><td valign=top>Множественные входные потоки (Multiple input streams)</td>
+<td valign=top>Pull-model предоставляет возможность пользователю соединять вместе 
+множественные входные потоки. Выполнение этого в Push-model почти невозможно.</td></tr>
+<tr><td valign=top>Тест иерархического представления (Layering test)</td>
+<td valign=top>Push-model легко реализуется синтаксическим анализатором Pull-model, 
+но не наоборот.</td></tr>
+<tr><td valign=top>Подсказки клиента (Hints from client)</td>
+<td valign=top>Может быть разработан такой Pull-model API, который предоставит возможность 
+пользователю давать подсказки синтаксическому анализатору о том, что его ожидает на следующем 
+шаге, и давать возможность синтаксическому анализатору оптимизировать это шаг. Может быть 
+добавлена поддержка типов данных тогда, когда пользователь знает, например, что следующая 
+строка является целым числом, синтаксический анализатор сможет анализировать целое число 
+из его буфера, вместо возвращения строки, которая впоследствии будет отброшена, что замедлит 
+скорость исполнения прикладной программы (обработка мусора).</td></tr>
+<tr><td valign=top>Предотвращение появления дополнительных копий (Avoids extra copy)</td>
+<td valign=top>Pull-model дает возможность пользователю обеспечить синтаксический анализатор 
+буфером для записи строк. Это позволяет избегает дополнительных копий из буфера 
+синтаксического анализатора в объект строки, который будет, в этом случае, помещен в 
+буфер пользователя.</td></tr>
+<tr><td valign=top>Пропустит что-либо (Skipping things)</td>
+<td valign=top>Push-model должна разместить на всякий случай всё, что Вы могли бы запросить, 
+включая все атрибуты, комментарии, текст, незаполненное пространство, и т.д. В Pull-model, 
+пользователь перемещает только то, что требуется. Если пользователь, например, не читает 
+атрибуты, то значения атрибут не должны быть расширением сущности, строковыми значениями, 
+именованными составляющими. Это позволяет строить высоко эффективные прикладные программы 
+уровня передачи Xml сообщений.</td></tr></table></p>
+
+<a name="02013">
+<p>
+<b>2.1.3. Обработка необходимого свободного пространства в XmlTextReader</b></p> 
+<p>
+Свободное, не заполненное пространство (пробелы, символы табуляции, новые и пустые строки) 
+между элементами классифицируются двумя способами:<br>
+- Необходимое, не заполненное пространство - любое не заполненное пространство, которое 
+должно быть сохранено в конечном документе.<br>
+- Не значащее, не заполненное пространство - незаполненное пространство, не предполагаемое 
+для сохранения в конечном документе (часто, включаемое для повышения удобочитаемости).</p>
+<p>
+Следующий ниже пример представляет необходимое, не заполненное пространство как звездочки 
+(*), а не значащее, не заполненное пространство как точки (.), что бы продемонстрировать 
+их отличие. Символы newline также иллюстрированы соответственно как звездочки или точки.</p>
+<p>
+<tt>
+&lt;!DOCTYPE test [<br>
+&lt;!ELEMENT test (item|bar)*&gt;&nbsp;&nbsp;&nbsp;&lt;-- element content model --&gt;<br>
+&lt;!ELEMENT item (item*)&gt;&nbsp;&nbsp;&nbsp;&lt;-- element content model --&gt;<br>
+&lt;!ATTLIST item xml:space (default|preserve) #IMPLIED&gt;<br>
+&lt;!ELEMENT bar (#PCDATA|b|i)*&gt;&nbsp;&nbsp;&nbsp;&lt;-- mixed content model --&gt;<br>
+&lt;!ELEMENT b (#PCDATA)&gt;&nbsp;&nbsp;&nbsp;&lt;-- mixed content model --&gt;<br>
+&lt;!ELEMENT i (#PCDATA)&gt;&nbsp;&nbsp;&nbsp;&lt;-- mixed content model --&gt;<br>
+]&gt;.<br>
+&lt;test&gt;.<br>
+....&lt;item&gt;.<br>
+........&lt;item xml:space="preserve"&gt;*<br>
+************&lt;item/&gt;*<br>
+********&lt;/item&gt;.<br>
+....&lt;/item&gt;.<br>
+....&lt;bar&gt;*<br>
+********&lt;b&gt;This&lt;b&gt;*<br>
+********&lt;i&gt;is&lt;/i&gt;*<br>
+********&lt;b&gt;a test&lt;/b&gt;*<br>
+****&lt;/bar&gt;.<br>
+&lt;/test&gt;.</tt></p>
+<p>
+Необходимое, не заполненное пространство возвращается, как тип узла &quot;SignificantWhitespace&quot;, 
+принимая во внимание, что не значащее, незаполненное пространство возвращается только, как 
+&quot;Whitespace&quot;. Для получения дополнительной информации, см. раздел № 2.10 в 
+спецификации W3C Extensible Markup Language (Xml) 1.0 
+(http://www.w3.org/TR/1998/REC-xml-19980210#sec-white-space). 
+
+<a name="02014">
+<p>
+<b>2.1.4. Редактирование свойств XmlTextReader</b></p>
+<p>
+Представленная ниже таблица показывает, как правильно устанавливать свойства перед запуском 
+на исполнение операции чтения. Единственное свойство, которое не может быть отредактировано 
+после первой операции чтения, это свойство Namespace (пространство имён). XmlReader 
+разработан так, чтобы бы исключить зависимость от установленных свойств, и что бы не 
+было никаких зависимостей между свойствами. Вы выбираете комбинацию параметров настройки 
+свойств, которая лучше всего соответствует вашим прикладным требованиям. Например, если 
+Validation (проверка правильности) установлена в 'Auto' и Entity handling (обработка 
+сущности) установлена в 'Ignore', в следствии чего подразумевается, что сущности не 
+проверяются. Это только означает, что механизм чтения будет генерировать выходной поток 
+сущностей, не раскрывая его и т.д., но ошибки, вследствие проверок правильности, всё же 
+удут выдаваться.</p>
+<p>
+<table border=1 cellspacing=2 cellpadding=2>
+<tr><td valign=top><b>Свойство</b></td>
+<td valign=top><b>Возможность установки значения<br>после операции чтения</b></td>
+<td valign=top><b>Когда это значение будет учтено</b></td></tr>
+<tr><td valign=top>Whitespace</td>
+<td valign=top>Да</td>
+<td valign=top>После следующей операции чтения</td></tr>
+<tr><td valign=top>Validation</td>
+<td valign=top>Да</td>
+<td valign=top>После следующей операции чтения</td></tr>
+<tr><td valign=top>EntityHandling</td>
+<td valign=top>Да</td>
+<td valign=top>После следующей операции чтения</td></tr>
+<tr><td valign=top>Normalization</td>
+<td valign=top>Да</td>
+<td valign=top>После следующей операции чтения</td></tr>
+<tr><td valign=top>Namespaces</td>
+<td valign=top>Нет</td>
+<td valign=top>Нет данных.</td></tr>
+<tr><td valign=top>XmlResolver</td>
+<td valign=top>Да</td>
+<td valign=top>Эффективно после следующей операции чтения</td></tr></table></p>
+<p>
+Если EntityHandling установлено в 'IgnoreEntites', и Normalization установлено в 'true', 
+то установка EntityHandling имеет приоритет относительно сущностей атрибут символа. 
+Сущность атрибут символа никогда не раскрывается, если EntityHandling - 'IgnoreEntites'.</p>
+
+<a name="02015">
+<p>
+<b>2.1.5. Матрица возможных сценариев для XmlTextReader</b></p>
+<p>
+Представленная ниже таблица показывает, как различные свойства XmlTextReader могут 
+использоваться для реализации различных сценариев.</p>
+<p>
+<table border=1 cellspacing=2 cellpadding=2>
+<tr><td valign=top><b>Сценарии</b></td>
+<td valign=top><b>Validation</b></td>
+<td valign=top><b>Callback</b></td>
+<td valign=top><b>URIResolver</b></td>
+<td valign=top><b>Normalization</b></td></tr>
+<tr><td valign=top>Самый быстрый - не полностью управляемый режим</td>
+<td valign=top>None</td>
+<td valign=top>null</td>
+<td valign=top>null</td>
+<td valign=top>false</td></tr>
+<tr><td valign=top>Удовлетворяющий W3C<br>(только внутренний)<sup>1</sup></td>
+<td valign=top>None</td>
+<td valign=top>Не применим</td>
+<td valign=top>null</td>
+<td valign=top>true</td></tr>
+<tr><td valign=top>Удовлетворяющий W3C<br>(внутренний и внешний)<sup>2</sup></td>
+<td valign=top>None</td>
+<td valign=top>Не применим</td>
+<td valign=top>Непустой указатель и все внешние сущности должны быть раскрыты</td>
+<td valign=top>true</td></tr>
+<tr><td valign=top>Удовлетворяющий и согласованный<br>с DTD Auto или DTD</td>
+<td valign=top>Не применим <sup>3</sup></td>
+<td valign=top>Непустой указатель и все внешние сущности должны быть раскрыты</td>
+<td valign=top>true </td>
+<td valign=top>&nbsp;</td></tr>
+<tr><td valign=top>Хорошо сформированный и включающий проверку правильности схемы</td>
+<td valign=top>Auto (и не DTD) или Schema </td>
+<td valign=top>Не применим <sup>3</sup></td>
+<td valign=top>Непустой указатель и все внешние сущности должны быть раскрыты</td>
+<td valign=top>true</td></tr></table></p>
+<p>
+1. Обеспечивает заданные по умолчанию атрибуты и сущности, но только из внутреннего 
+подмножества, не выбирает никакие внешние сущности.<br>
+2. Обеспечивает заданные по умолчанию атрибуты и сущности из внутреннего подмножества, 
+а также из внешнего DTD и сущностей.<br>
+3. Если возвращается не нулевое значение, все ошибки проверки правильности возвращаются 
+через callback. Если возвращается нулевое значение, первые ошибки по результатам проверки 
+правильности будут в XmlException. Это активирует состояние ошибки, после чего синтаксический 
+анализ XmlTextReader дальше не сможет продолжаться.</p>
+
+<a name="02020">
+<p>
+<b>2.2. Запись Xml средствами XmlTextWriter</b></p>
+<p>
+Класс XmlTextWriter определяет методы, которые пишут XML данные non-cached и forward-only 
+способом в потоки, файлы и объекты TextWriter. Класс XmlTextWriter расширяет абстрактный 
+класс XmlWriter. Объект XmlWriter помогает составлять XML документы, которые соответствуют 
+спецификации W3C Extensible Markup Language (http://www.w3.org/TR/1998/REC-xml-19980210) 
+и пространству имён из спецификации XML (http://www.w3.org/TR/REC-xml-names/).<br>
+XmlTextWriter имеет следующие методы и свойства:<br>
+- Запись синтаксически правильного Xml, как-то: декларации и номера версий, типы документа, 
+специфические метки начала и конца с обрамлением пространства имён, комментарии, атрибуты, 
+CDATA, обработка команд, сущности и ссылки объектов, строки текста, необработанный - маркированный 
+текст (полезный при отправке по неправильному адресу сегментов Xml).<br>
+- Кодировка текста из 64-битног и шестнадцатеричного в соответствующие ESC символы.<br> 
+- Управление выводом, включая средства оповещения о состоянии вывода, записи множественных 
+документов в один выходной поток, и очистки или закрытия вывода.<br> 
+- Сообщает текущий префикс пространства имён, язык, или контекст пространства имён.<br> 
+- Запись правильных имён, составных имён, и названий лексем.<br> 
+- Запись значений или атрибут с определенными типами данных, например, булевы значения, 
+дата и время, десятичные числа, единичной и двойной точности с плавающей запятой, и 
+16-битные, 32-битные или 64-битные целые числа.<br> 
+- Полное копирования ввода в вывод.<br> 
+- Определение состояния или форматирование, кодирование, выравнивание или конвертация 
+типов данных в метки.</p>
+
+<a name="02021">
+<p>
+<b>2.2.1. Как XmlTextWriter генерирует хорошо сформированный (Well Formed) XML</b></p>
+<p>
+Рассмотрим, какую функциональность предоставляет XmlTextWriter для помощи в генерации 
+well-formed XML документов и обеспечения соответствия  спецификации W3C Extensible Markup 
+Language (XML) 1.0 (http://www.w3.org/TR/1998/REC-xml-19980210):<br>
+- Для WriteAttribute, если используются двойные кавычки, XmlTextWriter заменит двойных 
+кавычки в тексте (контенте) значениями атрибут &amp;quot;. Если используются одинарные кавычки, 
+они будут заменены на значения атрибут &amp;apos;.<br> 
+- Для WriteString, XmlTextWriter вычленяет специальные символы, заменяя их на &amp;amp; 
+&amp;lt; &amp;gt; и на сущности цифровых символов, когда это требуется. Если запрос 
+находится в контексте значений атрибут, то также будут выводиться &amp;apos; и &amp;quot;. 
+Символьные значения 0x-0x1F закодированы как сущности цифр от &amp;#0; и до &amp;#x1f;, 
+кроме символов незаполненного пространства 0x9, 0x10 и 0x13.<br>
+- Для WriteBase64, XmlTextWriter так кодирует эти base64 значения, что бы они  могли 
+быть прочитаны с использованием ReadBinary для XmlReader.<br>
+- Генерация префикса пространства имён и генерация декларации xmlns (см. Namespace 
+Handling by XmlTextWriter).<br>
+- Гарантирует, что элементы xml написаны в правильном порядке. Например, не допускает 
+существование атрибут вне элемента, блока CDATA внутри атрибута, или существование нескольких 
+корневых элементов. Также гарантируется, что декларация <?xml помещается раньше, чем узел 
+&lt;!DOCTYPE, размещаемый перед элементом корня.<br>
+- Значения и формат атрибута xml:space проверены. Следующий пример верен:<br> 
+w.WriteAttribute(&quot;xml:space&quot;, &quot;&quot;, &quot;preserve&quot;);<br>
+Допустимые значения - "default" и "preserve". Если параметр - не принимает ни одно из 
+этих значений, ArgumentException будет сброшен.<br>
+- Формат атрибута xml:lang проверен. Следующий пример не верен:<br>
+ w.WriteAttribute(&quot;xml:lang&quot;, &quot;&quot;, &quot;U.S.A.&quot;);<br>
+В этом случае ArgumentException будет сброшен, потому что значение. &quot;U.S.A&quot; 
+не соответствует BNF для идентификаторов языка как определено в IETF RFC 1766. BNF должны 
+быть следующие:<br>
+Language-Tag = Primary-tag ( &quot;-&quot; Subtag )*<br>
+Primary-tag = 1*8ALPHA<br> 
+Subtag = 1*8ALPHA<br>
+ALPHA = любые ASCII алфавитно-цифровые значения в диапазонах 65-90 и 97-122.<br>
+Здесь подразумевается одна первичная метка и ноль или большее количество вторичных меток, 
+разделённых символом &quot;-&quot;, где первичная метка и вторичные метки могут иметь 
+от 1 до 8 символов ALPHA ASCII. Фактически, до сих пор коды языков и значения кодов 
+стран/областей не утверждены. Чтобы определить код языка, поддерживаемый вашей системой, 
+используйте класс System.Globalization.CultureInfo.<br>
+- Если Close() даёт в результате недопустимый xml документ, InvalidOperationException 
+будет сброшен.</p>
+<p>
+XmlWriter не проверяет следующее:</p>
+<p>
+- Недопустимые элементы и имена атрибут символов.<br>
+- Символы Unicode, которые не соответствуют кодировке, не проявившиеся как символьные сущности.<br> 
+- Дубли атрибут не могут быть обнаружены.<br>
+- Символы в DOCTYPE pubid или sysid не проверяются.<br> 
+- Newlines в значении атрибут записываются, как и &amp;#A;, так что они сохраняются в 
+соответствии с принятыми в W3C значениями атрибут, нормализующими синтаксический анализатор, 
+на подобии XmlTextReader.</p> 
+
+
+<a name="02022">
+<p>
+<b>2.2.2. Работа с пространствами имён средствами XmlTextWriter</b></p> 
+<p>
+XmlTextWriter поддерживает стек пространства имён, соответствующий всем пространствам 
+имён, определенных текущим стеком элемента. Например:</p>
+<p>
+XmlTextWriter w = new XmlTextWriter(Console.Out);<br>
+w.WriteStartElement("root","urn:1");<br>
+w.WriteStartElement("item","urn:1");<br>
+w.WriteEndElement();<br>
+w.WriteEndElement();<br> 
+w.Close();</p>
+<p>
+В результате получим следующее:</p>
+<p>
+&lt;root xmlns="urn:1"&gt;&lt;item/&gt;&lt;/root&gt;</p>
+<p>
+Обратите внимание, что декларация пространства имён для вложенного элемента item не 
+выполняется повторно.</p>
+<p>
+<u>Генерация префиксов</u></p>
+<p>
+Если атрибутам установлена связь с пространством имён URI, то они должны иметь префикс, 
+соответствующий &quot;Namespace Defaulting&quot; (http://www.w3.org/TR/1999/REC-xml-names-19990114/defaulting) 
+в пространствах имён W3C спецификации Xml, что соответствует следующему коду:</p>
+<p>
+XmlTextWriter w = new XmlTextWriter(Console.Out);<br>
+w.WriteStartElement("root");<br>
+w.WriteAttribute("foo","urn:1", "123");<br>
+w.WriteEndElement();<br>
+w.Close();</p>
+<p>
+<u>В результате получим следующее:</u></p>
+<p>
+&lt;root n1:foo="123" xmlns:n1="urn:1"/&gt;</p>
+<p>
+Примечание: Это справедливо, даже если корневой элемент связан с заданным по умолчанию 
+пространством имён &quot;URN:1&quot;. Префиксы именованы, как n{i}, где i начинается с 1. 
+Индекс запускается для каждого следующего элемента, так что, если вложенный, порождённый 
+элемент также нуждается в сгенерированном префиксе, "n1" будут использоваться повторно. 
+Такая организация помогает автору генерировать канонический Xml, соответствующий &quot;W3C 
+Canonical XML Version 1.0 specification&quot;.  (http://www.w3.org/TR/sec-namespaces).</p>
+<p>
+<u>Описание деклараций пространства имён вручную</u></p>
+<p>
+Вы также можете включить код декларации пространства имён вручную. Это полезно, если Вы 
+знаете, как лучше оптимизировать число деклараций пространства имён. Делается это 
+следующим образом:</p>
+<p>
+w.WriteStartElement("root");<br>
+w.WriteAttribute("xmlns", "x", null, "urn:1");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;w.WriteStartElement("item","urn:1");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;w.WriteEndElement();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;w.WriteStartElement("item","urn:1");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;w.WriteEndElement();<br>
+w.WriteEndElement();</p>
+<p>
+<u>В результате получим следующее:</u></p>
+<p>
+&lt;root xmlns:x="urn:1"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;x:item/&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;x:item/&gt;<br>
+&lt;/x:root&gt;</p>
+<p>
+В этом примере, декларация пространства имён сдвигается к корневому элементу, чтобы избежать 
+дублирования для двух порожденных элементов. Элементы <item> также приобретает префикс 
+от декларации пространства имён.</p>
+<p>
+<u>Отмена деклараций пространства имён</u></p>
+<p>
+Вы можете вручную отменять пространство имён, связанное с данным префиксом следующим 
+образом:</p>
+<p>
+w.WriteStartElement(&quot;x&quot;,&quot;node&quot;,&quot;123&quot;);<br>
+w.WriteAttribute(&quot;xmlns&quot;,&quot;x&quot;,null,&quot;bar&quot;);</p>
+<p>
+<u>В результате получим следующее:</u></p>
+<p>
+&lt;x:node xmlns:x="bar"/&gt;</p>
+<p>
+Заметьте, что &quot;bar&quot; отменяет первоначальное пространство имён URI &quot;123&quot;. 
+Это добавляет гибкости для распределённых приложений.</p>
+<p>
+<u>Определение префиксов</u></p>
+<p>
+Вы можете передавать префикс для использования. Для этого существует два способа. Первый, 
+явно использует методы, которые вызывают префикс:</p>
+<p>
+XmlTextWriter w = new XmlTextWriter(Console.Out);<br>
+w.WriteStartElement("x","root","urn:1");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;w.WriteStartElement("y","item","urn:1");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;w.WriteEndElement();<br>
+w.WriteEndElement();<br>
+w.Close();</p>
+<p>
+<u>В результате получим следующее:</u></p>
+<p>
+&lt;x:root xmlns:x=&quot;urn:1&quot;&gt;&lt;y:item xmlns:y=&quot;urn:1&quot;/&gt;&lt;/x:root&gt;</p>
+<p>
+Заметьте, что оба префикса &quot;x&quot; и &quot;y&quot; сохранились.</p>
+<p>
+Обратите внимание: Определение префикса и пустого пространства имён URI нарушает Section 
+2 W3C пространства имён в спецификации Xml (http://www.w3.org/TR/1999/REC-xml-names-19990114/ns-decl).</p>
+<p>
+<u>Множественные декларации пространств имён</u></p>
+<p>
+Когда есть множественные декларации пространства имён, отображающие различные префиксы 
+одному и тому же URN, XmlWriter выбирает самый близкий стек деклараций пространства имён 
+следующим образом:</p>
+<p>
+XmlTextWriter w = new XmlTextWriter(Console.Out);<br>
+w.WriteStartElement("x","root","urn:1");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;w.WriteStartElement("y","item","urn:1");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w.WriteAttribute("foo","urn:1","bar");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;w.WriteEndElement();<br>
+w.WriteEndElement();<br>
+w.Close();</p>
+<p>
+В этом случае, запрос WriteAttribute не определил никакой префикс (так что Вы можете 
+выбирать любые префиксы). XmlWriter находит сначала префикс &quot;y&quot; и использует его, чтобы 
+воспроизвести следующее:</p>
+<p>
+&lt;x:root xmlns:x=&quot;urn:1&quot;&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;y:item y:foo=&quot;bar&quot; xmlns:y=&quot;urn:1&quot;/&gt;<br>
+&lt;/x:root&gt;</p>
+<p>
+<u>Возможности разрешения конфликтов</u></p>
+<p>
+Любая из предшествующих процедур может порождать конфликты, для разрешения которых 
+XmlWriter генерирует дополнительные префиксы. В следующем примере атрибут будет иметь 
+тот же самый префикс, что и  элемент, но пространства имён будут отличаться:</p>
+<p>
+w.WriteStartElement(&quot;x&quot;,&quot;root&quot;,&quot;urn:1&quot;);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;w.WriteAttribute(&quot;x&quot;,&quot;foo&quot;,&quot;urn:2&quot;, &quot;123&quot;);<br>
+w.WriteEndElement();</p>
+<p>
+Атрибуту &quot;foo&quot; присваивается новый префикс следующим образом:</p>
+<p>
+&lt;x:root n1:foo=&quot;123&quot; xmlns:n1=&quot;urn:2&quot; xmlns:x=&quot;urn:1&quot;/></p>
+<p>
+Эти конфликты могут случаться только в атрибутах. Для вложенных элементов, новая декларация 
+пространства имён может просто переопределяться, как у двойных префиксные областей. Например, 
+рассмотрим следующий код:</p>
+<p>
+w.WriteStartElement("x","root","urn:1");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;w.WriteStartElement("x","item","urn:2");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;w.WriteEndElement();<br>
+w.WriteEndElement();</p>
+<p>
+<u>В результате получим следующее:</u>
+<p>
+&lt;x:root xmlns:x=&quot;urn:1&quot;&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;x:item xmlns:x="urn:2"/&gt;<br></p>
+</DIV>
+<TD>
+<TR>
+</TABLE>
+<TABLE BORDER=0 WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<a href="../../index.shtml">Доступ к данным</a> |
+<A HREF="index.shtml">Доступ к XML и реляционным данным</A> | 
+<b>Чтение и запись Xml
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="3.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+</TD>
+</TR>
+</TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>

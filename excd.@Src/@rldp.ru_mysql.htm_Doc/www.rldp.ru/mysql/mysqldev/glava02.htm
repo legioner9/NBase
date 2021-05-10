@@ -1,0 +1,3133 @@
+<HTML>
+<HEAD>
+  <TITLE>MySQL C API</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H2><A NAME="C">2 MySQL C API</A></H2>
+<P>Код C API распространяется в комплекте с MySQL. Он включен в библиотеку
+<CODE>mysqlclient</CODE> и позволяет программам на C обращаться к базе данных.
+</P>
+
+<P>Многие клиенты в дистрибутиве исходного кода MySQL написаны на C. Если Вы
+ищете примеры, которые показывают, как использовать C API, посмотрите код
+этих клиентов. Их можно найти в каталоге <CODE>clients</CODE> дистрибутива
+исходного кода MySQL.</P>
+
+<P>Большинство других клиентских API (кроме поддержки Java) использует
+библиотеку <CODE>mysqlclient</CODE>, чтобы связаться с сервером MySQL. Это
+означает, что, например, Вы можете воспользоваться большинством системных
+переменных, которые используются другими программами потому, что реально они
+вызваны из библиотеки.</P>
+
+<P>Пользователь имеет максимальный размер буфера связи. Размер буфера,
+который распределен первоначально (16 килобайт), автоматически увеличивается
+до максимального размера (максимум 16 мегабайт). Поскольку размеры буфера
+растут только по запросу, просто увеличивая заданное по умолчанию
+максимальное ограничение, Вы не заставите большее количество ресурсов
+использоваться. Эта проверка размера обычно применяется в сложных ситуациях.
+</P>
+
+<P>Буфер связи должен быть достаточно большим, чтобы хранить одиночную
+инструкцию SQL (для трафика "клиент-на сервер") и одну строку возвращенных
+данных (для трафика "сервер-на-клиент"). Буфер связи каждого потока будет
+динамически расширен до максимального ограничения, чтобы обработать любой
+запрос или строку. Например, если Вы имеете значения <CODE>BLOB</CODE>,
+которые содержат до 16M данных, Вы должны иметь ограничение буфера связи
+по крайней мере в 16M (на клиенте и на сервере сразу). Заданный по умолчанию
+максимум пользователя равен 16M, но заданный по умолчанию максимум сервера
+равен всего 1M. Вы можете увеличивать это, меняя значение параметра
+<CODE>max_allowed_packet</CODE> при запуске сервера.</P>
+
+<P>Сервер MySQL сокращает каждый буфер связи до
+<CODE>net_buffer_length</CODE> байт после каждого запроса. Для клиентуры
+размер буфера, связанного с подключением, не будет уменьшен, пока подключение
+не будет закрыто.</P>
+
+<P>Для программирования с потоками, обратитесь к разделу
+<A HREF="#Threaded_clients">"2.8 Как делать поточные клиенты"</A>. Для
+создания автономной прикладной программы, которая включает клиент и сервер в
+той же самой программе (и не связывается с внешним сервером MySQL) обратитесь
+к разделу <A HREF="#libmysqld">"2.9 libmysqld, библиотека
+встроенного сервера MySQL"</A>.</P>
+
+<H3><A NAME="C_API_datatypes">2.1 Типы данных в C API</A></H3>
+<DL COMPACT>
+<DT><CODE>MYSQL</CODE>
+<DD>Эта структура представляет дескриптор на одно подключение базы данных.
+Это используется почти для всех функций MySQL.
+
+<DT><CODE>MYSQL_RES</CODE>
+<DD>Эта структура представляет результат запроса, который возвращает строки
+(<CODE>SELECT</CODE>, <CODE>SHOW</CODE>, <CODE>DESCRIBE</CODE>,
+<CODE>EXPLAIN</CODE>). Информация, возвращенная из запроса, названа набором
+результатов в остатках от этого раздела.
+
+<DT><CODE>MYSQL_ROW</CODE>
+<DD>Это тип-безопасное представление одной строки данных. Это в настоящее
+время выполнено как массив рассчитанных байтовых строк. Вы не можете
+обрабатывать их как строки с нулевым символом в конце, если значения поля
+могут содержать двоичные данные потому, что такие значения могут содержать
+нулевые символы в себе. Строки получены, вызывая функцию
+<CODE>mysql_fetch_row()</CODE>.
+
+<DT><CODE>MYSQL_FIELD</CODE>
+<DD>Эта структура содержит информацию относительно поля, например, имя поля,
+тип и размер. Члены описаны более подробно ниже. Вы можете получать структуры
+<CODE>MYSQL_FIELD</CODE> для каждого поля, неоднократно вызывая
+<CODE>mysql_fetch_field()</CODE>. Значения полей не являются частью этой
+структуры, они содержатся в структуре <CODE>MYSQL_ROW</CODE>.
+
+<DT><CODE>MYSQL_FIELD_OFFSET</CODE>
+<DD>Это тип-безопасное представление смещения в списке полей MySQL.
+Используются в вызове <CODE>mysql_field_seek()</CODE>. Смещения представляют
+собой номера полей внутри строки, начиная с нуля.
+
+<DT><CODE>my_ulonglong</CODE>
+<DD>Тип, используемый для числа строк и для
+<CODE>mysql_affected_rows()</CODE>, <CODE>mysql_num_rows()</CODE> и
+<CODE>mysql_insert_id()</CODE>. Этот тип обеспечивает диапазон от
+<CODE>0</CODE> до <CODE>1.84e19</CODE>. На некоторых системах попытка
+печатать значение типа <CODE>my_ulonglong</CODE> не будет работать. Чтобы
+отпечатать такое значение, преобразуйте его к типу <CODE>unsigned long</CODE>
+и используйте формат вывода <CODE>%lu</CODE>. Например:
+<PRE>
+printf (Number of rows: %lu\n", (unsigned long) mysql_num_rows(result));
+</PRE>
+</DL>
+
+<P>Структура <CODE>MYSQL_FIELD</CODE> содержит члены, перечисленные ниже:</P>
+<DL COMPACT>
+<DT><CODE>char * name</CODE>
+<DD>Имя поля, как строка с нулевым символом в конце.
+
+<DT><CODE>char * table</CODE>
+<DD>Имя таблицы, содержащей это поле, если это не расчетное поле. Для
+расчетных полей, значение <CODE>table</CODE> представлено пустой строкой.
+
+<DT><CODE>char * def</CODE>
+<DD>Значение по умолчанию этого поля, как строка с нулевым символом в
+конце. Это установлено только, если Вы используете
+<CODE>mysql_list_fields()</CODE>.
+
+<DT><CODE>enum enum_field_types type</CODE>
+<DD>Тип поля. Значение <CODE>type</CODE> может быть один из следующего:
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Значение Type</STRONG></TD><TD><STRONG>Используемый тип
+</STRONG></TD></TR>
+<TR><TD><CODE>FIELD_TYPE_TINY</CODE></TD><TD><CODE>TINYINT</CODE></TD></TR>
+<TR><TD><CODE>FIELD_TYPE_SHORT</CODE></TD><TD><CODE>SMALLINT</CODE></TD></TR>
+<TR><TD><CODE>FIELD_TYPE_LONG</CODE></TD><TD><CODE>INTEGER</CODE></TD></TR>
+<TR><TD><CODE>FIELD_TYPE_INT24</CODE></TD><TD><CODE>MEDIUMINT</CODE></TD>
+</TR>
+<TR><TD><CODE>FIELD_TYPE_LONGLONG</CODE></TD><TD><CODE>BIGINT</CODE></TD>
+</TR>
+<TR><TD><CODE>FIELD_TYPE_DECIMAL</CODE></TD><TD><CODE>DECIMAL</CODE> или
+<CODE>NUMERIC</CODE></TD></TR>
+<TR><TD><CODE>FIELD_TYPE_FLOAT</CODE></TD><TD><CODE>FLOAT</CODE></TD></TR>
+<TR><TD><CODE>FIELD_TYPE_DOUBLE</CODE></TD><TD><CODE>DOUBLE</CODE> или
+<CODE>REAL</CODE></TD></TR>
+<TR><TD><CODE>FIELD_TYPE_TIMESTAMP</CODE></TD><TD><CODE>TIMESTAMP</CODE></TD>
+</TR>
+<TR><TD><CODE>FIELD_TYPE_DATE</CODE></TD><TD><CODE>DATE</CODE></TD></TR>
+<TR><TD><CODE>FIELD_TYPE_TIME</CODE></TD><TD><CODE>TIME</CODE></TD></TR>
+<TR><TD><CODE>FIELD_TYPE_DATETIME</CODE></TD><TD><CODE>DATETIME</CODE></TD>
+</TR>
+<TR><TD><CODE>FIELD_TYPE_YEAR</CODE></TD><TD><CODE>YEAR</CODE></TD></TR>
+<TR><TD><CODE>FIELD_TYPE_STRING</CODE></TD><TD>Строка (<CODE>CHAR</CODE> или
+<CODE>VARCHAR</CODE>)</TD></TR>
+<TR><TD><CODE>FIELD_TYPE_BLOB</CODE></TD><TD><CODE>BLOB</CODE> или
+<CODE>TEXT</CODE> (используйте <CODE>max_length</CODE>, чтобы определить
+максимальную длину поля)</TD></TR>
+<TR><TD><CODE>FIELD_TYPE_SET</CODE></TD><TD><CODE>SET</CODE></TD></TR>
+<TR><TD><CODE>FIELD_TYPE_ENUM</CODE></TD><TD><CODE>ENUM</CODE></TD></TR>
+<TR><TD><CODE>FIELD_TYPE_NULL</CODE></TD><TD><CODE>NULL</CODE></TD></TR>
+<TR><TD><CODE>FIELD_TYPE_CHAR</CODE></TD><TD>Не рекомендуется: используйте
+<CODE>FIELD_TYPE_TINY</CODE></TD></TR></TABLE>
+
+Вы можете использовать макрос <CODE>IS_NUM()</CODE>, чтобы проверить имеет
+или нет поле числовой тип. Передайте значение <CODE>type</CODE> в
+<CODE>IS_NUM()</CODE>. Вернется TRUE, если поле числовое:
+<PRE>
+if (IS_NUM(field-&#62;type)) printf("Field is numeric\n");
+</PRE>
+
+<DT><CODE>unsigned int length</CODE>
+<DD>Ширина поля, как она определена в описании таблицы.
+
+<DT><CODE>unsigned int max_length</CODE>
+<DD>Максимальная ширина поля для набора результатов (длина самого длинного
+поля для строк в наборе результатов). Если Вы используете
+<CODE>mysql_store_result()</CODE> или <CODE>mysql_list_fields()</CODE>, это
+содержит максимальную длину поля. Если Вы используете
+<CODE>mysql_use_result()</CODE>, значение этой переменной нулевое.
+
+<DT><CODE>unsigned int flags</CODE>
+<DD>Различные биты задают флажки для поля. Значение <CODE>flags</CODE>
+может иметь ноль или большее количество из следующего набора битов:
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Значение Flag</STRONG></TD><TD><STRONG>Что это значит
+</STRONG></TD></TR>
+<TR><TD><CODE>NOT_NULL_FLAG</CODE></TD><TD>Поле не может быть
+<CODE>NULL</CODE></TD></TR>
+<TR><TD><CODE>PRI_KEY_FLAG</CODE></TD><TD>Поле часть первичного ключа</TD></TR>
+<TR><TD><CODE>UNIQUE_KEY_FLAG</CODE></TD><TD>Поле часть уникального ключа
+</TD></TR>
+<TR><TD><CODE>MULTIPLE_KEY_FLAG</CODE></TD><TD>Поле часть неуникального ключа
+</TD></TR>
+<TR><TD><CODE>UNSIGNED_FLAG</CODE></TD><TD>Поле имеет атрибут
+<CODE>UNSIGNED</CODE></TD></TR>
+<TR><TD><CODE>ZEROFILL_FLAG</CODE></TD><TD>Поле имеет атрибут
+<CODE>ZEROFILL</CODE></TD></TR>
+<TR><TD><CODE>BINARY_FLAG</CODE></TD><TD>Поле имеет атрибут
+<CODE>BINARY</CODE></TD></TR>
+<TR><TD><CODE>AUTO_INCREMENT_FLAG</CODE></TD><TD>Поле имеет атрибут
+<CODE>AUTO_INCREMENT</CODE></TD></TR>
+<TR><TD><CODE>ENUM_FLAG</CODE></TD><TD>Поле имеет тип <CODE>ENUM</CODE></TD>
+</TR>
+<TR><TD><CODE>BLOB_FLAG</CODE></TD><TD>Поле имеет тип <CODE>BLOB</CODE> или
+<CODE>TEXT</CODE></TD></TR>
+<TR><TD><CODE>TIMESTAMP_FLAG</CODE></TD><TD>Поле имеет тип
+<CODE>TIMESTAMP</CODE></TD></TR></TABLE>
+
+Использование <CODE>BLOB_FLAG</CODE>, <CODE>ENUM_FLAG</CODE> и
+<CODE>TIMESTAMP_FLAG</CODE> не рекомендуется потому, что они указывают тип
+поля, а не атрибут типа. Предпочтительно проверить
+<CODE>field-&#62;type</CODE> вместо <CODE>FIELD_TYPE_BLOB</CODE>,
+<CODE>FIELD_TYPE_ENUM</CODE> или <CODE>FIELD_TYPE_TIMESTAMP</CODE>. Пример
+ниже иллюстрирует типичное использование <CODE>flags</CODE>:
+<PRE>
+if (field-&#62;flags &#38; NOT_NULL_FLAG) printf("Field can't be null\n");
+</PRE>
+
+Вы можете использовать следующие макрокоманды, чтобы определить булево
+состояние значения <CODE>flags</CODE>:
+
+<TABLE><TR><TD><CODE>IS_NOT_NULL(flags)</CODE></TD><TD>Истина, если это поле
+определено как <CODE>NOT NULL</CODE></TD></TR>
+<TR><TD><CODE>IS_PRI_KEY(flags)</CODE></TD><TD>Истина, если это
+поле первичный ключ</TD></TR>
+<TR><TD><CODE>IS_BLOB(flags)</CODE></TD><TD>Истина, если это поле
+<CODE>BLOB</CODE> или <CODE>TEXT</CODE></TD></TR></TABLE>
+
+<DT><CODE>unsigned int decimals</CODE>
+<DD>Число допустимых десятичных чисел для числовых полей.</DL>
+
+<H3><A NAME="C_API_function_overview">2.2 Обзор функций C API</A></H3>
+<P>Функции, доступные в C API, перечислены ниже и описаны более подробно в
+следующем разделе. Подробности в разделе <A HREF="#C_API_functions">"2.3
+Описание функций C API"</A>.</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>mysql_affected_rows()</STRONG></TD><TD>
+Возвращает число строк измененных последним запросом <CODE>UPDATE</CODE>,
+<CODE>DELETE</CODE> или <CODE>INSERT</CODE>.</TD></TR>
+
+<TR><TD><STRONG>mysql_close()</STRONG></TD><TD>
+Закрывает подключение к серверу.</TD></TR>
+
+<TR><TD><STRONG>mysql_connect()</STRONG></TD><TD>Соединяется с сервером.</TD>
+</TR>
+
+<TR><TD><STRONG>mysql_change_user()</STRONG></TD><TD>Меняет пользователя и
+базу данных на открытом подключении.</TD></TR>
+
+<TR><TD><STRONG>mysql_character_set_name()</STRONG></TD><TD>
+Возвращает имя заданного по умолчанию набора символов для подключения.</TD>
+</TR>
+
+<TR><TD><STRONG>mysql_create_db()</STRONG></TD><TD>Создает базу данных.
+Аналог команды SQL <CODE>CREATE DATABASE</CODE>.</TD></TR>
+
+<TR><TD><STRONG>mysql_data_seek()</STRONG></TD><TD>Ищет произвольную строку в
+наборе результатов запросов.</TD></TR>
+
+<TR><TD><STRONG>mysql_debug()</STRONG></TD><TD>Делает <CODE>DBUG_PUSH</CODE>
+для заданной строки.</TD></TR>
+
+<TR><TD><STRONG>mysql_drop_db()</STRONG></TD><TD>Удаляет базу данных. Эта
+функция аналогична команде SQL <CODE>DROP DATABASE</CODE>.</TD></TR>
+
+<TR><TD><STRONG>mysql_dump_debug_info()</STRONG></TD><TD>Заставляет сервер
+писать информацию отладки в файл регистрации.</TD></TR>
+
+<TR><TD><STRONG>mysql_eof()</STRONG></TD><TD>Определяет, читалась или нет
+последняя строка набора результатов.</TD></TR>
+
+<TR><TD><STRONG>mysql_errno()</STRONG></TD><TD>Возвращает код ошибки для
+вызванной недавно функции MySQL.</TD></TR>
+
+<TR><TD><STRONG>mysql_error()</STRONG></TD><TD>Возвращает текстовое сообщение
+об ошибке для вызванной недавно функции MySQL.</TD></TR>
+
+<TR><TD><STRONG>mysql_real_escape_string()</STRONG></TD><TD>Выходит из
+специальных символов в строке для использования в инструкции SQL, принимающей
+во внимание текущий набор символов данного подключения.</TD></TR>
+
+<TR><TD><STRONG>mysql_escape_string()</STRONG></TD><TD>Выходит из специальных
+символов в строке для использования в обычной инструкции SQL.</TD></TR>
+
+<TR><TD><STRONG>mysql_fetch_field()</STRONG></TD><TD>Возвращает тип
+следующего поля таблицы.</TD></TR>
+
+<TR><TD><STRONG>mysql_fetch_field_direct()</STRONG></TD><TD>Возвращает тип
+поля таблицы, по номеру поля.</TD></TR>
+
+<TR><TD><STRONG>mysql_fetch_fields()</STRONG></TD><TD>Возвращает массив
+всех структур поля.</TD></TR>
+
+<TR><TD><STRONG>mysql_fetch_lengths()</STRONG></TD><TD>Возвращает длины всех
+столбцов в текущей (актуальной) строке.</TD></TR>
+
+<TR><TD><STRONG>mysql_fetch_row()</STRONG></TD><TD>Выбирает следующую строку
+из набора результатов.</TD></TR>
+
+<TR><TD><STRONG>mysql_field_seek()</STRONG></TD><TD>Помещает курсор столбца в
+определенный параметром столбец.</TD></TR>
+
+<TR><TD><STRONG>mysql_field_count()</STRONG></TD><TD>Возвращает число
+столбцов результата для последнего запроса.</TD></TR>
+
+<TR><TD><STRONG>mysql_field_tell()</STRONG></TD><TD>Возвращает позицию
+курсора поля, используемого для последнего вызова
+<CODE>mysql_fetch_field()</CODE>.</TD></TR>
+
+<TR><TD><STRONG>mysql_free_result()</STRONG></TD><TD>Освобождает память,
+используемую набором результатов.</TD></TR>
+
+<TR><TD><STRONG>mysql_get_client_info()</STRONG></TD><TD>Возвращает
+информацию о версии программы-клиента.</TD></TR>
+
+<TR><TD><STRONG>mysql_get_host_info()</STRONG></TD><TD>Возвращает строку,
+описывающую подключение.</TD></TR>
+
+<TR><TD><STRONG>mysql_get_proto_info()</STRONG></TD><TD>Возвращает версию
+протокола, используемую подключением.</TD></TR>
+
+<TR><TD><STRONG>mysql_get_server_info()</STRONG></TD><TD>Возвращает номер
+версии сервера.</TD></TR>
+
+<TR><TD><STRONG>mysql_info()</STRONG></TD><TD>Возвращает информацию
+относительно недавно выполненного запроса.</TD></TR>
+
+<TR><TD><STRONG>mysql_init()</STRONG></TD><TD>Получает или инициализирует
+структуру <CODE>MYSQL</CODE>.</TD></TR>
+
+<TR><TD><STRONG>mysql_insert_id()</STRONG></TD><TD>Возвращает ID,
+сгенерированный для столбца с поддержкой <CODE>AUTO_INCREMENT</CODE>
+предыдущим запросом.</TD></TR>
+
+<TR><TD><STRONG>mysql_kill()</STRONG></TD><TD>Уничтожает заданный поток.
+</TD></TR>
+
+<TR><TD><STRONG>mysql_list_dbs()</STRONG></TD><TD>Возвращает имена баз
+данных, соответствующие простому регулярному выражению.</TD></TR>
+
+<TR><TD><STRONG>mysql_list_fields()</STRONG></TD><TD>Возвращает имена полей,
+соответствующие простому регулярному выражению.</TD></TR>
+
+<TR><TD><STRONG>mysql_list_processes()</STRONG></TD><TD>Возвращает список
+текущих потоков сервера.</TD></TR>
+
+<TR><TD><STRONG>mysql_list_tables()</STRONG></TD><TD>Возвращает имена таблиц,
+соответствующие простому регулярному выражению.</TD></TR>
+
+<TR><TD><STRONG>mysql_num_fields()</STRONG></TD><TD>Возвращает число столбцов
+в наборе результатов.</TD></TR>
+
+<TR><TD><STRONG>mysql_num_rows()</STRONG></TD><TD>Возвращает число строк в
+наборе результатов.</TD></TR>
+
+<TR><TD><STRONG>mysql_options()</STRONG></TD><TD>Устанавливает опции связи
+для вызова <CODE>mysql_connect()</CODE>.</TD></TR>
+
+<TR><TD><STRONG>mysql_ping()</STRONG></TD><TD>Проверяет работает или нет
+подключение с сервером, повторно соединяется по мере необходимости.</TD></TR>
+
+<TR><TD><STRONG>mysql_query()</STRONG></TD><TD>Выполняет запрос SQL,
+определенный как строка с нулевым символом в конце.</TD></TR>
+
+<TR><TD><STRONG>mysql_real_connect()</STRONG></TD><TD>Соединяется с сервером.
+</TD></TR>
+
+<TR><TD><STRONG>mysql_real_query()</STRONG></TD><TD>Выполняет запрос SQL,
+определенный как рассчитанная строка.</TD></TR>
+
+<TR><TD><STRONG>mysql_reload()</STRONG></TD><TD>Сообщает, чтобы сервер
+перезагрузил таблицы предоставления привилегий.</TD></TR>
+
+<TR><TD><STRONG>mysql_row_seek()</STRONG></TD><TD>Переходит к строке в наборе
+результатов, используя значение, возвращенное из
+<CODE>mysql_row_tell()</CODE>.</TD></TR>
+
+<TR><TD><STRONG>mysql_row_tell()</STRONG></TD><TD>Возвращает позицию
+курсора строки.</TD></TR>
+
+<TR><TD><STRONG>mysql_select_db()</STRONG></TD><TD>Выбирает базу данных.</TD>
+</TR>
+
+<TR><TD><STRONG>mysql_shutdown()</STRONG></TD><TD>Закрывает сервер.</TD></TR>
+<TR><TD><STRONG>mysql_stat()</STRONG></TD><TD>Возвращает состояние сервера.
+</TD></TR>
+
+<TR><TD><STRONG>mysql_store_result()</STRONG></TD><TD>Возвращает полный набор
+результатов пользователю.</TD></TR>
+
+<TR><TD><STRONG>mysql_thread_id()</STRONG></TD><TD>Возвращает ID потока.</TD>
+</TR>
+
+<TR><TD><STRONG>mysql_thread_safe()</STRONG></TD><TD>Возвращает 1, если
+клиент компилируется как поточно-безопасный.</TD></TR>
+
+<TR><TD><STRONG>mysql_use_result()</STRONG></TD><TD>Инициализирует копию
+результата строка в строку.</TD></TR></TABLE>
+
+<P>Чтобы соединиться с сервером, вызовите <CODE>mysql_init()</CODE>, чтобы
+инициализировать драйвер подключения, затем вызовите
+<CODE>mysql_real_connect()</CODE> с этим драйвером (наряду с другой
+информацией типа hostname, имени пользователя и пароля). При подключении
+<CODE>mysql_real_connect()</CODE> устанавливает флажок <CODE>reconnect</CODE>
+(часть структуры MYSQL) в значение <CODE>1</CODE>. Этот флажок указывает, что
+когда запрос не может выполняться из-за потерянного подключения, надо
+попробовать повторно соединиться с сервером перед отказом. Когда Вы закончите
+работу с подключением, вызовите <CODE>mysql_close()</CODE> для его закрытия.
+</P>
+
+<P>В то время как подключение активно, пользователь может посылать запросы
+SQL серверу, применяя функции <CODE>mysql_query()</CODE> или
+<CODE>mysql_real_query()</CODE>. Различие между ними в том, что
+<CODE>mysql_query()</CODE> ожидает, что запрос будет определен как строка с
+нулевым символом в конце, в то время как <CODE>mysql_real_query()</CODE>
+ожидает рассчитанную строку. Если несет в себе двоичные данные (которые сами
+по себе могут включать нулевые байты), Вы должны использовать только
+<CODE>mysql_real_query()</CODE>.</P>
+
+<P>Для каждого запроса не-<CODE>SELECT</CODE> (например, <CODE>INSERT</CODE>,
+<CODE>UPDATE</CODE>, <CODE>DELETE</CODE>), Вы можете выяснить, сколько строк
+были изменены, вызывая <CODE>mysql_affected_rows()</CODE>.</P>
+
+<P>Для запросов <CODE>SELECT</CODE> Вы получаете выбранные строки в наборе
+результатов. Обратите внимание, что некоторые инструкции подобны
+<CODE>SELECT</CODE> в том плане, что они возвращают строки. Сюда входят
+<CODE>SHOW</CODE>, <CODE>DESCRIBE</CODE> и <CODE>EXPLAIN</CODE>. Они должны
+обработаться тем же самым методом, что и обычный <CODE>SELECT</CODE>.</P>
+
+<P>Имеются два пути для пользователя, чтобы обработать наборы результатов.
+Один путь состоит в том, чтобы получить весь набор результатов, вызывая
+<CODE>mysql_store_result()</CODE>. Эта функция получает с сервера все строки,
+возвращенные запросом и сохраняет их на клиенте. Второй путь инициализировать
+построчный набор результатов, вызывая <CODE>mysql_use_result()</CODE>. Эта
+функция инициализирует поиск, но фактически не получает никаких строк.</P>
+
+<P>В обоих случаях Вы обращаетесь к строкам, вызывая
+<CODE>mysql_fetch_row()</CODE>. В случае <CODE>mysql_store_result()</CODE>
+<CODE>mysql_fetch_row()</CODE> обращается к строкам, которые уже были выбраны
+из сервера. В случае же <CODE>mysql_use_result()</CODE>
+<CODE>mysql_fetch_row()</CODE> фактически получает строку с сервера
+самостоятельно. Информация относительно размера данных в каждой строке
+доступна через вызов <CODE>mysql_fetch_lengths()</CODE>.</P>
+
+<P>После того, как Вы закончите работу с набором результатов, вызовите
+<CODE>mysql_free_result()</CODE>, чтобы освободить используемую память.</P>
+
+<P>Два механизма поиска дополняют друг друга. Программы пользователя должны
+выбрать подход, который является наиболее подходящим для их требований.
+Практически же, клиентура имеет тенденцию обычно использовать
+<CODE>mysql_store_result()</CODE>.</P>
+
+<P>Преимущество <CODE>mysql_store_result()</CODE> в том, что, поскольку все
+строки были переданы пользователю, Вы не только можете обращаться к строкам
+последовательно, Вы можете также двигаться обратно в наборе результатов,
+используя <CODE>mysql_data_seek()</CODE> или <CODE>mysql_row_seek()</CODE>,
+чтобы изменить текущую (актуальную) позицию строки внутри набора результатов.
+Вы можете также выяснять, сколько там строк, вызывая
+<CODE>mysql_num_rows()</CODE>. С другой стороны, требования к памяти для
+<CODE>mysql_store_result()</CODE> могут быть очень высоки для больших наборов
+результатов, и Вы, вероятно, столкнетесь с проблемами нехватки памяти.</P>
+
+<P>Преимущество <CODE>mysql_use_result()</CODE> в том, что пользователь
+требует меньшего количества памяти для набора результатов потому, что это
+поддерживает только одну строку одновременно (и потому, что имеется меньшее
+количество дополнительных распределений для заголовков, так что
+<CODE>mysql_use_result()</CODE> может быть быстрее). Недостаток: Вы должны
+обработать каждую строку быстро, чтобы не держать занятым сервер. Вы не
+имеете произвольного доступа к строкам внутри набора результатов (Вы можете
+только обращаться к строкам последовательно), и Вы не знаете, сколько строк
+находится в наборе результатов, пока Вы не получите их все. Кроме того, Вы
+должны принять все строки, даже если Вы определяете в середине поиска, что
+уже нашли ту информацию, которую Вы искали.</P>
+
+<P>API позволяет клиентам ответить соответственно на запросы (получая строки
+только по мере необходимости) без того, чтобы знать, является или нет запрос
+<CODE>SELECT</CODE>. Вы можете делать это, вызывая
+<CODE>mysql_store_result()</CODE> после каждого <CODE>mysql_query()</CODE>
+(или <CODE>mysql_real_query()</CODE>). Если обращение к набору результатов
+прошло успешно, запросом был <CODE>SELECT</CODE>, и Вы можете читать строки.
+Если произошел сбой, вызовите <CODE>mysql_field_count()</CODE>, чтобы
+определить, должен или нет фактически ожидаться результат. Если
+<CODE>mysql_field_count()</CODE> возвращает ноль, запрос не возвратил никаких
+данных (это показывает, что это был <CODE>INSERT</CODE>, <CODE>UPDATE</CODE>,
+<CODE>DELETE</CODE> или что-то в этом роде) и не возвратит строки. Если
+<CODE>mysql_field_count()</CODE> отличен от нуля, запрос должен был
+возвратить строки, но не сделал этого. Это указывает, что запросом был
+<CODE>SELECT</CODE>, который потерпел неудачу.</P>
+
+<P>Вызовы <CODE>mysql_store_result()</CODE> и <CODE>mysql_use_result()</CODE>
+позволяют Вам получать информацию относительно полей, которые составляют
+набор результатов (число полей, их имена, типы и т.п.). Вы можете обращаться
+к информации поля последовательно внутри строки, вызывая
+<CODE>mysql_fetch_field()</CODE> неоднократно, или по номеру поля внутри
+строки, вызывая <CODE>mysql_fetch_field_direct()</CODE> напрямую. Текущая
+(актуальная) позиция курсора поля может быть изменена вызовом
+<CODE>mysql_field_seek()</CODE>. Установка курсора поля воздействует на
+последующие обращения к <CODE>mysql_fetch_field()</CODE>. Вы можете также
+получать информацию для полей в любой момент, вызывая
+<CODE>mysql_fetch_fields()</CODE>.</P>
+
+<P>Для обнаружения и сообщения об ошибках MySQL обеспечивает доступ к
+информации ошибки посредством функций <CODE>mysql_errno()</CODE> и
+<CODE>mysql_error()</CODE>. Они возвращают код ошибки или сообщение об ошибке
+для последней вызванной функции, позволяя Вам определить, когда ошибка
+произошла, и что это было.</P>
+
+<H3><A NAME="C_API_functions">2.3 Описание функций C API</A></H3>
+<P>В описаниях ниже параметр или значение возврата <CODE>NULL</CODE> означает
+<CODE>NULL</CODE> в смысле языка программирования C, а не MySQL-значение
+<CODE>NULL</CODE>.</P>
+
+<P>Функции, которые возвращают значение, возвращают указатель или целое
+число. Если не определено иное, функции, возвращающие указатель, возвращают
+значение не-<CODE>NULL</CODE>, чтобы указать успех, или значение
+<CODE>NULL</CODE>, чтобы указать ошибку, а функции, возвращающие число,
+возвращают целочисленный ноль, чтобы указать успех, или отличное от нуля
+значение, чтобы указать ошибку. Обратите внимание, что "отличное от нуля"
+означает только это. Если функциональное описание не говорит иного, не надо
+проверять результат на соответствие каким-либл числам, кроме нуля.</P>
+<PRE>
+if (result)                   /* правильно */
+    ... error ...
+
+if (result &#60; 0)           /* неправильно */
+    ... error ...
+
+if (result == -1)             /* неправильно */
+    ... error ...
+</PRE>
+
+<P>Когда функция возвращает ошибку, подраздел <STRONG>Ошибки</STRONG>
+описания функции вносит в список возможные типы ошибок. Вы можете выяснить,
+который из них произошел, вызывая <CODE>mysql_errno()</CODE>. Представление
+строки ошибки может быть получено, вызывая <CODE>mysql_error()</CODE>.</P>
+
+<H4><A NAME="mysql_affected_rows">2.3.1 <CODE>mysql_affected_rows()</CODE>
+</A></H4>
+<P><CODE>my_ulonglong mysql_affected_rows(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.2 Описание</H4>
+<P>Возвращает число строк, измененных последним <CODE>UPDATE</CODE>,
+удаленных последним <CODE>DELETE</CODE> или вставленных последней инструкцией
+<CODE>INSERT</CODE>. Может быть вызвана немедленно после
+<CODE>mysql_query()</CODE> для <CODE>UPDATE</CODE>, <CODE>DELETE</CODE> или
+<CODE>INSERT</CODE>. Для инструкции <CODE>SELECT</CODE>
+<CODE>mysql_affected_rows()</CODE> работает подобно
+<CODE>mysql_num_rows()</CODE>.</P>
+
+<H4>2.3.3 Возвращаемые значения</H4>
+<P>Целое число, большее, чем ноль, указывает количество обработанных строк.
+Ноль указывает, что никакие записи обработаны не были. -1 указывает, что
+запрос возвратил ошибку или то, что для запроса <CODE>SELECT</CODE>
+<CODE>mysql_affected_rows()</CODE> был вызван до вызова
+<CODE>mysql_store_result()</CODE>.</P>
+
+<H4>2.3.4 Ошибки</H4>
+<P>Нет.</P>
+
+<H4>2.3.5 Пример</H4>
+<PRE>
+mysql_query(&#38;mysql,"UPDATE products SET cost=cost*1.25 WHERE group=10");
+printf("%ld products updated",(long) mysql_affected_rows(&#38;mysql));
+</PRE>
+
+<P>Если определен флажок <CODE>CLIENT_FOUND_ROWS</CODE>, при соединение с
+<CODE>mysqld</CODE> <CODE>mysql_affected_rows()</CODE> возвратит число строк,
+согласованных инструкцией <CODE>WHERE</CODE> для <CODE>UPDATE</CODE>.</P>
+
+<P>Обратите внимание, что, когда использована команда <CODE>REPLACE</CODE>,
+<CODE>mysql_affected_rows()</CODE> вернет 2 потому, что в этом случае одна
+строка была вставлена, а затем дубликат был удален.</P>
+
+<H4><A NAME="mysql_close">2.3.6 <CODE>mysql_close()</CODE></A></H4>
+<P><CODE>void mysql_close(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.7 Описание</H4>
+<P>Закрывает предварительно открытое подключение. <CODE>mysql_close()</CODE>
+также освободит дескриптор подключения, указанный в <CODE>mysql</CODE>, если
+дескриптор был распределен автоматически <CODE>mysql_init()</CODE> или
+<CODE>mysql_connect()</CODE>.</P>
+
+<H4>2.3.8 Возвращаемые значения</H4>
+<P>Нет.</P>
+
+<H4>2.3.9 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_connect">2.3.10 <CODE>mysql_connect()</CODE></A></H4>
+<P><CODE>MYSQL *mysql_connect(MYSQL *mysql, const char *host, const
+char *user, const char *passwd)</CODE></P>
+
+<H4>2.3.11 Описание</H4>
+<P>пытается устанавливать подключение с сервером MySQL на компьютере
+<CODE>host</CODE>. <CODE>mysql_connect()</CODE> должна завершиться успешно
+прежде, чем Вы сможете выполнить любую из функций API, за исключением
+<CODE>mysql_get_client_info()</CODE>.</P>
+
+<P>Значения параметров такие же, как для соответствующих параметров
+<CODE>mysql_real_connect()</CODE> с тем различием, что параметр подключения
+может быть <CODE>NULL</CODE>. В этом случае C API распределяет память для
+структуры подключения автоматически и освобождает ее, когда Вы вызываете
+<CODE>mysql_close()</CODE>. Недостаток этого подхода в том, что Вы не можете
+получить сообщение об ошибке, если подключение терпит неудачу. Чтобы получать
+информацию об ошибке из <CODE>mysql_errno()</CODE> или
+<CODE>mysql_error()</CODE>, Вы должны обеспечить имеющий силу указатель
+на структуру <CODE>MYSQL</CODE>.</P>
+
+<H4>2.3.12 Возвращаемые значения</H4>
+<P>Аналогично <CODE>mysql_real_connect()</CODE>.</P>
+
+<H4>2.3.13 Ошибки</H4>
+<P>Аналогично <CODE>mysql_real_connect()</CODE>.</P>
+
+<H4><A NAME="mysql_change_user">2.3.14 <CODE>mysql_change_user()</CODE>
+</H4>
+<P><CODE>my_bool mysql_change_user(MYSQL *mysql, const char *user, const
+char *password, const char *db)</CODE></P>
+
+<H4>2.3.15 Описание</H4>
+<P>Меняет пользователя и заставляет базу данных, определенную как
+<CODE>db</CODE>, стать заданной по умолчанию (текущей) базой данных на
+подключении, определенном <CODE>mysql</CODE>. В последующих запросах эта база
+данных будет значением по умолчанию для ссылок на таблицы, которые не
+включают явный спецификатор базы данных.</P>
+
+<P>Эта функция представлена в MySQL Version 3.23.3.</P>
+
+<P><CODE>mysql_change_user()</CODE> терпит неудачу, если указанный
+пользователь не может быть использован, или если он не имеет разрешения
+использовать эту базу данных. В этом случае пользователь и база данных не
+будут изменены вообще.</P>
+
+<P>Параметр <CODE>db</CODE> может быть установлен в <CODE>NULL</CODE>, если
+Вы не хотите иметь заданную по умолчанию базу данных.</P>
+
+<H4>2.3.16 Возвращаемые значения</H4>
+<P>Ноль для успеха. Отличное от нуля, если произошла ошибка.</P>
+
+<H4>2.3.17 Ошибки</H4>
+<P>Аналогично <CODE>mysql_real_connect()</CODE>.</P>
+
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.
+<DT><CODE>ER_UNKNOWN_COM_ERROR</CODE>
+<DD>Сервер MySQL не выполняет эту команду (вероятно, старая версия).
+<DT><CODE>ER_ACCESS_DENIED_ERROR</CODE>
+<DD>Пользователь или пароль ошибочен.
+<DT><CODE>ER_BAD_DB_ERROR</CODE>
+<DD>База данных не существует.
+<DT><CODE>ER_DBACCESS_DENIED_ERROR</CODE>
+<DD>Пользователь не имеет прав доступа к базе данных.
+<DT><CODE>ER_WRONG_DB_NAME</CODE>
+<DD>Имя базы данных слишком длинное.</DL>
+
+<H4>2.3.18 Пример</H4>
+<PRE>
+if (mysql_change_user(&#38;mysql, "user", "password", "new_database"))
+{
+   fprintf(stderr, "Failed to change user.  Error: %s\n",
+           mysql_error(&#38;mysql));
+}
+</PRE>
+
+<H4><A NAME="mysql_character_set_name">2.3.19
+<CODE>mysql_character_set_name()</CODE></A></H4>
+<P><CODE>const char *mysql_character_set_name(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.20 Описание</H4>
+<P>Возвращает заданный по умолчанию набор символов для текущего (актуального)
+подключения.</P>
+
+<H4>2.3.21 Возвращаемые значения</H4>
+<P>Заданный по умолчанию набор символов</P>
+
+<H4>2.3.22 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_create_db">2.3.23 <CODE>mysql_create_db()</CODE></A>
+</H4>
+<P><CODE>int mysql_create_db(MYSQL *mysql, const char *db)</CODE></P>
+
+<H4>2.3.24 Описание</H4>
+<P>Создает базу данных с именем <CODE>db</CODE>.</P>
+
+<H4>2.3.25 Возвращаемые значения</H4>
+<P>Ноль, если база данных была создана успешно. Отличное от нуля, если в
+процессе произошла ошибка.</P>
+
+<H4>2.3.26 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.Произошла неизвестная ошибка.</DL>
+
+<H4>2.3.27 Пример</H4>
+<PRE>
+if (mysql_create_db(&#38;mysql, "my_database"))
+{
+   fprintf(stderr, "Failed to create new database. Error: %s\n",
+           mysql_error(&#38;mysql));
+}
+</PRE>
+
+<H4><A NAME="mysql_data_seek">2.3.28 <CODE>mysql_data_seek()</CODE></A>
+</H4>
+<P><CODE>void mysql_data_seek(MYSQL_RES *result, unsigned long long offset)
+</CODE></P>
+
+<H4>2.3.29 Описание</H4>
+<P>Переходит к произвольной строке в наборе результатов запроса. Это требует,
+чтобы структура набора результата содержала весь результат запроса, так что
+<CODE>mysql_data_seek()</CODE> может использоваться только в конъюнкции с
+<CODE>mysql_store_result()</CODE>, но никак не с
+<CODE>mysql_use_result()</CODE>.</P>
+
+<P>Смещение должно быть значением в диапазоне от 0 до
+<CODE>mysql_num_rows(result)-1</CODE>.</P>
+
+<H4>2.3.30 Возвращаемые значения</H4>
+<P>Нет.</P>
+
+<H4>2.3.31 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_debug">2.3.32 <CODE>mysql_debug()</CODE></A></H4>
+<P><CODE>void mysql_debug(char *debug)</CODE></P>
+
+<H4>2.3.33 Описание</H4>
+<P>Делает <CODE>DBUG_PUSH</CODE> с заданной строкой. Вызов
+<CODE>mysql_debug()</CODE> использует библиотеку отладки Fred Fish. Чтобы
+использовать эту функцию, Вы должны компилировать библиотеку клиентов так,
+чтобы поддерживать отладку.</P>
+
+<H4>2.3.34 Возвращаемые значения</H4>
+<P>Нет.</P>
+
+<H4>2.3.35 Ошибки</H4>
+<P>Нет.</P>
+
+<H4>2.3.36 Пример</H4>
+<P>Обращение, показанное ниже, заставляет библиотеку клиентов генерировать
+файл трассировки <TT>/tmp/client.trace</TT> на машине пользователя:</P>
+<PRE>
+mysql_debug("d:t:O,/tmp/client.trace");
+</PRE>
+
+<H4><A NAME="mysql_drop_db">2.3.37 <CODE>mysql_drop_db()</CODE></A></H4>
+<P><CODE>int mysql_drop_db(MYSQL *mysql, const char *db)</CODE></P>
+
+<H4>2.3.38 Описание</H4>
+<P>Удвляет базу данных, упомянутую как параметр <CODE>db</CODE>.</P>
+
+<H4>2.3.39 Возвращаемые значения</H4>
+<P>Ноль, если база данных была удалена успешно. Отличное от нуля, если в
+процессе произошла ошибка.</P>
+
+<H4>2.3.40 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H4>2.3.41 Пример</H4>
+<PRE>
+if (mysql_drop_db(&#38;mysql, "my_database"))
+   fprintf(stderr, "Failed to drop the database: Error: %s\n",
+           mysql_error(&#38;mysql));
+</PRE>
+
+<H4><A NAME="mysql_dump_debug_info">2.3.42 <CODE>mysql_dump_debug_info()
+</CODE></A></H4>
+<P><CODE>int mysql_dump_debug_info(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.43 Описание</H4>
+<P>Инструктирует сервер, чтобы писать некоторую информацию отладки в файл
+регистрации. Отдавший команду пользователь должен иметь привилегию
+<STRONG>process</STRONG>, чтобы работать.</P>
+
+<H4>2.3.44 Возвращаемые значения</H4>
+<P>Ноль, если команда была успешно выполнена. Отличное от нуля, если в
+процессе произошла ошибка.</P>
+
+<H4>2.3.45 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H4><A NAME="mysql_eof">2.3.46 <CODE>mysql_eof()</CODE></A></H4>
+<P><CODE>my_bool mysql_eof(MYSQL_RES *result)</CODE></P>
+
+<H4>2.3.47 Описание</H4>
+<P><CODE>mysql_eof()</CODE> определяет, читалась или нет последняя
+строка набора результатов.</P>
+
+<P>Если Вы приобретаете результат из успешного обращения к
+<CODE>mysql_store_result()</CODE>, клиент получает весь набор в одной
+операции. В этом случае возврат <CODE>NULL</CODE> из
+<CODE>mysql_fetch_row()</CODE> всегда означает, что конец набора результатов
+был достигнут и не нужно вызвать <CODE>mysql_eof()</CODE>.</P>
+
+<P>С другой стороны, если Вы используете <CODE>mysql_use_result()</CODE>,
+чтобы инициализировать поиск набора результата, строки набора получены с
+сервера по одной, поскольку Вы вызываете <CODE>mysql_fetch_row()</CODE>
+неоднократно. Потому что ошибка может происходить на подключении в течение
+этого процесса, значение <CODE>NULL</CODE> из функции
+<CODE>mysql_fetch_row()</CODE> не обязательно означает, что конец набора
+результатов был достигнут. В этом случае, Вы можете использовать
+<CODE>mysql_eof()</CODE>, чтобы определить, что там случилось. Функция
+<CODE>mysql_eof()</CODE> возвращает значение, отличное от нуля, если конец
+набора результатов был достигнут и ноль, если произошла ошибка.</P>
+
+<P>Исторически <CODE>mysql_eof()</CODE> предшествует стандартной функции
+MySQL <CODE>mysql_errno()</CODE> и <CODE>mysql_error()</CODE>. Так как те
+функции ошибки обеспечивают ту же самую информацию, их использование
+предпочтительнее <CODE>mysql_eof()</CODE>. Фактически, они обеспечивают
+большее количество информации потому, что <CODE>mysql_eof()</CODE> возвращает
+только булево значение, в то время как функции ошибки указывают причину.</P>
+
+<H4>2.3.48 Возвращаемые значения</H4>
+<P>Функция <CODE>mysql_eof()</CODE> возвращает значение, отличное от нуля,
+если конец набора результатов был достигнут и ноль, если произошла ошибка.
+</P>
+
+<H4>2.3.49 Ошибки</H4>
+<P>Нет.
+
+<H4>2.3.50 Пример</H4>
+<P>Следующий пример показывает, как Вы могли бы использовать
+<CODE>mysql_eof()</CODE>:</P>
+<PRE>
+mysql_query(&#38;mysql,"SELECT * FROM some_table");
+result = mysql_use_result(&#38;mysql);
+while((row = mysql_fetch_row(result)))
+{
+  // Что-то делается с данными
+}
+if (!mysql_eof(result))  // mysql_fetch_row() потерпел неудачу из-за ошибки
+{
+   fprintf(stderr, "Error: %s\n", mysql_error(&#38;mysql));
+}
+</PRE>
+
+<P>Однако, Вы можете достичь того же самого эффекта с помощью стандартных
+функций обработки ошибок в MySQL:</P>
+<PRE>
+mysql_query(&#38;mysql,"SELECT * FROM some_table");
+result = mysql_use_result(&#38;mysql);
+while((row = mysql_fetch_row(result)))
+{
+  // Что-то делается с данными
+}
+if (mysql_errno(&#38;mysql))
+   // mysql_fetch_row() потерпел неудачу из-за ошибки
+{
+   fprintf(stderr, "Error: %s\n", mysql_error(&#38;mysql));
+}
+</PRE>
+
+<H4><A NAME="mysql_errno">2.3.51 <CODE>mysql_errno()</CODE></A></H4>
+<P><CODE>unsigned int mysql_errno(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.52 Описание</H4>
+<P>Для подключения, определенного в <CODE>mysql</CODE>,
+<CODE>mysql_errno()</CODE> возвращает код ошибки для вызванной функции
+API, которая может сработать нормально или потерпеть неудачу. Значение
+возврата 0 означает, что никакой ошибки не произошло. Числа сообщений об
+ошибках клиента перечислены в файле заголовка MySQL <TT>errmsg.h</TT>.
+Серверные ошибки перечислены в <TT>mysqld_error.h</TT>. В дистрибутиве
+исходного кода MySQL Вы можете найти полный список сообщений об ошибках и их
+кодов в файле <TT>Docs/mysqld_error.txt</TT>.</P>
+
+<H4>2.3.53 Возвращаемые значения</H4>
+<P>Значение кода ошибки. 0, если никакая ошибка не произошла.</P>
+
+<H4>2.3.54 Ошибки</H4>
+<P>Нет.
+
+<H4><A NAME="mysql_error">2.3.55 <CODE>mysql_error()</CODE></A></H4>
+<P><CODE>char *mysql_error(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.56 Описание</H4>
+<P>Для подключения, определенного в <CODE>mysql</CODE>,
+<CODE>mysql_error()</CODE> возвращает сообщение об ошибках для вызванной
+функции API, которая может сработать нормально или потерпеть неудачу. Пустая
+строка (<CODE>""</CODE>) вернется, если никакой ошибки не произошло. Это
+означает, что следующие тесты эквивалентны:</P>
+<PRE>
+if (mysql_errno(&#38;mysql))
+{
+   // an error occurred
+}
+if (mysql_error(&#38;mysql)[0] != '\0')
+{
+   // an error occurred
+}
+</PRE>
+
+<P>Язык сообщений об ошибках пользователя может быть изменен перекомпиляцией
+библиотеки клиента MySQL. В настоящее время Вы можете выбирать сообщения
+об ошибках на нескольких различных языках.</P>
+
+<H4>2.3.57 Возвращаемые значения</H4>
+<P>Символьная строка, которая описывает ошибку. Пустая строка, если никакой
+ошибки не произошло.</P>
+
+<H4>2.3.58 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_escape_string">2.3.59 <CODE>mysql_escape_string()</CODE>
+</A></H4>
+<P>Это идентично <CODE>mysql_real_escape_string()</CODE> за исключением того,
+что требуется подключение как первый параметр.
+<CODE>mysql_real_escape_string()</CODE> обработает строку согласно текущему
+(актуальному) набору символов, в то время как
+<CODE>mysql_escape_string()</CODE> игнорирует установку charset.</P>
+
+<H4><A NAME="mysql_fetch_field">2.3.60 <CODE>mysql_fetch_field()</CODE></A>
+</H4>
+<P><CODE>MYSQL_FIELD *mysql_fetch_field(MYSQL_RES *result)</CODE></P>
+
+<H4>2.3.61 Описание</H4>
+<P>Возвращает определение одного столбца набора результатов как структуру
+<CODE>MYSQL_FIELD</CODE>. Вызовите эту функцию неоднократно, чтобы собрать
+информацию относительно всех столбцов в наборе результатов.
+<CODE>mysql_fetch_field()</CODE> возвращает <CODE>NULL</CODE>, когда все поля
+уже обработаны или их не было вовсе.</P>
+
+<P><CODE>mysql_fetch_field()</CODE> будет сброшен так, чтобы возвратить
+информацию относительно первого поля каждый раз, когда Вы выполняете новый
+запрос <CODE>SELECT</CODE>. На поле, возвращенное
+<CODE>mysql_fetch_field()</CODE> также воздействуют обращения к
+<CODE>mysql_field_seek()</CODE>.</P>
+
+<P>Если Вы вызвали <CODE>mysql_query()</CODE> чтобы выполнить
+<CODE>SELECT</CODE> на таблице, но не вызвали
+<CODE>mysql_store_result()</CODE>, MySQL возвращает заданную по умолчанию
+длину blob (8K), если Вы вызываете <CODE>mysql_fetch_field()</CODE>, чтобы
+спросить о длине поля типа <CODE>BLOB</CODE>. Размер в 8K выбран потому, что
+MySQL не знает максимальную длину для <CODE>BLOB</CODE>. Это должно быть
+сделано с перестраиваемой конфигурацией когда-нибудь. Как только Вы получили
+набор результатов, <CODE>field-&#62;max_length</CODE> хранит длину самого
+большого значения для этого столбца в специфическом запросе.</P>
+
+<H4>2.3.62 Возвращаемые значения</H4>
+<P>Структура типа <CODE>MYSQL_FIELD</CODE> для текущего (актуального)
+столбца. <CODE>NULL</CODE>, если никакие столбцы не обработаны.</P>
+
+<H4>2.3.63 Ошибки</H4>
+<P>Нет.</P>
+
+<H4>2.3.64 Пример</H4>
+<PRE>
+MYSQL_FIELD *field;
+
+while((field = mysql_fetch_field(result)))
+{
+  printf("field name %s\n", field-&#62;name);
+}
+</PRE>
+
+<H4><A NAME="mysql_fetch_fields">2.3.65 <CODE>mysql_fetch_fields()</CODE>
+</A></H4>
+<P><CODE>MYSQL_FIELD *mysql_fetch_fields(MYSQL_RES *result)</CODE></P>
+
+<H4>2.3.66 Описание</H4>
+<P>Возвращает массив всех структур <CODE>MYSQL_FIELD</CODE> для набора
+результатов. Каждая структура обеспечивает определение поля для одного
+столбца набора результатов.</P>
+
+<H4>2.3.67 Возвращаемые значения</H4>
+<P>Массив структур <CODE>MYSQL_FIELD</CODE> для всех
+столбцов набора результатов.</P>
+
+<H4>2.3.68 Ошибки</H4>
+<P>Нет.</P>
+
+<H4>2.3.69 Пример</H4>
+<PRE>
+unsigned int num_fields;
+unsigned int i;
+MYSQL_FIELD *fields;
+
+num_fields = mysql_num_fields(result);
+fields = mysql_fetch_fields(result);
+for (i = 0; i &#60; num_fields; i++)
+{
+  printf("Field %u is %s\n", i, fields[i].name);
+}
+</PRE>
+
+<H4><A NAME="mysql_fetch_field_direct">2.3.70
+<CODE>mysql_fetch_field_direct()</CODE></A></H4>
+<P><CODE>MYSQL_FIELD *mysql_fetch_field_direct(MYSQL_RES *result,
+unsigned int fieldnr)</CODE></P>
+
+<H4>2.3.71 Описание</H4>
+<P>Получает код поля <CODE>fieldnr</CODE> для столбца внутри набора
+результатов, возвращает определение поля столбца как структура
+<CODE>MYSQL_FIELD</CODE>. Вы можете использовать эту функцию, чтобы получить
+описание для произвольного столбца. Значение <CODE>fieldnr</CODE> должно быть
+в диапазоне от 0 до <CODE>mysql_num_fields(result)-1</CODE>.</P>
+
+<H4>2.3.72 Возвращаемые значения</H4>
+<P>Структура <CODE>MYSQL_FIELD</CODE> для определенного столбца.</P>
+
+<H4>2.3.73 Ошибки</H4>
+<P>Нет.</P>
+
+<H4>2.3.74 Пример</H4>
+<PRE>
+unsigned int num_fields;
+unsigned int i;
+MYSQL_FIELD *field;
+
+num_fields = mysql_num_fields(result);
+for (i = 0; i &#60; num_fields; i++)
+{
+  field = mysql_fetch_field_direct(result, i);
+  printf("Field %u is %s\n", i, field-&#62;name);
+}
+</PRE>
+
+<H4><A NAME="mysql_fetch_lengths">2.3.75 <CODE>mysql_fetch_lengths()</CODE>
+</A></H4>
+<P><CODE>unsigned long *mysql_fetch_lengths(MYSQL_RES *result)</CODE></P>
+
+<H4>2.3.76 Описание</H4>
+<P>Возвращает длины столбцов текущей (актуальной) строки внутри набора
+результатов. Если Вы планируете копировать значения поля, эта информация
+также полезна для оптимизации потому, что Вы можете избежать вызова
+<CODE>strlen()</CODE>. Кроме того, если набор результатов содержит двоичные
+данные, Вы <EM>должны</EM> использовать эту функцию, чтобы определить размер
+данных потому, что функция <CODE>strlen()</CODE> возвращает неправильные
+результаты для любого поля, содержащего символы пробела.</P>
+
+<P>Длина для пустых столбцов и для столбцов, содержащих значения
+<CODE>NULL</CODE>, равна нулю. Чтобы видеть, как отличить эти два случая,
+обратитесь к описанию <CODE>mysql_fetch_row()</CODE>.</P>
+
+<H4>2.3.77 Возвращаемые значения</H4>
+<P>Массив длинных целых чисел без знака, представляющих размер каждого
+столбца (не включая любые символы пробелов в хвосте). <CODE>NULL</CODE>, если
+что-то пошло не так.</P>
+
+<H4>2.3.78 Ошибки</H4>
+<P><CODE>mysql_fetch_lengths()</CODE> имеет силу только для текущей строки
+набора результатов. Этот вызов возвращает <CODE>NULL</CODE>, если Вы
+вызываете его перед <CODE>mysql_fetch_row()</CODE> или после получения
+всех строк в результате.</P>
+
+<H4>2.3.79 Пример</H4>
+<PRE>
+MYSQL_ROW row;
+unsigned long *lengths;
+unsigned int num_fields;
+unsigned int i;
+
+row = mysql_fetch_row(result);
+if (row)
+{
+   num_fields = mysql_num_fields(result);
+   lengths = mysql_fetch_lengths(result);
+   for (i = 0; i &#60; num_fields; i++)
+   {
+     printf("Column %u is %lu bytes in length.\n", i, lengths[i]);
+   }
+}
+</PRE>
+
+<H4><A NAME="mysql_fetch_row">2.3.80 <CODE>mysql_fetch_row()</CODE></A>
+</H4>
+<P><CODE>MYSQL_ROW mysql_fetch_row(MYSQL_RES *result)</CODE></P>
+
+<H4>2.3.81 Описание</H4>
+<P>Получает следующую строку набора результатов. Когда используется после
+<CODE>mysql_store_result()</CODE>, <CODE>mysql_fetch_row()</CODE> возвращает
+<CODE>NULL</CODE>, когда не имеется больше строк, чтобы получить. Когда
+используется после <CODE>mysql_use_result()</CODE>,
+<CODE>mysql_fetch_row()</CODE> вернет <CODE>NULL</CODE>, когда не имеется
+больше строк, чтобы получить, или произошла ошибка.</P>
+
+<P>Число значений в строке задано <CODE>mysql_num_fields(result)</CODE>. Если
+<CODE>row</CODE> хранит значение возврата от обращения к
+<CODE>mysql_fetch_row()</CODE>, указатели на значения меняются с
+<CODE>row[0]</CODE> на <CODE>row[mysql_num_fields(result)-1]</CODE>. Значения
+<CODE>NULL</CODE> в строке обозначены указателями <CODE>NULL</CODE>.</P>
+
+<P>Длины значений полей в строке могут быть получены, вызывая
+<CODE>mysql_fetch_lengths()</CODE>. Пустые поля и поля, содержащие
+<CODE>NULL</CODE> имеют длину 0. Вы можете отличать их, проверяя указатель
+для значения поля. Если указатель равен <CODE>NULL</CODE>, поле
+<CODE>NULL</CODE>, иначе поле пустое.</P>
+
+<H4>2.3.82 Возвращаемые значения</H4>
+<P>Структура <CODE>MYSQL_ROW</CODE> для следующей строки. <CODE>NULL</CODE>,
+если не имеется больше строк, чтобы получить, или произошла ошибка.</P>
+
+<H4>2.3.83 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H4>2.3.84 Пример</H4>
+<PRE>
+MYSQL_ROW row;
+unsigned int num_fields;
+unsigned int i;
+
+num_fields = mysql_num_fields(result);
+while ((row = mysql_fetch_row(result)))
+{
+  unsigned long *lengths;
+  lengths = mysql_fetch_lengths(result);
+  for (i = 0; i &#60; num_fields; i++)
+  {
+    printf("[%.*s] ", (int) lengths[i], row[i] ? row[i] : "NULL");
+  }
+  printf("\n");
+}
+</PRE>
+
+<H4><A NAME="mysql_field_count">2.3.85 <CODE>mysql_field_count()</CODE></A>
+</H4>
+<P><CODE>unsigned int mysql_field_count(MYSQL *mysql)</CODE></P>
+<P>Если Вы используете версию MySQL ранее, чем Version 3.22.24, Вы должны
+вместо этого использовать <CODE>unsigned int
+mysql_num_fields(MYSQL *mysql)</CODE>.</P>
+
+<H4>2.3.86 Описание</H4>
+<P>Возвращает число столбцов для самого последнего запроса на подключении.
+</P>
+
+<P>Нормальное использование этой функции: когда
+<CODE>mysql_store_result()</CODE> возвращает <CODE>NULL</CODE> (и таким
+образом Вы не имеете никакого указателя на набор результатов). В этом случае
+Вы можете вызывать <CODE>mysql_field_count()</CODE>, чтобы определить, должен
+или нет <CODE>mysql_store_result()</CODE> произвести не пустой результат. Это
+позволяет программе пользователя выбрать соответствующее действие без того,
+чтобы знать, был или нет запрос <CODE>SELECT</CODE> (или
+<CODE>SELECT</CODE>-подобным). Пример, показанный ниже иллюстрирует, как это
+может быть выполнено.</P>
+
+<H4>2.3.87 Возвращаемые значения</H4>
+<P>Целое число без знака, представляющее число полей в наборе результатов.
+</P>
+
+<H4>2.3.88 Ошибки</H4>
+<P>Нет.</P>
+
+<H4>2.3.89 Пример</H4>
+<PRE>
+MYSQL_RES *result;
+unsigned int num_fields;
+unsigned int num_rows;
+
+if (mysql_query(&#38;mysql,query_string))
+{
+   // error
+}
+else // query succeeded, process any data returned by it
+{
+  result = mysql_store_result(&#38;mysql);
+  if (result)  // there are rows
+  {
+     num_fields = mysql_num_fields(result);
+     // retrieve rows, then call mysql_free_result(result)
+  }
+  else  // mysql_store_result() returned nothing; should it have?
+  {
+    if (mysql_field_count(&#38;mysql) == 0)
+    {
+       // query does not return data
+       // (it was not a SELECT)
+       num_rows = mysql_affected_rows(&#38;mysql);
+    }
+    else // mysql_store_result() should have returned data
+    {
+      fprintf(stderr, "Error: %s\n", mysql_error(&#38;mysql));
+    }
+  }
+}
+</PRE>
+
+<P>Вариант: можно заменить <CODE>mysql_field_count(&#38;mysql)</CODE> на
+<CODE>mysql_errno(&#38;mysql)</CODE>. В этом случае Вы проверяете
+непосредственно для ошибки из <CODE>mysql_store_result()</CODE> вместо
+анализа значения <CODE>mysql_field_count()</CODE> на предмет того, является
+или нет оператор <CODE>SELECT</CODE>.</P>
+
+<H4><A NAME="mysql_field_seek">2.3.90 <CODE>mysql_field_seek()</CODE></A>
+</H4>
+<P><CODE>MYSQL_FIELD_OFFSET mysql_field_seek(MYSQL_RES *result,
+MYSQL_FIELD_OFFSET offset)</CODE></P>
+
+<H4>2.3.91 Описание</H4>
+<P>Устанавливает курсор поля к данному смещению. Следующее обращение к
+<CODE>mysql_fetch_field()</CODE> получит определение поля столбца, связанного
+именно с этим смещением.</P>
+
+<P>Чтобы перейти к началу строки, передайте 0 как значение
+<CODE>offset</CODE>.</P>
+
+<H4>2.3.92 Возвращаемые значения</H4>
+<P>Предыдущее значение курсора поля.</P>
+
+<H4>2.3.93 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_field_tell">2.3.94 <CODE>mysql_field_tell()</CODE></A>
+</H4>
+<P><CODE>MYSQL_FIELD_OFFSET mysql_field_tell(MYSQL_RES *result)</CODE></P>
+
+<H4>2.3.95 Описание</H4>
+<P>Возвращает позицию курсора поля, используемого для последнего
+<CODE>mysql_fetch_field()</CODE>. Это значение может использоваться как
+параметр для <CODE>mysql_field_seek()</CODE>.</P>
+
+<H4>2.3.96 Возвращаемые значения</H4>
+<P>Текущее смещение курсора поля.</P>
+
+<H4>2.3.97 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_free_result">2.3.98 <CODE>mysql_free_result()</CODE></A>
+</H4>
+<P><CODE>void mysql_free_result(MYSQL_RES *result)</CODE></P>
+
+<H4>2.3.99 Описание</H4>
+<P>Освобождает память, распределенную для набора результатов
+<CODE>mysql_store_result()</CODE>, <CODE>mysql_use_result()</CODE>,
+<CODE>mysql_list_dbs()</CODE> и другими подобными функциями. Когда Вы
+закончили работу с набором результатов, Вы должны освободить память, которую
+он использует, вызывая <CODE>mysql_free_result()</CODE>.</P>
+
+<H4>2.3.100 Возвращаемые значения</H4>
+<P>Нет.</P>
+
+<H4>2.3.101 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_get_client_info">2.3.102 <CODE>mysql_get_client_info()
+</CODE></A></H4>
+<P><CODE>char *mysql_get_client_info(void)</CODE></P>
+
+<H4>2.3.103 Описание</H4>
+<P>Возвращает строку, которая представляет версию клиентской библиотеки.</P>
+
+<H4>2.3.104 Возвращаемые значения</H4>
+<P>Символьная строка, которая представляет версию клиентской библиотеки MySQL.
+</P>
+
+<H4>2.3.105 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_get_host_info">2.3.106 <CODE>mysql_get_host_info()
+</CODE></A></H4>
+<P><CODE>char *mysql_get_host_info(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.107 Описание</H4>
+<P>Возвращает строку, описывающую тип используемого подключения, включая имя
+главного компьютера сервера.</P>
+
+<H4>2.3.108 Возвращаемые значения</H4>
+<P>Символьная строка, представляющая имя компьютера и тип подключения.</P>
+
+<H4>2.3.109 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_get_proto_info">2.3.110 <CODE>mysql_get_proto_info()
+</CODE></A></H4>
+<P><CODE>unsigned int mysql_get_proto_info(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.111 Описание</H4>
+<P>Возвращает код версии протокола, используемой текущим подключением.</P>
+
+<H4>2.3.112 Возвращаемые значения</H4>
+<P>Целое число без знака, представляющее версию протокола, используемую
+текущим (актуальным) подключением.</P>
+
+<H4>2.3.113 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_get_server_info">2.3.114 <CODE>mysql_get_server_info()
+</CODE></A></H4>
+<P><CODE>char *mysql_get_server_info(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.115 Описание</H4>
+<P>Возвращает строку, которая представляет номер версии сервера.</P>
+
+<H4>2.3.116 Возвращаемые значения</H4>
+<P>Символьная строка, которая представляет номер версии станции.</P>
+
+<H4>2.3.117 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_info">2.3.118 <CODE>mysql_info()</CODE></A></H4>
+<P><CODE>char *mysql_info(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.119 Описание</H4>
+<P>Возвращает строку, обеспечивающую информацию относительно недавно
+выполненного запроса, но только для инструкций, перечисленных ниже. Для
+других инструкций <CODE>mysql_info()</CODE> всегда возвращает
+<CODE>NULL</CODE>. Формат строки изменяется в зависимости от типа запроса,
+как описано ниже. Числа только иллюстративны: строка будет содержать
+значения, соответствующие запросу.</P>
+
+<DL COMPACT>
+<DT><CODE>INSERT INTO ... SELECT ...</CODE>
+<DD>Формат строки: <CODE>Records: 100 Duplicates: 0 Warnings: 0</CODE>
+<DT><CODE>INSERT INTO ... VALUES (...),(...),(...)...</CODE>
+<DD>Формат строки: <CODE>Records: 3  Duplicates: 0  Warnings: 0</CODE>
+<DT><CODE>LOAD DATA INFILE ...</CODE>
+<DD>Формат строки: <CODE>Records: 1 Deleted: 0 Skipped: 0 Warnings: 0</CODE>
+<DT><CODE>ALTER TABLE</CODE>
+<DD>Формат строки: <CODE>Records: 3 Duplicates: 0 Warnings: 0</CODE>
+<DT><CODE>UPDATE</CODE>
+<DD>Формат строки: <CODE>Rows matched: 40 Changed: 40 Warnings: 0</CODE></DL>
+
+<P>Обратите внимание, что <CODE>mysql_info()</CODE> возвращает значение
+не-<CODE>NULL</CODE> для инструкции <CODE>INSERT ... VALUES</CODE> только,
+если много списков значений было определено в инструкции.</P>
+
+<H4>2.3.120 Возвращаемые значения</H4>
+<P>Символьная строка, представляющая дополнительную информацию относительно
+последнего выполненного запроса. <CODE>NULL</CODE>, если никакая информация
+не доступна для запроса.</P>
+
+<H4>2.3.121 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_init">2.3.122 <CODE>mysql_init()</CODE></A></H4>
+<P><CODE>MYSQL *mysql_init(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.123 Описание</H4>
+<P>Распределяет или инициализирует объект <CODE>MYSQL</CODE>, подходящий для
+<CODE>mysql_real_connect()</CODE>. Если <CODE>mysql</CODE> является
+указателем <CODE>NULL</CODE>, функция распределяет память, инициализирует и
+возвращает новый объект. Иначе объект будет просто инициализирован, и адрес
+объекта возвращен. Если <CODE>mysql_init()</CODE> распределяет новый объект,
+место будет освобождено, когда будет вызвана <CODE>mysql_close()</CODE>.</P>
+
+<H4>2.3.124 Возвращаемые значения</H4>
+<P>Инициализированный дескриптор <CODE>MYSQL*</CODE>. <CODE>NULL</CODE>, если
+недостаточно памяти, чтобы распределить и инициализировать новый объект.</P>
+
+<H4>2.3.125 Ошибки</H4>
+<P>В случае недостаточной памяти вернется <CODE>NULL</CODE>.</P>
+
+<H4><A NAME="mysql_insert_id">2.3.126 <CODE>mysql_insert_id()</CODE></A>
+</H4>
+<P><CODE>my_ulonglong mysql_insert_id(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.127 Описание</H4>
+<P>Возвращает ID, сгенерированный предыдущим запросом для столбца с
+поддержкой <CODE>AUTO_INCREMENT</CODE>. Используйте эту функцию после того,
+как Вы выполнили запрос <CODE>INSERT</CODE> для таблицы, которая содержит
+поле <CODE>AUTO_INCREMENT</CODE>.</P>
+
+<P>Обратите внимание, что <CODE>mysql_insert_id()</CODE> возвращает
+<CODE>0</CODE>, если предыдущий запрос не генерирует значение
+<CODE>AUTO_INCREMENT</CODE>. Если Вы должны сохранить значение для
+последующего неспешного потребления убедитесь, что вызвали
+<CODE>mysql_insert_id()</CODE> немедленно после того запроса,
+который генерирует значение.</P>
+
+<P><CODE>mysql_insert_id()</CODE> модифицируется после инструкций
+<CODE>INSERT</CODE> и <CODE>UPDATE</CODE>, которые генерируют значение
+<CODE>AUTO_INCREMENT</CODE>, или установки значения столбца с помощью
+<CODE>LAST_INSERT_ID(expr)</CODE>.</P>
+
+<P>Также обратите внимание, что значение функции SQL
+<CODE>LAST_INSERT_ID()</CODE> всегда содержит самое последнее сгенерированное
+значение <CODE>AUTO_INCREMENT</CODE>, и оно не будет сброшено между запросами
+потому, что значение этой функции поддерживается сервером.</P>
+
+<H4>2.3.128 Возвращаемые значения</H4>
+<P>Значение поля <CODE>AUTO_INCREMENT</CODE>, которое модифицировалось
+предыдущим запросом. 0, если не имелось никакого предыдущего запроса на
+подключении, или если запрос не модифицировал <CODE>AUTO_INCREMENT</CODE>.</P>
+
+<H4>2.3.129 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_kill">2.3.130 <CODE>mysql_kill()</CODE></A></H4>
+<P><CODE>int mysql_kill(MYSQL *mysql, unsigned long pid)</CODE></P>
+
+<H4>2.3.131 Описание</H4>
+<P>Просит, чтобы сервер уничтожил поток, определенный как <CODE>pid</CODE>.
+</P>
+
+<H4>2.3.132 Возвращаемые значения</H4>
+<P>Ноль для успеха. Отличное от нуля, если произошла ошибка.</P>
+
+<H4>2.3.133 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H4><A NAME="mysql_list_dbs">2.3.134 <CODE>mysql_list_dbs()</CODE></A></H4>
+<P><CODE>MYSQL_RES *mysql_list_dbs(MYSQL *mysql, const char *wild)</CODE></P>
+
+<H4>2.3.135 Описание</H4>
+<P>Возвращает набор результатов, состоящий из имен баз данных на сервере,
+которые соответствуют простому регулярному выражению, определенному
+параметром <CODE>wild</CODE>. Здесь <CODE>wild</CODE> может содержать
+групповые символы <SAMP>%</SAMP> или <SAMP>_</SAMP>, или может быть
+<CODE>NULL</CODE>, чтобы соответствовать всем базам данных. Вызов
+<CODE>mysql_list_dbs()</CODE> подобен выполнению запроса <CODE>SHOW
+databases [LIKE wild]</CODE>.</P>
+
+<P>Вы должны освободить набор результатов с помощью
+<CODE>mysql_free_result()</CODE>.</P>
+
+<H4>2.3.136 Возвращаемые значения</H4>
+<P>Набор результатов <CODE>MYSQL_RES</CODE> для успеха, <CODE>NULL</CODE>,
+если произошла ошибка.</P>
+
+<H4>2.3.137 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_OUT_OF_MEMORY</CODE>
+<DD>Не хватило памяти.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H4><A NAME="mysql_list_fields">2.3.138 <CODE>mysql_list_fields()</CODE>
+</A></H4>
+<P><CODE>MYSQL_RES *mysql_list_fields(MYSQL *mysql, const char *table,
+const char *wild)</CODE></P>
+
+<H4>2.3.139 Описание</H4>
+<P>Возвращает набор результатов, состоящий из имен полей в данной таблице,
+которые соответствуют простому регулярному выражению, определенному
+параметром <CODE>wild</CODE>. Здесь <CODE>wild</CODE> может содержать
+групповые символы <SAMP>%</SAMP> или <SAMP>_</SAMP>, или может быть
+<CODE>NULL</CODE>, чтобы соответствовать всем полям. Вызов
+<CODE>mysql_list_fields()</CODE> подобен выполнению запроса <CODE>SHOW
+COLUMNS FROM tbl_name [LIKE wild]</CODE>.</P>
+
+<P>Обратите внимание, что рекомендуется, чтобы Вы использовали <CODE>SHOW
+COLUMNS FROM tbl_name</CODE> вместо <CODE>mysql_list_fields()</CODE>.</P>
+
+<P>Вы должны освободить набор результатов с помощью
+<CODE>mysql_free_result()</CODE>.</P>
+
+<H4>2.3.140 Возвращаемые значения</H4>
+<P>Набор результатов <CODE>MYSQL_RES</CODE> для успеха. <CODE>NULL</CODE>,
+если произошла ошибка.</P>
+
+<H4>2.3.141 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H4><A NAME="mysql_list_processes">2.3.142 <CODE>mysql_list_processes()
+</CODE></A></H4>
+<P><CODE>MYSQL_RES *mysql_list_processes(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.143 Описание</H4>
+<P>Возвращает набор результатов, описывающий текущие потоки сервера. Это тот
+же самый вид информации, что и сообщаемый командой <CODE>mysqladmin
+processlist</CODE> или запросом <CODE>SHOW PROCESSLIST</CODE>.</P>
+
+<P>Вы должны освободить набор результатов с помощью
+<CODE>mysql_free_result()</CODE>.</P>
+
+<H4>2.3.144 Возвращаемые значения</H4>
+<P>Набор результатов <CODE>MYSQL_RES</CODE> для успеха. <CODE>NULL</CODE>,
+если произошла ошибка.</P>
+
+<H4>2.3.145 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H4><A NAME="mysql_list_tables">2.3.146 <CODE>mysql_list_tables()</CODE>
+</A></H4>
+<P><CODE>MYSQL_RES *mysql_list_tables(MYSQL *mysql, const char *wild)</CODE>
+</P>
+
+<H4>2.3.147 Описание</H4>
+<P>Возвращает набор результатов, состоящий из имен таблиц в текущей базе
+данных, которые соответствуют простому регулярному выражению, определенному
+параметром <CODE>wild</CODE>. Здесь <CODE>wild</CODE> может содержать
+групповые символы <SAMP>%</SAMP> или <SAMP>_</SAMP>, или может быть
+<CODE>NULL</CODE>, чтобы соответствовать всем таблицам. Вызов
+<CODE>mysql_list_tables()</CODE> подобен выполнению запроса <CODE>SHOW
+tables [LIKE wild]</CODE>.</P>
+
+<P>Вы должны освободить набор результатов с помощью
+<CODE>mysql_free_result()</CODE>.</P>
+
+<H4>2.3.148 Возвращаемые значения</H4>
+<P>Набор результатов <CODE>MYSQL_RES</CODE> для успеха. <CODE>NULL</CODE>,
+если произошла ошибка.</P>
+
+<H4>2.3.149 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H4><A NAME="mysql_num_fields">2.3.150 <CODE>mysql_num_fields()</CODE></A>
+</H4>
+<P><CODE>unsigned int mysql_num_fields(MYSQL_RES *result)</CODE></P>
+<P>или</P>
+<P><CODE>unsigned int mysql_num_fields(MYSQL *mysql)</CODE></P>
+<P>Вторая форма не работает в MySQL Version 3.22.24 или выше. Чтобы
+передавать параметр <CODE>MYSQL*</CODE>, Вы должны использовать
+<CODE>unsigned int mysql_field_count(MYSQL *mysql)</CODE>.</P>
+
+<H4>2.3.151 Описание</H4>
+<P>Возвращает число столбцов в наборе результатов.</P>
+
+<P>Обратите внимание, что Вы можете получать число столбцов из указателя
+набора результатов или от дескриптора подключения. Вы используете дескриптор
+подключения, если <CODE>mysql_store_result()</CODE> или
+<CODE>mysql_use_result()</CODE> возвращает <CODE>NULL</CODE> (и таким образом
+Вы не имеете никакого указателя набора результата). В этом случае Вы можете
+вызывать <CODE>mysql_field_count()</CODE> чтобы определить, должен или нет
+<CODE>mysql_store_result()</CODE> произвести непустой результат. Это
+позволяет программе пользователя выбрать соответствующее действие без того,
+чтобы знать, был или нет запрос <CODE>SELECT</CODE> (или
+<CODE>SELECT</CODE>-подобным). Пример, показанный ниже иллюстрирует, как это
+может быть выполнено.</P>
+
+<H4>2.3.152 Возвращаемые значения</H4>
+<P>Целое число без знака, представляющее число полей в наборе результатов.
+</P>
+
+<H4>2.3.153 Ошибки</H4>
+<P>Нет.</P>
+
+<H4>2.3.154 Пример</H4>
+<PRE>
+MYSQL_RES *result;
+unsigned int num_fields;
+unsigned int num_rows;
+
+if (mysql_query(&#38;mysql,query_string))
+{
+   // error
+}
+else // query succeeded, process any data returned by it
+{
+  result = mysql_store_result(&#38;mysql);
+  if (result)  // there are rows
+  {
+     num_fields = mysql_num_fields(result);
+     // retrieve rows, then call mysql_free_result(result)
+  }
+  else // mysql_store_result() returned nothing; should it have?
+  {
+    if (mysql_errno(&#38;mysql))
+    {
+       fprintf(stderr, "Error: %s\n", mysql_error(&#38;mysql));
+    }
+    else if (mysql_field_count(&#38;mysql) == 0)
+    {
+      // query does not return data
+      // (it was not a SELECT)
+      num_rows = mysql_affected_rows(&#38;mysql);
+    }
+  }
+}
+</PRE>
+
+<P>Вариант (если Вы ЗНАЕТЕ, что ваш запрос должен был возвратить набор
+результатов): заменить обращение <CODE>mysql_errno(&#38;mysql)</CODE> на
+проверку <CODE>mysql_field_count(&#38;mysql)</CODE>=0.</P>
+
+<H4><A NAME="mysql_num_rows">2.3.155 <CODE>mysql_num_rows()</CODE></A></H4>
+<P><CODE>my_ulonglong mysql_num_rows(MYSQL_RES *result)</CODE></P>
+
+<H4>2.3.156 Описание</H4>
+<P>Возвращает число строк в наборе результатов.</P>
+
+<P>Использование <CODE>mysql_num_rows()</CODE> зависит от того, используете
+ли Вы <CODE>mysql_store_result()</CODE> или <CODE>mysql_use_result()</CODE>,
+чтобы получить набор результатов. Если Вы используете
+<CODE>mysql_store_result()</CODE>, <CODE>mysql_num_rows()</CODE> может
+быть вызван немедленно. Если Вы используете <CODE>mysql_use_result()</CODE>,
+<CODE>mysql_num_rows()</CODE> не будет возвращать правильное значение, пока
+все строки в наборе результатов не будут получены.</P>
+
+<H4>2.3.157 Возвращаемые значения</H4>
+<P>Число строк в наборе результатов.</P>
+
+<H4>2.3.158 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_options">2.3.159 <CODE>mysql_options()</CODE></A></H4>
+<P><CODE>int mysql_options(MYSQL *mysql, enum mysql_option option,
+const char *arg)</CODE></P>
+
+<H4>2.3.160 Описание</H4>
+<P>Может использоваться, чтобы установить дополнительные параметры связи и
+действует на поведение подключения. Эта функция может быть вызвана несколько
+раз, чтобы установить несколько параметров.</P>
+
+<P><CODE>mysql_options()</CODE> должна быть вызвана после
+<CODE>mysql_init()</CODE>, но перед <CODE>mysql_connect()</CODE> или
+<CODE>mysql_real_connect()</CODE>.</P>
+
+<P>Параметр <CODE>option</CODE> представляет собой опцию, которую Вы хотите
+устанавливать, <CODE>arg</CODE> задает значение для опции. Если опция целое
+число, то <CODE>arg</CODE> должен указывать на значение целого числа.</P>
+
+<P>Возможные значения параметров:</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Опция</STRONG></TD><TD><STRONG>Тип аргумента</STRONG></TD>
+<TD><STRONG>Действие</STRONG></TD></TR>
+<TR><TD><CODE>MYSQL_OPT_CONNECT_TIMEOUT</CODE></TD><TD>
+<CODE>unsigned int *</CODE></TD><TD>Время ожидания в секундах.</TD></TR>
+<TR><TD><CODE>MYSQL_OPT_COMPRESS</CODE></TD><TD>Не используется</TD><TD>
+Использовать сжатый протокол клиент-сервер.</TD></TR>
+<TR><TD><CODE>MYSQL_OPT_NAMED_PIPE</CODE></TD><TD>Не используется</TD><TD>
+Использовать именованные каналы, чтобы соединиться с сервером MySQL под NT.
+</TD></TR>
+<TR><TD><CODE>MYSQL_INIT_COMMAND</CODE></TD><TD><CODE>char *</CODE></TD><TD>
+Команда, чтобы выполнить при соединении с сервером MySQL. Будет автоматически
+выполнена при повторном соединении.</TD></TR>
+<TR><TD><CODE>MYSQL_READ_DEFAULT_FILE</CODE></TD><TD><CODE>char *</CODE></TD>
+<TD>Читать параметры из указанного файла опций вместо <TT>my.cnf</TT>.</TD>
+</TR>
+<TR><TD><CODE>MYSQL_READ_DEFAULT_GROUP</CODE></TD><TD><CODE>char *</CODE>
+</TD><TD>Читать параметры из именованной группы из файла опций
+<TT>my.cnf</TT> или файла, определенного в
+<CODE>MYSQL_READ_DEFAULT_FILE</CODE>.</TD></TR></TABLE>
+
+<P>Обратите внимание, что группа <CODE>client</CODE> всегда читается, если Вы
+используете <CODE>MYSQL_READ_DEFAULT_FILE</CODE> или
+<CODE>MYSQL_READ_DEFAULT_GROUP</CODE>.</P>
+
+<P>Определенная группа в файле опций может содержать следующие параметры:</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><CODE>connect_timeout</CODE></TD><TD>Время ожидания в секундах. В
+Linux это время ожидания также используется для ожидания первого ответа.
+</TD></TR>
+<TR><TD><CODE>compress</CODE></TD><TD>Использовать сжатый протокол
+клиент-сервер.</TD></TR>
+<TR><TD><CODE>database</CODE></TD><TD>Соединиться с этой базой данных, если
+никакая база данных не была определена в команде подключения.</TD></TR>
+<TR><TD><CODE>debug</CODE></TD><TD>Опции для отладки.</TD></TR>
+<TR><TD><CODE>host</CODE></TD><TD>Имя сервера по умолчанию.</TD></TR>
+<TR><TD><CODE>init-command</CODE></TD><TD>Команда, чтобы выполнить при
+соединении с сервером MySQL. Будет автоматически заново выполнена при
+повторном соединении, если связь прервалась.</TD></TR>
+<TR><TD><CODE>interactive-timeout</CODE></TD><TD>Аналогично указанию опции
+<CODE>CLIENT_INTERACTIVE</CODE> в <CODE>mysql_real_connect()</CODE>.
+Подробности в разделе "2.3.171 <CODE>mysql_real_connect()</CODE>".</TD>
+</TR>
+<TR><TD><CODE>password</CODE></TD><TD>Пароль по умолчанию.</TD></TR>
+<TR><TD><CODE>pipe</CODE></TD><TD>Использовать именованные каналы, чтобы
+соединиться с сервером MySQL, работая под NT.</TD></TR>
+<TR><TD><CODE>port</CODE></TD><TD>Порт по умолчанию.</TD></TR>
+<TR><TD><CODE>return-found-rows</CODE></TD><TD>Сообщить
+<CODE>mysql_info()</CODE> о том, что нужно возвратить найденные строки вместо
+модифицируемых строк при использовании <CODE>UPDATE</CODE>.</TD></TR>
+<TR><TD><CODE>socket</CODE></TD><TD>Сокет по умолчанию.</TD></TR>
+<TR><TD><CODE>user</CODE></TD><TD>Пользователь по умолчанию.</TD></TR></TABLE>
+
+<P>Обратите внимание, что <CODE>timeout</CODE> был заменен на
+<CODE>connect_timeout</CODE>, но <CODE>timeout</CODE> будет все еще работать
+некоторое время для совместимости.</P>
+
+<H4>2.3.161 Возвращаемые значения</H4>
+<P>Ноль для успеха. Отличное от нуля, если Вы использовали неизвестную опцию.
+</P>
+
+<H4>2.3.162 Пример</H4>
+<PRE>
+MYSQL mysql;
+
+mysql_init(&#38;mysql);
+mysql_options(&#38;mysql,MYSQL_OPT_COMPRESS,0);
+mysql_options(&#38;mysql,MYSQL_READ_DEFAULT_GROUP,"odbc");
+if (!mysql_real_connect(&#38;mysql,"host","user","passwd",
+    "database",0,NULL,0))
+{
+   fprintf(stderr, "Failed to connect to database: Error: %s\n",
+           mysql_error(&#38;mysql));
+}
+</PRE>
+
+<P>Вышеупомянутое запрашивает использовать сжатый протокол клиент-сервер и
+читать дополнительные параметры из группы <CODE>odbc</CODE> в файле опций
+<CODE>my.cnf</CODE>.</P>
+
+<H4><A NAME="mysql_ping">2.3.163 <CODE>mysql_ping()</CODE></A></H4>
+<P><CODE>int mysql_ping(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.164 Описание</H4>
+<P>Проверяет работает или нет подключение. В случае неработоспособности будет
+предпринято автоматическое переподключение.</P>
+
+<P>Эта функция может использоваться клиентом, который долго простаивает,
+чтобы определить, закрыл или нет сервер подключение, и повторно соединиться с
+ним в случае необходимости.</P>
+
+<H4>2.3.165 Возвращаемые значения</H4>
+<P>Ноль, если подключение работает. Отличное от нуля, если произошла ошибка.
+</P>
+
+<H4>2.3.166 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H4><A NAME="mysql_query">2.3.167 <CODE>mysql_query()</CODE></A></H4>
+<P><CODE>int mysql_query(MYSQL *mysql, const char *query)</CODE></P>
+
+<H4>2.3.168 Описание</H4>
+<P>Выполняет запрос SQL, указанный строкой с нулевым символом в конце. Запрос
+должен состоять из одиночной инструкции SQL. Вы не должны добавлять точку с
+запятой (<SAMP>;</SAMP>) или <CODE>\g</CODE> для завершения запроса.</P>
+
+<P><CODE>mysql_query()</CODE> не может использоваться для запросов, которые
+содержат двоичные данные, взамен Вы должны использовать
+<CODE>mysql_real_query()</CODE>. Двоичные данные могут содержать в себе
+символ <SAMP>\0</SAMP>, который <CODE>mysql_query()</CODE> интерпретирует как
+конец строки запроса.</P>
+
+<P>Если Вы хотите знать, возвратил ли запрос набор результатов или нет, Вы
+можете использовать <CODE>mysql_field_count()</CODE>, чтобы проверить это.
+Подробности в разделе "2.3.85 <CODE>mysql_field_count()</CODE>".</P>
+
+<H4>2.3.169 Возвращаемые значения</H4>
+<P>Ноль, если запрос был успешен. Отличное от нуля, если произошла ошибка.
+</P>
+
+<H4>2.3.170 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H4><A NAME="mysql_real_connect">2.3.171 <CODE>mysql_real_connect()</CODE>
+</A></H4>
+<P><CODE>MYSQL *mysql_real_connect(MYSQL *mysql, const char *host,
+                                   const char *user, const char *passwd,
+                                   const char *db, unsigned int port,
+                                   const char *unix_socket,
+                                   unsigned int client_flag)</CODE></P>
+<H4>2.3.172 Описание</H4>
+<P><CODE>mysql_real_connect()</CODE> пытается установить подключение с
+сервером MySQL, запущенным на машине <CODE>host</CODE>.
+<CODE>mysql_real_connect()</CODE> должен завершиться успешно прежде, чем Вы
+сможете выполнить любую из других функций API, за исключением
+<CODE>mysql_get_client_info()</CODE>.</P>
+
+<P>Параметры определены следующим образом:</P>
+
+<UL><LI>Первый параметр должен быть адресом существующей структуры типа
+<CODE>MYSQL</CODE>. Перед вызовом <CODE>mysql_real_connect()</CODE> Вы должны
+вызвать <CODE>mysql_init()</CODE>, чтобы инициализировать структуру
+<CODE>MYSQL</CODE>. Вы можете изменять много параметров подключения через
+вызов <CODE>mysql_options()</CODE>. Подробности в
+разделе "2.3.159 <CODE>mysql_options()</CODE>".
+
+<LI>Значением <CODE>host</CODE> может быть имя или адрес IP. Если это
+<CODE>NULL</CODE> или строка <CODE>localhost</CODE>, выполняется подключение
+к локальной системе. Если OS поддерживает сокеты (Unix) или именованные
+каналы (Windows), именно они используются вместо стека протоколов TCP/IP,
+чтобы соединиться с сервером.
+
+<LI>Аргумент <CODE>user</CODE> содержит ID пользователя MySQL. Если
+<CODE>user</CODE> равен <CODE>NULL</CODE>, предполагается текущий
+пользователь. Под Unix это текущее (актуальное) имя входа в систему. Под
+Windows ODBC имя пользователя должно быть определено явно.
+
+<LI>Параметр <CODE>passwd</CODE> содержит пароль для <CODE>user</CODE>. Если
+<CODE>passwd</CODE> равен <CODE>NULL</CODE>, только записи в таблице
+<CODE>user</CODE>, которые имеют пустое поле пароля, будут проверены на
+соответствие. Это позволяет администратору базы данных устанавливать систему
+привилегий MySQL таким способом, которым пользователи получают различные
+привилегии в зависимости от того, определили или нет они пароль. ОБРАТИТЕ
+ВНИМАНИЕ: Не пытайтесь шифровать пароль перед вызовом
+<CODE>mysql_real_connect()</CODE>: шифрование пароля обработано автоматически.
+
+<LI><CODE>db</CODE> задает имя базы данных. Если <CODE>db</CODE> не
+<CODE>NULL</CODE>, подключение установит заданную по умолчанию базу данных.
+
+<LI>Если <CODE>port</CODE> не равен 0, значение будет использоваться как
+номер порта для подключения по TCP/IP. Обратите внимание, что параметр
+<CODE>host</CODE> определяет тип подключения.
+
+<LI>Если <CODE>unix_socket</CODE> не равен <CODE>NULL</CODE>, строка
+определяет сокет или именованный канал, который должен использоваться.
+Обратите внимание, что параметр <CODE>host</CODE> определяет тип подключения.
+
+<LI>Значение <CODE>client_flag</CODE> как правило равно 0, но может быть
+установлено к комбинации из следующих флажков в специальных обстоятельствах:
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Имя флажка</STRONG></TD><TD><STRONG>Что он делает</STRONG>
+</TD></TR>
+<TR><TD><CODE>CLIENT_COMPRESS</CODE></TD><TD>Использовать протокол сжатия.
+</TD></TR>
+<TR><TD><CODE>CLIENT_FOUND_ROWS</CODE></TD><TD>Возвратить число найденных, а
+не обработанных строк.</TD></TR>
+<TR><TD><CODE>CLIENT_IGNORE_SPACE</CODE></TD><TD>Позволить использовать
+пробелы после имен функций. Делает все зарезервированные
+слова именами функций.</TD></TR>
+<TR><TD><CODE>CLIENT_INTERACTIVE</CODE></TD><TD>Позволить
+<CODE>interactive_timeout</CODE> секунд (вместо <CODE>wait_timeout</CODE>
+секунд) бездеятельности перед закрытием подключения.</TD></TR>
+<TR><TD><CODE>CLIENT_NO_SCHEMA</CODE></TD><TD>Не позволять синтаксис
+<CODE>db_name.tbl_name.col_name</CODE>. Это сделано для ODBC. Это заставляет
+синтаксический анализатор генерировать ошибку, если Вы используете тот
+синтаксис, который является полезным для заманивания в ловушку ошибок в
+некоторых программах ODBC.</TD></TR>
+<TR><TD><CODE>CLIENT_ODBC</CODE></TD><TD>Работает клиент ODBC.</TD></TR>
+<TR><TD><CODE>CLIENT_SSL</CODE></TD><TD>Использовать шифрованный протокол SSL.
+</TD></TR></TABLE></UL>
+
+<H4>2.3.173 Возвращаемые значения</H4>
+<P>Дескриптор <CODE>MYSQL*</CODE>, если подключение было успешно,
+<CODE>NULL</CODE>, если подключение было неудачно. Для успешного подключения,
+значение возврата: такое же, как значение первого параметра, если Вы не
+передаете <CODE>NULL</CODE> для этого параметра.</P>
+
+<H4>2.3.174 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_CONN_HOST_ERROR</CODE>
+<DD>Не удалось связаться с сервером.
+<DT><CODE>CR_CONNECTION_ERROR</CODE>
+<DD>Не удалось связаться с локальным сервером.
+<DT><CODE>CR_IPSOCK_ERROR</CODE>
+<DD>Не удалось создать IP-сокет.
+<DT><CODE>CR_OUT_OF_MEMORY</CODE>
+<DD>Не хватило памяти.
+<DT><CODE>CR_SOCKET_CREATE_ERROR</CODE>
+<DD>Не удалось создать Unix-сокет.
+<DT><CODE>CR_UNKNOWN_HOST</CODE>
+<DD>Не удалось найти IP-адрес для hostname.
+<DT><CODE>CR_VERSION_ERROR</CODE>
+<DD>Несоответствие протоколов следовало из попытки соединиться с сервером с
+помощью клиентской библиотеки, которая использует иную версию протокола. Это
+может случиться, если Вы используете очень старую библиотеку, чтобы
+соединиться с новым сервером, который не был запущен с параметром
+<CODE>--old-protocol</CODE>.
+<DT><CODE>CR_NAMEDPIPEOPEN_ERROR</CODE>
+<DD>Не удалось создать именованный канал в Windows.
+<DT><CODE>CR_NAMEDPIPEWAIT_ERROR</CODE>
+<DD>Не удалось дождаться именованного канала в Windows.
+<DT><CODE>CR_NAMEDPIPESETSTATE_ERROR</CODE>
+<DD>Не удалось получить дескриптор для именованного канала в Windows.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Если <CODE>connect_timeout</CODE>&#62; 0 и требуется более, чем
+<CODE>connect_timeout</CODE> секунд, чтобы соединиться с сервером, или если
+сервер свалился при выполнении <CODE>init-command</CODE>, вернется это.</DL>
+
+<H4>2.3.175 Пример</H4>
+<PRE>
+MYSQL mysql;
+
+mysql_init(&#38;mysql);
+mysql_options(&#38;mysql,MYSQL_READ_DEFAULT_GROUP,"your_prog_name");
+if (!mysql_real_connect(&#38;mysql,"host","user","passwd","database",
+    0,NULL,0))
+{
+   fprintf(stderr, "Failed to connect to database: Error: %s\n",
+           mysql_error(&#38;mysql));
+}
+</PRE>
+
+<P>Используя <CODE>mysql_options()</CODE> библиотека клиентов MySQL будет
+читать группы <CODE>[client]</CODE> и <CODE>your_prog_name</CODE> в файле
+<CODE>my.cnf</CODE>, что гарантирует, что Ваша программа будет работать, даже
+если кто-то установил MySQL некоторым ненормативным способом.</P>
+
+<P>Обратите внимание, что на подключение <CODE>mysql_real_connect()</CODE>
+устанавливает флажок <CODE>reconnect</CODE> (часть структуры MYSQL) в
+значение <CODE>1</CODE>. Этот флажок указывает, что когда запрос не может
+выполниться из-за потерянного подключения, надо попробовать повторно
+соединиться с сервером перед отказом.</P>
+
+<H4><A NAME="mysql_real_escape_string">2.3.176
+<CODE>mysql_real_escape_string()</CODE></A></H4>
+<P><CODE>unsigned int mysql_real_escape_string(MYSQL *mysql, char *to,
+                                               const char *from,
+                                               unsigned int length)</CODE></P>
+<H4>2.3.177 Описание</H4>
+<P>Эта функция используется, чтобы создать допустимую строку, которую
+Вы можете использовать в инструкции SQL.</P>
+
+<P>Строка в <CODE>from</CODE> бужет закодирована до экранированной строки
+SQL, принимая во внимание текущий (актуальный) набор символов подключения.
+Результат будет помещен в <CODE>to</CODE> и завершающий байт пустого
+указателя допишется автоматически. Символы <CODE>NUL</CODE> (ASCII 0),
+<SAMP>\n</SAMP>, <SAMP>\r</SAMP>, <SAMP>\</SAMP>, <SAMP>'</SAMP>,
+<SAMP>"</SAMP>, а также Control-Z, будуь экранированы.</P>
+
+<P>Строка, указанная в <CODE>from</CODE> должна быть <CODE>length</CODE>
+байтов длины. Вы должны распределить буфер по крайней мере
+<CODE>length*2+1</CODE> байт. В худшем случае каждый символ должен быть
+закодирован как использование двух байтов, и Вы нуждаетесь в участке памяти
+для завершающего байта пустого указателя. Когда
+<CODE>mysql_escape_string()</CODE> завершится, в <CODE>to</CODE> будет
+строка с нулевым байтом в конце. Значение возврата: длина закодированной
+строки, не включая символ завершения.</P>
+
+<H4>2.3.178 Пример</H4>
+<PRE>
+char query[1000],*end;
+
+end = strmov(query,"INSERT INTO test_table values(");
+*end++ = '\'';
+end += mysql_real_escape_string(&#38;mysql, end,"What's this",11);
+*end++ = '\'';
+*end++ = ',';
+*end++ = '\'';
+end += mysql_real_escape_string(&#38;mysql, end,"binary data: \0\r\n",16);
+*end++ = '\'';
+*end++ = ')';
+
+if (mysql_real_query(&#38;mysql,query,(unsigned int) (end - query)))
+{
+   fprintf(stderr, "Failed to insert row, Error: %s\n",
+           mysql_error(&#38;mysql));
+}
+</PRE>
+
+<P>Функция <CODE>strmov()</CODE>, используемая в примере, включена в
+библиотеку <CODE>mysqlclient</CODE> и работает подобно <CODE>strcpy()</CODE>,
+но возвращает указатель на завершающий символ первого параметра.</P>
+
+<H4>2.3.179 Возвращаемые значения</H4>
+<P>Длина значения, помещенного в <CODE>to</CODE>, не включая
+нулевой символ завершения.</P>
+
+<H4>2.3.180 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_real_query">2.3.181 <CODE>mysql_real_query()</CODE></A>
+</H4>
+<P><CODE>int mysql_real_query(MYSQL *mysql, const char *query,
+                              unsigned int length)</CODE></P>
+<H4>2.3.182 Описание</H4>
+<P>Выполняет запрос SQL, указанный в <CODE>query</CODE>, который должен быть
+строкой длиной в <CODE>length</CODE> байт. Запрос должен состоять из
+одиночной инструкции SQL. Вы не должны добавлять точку с запятой
+(<SAMP>`;'</SAMP>) или <CODE>\g</CODE> для завершения запроса.</P>
+
+<P>Вы <EM>должны</EM> использовать <CODE>mysql_real_query()</CODE> вместо
+<CODE>mysql_query()</CODE> для запросов, которые содержат двоичные данные,
+потому, что двоичные данные могут сами содержать символ <SAMP>\0</SAMP>.
+Кроме того, <CODE>mysql_real_query()</CODE> быстрее, чем
+<CODE>mysql_query()</CODE> потому, что не вызывает <CODE>strlen()</CODE>.</P>
+
+<P>Если Вы хотите знать, возвратил ли запрос набор результатов или нет, Вы
+можете использовать <CODE>mysql_field_count()</CODE>, чтобы проверить это.
+Подробности в разделе "2.3.85 <CODE>mysql_field_count()</CODE>".</P>
+
+<H4>2.3.183 Возвращаемые значения</H4>
+<P>Ноль, если запрос был успешным. Отличное от нуля, если произошла ошибка.
+</P>
+
+<H4>2.3.184 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H4><A NAME="mysql_reload">2.3.185 <CODE>mysql_reload()</CODE></A></H4>
+<P><CODE>int mysql_reload(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.186 Описание</H4>
+<P>Просит, чтобы сервер MySQL перезагрузил таблицы предоставления привилегий.
+Пользователь должен иметь привилегию <STRONG>reload</STRONG>.</P>
+
+<H4>2.3.187 Возвращаемые значения</H4>
+<P>Ноль для успеха. Отличное от нуля, если произошла ошибка.</P>
+
+<H4>2.3.188 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H4><A NAME="mysql_row_seek">2.3.189 <CODE>mysql_row_seek()</CODE></A></H4>
+<P><CODE>MYSQL_ROW_OFFSET mysql_row_seek(MYSQL_RES *result,
+MYSQL_ROW_OFFSET offset)</CODE></P>
+
+<H4>2.3.190 Описание</H4>
+<P>Устанавливает курсор строки на произвольную строку в наборе результатов
+запросов. Это требует, чтобы структура набора результата содержала весь
+результат запроса, так что <CODE>mysql_row_seek()</CODE> может использоваться
+в конъюнкции только с <CODE>mysql_store_result()</CODE>, но не с
+<CODE>mysql_use_result()</CODE>.</P>
+
+<P>Смещение должно быть значением, возвращенным из
+<CODE>mysql_row_tell()</CODE> для <CODE>mysql_row_seek()</CODE>. Это значение
+не просто номер строки, если Вы хотите перейти к строке внутри набора
+результатов, используйте <CODE>mysql_data_seek()</CODE>.</P>
+
+<H4>2.3.191 Возвращаемые значения</H4>
+<P>Предыдущее значение курсора строки. Это значение может быть передано
+последующему обращению к <CODE>mysql_row_seek()</CODE>.</P>
+
+<H4>2.3.192 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_row_tell">2.3.193 <CODE>mysql_row_tell()</CODE></A></H4>
+<P><CODE>MYSQL_ROW_OFFSET mysql_row_tell(MYSQL_RES *result)</CODE></P>
+
+<H4>2.3.194 Описание</H4>
+<P>Возвращает текущую (актуальную) позицию курсора строки для последнего
+вызова <CODE>mysql_fetch_row()</CODE>. Это значение может использоваться как
+параметр для <CODE>mysql_row_seek()</CODE>.</P>
+
+<P>Вы должны использовать <CODE>mysql_row_tell()</CODE> только после
+<CODE>mysql_store_result()</CODE>, но не после
+<CODE>mysql_use_result()</CODE>.</P>
+
+<H4>2.3.195 Возвращаемые значения</H4>
+<P>Текущее (актуальное) смещение курсора строки.</P>
+
+<H4>2.3.196 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_select_db">2.3.197 <CODE>mysql_select_db()</CODE></A>
+</H4>
+<P><CODE>int mysql_select_db(MYSQL *mysql, const char *db)</CODE></P>
+
+<H4>2.3.198 Описание</H4>
+<P>Заставляет базу данных, определенную через <CODE>db</CODE>, стать заданной
+по умолчанию базой данных на подключении, определенном в <CODE>mysql</CODE>.
+В последующих запросах эта база данных будет значением по умолчанию для
+ссылок на таблицы, которые не включают явный спецификатор базы данных.</P>
+
+<P><CODE>mysql_select_db()</CODE> терпит неудачу, если связанный пользователь
+не имеет прав доступа, чтобы использовать базу данных.</P>
+
+<H4>2.3.199 Возвращаемые значения</H4>
+<P>Ноль для успеха. Отличное от нуля, если произошла ошибка.</P>
+
+<H4>2.3.200 Ошибки</H4>
+<DL COMPACT>
+
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H4><A NAME="mysql_shutdown">2.3.201 <CODE>mysql_shutdown()</CODE></A></H4>
+<P><CODE>int mysql_shutdown(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.202 Описание</H4>
+<P>Выключает сервер. Связанный пользователь должен иметь привилегии
+закрытия системы (<STRONG>shutdown</STRONG>).</P>
+
+<H4>2.3.203 Возвращаемые значения</H4>
+<P>Ноль для успеха. Отличное от нуля, если произошла ошибка.</P>
+
+<H4>2.3.204 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H4><A NAME="mysql_stat">2.3.205 <CODE>mysql_stat()</CODE></A></H4>
+<P><CODE>char *mysql_stat(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.206 Описание</H4>
+<P>Возвращает символьную строку, содержащую информацию, подобную
+обеспечиваемой командой <CODE>mysqladmin status</CODE>. Это включает
+uptime в секундах, число работающих потоков, количество запросов,
+перезагрузок и открытых таблиц.</P>
+
+<H4>2.3.207 Возвращаемые значения</H4>
+<P>Символьная строка, описывающая состояние сервера. <CODE>NULL</CODE>,
+если произошла ошибка.</P>
+
+<H4>2.3.208 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H4><A NAME="mysql_store_result"> 2.3.209 <CODE>mysql_store_result()</CODE>
+</A></H4>
+<P><CODE>MYSQL_RES *mysql_store_result(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.210 Описание</H4>
+<P>Вы должны вызвать <CODE>mysql_store_result()</CODE> или
+<CODE>mysql_use_result()</CODE> для каждого запроса, который успешно получает
+данные (<CODE>SELECT</CODE>, <CODE>SHOW</CODE>, <CODE>DESCRIBE</CODE>,
+<CODE>EXPLAIN</CODE>).</P>
+
+<P>Вы не должны вызывать <CODE>mysql_store_result()</CODE> или
+<CODE>mysql_use_result()</CODE> для других запросов, но это не причинит
+вреда, если Вы вызываете <CODE>mysql_store_result()</CODE> во всех случаях.
+Правда, и эффективности не прибавится... Вы могли обнаружить, что запрос не
+имеет набора результатов, проверяя равенство нулю возврата
+<CODE>mysql_store_result()</CODE>.</P>
+
+<P>Если Вы хотите знать, возвратил ли запрос набор результатов или нет, Вы
+можете использовать <CODE>mysql_field_count()</CODE>, чтобы проверить это.
+Подробности в разделе "2.3.85 <CODE>mysql_field_count()</CODE>".</P>
+
+<P><CODE>mysql_store_result()</CODE> читает весь результат запроса,
+распределяет структуру <CODE>MYSQL_RES</CODE> и помещает
+результат в эту структуру.</P>
+
+<P><CODE>mysql_store_results()</CODE> вернет пустой указатель, если запрос не
+возвращал набор результатов вообще (если запрос был, например, инструкцией
+<CODE>INSERT</CODE>).</P>
+
+<P><CODE>mysql_store_results()</CODE> также возвращает пустой указатель, если
+чтение набора результатов потерпело неудачу. Вы можете проверить, получили
+ли Вы ошибку, проверяя возвращает ли <CODE>mysql_error()</CODE> пустой
+указатель. Если <CODE>mysql_errno()</CODE> &#60;&#62; 0, или если
+<CODE>mysql_field_count()</CODE> &#60;&#62; 0, значит, ошибочка.</P>
+
+<P>Пустой набор результатов будет возвращен, если не имеется никаких
+возвращенных строк. Пустой набор результатов отличается от пустого указателя
+как значение возврата.</P>
+
+<P>Как только Вы вызвали <CODE>mysql_store_result()</CODE> и получили
+результат, который не пустой указатель, Вы можете вызывать
+<CODE>mysql_num_rows()</CODE>, чтобы выяснить, сколько строк
+находится в наборе результатов.</P>
+
+<P>Вы можете вызвать <CODE>mysql_fetch_row()</CODE>, чтобы выбрать строки из
+набора результатов, или <CODE>mysql_row_seek()</CODE> и
+<CODE>mysql_row_tell()</CODE>, чтобы получить или установить текущую позицию
+строки внутри набора результатов.</P>
+
+<P>Вы должны вызвать <CODE>mysql_free_result()</CODE> как только Вы закончите
+работу с данным набором результатов.</P>
+
+<H4>2.3.211 Возвращаемые значения</H4>
+<P>Структура <CODE>MYSQL_RES</CODE> с результатами. <CODE>NULL</CODE>,
+если произошла ошибка.</P>
+
+<H4>2.3.212 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_OUT_OF_MEMORY</CODE>
+<DD>Не хватило памяти.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H4><A NAME="mysql_thread_id">2.3.213 <CODE>mysql_thread_id()</CODE></A>
+</H4>
+<P><CODE>unsigned long mysql_thread_id(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.214 Описание</H4>
+<P>Возвращает ID потока текущего (актуального) подключения. Это значение
+может использоваться как параметр для <CODE>mysql_kill()</CODE>, чтобы
+уничтожить этот поток.</P>
+
+<P>Если подключение потеряно, и Вы повторно соединяетесь через
+<CODE>mysql_ping()</CODE>, ID потока изменится. Это означает, что Вы не
+должны получить ID потока и хранить его. Надо получать ID по мере надобности.
+</P>
+
+<H4>2.3.215 Возвращаемые значения</H4>
+<P>ID потока текущего (актуального) подключения.</P>
+
+<H4>2.3.216 Ошибки</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_use_result">2.3.217 <CODE>mysql_use_result()</CODE></A>
+</H4>
+<P><CODE>MYSQL_RES *mysql_use_result(MYSQL *mysql)</CODE></P>
+
+<H4>2.3.218 Описание</H4>
+<P>Вы должны вызвать <CODE>mysql_store_result()</CODE> или
+<CODE>mysql_use_result()</CODE> для каждого запроса, который успешно получает
+данные (<CODE>SELECT</CODE>, <CODE>SHOW</CODE>, <CODE>DESCRIBE</CODE>,
+<CODE>EXPLAIN</CODE>).</P>
+
+<P><CODE>mysql_use_result()</CODE> инициализирует поиск набора результата, но
+фактически не читает набор результатов подобно
+<CODE>mysql_store_result()</CODE>. Вместо этого, каждая строка должна быть
+получена индивидуально, делая обращения к <CODE>mysql_fetch_row()</CODE>. Это
+читает результат запроса непосредственно с сервера без того, чтобы сохранить
+его во временной таблице или локальном буфере, что несколько быстрее и
+использует намного меньше памяти, чем <CODE>mysql_store_result()</CODE>.
+Пользователь распределит память только для текущей (актуальной) строки и
+буфера связей, который может сам вырасти до <CODE>max_allowed_packet</CODE>.
+</P>
+
+<P>С другой стороны, Вы не должны использовать
+<CODE>mysql_use_result()</CODE> если Вы делаете много обработки для каждой
+строки на стороне пользователя, или если вывод послан экрану, на котором
+пользователь может напечатать <CODE>^S</CODE> (приостановить показ данных).
+Это свяжет сервер и не даст другим потокам модифицировать любые таблицы, из
+которых выбираются данные.</P>
+
+<P>При использовании <CODE>mysql_use_result()</CODE> Вы должны выполнять
+<CODE>mysql_fetch_row()</CODE> до тех пор, пока значение не вернется значение
+<CODE>NULL</CODE>, иначе невыбранные строки будут возвращены как часть набора
+результатов для Вашего следующего запроса. C API выдает ошибку
+"<CODE>Commands out of sync; You can't run this command now</CODE>", если Вы
+забываете про это!</P>
+
+<P>Вы не можете использовать <CODE>mysql_data_seek()</CODE>,
+<CODE>mysql_row_seek()</CODE>, <CODE>mysql_row_tell()</CODE>,
+<CODE>mysql_num_rows()</CODE> или <CODE>mysql_affected_rows()</CODE> с
+результатом, возвращенным из <CODE>mysql_use_result()</CODE>, и при этом Вы
+не можете выдавать другие запросы, пока не закончится
+<CODE>mysql_use_result()</CODE>. Однако, после того, как Вы выбрали все
+строки, <CODE>mysql_num_rows()</CODE> точно возвратит число выбранных строк.
+</P>
+
+<P>Вы должны вызвать <CODE>mysql_free_result()</CODE> как только Вы закончили
+с этим набором результатов.</P>
+
+<H4>2.3.219 Возвращаемые значения</H4>
+<P>Структура <CODE>MYSQL_RES</CODE>. <CODE>NULL</CODE>, если произошла ошибка.
+</P>
+
+<H4>2.3.220 Ошибки</H4>
+<DL COMPACT>
+<DT><CODE>CR_COMMANDS_OUT_OF_SYNC</CODE>
+<DD>Команды были выполнены в неподходящем порядке.
+<DT><CODE>CR_OUT_OF_MEMORY</CODE>
+<DD>Не хватило памяти.
+<DT><CODE>CR_SERVER_GONE_ERROR</CODE>
+<DD>Сервер MySQL занят.
+<DT><CODE>CR_SERVER_LOST</CODE>
+<DD>Подключение было потеряно в течение запроса.
+<DT><CODE>CR_UNKNOWN_ERROR</CODE>
+<DD>Произошла неизвестная ошибка.</DL>
+
+<H3><A NAME="C_Thread_functions">2.4 Описание поточных функций C</A></H3>
+<P>Вы должны использовать следующие функции, когда Вы хотите создавать
+поточного клиента. Подробности в разделе "2.8 Как делать поточного клиента".
+</P>
+
+<H4><A NAME="my_init()">2.4.1 <CODE>my_init()</CODE></A></H4>
+<H4>2.4.2 Описание</H4>
+<P>Эта функция должна быть вызвана однажды в программе перед вызовом любой
+функции MySQL. Это инициализирует некоторые глобальные переменные. Если Вы
+используете поточно-безопасную библиотеку клиентов, это также вызовет для
+этого потока функцию <CODE>mysql_thread_init()</CODE>.</P>
+
+<P>Это автоматически вызвано функциями <CODE>mysql_init()</CODE>,
+<CODE>mysql_server_init()</CODE> и <CODE>mysql_connect()</CODE>.</P>
+
+<H4>2.4.3 Возвращаемые значения</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_thread_init()">2.4.4 <CODE>mysql_thread_init()</CODE>
+</A></H4>
+<H4>2.4.5 Описание</H4>
+<P>Эту функцию должен запрашивать каждый созданный поток, чтобы
+инициализировать специфические переменные.</P>
+
+<P>Это автоматически вызвано <CODE>my_init()</CODE> и
+<CODE>mysql_connect()</CODE>.</P>
+
+<H4>2.4.6Возвращаемые значения</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_thread_end()">2.4.7 <CODE>mysql_thread_end()</CODE></A>
+</H4>
+<H4>2.4.8 Описание</H4>
+<P>Эта функция должна быть вызвана перед вызовом <CODE>pthread_exit()</CODE>,
+чтобы освободить память, распределенную в <CODE>mysql_thread_init()</CODE>.
+</P>
+
+<P>Обратите внимание, что эта функция <STRONG>не вызывается
+автоматически</STRONG> библиотекой. Это должно быть вызвано явно, чтобы
+избежать утечки памяти.</P>
+
+<H4>2.4.9 Возвращаемые значения</H4>
+<P>Нет.</P>
+
+<H3><A NAME="C_Embedded_Server_functions">2.5
+Описание C-функций встроенного сервера</A></H3>
+<P>Вы должны использовать следующие функции, если Вы хотите, чтобы в Вашей
+прикладной программе была функциональность встроенного сервера MySQL.
+Подробности в разделе "2.9 libmysqld, библиотека встроенного сервера MySQL
+</A>".</P>
+
+<P>Если программа скомпонована с <CODE>-lmysqlclient</CODE> вместо
+<CODE>-lmysqld</CODE>, эти функции не делают ничего. Это делает возможным
+выбирать между использованием встроенного и автономного сервера без изменения
+какого-либо кода.</P>
+
+<H4><A NAME="mysql_server_init()">2.5.1 <CODE>mysql_server_init()</CODE>
+</A></H4>
+<P><CODE>void mysql_server_init(int argc, const char **argv,
+const char **groups)</CODE></P>
+
+<H4>2.5.2 Описание</H4>
+<P>Эта функция <STRONG>должна</STRONG> быть вызвана в программе перед вызовом
+любой другой функции MySQL. Она запускает сервер и инициализирует все
+подсистемы (<CODE>mysys</CODE>, InnoDB и т.д.), используемые сервером. Если
+эта функция не была вызвана, программа разрушится.</P>
+
+<P>Параметры <CODE>argc</CODE> и <CODE>argv</CODE> аналогичны параметрам
+<CODE>main()</CODE>. Первый элемент <CODE>argv</CODE> игнорируется (он обычно
+содержит имя программы). Для удобства <CODE>argc</CODE> может быть
+<CODE>0</CODE>, если не имеется никаких параметров командной строки сервера.
+</P>
+
+<P>Завершаемый символом <CODE>NULL</CODE> список строк в <CODE>groups</CODE>
+задает то, какие группы в файле опций будут активны. Для удобства
+<CODE>groups</CODE> может быть <CODE>NULL</CODE>, тогда будет активна группа
+<CODE>[server]</CODE>.</P>
+
+<H4>2.5.3 Пример</H4>
+<PRE>
+#include &#60;mysql.h&#62;
+#include &#60;stdlib.h&#62;
+
+static char *server_args[] = {
+  "this_program",       /* this string is not used */
+  "--datadir=.",
+  "--set-variable=key_buffer_size=32M"
+};
+
+static char *server_groups[] = {
+  "server", "this_program_SERVER", (char *)NULL
+};
+
+int main(void) {
+  mysql_server_init(sizeof(server_args) / sizeof(char *),
+                    server_args, server_groups);
+  /* Use any MySQL API functions here */
+  mysql_server_end();
+  return EXIT_SUCCESS;
+}
+</PRE>
+
+<H4>2.5.4 Возвращаемые значения</H4>
+<P>Нет.</P>
+
+<H4><A NAME="mysql_server_end()">2.5.5 <CODE>mysql_server_end()</CODE></A>
+</H4>
+<H4>2.5.6 Описание</H4>
+<P>Эта функция <STRONG>должна быть</STRONG> вызвана в программе, в конце.
+Она завершает сервер.</P>
+
+<H4>2.5.7 Возвращаемые значения</H4>
+<P>Нет.</P>
+
+<H3><A NAME="C_API_problems">2.6 Общие вопросы и проблемы
+при использовании C API</A></H3>
+<H4><A NAME="NULL_mysql_store_result">2.6.1 Почему при успехе
+<CODE>mysql_query()</CODE> вызов <CODE>mysql_store_result()</CODE>
+иногда возвращает <CODE>NULL?</CODE></A></H4>
+
+<P>Когда это случается, это означает, что одно из следующего произошло:</P>
+<UL><LI>Имелся сбой <CODE>malloc()</CODE> (например, если набор результатов
+был слишком большой).
+<LI>Данные не могли прочитаться (произошла ошибка на подключении).
+<LI>Запрос не возвратил никакие данные (например, это был
+<CODE>INSERT</CODE>, <CODE>UPDATE</CODE> или <CODE>DELETE</CODE>).</UL>
+
+<P>Вы можете всегда проверить, должна или нет инструкция произвести непустой
+результат, вызывая <CODE>mysql_field_count()</CODE>. Если
+<CODE>mysql_field_count()</CODE> вернет ноль, результат пуст, и последний
+запрос был инструкцией, которая не возвращает значения (например,
+<CODE>INSERT</CODE> или <CODE>DELETE</CODE>). Если
+<CODE>mysql_field_count()</CODE> вернет не ноль, инструкция должна была
+произвести не пустой результат.</P>
+
+<P>Вы можете проверить наличие ошибки вызовом <CODE>mysql_error()</CODE> или
+<CODE>mysql_errno()</CODE>.</P>
+
+<H4><A NAME="Query_results">2.6.2 Какой результат я могу
+получить из запроса?</A></H4>
+<P>В дополнение к набору результатов, возвращенному запросом, Вы можете также
+получать следующую информацию:</P>
+
+<UL><LI><CODE>mysql_affected_rows()</CODE> возвращает число строк, на которые
+воздействует последний запрос при выполнении <CODE>INSERT</CODE>,
+<CODE>UPDATE</CODE> или <CODE>DELETE</CODE>. Исключительная ситуация:
+<CODE>DELETE</CODE> используется без предложения <CODE>WHERE</CODE>, таблица
+будет пересоздана пустой, что намного быстрее! В этом случае
+<CODE>mysql_affected_rows()</CODE> возвращает ноль для числа записей.
+
+<LI><CODE>mysql_num_rows()</CODE> возвращает число строк в наборе
+результатов. При использовании <CODE>mysql_store_result()</CODE>
+<CODE>mysql_num_rows()</CODE> может быть вызван, как только отработает
+<CODE>mysql_store_result()</CODE>. При использовании
+<CODE>mysql_use_result()</CODE> <CODE>mysql_num_rows()</CODE> может быть
+вызван только после того, как Вы выбрали все строки с помощью
+<CODE>mysql_fetch_row()</CODE>.
+
+<LI><CODE>mysql_insert_id()</CODE> возвращает ID, сгенерированный последним
+запросом, который вставил строку в таблицу с индексом
+<CODE>AUTO_INCREMENT</CODE>. Подробности в разделе "2.3.126
+<CODE>mysql_insert_id()</CODE>".
+
+<LI>Некоторые запросы (<CODE>LOAD DATA INFILE ...</CODE>, <CODE>INSERT INTO
+... SELECT ...</CODE>, <CODE>UPDATE</CODE>) возвращают дополнительную
+информацию. Результат возвращен через <CODE>mysql_info()</CODE>.
+<CODE>mysql_info()</CODE> вернет <CODE>NULL</CODE> если не имеется
+никакой дополнительной информации.</UL>
+
+<H4><A NAME="Getting_unique_ID">2.6.3 Как я могу получить уникальный ID для
+последней вставленной строки?</A></H4>
+<P>Если Вы вставляете запись в таблицу, содержащую столбец, который имеет
+атрибут <CODE>AUTO_INCREMENT</CODE>, Вы можете получать последнее значение
+ID вызовом <CODE>mysql_insert_id()</CODE>.</P>
+
+<P>Вы можете также получать ID, используя функцию
+<CODE>LAST_INSERT_ID()</CODE> в строке запроса, которую Вы передаете
+<CODE>mysql_query()</CODE>.</P>
+
+<P>Вы можете проверять, используется ли индекс <CODE>AUTO_INCREMENT</CODE>,
+выполняя следующий код. Это также проверит, был ли запрос <CODE>INSERT</CODE>
+с индексом <CODE>AUTO_INCREMENT</CODE>:</P>
+<PRE>
+if (mysql_error(&#38;mysql)[0] == 0 &#38;&
+    mysql_num_fields(result) == 0 &#38;& mysql_insert_id(&#38;mysql) != 0)
+{
+   used_id = mysql_insert_id(&#38;mysql);
+}
+</PRE>
+
+<P>Недавно сгенерированный ID хранится на сервере с привязкой к подключению.
+Это не будет изменено другим пользователем. Это не будет даже изменено, если
+Вы модифицируете другой столбец <CODE>AUTO_INCREMENT</CODE> не со специальным
+значением (то есть значением, которое не <CODE>NULL</CODE> и не
+<CODE>0</CODE>).</P>
+
+<P>Если Вы хотите использовать ID, который был сгенерирован для одной
+таблицы и вставлять его во вторую таблицу, Вы можете использовать инструкции
+SQL подобно этому:</P>
+<PRE>
+INSERT INTO foo (auto,text)
+    VALUES(NULL,'text');              # generate ID by inserting NULL
+INSERT INTO foo2 (id,text)
+    VALUES(LAST_INSERT_ID(),'text');  # use ID in second table
+</PRE>
+
+<H4><A NAME="C_API_linking_problems">2.6.4 Проблемы компоновки с C API</A>
+</H4>
+<P>При компоновке с C API следующие ошибки могут происходить
+на некоторых системах:
+<PRE>
+gcc -g -o client test.o -L/usr/local/lib/mysql -lmysqlclient -lsocket -lnsl
+Undefined        first referenced
+ symbol          in file
+floor            /usr/local/lib/mysql/libmysqlclient.a(password.o)
+ld: fatal: Symbol referencing errors. No output written to client
+</PRE></P>
+
+<P>Если это случается на Вашей системе, Вы должны включить математическую
+библиотеку, добавляя <CODE>-lm</CODE> к концу строки для компоновки.</P>
+
+<H3><A NAME="Building_clients">2.7 Построение клиентских программ</A></H3>
+<P>Если Вы компилируете MySQL клиентуру, которую вы написали самостоятельно
+или получили от третьего лица, программы должны быть скомпонованы, используя
+опцию <CODE>-lmysqlclient -lz</CODE>. Вы также должны определить опцию
+<CODE>-L</CODE>, чтобы сообщить компоновщику, где найти библиотеку. Например,
+если библиотека установлена в <TT>/usr/local/mysql/lib</TT>, используйте
+<CODE>-L/usr/local/mysql/lib -lmysqlclient -lz</CODE> на строке компоновки.
+</P>
+
+<P>Для клиентуры, которая использует файлы заголовков MySQL, Вы должны
+определить опцию <CODE>-I</CODE>, когда Вы компилируете их (например,
+<CODE>-I/usr/local/mysql/include</CODE>), чтобы транслятор смог найти файлы.
+</P>
+
+<H3><A NAME="Threaded_clients">2.8 Как делать поточные клиенты</A></H3>
+<P>Самая большая проблема состоит в том, что подпрограммы в <TT>net.c</TT>,
+которые читают из сокетов, не безопасны для прерываний. Это было выполнено с
+мыслью о том, что Вы могли бы иметь Вашу собственную функцию, которая может
+разорвать длинное чтение на сервер. Если Вы устанавливаете программы
+обработки прерывания для <CODE>SIGPIPE</CODE>, обработка сокета должна
+быть поточно-безопасной.</P>
+
+<P>В старом двоичном коде библиотеки пользователей обычно не компилируются с
+опциями для поддержки поточной безопасности (код для Windows по умолчанию
+компилируются как поточно-безопасный). Более новые двоичные дистрибутивы
+имеют оба варианта библиотек.</P>
+
+<P>Чтобы сделать поточный клиент, где Вы можете прерывать пользователя
+из других потоков и устанавливать времена ожидания при обмене данными с
+сервером MySQL, Вы должны использовать библиотеки <CODE>-lmysys</CODE>,
+<CODE>-lstring</CODE> и <CODE>-ldbug</CODE>, а также код
+<CODE>net_serv.o</CODE>, который использует сервер.</P>
+
+<P>Если Вы не нуждаетесь в прерываниях или временах ожидания, Вы можете
+только скомпилировать поточно-безопасную библиотеку пользователей
+<CODE>(mysqlclient_r)</CODE> и использовать ее. В этом случае Вы не должны
+волноваться относительно объектного файла <CODE>net_serv.o</CODE> или других
+библиотек для MySQL.</P>
+
+<P>При использовании поточного клиента, и если Вы хотите использовать времена
+ожидания и прерывания, Вы можете использовать код из файла
+<TT>thr_alarm.c</TT>. Если Вы используете подпрограммы из библиотеки
+<CODE>mysys</CODE>, Вы должны помнить, что нужно сначала вызвать
+<CODE>my_init()</CODE>! Подробности в разделе "2.4
+Описание поточных функций C".</P>
+
+<P>Все функции за исключением <CODE>mysql_real_connect()</CODE> по умолчанию
+безопасны для потоков. Следующие замечания описывают, как компилировать
+безопасную библиотеку клиентов и использовать ее соответственно. Замечания
+для <CODE>mysql_real_connect()</CODE> фактически применимы и для
+<CODE>mysql_connect()</CODE>.</P>
+
+<P>Чтобы сделать <CODE>mysql_real_connect()</CODE> поточно-безопасной, Вы
+должны перетранслировать библиотеку этой командой:</P>
+<PRE>
+shell&#62; ./configure --enable-thread-safe-client
+</PRE>
+
+<P>Это создаст поточно-безопасную библиотеку <CODE>libmysqlclient_r</CODE>.
+Вы можете позволять двум потокам совместно использовать то же самое
+подключение, пока Вы делаете следующее:</P>
+
+<UL><LI>Два потока не могут посылать запрос MySQL в то же самое время на том
+же самом подключении. В частности Вы должны гарантировать, что между
+<CODE>mysql_query()</CODE> и <CODE>mysql_store_result()</CODE> другой поток
+никогда не использует то же самое подключение.
+
+<LI>Несколько потоков могут обращаться к различным наборам результатов,
+которые получены через <CODE>mysql_store_result()</CODE>.
+
+<LI>Если Вы используете <CODE>mysql_use_result</CODE>, Вы должны
+гарантировать, что никакой другой поток не спрашивает что-нибудь относительно
+того же самого подключения, пока набор результатов не закрыт.
+
+<LI>Если Вы хотите использовать много потоков на том же самом подключении, Вы
+должны иметь блокировку mutex вокруг Вашей комбинации вызовов
+<CODE>mysql_query()</CODE> и <CODE>mysql_store_result()</CODE>. Когда
+<CODE>mysql_store_result()</CODE> готов, блокировка может быть снята, и
+другие потоки смогут сделать запрос с того же самого подключения.
+
+<LI>Если Вы программируете с потоками в стиле POSIX, Вы можете использовать
+<CODE>pthread_mutex_lock()</CODE> и <CODE>pthread_mutex_unlock()</CODE>,
+чтобы устанавливать и снимать блокировку mutex.</UL>
+
+<P>Вы должны знать следующее, если Вы имеете поток, который вызывает функции
+MySQL, но не создал подключение к базе данных MySQL:</P>
+
+<P>Когда Вы вызываете <CODE>mysql_init()</CODE> или
+<CODE>mysql_connect()</CODE>, MySQL создаст специфические переменные для
+потока, которые используются библиотекой отладки.</P>
+
+<P>Если Вы имеете в потоке вызов функции MySQL прежде, чем поток вызвал
+<CODE>mysql_init()</CODE> или <CODE>mysql_connect()</CODE>, поток не будет
+иметь необходимых специфических переменных, и Вы, вероятно, свалите программу
+в дамп рано или поздно (скорее рано, чем поздно). Чтобы работать спокойно,
+надо предпринять следующее:</P>
+
+<OL><LI>Вызовите <CODE>my_init()</CODE> в начале Вашей программы, если она
+вызывает любую другую функцию MySQL, перед вызовом
+<CODE>mysql_real_connect()</CODE>.
+
+<LI>Вызовите <CODE>mysql_thread_init()</CODE> в драйвере потока перед вызовом
+любой функции MySQL.
+
+<LI>В потоке вызовите <CODE>mysql_thread_end()</CODE> перед вызовом
+<CODE>pthread_exit()</CODE>. Это освободит память, используемую
+специфическими переменными MySQL.</OL>
+
+<P>Вы можете получать некоторые ошибки из-за неопределенных символов при
+компоновке Вашего клиента с <CODE>mysqlclient_r</CODE>. В большинстве случаев
+это потому, что Вы не включили библиотеки потоков в строку компоновки.</P>
+
+<H3><A NAME="libmysqld">2.9 libmysqld, библиотека встроенного сервера MySQL
+</A></H3>
+<H4><A NAME="libmysqld_overview">2.9.1 Обзор библиотеки встроенного
+сервера MySQL</A></H4>
+<P>Библиотека встроенного сервера MySQL делает возможным выполнить
+полнофункциональный сервер MySQL внутри прикладной программы. Основные
+выгоды: увеличивается быстродействие и упрощается управление.</P>
+
+<H4><A NAME="libmysqld_compiling">2.9.2 Компиляция программ с
+<CODE>libmysqld</CODE></A></H4>
+<P>В настоящее время, все библиотеки должны быть явно перечислены при
+компоновке с <CODE>-lmysqld</CODE>. В будущем <CODE>mysql_config
+--libmysqld-libs</CODE> назовет библиотеки, чтобы делать этот проще. Также,
+все библиотеки будут, вероятно, включены в libmysqld, чтобы упростить этот
+процесс еще сильнее.</P>
+
+<P>Правильные флажки для компиляции и компоновки поточной программы должны
+использоваться, даже если Вы непосредственно не вызываете никакие функции
+потоков в Вашем коде.</P>
+
+<H4><A NAME="libmysqld_example">2.9.3 Пример простого встроенного сервера
+</A></H4>
+<P>Эта программа должна работать без любых изменений на Linux или FreeBSD
+системе. Для других операционных систем будут необходимы маленькие изменения.
+Этот пример разработан, чтобы дать общее представление о том, как все делать.
+</P>
+
+<P>Чтобы испытать пример, создайте каталог <TT>example</TT> в том же самом
+уровне, где лежит каталог с исходными текстами mysql-4.0. Сохраните в нем
+файлы <TT>example.c</TT> и <TT>GNUmakefile</TT>, после чего выполните
+GNU <TT>make</TT> из каталога <TT>example</TT>.</P>
+
+<P>Файл <TT>example.c</TT>:
+<PRE>
+/*
+ * A simple example client, using the embedded MySQL server library
+ */
+#include &#60;mysql.h&#62;
+#include &#60;stdarg.h&#62;
+#include &#60;stdio.h&#62;
+#include &#60;stdlib.h&#62;
+
+enum on_error {E_okay, E_warn, E_fail};
+
+static void die(MYSQL *db, char *fmt, ...);
+MYSQL *db_connect(const char *dbname);
+void db_disconnect(MYSQL *db);
+void db_do_query(MYSQL *db, const char *query, enum on_error on_error);
+
+const char *server_groups[] = { "test_client_SERVER", "server", NULL };
+
+int main(int argc, char **argv)
+{
+  MYSQL *one, *two;
+
+  /* This must be called before any other mysql functions.
+   *
+   * You can use mysql_server_init(0, NULL, NULL), and it will
+   * initialize the server using groups = { "server", NULL }.
+   *
+   * In your $HOME/.my.cnf file, you probably want to put:
+[test_client_SERVER]
+language = /path/to/source/of/mysql/sql/share/english
+
+   * You could, of course, modify argc and argv before passing
+   * them to this function. Or you could create new ones in any
+   * way you like. But all of the arguments in argv (except for
+   * argv[0], which is the program name) should be valid options
+   * for the MySQL server.
+   *
+   * If you link this client against the normal mysqlclient
+   * library, this function is just a stub that does nothing.
+   */
+  mysql_server_init(argc, argv, server_groups);
+  one = db_connect("test");
+  two = db_connect(NULL);
+  db_do_query(one, "show table status", E_fail);
+  db_do_query(two, "show databases", E_fail);
+  mysql_close(two);
+  mysql_close(one);
+
+  /* This must be called after all other mysql functions */
+  mysql_server_end();
+  exit(EXIT_SUCCESS);
+}
+
+void die(MYSQL *db, char *fmt, ...)
+{
+  va_list ap;
+  va_start(ap, fmt);
+  vfprintf(stderr, fmt, ap);
+  va_end(ap);
+  putc('\n', stderr);
+  if (db) db_disconnect(db);
+  exit(EXIT_FAILURE);
+}
+
+MYSQL * db_connect(const char *dbname)
+{
+  MYSQL *db = mysql_init(NULL);
+  if (!db) die(db, "mysql_init failed: no memory");
+  mysql_options(db, MYSQL_READ_DEFAULT_GROUP, "simple");
+  if (!mysql_real_connect(db, NULL, NULL, NULL, dbname, 0, NULL, 0))
+     die(db, "mysql_real_connect failed: %s", mysql_error(db));
+  return db;
+}
+
+void db_disconnect(MYSQL *db)
+{
+  mysql_close(db);
+}
+
+/*
+ * show_query: this code is snagged from mysql.cc; this function
+ * is intended to be used internally to db_do_query()
+ */
+static char * show_query(MYSQL *db)
+{
+  MYSQL_RES   *res;
+  MYSQL_FIELD *field;
+  MYSQL_ROW    row;
+  char sep[256], *psep = sep;
+  char *is_num = 0;
+  char *err = 0;
+  unsigned int length = 1;      /* initial "|" */
+  unsigned int off;
+
+  if (!(res = mysql_store_result(db))) return mysql_error(db);
+  if (!(is_num = malloc(mysql_num_fields(res))))
+  {
+     err = "Не хватило памяти";
+     goto err;
+  }
+  /* set up */
+  *psep++ = '+';
+  while ((field = mysql_fetch_field(res)))
+  {
+    unsigned int len = strlen(field-&#62;name);
+    if (len &#60; field-&#62;max_length) len = field-&#62;max_length;
+    if (len &#60; 2 &#38;& !IS_NOT_NULL(field-&#62;flags)) len = 2; /* \N */
+    field-&#62;max_length = len + 1;    /* bending the API... */
+    len += 2; length += len + 1;        /* " " before, " |" after */
+    if (length &#62;= 255)
+    {
+       err = "row too long";
+       goto err;
+    }
+    memset(psep, '-', len); psep += len;
+    *psep++ = '+';
+    *psep   = '\0';
+  }
+  /* column headings */
+  puts(sep);
+  mysql_field_seek(res,0);
+  fputc('|',stdout);
+  for (off=0; (field = mysql_fetch_field(res)) ; off++)
+  {
+    printf(" %-*s|",field-&#62;max_length, field-&#62;name);
+    is_num[off]= IS_NUM(field-&#62;type);
+  }
+  fputc('\n',stdout);
+  puts(sep);
+  /* rows */
+  while ((row = mysql_fetch_row(res)))
+  {
+    (void) fputs("|",stdout);
+    mysql_field_seek(res,0);
+    for (off=0; off &#60; mysql_num_fields(res); off++)
+    {
+      field = mysql_fetch_field(res);
+      printf(is_num[off] ? "%*s |" : " %-*s|",
+             field-&#62;max_length, row[off] ? (char*) row[off] : "NULL");
+    }
+    (void) fputc('\n',stdout);
+  }
+  puts(sep);
+err:
+  if (is_num) free(is_num);
+  mysql_free_result(res);
+  return err;
+}
+
+void db_do_query(MYSQL *db, const char *query, enum on_error on_error)
+{
+  char *err = 0;
+
+  if (mysql_query(db, query) != 0) goto err;
+  if (mysql_field_count(db) &#62; 0)
+  {
+     if ((err = show_query(db))) goto err;
+  }
+  else if (mysql_affected_rows(db))
+          printf("Affected rows: %lld [%s]\n",
+                 mysql_affected_rows(db),query);
+  return;
+err:
+  switch (on_error)
+  {
+    case E_okay: break;
+    case E_warn:
+      fprintf(stderr, "db_do_query failed: %s [%s]\n",
+              err ? err : mysql_error(db), query);
+      break;
+    case E_fail:
+      die(db, "db_do_query failed: %s [%s]",
+          err ? err : mysql_error(db), query);
+      break;
+  }
+}
+</PRE>
+
+<P>Файл <TT>GNUmakefile</TT>:
+<PRE>
+# Set this to your mysql source directory
+m        := ../mysql-4.0
+CC       := cc
+CPPFLAGS := -I$m/include -D_THREAD_SAFE -D_REENTRANT
+CFLAGS   := -g -W -Wall
+LDFLAGS  := -static
+LDLIBS    = $(embed_libs) -lz -lm -lcrypt
+
+ifneq (,$(shell grep FreeBSD /COPYRIGHT 2&#62;/dev/null))
+# FreeBSD
+LDFLAGS += -pthread
+else
+# Assume Linux
+LDLIBS += -lpthread
+endif
+
+# Standard libraries
+embed_libs := \
+        $m/libmysqld/.libs/libmysqld.a \
+        $m/isam/libnisam.a \
+        $m/myisam/libmyisam.a \
+        $m/heap/libheap.a \
+        $m/merge/libmerge.a \
+        $m/myisammrg/libmyisammrg.a
+
+# Optionally-built libraries
+ifneq (,$(shell test -r $m/innobase/usr/libusr.a &#38;& echo "yes"))
+embed_libs += \
+        $m/innobase/usr/libusr.a \
+        $m/innobase/odbc/libodbc.a \
+        $m/innobase/srv/libsrv.a \
+        $m/innobase/que/libque.a \
+        $m/innobase/srv/libsrv.a \
+        $m/innobase/dict/libdict.a \
+        $m/innobase/ibuf/libibuf.a \
+        $m/innobase/row/librow.a \
+        $m/innobase/pars/libpars.a \
+        $m/innobase/btr/libbtr.a \
+        $m/innobase/trx/libtrx.a \
+        $m/innobase/read/libread.a \
+        $m/innobase/usr/libusr.a \
+        $m/innobase/buf/libbuf.a \
+        $m/innobase/ibuf/libibuf.a \
+        $m/innobase/eval/libeval.a \
+        $m/innobase/log/liblog.a \
+        $m/innobase/fsp/libfsp.a \
+        $m/innobase/fut/libfut.a \
+        $m/innobase/fil/libfil.a \
+        $m/innobase/lock/liblock.a \
+        $m/innobase/mtr/libmtr.a \
+        $m/innobase/page/libpage.a \
+        $m/innobase/rem/librem.a \
+        $m/innobase/thr/libthr.a \
+        $m/innobase/com/libcom.a \
+        $m/innobase/sync/libsync.a \
+        $m/innobase/data/libdata.a \
+        $m/innobase/mach/libmach.a \
+        $m/innobase/ha/libha.a \
+        $m/innobase/dyn/libdyn.a \
+        $m/innobase/mem/libmem.a \
+        $m/innobase/sync/libsync.a \
+        $m/innobase/ut/libut.a \
+        $m/innobase/os/libos.a \
+        $m/innobase/ut/libut.a
+endif
+
+ifneq (,$(shell test -r $m/bdb/build_unix/libdb.a &#38;& echo "yes"))
+embed_libs += $m/bdb/build_unix/libdb.a
+endif
+
+# Support libraries
+embed_libs += \
+        $m/mysys/libmysys.a \
+        $m/strings/libmystrings.a \
+        $m/dbug/libdbug.a \
+        $m/regex/libregex.a
+
+# Optionally built support libraries
+ifneq (,$(shell test -r $m/readline/libreadline.a &#38;& echo "yes"))
+embed_libs += $m/readline/libreadline.a
+endif
+
+# This works for simple one-file test programs
+sources := $(wildcard *.c)
+objects := $(patsubst %c,%o,$(sources))
+targets := $(basename $(sources))
+
+all: $(targets)
+
+clean:
+  rm -f $(targets) $(objects) *.core
+</PRE>
+
+<H4><A NAME="libmysqld_licensing">2.9.4 Лицензирование встроенного сервера
+</A></H4>
+<P>Исходный текст MySQL охвачен GNU GPL. Один результат этого: любая
+программа, которая компонуется с <CODE>libmysqld</CODE> и с исходным текстом
+MySQL, должна быть выпущена как свободное программное обеспечение (согласно
+лицензии, совместимой с GPL).</P>
+
+<P>Авторы поощряют каждого поддерживать свободное программное обеспечение,
+выпуская код под GPL или совместимой лицензией. Для тех, кто не способен
+делать это, есть другой вариант: они должны приобрести MySQL у MySQL AB
+согласно более свободной лицензии.</P>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

@@ -1,0 +1,931 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 2. Установка</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="wb-installing"></a>Глава 2. Установка</h1>
+<p>MySQL Workbench доступен для Windows, Linux и macOS.</p>
+<p>Двоичные дистрибутивы MySQL Workbench доступны для предыдущих платформ.
+Дистрибутивы исходного кода также доступны как пакеты
+<code class="filename">tar.gz</code> или RPM.</p>
+
+<p>MySQL Workbench доступен в
+<a href="../../../https@dev.mysql.com/downloads/workbench/default.htm" target="_top">
+https://dev.mysql.com/downloads/workbench/</a>. Исходный код также
+<a href="../../../https@github.com/mysql/mysql-workbench" target="_top">
+есть на GitHub</a>.</p>
+
+<h2><a name="wb-requirements"></a>2.1. Системные требования</h2>
+<p>MySQL Workbench доступен в ряде операционных систем и платформ.
+Для получения информации о тех платформах, которые официально поддерживаются,
+см. <a href="../../../https@www.mysql.com/support/supportedplatforms/workbench.html"
+target="_top">https://www.mysql.com/support/supportedplatforms/workbench.html
+</a>.</p>
+
+<h3><a name="wb-requirements-general"></a>Общие требования</h3>
+<p>Общие требования и соображения, которые относятся ко
+всем операционным системам.</p>
+
+<ul><li><p><span class="bold"><strong>MySQL server</strong></span>:
+Хотя это не требуется, MySQL Workbench разработан, чтобы иметь удаленную или
+местную связь с сервером MySQL. Для получения дополнительной информации о
+соединении с сервером MySQL см. <a href="connect.htm">главу 5</a>.
+Для получения дополнительной информации об установке сервера MySQL посмотрите
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/installing.html"
+target="_top">Installing and Upgrading MySQL</a>.</p>
+
+<p>Моделирование данных не требует связи с сервером MySQL.</p>
+<p>Некоторые особенности используют в своих интересах особенности сервера
+MySQL, они требуют более свежих версий сервера MySQL. Например,
+<span class="guilabel">Performance Dashboard</span> требует
+MySQL Server 5.6 или выше.</p></li>
+
+<li><span class="bold"><strong>Одновременные связи клиента</strong></span>:
+Открытие подключения MySQL с домашней страницы MySQL Workbench открывает
+новую вкладку в MySQL Workbench для этой связи. Каждая из этих вкладок
+требует, чтобы два подключения MySQL выполнили основные задачи, такие как
+открытие схемы и выполнение SQL. Кроме того, задачи управления, такие как
+<span class="guilabel">Server Status</span>,
+требуют двух дополнительных подключений MySQL.
+По существу это означает, что каждая вкладка подключения MySQL в
+MySQL Workbench требует четырех доступных связей с MySQL.
+Для получения дополнительной информации об ошибке "Too many connection" см.
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/too-many-connections.html"
+target="_top">Too many connections</a>.</p>
+
+<p>Это требование удваивается с каждой вкладкой связи, открытой в MySQL
+Workbench, даже если две вкладки связи указывают на тот же самый сервер
+MySQL. Редактор SQL разделяет свои связи, много редакторов SQL и вкладок
+результатов SQL не затрагивают количество необходимых связей.</p></li></ul>
+
+<p>На запуске приложение проверяет версию OpenGL и выбирает между
+рендерингом программного и аппаратного обеспечения. Чтобы определить, какой
+метод используется, откройте меню <span class="guimenu">Help</span>,
+<span class="guimenuitem">System Info</span>.</p>
+
+<h3><a name="wb-requirements-linux"></a>Требования для Linux</h3>
+<ul><li><p>Требования для Linux включены в соответствующих пакетах.
+Используйте подходящий инструмент (например, example, yum или apt), чтобы
+установить пакет и зависимости.</p></li>
+
+<li>Функциональность <span class="guilabel">Save password in vault</span>
+требует <code class="literal">gnome-keyring-daemon</code>, чтобы
+сохранить пароли. Обратите внимание на то, что системы KDE используют свою
+собственную версию <code class="literal">ksecretservice</code>.</p></li>
+
+<li>В Linux и macOS особенности администрирования сервера MySQL требуют
+привилегий команды <span class="command"><strong>sudo</strong></span>, чтобы
+выполнить несколько команд. Пользователь <span class="command"><strong>sudo
+</strong></span> должен быть способен к выполнению
+следующих системных команд:</p>
+
+<pre>
+/usr/bin/sudo
+/usr/bin/nohup
+/usr/bin/uptime
+/usr/bin/which
+/usr/bin/stat
+
+/bin/bash
+/bin/mkdir
+/bin/rm
+/bin/rmdir
+/bin/dd
+/bin/cp
+/bin/ls
+</pre>
+
+<p>Кроме того, пользователь <span class="command"><strong>sudo</strong>
+</span> должен хранить переменную окружения
+<code class="literal">HOME</code>, выполняя системные команды, что означает
+добавление следующей записи в файл
+<code class="filename">/etc/sudoers</code> командой
+<span class="command"><strong>visudo</strong></span>:</p>
+
+<pre>
+Defaults env_keep +="HOME"
+</pre>
+
+<p>Для MySQL Workbench, чтобы выполнить Команды резервного копирования
+MySQL Enterprise Backup надо, чтобы пользователь
+<span class="command"><strong>sudo</strong></span> также был в
+состоянии выполнить MySQL Enterprise Backup.</p></li></ul>
+
+<h3><a name="wb-requirements-windows"></a>Минимальные требования для Windows
+</h3>
+<p>Следующие предпосылки доступны в
+<a href="../../../www.microsoft.com/en-us/download/default.aspx" target="_top">
+Microsoft Download Center</a>:</p>
+
+<ul><li><p>Microsoft .NET Framework 4.5.2.</p></li>
+<li>Visual C++ 2015 Redistributable for Visual Studio 2015.
+<p>Версия 2013 была изменена на 2015 в MySQL Workbench 6.3.9.</p></li>
+<li>Microsoft Windows 7 (и позже). MySQL Workbench 6.1 поддерживает более
+ранние версии Windows, включая Vista.</p></li></ul>
+
+<h2><a name="wb-command-line-options"></a>2.2. Параметры командной строки</h2>
+<p>В дополнение к определенным для платформы параметрам командной строки у
+MySQL Workbench есть следующие параметры:
+
+<p>В Microsoft Windows параметры командной строки содержат одно тире вместо
+двух. Например, надо использовать <code>-log-level</code> в Microsoft Windows
+и <code>--log-level</code> в Linux и macOS.</p>
+
+<ul><li><p><code>--log-level</code> <em class="replaceable"><code>level
+</code></em>: Управляет уровнем подробностей для
+журнала протоколов Workbench.</p>
+
+<p>По мере роста подробностей значения <code class="literal">level</code>
+такие: error, warning, info, debug1, debug2 и debug3.</p>
+<p>Местоположение произведенных файлов журнала, таких как
+<code class="filename">wb.log</code>:</p>
+
+<a name="wb-configuring-log-file-paths"></a>
+<p><b>Таблица 2.1. Местоположение по умолчанию произведенных файлов
+журнала MySQL Workbench</b></p>
+<table border="1">
+<thead><tr><th scope="col">Платформа</th>
+<th scope="col">Местоположение по умолчанию</th></tr></thead>
+<tbody><tr><td scope="row">Linux</td>
+<td><code class="filename">~/.mysql/workbench/log/</code></td></tr>
+<tr><td scope="row">macOS</td>
+<td><code class="filename">~/Library/Application Support/Workbench/log/
+</code></td></tr>
+<tr><td scope="row">Microsoft Windows</td>
+<td><code class="filename">C:\Users\<em class="replaceable"><code>user_name
+</code></em>\AppData\Roaming\MySQL\Workbench\log\</code></td></tr></tbody>
+</table><br class="table-break"></li>
+
+<li><code>--admin <em class="replaceable"><code>instance</code></em></code>:
+Откроет административную вкладку для указанного сервера MySQL.</p></li>
+<li><code>--upgrade-mysql-dbs</code>: Откроет вкладку Migration Wizard.
+</p></li>
+
+<li><code>--migration</code>: Откроет вкладку Migration Wizard.</p></li>
+<li><code>--log-to-stderr</code>: Также пишет журнал в
+<code class="literal">stderr</code>.</p></li>
+
+<li><code>--version</code>: Покажет номер версии MySQL Workbench.</p></li>
+<li><code>--verbose, -v</code>: Включает вывод диагностики.</p></li>
+<li><code>--query <em class="replaceable"><code>
+[connection|connection_string]</code></em></code>:</p>
+
+<ul><li><p>Пусто: Откроет вкладку запроса и запросит для связи.</p></li>
+<li>Соединение: Откроет названную связь.</p></li>
+<li>Connection_string: Создает связь на основе введенной строки подключения,
+которая должна быть в форме <em class="replaceable"><code>$USER@$HOST:$PORT
+</code></em>.</p></li></ul></li>
+
+<li><code>--model <em class="replaceable"><code>modelfile</code></em></code>:
+Откроет данный файл модели EER.</p></li>
+<li><code>--script <em class="replaceable"><code>script</code></em></code>:
+Откроет данный файл SQL в связи, как правило, используется с параметром
+<code>--query</code>.</p></li>
+
+<li><code>--run <em class="replaceable"><code>code</code></em></code>:
+Выполнит данный код, используя язык по умолчанию для GRT shell.</p></li>
+<li><code>--run-python <em class="replaceable"><code>script</code></em>
+</code>: Выполнит данный код в Python.</p></li>
+
+<li><code>--run-script <em class="replaceable"><code>file</code></em></code>:
+Выполнит код Python из файла.</p></li>
+<li><code>--open <em class="replaceable"><code>file</code></em></code>:
+Откроет данный файл при запуске. Устаревший параметр, вместо этого используют
+<code>--script</code> или <code>--model</code>.</p></li>
+<li><code>--quit-when-done</code>: Выйти из MySQL Workbench после завершения
+<code>--script</code> или <code>--run</code>.</p></li></ul>
+
+<h2><a name="wb-windows"></a>2.3. MySQL Workbench в Windows</h2>
+<h3><a name="wb-installing-windows"></a>2.3.1. Установка</h3>
+<p>MySQL Workbench for Windows может быть установлен, используя
+MySQL Installer, который устанавливает и обновляет все продукты
+MySQL в Windows, или автономным пакетом Windows MSI Installer.</p>
+<p>Установка MySQL Workbench, используя пакет Windows MSI Installer требует
+привилегий Administrator или Power User.</p>
+
+<h4><a name="wb-installing-windows-requirements"></a>
+Минимальные требования для Windows</h4>
+<p>Следующие предпосылки доступны в
+<a href="../../../www.microsoft.com/en-us/download/default.aspx" target="_top">
+Microsoft Download Center</a>:</p>
+
+<ul><li><p>Microsoft .NET Framework 4.5.2.</p></li>
+<li>Visual C++ 2015 Redistributable for Visual Studio 2015.</p>
+<p>Версия 2013 заменена на 2015 в MySQL Workbench 6.3.9.</p></li>
+<li>Microsoft Windows 7 (или позже). MySQL Workbench 6.1 понимает
+более ранние версии Windows, включая Vista.</p></li></ul>
+
+<h4><a name="wb-windows-mi"></a>Установка через MySQL Installer</h4>
+<p>Общая загрузка MySQL Installer доступна в
+<a href="../../../https@dev.mysql.com/downloads/windows/installer/default.htm" target="_top">
+https://dev.mysql.com/downloads/windows/installer/</a>. MySQL Installer может
+установить, модернизировать и управлять большинством продуктов MySQL,
+включая MySQL Workbench.</p>
+
+<h5><a name="idm140523195374096"></a>Это рекомендуемый подход</h5>
+<p>Управление всеми вашими продуктами MySQL, включая Workbench, через
+<a href="../../../https@dev.mysql.com/downloads/windows/installer/default.htm" target="_top">
+MySQL Installer</a> является рекомендуемым подходом. Это грамотно обращается
+со всеми требованиями и предпосылками, конфигурациями и модернизациями.</p>
+
+<p>Выполняя <a href="../../../dev.mysql.com/doc/refman/8.0/en/mysql-installer.html"
+target="_top">MySQL Installer</a>, можно выбрать MySQL Workbench
+в качестве одного из продуктов, чтобы установить. Это выбрано по умолчанию и
+по существу выполняет автономный пакет MSI Installer,
+описанный в следующей секции.</p>
+
+<h4><a name="wb-windows-standalone"></a>
+Установка чкерез Windows MSI Installer</h4>
+<p>Автономная загрузка доступна в
+<a href="../../../https@dev.mysql.com/downloads/workbench/default.htm" target="_top">
+https://dev.mysql.com/downloads/workbench/</a>.</p>
+
+<p>MySQL Workbench может быть установлен, используя пакет
+Windows MSI Installer. Он носит имя
+<code class="filename">mysql-workbench-<em class="replaceable">
+<code>community</code></em>-<em class="replaceable"><code>version</code>
+</em>-win<em class="replaceable"><code>arch</code></em>.msi</code>, где
+<em class="replaceable"><code>version</code></em> указывает на номер версии
+MySQL Workbench, а <em class="replaceable"><code>arch</code></em>
+на архитектуру (winx64).</p>
+<p>Следующая процедура требует привилегий Administrator или Power User.</p>
+
+<ol type="1"><li><p>Чтобы поставить MySQL Workbench,
+щелкните правой кнопкой мыши по файлу MSI и выберите
+<span class="guimenuitem">Install</span>
+из всплывающего меню или дважды щелкните по файлу.</p></li>
+
+<li>В окне <span class="guilabel">Setup Type</span> можно выбрать
+<code>Complete</code> или <code>Custom</code>. Чтобы использовать все функции
+MySQL Workbench выбирайте <code>Complete</code>.</p></li>
+
+<li>Если вы не выбираете иное, MySQL Workbench устанавливается в
+<code class="filename">C:\<em class="replaceable"><code>%PROGRAMFILES%</code>
+</em>\MySQL\MySQL Workbench 8.0
+<em class="replaceable"><code>edition_type</code></em>\</code>, где
+<em class="replaceable"><code>%PROGRAMFILES%</code></em> это каталог по
+умолчанию для программ. Каталог <code class="literal">%PROGRAMFILES%</code>
+определяется на большинстве систем как
+<code class="filename">C:\Program Files\</code>.</p></li></ol>
+
+<h3><a name="wb-launching-windows"></a>2.3.2. Запуск</h3>
+<p>Чтобы запустить MySQL Workbench в Windows, выберите
+<span class="guimenu">Start</span>,
+<span class="guimenuitem">Programs</span>,
+<span class="guimenuitem">MySQL</span>, затем нажмите на MySQL Workbench.
+Это выполнит файл <code class="filename">MySQLWorkbench.exe</code>.</p>
+
+<p>Альтернативно, запустите MySQL Workbench из командной строки.
+Чтобы просмотреть доступные параметры командной строки, дайте команду
+<span class="command"><strong>MySQLWorkbench -help</strong></span> из
+каталога установки MySQL Workbench. Вы будете видеть следующий вывод:</p>
+
+<pre>
+MySQLWorkbench.exe [&lt;options&gt;] [&lt;name of a model file or sql script&gt;]
+
+Options:
+-swrendering Force the diagram canvas to use software rendering
+             instead of OpenGL
+-query [&lt;connection&gt;|&lt;connection string&gt;]
+   Open a query tab and ask for connection if nothing is specified.
+   If named connection is specified it will be opened, else connection
+   will be created based on the given connection string, which should
+   be in form &lt;user&gt;@&lt;host&gt;:&lt;port&gt;
+-admin &lt;instance&gt; Open a administration tab to the named instance
+-upgrade-mysql-dbs Open a migration wizard tab
+-model &lt;model file&gt; Open the given EER model file
+-script &lt;sql file&gt; Open the given SQL file in an connection, best in
+                         conjunction with a query parameter
+-run-script &lt;file&gt; Execute Python code from a file
+-run &lt;code&gt;Execute the given Python code
+-run-python &lt;code&gt; Execute the given Python code
+-migration Open the Migration Wizard tab
+-quit-when-done Quit Workbench when the script is done
+-log-to-stderr Also log to stderr
+-help, -h Show command line options and exit
+-log-level=&lt;level&gt; Valid levels are:
+           error, warning, info, debug1, debug2, debug3
+-verbose, -v Enable diagnostics output
+-version Show Workbench version number and exit
+-open &lt;file&gt; Open the given file at startup
+                   (deprecated, use script, model etc.)
+</pre>
+
+<p>Используйте <code>-swrendering</code>, если ваша видеокарта не
+поддерживает OpenGL 1.5. Опция <code>-version</code> может использоваться,
+чтобы показать номер версии MySQL Workbench.</p>
+
+<p>MySQL Workbench может также быть запущен из MySQL Notifier, выбирая
+<span class="guimenu">SQL Editor</span> или <span class="guimenu">Configure
+Instance</span> из контекстного меню Notifier. Для получения дополнительной
+информации посмотрите
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/windows-notifier.html"
+target="_top">MySQL Notifier</a>.</p>
+
+<h3><a name="wb-windows-uninstalling"></a>2.3.3. Деинсталляция</h3>
+<p>Метод для того, чтобы деинсталлировать MySQL Workbench
+зависит от того, как вы его установили.</p>
+
+<p><span class="bold"><strong>Удаление MySQL Workbench после установки,
+используя пакет инсталлятора</strong></span></p>
+<ol type="1"><li><p>Чтобы деинсталлировать MySQL Workbench, откройте
+<span class="guilabel">Control Panel</span> и выберите
+<span class="guilabel">Add or Remove Programs</span>.
+Найдите MySQL Workbench и нажмите <span class="guibutton">Remove</span>.
+</p></li></ol>
+
+<p>Если вы установили MySQL Workbench, используя пакет инсталлятора,
+невозможно удалить MySQL Workbench из командной строки. Хотя можно вручную
+удалить некоторые компоненты, нет никакого параметра командной строки для
+удаления MySQL Workbench.</p>
+<p>Удаление каталога MySQL Workbench вручную не удалит все файлы,
+принадлежащие MySQL Workbench.</p>
+
+<p><span class="bold"><strong>Удаление MySQL Workbench после установки
+из MySQL Installer</strong></span></p>
+<p>Откройте MySQL Installer for Windows, нажмите
+<span class="guilabel">Remove MySQL Products</span>, выберите MySQL
+Workbench и нажмите <span class="guibutton">Execute</span>.</p>
+
+<h4><a name="wb-windows-uninstalling-kept"></a>Что не удалено</h4>
+<p>Деинсталлирование MySQL Workbench не удаляет ваш каталог конфигурации.
+Этот каталог включает ваши подключения MySQL, параметры конфигурации, файлы
+кэша, отрывки SQL и историю, журналы, модули и т.д. Эти файлы хранятся
+в каталоге <code class="literal">%AppData%</code> пользователя.</p>
+
+<p>По умолчанию каталог конфигурации Workbench
+<code class="filename">C:\username\AppData\Roaming\MySQL\Workbench\</code>,
+где "C:\username\AppData\Roaming\" значение вашей системной переменной
+Windows <code class="literal">%AppData%</code>.</p>
+
+<p>Кроме того, деинсталлирование не удаляет схему
+<code class="literal">.mysqlworkbench</code>, которую Workbench
+создает, разделяя отрывки SQL через подключение MySQL.
+Для получения дополнительной информации об общих отрывках посмотрите
+<a href="dev.htm#wb-sql-editor-snippets">раздел 8.1.5</a>.</p>
+
+<h2><a name="wb-linux"></a>2.4. MySQL Workbench в Linux</h2>
+<h3><a name="wb-installing-linux"></a>2.4.1. Установка</h3>
+<p>Есть двоичные дистрибутивы MySQL Workbench для нескольких вариантов Linux,
+включая Fedora, Oracle Linux и Ubuntu.</p>
+
+<p>Опции инсталляции включают:</p>
+<ul><li><p><span class="bold"><strong>Official MySQL Yum or APT repository
+packages</strong></span>: Эти пакеты строятся командой MySQL Release.
+Для получения дополнительной информации об их установке посмотрите
+<a href="../../../dev.mysql.com/downloads/repo/yum/default.htm" target="_top">Yum</a>
+или <a href="../../../dev.mysql.com/downloads/repo/apt/default.htm" target="_top">APT</a>.
+Они содержат новейшие версии MySQL Workbench. Как правило, этот пакет
+называют <code class="literal">mysql-workbench-community</code>.</p></li>
+
+<li><span class="bold"><strong>Your Linux distributions repository
+packages</strong></span>: Эти пакеты строятся и поддерживаются авторами
+дистрибутива Linux, который вы используете, а не командой MySQL.
+Они стабильны, но выпуски часто отстают. Как правило, этот пакет называют
+<code class="literal">mysql-workbench</code>.</p></li>
+
+<li><span class="bold"><strong>Download official MySQL
+packages</strong></span>: Загрузки доступны на
+<a href="../../../https@dev.mysql.com/downloads/workbench" target="_top">
+https://dev.mysql.com/downloads/workbench</a>.</p></li>
+
+<li><span class="bold"><strong>Download the source code and compile
+yourself</strong></span>: Исходный код доступен на
+<a href="../../../https@dev.mysql.com/downloads/workbench" target="_top">
+https://dev.mysql.com/downloads/workbench</a> как пакеты
+<code class="filename">tar.gz</code> или RPM.</p></li></ul>
+
+<p>32-битные двоичные сборки недоступны после MySQL Workbench 6.2.0.
+Можно использовать исходный код, чтобы построить собственную 32-битную версию
+по мере необходимости.</p>
+<p>Процедура установки на Linux зависит от того, который дистрибутив
+Linux вы используете.</p>
+
+<h4><a name="wb-installing-linux-requirements"></a>Требования для Linux</h4>
+<ul><li><p>Требования для Linux включены в их соответствующих пакетах.
+Используйте подходящий инструмент (например, yum или apt), чтобы
+установить пакет и зависимости.</p></li>
+
+<li>Функция <span class="guilabel">Save password in vault</span>
+требует <code class="literal">gnome-keyring-daemon</code>, чтобы
+сохранить пароли. Обратите внимание на то, что системы KDE используют свою
+собственную версию <code class="literal">ksecretservice</code>.</p></li>
+
+<li>В Linux и macOS функции управления сервером MySQL требуют привилегий
+команды <span class="command"><strong>sudo</strong></span>, чтобы
+выполнить несколько команд. Пользователь <span class="command"><strong>sudo
+</strong></span> должен быть способен к выполнению
+следующих системных команд:</p>
+
+<pre>
+/usr/bin/sudo
+/usr/bin/nohup
+/usr/bin/uptime
+/usr/bin/which
+/usr/bin/stat
+
+/bin/bash
+/bin/mkdir
+/bin/rm
+/bin/rmdir
+/bin/dd
+/bin/cp
+/bin/ls
+</pre>
+
+<p>Кроме того, пользователь <span class="command"><strong>sudo</strong>
+</span> должен хранить переменную окружения
+<code class="literal">HOME</code>, выполняя системные команды, что означает
+добавление следующей записи в файл <code class="filename">/etc/sudoers
+</code>:</p>
+
+<pre>
+Defaults env_keep +="HOME"
+</pre>
+
+<p>Для MySQL Workbench, чтобы выполнить команды резервного копирования
+MySQL Enterprise Backup, надо чтобы пользователь
+<span class="command"><strong>sudo</strong></span> также был в состоянии
+выполнить MySQL Enterprise Backup.</p></li></ul>
+
+<h4><a name="wb-installing-linux-installing-deb"></a>
+Установка пакетов DEB</h4>
+<p>В Ubuntu и других системах, которые используют схему пакета Debian, можно
+загрузить и установить .deb пакеты или использовать диспетчер пакетов APT.
+</p>
+
+<p><span class="bold"><strong>Используя диспетчер пакетов APT</strong></span>
+</p>
+<p>Ваш дистрибутив Linux включает MySQL Workbench, где
+"apt-get install mysql-workbench" установит его из пакета MySQL Workbench.
+Чтобы использовать официальные сборки MySQL Workbench, необходимо установить
+официальное хранилище MySQL APT и выбрать пакет
+"mysql-workbench-community" вместо "mysql-workbench".</p>
+
+<ul><li><p>Установите хранилище MySQL APT, как описано в
+<a href="../../../dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/default.htm"
+target="_top">документации MySQL APT</a>:</p>
+
+<pre>
+shell&gt; <strong class="userinput"><code>sudo dpkg -i mysql-apt-config_0.5.3-1_all.deb</code></strong>
+shell&gt; <strong class="userinput"><code>sudo apt-get update</code></strong>
+</pre></li>
+
+<li>Затем установите MySQL Workbench. Вы могли бы иметь много пакетов
+Workbench в наличии, поэтому надо выбрать версию "mysql-workbench-community":
+</p>
+<pre>
+shell&gt; <strong class="userinput"><code>sudo apt-get install mysql-workbench-community</code></strong>
+</pre></li></ul>
+
+<p><span class="bold"><strong>Ручная установка пакета</strong></span></p>
+<p>Вы устанавливаете MySQL Workbench, используя команду:</p>
+<pre>
+shell&gt; <strong class="userinput"><code>sudo dpkg -i <em class="replaceable"><code>package</code></em>.deb</code></strong>
+</pre>
+
+<p><code class="filename"><em class="replaceable"><code>package</code></em>
+.deb</code> это имя пакета MySQL Workbench, например,
+<code class="filename">mysql-workbench-community-<em class="replaceable">
+<code>version</code></em>1ubu1404-amd64.deb</code>, где
+<em class="replaceable"><code>version</code></em> это номер
+версии MySQL Workbench.</p>
+
+<p>Вас можно предупредить, что определенные библиотеки недоступны, в
+зависимости от того, что вы уже установили. Установите необходимые библиотеки
+и затем установите пакет MySQL Workbench.</p>
+
+<h4><a name="wb-installing-linux-installing-rpm"></a>
+Установка пакетов RPM</h4>
+<p>На Red Hat-системах и других системах, которые используют формат пакета
+RPM, можно загрузить и установить пакеты RPM или использовать
+диспетчер пакетов Yum.</p>
+
+<p>Системы Enterprise Linux, например, Oracle Linux и Red Hat,
+требуют доступа к хранилищу пакетов EPEL. Для получения дополнительной
+информации об установке EPEL посмотрите
+<a href="#wb-installing-linux-installing-oel">здесь</a>.</p>
+
+<p><span class="bold"><strong>Менеджер пакетов Yum</strong></span></p>
+<p>Ваш дистрибутив Linux включает сборку MySQL Workbench, где
+"yum install mysql-workbench" устанавливает свой пакет MySQL Workbench.
+Чтобы использовать официальную сборку MySQL Workbench,
+необходимо установить официальное хранилище MySQL Yum и выбрать пакет
+"mysql-workbench-community" вместо "mysql-workbench".</p>
+
+<ul><li><p>Установите хранилище MySQL Yum, как описано в документации
+<a href="../../../dev.mysql.com/doc/mysql-yum-repo-quick-guide/en/default.htm"
+target="_top">MySQL Yum Repository</a>:</p>
+
+<pre>
+shell&gt; <strong class="userinput"><code>sudo rpm -Uvh mysql-community-release-el7-7.noarch.rpm</code></strong>
+</pre></li>
+
+<li>Затем установите MySQL Workbench. Вы могли бы иметь много пакетов
+Workbench в наличии, поэтому выбрать версию "mysql-workbench-community":</p>
+<pre>
+shell&gt; <strong class="userinput"><code>sudo yum install mysql-workbench-community</code></strong>
+</pre></li></ul>
+
+<p><span class="bold"><strong>Ручная установка пакета</strong></span></p>
+<pre>
+shell&gt; <strong class="userinput"><code>sudo rpm -i <em class="replaceable"><code>package</code></em>.rpm</code></strong>
+</pre>
+
+<p><code class="filename"><em class="replaceable"><code>package</code></em>
+.rpm</code> это имя пакета MySQL Workbench, например,
+<code class="filename">mysql-workbench-community-<em class="replaceable">
+<code>version</code></em>-1fc10.x86_64.rpm</code>, где
+<em class="replaceable"><code>version</code></em> это версия MySQL Workbench.
+</p>
+
+<h4><a name="wb-installing-linux-installing-oel"></a>
+Установка в Oracle Enterprise Linux</h4>
+<p>MySQL Workbench требует доступа к хранилищу
+<a href="../../../fedoraproject.org/wiki/EPEL" target="_top">EPEL</a>.
+EPEL это хранилище с дополнительными пакетами RPM, которые не являются частью
+основного дистрибутива RHEL/OEL. Это включает пакеты (такие как tinyxml),
+которые требует MySQL Workbench.</p>
+
+<p>Необходимо настроить хранилище EPEL в yum, чтобы решить необходимые
+зависимости. Например, использование Oracle Linux 6.8:</p>
+<pre>
+shell&gt; <strong class="userinput"><code>wget http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm</code></strong>
+shell&gt; <strong class="userinput"><code>rpm -ivh epel-release-6-8.noarch.rpm</code></strong>
+shell&gt; <strong class="userinput"><code>yum repolist</code></strong>
+Loaded plugins: refresh-packagekit, rhnplugin
+repo idrepo namestatus
+epel Extra Packages for Enterprise Linux 6 - x86_647,124
+</pre>
+
+<p>Эти инструкции также относятся к подобным дистрибутивам Linux, таким как
+Red Hat Enterprise Linux, CentOS и Scientific Linux.</p>
+<p>Затем, следуйте основанной на RPM документации по установке
+<a href="#wb-installing-linux-installing-rpm">пакетов RPM</a>.</p>
+
+<h3><a name="wb-launching-linux"></a>2.4.2. Запуск</h3>
+<p>После установки MySQL Workbench он может быть запущен выбором из меню
+<span class="guimenu">Applications</span>,
+<span class="guimenuitem">Programming</span>,
+<span class="guimenuitem">MySQL Workbench</span>.</p>
+
+<p>MySQL Workbench может также быть запущен
+из командной строки в Linux:</p>
+<pre>
+shell&gt; <strong class="userinput"><code>/usr/bin/mysql-workbench --help</code></strong>
+</pre>
+
+<p>Это покажет доступные параметры командной строки:</p>
+<pre>
+mysql-workbench [&lt;options&gt;] [&lt;name of a model file or sql script&gt;]
+Options:
+--force-sw-render Force Xlib rendering
+--force-opengl-render Force OpenGL rendering
+--query [&lt;connection&gt;|&lt;connection string&gt;]
+    Open a query tab and ask for connection if nothing is specified.
+    If named connection is specified it will be opened, else connection
+    will be created based on the given connection string, which should
+    be in form &lt;user&gt;@&lt;host&gt;:&lt;port&gt;
+--admin &lt;instance&gt; Open a administration tab to the named instance
+--upgrade-mysql-dbs Open a migration wizard tab
+--model &lt;model file&gt; Open the given EER model file
+--script &lt;sql file&gt; Open the given SQL file in an connection,
+                          best in conjunction with a query parameter
+--run-script &lt;file&gt; Execute Python code from a file
+--run &lt;code&gt; Execute the given Python code
+--run-python &lt;code&gt; Execute the given Python code
+--migration Open the Migration Wizard tab
+--quit-when-done Quit Workbench when the script is done
+--log-to-stderr Also log to stderr
+--help, -h Show command line options and exit
+--log-level=&lt;level&gt; Valid levels are:
+                error, warning, info, debug1, debug2, debug3
+--verbose, -v Enable diagnostics output
+--version Show Workbench version number and exit
+--open &lt;file&gt; Open the given file at startup
+                    (deprecated, use script, model etc.)
+</pre>
+
+<h3><a name="wb-linux-uninstalling"></a>2.4.3. Удаление</h3>
+<p>Процедура того, чтобы деинсталлировать MySQL Workbench в Linux зависит
+от пакета, который вы используете.</p>
+
+<p>Используя apt, официальное имя пакета с dev.mysql.com
+<code class="literal">mysql-workbench-community</code>,
+тогда как большинство дистрибутивов Linux использует имя
+<code class="literal">mysql-workbench</code>.</p>
+
+<p><span class="bold"><strong>Удаление пакетов DEB</strong></span></p>
+<p>Чтобы деинсталлировать пакет Debian, используйте следующее:</p>
+<pre>
+shell&gt; <strong class="userinput"><code>sudo apt-get remove mysql-workbench-community</code></strong>
+</pre>
+
+<p>Или, альтернативно:</p>
+<pre>
+shell&gt; <strong class="userinput"><code>sudo dpkg -r mysql-workbench-community</code></strong>
+</pre>
+
+<p>Эта команда не удаляет конфигурационные файлы. Если вы хотите также
+удалить конфигурационные файлы, используйте эту команду:</p>
+<pre>
+shell&gt; <strong class="userinput"><code>sudo dpkg --purge mysql-workbench-community</code></strong>
+</pre>
+
+<p><span class="bold"><strong>Удаление пакетов RPM</strong></span></p>
+<p>Используя yum, официальное имя пакета с dev.mysql.com
+<code class="literal">mysql-workbench-community</code>,
+тогда как большинство дистрибутивов Linux использует имя
+<code class="literal">mysql-workbench</code>.</p>
+
+<p>Чтобы деинсталлировать пакет RPM, используйте эту команду:</p>
+<pre>
+shell&gt; <strong class="userinput"><code>sudo yum remove mysql-workbench-community</code></strong>
+</pre>
+
+<p>Или, альтернативно:</p>
+<pre>
+shell&gt; <strong class="userinput"><code>sudo rpm -e mysql-workbench-community</code></strong>
+</pre>
+<p>Эта команда не удаляет конфигурационные файлы.</p>
+
+<h4><a name="wb-linux-uninstalling-kept"></a>Что не удалено</h4>
+<p>По умолчанию деинсталлирование MySQL Workbench не удаляет ваш каталог
+конфигурации, он включает ваши подключения MySQL, параметры конфигурации,
+файлы кэша, отрывки SQL и историю, журналы, модули и т.д. Эти файлы хранятся
+в вашем пользовательском каталоге <code class="literal">.mysql/workbench/
+</code>.</p>
+
+<p>По умолчанию каталог конфигурации Workbench это
+<code class="literal">~username/mysql/workbench/</code>, где "~username" это
+путь к корневому каталогу вашего пользователя.</p>
+
+<p>Кроме того, деинсталлирование Workbench не удаляет схему
+<code class="literal">.mysqlworkbench</code>, которую Workbench
+создает, разделяя отрывки SQL через подключение MySQL.
+Для получения дополнительной информации об общих отрывках посмотрите
+<a href="dev.htm#wb-sql-editor-snippets">раздел 8.1.5</a>.</p>
+
+<h2><a name="wb-mac"></a>2.5. MySQL Workbench в macOS</h2>
+<h3><a name="wb-installing-mac"></a>2.5.1. Установка</h3>
+<p>MySQL Workbench for macOS распространяется как файл DMG. Файл называют
+<code class="filename">mysql-workbench-community-<em class="replaceable">
+<code>version</code></em>-osx.dmg</code>, где
+<em class="replaceable"><code>version</code></em> это версия MySQL Workbench.
+</p>
+
+<p>Загрузки доступны с <a href="../../../https@dev.mysql.com/downloads/workbench/default.htm"
+target="_top">https://dev.mysql.com/downloads/workbench/</a>.</p>
+<p>Чтобы установить MySQL Workbench в macOS, загрузите файл. Дважды щелкните
+по загруженному файлу. Вам покажут инсталляционное окно.</p>
+
+<a name="wb-installing-mac-install-screen"></a>
+<p><b>Рис. 2.1. MySQL Workbench в macOS: окно установки</b></p>
+<img src="images/wb-installing-mac-install-screen.png" width="526"
+height="390" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Тяните символ MySQL Workbench на Applications.
+MySQL Workbench установлен.</p>
+<p>Можно теперь запустить MySQL Workbench из папки Applications
+или из командной строки:</p>
+<pre>
+shell&gt; <strong class="userinput"><code>/Applications/MySQLWorkbench.app/Contents/MacOS/MySQLWorkbench --help</code></strong>
+</pre>
+
+<p>Это покажет доступные параметры командной строки:</p>
+<pre>
+MySQLWorkbench [&lt;options&gt;] [&lt;name of a model file or sql script&gt;]
+Options:
+--query [&lt;connection&gt;|&lt;connection string&gt;]
+   Open a query tab and ask for connection if nothing is specified.
+   If named connection is specified it will be opened,
+   else connection will be created based on the given connection string,
+   which should be in form &lt;user&gt;@&lt;host&gt;:&lt;port&gt;
+--admin &lt;instance&gt; Open a administration tab to the named instance
+--upgrade-mysql-dbs Open a migration wizard tab
+--model &lt;model file&gt; Open the given EER model file
+--script &lt;sql file&gt; Open the given SQL file in an connection, best in
+                          conjunction with a query parameter
+--run-script &lt;file&gt; Execute Python code from a file
+--run &lt;code&gt; Execute the given Python code
+--run-python &lt;code&gt; Execute the given Python code
+--migration Open the Migration Wizard tab
+--quit-when-done Quit Workbench when the script is done
+--log-to-stderr Also log to stderr
+--help, -h Show command line options and exit
+--log-level=&lt;level&gt; Valid levels are:
+                error, warning, info, debug1, debug2, debug3
+--verbose, -v Enable diagnostics output
+--version Show Workbench version number and exit
+--open &lt;file&gt; Open the given file at startup
+                    (deprecated, use script, model etc.)
+</pre>
+
+<h3><a name="wb-launching-osx"></a>2.5.2. Запуск</h3>
+<p>Чтобы запустить MySQL Workbench в macOS, откройте папку Applications
+в Finder, затем дважды щелкните по MySQL Workbench.</p>
+
+<p>Также возможно запустить MySQL Workbench из командной строки:</p>
+<pre>
+shell&gt; <strong class="userinput"><code>open MySQLWorkbench.app <em class="replaceable"><code>[options]</code></em> <em class="replaceable"><code>[model_file]</code></em></code></strong>
+</pre>
+<p>Определение вариантов и/или файла модели дополнительно.</p>
+
+<h3><a name="wb-mac-uninstalling"></a>2.5.3. Удаление</h3>
+<p>Чтобы деинсталлировать MySQL Workbench for macOS, определите
+местонахождение MySQL Workbench в папке Applications, щелкните правой кнопкой
+мыши и выберите <span class="guimenuitem">Move to Trash</span>.</p>
+
+<h4><a name="wb-mac-uninstalling-kept"></a>Что не удалено</h4>
+<p>По умолчанию деинсталлирование MySQL Workbench не удаляет ваш каталог
+конфигурации, он включает ваши подключения MySQL, параметры конфигурации,
+файлы кэша, отрывки SQL и историю, журналы, модули и т.д. Эти файлы хранятся
+в вашем пользовательском каталоге <code class="literal">MySQL/Workbench/
+</code>.</p>
+
+<p>По умолчанию каталог конфигурации Workbench это
+<code class="literal">~username/Library/Application
+Support/MySQL/Workbench</code>, где "~username" это
+путь к корневому каталогу вашего пользователя.</p>
+
+<p>Кроме того, деинсталлирование Workbench не удаляет схему
+<code class="literal">.mysqlworkbench</code>, которую Workbench
+создает, разделяя отрывки SQL через подключение MySQL.
+Для получения дополнительной информации об общих отрывках посмотрите
+<a href="dev.htm#wb-sql-editor-snippets">раздел 8.1.5</a>.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

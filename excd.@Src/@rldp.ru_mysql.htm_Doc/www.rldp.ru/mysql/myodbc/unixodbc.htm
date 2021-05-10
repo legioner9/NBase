@@ -1,0 +1,1825 @@
+<html>
+<head>
+  <meta name="Description" content="ODBC for Linux">
+  <title>ODBC и проект unixODBC</title>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</head>
+
+<body>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1>8 ODBC и проект unixODBC</H1>
+<H2>Что такое проект unixODBC?</H2>
+<p>Цели проекта unixODBC состоят в том, чтобы разрабатывать и поддержать
+unixODBC, который призван стать окончательным стандартом для ODBC на
+не-MS Windows системах. Это должно включить поддержку GUI для KDE и GNOME.
+Платформы Microsoft включают много расширений в спецификацию ODBC, эти
+расширения также обеспечиваются unixODBC.
+
+<p>Группа разработчиков unixODBC достигла лучших на сегодняшний день
+результатов под Linux. Весь проект unixODBC распространяется согласно
+лицензиям GPL или LGPL. Наличие LGPL для библиотек позволяет применять их в
+коммерческом программном обеспечении с закрытыми исходными текстами.
+
+<h1>ODBCConfig</h1>
+<P>Это приложение GUI, подобное MS ODBC Administrator. Это позволяет
+любому пользователю легко конфигурировать свои (пользовательские) источники
+данных. Пользователь root может также добавлять, удалять и настраивать
+общесистемные источники данных. Опции Driver меняются в зависимости от СУБД.
+ODBCConfig вызывает код Driver Config, чтобы позволить драйверу запрашивать
+пользователя относительно специфических опций.
+
+<P>Пользователь root может добавлять или удалять драйверы, используя
+ODBCConfig. Это скорее регистрация и отмена регистрации драйвера потому, что
+никакие файлы фактически не будут скопированы или перемещены, зато
+модифицируется информация системы ODBC.
+
+<P>Все зарегистрированные драйверы будут представлены пользователю на выбор
+при создании нового источника данных.
+
+<h1>DataManager</h1>
+<P>DataManager мог бы называться Data Explorer. Это приложение GUI, которое
+позволяет пользователю просматривать и управлять источниками данных. Более
+точно: оно позволяет пользователю просматривать источники данных, начиная с
+имени источника и заканчивая таблицами, столбцами и индексами. Это также
+включает SQL-редактор, который позволяет пользователю представлять на
+рассмотрение источнику данных SQL-запросы и просматривать результаты.
+
+<H1>DriverManager</H1>
+<P>ODBC-приложения делают ODBC-вызовы через DriverManager. DriverManager
+выполняет ряд задач для приложения:
+
+<ul><li>Обеспечение загрузки и выгрузки соответствующего драйвера</li>
+<li>Задачи проверки правильности</li>
+<li>Отображение данных и вызовов 3.5 на 3.0 и на 2.0</li></ul>
+
+<p>Большинство обращений к DriverManager передается на загруженный драйвер,
+чтобы он их дальше обработал сам.
+
+<p>Некоторые преимущества от использования ODBC DriverManager включают;
+<ul><li>Переносной (мобильный) код доступа к данным</li>
+<li>Связывание во время выполнения с источником данных (Data Source)</li>
+<li>Способность легко изменять источник данных</li></ul>
+
+<h1>Использование unixODBC с wine</h1>
+Те, кто работает с wine (<a href="../../../www.winehq.org/default.htm">
+http://www.winehq.org</a>), некоторое время назад добавили поддержку ODBC.
+Это выполнено через ODBC.DLL в коде wine, который направляет обращения
+из среды эмуляции к библиотеке libodbc.so в *nix. Это работает через unixODBC
+с различными приложениями.
+
+<p>Когда Crystal Reports запущен под WINE и использует ODBC, появляется
+сообщение о том, что строка соединения недопустима (сообщение об ошибке:
+"Unable to connect: Incorrect log on parameters").
+
+<p>Дело в том, что Crystal Reports обращается к реестру Windows, чтобы найти
+там настройки драйвера для DSN в секции ODBC.INI реестра. Так как установка
+драйвера находится в файловой системе Linux, ничего хорошего он там не
+находит, что и приводит к ошибке.
+
+<p>Чтобы исправить положение надо ввести соответствующую запись в реестр.
+Новая запись может располагаться в дереве HKEY_CURRENT_USER или в
+HKEY_LOCAL_MACHINE и выглядит так: Software->ODBC->ODBC.INI->&lt;MYDSN&gt;->
+Driver="not blank", где &lt;MYDSN&gt; определяет соответствующий DSN.
+Установка для драйвера не имеет значения, за исключением того, что это не
+должно быть пустой строкой. Такая схема применима и для других программ.
+
+<h1>Использование unixODBC с wine</h1>
+Те, кто работает с wine (<a href="../../../www.winehq.org/default.htm">
+http://www.winehq.org</a>), некоторое время назад добавили поддержку ODBC.
+Это выполнено через ODBC.DLL в коде wine, который направляет обращения
+из среды эмуляции к библиотеке libodbc.so в *nix. Это работает через unixODBC
+с различными приложениями.
+
+<p>Когда Crystal Reports запущен под WINE и использует ODBC, появляется
+сообщение о том, что строка соединения недопустима (сообщение об ошибке:
+"Unable to connect: Incorrect log on parameters").
+
+<p>Дело в том, что Crystal Reports обращается к реестру Windows, чтобы найти
+там настройки драйвера для DSN в секции ODBC.INI реестра. Так как установка
+драйвера находится в файловой системе Linux, ничего хорошего он там не
+находит, что и приводит к ошибке.
+
+<p>Чтобы исправить положение надо ввести соответствующую запись в реестр.
+Новая запись может располагаться в дереве HKEY_CURRENT_USER или в
+HKEY_LOCAL_MACHINE и выглядит так: Software->ODBC->ODBC.INI->&lt;MYDSN&gt;->
+Driver="not blank", где &lt;MYDSN&gt; определяет соответствующий DSN.
+Установка для драйвера не имеет значения, за исключением того, что это не
+должно быть пустой строкой. Такая схема применима и для других программ.
+
+<h1>Установка PHP с unixODBC</h1>
+Эта процедура установки основана на apache 1.3.12 и PHP 3.0.16, но идентична
+по крайней мере для apache 1.3.6 и php 3.0.9. PHP4 имеет опцию выбора
+конфигурации, чтобы использовать unixODBC, но она, к сожалению, не всегда
+работает должным образом.
+
+<ol><li>В каталоге Apache выполните следующую команду:
+<pre>
+./configure --prefix=/www
+</pre>
+Плюс любая другая локальная конфигурация, в которой Вы нуждаетесь.
+
+<li>Создайте файл odbc.h в /usr/local/include содержащий следующие строки:
+<pre>
+#include &lt;sql.h&gt;
+#include &lt;sqlext.h&gt;
+#include &lt;odbcinst.h&gt;
+</pre>
+Замените здесь /www на каталог, в который установлен apache.
+
+<li>Перейдите в каталог PHP и определите следующие переменные среды:
+<pre>
+CFLAGS="-I/usr/local/include"
+LDFLAGS=
+CUSTOM_ODBC_LIBS="-L/usr/local/lib -lodbc"
+</pre>
+
+Не забудьте экспортировать эти переменные!
+<pre>
+export CFLAGS LDFLAGS CUSTOM_ODBC_LIBS
+</pre>
+
+<li>Настройте PHP командой:
+<pre>
+./configure --with-apache=../apache_1.3.12 --with-custom-odbc=/usr/local \
+            --enable-track-vars
+</pre>
+Плюс любая другая локальная конфигурация, в которой Вы нуждаетесь, затем:
+<pre>
+make
+make install
+</pre>
+
+<li>Вернитесь назад в каталог apache и введите:
+<pre>
+./configure --prefix=/www --activate-module=src/modules/php3/libphp3.a
+make
+make install
+</pre>
+
+<li>Вернитесь в каталог PHP и скомандуйте:
+<pre>
+cp php3.ini-dist /usr/local/lib/php3.ini
+</pre>
+
+Вы можете редактировать файл /usr/local/lib/php3.ini, чтобы установить опции
+PHP. Отредактируйте Ваш файл httpd.conf или srm.conf и добавьте:
+<pre>
+AddType application/x-httpd-php3 .php3
+</pre></ol>
+
+<h3>Поддержка Apache DSO</h3>
+Дополнительная проблема была найдена, когда Вы формируете PHP как
+динамический общедоступнный объект с apache. Поскольку по умолчанию unixODBC
+формируется с поддержкой потоков, а вот apache нет, если они не связаны
+вместе в процессе построения, а встречаются только во время выполнения, такая
+комбинация будет взрывоопасной.
+
+<p>Имеются два способа обхода проблемы. Необходимо определить и
+экспортировать следующие переменные среды перед формированием apache:
+<pre>
+export CFLAGS=-D_REENTRANT
+export LFLAGS=-lpthread
+./configure --prefix=www
+</pre>
+
+Или пересоберите unixODBC без поддержки потоков, конфигурируя его так:
+<pre>
+./configure --enable-threads=no
+</pre>
+
+<p>В обоих случаях не забывайте удалять файл config.cache из корневого
+каталога Apache или unixODBC
+
+<h1>UnixODBC и 2000 год</h1>
+Из-за того, как спроектирован ODBC, не имеется никаких прямых ссылок к дате
+или времени, кроме как в структурах SQL_DATE, SQL_TIME и SQL_TIMESTAMP. Любая
+информация о годн внутри них сохранена с четыремя цифрами, включая столетие.
+
+<p>Поскольку ничего из вышеупомянутой информации не сгенерировано кодом
+внутри unixODBC, каких бы то ни было проблем с 2000 годом в рамках кода
+unixODBC быть не должно. Могут быть сложности у конкретной СУБД или
+операционной системы, но они не имеют отношения к пакету unixODBC.
+
+<h1>Библиотеки в unixODBC</h1>
+<p>INI-библиотека представляет собой библиотеку функций нужных, чтобы помочь
+в разработке кода для взаимодействия с INI-файлами. Будущая расширенная
+версия этой библиотеки скорее всего станет стандартной библиотекой Linux, что
+позволит рассматривать INI-файлы как стандартный формат новых файлов
+конфигурации в ОС Linux.
+
+<p>Log-библиотека представляет собой комплект функций нужных, чтобы создать
+средство регистрации событий. Это используется odbcinst и unixODBC Driver
+Manager. Планируется поддержка системы регистрации событий в UNIX.
+
+<p>List-библиотека представляет собой набор маленьких и простых функций для
+создания, управления и удаления связанных списков Эти функции служат, чтобы
+усилить код для работы связанных списков в unixODBC и обеспечить основу
+для поддержки курсора.
+
+<p>Библиотека odbcinst обеспечивает приложения и другие компоненты unixODBC
+способностью к чтению и записи системной информации ODBC. Причем неважно, как
+или где эта информация сохранена. Это осуществляет основной API из MS и
+добавляет несколько функций для удобства. Одно из таких расширений:
+добавление нескольких API для работы с ODBC-программами Config в
+среде KDE/Qt.
+
+<p>Библиотека Tree была создана, чтобы хранить анализируемый код SQL. Она
+также должна использоваться в будущих версиях, чтобы сохранить синтаксис SQL
+в намного более реалистичном виде.
+
+<p>Библиотека SQI реализует сильно облегченный обработчик SQL, который
+использует текстовые файлы для хранения данных. Это дополнено ODBC-драйвером,
+чтобы создать очень открытую СУБД для маленьких наборов данных. Строго
+рекомендуется, чтобы все использование SQI было сделано через ODBC-драйвер:
+это позволит источнику данных превратиться в нормальную СУБД без того, чтобы
+перетранслировать исходный код.
+
+<p>Разработка SQI управлялась желанием включить поддержку ODBC в KDE и в
+соответствии с необходимостью создания полноценной СУБД, чтобы позволить
+использование. SQI для этого вполне достаточна.
+
+<p>Библиотека SQP представляет собой SQL-анализатор, основанный на lex/yacc.
+Это было выдрано из SQI так, чтобы общий анализатор SQL можно было бы
+обеспечивать для всех частей unixODBC, в частности, в драйверах и источниках
+данныхх, основанных не на SQL. Текущее понимание синтаксиса SQL очень
+ограничено, но это должно быть расширено в будущем.
+
+<h1>Утилиты командной строки</h1>
+<p>odbcinst представляет собой инструмент, который был создан для помощи тем,
+кто разрабатывает скрипты и RPM-пакеты для драйверов, чтобы иметь возможность
+легко создавать и удалять записи в файлах odbc.ini и odbcinst.ini. Этот
+инструмент командной строки связан с разделяемой библиотекой
+(libodbcinst.so) и является частью компонента odbcinst в unixODBC.
+
+<p>isql представляет собой инструмент, который позволяет пользователю
+выполнять SQL-команды в пакете или в интерактивном режиме. Это имеет
+некоторые интересные опции типа опции, чтобы генерировать вывод, в виде
+таблицы на HTML.
+
+<h1>Использование IBM DB2 с unixODBC</h1>
+Этот короткий раздел детализирует то, как соединиться с IBM DB2 из Linux
+через unixODBC. Этот документ первоначально был ориентирован на DB2 версии
+6.1, но все работает и с версией 7.1, хотя есть некоторые отличия, они
+описаны в конце раздела.
+
+<p>Сначала установите клиентский пакет доступа DB2 от IBM, это установит IBM
+CLI драйвер, который работает с unixODBC как ODBC-драйвер.
+
+<p>При использовании клиентского пакета доступа, определите клиентский
+доступ под неким именем, например, db2inst1, а затем создайте запись в
+файле odbcinst.ini:
+<pre>
+[DB2]
+Description = DB2 Driver
+Driver = /usr/IBMdb2/V6.1/lib/libdb2.so
+FileUsage = 1
+DontDLClose = 1
+</pre>
+
+Параметр DontDLClose требуется, чтобы избежать проблемы в драйвере, когда
+он динамически загружен.
+
+<p>Теперь настройте файл odbc.ini примерно так:
+<pre>
+[sample]
+Description = Test to DB2
+Driver = DB2
+</pre>
+
+Затем, когда происходит соединение, Вы ДОЛЖНЫ ИМЕТЬ переменную среды
+DB2INSTANCE, установленную на корректный образец db2, например:
+<pre>
+export DB2INSTANCE=db2inst1
+isql -v sample db2inst1 ibmdb2
+</pre>
+
+<h3>Версия 7.1</h3>
+<p>Единственое различие сводится к имени пакета, используемого для доступа.
+CLI-драйвер теперь должен быть найден в DB2 Personal Developer's Edition V7.1.
+
+<p>Использование версии 7.1 формирует путь к библиотеке:
+<pre>
+Driver = /usr/IBMdb2/V7.1/lib/libdb2.so
+</pre>
+
+<p>Вы также должны добавить &quot;/usr/IBMdb2/V7.1/lib&quot; в
+/etc/ld.so.conf.
+
+<p>Другая полезная подсказка. При использовании PHP+DB2 под AIX через
+unixODBC к IBM-серверу (4 процессора, мультиядра и т.д), возникало сильное
+замедление работы. Имеется ошибка в стеке TCP/IP IBM. После изучения
+странички
+<a href="../../../www-4.ibm.com/cgi-bin/db2www/data/db2/udb/winos2unix/support/document.d2w/report@last_page=list.d2w&fn=1006553">
+http://www-4.ibm.com/cgi-bin/db2www/data/db2/udb/winos2unix/support/document.d2w/report?last_page=list.d2w&fn=1006553
+</a> и выполнения команд
+<pre>
+$ su - db2inst1
+$ db2set DB2TCPCONNMGRS=1
+</pre>
+был достигнут поистине огромный рост производительности (в десятки раз!).
+
+<h1>unixODBC и Sybase/MS SQL Server</h1>
+<h2>Введение</h2>
+<p>Этот документ поможет пользователям unixODBC обратиться к MS SQL Server, а
+также к Sybase SQL Server из клиентов unixODBC.
+
+<p>Будем считать, что Вы имеете недавнюю версию unixODBC на своей системе и
+где-то выполняется сервер. SQL Server должен позволять удаленный доступ и
+поддерживать соединения, использующие TCP/IP. Конечно, нужны также
+идентификатор для входа в систему и пароль.
+
+<h2>Подготовка</h2>
+<p>MS SQL Server был порожден партнерством между Microsoft и Sybase.
+Впоследствии эти два сервера остались очень похожими. Фактически настолько
+похожими, что протокол связи, используемый клиентским программным
+обеспечением, чтобы связаться с этими серверами является фактически
+идентичным. Этот протокол называется Табличным Потоком Данных (Tabular Data
+Stream, сокращенно TDS).</font>
+
+<p>Brian Bruns создал проект проект открытых исходных текстов, призванный
+обеспечить реализацию протокола TDS для всех желающих. Проект называется
+FreeTDS и может быть найден на сайте <a href="../../../www.freetds.org/default.htm">
+http://www.freetds.org</a>.
+
+<h2>Что с ним делать</h2>
+<p>FreeTDS приходит с несколькими интерфейсами TDS с ODBC. ODBC-драйвер,
+включенный в FreeTDS, работает хорошо для типичных запросов, типа запроса
+данных. Однако, этот ODBC-драйвер не поддерживает менее используемые функции
+каталога ODBC. FreeTDS хорошо работает с unixODBC, но Вы скачайте самую
+свежую версию, например, с ftp://ibiblio.org/pub/Linux/ALPHA/freetds.
+
+<h2>Установка</h2>
+<p>Наиболее вероятно, что Вы скачали исходный текст, и этой точки зрения я
+буду придерживаться. Обычно установка из исходных текстов представляет собой
+проблему по причине отсутствия необходимых инструментов, но почти версии
+Linux их имеют. Распакуйте дистрибутив следующими командами:
+<pre>
+# tar zxvf freetds-0.52.tar.gz
+# cd freetds-0.52</td>
+</pre>
+Как только Вы распаковали исходный текст, изучите файлы INSTALL и README.
+
+<p>Сначала определите некоторые переменные среды. Например, пользователь
+оболочки bash может добавлять следующее в свой файл /etc/profile.</font>
+<pre>
+# TDS
+#
+SYBASE=/usr/local/freetds
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$SYBASE/lib
+export SYBASE LD_LIBRARY_PATH
+</pre>
+
+<p>Опции configure могут просматриваться, выполняя ./configure --help.
+Главное, должна быть указана опция выбора конфигурации --with-tdsver. Теперь
+соберем пакет и установим его:
+<pre>
+# ./configure --with-tdsver=4.2 --with-unixodbc=/usr/local
+# make
+# make install
+</pre>
+
+<p>Драйвер FreeTDS ODBC должен быть установлен в /usr/local/freetds/lib. Там
+должен появиться файл libtdsodbc.so.
+
+<h2>Настройка</h2>
+<p><i>Регистрация SQL Server с TDS</i>
+<p>FreeTDS должен знать несколько вещей относительно каждого сервера, с
+которым Вы хотите работать. Традиционно используется интерфейсный файл.
+FreeTDS может работать с файлом, называемым freetds.conf, но для упрощения
+примера применим старый метод. Файл интерфейсов может быть найден в каталоге
+/usr/local/freetds. Имеется пример для доступа к MS SQL Server:
+<pre>
+P450
+query tcp ether 192.168.1.25 1433
+master tcp ether 192.168.1.25 1433
+</pre>
+
+Под P450 здесь значится имя машины, на которой выполняется MS SQL Server.
+Имя может быть каким угодно. По умолчанию MS SQL Server слушает порт 1433.
+
+<p><i>Регистрация ODBC-драйвера через unixODBC</i>
+<p>unixODBC должен знать ряд данных относительно всех ODBC-драйверов, которые
+Вы предполагаете использовать. Самый лучший способ этого достичь: применить
+графическую программу ODBCConfig, которая приходит с unixODBC. Альтернативный
+метод состоит в том, чтобы использовать команду odbcinst, которая также
+приходит с unixODBC. Мы сосредоточимся на использовании команды odbcinst.
+Создайте файл с именем tds.driver.template с несколькими строками,
+описывающими нужный драйвер:
+<pre>
+[TDS]
+<br>Description = v0.52 with protocol v4.2
+<br>Driver = /usr/local/freetds/lib/libtdsodbc.so
+</pre>
+
+<p>Выполните odbcinst, предписывая ему создать запись драйвера, используя
+файл tds.driver.template. Обратите внимание, что Вы должны оставить пробел
+между параметром -f и именем файла шаблона:
+<pre>
+# odbcinst -i -d -f tds.driver.template
+</pre>
+
+<p><i>Создание ODBC Data Source Name</i>
+<p>Клиенты ODBC обычно будут работать с ODBC Data Source Names (DSN). Самый
+лучший способ создавать, редактировать и удалять DSN состоит в том, чтобы
+использовать инструмент ODBCConfig.
+
+<p>Снова мы используем команду odbcinst вместо него. Это делается потому, что
+программа ODBCConfig достаточно наглядна и понятна, но не все пользователи
+имеют установленные инструментальные средства unixODBC GUI. Снова начнем с
+создания файла-шаблона под именем tds.datasource.template, который содержит
+некоторые опции типа заданной по умолчанию базы данных и UID. Примечание: Вы
+будете использовать Ваш собственный Servername и UID:
+<pre>
+[P450]
+Driver = TDS
+Description = Northwind sample database
+Trace&nbsp = No
+Servername = 192.168.1.25
+Database = Northwind
+UID = sa
+</pre>
+
+<p><b>Примечание:</b> Servername не означает DNS-имя или IP-адрес сервера.
+Это должно соответствовать серверу из интерфейсного файла (в случае
+freetds.conf это значение между [], заголовок желательного раздела сервера).
+
+<p><b>Примечание:</b> предыдущие команды выполнялись как root (обозначенный
+символом #), но теперь команда выполняется от имени обычного пользователя.
+Это значительно. Все пользователи системы совместно используют FreeTDS и
+ODBC-драйверы, но каждый пользователь имеет собственный список DSN (имеются
+исключения, но здесь они не актуальны). Так что создайте DSN как тот
+пользователь, который собирается использовать это:
+<pre>
+$ odbcinst -i -s -f tds.datasource.template
+</pre>
+
+<p><b>Тестирование</b>
+<p>unixODBC приходит с рядом инструментальных средств, которые позволяют Вам
+проверять работоспособность пакета. Используем инструмент командной строки
+isql. Он позволяет представлять на рассмотрение DSN команды (обычно это
+инструкции SQL) и принимать результаты:
+<pre>
+$ isql -v P450 sa MyPassword
+SQL> select contactname from customers
+</pre>
+
+<p>Вы должны видеть сообщение о соединении и подсказку SQL. Если этого не
+наблюдается, либо проблема с конфигурацией, либо задана неправильная пара
+значений ID и PWD.
+
+<p>Теперь попробуйте простую команду SQL:
+<pre>
+SQL> SELECT contactname FROM customers
+</pre>
+
+<h1>Шаблон драйвера</h1>
+<p>Создан шаблон драйвера, чтобы позволить программистам легко разрабатывать
+новые драйверы. Это содержит некоторые файлы типа make и все функциональные
+заголовки, требуемые для совместимости с ODBC 3.5.1. Некоторые функции имеют
+код, но большая часть оставлена для конкретной реализации.
+
+<h1>Типовые драйверы</h1>
+<p>Двоичная переносимость драйверов для Linux ODBC когда-нибудь будет
+достигнута, но ODBC пока довольно плохо реализован под Linux в это время, и
+некоторые драйверы могут иметь проблемы. Это явление постепенно должно
+уменьшится, поскольку ODBC становится более используемым на Linux.
+
+<p><b>Сертифицированные драйверы</b>
+<table CELLSPACING=0 CELLPADDING=0 COLS=6 WIDTH="100%">
+<tr><td>СУБД</td>
+<td>Уровень ODBC</td>
+<td>Устанавливается в odbcdrivers.ini</td>
+<td>DriverConfig</td>
+<td>Замечания</td>
+<td>Поддержка</td></tr>
+
+<tr><td>DB2 UDB для iSeries</td>
+<td><A HREF="../../../www-1.ibm.com/servers/eserver/iseries/access/linux"
+TARGET="_top">http://www-1.ibm.com/servers/eserver/iseries/access/linux</a>
+</td>
+<td>3.5</td>
+<td>Да</td>
+<td>Да</td>
+
+<td>Имеется драйвер, доступный для систем Intel и для разделов iSeries,
+выполняющих Linux. Драйвер соответствует ODBC 3.5 ANSI со способностью
+сохранять и обрабатывать Unicode-данные. Поддерживает тип SQL_WCHAR</td>
+
+<td>Поддержка и закачка пакета:
+<a href="../../../www-1.ibm.com/servers/eserver/iseries/access/linux"
+TARGET="__top">http://www-1.ibm.com/servers/eserver/iseries/access/linux</a>
+</td></tr>
+
+<tr><td>Microsoft SQL Server и Microsoft Access</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+
+<td>Вы можете использовать Bridge для работы с источником данных ODBC
+на Windows-машине</td>
+<td><a href="../../../www.easysoft.com/products/oob/main.phtml">
+http://www.easysoft.com/products/oob/main.phtml</a></td></tr>
+
+<tr><td>DB2</td>
+<td><A HREF="../../../www.ibm.com/db2">http://www.ibm.com/db2</a></td>
+<td>3.5</td>
+<td>No</td>
+<td>No</td>
+
+<td>Библиотека libdb2.so, которая является частью набора DB Connect, работает
+как ODBC-драйвер</td>
+<td>Загрузить пакет можно с
+<a href="../../../www-1.ibm.com/support/docview.wss@uid=swg21079056">
+http://www-1.ibm.com/support/docview.wss?uid=swg21079056</a></td></tr>
+
+<tr><td>Oracle</td>
+<td><A HREF="../../../www.oracle.com/default.htm">http://www.oracle.com</a>
+</td>
+<td>3.5</td>
+<td>Да</td>
+<td>Да</td>
+
+<td>Загрузка свободноой тестовой версии: <a href="../../../www.easysoft.com/default.htm">
+http://www.easysoft.com</a></td>
+
+<td><a href="mailto:support@easysoft.com">support@easysoft.com</a>
+<a href="news_3A//news.easysoft.com/easysoft.public.oracle">
+news://news.easysoft.com/easysoft.public.oracle</a></tr>
+
+<tr><td>Easysoft ODBC-ODBC Bridge</td>
+<td>от 2.0 до 3.5</td>
+<td>Да</td>
+<td>Да</td>
+
+<td><a href="../../../www.easysoft.com/products/oob/main.phtml">
+http://www.easysoft.com/products/oob/main.phtml</a>. Easysoft's ODBC-ODBC
+Bridge (пробная бесплатная версия) обеспечивает удаленный доступ к
+любому ODBC-драйверу</td>
+
+<td><a href="mailto:support@easysoft.com">support@easysoft.com</a><br>
+<a href="news_3A//news.easysoft.com/easysoft.public.da2k.odbc-odbc-bridge">
+news://news.easysoft.com/easysoft.public.da2k.odbc-odbc-bridge</a><br>
+<a href="../../../www.easysoft.com/default.htm">http://www.easysoft.com</a>
+</td></tr>
+
+<tr><td>DB2</td>
+<td><A HREF="../../../www.starquest.com/default.htm">http://www.starquest.com
+</a></td>
+
+<td>3.5</td>
+<td>Нет данных</td>
+<td>Нет данных</td>
+
+<td><a href="../../../www.starquest.com/default.htm">http://www.starquest.com
+</a>: StarSQL для UNIX 3.10 и выше, Solaris, AIX и Linux</td>
+
+<td><a href="../../../www.starquest.com/support">
+www.starquest.com/support</a></td></tr>
+
+<tr><td>Sybase</td>
+<td><A HREF="../../../www.sybase.com/default.htm">http://www.sybase.com</a>
+</td>
+<td>3.5</td>
+<td>Да</td>
+<td>Нет</td>
+
+<td>Бесплатная пробная версия доступна на <a href="../../../www.easysoft.com/default.htm">
+http://www.easysoft.com</a></td>
+
+<td><a href="mailto:support@easysoft.com">support@easysoft.com</a><br>
+<a href="news_3A//news.easysoft.com/easysoft.public.sybase">
+news://news.easysoft.com/easysoft.public.sybase</a></td></tr>
+
+<tr><td>Informix</td>
+<td><A HREF="../../../www.informix.com/default.htm">http://www.informix.com
+</a></td>
+
+<td>3.51</td>
+<td>Нет</td>
+<td>Нет</td>
+
+<td>Драйвер от informix работает прекрасно, но Вы должны ознакомиться с
+сайтом разработчиков в плане свежей документации</td></tr>
+
+<tr><td>AdabasD</td>
+<td><a href="../../../www.softwareag.com/adabasd">
+www.softwareag.com/adabasd</a></td>
+<td>3.5</td>
+<td>Нет</td>
+<td>Нет</td>
+
+<td>ODBC-драйвер для AdabasD доступен для Solaris, HP-UX, AIX, Linux и
+нескольких других типов unix.
+
+<td>Подробности на сайте разработчика
+<a href="../../../www.softwareag.com/adabasd">
+http://www.softwareag.com</a> и в конференции comp.databases.adabas</td></tr>
+
+<tr><td>Empress</td>
+<td><A HREF="../../../www.empress.com/default.htm">http://www.empress.com</a>
+</td>
+<td>.</td>
+<td>.</td>
+<td>.</td>
+<td>.</td>
+<td>.</td></tr>
+
+<tr><td>Postgres</td>
+<td><A HREF="../../../www.postgresql.org/default.htm">
+http://www.postgresql.org</a></td>
+
+<td>2.5</td>
+<td>.</td>
+<td>Да</td>
+<td>Была взята Win32-версия (не из дистрибутива сервера), и она нормально
+работала с unixODBC с небольшими изменениями. Изменения отправлены
+координаторам проекта PostgreSQL</td></tr>
+
+<tr><td>MySQL</td>
+<td><A HREF="../../../www.mysql.com/default.htm">http://www.mysql.com</a>
+</td>
+<td>.</td>
+<td>.</td>
+<td>.</td>
+
+<td>Драйвер MyODBC (<a href="../../../www.mysql.com/download.html"
+TARGET="_top">http://www.mysql.com/download.html</a>) работает с unixODBC
+</td>
+<td><a href="../../../www.mysql.com/default.htm">http://www.mysql.com</a>
+</td></tr>
+
+<tr><td>MiniSQL (он же mSQL)</td>
+<td><A HREF="../../../www.hughes.com.au/default.htm">http://www.Hughes.com.au
+</a></td>
+
+<td>Смесь из различных уровней. Борется за достижение 3.51. Безуспешно</td>
+<td>Да</td>
+<td>Да</td>
+<td>Alpha-версия</td>
+<td><a href="mailto:pharvey@codebydesign.com">pharvey@codebydesign.com</a>
+</td></tr>
+
+<tr><td>SQI</td>
+<td>Очень ограниченные версии INSERT, SELECT, UPDATE и DELETE</td>
+<td>.</td>
+<td>Да (используются значения по умолчанию для файла)</td>
+<td>Text File Driver (alpha)</td>
+<td><a href="mailto:pharvey@codebydesign.com">pharvey@codebydesign.com</a>
+</td></tr>
+
+<tr><td>News Server</td>
+<td>Реализована минимальная функциональность ODBC. Сильно ограниченное, но
+очень полезное подмножество SQL</td>
+<td>.</td>
+<td>Да</td>
+
+<td>Расширенная версия Ke Jin's Internet News Server ODBC-драйвера.
+News-серверы представляют собой источники данных, а группы новостей таблицы.
+</td>
+<td><a href="mailto:pharvey@codebydesign.com">pharvey@codebydesign.com</a>
+</td></tr>
+
+<tr><td>YARD SQL</td>
+<td>3.5</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td></td>
+<td>Сайт проекта YARD (<a href="../../../www.yard.de/default.htm">http://www.yard.de</a>).
+</td></tr>
+
+<tr><td>Interbase</td>
+<td>3.5</td>
+<td>Да</td>
+<td>Да</td>
+
+<td>Доступен для Windows, Linux Intel, Solaris, HPUX, AIX и OS X</td>
+<td><a href="../../../ftp@ftp.easysoft.com/pub/interbase">
+ftp://ftp.easysoft.com/pub/interbase</a></td></tr>
+
+<tr><td>RDBMS Linter SQL</td>
+<td>3.5</td>
+<td>Да</td>
+<td>Да</td>
+
+<td>Оригинальный драйвер ODBC портирован на UNIX</td>
+<td><a href="../../../www.relex.ru/default.htm">www.relex.ru</a>,
+<a href="../../../www.relexus.com/default.htm">www.relexus.com</a></td></tr>
+
+<tr><td>Ovrimos Webbase</font></td>
+<td><A HREF="../../../www.ovrimos.gr/download.php">
+http://www.ovrimos.gr/download.php</a></td>
+<td>3.5</td>
+<td>Да</td>
+<td>Да</td>
+
+<td><a href="../../../www.ovrimos.gr/download.php">
+http://www.ovrimos.gr/download.php</a></td>
+<td><a href="mailto:support@ovrimos.com">support@ovrimos.com</a></tr>
+
+<tr><td>Mimer SQL</td>
+<td><A HREF="../../../www.mimer.com/default.htm">http://www.mimer.com</a>
+</td>
+<td>3.51</td>
+<td>Нет данных</td>
+<td>Нет данных</td>
+
+<td>Посетите сайт <a href="../../../www.mimer.com/developers">
+www.mimer.com/developers</a> для сбора дополнительной информации и загрузки
+пробной версии высокопроизводительной СУБД</td>
+
+<td><a href="../../../www.mimer.com/developers">
+www.mimer.com/developers</a></td></tr>
+
+<tr><td>Ingres</td>
+<td><A HREF="../../../www.cai.com/default.htm">http://www.cai.com</a></td>
+<td>3.51</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+
+<td><a href="../../../support.cai.com/techbases/ingres/4327.html">
+http://support.cai.com/techbases/ingres/4327.html</a></td></tr>
+
+<tr><td>Sap DB</td>
+<td><A HREF="../../../www.sapdb.org/default.htm">http://www.sapdb.org</a>
+</td>
+<td>3.51</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td></tr></table>
+
+<H1>Установка и настройка Cold Fusion и Interbase под Linux</H1>
+<P>Что было использовано:
+<ul><li><a href="../../../commerce.allaire.com/download/index.cfm">
+http://commerce.allaire.com/download/index.cfm</a> Cold Fusion 4.51
+Professional Evaluation Version for Linux,
+<li><a href="../../../www.borland.com/interbase/downloads/#interbase">
+http://www.borland.com/interbase/downloads/#interbase</a> Interbase 6.01
+Super Server for Linux,
+<li><a href="../../../ftp@ftp.freesoftware.com/pub/linux/redhat">
+ftp://ftp.freesoftware.com/pub/linux/redhat</a> Redhat 6.1,
+<li><a href="../../../ftp@ftp.freesoftware.com/pub/linux/redhat">
+ftp://ftp.freesoftware.com/pub/linux/redhat</a> Redhat 6.2.</ul>
+
+<P>Как и что делалось:
+<ul><li>1. Под RH Linux 6.2 установлен UnixODBC 1.8.12 с применением для
+этой цели rpm-пакета с сайта Coding Apes
+(<a href="../../../grapeape.codingapes.com/unixODBC.xml">
+http://grapeape.codingapes.com/unixODBC.xml</a>). ODBC-диспетчер драйверов,
+обеспеченный ColdFusion, был заменен на диспетчер из UnixODBC:
+<pre>
+mv /opt/coldfusion/lib/odbc/libodbc.so /opt/coldfusion/lib/odbc/libodbc.so.bak
+ln -s /usr/lib/libodbc.so /opt/coldfusion/lib/odbc/libodbc.so
+</pre>
+
+<li>2. Под RH Linux 6.1 используйте исходный текст с сайта
+<a href="../../../www.unixodbc.org/default.htm">http://www.unixodbc.org</a>. Если Вы
+не нуждаетесь в графических инструментальных средствах, а для серверов обычно
+их не ставят), выполните:
+<pre>
+configure --enable-gui=no
+make all
+make install
+</pre>
+Остальное подобно описанному выше.
+
+<li>3. Конфигурируйте Interbase ODBC Driver, загрузите Interbase Driver с
+сайта Easysoft (<a href="../../../www.easysoft.com/products/interbase">
+http://www.easysoft.com/products/interbase</a>). Установите его, скопировав
+файлы в каталог /usr/local/lib. Теперь настройте Ваш файл odbc.ini в
+/opt/coldfusion/odbc/odbc.ini примерно так:
+<pre>
+[MyODBCSource]
+Driver=/usr/local/lib/libib6odbc.so.1.0.0
+Description=Interbase Driver
+Database=192.168.0.1:/Database/MyDB.gdb
+User=MyUser
+Password=MyPassword
+With_Schema=0
+Dialect=3
+</pre></ul>
+
+<h1>Получение ODBC-драйвера из Informix Client access или SDK,
+работающего с unixODBC</h1>
+<p>1. Установите переменную окружения INFORMIXDIR к корню Вашей установки
+Informix. Далее я считаю, что это /usr/local/informix.
+
+<p>2. Определите сервис online в файле /etc/services.
+<p>3. Создайте файл sqlhosts в каталоге $INFORMIXDIR/etc, который определяет
+все Ваши серверы базы данных.
+
+<p>4. Удостоверьтесь, что все библиотеки Informix найдены ld. Они размещены в
+каталоге $INFORMIXDIR/lib и его подкаталогах (это включает по крайней мере
+cli и esql). Обычно следует включить каталоги с библиотеками в файл
+/etc/ld.so.conf и выполнить команду ldconfig от имени root.
+
+<p>5. Определите переменную окружения ODBCINI, чтобы указать на Ваш системный
+файл odbc.ini, например: export ODBCINI=/etc/odbc.ini. Дело в том, что эта
+переменная представляет собой единственный способ управлять тем, где драйвер
+Informix ищет сведения о конфигурации.
+
+<p>6. Добавьте драйвер Informix в odbcinst.ini без пробелов между именами
+параметров и их значениями, например:
+<pre>
+[Informix]
+Description=Informix IDS 2000
+Driver=/usr/local/informix/lib/cli/libifcli.so
+APILevel=1
+ConnectFunctions=YYY
+DriverODBCVer=03.00
+FileUsage=0
+SQLLevel=1
+smProcessPerConnect=Y
+</pre>
+
+<p>7. Определите Informix DSN в odbc.ini:
+<pre>
+[miecr]
+Driver=Informix
+Server=BARNET
+Database=miecr
+CLIENT_LOCALE=en_us.8859-1
+DB_LOCALE=en_us.8859-1
+TRANSLATIONDLL=/usr/local/informix/lib/esql/igo4a304.so
+</pre>
+
+<p>8. Теперь попробуйте выполнить тестовую команду isql miecr.
+
+<p>Если Вы получаете ошибку "Server %s is not listed as a dbserver name in
+sqlhosts", это, вероятно, вызвано пробелами в определении драйвера Informix в
+файле odbcinst.ini или в записи DSN в файле odbc.ini. Синтаксический
+анализатор драйвера очень легко ошибается.
+
+<p><TABLE COLS=1 WIDTH=100% BORDER=1 CELLPADDING=2 CELLSPACING=2>
+<TR><TD>Откуда и что можно скачать</TD></TR>
+<TR><TD><B>Формат дистрибутива</B></P>
+<P>unixODBC на сегодня доступен в формате tar+gzip. Это означает,
+что Вы должны:</P>
+
+<P>Скопировать файл unixODBC*.tar.gz в нужный Вам каталог.
+<P>Распаковать его, например, командами:
+<pre>
+gunzip unixODBC*.tar.gz
+tar xvf unixODBC*.tar
+</pre></P>
+
+<P>Выполнение этих команд создаст каталог unixODBC со всеми
+исходными файлами внутри.</P>
+
+<P>На момент написания данной работы последней версией была 2.2.6 (архив
+назывался unixODBC-2.2.6.tar.gz).</P>
+
+<P><B>RPM-пакеты</B></p>
+В настоящее время на сайте CodingApes
+(<a href="../../../grapeape.codingapes.com/default.htm">
+http://grapeape.codingapes.com</a>) выложено несколько RPM-пакетов. Их также
+можно найти на <a href="../../../edas.visaci.cz/en/unixodbc">
+http://edas.visaci.cz/en/unixodbc</a>. RPM-пакеты для использования с
+версиями 7.0 и 8.0 Connectiva Linux (<a href="../../../www.conectiva.com/default.htm"
+target="_top">http://www.conectiva.com</a> можно взять на.
+<a href="../../../www.andrefelipemachado.hpg.com.br/linux/index.html"
+target="_top">http://www.andrefelipemachado.hpg.com.br/linux/index.html</a>.
+
+<p>Есть также версия для QNX (<a href="../../../www.qnx.com/default.htm">
+http://www.qnx.com</a>), которую можно взять с
+<a href="../../../www.unixodbc.org/pub/beta/unixODBC/unixODBC-2.1.1-x86-public.qpr">
+http://www.unixodbc.org/pub/beta/unixODBC/unixODBC-2.1.1-x86-public.qpr</a>.
+
+<P><B>Версия для FreeBSD</B></p>
+<P>Nick Sayer создал порт unixODBC для FreeBSD. Ее можно найти на сайте
+<a href="../../../www.freebsd.org/ports">
+http://www.freebsd.org/ports</a>.
+
+<P><B>Solaris 8 PKG</B></p>
+Palle Haastrup создал пакет для Solaris 8 <a href="
+../../../www.unixodbc.org/pub/beta/unixODBC/binaries/unixodbc-2.1.1-sol8-sparc-local.gz">
+http://www.unixodbc.org/pub/beta/unixODBC/binaries/unixodbc-2.1.1-sol8-sparc-local.gz
+</a>.
+
+<P><B>CVS-доступ</B></P>
+<P>Публичный доступ к CVS access также доступен для всех желающих работать с
+самыми последними исходными текстами. CVS-доступ есть на
+<a href="../../../sourceforge.net/cvs/@group_id=1544">
+http://sourceforge.net/cvs/?group_id=1544</a>.
+
+<P>Так что Вы можете использовать следующие команды, Когда будет запрошен
+пароль для anonymous, просто нажмите клавишу Enter:</P>
+<pre>
+cvs -d:pserver:anonymous@cvs.unixODBC.sourceforge.net:/cvsroot/unixodbc
+login
+cvs -z3 -d:pserver:anonymous@cvs.unixODBC.sourceforge.net:/cvsroot/unixodbc
+co modulename
+</pre></P>
+
+<P>Чтобы сформировать пакет из архива CVS, выполните следующую команду:
+<pre>
+make -f Makefile.cvs
+</pre>
+
+<P>Это будет формировать скрипт configure.</B>
+<P>Чтобы сформировать пакет из CVS, Вы нуждаетесь в
+некоторых инструментальных средствах:
+<ul><li>automake 1.5</B>
+<li>libtool 1.4.2</B></ul>
+Они могут быть найдены на web-сайте проекта GNU
+<a href="../../../www.gnu.org/default.htm">http://www.gnu.org</a> или на его
+многоичисленных зеркалах.
+
+<P><B>Построение библиотек и программ</B></P>
+<P>Установка теперь использует стандартный процесс GNU autoconf. Скомандуйте:
+<pre>
+./configure
+>make
+make install
+</pre>
+
+<p>По умолчанию файлы будут установлены в каталог /usr/local. Как и положено
+с configure, это расположение может быть изменено опцией prefix:
+<pre>
+./configure --prefix=/usr/local/unixODBC
+</pre>
+Это установит каталоги в /usr/local/unixODBC.
+
+<p>Чтобы соответствовать руководящим принципам GNU, файл odbcinst теперь
+установлен по умолчанию в {prefix}/etc, что может быть изменено, используя
+опцию --sysconfdir в вызове configure. Чтобы устанавливать файлы в старое
+место, надо указать:
+<pre>
+./configure --sysconfdir=/etc
+</pre>
+
+<p>Скрипт будет пытаться находить каталоги, которые необходимы для
+компонентов GUI, и если они не найдены (то есть, Вы не установили QT),
+построение пакета продолжится, но без частей GUI.</P>
+
+<P><B>Зависимости</B></P>
+<P>Компоненты GUI (ODBCConfig и DataManager) требуют Qt не ниже 2.2
+(<A HREF="../../../www.troll.no/dl/qtfree-dl.html">
+http://www.troll.no/dl/qtfree-dl.html</A>).</P>
+
+<P>Библиотека SQI требует flex и yacc, чтобы анализировать команды SQL.</P>
+<P>Дистрибутив в целом зависит от наличия многих из стандартных
+инструментальных средств разработки, типа компилятора C/C++ (в настоящее
+время протестирован egcs).</P></TD></TR></TABLE></CENTER>
+
+<H1>Начинка unixODBC</H1>
+<center><img SRC="odbcflow.gif" height=157 width=530></center>
+
+<p>Data Flow Diagram (DFD) описывает все ключевые компоненты в окружении
+Linux ODBC. DFD пронумерована так, чтобы показать, что происходит при
+<b>соединении</b> с системой базы данных.
+
+<p>1. Приложение вызывает функцию (SQLAllocEnv, SQLAllocConnect, SQLConnect)
+из DriverManager.
+<p>2. DriverManager отвечает на SQLConnect драйвером базы данных, который
+соответствует заданному источнику данных (Data Source Name, DSN).
+<p>3. DriverManager загружает драйвер базы данных и просит, чтобы он
+установил связь с СУБД.
+<p>4. Драйвер базы данных может быть должен получить дополнительные опции из
+DSN, что выполняется им по ходу дела.
+<p>5. Драйвер базы данных использует специфическое для конкретной СУБД
+обращение, чтобы соединиться с базой данных.
+
+<H1>Файл odbc.ini</H1>
+<p><b>ОБРАТИТЕ ВНИМАНИЕ: файлы odbc.ini и odbcinst.ini являются системной
+информацией ODBC. Весь доступ (чтение или запись) к этой информации должен
+проходить через DriverManager или разделяемую библиотеку ODBCINST. Не
+обращайтесь к этим INI-файлам непосредственно!</b>
+
+<p>Файл odbc.ini хранит список источников данных и любых параметров для
+каждого из них. Имеются два типа файлов odbc.ini: системный (/etc/odbc.ini) и
+пользовательский (~/.odbc.ini). По умолчанию, DriverManager будет искать
+источники данных, используя следующую схему;
+
+<p>1. Используя переменную окружения, чтобы указать путь к пользовательскому
+файлу odbc.ini. Например, ODBCINI+/.odbc.ini.
+<p>2. Используя домашний каталог, заданный в файле /etc/passwd, чтобы найти
+путь для .odbc.ini.
+<p>3. Используя системный файл odbc.ini, который расположен в /etc/odbc.ini.
+
+<p>Файлы odbc.ini предоставляют те же самые функциональные возможности за
+исключением того, что системные сервисы могут принимать более высокий уровень
+защиты на системном odbc.ini. Во всем остальном пользовательские и системные
+файлы совершенно равны.
+
+<p>ini-файлы используют те же самые требования к синтаксису. Имена источников
+данных охвачены квадратными скобками. Параметры следуют в последующих строках
+и используют формат PropertyName=PropertyValue. Например;
+<pre>
+[TEST]
+driver = /usr/lib/libsybase.so.11
+tracefile = /home/pharvey/sql.log
+trace = off
+database = dbAccounting
+</pre>
+
+<p>Каждое имя источника данных должно иметь, по крайней мере, определенный
+параметр driver. Это позволит DriverManager загружать драйвер, когда сделан
+запрос на соединение. Единственые параметры, с которыми работает сам
+DriverManager: DRIVER, TRACEFILE и TRACE. Другие параметры будут
+интерпретироваться уже драйвером. Секция [ODBC Data Sources] поддерживается в
+каждом файле odbc.ini.
+
+<H1>Файл odbcinst.ini</H1>
+<p>Этот ini-файл просто перечисляет все установленные драйверы. Синтаксис
+прост: имя, сопровождаемое параметром, который сообщает имя файла драйвера:
+<pre>
+[Sybase 11]
+Comment = Super Sybase Server
+Driver = /usr/lib/libsybase.so.11
+Setup = /usr/lib/libsybaseS.so.11
+FileUsage = 1
+</pre>
+
+<p>Имя файла драйвера (в данном случае /usr/lib/libsybase.so.11) должно быть
+уникально. Дружественное имя (то есть Sybase 11) также должно быть уникально.
+
+<p>Параметр Setup указывает на общедоступную (разделяемую) библиотеку,
+содержащую функции, которые нужно вызвать ODBC Config. ODBC Config вызовет
+эту библиотеку, чтобы получить специфические для конкретного драйвера имена
+параметров в ходе конфигурации источника данных. Если программа ODBC Config
+не может найти или использовать этот файл, она примет некоторые значения по
+умолчанию. Этот файл должен изменяться только разделяемой библиотекой
+ODBCINST или утилитой командной строки odbcinst.
+
+<H1>Графическое наполнение</H1>
+<p>Спецификации ODBC включают два случая, в которых GUI был бы особенно
+полезен. Проект LinuxODBC находится в процессе реализации GUI для обоих
+случаев. Случаи это такие:
+
+<p><b>1. Настройка</b>
+<p>ODBC Config должен позволить пользователю настроить параметры, специфичные
+для конкретного драйвера. В MS это обработано через ODBC Admin, вызывающий
+драйвер и передающий ему дальнейшую инициативу. LinuxODBC не будет вынуждать
+драйвер делать такую работу. Вместо этого, ODBC Config вызовет библиотеку
+Drivers Setup, чтобы получить простой список реквизитов. ODBC Config
+обработает представление и сохранение этих реквизитов. Этот подход делает
+создание библиотек Driver Setup ОЧЕНЬ простым потому, что они должны
+обеспечить только список опций.
+
+<p><b>2. Ввод логина</b>
+<p>DriverManager, вероятно, придется запрашивать пользователя относительно
+большего количества информации для входа в систему. С поддержкой графики
+это вполне реально.
+
+<h1>unixODBC без GUI</h1>
+<h3>Цель</h3>
+<p>Много людей используют unixODBC, но по ряду причин не формируют
+конфигурацию GUI и соответствующие утилиты (ODBCConfig и DataManager).
+
+<h3>Что такое ini-файл?</h3>
+<p>ODBC сначала появился внутри Windows 3.0. В это время Windows использовала
+.ini-файлы, чтобы хранить информацию о конфигурации. Это текстовые файлы,
+содержащие данные в следующем формате:
+<pre>
+[section1]
+entry1 = value
+entry2 = value
+
+[section2]
+entry1 = value
+entry2 = value
+...
+</pre>
+
+<p>С появлением Windows NT, эти ini-файлы были заменены реестром, но API,
+чтобы обратиться к ним из ODBC, остался тем же самый. Windows имеет две
+функции в odbcinst.dll, которые позволяют приложениям и драйверам сделать
+запрос и изменять эти файлы: SQLGetPrivateProfileString и
+SQLPutPrivateProfileString.
+
+<p>Как часть репродуцирования ODBC-среды на платформах не-Windows, unixODBC
+обеспечивает тот же самый формат ini-файлов и функциональные возможности с
+помощью библиотеки libodbcinst.
+
+<h3>Система и пользователь</h3>
+<p>ODBC делает различие между двумя типами ini-файлов. Системные ini-файлы
+разработаны, чтобы быть доступными, но не изменяемыми любым пользователем, а
+ini-файлы пользователя относятся только к какому-то специфическому
+пользователю и могут изменяться им.
+
+<p>Системные ini-файлы: odbcinst.ini и odbc.ini (внимание: точек в начале
+имени нет!), а пользовательский: ~/.odbc.ini в домашнем каталоге пользователя
+(вот этот уже с точкой: скрытый).
+
+<p>Системный файл odbcinst.ini хранит информацию относительно ODBC-драйверов,
+доступных всем пользователям, а файл odbc.ini содержит информацию
+относительно DSN, доступных всем пользователям. Эти системные DSN полезны для
+приложения типа web-серверов, которые не могут выполняться как реальный
+пользователь и соответственно не будут иметь домашнего каталога, чтобы
+хранить в нем файл .odbc.ini.
+
+<p>Хороший пример этого: Apache и PHP с поддержкой ODBC. Когда http-сервер
+запущен, он от имени root вызывает SQLAllocEnv. Позже он меняет свою
+принадлежность на иного пользователя и вызывает SQLConnect. Если DSN не
+является системным, сервер потерпит неудачу.
+
+<h3>FILEDSN</h3>
+<p>ODBC 3 также имеет третий сорт DSN, файловый DSN. Они сохраняют информацию
+соединения в файле, который может быть доступен любому пользователю. UnixODBC
+в настоящее время не поддерживает файловый DSN, но такая поддержка
+планируется в ближайшее время, поскольку такой тип DSN весьма полезен. Он
+больше распространен в NT, чем в UNIX по причине того, такие файлы позволяют
+хранить данные на центральном сервере, который является доступным всем
+рабочим станциям, что избавляет от настройки всех систем сразу.
+
+<h3>Почему не vi?</h3>
+<p>Все файлы конфигурации, необходимые unixODBC представляют собой простые
+текстовые файлы, так что не имеется никакой причины, из-за которой Вы не
+можете использовать Ваш любимый текстовый редактор для правки файлы.
+
+<p>Однако, начиная с версии beta 1.6, расположение системных файлов
+odbcinst.ini и odbc.ini определено скриптом выбора конфигурации. Заданное по
+умолчанию расположение: /usr/local/etc, и если префикс определен,
+расположение будет {prefix}/etc. Расположение системных файлов можно
+поменять и радикально указанием опции --sysconfdir=DIR, например, для
+обратной совместимости с версиями до pre 1.6 попробуйте:
+<pre>
+./configure --sysconfdir=/etc
+</pre>
+
+<h3>Что входит в эти файлы?</h3>
+<h4>odbcinst.ini</h4>
+Он содержит заголовок раздела, который обеспечивает имя для драйвера, в
+примере ниже это будет PostgreSQL для драйвера Postgres. Следующие строки
+содержат описание и затем важные биты. Пути Driver и Setup указывает на
+ODBC-драйвер и установку lib. Установка lib используется, когда Вы нажимаете
+на Add в ODBCConfig, чтобы добавить новый DSN. Наиболее интересна запись
+Driver. Это библиотека, которую диспетчер драйверов будет загружать
+динамически, когда SQLConnect или SQLDriverConnect запрашивают этот DSN. Если
+это указывает на неправильное место, DSN не будет работать. Если dlopen()
+не сработает, DSN также не будет работать. Запись fileusage дописывается
+программой odbcinst, так что в текстовом редакторе добавьте ее сами.
+<pre>
+[PostgreSQL]
+Description = PostgreSQL driver for Linux & Win32
+Driver = /usr/local/lib/libodbcpsql.so
+Setup = /usr/local/lib/libodbcpsqlS.so
+FileUsage = 1
+</pre>
+
+<h4>Шаблоны</h4>
+odbcinst должен быть обеспечен файлом шаблона. Если Вы добавляете драйвер для
+вышеупомянутой записи, файл шаблона содержал бы следующее:
+<pre>
+[PostgreSQL]
+Description = PostgreSQL driver for Linux & Win32
+Driver = /usr/local/lib/libodbcpsql.so
+Setup = /usr/local/lib/libodbcpsqlS.so
+</pre>
+
+Вы вызвали бы odbcinst со следующими параметрами:
+<pre>
+odbcinst -i -d -f файл_шаблона
+</pre>
+
+Параметры odbcinst имеют такой смысл:
+<p>-i Установить
+<br>-d драйвер
+<br>-f имя файла с шаблоном
+
+<h4>Потоки</h4>
+Начиная с версии 1.6, если диспетчер драйверов был сформирован с поддержкой
+потоков, Вы можете добавлять другую запись к каждой записи о драйвере:
+<pre>
+[PostgreSQL]
+Description = PostgreSQL driver for Linux & Win32
+Driver = /usr/local/lib/libodbcpsql.so
+Setup = /usr/local/lib/libodbcpsqlS.so
+<b>Threading = 2</b>
+</pre>
+
+Эта запись изменяет заданный по умолчанию уровень преобразования в
+последовательную форму потока.
+
+<h4>[.]odbc.ini</h4>
+Содержание файлов odbc.ini немного сложнее, но они все равно следуют формату
+файла odbcinst.ini. Они усложнены каждым драйвером, требующим различных
+записей. Записи могут быть добавлены таким же образом, используя odbcinst или
+текстовый редактор. Пример типичной записи:
+<pre>
+[PostgreSQL]
+Description = Test to Postgres
+Driver = PostgreSQL
+Trace = Yes
+TraceFile = sql.log
+Database = nick
+Servername = localhost
+UserName =
+Password =
+Port = 5432
+Protocol = 6.4
+ReadOnly = No
+RowVersioning = No
+ShowSystemTables = No
+ShowOidColumn = No
+FakeOidIndex = No
+ConnSettings =
+</pre>
+
+<p>Это может быть записано в файл шаблона и вставлено в ini-файле для
+текущего (актуального) пользователя командой:
+<pre>
+odbcinst -i -s -f template_file
+</pre>
+
+<p>Строка Driver используется, чтобы соответствовать записи [section] в
+odbcinst.ini, а строка Driver в файле odbcinst используется, чтобы найти путь
+для библиотеки драйвера, которая будет загружена, когда будет установлено
+соединение. Возможно заменить имя драйвера на путь к драйверу
+непосредственно. Это может использоваться, например, если пользователь
+не может получить root-доступ для записи чего-либо в /etc. Например:
+<pre>
+[PostgreSQL]
+Description = Test to Postgres
+Driver = /usr/local/lib/libodbcpsql.so
+Trace = Yes
+TraceFile = sql.log
+Database = nick
+Servername = localhost
+UserName =
+Password =
+Port = 5432
+Protocol = 6.4
+ReadOnly = No
+RowVersioning = No
+ShowSystemTables = No
+ShowOidColumn = No
+FakeOidIndex = No
+ConnSettings =
+</pre>
+
+<h3>Шаблоны</h3>
+Шаблоны для драйверов, поддерживаемых пакетом:
+
+<h4>MySQL</h4>
+<pre>
+[MySQL-test]
+Description = MySQL test database
+Trace = Off
+TraceFile = stderr
+Driver = MySQL
+SERVER = 192.168.1.26
+USER = pharvey
+PASSWORD =
+PORT = 3306
+DATABASE = test
+</pre>
+
+<h4>Mini SQL (он же mSQL)</h4>
+<pre>
+[Mini SQL]
+Description = MiniSQL (mSQL)
+Driver = MiniSQL
+Trace = No
+TraceFile =
+Host = localhost
+Database =
+ConfigFile =
+</pre>
+
+<h4>Postgress</h4>
+<pre>
+[PostgreSQL]
+Description = Test to Postgres
+Driver = PostgreSQL
+Trace = Yes
+TraceFile = sql.log
+Database = nick
+Servername = localhost
+UserName =
+Password =
+Port = 5432
+Protocol = 6.4
+ReadOnly = No
+RowVersioning = No
+ShowSystemTables = No
+ShowOidColumn = No
+FakeOidIndex = No
+ConnSettings =
+</pre>
+
+<h4>NNTP driver</h4>
+<pre>
+[nntp Data Source]
+Description = nntp Driver
+Driver = nntp Driver
+Trace = No
+TraceFile =
+Host = localhost
+Database =
+Port =
+</pre>
+
+<h4>FreeTDS</h4>
+<pre>
+Driver = TDS
+Description = Northwind sample database
+Trace = No
+Servername = 192.168.1.25
+Database = Northwind
+UID = sa
+</pre>
+
+<h4>Sybase SQL Anywhere 5.0</h4>
+<pre>
+[Sybase SQL Anywhere 5.0]
+Driver = Sybase SQL Anywhere 5.0
+Description = Sybase SQL Anywhere 5.0 ODBC Driver
+Userid = dba
+Password = sql
+DatabaseFile = sademo.db
+</pre>
+
+<H1>Взаимодействие unixODBC и Mysql/MyODBC</H1>
+<H2>Введение</H2>
+<P>Этот раздел разработан, чтобы помочь установить и использовать UnixODBC.
+Установка рассматривается в контексте базы данных MySQL.</P>
+
+<P>ODBC представляет собой интерфейс, через который программы могут
+связываться с любой базой данных, которая имеет ODBC-драйвер. В то время как
+большинство баз данных имеет один или большее количество API в различных
+языках программирования, ODBC позволяет тому же самому коду работать с
+многочисленными типами баз данных. ODBC не единственый интерфейс, чтобы
+делать это, но он очень широко используется.</P>
+
+<H2>Начнем</H2>
+<P>Пакет UnixODBC доступен только в исходных текстах. Это означает, что Вы
+скачиваете tar-файл с <A HREF="../../../www.unixodbc.org/default.htm">
+http://www.unixODBC.org</A>, распаковываете его, компилируете исходные
+тексты и устанавливаете получившийся пакет. Прежде, чем Вы это сможете
+сделаеть, нужно убедиться в некоторых вещах.</P>
+
+<H2>Требования</H2>
+<OL><LI>Qt toolkit version 2.x (исходные тексты) с
+<A HREF="../../../www.troll.no/default.htm">http://www.troll.no</A>. Удостоверьтесь, что
+это версия 2 или выше!</P>
+
+<OL><LI>Загрузите исходные тексты Qt v2
+<LI>Распакуйте их куда-нибудь, обычно это выполнено, помещая tar-файл в
+каталог вроде /usr/local или /opt. Затем выполните команду:
+<PRE>
+tar zxvf qt-2.0.1.tar.gz
+</PRE>
+
+<p>Это создаст подкаталог qt-2.0.1 (у Вас версия пакета и имя каталога,
+конечно, будут другими). Не забудьте, что только root обычно может записывать
+данные в /usr/local или в /opt.
+
+<LI>Откомпилируйте исходные тексты. Из каталога qt-2.0.1 скомандуйте:
+<PRE>
+./configure
+make
+make install
+</PRE></P>
+
+<LI>Эта последняя команда интересна тем, что она установит новую библиотеку
+libqt в места, где может существовать любая старая версия. Проследите, чтобы
+имена библиотек не совпадали, и новая библиотека не перезаписала старую,
+иначе могут быть проблемы с приложениями Qt/KDE</OL></OL>
+
+<OL START=2><LI>База данных (в данном случае это MySQL с
+<A HREF="../../../www.mysql.com/default.htm">http://www.mysql.com</A>).</OL>
+
+<H2>Установка unixODBC</H2>
+<OL><LI>Как упомянуто прежде, получите исходный tar-файл с
+<A HREF="../../../www.unixodbc.org/default.htm">http://www.unixodbc.org</A>. От имени root
+переместите этот файл в /opt или в /usr/local. Распакуйте архив, перейдите в
+каталог с исходными текстами пакета и скомандуйте из него:
+<PRE>
+./configure
+./make
+./make install
+</PRE></OL>
+
+<H2>Установка драйвера</H2>
+<P>UnixODBC нуждается в драйвере для каждого типа базы данных, с которой он
+будет работать. MySQL имеет драйвер ODBC, названный MyODBC, но он не входит в
+комплект unixODBC, так что Вы должны получить и откомпилировать его
+непосредственно. Я рассматриваю версию 2.50.24, для остальных все так же.
+Установка аналогична другим пакетам, но Вы должны дать скрипту configure
+некоторые опции. Он запросит Вас относительно пути к исходным текстам MySQL,
+но Вы также должны обеспечить параметр <I>--with-unixODBC=</I>&lt;Ваш каталог
+unixODBC&gt;. Чтобы configure искал unixODBC вместо iODBC, используйте
+<I>--with-unixODBC=DIR</I>, где DIR определяет каталог, в который установлен
+unixODBC. Если включаемые файлы и библиотеки unixODBC не размещены в
+каталогах <I>DIR/include</I> и <I>DIR/lib</I>, используйте параметры <I>
+--with-unixODBC-libs=LIBDIR</I> и <I>--with-unixODBC-includes=INCDIR</I>.</P>
+
+<P>Вы могли бы поределять иной префикс для установки (не /usr/local). Я,
+например, храню мои ODBC-драйверы в каталоге /usr/local/odbc/lib, так что я
+добавляю: <I>--prefix=/usr/local/odbc</I>.</P>
+
+<P>Таким образом, строка вызова скрипта настройки для моего случая такая:
+<PRE>
+./configure --with-unixODBC=/usr/local \
+            --with-mysql-sources=/usr/local/mysql
+</PRE></P>
+
+<P>Выполните <B>make</B> и <B>make install</B>. Это помещает возникающую в
+результате библиотеку <B>libmyodbc-2.50.23.so</B> в каталог /usr/local/lib.
+В исходном тексте библиотеки есть ошибка контроля версии, благодаря которой
+версия 2.50.24 обозначена как <B>libmyodbc-2.50.23.so</B>. Ничего страшного
+это не вызывает.</P>
+
+<P>Если Вы опускаете параметр <I>--with-mysql-sources</I>, configure будет
+терпеть неудачу. Если Вы опускаете параметр <I>--with-unixODBC</I>, configure
+завершится, и MyODBC откомпилируется. Однако, он не будет работать правильно
+при использовании с unixODBC. Проблемы, описанные ниже, произошли, когда я
+опустил этот параметр:
+
+<P>1) Если DSN (Data Source Name), которое Вы создаете, также является именем
+базы данных, драйвер направляется на эту базу данных независимо от того, что
+Вы еще определили.
+
+<P>2) Если DSN не задает имя существующей базы данных, Вы просто не сможете
+войти в систему к базе данных. Трассировка сообщит Вам, что пакет не может
+найти базу данных с именем DSN. Это сбивает с толку, если Вы определили
+допустимое имя базы данных в файле .odbc.ini.</P>
+
+<P>При использовании параметра <I>--with-unixODBC</I>, эти проблемы не
+наблюдались, и все работало.</P>
+
+<P>Примечание: MyODBC не поддерживает ODBC версию 3 в своей версии 2.50.24.
+При написании программ, которые используют этот драйвер, следует указывать
+параметр V_OD_ODBC2 при вызове функции SQLSetEnvAttr().</P>
+
+<H2>Настройка unixODBC</H2>
+<P>UnixODBC состоит из большого количества библиотек, установленных в каталог
+<B>/usr/local/lib</B>, и нескольких исполняемых файлов (binaries),
+установленных в каталог <B>/usr/local/bin</B>. Эти исполняемые файлы:
+<I>ODBCConfig</I>, <I>DataManager</I> и <I>odbcinst</I>.</P>
+
+<P>Чтобы получить работающий пакет unixODBC, выполните следующее:</P>
+<P><B>Все выполняется от имени root.</B></P>
+<P>В xterm введите ODBCConfig. Это GUI-программа, и она должна выполняться в
+X-сессии. По крайней мере Вы должны установить драйвер, чтобы его
+использовать. Драйверы будут специфические для каждого приложения базы
+данных, так, например, MyODBC специфический для MySQL. В дополнение к этому,
+Вы должны определить setup-файл, который надлежит использовать для этого
+драйвера. Файлы setup находятся в <B>/usr/local/lib/libodbc*S.so</B> и
+представляют собой библиотеки, где * выражает приложение базы данных, так что
+<B>/usr/local/lib/libodbcmyS.so</B> является setup-файлом для MyODBC. Драйвер
+(не setup-файл!) в этом случае имеет имя
+<B>/usr/local/lib/libmyodbc-2.50.23.so.</B></P>
+
+<P>Чтобы устанавливать драйвер, выполните ODBCConfig как root, перейдите на
+вкладку "drivers" и нажмите кнопку &quot;New&quot;. Вот пример настройки:
+<PRE>
+Name: myodbc
+Description: MySQL driver.
+Driver: /usr/local/lib/libmyodbc-2.50.23.so
+Setup: /usr/local/lib/libodbcmyS.so
+FileUsage: 1
+</PRE></P>
+
+<P>Вы должны иметь установленный драйвер перед установкой DSN. Сделав так, Вы
+можете устанавливать системный DSN. Вы делаете это, выбирая вкладку
+&quot;System DSN&quot; и нажимая на кнопку 'New'. Затем надо указать драйвер,
+который надо использовать и ввести требуемую информацию. Используйте имя
+драйвера, которое определили в поле Driver на первом экране, и нажмите OK.
+</P>
+
+<P>При выполнении этого как root, Вы можете создавать и редактировать файлы
+<B>/usr/local/etc/odbcinst.ini</B> (информация о драйверах) и
+<B>/usr/local/etc/odbc.ini</B> (системные записи DSN). Ранние версии unixODBC
+поместили бы эти файлы в /etc, и все еще Вы можете использовать опцию
+<I>--sysconfdir=/etc</I> скрипта configure, чтобы поместить
+файлы в это расположение.</P>
+
+<P><B>При выполнении этого как нормальный пользователь, имейте в виду, что:
+</B></P>
+<P>Процесс установки пользовательской записи DSN идентичен установке
+системной DSN. Вы просто выбираете вкладку &quot;User DSN&quot; в ODBCConfig
+и заполняете требуемые поля. Например, так:
+<PRE>
+Name: mysqltest
+Description: myodbc
+Driver: myodbc
+Trace: Yes
+TraceFile: mysql.log
+Host: localhost
+Port: 3306
+Socket:
+Database: test
+</PRE></P>
+
+<P>Это создаст и позволит редактировать файл, именованный ~/.odbc.ini.
+Так как база данных test приходит без любых таблиц, Вы можете определить
+mysql как базу данных вместо нее, так что Вы сможете увидеть таблицы при
+выполнении DataManager.</P>
+
+<H2>Запуск DataManager</H2>
+<P>Теперь Вы должны иметь возможность выполнить DataManager и просмотреть
+список драйверов, DSN и таблиц для каждого DSN.</P>
+
+<H2>Работает! Дальше что?</H2>
+<P>UnixODBC скорее посредник между программой и одной или большим количеством
+баз данных, а не самостоятельная и самодостаточная программа. Имеется
+информация относительно настройки StarOffice так, чтобы можно было
+использовать ODBC-соединение. Есть также пакет управления данными, также
+использующий unixODBC
+(<A HREF="../../../www.info2000.net/~cmorrison/databuilder.html">
+http://www.info2000.net/~cmorrison/databuilder.html</A>), да и вообще в
+последнее время стало много программ с поддержкой unixODBC.</P>
+
+<h1>Буфер соединений ODBC</h1>
+<p>Начиная с unixODBC версии 2.0.0, драйвер поддерживает объединение
+соединения. Этот метод позволяет увеличить быстродействие соединений
+драйверов путем их многократного использования. Этот раздел обсуждает, как
+выполнить объединение соединения в unixODBC а также, что Вы должны знать
+перед выполнением этого.
+
+<h2>Сначала, почему Вы не должны использовать объединение</h2>
+<p>Имеется пара пунктов, которые должны быть рассмотрены перед использованием
+объединенных соединений. Возможно, что если они используются неправильно,
+это может нарушить системную безопасность. Если Ваш web-сервер использует
+PHP (например) и объединенные соединения, и делает на соединении что-либо,
+из-за чего конечное состояние соединения будет отличаться от начального,
+Вы не должны использовать объединение.
+
+<p>Приведу конкретный пример. Допустим, что Вы имеете страницу, которая
+запрашивает пароль от пользователя, а затем используя этот пароль, изменяет
+заданную по умолчанию базу данных как-то так, как не позволено другим
+пользователям. Если это соединение многократно используется другими
+пользователями, они будут иметь доступ к данным, которые им нельзя позволять
+видеть. Если Ваши скрипты делают что-то подобно этому, всегда изменяют
+соединение с базой данных или изменяют заданную по умолчанию базу данных,
+лучше не пользоваться объединением соединений
+
+<h2>Когда Вы можете использовать объединение</h2>
+<p>Объединение эффективно только когда используется внутри процесса, хороший
+пример: web-сервер, использующий PHP и ODBC. Здесь соединения будут
+объединены внутри каждого процесса web-сервера и многократно использоваться с
+хорошим увеличением эффективности. Плохой пример: внешняя программа CGI.
+Здесь каждый раз будет выполнен различный процесс, и не имеется ничего
+такого, что можно улучшить с помощью объединения соединений.
+
+<h2>Как это делается</h2>
+<p>Объединение запускается, редактируя файл настройки odbcinst.ini, а также
+на основании драйвера. Если требуется иметь некоторые соединения с драйвером
+с использованием объединений, а некоторые без этого, то создают две записи
+для драйвера и отображают различные DSN. Установка с поддержкой объединения
+выглядит примерно так:
+<pre>
+[ODBC]
+Trace = No
+Trace File = /tmp/sql.log
+Pooling = Yes
+
+[INTERBASE-P]
+Description = Easysoft Driver for Interbase
+Driver = /usr/local/lib/libib6odbc.so
+Setup = /usr/local/lib/libib6odbcS.so
+FileUsage = 1
+DontDLClose = 1
+CPTimeout = 120
+
+[INTERBASE]
+Description = Easysoft Driver for Interbase
+Driver = /usr/local/lib/libib6odbc.so
+Setup = /usr/local/lib/libib6odbcS.so
+FileUsage = 1
+DontDLClose = 1
+CPTimeout = 0
+</pre>
+
+<p>При использовании этого файла любой DSN, который применяет драйвер
+INTERBASE, не будет объединять соединения, а DSN, который использует драйвер
+INTERBASE-P, будет объединять соединения.
+
+<p>Параметр &quot;Pooling=Yes&quot; представляет собой глобальный
+переключатель, включающий возможность объединению в диспетчере драйвера, если
+он установлен в No, не будут никаких объединенных соединений. Чтобы
+объединять индивидуальный драйвер, значение &quot;CPTimeout&quot; должно быть
+установлено в ненулевое числовое значение.
+
+<p>Это значение указывает число секунд, которое объединенное соединение
+останется открытым, если оно не используется. Обратите внимание, что
+соединение будет закрыто только, когда другое соединение открыто.
+
+<h1>Полезные сслки</h1>
+<p><b><a href="../../../users.ids.net/~bjepson/freeODBC">
+http://users.ids.net/~bjepson/freeODBC</a>: FreeODBC</b>.
+<p>web=сайт, специализированный по общим понятиям и принципам FreeODBC.
+Очень неплохое свободное ODBC-решение для Linux.
+
+<p><b><a href="../../../www.easysoft.com/default.htm">http://www.easysoft.com
+</a>: EasySoft</b>.
+<p>Вы можете искать коммерческое решение для Вашего ODBC-проекта. EasySoft
+был очень полезен при разработке unixODBC, так что я очень рекомендую Вам
+обратить внимание на их разработки.
+
+<p><b><a href="../../../www.openlinksw.com/default.htm">
+http://www.openlinksw.com</a>: OpenLink</b>.
+<p>Другой коммерческий поставщик простой технологии доступа к данным.
+
+<p><b><a href="../../../www.inline.net/default.htm">http://www.inline.net
+</a>: InLine</b>.
+<p>Эта система очень хорошо поддерживает unixODBC.
+
+<p><b><a href="../../../orcane.net/freeodbc++">
+http://orcane.net/freeodbc++</a>: odbc++</b>.
+<p>Это очень хорошо написанный JDBC-подобный класс для ODBC. Это может
+использоваться вместе с unixODBC.
+
+<p><b><a href="../../../www.dharma.com/default.htm">http://www.dharma.com</a>:
+dharma</b>.
+<p>Коммерческий набор разработчика (SDK).
+
+<p><b><a href="../../../www.geocities.com/skuchin/otl/home.htm">
+http://www.geocities.com/skuchin/otl/home.htm</a>: Odbc Template Library
+(OTL)</b>.
+<p>OTL предоставляет API подобный обычным потокам C++. OTL сильно
+интегрирован с STL через-совместимый поток.
+
+<p><b><a href="../../../www.geocities.com/corwinjoy/dtl/index.htm"
+target="_top">http://www.geocities.com/corwinjoy/dtl/index.htm</a>:
+Database Template Library</b>.
+<p>Цель этой библиотеки состоит в том, чтобы сделать просмотр наборов данных
+ODBC аналогичным STL-контейнерам.
+
+<p><b>Ссылки на СУБД</b>
+<UL><LI><A HREF="../../../members.aa.net/~swear/pedia/database.html"
+TARGET="_top">http://members.aa.net/~swear/pedia/database.html</a></LI>
+<LI><A HREF="../../../ftp@ftp.idiom.com/pub/free-databases">
+ftp://ftp.idiom.com/pub/free-databases</a></LI>
+<LI><A HREF="../../../www.linux.org/apps/database.html">
+http://www.linux.org/apps/database.html</a></LI>
+<LI><A HREF="../../../www-ccs.cs.umass.edu/db.html">
+http://www-ccs.cs.umass.edu/db.html</a></LI>
+<LI><A HREF="../../../www.cs.wisc.edu/~jgoldst/dbmshome.html#other">
+http://www.cs.wisc.edu/~jgoldst/dbmshome.html#other</a></LI>
+</UL>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</html>

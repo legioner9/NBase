@@ -1,0 +1,736 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 2. Установка MySQL Router</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="mysql-router-installation"></a>Глава 2. Установка MySQL Router
+</h1>
+<p>В этой главе описывается, как получить и установить MySQL Router.
+Загрузки доступны с <a href="../../../https@dev.mysql.com/downloads/router"
+target="_top">https://dev.mysql.com/downloads/router</a>.</p>
+
+<h2><a name="mysql-router-installation-linux"></a>
+2.1. Установка MySQL Router в Linux</h2>
+<p>Есть двоичные дистрибутивы MySQL Router, доступные для нескольких
+вариантов Linux, включая Fedora, Oracle Linux, Red Hat и Ubuntu.</p>
+
+<p>Опции инсталляции включают:
+<ul><li><span class="bold"><strong>Official MySQL Yum or APT repository
+packages</strong></span>: Эти двоичные модули строятся командой MySQL
+Release. Для получения дополнительной информации об их установке см. краткие
+руководства по установке, используя
+<a href="../../../https@dev.mysql.com/doc/mysql-yum-repo-quick-guide/en/default.htm"
+target="_top">Yum</a> или
+<a href="../../../https@dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/default.htm"
+target="_top">APT</a>.</p></li>
+
+<li><p><span class="bold"><strong>Скачать официальные пакеты MySQL</strong>
+</span>: Загрузки доступны с <a href="../../../https@dev.mysql.com/downloads/router"
+target="_top">https://dev.mysql.com/downloads/router</a>.
+Загрузите и установите с использованием вашего
+предпочтительного диспетчера пакетов.</p>
+<p>Альтернативно, MySQL Router включен в исходные тексты MySQL Server
+и монолитные двоичные сборки MySQL Router 8.0.13.</p></li>
+
+<li><p><span class="bold"><strong>Скачайте и соберите исходные тексты
+</strong></span>: исходный код доступен с
+<a href="../../../https@dev.mysql.com/downloads/router" target="_top">
+https://dev.mysql.com/downloads/router</a> как пакеты
+<code class="filename">tar.gz</code> или RPM. Альтернативно, исходный код
+также <a href="../../../https@github.com/mysql/mysql-router" target="_top">
+есть на GitHub</a>.</p>
+
+<p>Для получения информации о компилировании MySQL Router см.
+<a href="#mysql-router-installation-source-code">
+здесь</a>.</li></ul>
+
+<p>Процедура установки на Linux зависит от вашего дистрибутива Linux.</p>
+<p>Установка MySQL Router, используя официальный пакет DEB или RPM создает
+местного пользователя системы и группу, названную "mysqlrouter" на хосте,
+на котором работает по умолчанию MySQL Router.
+Для получения дополнительной информации посмотрите опцию настройки
+<a href="mysql-router-configuration.html#option_mysqlrouter_user_default">
+<code class="option">user</code></a>.</p>
+
+<h3><a name="mysql-router-installation-deb"></a>Установка пакетов DEB</h3>
+<p>В Ubuntu и других системах, которые используют схему пакета Debian, можно
+загрузить и установить .deb пакеты или использовать диспетчер пакетов APT.
+</p>
+
+<h4><a name="idm139674076213264"></a>Использование APT Package Manager</h4>
+<ol type="1"><li><p>Установите репозитарий MySQL APT как описано в
+документации <a href="../../../dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/default.htm"
+target="_top">MySQL APT Repository</a>:</p>
+
+<p>Загрузите пакет конфигурации APT с
+<a href="../../../https@dev.mysql.com/downloads/repo/apt/default.htm" target="_top">
+https://dev.mysql.com/downloads/repo/apt/</a>.
+<pre>
+shell&gt; sudo dpkg -i mysql-apt-config_0.8.8-1_all.deb
+</pre>
+<p>Включите на экране конфигурации "MySQL Tools &amp; Connectors".</p></li>
+
+<li><p>Обновите свое хранилище APT:
+<pre>
+shell&gt; <strong class="userinput"><code>sudo apt-get update</code></strong>
+</pre></li>
+
+<li><p>Установите MySQL Router:
+<pre>
+shell&gt; <strong class="userinput"><code>sudo apt-get install mysql-router</code></strong>
+</pre></li></ol>
+
+<h4><a name="idm139674076201776"></a>Установка пакета вручную</h4>
+<p>Можно также загрузить .deb пакет и установить его из командной строки:
+<pre>
+shell&gt; <strong class="userinput"><code>sudo dpkg -i <em class="replaceable"><code>package</code></em>.deb</code></strong>
+</pre>
+
+<p><code class="filename"><em class="replaceable"><code>package</code></em>
+.deb</code> это имя пакета MySQL Router, например,
+<code class="filename">mysql-router-<em class="replaceable"><code>version
+</code></em>-1ubu1604-amd64.deb</code>, где
+<em class="replaceable"><code>version</code></em> номер версии MySQL Router.
+</p>
+
+<h3><a name="mysql-router-installation-rpm"></a>Установка пакетов RPM</h3>
+<p>На основанных на RPM системах можно загрузить и установить пакеты RPM или
+использовать Yum package manager.</p>
+
+<h4><a name="idm139674076194496"></a>Применение Yum Package Manager</h4>
+<ul><li><p>Во-первых, установите хранилище MySQL Yum, как описано в
+документации <a href="../../../dev.mysql.com/doc/mysql-yum-repo-quick-guide/en/default.htm"
+target="_top">MySQL Yum Repository</a>:
+
+<p>Загрузите пакет конфигурации Yum
+<a href="../../../https@dev.mysql.com/downloads/repo/yum/default.htm" target="_top">отсюда</a>.
+<pre>
+shell&gt; sudo rpm -Uvh mysql57-community-release-el7-11.noarch.rpm
+</pre></li>
+
+<li><p>Затем установите MySQL Router:
+<pre>
+shell&gt; <strong class="userinput"><code>sudo yum install mysql-router</code></strong>
+</pre></li></ul>
+
+<h4><a name="idm139674076186432"></a>Ручная установка пакета RPM</h4>
+<pre>
+shell&gt; <strong class="userinput"><code>sudo rpm -i <em class="replaceable"><code>package</code></em>.rpm</code></strong>
+</pre>
+
+<p><code class="filename"><em class="replaceable"><code>package</code></em>
+.rpm</code> это имя пакета MySQL Router, например,
+<code class="filename">mysql-router-<em class="replaceable"><code>version
+</code></em>-el7.x86_64.rpm</code>, где
+<em class="replaceable"><code>version</code></em> номер версии MySQL Router.
+</p>
+
+<h3><a name="mysql-router-linux-uninstalling"></a>Деинсталляция</h3>
+<p>Процедура деинсталляции MySQL Router в Linux
+зависит от пакета, который вы используете.</p>
+
+<h4><a name="idm139674076179680"></a>Деинсталляция пакетов DEB</h4>
+<p>Чтобы деинсталлировать пакет Debian, используйте эту команду:
+<pre>
+shell&gt; <strong class="userinput"><code>sudo dpkg -r mysql-router</code></strong>
+</pre>
+
+<p>Эта команда не удаляет конфигурационные файлы. Чтобы также удалить их и
+каталог данных, используйте:
+<pre>
+shell&gt; <strong class="userinput"><code>sudo dpkg --purge mysql-router</code></strong>
+</pre>
+
+<p>Альтернативно, можно использовать
+<code class="literal">apt-get remove mysql-router</code> или
+<code class="literal">apt-get purge mysql-router</code>.</p>
+
+<h4><a name="idm139674076173072"></a>Деинсталляция пакетов RPM</h4>
+<p>Чтобы деинсталлировать пакет RPM, используйте эту команду:
+<pre>
+shell&gt; <strong class="userinput"><code>sudo rpm -e mysql-router</code></strong>
+</pre>
+
+<p>Точно так же можно использовать
+<code class="literal">yum remove mysql-router</code>.</p>
+<p>Эта команда не удаляет конфигурационные файлы.</p>
+
+<h4><a name="idm139674076168640"></a>Что не удалено</h4>
+<p>Если не производить чистку, процесс деинсталляции не удаляет ваши
+конфигурационные файлы. На системах Debian это могло бы включать
+такие файлы, как:
+<pre>
+/etc/init.d/mysqlrouter
+/etc/mysqlrouter/mysqlrouter.conf
+/etc/apparmor.d/usr.sbin.mysqlrouter
+</pre>
+
+<h2><a name="mysql-router-installation-osx"></a>
+2.2. Установка MySQL Router в macOS</h2>
+<p>Загрузите архив DMG с
+<a href="../../../https@dev.mysql.com/downloads/router/default.htm" target="_top">
+https://dev.mysql.com/downloads/router/</a> и выполните его, чтобы
+установить MySQL Router.</p>
+<p>Альтернативно, загрузите, распакуйте и вручную установите
+файл <code class="literal">.tar.gz</code>.</p>
+
+<h2><a name="mysql-router-installation-windows"></a>2.3.
+Установка MySQL Router в Windows</h2>
+<p>MySQL Router для Windows может быть установлен, используя MySQL Installer,
+который устанавливает и обновляет все продукты MySQL в Windows, или
+загружая архив ZIP.</p>
+
+<h3><a name="mysql-router-installation-windows-prereq"></a>
+Требования для Windows</h3>
+<p><span class="emphasis"><em>Для версии Community MySQL Router</em></span>:
+Нужен Visual C++ Redistributable для Visual Studio 2015 (доступно на
+<a href="../../../www.microsoft.com/en-us/download/default.aspx" target="_top">
+Microsoft Download Center</a>). Установите его прежде, чем установить
+MySQL Router в Windows.</p>
+
+<h3><a name="mysql-router-installation-windows-mi"></a>
+Установка через MySQL Installer</h3>
+<p>Общая загрузка MySQL Installer доступна с
+<a href="../../../https@dev.mysql.com/downloads/windows/installer/default.htm" target="_top">
+https://dev.mysql.com/downloads/windows/installer/</a>. MySQL Installer
+может установить, модернизировать и управлять большинством продуктов MySQL,
+включая MySQL Router. MySQL Installer также включает возможность
+автонастройки MySQL Router с кластером MySQL InnoDB.</p>
+
+<h4><a name="idm139674076157056"></a>Рекомендуемый подход</h4>
+<p>Управление всеми вашими продуктами MySQL, включая MySQL Router, с
+<a href="../../../https@dev.mysql.com/downloads/windows/installer/default.htm" target="_top">
+MySQL Installer</a> является рекомендуемым подходом. Это работает со всеми
+требованиями, предпосылками, процедурами конфигурации и модернизациями.</p>
+
+<p>Используя <a href="../../../dev.mysql.com/doc/refman/8.0/en/mysql-installer.html"
+target="_top">MySQL Installer</a>, можно выбрать MySQL Router
+в качестве одного из продуктов, чтобы установить или модернизировать.</p>
+
+<p>MySQL Router, как правило, устанавливается в
+<code class="filename">C:\<em class="replaceable"><code>%PROGRAMFILES%</code>
+</em>\MySQL\MySQL Router 8.0</code>, где
+<em class="replaceable"><code>%PROGRAMFILES%</code></em>
+каталог по умолчанию для программ. Каталог
+<code class="literal">%PROGRAMFILES%</code> определяется как
+<code class="filename">C:\Program Files\</code> на большинстве систем.</p>
+
+<p>Для получения информации об установке и старте роутера как службы
+Windows см. <a href="mysql-router-server.html#mysql-router-server-starting">
+раздел 5.1</a>.</p>
+
+<h3><a name="mysql-router-installation-windows-zip"></a>
+Установка архива ZIP</h3>
+<p>Загрузка прхива ZIP доступна с
+<a href="../../../https@dev.mysql.com/downloads/router/default.htm" target="_top">
+https://dev.mysql.com/downloads/router/</a>.</p>
+
+<p>В отличие от установки с MySQL Installer, распаковка архива MySQL Router
+ZIP не проверяет зависимости в вашей системе, такие как необходимый
+VC++ 2015 runtime. Устанавливая MySQL Router, используя архив ZIP, загрузите
+и установите <a href="../../../https@www.microsoft.com/en-us/download/details.aspx@id=48145"
+target="_top">Visual C++ Redistributable for Visual Studio 2015</a>
+перед использованием MySQL Router.</p>
+
+<p>После установки VC++ 2015 runtime распакуйте архив ZIP и выполните
+<code class="filename">bin/mysqlrouter.exe</code>.</p>
+<p>Для получения информации об установке и использовании MySQL Router как
+сервиса Windows см. <a href="mysql-router-server.html#mysql-router-server-starting">
+раздел 5.1</a>.</p>
+
+<h2><a name="mysql-router-installation-source-code"></a>2.4.
+Установка MySQL Router из исходных текстов</h2>
+<p>MySQL Router написан, используя C++. По сути, необходимо собрать код
+прежде чем можно будет установить его. Компиляция типична для большинства
+приложений C++, как продемонстрировано ниже.</p>
+
+<p>CMake обеспечивает контроль над тем, как вы формируете исходный
+дистрибутив MySQL Router. Как правило, вы делаете это использованием опций
+в командной строке CMake. Для получения информации об опциях, поддержанных
+CMake, выполните любую из этих команд в исходном каталоге MySQL Router:
+<pre>
+shell&gt; <strong class="userinput"><code>cmake . -LH</code></strong>
+shell&gt; <strong class="userinput"><code>ccmake .</code></strong>
+</pre>
+
+<p>По умолчанию инсталляционные префиксы используются.
+Это отличается для каждой платформы, но для большинства подобных Unix
+платформ это "<code class="filename">/usr/local</code>".
+Возможно изменить инсталляционный путь переменной
+CMake "<span class="bold"><strong>CMAKE_INSTALL_PREFIX</strong></span>":
+<pre>
+shell&gt; <strong class="userinput"><code>mkdir build &amp;&amp; cd build</code></strong>
+shell&gt; <strong class="userinput"><code>cmake .. -DINSTALL_LAYOUT=STANDALONE -DCMAKE_INSTALL_PREFIX=/opt/mysql/router8.0</code></strong>
+</pre>
+
+<p>Заметьте, что мы используем опцию
+<code class="literal">-DINSTALL_LAYOUT=STANDALONE</code>, чтобы
+использовать то же самое инсталляционное расположение, как используется для
+пакетов .tar.gz и .zip. Это рекомендуемое значение для сборки.</p>
+
+<p>Опции CMake не описаны здесь, но они подобны опциям CMake для MySQL
+Server. См. <a href="../../../dev.mysql.com/doc/refman/8.0/en/source-configuration-options.html"
+target="_top">MySQL Source-Configuration Options</a>.</p>
+<p>Загрузите и распакуйте исходные файлы, затем выполните шаги, определенные
+для вашей платформы.</p>
+
+<h3><a name="idm139674076132192"></a>Linux и macOS</h3>
+<pre>
+shell&gt; <strong class="userinput"><code>tar xzf mysql-router-8.0.14-src.tar.gz</code></strong>
+shell&gt; <strong class="userinput"><code>cd mysql-router-8.0.14-src</code></strong>
+</pre>
+
+<p>Как только это выполнено, надо сконфигурировать и собрать MySQL Router с
+помощью cmake. Наши примеры используют местоположение стандартной установки
+<code class="filename">/usr/local</code>.</p>
+
+<p>Установка MySQL Router производит файл, названный
+<code class="filename">install_manifest.txt</code>, который
+перечисляет все файлы (с путями), установленные в системе. Этот файл полезен
+для удаления MySQL Router.</p>
+<p>Однако, есть <a href="#mysql-router-source-code-requirements">
+предпосылки</a> для компилирования исходного кода MySQL Router.</p>
+
+<h3><a name="mysql-router-source-code-requirements"></a>2.4.1. Требования</h3>
+<p>Следующие компоненты и библиотеки требуются, чтобы собрать
+MySQL Router в Linux:
+
+<ul><li>Операционная система с компилятором, который поддерживает
+<span class="bold"><strong>C++11</strong></span>.</p>
+<p>Системы в качестве примера, которые включают эту поддержку, являются
+Ubuntu 14.04 и позже, Oracle Linux 7 и macOS 10.10 и выше.</p>
+
+<p>Enterprise Linux 6: компиляция работает, но требует Библиотеки
+Software Collection Library 1.2. Для Oracle Linux см.
+<a href="../../../https@docs.oracle.com/cd/E37670_01/E59096/E59096.pdf"
+target="_top">Docs</a> и
+<a href="../../../public-yum.oracle.com/repo/OracleLinux/OL6/SoftwareCollections12/x86_64/index.html"
+target="_top">Downloads</a>. Для RedHat и CentOS см.
+<a href="../../../https@access.redhat.com/documentation/en-US/Red_Hat_Developer_Toolset/3/html-single/User_Guide/index.html#sect-Red_Hat_Developer_Toolset-About"
+target="_top">Docs</a> и
+<a href="../../../https@www.softwarecollections.org/en/scls/rhscl/devtoolset-3/default.htm"
+target="_top">Downloads</a>.</p></li>
+
+<li><p>MySQL Server 5.5 и позже библиотеки клиента и заголовочные файлы.
+Например, на Ubuntu это пакет <code class="literal">libmysqlclient-dev
+</code>.</p></li>
+
+<li><p>Инструменты разработки кода включая gcc, make и различные утилиты для
+C++ 11, включая GCC 4.8 и позже, glibc 2.17 и позже и clang 3.3 и позже.
+</p></li>
+
+<li><p>SLES 12 considerations: с MySQL 8.0.13 эти двоичные модули собраны
+GCC 7, самая низкая поддержанная версия GCC на этой платформе теперь 5.3.
+Это изменение означает, что хранилище GCC Devel требуется. Например:
+<pre>
+shell&gt; cd /etc/zypp/repos.d/
+shell&gt; wget https://download.opensuse.org/repositories/devel:/gcc/SLE-12/devel:gcc.repo
+</pre></li>
+<li><p>CMake 2.8.9 или выше.</p></li>
+<li><p>Protobuf 3.0.</p></li></ul>
+
+<p>Если ваша установка MySQL Server не включает заголовочные файлы и
+собранные библиотеки клиента, то вы, возможно, должны загрузить исходный код
+для MySQL Server.</p>
+
+<h3><a name="mysql-router-source-code-compiling"></a>
+2.4.2. Компилирование исходного кода</h3>
+<p>Чтобы собрать исходный код, необходимо создать папку, чтобы хранить
+собранные файлы, управлять cmake, чтобы создать make-файл, затем собрать код.
+Следующее демонстрирует шаги, необходимые на машине с Ubuntu.
+Другие платформы подобны.</p>
+
+<p>Для некоторых платформ, таких как Oracle Enterprise Linux 6,
+вы, возможно, также должны установить
+<span class="emphasis"><em>devtoolset</em></span> software collection.</p>
+
+<p>Если вы получаете ошибку, что библиотеки MySQL не могут быть найдены, то
+проверьте перечисленные пути. Если библиотеки клиента или каталог
+<code class="literal">include</code> не существуют, вы, возможно, должны
+сослаться на собранную копию исходного кода MySQL Server при помощи опции
+<code class="literal">-DWITH_MYSQL=&lt;path to server code&gt;</code>.
+Более определенно компилятор должен быть в состоянии найти библиотеки клиента
+MySQL и включаемые файлы. Если libmysqlclient сохранен в другом месте, то
+<code class="literal">-DMySQL_CLIENT_LIB=/path/to/libmysqlclient.so</code>
+может также использоваться. У собранного дерева исходного кода сервера
+будут эти файлы.</p>
+
+<p>Например, на платформах Debian и RPM
+были бы нужны пакеты, которые содержат библиотеки и файлы заголовков.
+Если бы вы установили MySQL от определенного для платформы хранилища,
+необходимо было бы установить пакеты
+<code class="literal">mysql-community-libs</code> и
+<code class="literal">mysql-community-devel</code>.</p>
+
+<p>Если вы изменяете что-нибудь и должны повторно собрать с нуля,
+несомненно, удалите файл <code class="literal">CMakeCache.txt</code>
+перед выполнением <code class="literal">cmake</code>.</p>
+
+<p>Начните с запуска <code class="literal">cmake</code>, чтобы создать
+make-файл. Следующие командаы выполняются от корня дерева исходного кода
+MySQL Router. Необходимо видеть подобные результаты с соответствующими
+путями для системы.
+<pre>
+shell&gt; <strong class="userinput"><code> mkdir build</code></strong>
+shell&gt; <strong class="userinput"><code> cd build</code></strong>
+shell&gt; <strong class="userinput"><code> cmake ..-DWITH_MYSQL=&lt;path to binaries and libraries&gt;</code></strong>
+-- The C compiler identification is GNU 4.9.2
+-- The CXX compiler identification is GNU 4.9.2
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Loading internal repository
+-- Installation layout set to DEFAULT
+-- Adding MySQL Harness from /home/cbell/source/git/mysql-router-2.0.2/mysql_harness
+-- Harness will install plugins in lib/mysqlrouter
+-- MySQL Harness CPU Descriptor is x86_64
+-- MySQL Harness OS Descriptor is linux
+-- MySQL Harness Compiler Descriptor is gnu-3
+-- MySQL Harness Runtime Descriptor is *
+-- Found Doxygen: /usr/bin/doxygen (found version "1.8.9.1")
+-- Performing Test COMPILER_SUPPORTS_CXX11
+-- Performing Test COMPILER_SUPPORTS_CXX11 - Success
+-- Performing Test COMPILER_SUPPORTS_CXX0X
+-- Performing Test COMPILER_SUPPORTS_CXX0X - Success
+-- Looking for include file pthread.h
+-- Looking for include file pthread.h - found
+-- Looking for pthread_create
+-- Looking for pthread_create - not found
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE
+-- Performing Test support_11
+-- Performing Test support_11 - Success
+-- Performing Test support_0x
+-- Performing Test support_0x - Success
+-- Found MySQL Libraries 5.6.27; using &lt;path to server code&gt;/lib/libmysqlclient.so
+-- Loading module 'router'
+-- Loading module 'routing'
+-- Configuring done
+-- Generating done
+-- Build files have been written to: &lt;path to router code&gt;/build
+</pre>
+
+<p>Затем соберите код. Для этого нам нужна только команда
+<code class="literal">make</code> как показано. Снова необходимо видеть
+подобные результаты в системе.
+<pre>
+shell&gt; <strong class="userinput"><code> make</code></strong>
+Scanning dependencies of target harness-archive
+[2%] Building CXX object harness/harness/CMakeFiles/harness-archive.dir/src/loader.cc.o
+[5%] Building CXX object harness/harness/CMakeFiles/harness-archive.dir/src/utilities.cc.o
+[8%] Building CXX object harness/harness/CMakeFiles/harness-archive.dir/src/config_parser.cc.o
+[ 11%] Building CXX object harness/harness/CMakeFiles/harness-archive.dir/src/designator.cc.o
+[ 14%] Building CXX object harness/harness/CMakeFiles/harness-archive.dir/src/filesystem-posix.cc.o
+Linking CXX static library libmysqlharness.a
+[ 14%] Built target harness-archive
+Scanning dependencies of target harness-library
+[ 17%] Building CXX object harness/harness/CMakeFiles/harness-library.dir/src/loader.cc.o
+[ 20%] Building CXX object harness/harness/CMakeFiles/harness-library.dir/src/utilities.cc.o
+[ 22%] Building CXX object harness/harness/CMakeFiles/harness-library.dir/src/config_parser.cc.o
+[ 25%] Building CXX object harness/harness/CMakeFiles/harness-library.dir/src/designator.cc.o
+[ 28%] Building CXX object harness/harness/CMakeFiles/harness-library.dir/src/filesystem-posix.cc.o
+Linking CXX shared library libmysqlharness.so
+[ 28%] Built target harness-library
+Scanning dependencies of target logger
+[ 31%] Building CXX object harness/plugins/logger/CMakeFiles/logger.dir/logger.cc.o
+Linking CXX shared library ../../../stage/lib/mysqlrouter/logger.so
+[ 31%] Built target logger
+Scanning dependencies of target keepalive
+[ 34%] Building CXX object harness/plugins/keepalive/CMakeFiles/keepalive.dir/src/keepalive.cc.o
+Linking CXX shared library ../../../stage/lib/mysqlrouter/keepalive.so
+[ 34%] Built target keepalive
+Scanning dependencies of target router_lib
+[ 37%] Building CXX object src/router/src/CMakeFiles/router_lib.dir/router_app.cc.o
+[ 40%] Building CXX object src/router/src/CMakeFiles/router_lib.dir/arg_handler.cc.o
+[ 42%] Building CXX object src/router/src/CMakeFiles/router_lib.dir/utils.cc.o
+[ 45%] Building CXX object src/router/src/CMakeFiles/router_lib.dir/datatypes.cc.o
+[ 48%] Building CXX object src/router/src/CMakeFiles/router_lib.dir/plugin_config.cc.o
+Linking CXX shared library ../../../stage/lib/libmysqlrouter.so
+[ 48%] Built target router_lib
+Scanning dependencies of target mysqlrouter
+[ 51%] Building CXX object src/router/src/CMakeFiles/mysqlrouter.dir/main.cc.o
+Linking CXX executable ../../../stage/bin/mysqlrouter
+[ 51%] Built target mysqlrouter
+Scanning dependencies of target routing
+[ 77%] Building CXX object src/routing/CMakeFiles/routing.dir/src/routing_plugin.cc.o
+[ 80%] Building CXX object src/routing/CMakeFiles/routing.dir/src/plugin_config.cc.o
+[ 82%] Building CXX object src/routing/CMakeFiles/routing.dir/src/mysql_routing.cc.o
+[ 85%] Building CXX object src/routing/CMakeFiles/routing.dir/src/utils.cc.o
+[ 88%] Building CXX object src/routing/CMakeFiles/routing.dir/src/destination.cc.o
+[ 94%] Building CXX object src/routing/CMakeFiles/routing.dir/src/dest_first_available.cc.o
+[ 97%] Building CXX object src/routing/CMakeFiles/routing.dir/src/uri.cc.o
+[100%] Building CXX object src/routing/CMakeFiles/routing.dir/src/routing.cc.o
+Linking CXX shared library ../../stage/lib/mysqlrouter/routing.so
+[100%] Built target routing
+</pre>
+
+<h3><a name="mysql-router-source-code-installing"></a>
+2.4.3. Установка из исходного кода</h3>
+<p>Как только исходный код собран, можно установить MySQL Router
+на системе следующей командой. Обратите внимание на то, что вам, возможно,
+понадобятся большие привилегии (например, sudo), чтобы установить.
+<pre>
+shell&gt; <strong class="userinput"><code> sudo make install</code></strong>
+[ 14%] Built target harness-archive
+[ 28%] Built target harness-library
+[ 31%] Built target logger
+[ 34%] Built target keepalive
+[ 48%] Built target router_lib
+[ 51%] Built target mysqlrouter
+[100%] Built target routing
+Install the project...
+-- Install configuration: ""
+-- Up-to-date: /usr/local/include/mysql/mysqlrouter/loader.h
+-- Up-to-date: /usr/local/include/mysql/mysqlrouter/filesystem.h
+-- Up-to-date: /usr/local/include/mysql/mysqlrouter/plugin.h
+-- Up-to-date: /usr/local/include/mysql/mysqlrouter/config_parser.h
+-- Installing: /usr/local/lib/libmysqlharness.a
+-- Installing: /usr/local/lib/libmysqlharness.so.0
+-- Up-to-date: /usr/local/lib/libmysqlharness.so
+-- Set runtime path of "/usr/local/lib/libmysqlharness.so.0" to "$ORIGIN/../lib"
+-- Installing: /usr/local/lib/mysqlrouter/keepalive.so
+-- Set runtime path of "/usr/local/lib/mysqlrouter/keepalive.so" to "$ORIGIN"
+-- Installing: /usr/local/lib/mysqlrouter/logger.so
+-- Set runtime path of "/usr/local/lib/mysqlrouter/logger.so" to "$ORIGIN"
+-- Up-to-date: /usr/local/include/mysql/mysqlrouter/logger.h
+-- Up-to-date: /usr/local/share/doc/mysqlrouter/README.txt
+-- Up-to-date: /usr/local/share/doc/mysqlrouter/License.txt
+-- Up-to-date: /usr/local/include/mysql/mysqlrouter/plugin_config.h
+-- Up-to-date: /usr/local/include/mysql/mysqlrouter/utils.h
+-- Up-to-date: /usr/local/include/mysql/mysqlrouter/datatypes.h
+-- Installing: //var
+-- Installing: //var/local
+-- Installing: //var/local/mysqlrouter
+-- Installing: //var/local/mysqlrouter/log
+-- Installing: //var
+-- Installing: //var/local
+-- Installing: //var/local/mysqlrouter
+-- Installing: //var/local/mysqlrouter/run
+-- Installing: /usr/local/etc
+-- Installing: /usr/local/etc/mysqlrouter
+-- Installing: /usr/local/bin/mysqlrouter
+-- Set runtime path of "/usr/local/bin/mysqlrouter" to "$ORIGIN/../lib"
+-- Installing: /usr/local/lib/libmysqlrouter.so.1
+-- Up-to-date: /usr/local/lib/libmysqlrouter.so
+-- Set runtime path of "/usr/local/lib/libmysqlrouter.so.1" to "$ORIGIN/../lib"
+-- Installing: /usr/local/lib/mysqlrouter/routing.so
+-- Set runtime path of "/usr/local/lib/mysqlrouter/routing.so" to "$ORIGIN"
+-- Up-to-date: /usr/local/include/mysql/mysqlrouter/routing.h
+</pre>
+
+<h3><a name="mysql-router-source-code-test-install"></a>
+2.4.4. Тестирование установки</h3>
+<p>Можно гарантировать установку следующей командой.
+Необходимо видеть подобный вывод в системе. Пример установки роутера для
+простого направления доступен в
+<a href="mysql-router-general-using-deploying.html#mysql-router-deploying-sandbox">
+разделе 3.2</a>.</p>
+
+<p>Наш пример предполагает, что
+<a href="mysql-router-configuration.html#mysqlrouter">
+<span class="command"><strong>mysqlrouter</strong></span></a>
+находится в PATH системы. В этом случае PATH включает
+<code class="filename">/usr/local/bin</code>.
+<pre>
+shell&gt; <strong class="userinput"><code>mysqlrouter --help</code></strong>
+
+MySQL Router v8.0.14 on Linux (64-bit) (GPL community edition)
+Copyright (c) 2015, 2017, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of
+their respective owners.
+
+Start MySQL Router.
+
+Configuration read from the following files in the given order (enclosed
+in parentheses means not available for reading):
+(/etc/mysqlrouter/mysqlrouter.conf)
+/home/philip/.mysqlrouter.conf
+...
+</pre>
+<p>Используйте команду <code class="literal">mysqlrouter --version</code>,
+чтобы проверить версию.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

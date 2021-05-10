@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_C++\Containers\Intro_to_this\Vasiliev\1.Основы_языка_C++_...12.dir\1.4.ИСПОЛЬЗОВАНИЕ_ПЕРЕМЕННЫХ...16.dir\cat.1.4.ИСПОЛЬЗОВАНИЕ_ПЕРЕМЕННЫХ...16.dir\dir.1.4.ИСПОЛЬЗОВАНИЕ_ПЕРЕМЕННЫХ...16.dir.md">1.4.ИСПОЛЬЗОВАНИЕ_ПЕРЕМЕННЫХ...16.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_C++\Containers\Intro_to_this\Vasiliev\1.Основы_языка_C++_...12.dir\1.4.ИСПОЛЬЗОВАНИЕ_ПЕРЕМЕННЫХ...16.dir\1.4.ИСПОЛЬЗОВАНИЕ_ПЕРЕМЕННЫХ...16.md">1.4.ИСПОЛЬЗОВАНИЕ_ПЕРЕМЕННЫХ...16.md</a>
+        - *# int age

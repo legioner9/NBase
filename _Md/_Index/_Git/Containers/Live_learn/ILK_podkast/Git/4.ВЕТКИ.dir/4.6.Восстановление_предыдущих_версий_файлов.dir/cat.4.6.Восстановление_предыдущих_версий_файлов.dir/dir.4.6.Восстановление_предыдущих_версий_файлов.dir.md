@@ -1,0 +1,4 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\4.ВЕТКИ.dir\4.6.Восстановление_предыдущих_версий_файлов.dir\cat.4.6.Восстановление_предыдущих_версий_файлов.dir\dir.4.6.Восстановление_предыдущих_версий_файлов.dir.md">4.6.Восстановление_предыдущих_версий_файлов.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\4.ВЕТКИ.dir\4.6.Восстановление_предыдущих_версий_файлов.dir\4.6.Восстановление_предыдущих_версий_файлов.md">4.6.Восстановление_предыдущих_версий_файлов.md</a>
+        - *## git checkout <hash> <path_files_list> - from <hash> to git index
+        - *## git checkout -- <path_files_list> - from git index to work dir

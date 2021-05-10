@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\2.КОНФИГУРАЦИЯ.dir\2.7.Игнорирование_.gitignore.dir\cat.2.7.Игнорирование_.gitignore.dir\dir.2.7.Игнорирование_.gitignore.dir.md">2.7.Игнорирование_.gitignore.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\2.КОНФИГУРАЦИЯ.dir\2.7.Игнорирование_.gitignore.dir\2.7.Игнорирование_.gitignore.md">2.7.Игнорирование_.gitignore.md</a>
+        - *## [examp .gitignoge](https://github.com/github/gitignore)

@@ -1,0 +1,5 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Function-master\cat.Function-master\dir.Function-master.md">Function-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Function-master\Exercises.ru.md">Exercises.ru.md</a>
+        - *# Упражнения: Функции
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Function-master\README.md">README.md</a>
+        - *## Functions, lambda-functions, function contexts, closures

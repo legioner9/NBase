@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\marte\cat.marte\dir.marte.md">marte</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\marte\marte.md">marte.md</a>
+        - *# <a href="https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/marte.html" target="_blank">Modeling and Analysis of Real Time Embedded Systems (MARTE)</a> Моделирование и анализ встроенных систем реального времени (MARTE)

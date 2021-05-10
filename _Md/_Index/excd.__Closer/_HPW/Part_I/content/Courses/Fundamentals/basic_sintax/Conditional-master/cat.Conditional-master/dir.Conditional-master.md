@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\Part_I\content\Courses\Fundamentals\basic_sintax\Conditional-master\cat.Conditional-master\dir.Conditional-master.md">Conditional-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\Part_I\content\Courses\Fundamentals\basic_sintax\Conditional-master\README.md">README.md</a>
+        - *# Conditional

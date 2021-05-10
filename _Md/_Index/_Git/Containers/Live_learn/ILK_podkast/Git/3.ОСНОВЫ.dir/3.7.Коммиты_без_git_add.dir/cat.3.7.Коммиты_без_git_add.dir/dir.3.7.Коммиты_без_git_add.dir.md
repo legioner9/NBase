@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\3.ОСНОВЫ.dir\3.7.Коммиты_без_git_add.dir\cat.3.7.Коммиты_без_git_add.dir\dir.3.7.Коммиты_без_git_add.dir.md">3.7.Коммиты_без_git_add.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\3.ОСНОВЫ.dir\3.7.Коммиты_без_git_add.dir\3.7.Коммиты_без_git_add.md">3.7.Коммиты_без_git_add.md</a>
+        - *## commit -a

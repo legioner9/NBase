@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\stereotypedlg\addingelementsandmetaclass\cat.addingelementsandmetaclass\dir.addingelementsandmetaclass.md">addingelementsandmetaclass</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\stereotypedlg\addingelementsandmetaclass\addingelementsandmetaclassaddingelementsandmetaclass.md">addingelementsandmetaclassaddingelementsandmetaclass.md</a>
+        - *### [Add Stereotypes and Metaclasses](https://sparxsystems.com/enterprise_architect_user_guide/15.1/modeling/addingelementsandmetaclass.html) Добавить стереотипы и метаклассы

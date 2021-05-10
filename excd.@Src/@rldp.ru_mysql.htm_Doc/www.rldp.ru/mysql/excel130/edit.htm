@@ -1,0 +1,350 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r" />
+  <title>Глава 4. Редактирование данных MySQL в Excel</title>
+  <meta name="generator" content="DocBook XSL Stylesheets + chunker.py v1.9.2" />
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="mysql-for-excel-edit"></a>
+Глава 4. Редактирование данных MySQL в Excel</h1>
+<p>MySQL for Excel упрощает задачи вставки, удаления и обновления строк
+таблицы базы данных, используя Microsoft Excel, обеспечивая снимок отобранной
+таблицы MySQL, который импортируется в рабочий лист Excel. Особенность
+сеанса редактирования работает с отдельной копией данных. Любые изменения,
+внесенные в ту копию, переведены на SQL-операторы, которые применяются к
+отобранной таблице MySQL.</p>
+
+<h2><a name="mysql-for-excel-edit-sessions"></a>
+4.1. Обзор сессии редактирования</h2>
+<p>MySQL for Excel позволяет вам загрузить и отредактировать данные MySQL
+непосредственно из рабочего листа Microsoft Excel.
+Изменения немедленно передаются, если опция
+<span class="guilabel">Auto-Commit</span> включена во всплывающем меню,
+иначе можно использовать
+<span class="guibutton">Revert Data</span> или
+<span class="guibutton">Commit Changes</span> в том же самом всплывающем
+меню, чтобы отменить или передать изменения данных в MySQL.</p>
+
+<p><span class="bold"><strong>Отредактировать данные MySQL
+из рабочего листа Excel</strong></span></p>
+<ol class="orderedlist" type="1"><li class="listitem"><p>
+Запустите Excel, выберите вкладку меню <span class="guimenu">Data</span> и
+нажмите <span class="guibutton">MySQL for Excel</span>, чтобы открыть панель
+задач MySQL for Excel.</p></li>
+
+<li class="listitem"><p>В ней из области
+<span class="guilabel">Open a MySQL Connection</span>
+дважды щелкните по существующей связи, чтобы показать доступные
+схемы базы данных.</p></li>
+
+<li class="listitem"><p>Выберите схему из списка и нажмите
+<span class="guibutton">Next</span>, чтобы показать все объекты
+базы данных в схеме.</p></li>
+
+<li class="listitem"><p>Выберите таблицу с данными, чтобы отредактировать и
+затем нажмите <span class="guilabel">Edit MySQL Data</span>.
+Окно предварительного просмотра показывает отобранные данные и предоставляет
+возможность определять количество строк к предварительному просмотру.
+</p></li>
+
+<li class="listitem"><p>Нажмите <span class="guibutton">OK</span>, чтобы
+переместить данные предварительного просмотра в текущий рабочий лист и
+включить режим редактирования.
+Посмотрите <a href="#mysql-for-excel-edit-table">рис. 4.1</a>
+для примера меню режима редактирования (всплывающее окно).</p>
+
+<p>В режиме редактирования отредактируйте данные в своем рабочем листе и
+нажмите <span class="guibutton">Commit Changes</span>, чтобы добавить
+изменения вручную или выберите <span class="guibutton">Auto-Commit</span>,
+чтобы передать изменения по мере правок.
+Нажмите <span class="guibutton">Revert Data</span>,
+чтобы освежить данные из базы данных или отменить правки.</p></li></ol>
+
+<p>Дополнительные действия режима редактирования:</p>
+<ul><li class="listitem"><p>Чтобы остановить режим редактирования, щелкните
+правой кнопкой мыши по всплывающему меню и выберите
+<span class="guimenuitem">Exit Edit Mode</span>.</p></li>
+
+<li class="listitem"><p>Чтобы возобновить режим редактирования, щелкните
+по ячейке с данными.</p></li>
+<li class="listitem"><p>Чтобы переместить всплывающее меню, удержите
+правильную кнопку мыши и тяните меню.</p></li></ul>
+
+<p>Следующие данные показывают пример таблицы
+<code class="literal">category</code> в примере схемы
+<code class="literal">sakila</code> в режиме редактирования.
+Цвет фона представляет статус каждой ячейки. Есть четыре разных цвета,
+которые используются, редактируя данные о таблице и два цвета-помощника.</p>
+
+<a name="mysql-for-excel-edit-table"></a>
+<p><b>Рис. 4.1. Редактирование данных в MySQL for Excel</b></p>
+<img src="images/excel-plugin-edit-window.png" width="916" height="762"
+alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>В предыдущем примере:</p>
+
+<ul><li class="listitem"><p>Зеленая ячейка Drama
+была изменена и затем передана.</p></li>
+<li class="listitem"><p>Синяя ячейка Gaming была изменена, но не передана.
+</p></li>
+
+<li class="listitem"><p><span class="guilabel">Auto-Commit</span>
+включен прежде, чем изменить значение 9 на 10 в строке 10 столбца
+category_id, это произвело ошибку, потому что это добавило бы двойное
+значение как первичный ключ.</p></li></ul>
+
+<a name="idm140266514358544"></a><p><b>Таблица 4.1.
+Цвета ячеек в режиме редактирования</b></p>
+<table border="1">
+<thead><tr><th scope="col">Цвет</th><th scope="col">Смысл</th></tr></thead>
+<tbody><tr><td scope="row">Белый</td><td>Цвет по умолчанию для всех ячеек.
+Это оригинальные данные или данные после того, как нажато
+<span class="guibutton">Refresh from DB</span>.</td></tr>
+<tr><td scope="row">Зеленый</td><td>Ячейки, которые были успешно переданы.
+</td></tr><tr><td scope="row">Синий</td><td>Ячейки, которые были
+изменены, но еще не были переданы.</td></tr>
+<tr><td scope="row">Красный</td><td>Ячейки, которые произвели ошибку при
+передаче. Диалог ошибки также показан, в то время как передача выполняется.
+</td></tr>
+<tr><td scope="row">Оранжевый</td><td>Ячейки, которым делали попытку
+передачи, но она провалилась из-за обнаруженных изменений из внешних
+источников. Например, иной пользователь внес изменение в поле после того, как
+это было импортировано в Excel. Это особенность
+<a href="config.htm#mysql-for-excel-optimistic-updates">Optimistic Updates
+</a>.</td></tr>
+<tr><td scope="row">Желтый</td><td>Ячейки, которые принимают новые данные.
+Данные, введенные здесь, вставляются в таблицу MySQL.
+</td></tr></tbody></table><br class="table-break">
+
+<h2><a name="mysql-for-excel-edit-muliple-sessions"></a>4.2.
+Многократные сеансы редактирования</h2>
+<p>Дизайн MySQL for Excel не блокирует таблицу, когда вы открываете
+сеанс редактирования, и данные импортируются. Вместо этого особенность
+сеанса редактирования полагается на модель, в которой у вас есть своя
+собственная копия данных (снимок), чтобы изменить.
+Модель также подразумевает, что у ваших коллег также есть своя собственная
+копия данных. Когда многократные сеансы редактирования выполняют операции на
+той же самой таблице в то же время, возможно переписать изменения,
+внесенные другой сессией.</p>
+
+<p>Чтобы предотвратить непреднамеренную перезапись, когда многократные
+сеансы редактирования используются, убедитесь, что включена опция
+<span class="guilabel">Use optimistic updates on all Edit
+Data sessions</span> (см. вкладку
+<a href="config.htm#mysql-for-excel-global-options-edit-sessions">
+Edit Sessions</a>). Эта опция включена по умолчанию и не должна быть
+отключена, когда база данных MySQL находится на удаленном хосте, который не
+гарантирует эксклюзивного доступа к данным.</p>
+
+<p>Оптимистические обновления гарантируют, что
+<code class="literal">WHERE</code> в
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/update.html" target="_top">
+<code class="literal">UPDATE</code></a> ссылается на все столбцы таблицы.
+Если какое-либо значение записи было изменено другой сессией, в то время как
+вы также вносите изменения, запись не найдена и этот запрос
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/update.html" target="_top">
+<code class="literal">UPDATE</code></a> ничего не сделает, когда вы
+передадите изменения базы данных. Напротив, с отключенными оптимистическими
+обновлениями <code class="literal">WHERE</code> в
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/update.html" target="_top">
+<code class="literal">UPDATE</code></a> ссылается на столбцы
+первичного ключа таблицы.</p>
+
+<p>Чтобы рассмотреть запросы, произведенные MySQL for Excel, выберите опцию
+<span class="guilabel">Preview SQL statements before they are sent to the
+server</span> прежде, чем начать ваш сеанс редактирования (см. вкладку
+<a href="config.htm#mysql-for-excel-global-options-sql-queries">SQL Queries
+</a>).</p>
+
+<p>С включенными оптимистическими обновлениями непротиворечивые изменения
+проходят в базу данных, но противоречивые изменения не передаются.
+Чтобы исправить конфликты, сделайте следующее:</p>
+
+<ol class="orderedlist" type="1"><li class="listitem"><p>
+В вашем рабочем листе в режиме редактирования определите местонахождение
+оранжевых клеток, которые показывают противоречивые данные.</p></li>
+
+<li class="listitem"><p>Загрузите новую копию данных из базы данных при
+нажатии <span class="guibutton">Revert Data</span> в диалоге сеанса
+редактирования, затем <span class="guibutton">Refresh Data from DB</span>.</p></li>
+<li class="listitem"><p>Примените изменения противоречивых ячеек снова
+и затем передайте изменения.</p></li></ol>
+
+<p>Для получения общей информации о работе с
+сеансами редактирования, см.
+<a href="#mysql-for-excel-edit-sessions">раздел 4.1</a>.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</body>
+</html>

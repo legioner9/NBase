@@ -1,0 +1,1782 @@
+<HTML>
+<HEAD>
+  <TITLE>Введение в администрирование</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1><A NAME="Disaster_Prevention">4 Введение в администрирование</A></H1>
+<P>Несмотря на то, что данная работа ориентирована на пользователей пакета,
+иногда им требуется выполнять простые административные задачи, например,
+резервирование и восстановление баз данных. Сложными делами, понятно, должен
+заниматься выделенный администратор, но иногда он может доверить выполнение
+простых задач достаточно квалифицированному пользователю.
+
+<H3><A NAME="Backup">4.1 Резервирование баз данных</A></H3>
+<P>Поскольку таблицы MySQL сохранены как файлы, просто делайте копию. Чтобы
+получать непротиворечивую копию, скомандуйте <CODE>LOCK TABLES</CODE> на
+релевантных таблицах и дополните это командой <CODE>FLUSH TABLES</CODE> для
+них, дабы все данные были гарантированно сброшены на диск. Подробности по
+этим командам есть в разделах
+"<A HREF="glava09.htm#LOCK_TABLES">9.7.2 Синтаксис <CODE>LOCK TABLES/UNLOCK
+TABLES</CODE></A>" и "<A HREF="#FLUSH">4.8 Синтаксис
+<CODE>FLUSH</CODE></A>". Вам нужна только блокировка записи. Это позволяет
+другим потокам продолжать делать запросы к таблицам в то время, как Вы
+делаете копию файлов в каталоге баз данных. Команда <CODE>FLUSH TABLE</CODE>
+необходима, чтобы гарантировать, что все активные индексные страницы записаны
+на диск прежде, чем Вы запускаете процесс копирования.</P>
+
+<P>Если Вы хотите делать копию уровня SQL из таблицы, Вы можете использовать
+<CODE>SELECT INTO OUTFILE</CODE> или <CODE>BACKUP TABLE</CODE>. Подробности в
+разделах "<A HREF="glava08.htm#SELECT">8.1 Синтаксис <CODE>SELECT</CODE>
+</A>" и "<A HREF="#BACKUP_TABLE">4.2 Синтаксис <CODE>BACKUP
+TABLE</CODE></A>".</P>
+
+<P>Другой способ поддержать базу данных состоит в том, чтобы использовать
+программу <CODE>mysqldump</CODE> или скрипт <CODE>mysqlhotcopy</CODE>.
+Подробности в разделах
+"<A HREF="glava12.htm#mysqldump">12.5 mysqldump, Дамп структур таблиц и
+данных</A>" и "<A HREF="glava12.htm#mysqlhotcopy">12.6 mysqlhotcopy,
+Копирование баз данных и таблиц MySQL</A>".</P>
+
+<OL><LI>Для полного резервирования баз данных надо скомандовать:
+<PRE>
+shell&#62; mysqldump --tab=/path/to/some/dir --opt --full
+</PRE>
+или
+<PRE>
+shell&#62; mysqlhotcopy database /path/to/some/dir
+</PRE>
+
+Вы можете также просто копировать все файлы таблицы (<TT>*.frm</TT>,
+<TT>*.MYD</TT> и <TT>*.MYI</TT>), пока сервер что-нибудь не модифицирует.
+Скрипт <CODE>mysqlhotcopy</CODE> использует этот метод.
+
+<LI><A NAME="IDX533"></A>Если <CODE>mysqld</CODE> запущен, остановите его, а
+затем запустите с опцией <CODE>--log-update[=file_name]</CODE>. Подробнее об
+этой опции можно узнать в разделе "<A HREF="glava.htm#Update_log">4.9.3
+Файл регистрации модификаций</A>". Файлы протоколов предоставляют Вам
+информацию относительно того, что изменилось со времени
+последнего вызова <CODE>mysqldump</CODE>.</OL>
+
+<P>Если Вы должны восстановить что-либо, попробуйте восстанавливать Ваши
+таблицы, используя <CODE>REPAIR TABLE</CODE> или <CODE>myisamchk -r</CODE>.
+Это эффективно в 99.9% случаев. Если <CODE>myisamchk</CODE> ничего хорошего
+не сделал, попробуйте следующую процедуру (это будет работать только, если Вы
+запустили MySQL с опцией <CODE>--log-update</CODE>):
+
+<OL><LI>Восстановите оригинальную копию <CODE>mysqldump</CODE>.
+<LI>Выполните следующую команду, чтобы заново выполнить модификации в
+двоичном файле регистрации:
+<PRE>
+shell&#62; mysqlbinlog hostname-bin.[0-9]* | mysql
+</PRE>
+
+Если Вы используете файл регистрации модификации, Вы можете использовать:
+<PRE>
+shell&#62; ls -1 -t -r hostname.[0-9]* | xargs cat | mysql
+</PRE>
+</OL>
+
+<P><CODE>ls</CODE> используется, чтобы получить все журналы модификации в
+правильном порядке.</P>
+
+<P>Вы можете также делать выборочные копии: <CODE>SELECT * INTO OUTFILE
+file_name FROM tbl_name</CODE> и восстанавливать их: <CODE>LOAD DATA INFILE
+file_name REPLACE ...</CODE>. Чтобы избежать двойных записей, Вам нужен
+<CODE>PRIMARY KEY</CODE> или <CODE>UNIQUE</CODE> в таблице. Ключевое слово
+<CODE>REPLACE</CODE> заменяет старые записи на новые, когда новая запись
+дублирует старую запись на уникальном значении ключа.</P>
+
+<P>Если Вы получаете проблемы эффективности при создании копий на Вашей
+системе, можно решить их установкой репликации и созданием копий на
+подчиненной системе вместо главной. Это задачи администратора.</P>
+
+<P>Если Вы используете файловую систему Veritas, Вы можете делать следующее:
+</P>
+<OL><LI>Выполните в клиенте (perl?) <CODE>FLUSH TABLES WITH READ LOCK</CODE>
+<LI>Выполните в другом клиенте или в копии оболочки команду <CODE>mount vxfs
+snapshot</CODE>.
+<LI>Выполните в первом клиенте <CODE>UNLOCK TABLES</CODE>
+<LI>Копируйте файлы из snapshot
+<LI>Размонтируйте snapshot</OL>
+
+<H3><A NAME="BACKUP_TABLE">4.2 Синтаксис <CODE>BACKUP TABLE</CODE></A></H3>
+<PRE>
+BACKUP TABLE tbl_name[,tbl_name...] TO '/path/to/backup/directory'
+</PRE>
+
+<P>Эта команда делает копию всех файлов таблицы в резервный каталог, что
+является минимумом, необходимым, чтобы восстановить ее. Сейчас это работает
+только для таблиц <CODE>MyISAM</CODE>. Для них копируются файлы
+<CODE>.frm</CODE> (определение) и <CODE>.MYD</CODE> (данные). Индексный файл
+может быть восстановлен из этих двух.</P>
+
+<P>Перед использованием этой команды, пожалуйста, ознакомьтесь с разделом
+"<A HREF="#Backup">4.1 Резервирование баз данных</A>".</P>
+
+<P>Пока таблица резервируется, она блокируется. Если нужно резервировать
+сразу несколько таблиц, выполните команду <CODE>LOCK TABLES</CODE> для каждой
+таблицы в этой группе.</P>
+
+<P>Команда возвращает таблицу со следующими столбцами:</P>
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Столбец</STRONG></TD><TD><STRONG>Значение</STRONG></TD></TR>
+<TR><TD>Table</TD><TD>Имя таблицы</TD></TR>
+<TR><TD>Op</TD><TD>Обязательно ``backup''</TD></TR>
+<TR><TD>Msg_type</TD><TD>Одно из <CODE>status</CODE>, <CODE>error</CODE>,
+<CODE>info</CODE> или <CODE>warning</CODE>.</TD></TR>
+<TR><TD>Msg_text</TD><TD>Собственно сообщение.</TD></TR></TABLE>
+
+<P>Обратите внимание, что команда <CODE>BACKUP TABLE</CODE> доступна только в
+MySQL версии 3.23.25 и старше.</P>
+
+<H3><A NAME="RESTORE_TABLE">4.3 Синтаксис <CODE>RESTORE TABLE</CODE></A></H3>
+<PRE>
+RESTORE TABLE tbl_name[,tbl_name...] FROM '/path/to/backup/directory'
+</PRE>
+
+<P>Восстанавливает таблицу из копии, которая была сделана с помощью
+<CODE>BACKUP TABLE</CODE>. Существующие таблицы не будут перезаписаны, если
+Вы попробуете восстанавливать существующую таблицу, получите ошибку.
+Восстановление занимает больше времени, чем резервирование из-за
+необходимости сгенерировать индексный файл. Чем больше имеется ключей, тем
+дольше система будет его строить. Также, как и <CODE>BACKUP TABLE</CODE>, эта
+функция работает только с таблицами <CODE>MyISAM</CODE>.</P>
+
+<P>Команда возвращает таблицу со следующими столбцами:</P>
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Столбец</STRONG></TD><TD><STRONG>Значение</STRONG></TD></TR>
+<TR><TD>Table</TD><TD>Имя таблицы</TD></TR>
+<TR><TD>Op</TD><TD>Обязательно ``restore''</TD></TR>
+<TR><TD>Msg_type</TD><TD>Одно из <CODE>status</CODE>, <CODE>error</CODE>,
+<CODE>info</CODE> или <CODE>warning</CODE>.</TD></TR>
+<TR><TD>Msg_text</TD><TD>Собственно сообщение.</TD></TR></TABLE>
+
+<H3><A NAME="CHECK_TABLE">4.4 Синтаксис <CODE>CHECK TABLE</CODE></A></H3>
+<PRE>
+CHECK TABLE tbl_name[,tbl_name...] [option [option...]]
+option = QUICK | FAST | MEDIUM | EXTENDED | CHANGED
+</PRE>
+
+<P><CODE>CHECK TABLE</CODE> работает только с таблицами типа
+<CODE>MyISAM</CODE>. На них данная команда эквивалентна
+<CODE>myisamchk -m table_name</CODE>.</P>
+
+<P>Если Вы не определяете опций, используется <CODE>MEDIUM</CODE>.</P>
+
+<P>Данная команда проверяет таблицу на ошибки. Для таблиц типа
+<CODE>MyISAM</CODE> модифицируется статистика ключа. Команда возвращает
+таблицу со следующими столбцами:</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Столбец</STRONG></TD><TD><STRONG>Значение</STRONG></TD></TR>
+<TR><TD>Table</TD><TD>Имя таблицы.</TD></TR>
+<TR><TD>Op</TD><TD>Обязательно ``check''.</TD></TR>
+<TR><TD>Msg_type</TD><TD>Одно из <CODE>status</CODE>, <CODE>error</CODE>,
+<CODE>info</CODE> или <CODE>warning</CODE>.</TD></TR>
+<TR><TD>Msg_text</TD><TD>Собственно сообщение.</TD></TR></TABLE>
+
+<P>Обратите внимание, что Вы можете получать много строк информации для
+каждой проверенной таблицы. Последняя строка будет иметь тип <CODE>Msg_type
+status</CODE> и значение <CODE>OK</CODE>, если все хорошо. Если ответов
+<CODE>OK</CODE> или <CODE>Not checked</CODE> нет, Вы должны выполнить ремонт
+таблицы. Сообщение <CODE>Not checked</CODE> говорит о том, что для данной
+таблицы <CODE>TYPE</CODE> сообщил MySQL, что там не было никакой
+потребности проверять таблицу.</P>
+
+<P>Различные типы проверки:</P>
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Тип</STRONG></TD><TD><STRONG>Значение</STRONG></TD></TR>
+<TR><TD><CODE>QUICK</CODE></TD><TD>Не просматривать строки, чтобы проверить
+неправильные связи.</TD></TR>
+<TR><TD><CODE>FAST</CODE></TD><TD>Проверить только те таблицы, которые не
+были закрыты правильно.</TD></TR>
+<TR><TD><CODE>CHANGED</CODE></TD><TD>Проверить только те таблицы, которые не
+были закрыты правильно, и те, которые изменились со времен последней проверки.
+</TD></TR>
+<TR><TD><CODE>MEDIUM</CODE></TD><TD>Сканировать строки для проверки
+правильности удаленных связей. Это также вычисляет контрольную сумму ключа
+для строк и проверяет ее правильность.</TD></TR>
+<TR><TD><CODE>EXTENDED</CODE></TD><TD>Выполнить полную проверку всех ключей
+для всех строк в таблице. Это гарантирует, что таблица на 100%
+непротиворечива, но требует много времени!</TD></TR></TABLE>
+
+<P>Для динамических таблиц <CODE>MyISAM</CODE> запущенная проверка будет
+всегда использовать опцию <CODE>MEDIUM</CODE>. Для статических строк не
+выполняется просмотр строки для режимов <CODE>QUICK</CODE> и
+<CODE>FAST</CODE>, поскольку строки очень редко разрушаются.</P>
+
+<P>Вы можете объединять параметры проверки:</P>
+<PRE>
+CHECK TABLE test_table FAST QUICK;
+</PRE>
+
+<P>Это предписывает провести быструю проверку на таблице, если она не была
+закрыта правильно.</P>
+
+<P><STRONG>ОБРАТИТЕ ВНИМАНИЕ:</STRONG> в ряде случаев
+<CODE>CHECK TABLE</CODE> изменяет таблицу! Это случается, если таблица
+отмечена как 'corrupted' (повреждена) или 'not closed properly' (не закрыта
+правильно), но команда <CODE>CHECK TABLE</CODE> не нашла проблем в таблице. В
+этой ситуации <CODE>CHECK TABLE</CODE> отметит таблицу как ok.</P>
+
+<P>Если таблица разрушена, то наиболее вероятное, что проблема находится в
+индексах, а не в части данных. Все приведенные выше типы проверки тестируют
+индексы и должны таким образом найти большинство ошибок.</P>
+
+<P>Если Вы хотите только проверить таблицу, Вы не должны использовать никакие
+параметры проверки или опцию <CODE>QUICK</CODE>. Последний должен
+использоваться, когда Вы спешите и можете позволить пропустить то малое число
+ошибок, которое <CODE>QUICK</CODE> не находит. Например, это ошибка в файле
+данных. В большинстве случаев MySQL, при нормальном использовании, должен сам
+найти любую ошибку в файле данных. Если это случается, таблица будет отмечена
+как 'разрушено', тогда таблица не сможет использоваться, пока ошибка не
+восстановлена, чтобы не развалить данные окончательно.</P>
+
+<P><CODE>FAST</CODE> и <CODE>CHANGED</CODE> обычно предназначены, чтобы
+использоваться из скрипта (например, из cron), если Вы хотите проверять
+таблицу время от времени. В большинстве случаев <CODE>FAST</CODE> имеет
+приоритет перед <CODE>CHANGED</CODE>.</P>
+
+<P><CODE>EXTENDED</CODE> должен использоваться после того, как Вы выполнили
+нормальную проверку, но все еще получаете странные ошибки из таблицы, когда
+MySQL пробует модифицировать строку или найти строку по ключу (это ОЧЕНЬ
+маловероятно, если нормальная проверка прошла спокойно!).</P>
+
+<P>Некоторые вещи, сообщаемые проверкой таблиц, не могут быть исправлены в
+автоматическом режиме:</P>
+
+<UL><LI><CODE>Найденная строка, где столбец auto_increment имеет значение 0
+</CODE>.
+
+Это означает, что Вы имеете в таблице строку, где столбец индекса
+<CODE>auto_increment</CODE> содержит значение 0. Можно создать такую
+конструкцию командой <CODE>UPDATE</CODE>.
+
+Это не ошибка само по себе, но может вызывать проблему, если Вы сбрасываете
+таблицу в дамп, а потом восстановите ее оттуда или скомандуете
+<CODE>ALTER TABLE</CODE> на таблице. В этом случае столбец auto_increment
+изменит значение, согласно правилам auto_increment, что может вызвать
+проблемы подобно ошибке дублирования ключа.
+
+Избавиться от предупреждения можно, только выполнив инструкцию
+<CODE>UPDATE</CODE>, чтобы установить столбец к некоторому другому значению
+(не 0).</UL>
+
+<H3><A NAME="REPAIR_TABLE">4.5 Синтаксис <CODE>REPAIR TABLE</CODE></A></H3>
+<PRE>
+REPAIR TABLE tbl_name[,tbl_name...] [QUICK] [EXTENDED]
+</PRE>
+
+<P><CODE>REPAIR TABLE</CODE> тоже работает только на таблицах типа
+<CODE>MyISAM</CODE> и аналогичен вызову <CODE>myisamchk -r table_name</CODE>.
+</P>
+
+<P>Обычно Вам никогда не придется выполнять эту команду, но в случае ошибок
+Вы, очень вероятно, вернете все Ваши данные из таблицы MyISAM с помощью
+команды <CODE>REPAIR TABLE</CODE>. Если Ваши таблицы разрушаются, Вы должны
+попробовать нахйти причину этого! Подробности по этому вопросу есть в разделе
+"<A HREF="glava11.htm#Crashing">11.4.1 Что делать, если MySQL рухнул</A>".
+</P>
+
+<P><CODE>REPAIR TABLE</CODE> восстанавливает разрушенную таблицу. Команда
+возвращает таблицу со следующими столбцами:</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Столбец</STRONG></TD><TD><STRONG>Значение</STRONG></TD></TR>
+<TR><TD>Table</TD><TD>Имя таблицы</TD></TR>
+<TR><TD>Op</TD><TD>Обязательно ``repair''</TD></TR>
+<TR><TD>Msg_type</TD><TD>Одно из <CODE>status</CODE>, <CODE>error</CODE>,
+<CODE>info</CODE> или <CODE>warning</CODE>.</TD></TR>
+<TR><TD>Msg_text</TD><TD>Собственно сообщение.</TD></TR></TABLE>
+
+<P>Обратите внимание, что Вы можете получать много строк информации для
+каждой восстановленной таблицы. Последняя будет иметь тип <CODE>Msg_type
+status</CODE> и значение <CODE>OK</CODE>, если все в порядке. Если значение
+<CODE>OK</CODE> так и не появилось, Вы должны попробовать восстанавливать
+таблицу с помощью <CODE>myisamchk -o</CODE>, поскольку <CODE>REPAIR
+TABLE</CODE> еще не выполняет все параметры <CODE>myisamchk</CODE>. В
+ближайшем будущем планируется сделать ее более гибкой.</P>
+
+<P>Если задан <CODE>QUICK</CODE>, MySQL пробует делать <CODE>REPAIR</CODE>
+только для индексного дерева.</P>
+
+<P>Если Вы используете <CODE>EXTENDED</CODE>, MySQL создаст индекс по строкам
+вместо того, чтобы создать индекс одновременно с сортировкой: это может быть
+лучше, чем сортировка по ключам фиксированной длины, если Вы имеете длинные
+ключи типа <CODE>char()</CODE>, которые сжимаются очень хорошо.</P>
+
+<H3><A NAME="OPTIMIZE_TABLE">4.6 Синтаксис <CODE>OPTIMIZE TABLE</CODE></A>
+</H3>
+<PRE>
+OPTIMIZE TABLE tbl_name[,tbl_name]...
+</PRE>
+
+<P><CODE>OPTIMIZE TABLE</CODE> должен использоваться, если Вы удалили большую
+часть таблицы, или если Вы сделали много изменений для таблицы со строками
+переменных длин (таблицы, которые имеют <CODE>VARCHAR</CODE>,
+<CODE>BLOB</CODE> или <CODE>TEXT</CODE>). Удаленные записи поддерживаются в
+связанном списке, и при последующем использовании операций
+<CODE>INSERT</CODE> повторно применяются старые позиции записей. Вы можете
+использовать <CODE>OPTIMIZE TABLE</CODE>, чтобы освободить неиспользуемое
+место и дефрагментировать файл данных.</P>
+
+<P>Сейчас <CODE>OPTIMIZE TABLE</CODE> применим только к таблицам типов
+<STRONG>MyISAM</STRONG> и <CODE>BDB</CODE>. Для таблиц типа <CODE>BDB</CODE>
+<CODE>OPTIMIZE TABLE</CODE> в настоящее время отображается на вызов
+<CODE>ANALYZE TABLE</CODE>. Подробности об этом вызове в разделе
+"<A HREF="#ANALYZE_TABLE">4.7 Синтаксис <CODE>ANALYZE TABLE</CODE>
+</A>".</P>
+
+<P>Вы можете оптимизировать и другие типы таблиц запуском <CODE>mysqld</CODE>
+с опциями <CODE>--skip-new</CODE> или <CODE>--safe-mode</CODE>, но в этом
+случае <CODE>OPTIMIZE TABLE</CODE> превратится в вызов <CODE>ALTER
+TABLE</CODE>.</P>
+
+<P><CODE>OPTIMIZE TABLE</CODE> работает следующим образом:
+<UL><LI>Если таблица имеет удаленные или порванные строки,
+ремонтирует таблицу.
+<LI>Если индексные страницы не отсортированы, сортирует их.
+<LI>Если статистика не современна (и ремонт не может быть выполнен с
+сортировкой индекса), модифицирует ее.</UL>
+
+<P><CODE>OPTIMIZE TABLE</CODE> для таблиц типа <CODE>MyISAM</CODE>
+эквивалентен вызову <CODE>myisamchk --quick --check-changed-tables
+--sort-index --analyze</CODE>.</P>
+
+<P>Обратите внимание, что таблица будет блокирована в течение всего времени
+работы команды <CODE>OPTIMIZE TABLE</CODE>!</P>
+
+<H3><A NAME="ANALYZE_TABLE">4.7 Синтаксис <CODE>ANALYZE TABLE</CODE></A></H3>
+<PRE>
+ANALYZE TABLE tbl_name[,tbl_name...]
+</PRE>
+
+<P>Анализирует и сохраняет распределение ключей для таблицы. Во время
+процесса анализа таблица будет блокирована с доступом только на чтение. Это
+работает на таблицах типов <CODE>MyISAM</CODE> и <CODE>BDB</CODE>.</P>
+
+<P>Это эквивалентно вызову <CODE>myisamchk -a</CODE>.</P>
+
+<P>MySQL использует сохраненное распределение ключей, чтобы решить, в каком
+порядке таблицы должны быть соединены, когда выполняется объединение.</P>
+
+<P>Команда возвращает таблицу со следующими столбцами:</P>
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Столбец</STRONG></TD><TD><STRONG>Значение</STRONG></TD></TR>
+<TR><TD>Table</TD><TD>Имя таблицы</TD></TR>
+<TR><TD>Op</TD><TD>Обязательно ``analyze''</TD></TR>
+<TR><TD>Msg_type</TD><TD>Одно из <CODE>status</CODE>, <CODE>error</CODE>,
+<CODE>info</CODE> или <CODE>warning</CODE>.</TD></TR>
+<TR><TD>Msg_text</TD><TD>Собственно сообщение.</TD></TR></TABLE>
+
+<P>Вы можете проверять сохраненное распределение ключей командой <CODE>SHOW
+INDEX</CODE>. Подробности в разделе
+"<A HREF="#SHOW_DATABASE_INFO">4.10.1 Получение информации о базах
+данных, таблицах, столбцах и индексах</A>".</P>
+
+<P>Если таблица не изменилась после последней команды <CODE>ANALYZE
+TABLE</CODE>, она не будет проанализирована снова.</P>
+
+<H3><A NAME="FLUSH">4.8 Синтаксис <CODE>FLUSH</CODE></A></H3>
+<PRE>
+FLUSH flush_option [,flush_option]
+</PRE>
+
+<P>Вы должны использовать команду <CODE>FLUSH</CODE>, если Вы хотите очищать
+внутренние кэши MySQL. Для выполнения <CODE>FLUSH</CODE> Вы должны иметь
+право <STRONG>RELOAD</STRONG>.</P>
+
+<P><CODE>flush_option</CODE> может быть любой из следующего списка:</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><CODE>HOSTS</CODE></TD><TD>Освобождает ведущие таблицы кэша. Вы
+должны это сделать, если некоторые из Ваших хостов изменяют IP, или если Вы
+получили сообщение об ошибке "<CODE>Host ... is blocked</CODE>". Когда в
+строке для данного компьютера происходит больше, чем
+<CODE>max_connect_errors</CODE> ошибок за время связи с сервером, MySQL
+приходит к выводу, что что-то пошло неправильно, и блокирует компьютер.
+Подробности в разделе "<A HREF="glava11.htm#Blocked_host">11.2.4 Ошибка
+<CODE>Host '...' is blocked</CODE></A>. Вы можете запустить
+<CODE>mysqld</CODE> с опцией <CODE>-O max_connection_errors=999999999</CODE>,
+чтобы избежать этого сообщения об ошибке.</TD></TR>
+
+<TR><TD><CODE>LOGS</CODE></TD><TD>Закрывает и вновь открывает все журналы.
+Если Вы определили журнал модификаций или двоичный журнал без расширения,
+номер расширения журнала будет увеличен на один относительно предыдущего
+файла. Если Вы использовали расширение в имени файла, MySQL закроет и вновь
+откроет журнал модификаций. Это эквивалентно посылке на сервер
+<CODE>mysqld</CODE> сигнала <CODE>SIGHUP</CODE>.</TD></TR>
+
+<TR><TD><CODE>PRIVILEGES</CODE></TD><TD>Перезагружает привилегии из таблиц в
+базе данных <CODE>mysql</CODE>.</TD></TR>
+
+<TR><TD><CODE>TABLES</CODE></TD><TD>Закрывает все открытые таблицы.</TD></TR>
+
+<TR><TD><CODE>[TABLE|TABLES] table_name [,table_name...]</CODE></TD>
+<TD>Применяет предыдущую команду только к заданным таблицам.</TD></TR>
+
+<TR><TD><CODE>TABLES WITH READ LOCK</CODE></TD><TD>Закрывает все открытые
+таблицы и блокирует все таблицы для всех баз данных с доступом только на
+чтение, пока не будет выполнена команда <CODE>UNLOCK TABLES</CODE>. Это очень
+удобный способ получить резервную копию, если Вы имеете файловую систему,
+подобную Veritas.</TD></TR>
+
+<TR><TD><CODE>STATUS</CODE></TD><TD>Сбрасывает большинство переменных
+состояния к нулю. Используется при отладке запроса.</TD></TR></TABLE>
+
+<P>Вы можете также обращаться к каждой из команд, показанных выше с помощью
+утилиты <CODE>mysqladmin</CODE>, используя команды <CODE>flush-hosts</CODE>,
+<CODE>flush-logs</CODE>, <CODE>reload</CODE> или <CODE>flush-tables</CODE>.
+</P>
+
+<H3><A NAME="KILL">4.9 Синтаксис <CODE>KILL</CODE></A></H3>
+<PRE>
+KILL thread_id
+</PRE>
+
+<P>Каждое подключение к <CODE>mysqld</CODE> выполняется в отдельном процессе.
+Вы можете видеть запущенные процессы командой <CODE>SHOW PROCESSLIST</CODE>
+и уничтожать процесс командой <CODE>KILL thread_id</CODE>.</P>
+
+<P>Если Вы имеете привилегию <STRONG>process</STRONG>, Вы можете видеть и
+уничтожать все процессы. Иначе Вы можете видеть и уничтожать только Ваши
+собственные процессы.</P>
+
+<P>Вы можете также использовать команды <CODE>mysqladmin processlist</CODE> и
+<CODE>mysqladmin kill</CODE>, чтобы исследовать и уничтожать процессы.</P>
+
+<P>При вызове <CODE>KILL</CODE> для процесса устанавливается флаг <CODE>kill
+flag</CODE>.</P>
+
+<P>В большинстве случаев может требоваться некоторое время для того, чтобы
+процесс уничтожился, поскольку флаг <CODE>kill flag</CODE> может быть
+проверен только в специфических интервалах:</P>
+
+<UL><LI>В циклах <CODE>SELECT</CODE>, <CODE>ORDER BY</CODE> и <CODE>GROUP
+BY</CODE> флажок будет проверен после чтения блока строк. Если он установлен,
+инструкция будет прервана.
+
+<LI>При выполнении <CODE>ALTER TABLE</CODE> флаг будет проверен прежде, чем
+каждый блок строк считается из первоначальной таблицы. Если он установлен,
+команда будет прервана, а временная таблица удалена.
+
+<LI>При выполнении <CODE>UPDATE TABLE</CODE> и <CODE>DELETE TABLE</CODE>,
+флажок будет проверен после каждого чтения блока и после каждого обновления
+или удаления строки. Если он установлен, инструкция будет прервана. Обратите
+внимание, что, если Вы не используете транзакции, сделанные в таблице
+изменения не будут отменены!
+
+<LI><CODE>GET_LOCK()</CODE> прервется с <CODE>NULL</CODE>.
+
+<LI>Все процессы <CODE>INSERT DELAYED</CODE> быстренько сбросят на диск все
+строки, которые у них лежат в памяти и завершатся.
+
+<LI>Если поток находится в драйвере блокировки таблицы (состояние:
+<CODE>Locked</CODE>), блокировка таблицы будет быстро прервана.
+
+<LI>Если поток ждет свободное дисковое пространство в вызове
+<CODE>write</CODE>, запись немедленно прерывается с сообщением об
+ошибке переполнения диска.</UL>
+
+<H3><A NAME="SHOW">4.10 Синтаксис <CODE>SHOW</CODE></A></H3>
+<PRE>
+   SHOW DATABASES [LIKE wild]
+   SHOW [OPEN] TABLES [FROM db_name] [LIKE wild]
+   SHOW [FULL] COLUMNS FROM tbl_name [FROM db_name] [LIKE wild]
+   SHOW INDEX FROM tbl_name [FROM db_name]
+   SHOW TABLE STATUS [FROM db_name] [LIKE wild]
+   SHOW STATUS [LIKE wild]
+   SHOW VARIABLES [LIKE wild]
+   SHOW LOGS
+   SHOW [FULL] PROCESSLIST
+   SHOW GRANTS FOR user
+   SHOW CREATE TABLE table_name
+   SHOW MASTER STATUS
+   SHOW MASTER LOGS
+   SHOW SLAVE STATUS
+</PRE>
+
+<P><CODE>SHOW</CODE> обеспечивает информацию относительно баз данных, таблиц,
+столбцов или информацию состояния сервера. Если используется часть
+<CODE>LIKE wild</CODE>, строка <CODE>wild</CODE> может быть строкой, которая
+использует групповые символы SQL <SAMP>%</SAMP> и <SAMP>_</SAMP>.</P>
+
+<H4><A NAME="SHOW_DATABASE_INFO">4.10.1 Получение информации о базе
+данных, таблицах, столбцах и индексах</A></H4>
+<P>Вы можете использовать <CODE>db_name.tbl_name</CODE> как вариант для
+<CODE>tbl_name FROM db_name</CODE>. Эти две инструкции эквивалентны:</P>
+<PRE>
+mysql&#62; SHOW INDEX FROM mytable FROM mydb;
+mysql&#62; SHOW INDEX FROM mydb.mytable;
+</PRE>
+
+<P><CODE>SHOW DATABASES</CODE> вносит в список базы данных на сервере
+MySQL. Вы можете также получать этот список, используя команду
+<CODE>mysqlshow</CODE>.</P>
+
+<P><CODE>SHOW TABLES</CODE> вносит в список таблицы в заданной базе данных.
+Вы можете также получать этот список, используя команду
+<CODE>mysqlshow db_name</CODE>.</P>
+
+<P><STRONG>ОБРАТИТЕ ВНИМАНИЕ:</STRONG> Если пользователь не имеет привилегий
+для таблицы, соответствующая таблица не будет обнаруживаться в выводе
+<CODE>SHOW TABLES</CODE> или <CODE>mysqlshow db_name</CODE>.</P>
+
+<P><CODE>SHOW OPEN TABLES</CODE> вносит в список таблицы, которые являются в
+настоящее время открытыми в кэше таблиц. Поле <CODE>Comment</CODE> сообщает
+сколько раз таблица кэшируется (<CODE>cached</CODE>) и используется
+(<CODE>in_use</CODE>).</P>
+
+<P><CODE>SHOW COLUMNS</CODE> вносит в список столбцы в данной таблице. Если
+Вы определяете опцию <CODE>FULL</CODE>, Вы также получите привилегии, которые
+Вы имеете для каждого столбца. Если типы столбцов отличны от ожидаемых, они
+будут основаны на инструкции <CODE>CREATE TABLE</CODE>, заметьте, что MySQL
+иногда сам изменяет типы столбца. Подробности в разделе
+"<A HREF="glava07.htm#Silent_column_changes">7.3.1 Тихие изменения
+спецификации столбца</A>".</P>
+
+<P>Инструкция <CODE>DESCRIBE</CODE> обеспечивает информацию, подобную
+<CODE>SHOW COLUMNS</CODE>. Подробности в разделе
+"<A HREF="glava09.htm#DESCRIBE">9.1.2 Синтаксис <CODE>DESCRIBE</CODE>
+(получение информации о столбцах)</A>".</P>
+
+<P><CODE>SHOW FIELDS</CODE> является синонимом для <CODE>SHOW COLUMNS</CODE>,
+а <CODE>SHOW KEYS</CODE> синонимом для <CODE>SHOW INDEX</CODE>. Вы можете
+также вносить в список столбцы таблицы или индексы с помощью команд
+<CODE>mysqlshow db_name tbl_name</CODE> или
+<CODE>mysqlshow -k db_name tbl_name</CODE>.</P>
+
+<P><CODE>SHOW INDEX</CODE> возвращает индексную информацию в формате, который
+очень походит на вызов <CODE>SQLStatistics</CODE> в ODBC. Следующие столбцы
+всегда будут возвращены:</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Столбец</STRONG></TD><TD><STRONG>Назначение</STRONG></TD>
+</TR>
+<TR><TD><CODE>Table</CODE></TD><TD>Имя таблицы.</TD></TR>
+<TR><TD><CODE>Non_unique</CODE></TD><TD>0, если индекс не может содержать
+дубликаты.</TD></TR>
+<TR><TD><CODE>Key_name</CODE></TD><TD>Имя индекса.</TD></TR>
+<TR><TD><CODE>Seq_in_index</CODE></TD><TD>Номер последовательности столбца в
+индексе, начиная с 1 (не с 0!).</TD></TR>
+<TR><TD><CODE>Column_name</CODE></TD><TD>Имя столбца.</TD></TR>
+<TR><TD><CODE>Collation</CODE></TD><TD>Как столбец сортируется в индексе. В
+MySQL это может иметь варианты <SAMP>`A'</SAMP> (по возрастанию) или
+<CODE>NULL</CODE> (не сортируемый).</TD></TR>
+<TR><TD><CODE>Cardinality</CODE></TD><TD>Число уникальных значений в индексе.
+Это модифицируется запуском <CODE>isamchk -a</CODE>.</TD></TR>
+<TR><TD><CODE>Sub_part</CODE></TD><TD>Число индексированных символов, если
+столбец только частично индексирован. <CODE>NULL</CODE> если весь ключ
+индексирован в полном объеме.</TD></TR>
+<TR><TD><CODE>Comment</CODE></TD><TD>Различные замечания. Пока это сообщает,
+является ли индекс полнотекстовым (FULLTEXT) или нет.</TD></TR></TABLE>
+
+<P>Обратите внимание, что, поскольку <CODE>Cardinality</CODE> будет
+рассчитано, основываясь на статистике, сохраненной как целые числа, оно не
+обязательно точно для маленьких таблиц.</P>
+
+<H4><A NAME="SHOW_TABLE_STATUS">4.10.2
+Синтаксис <CODE>SHOW TABLE STATUS</CODE></A></H4>
+<PRE>
+SHOW TABLE STATUS [FROM db_name] [LIKE wild]
+</PRE>
+
+<P><CODE>SHOW TABLE STATUS</CODE> (новинка в Version 3.23) работает подобно
+<CODE>SHOW STATUS</CODE>, но обеспечивает много информации относительно
+каждой таблицы. Вы можете также получать этот список, используя команду
+<CODE>mysqlshow --status db_name</CODE>. Следующие столбцы возвращены:</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Столбец</STRONG></TD><TD><STRONG>Зачем он нужен</STRONG></TD>
+</TR>
+<TR><TD><CODE>Name</CODE></TD><TD>Имя таблицы.</TD></TR>
+<TR><TD><CODE>Type</CODE></TD><TD>Тип таблицы.</TD></TR>
+<TR><TD><CODE>Row_format</CODE></TD><TD>Формат хранения строки
+(фиксированный, динамический или сжатый).</TD></TR>
+<TR><TD><CODE>Rows</CODE></TD><TD>Число строк.</TD></TR>
+<TR><TD><CODE>Avg_row_length</CODE></TD><TD>Средняя длина строки.</TD></TR>
+<TR><TD><CODE>Data_length</CODE></TD><TD>Длина файла данных.</TD></TR>
+<TR><TD><CODE>Max_data_length</CODE></TD><TD>Максимальная длина файла данных.
+</TD></TR>
+<TR><TD><CODE>Index_length</CODE></TD><TD>Длина индексного файла.</TD></TR>
+<TR><TD><CODE>Data_free</CODE></TD><TD>Число распределенных, но не
+используемых байт.</TD></TR>
+<TR><TD><CODE>Auto_increment</CODE></TD><TD>Следующее значение
+auto_increment.</TD></TR>
+<TR><TD><CODE>Create_time</CODE></TD><TD>Когда таблица была создана.</TD>
+</TR>
+<TR><TD><CODE>Update_time</CODE></TD><TD>Когда файл данных был в последний
+раз модифицирован.</TD></TR>
+<TR><TD><CODE>Check_time</CODE></TD><TD>Когда таблица была в последний раз
+проверена на ошибки.</TD></TR>
+<TR><TD><CODE>Create_options</CODE></TD><TD>Дополнительные параметры,
+используемые с <CODE>CREATE TABLE</CODE>.</TD></TR>
+<TR><TD><CODE>Comment</CODE></TD><TD>Комментарий, используемый при создании
+таблицы (или информация о том, почему MySQL не может обращаться к информации
+по данной таблицы).</TD></TR></TABLE>
+
+<P>Таблицы <CODE>InnoDB</CODE> сообщат свободное пространство в ней через
+поле комментария таблицы.</P>
+
+<H4><A NAME="SHOW_STATUS">4.10.3 Синтаксис <CODE>SHOW STATUS</CODE></A></H4>
+<CODE>SHOW STATUS</CODE> обеспечивает информацию состояния сервера (подобно
+<CODE>mysqladmin extended-status</CODE>). Вывод походит на показанное ниже,
+хотя формат и числа будут другими:</P>
+<PRE>
++--------------------------+------------+
+| Variable_name            | Value      |
++--------------------------+------------+
+| Aborted_clients          | 0          |
+| Aborted_connects         | 0          |
+| Bytes_received           | 155372598  |
+| Bytes_sent               | 1176560426 |
+| Connections              | 30023      |
+| Created_tmp_disk_tables  | 0          |
+| Created_tmp_tables       | 8340       |
+| Created_tmp_files        | 60         |
+| Delayed_insert_threads   | 0          |
+| Delayed_writes           | 0          |
+| Delayed_errors           | 0          |
+| Flush_commands           | 1          |
+| Handler_delete           | 462604     |
+| Handler_read_first       | 105881     |
+| Handler_read_key         | 27820558   |
+| Handler_read_next        | 390681754  |
+| Handler_read_prev        | 6022500    |
+| Handler_read_rnd         | 30546748   |
+| Handler_read_rnd_next    | 246216530  |
+| Handler_update           | 16945404   |
+| Handler_write            | 60356676   |
+| Key_blocks_used          | 14955      |
+| Key_read_requests        | 96854827   |
+| Key_reads                | 162040     |
+| Key_write_requests       | 7589728    |
+| Key_writes               | 3813196    |
+| Max_used_connections     | 0          |
+| Not_flushed_key_blocks   | 0          |
+| Not_flushed_delayed_rows | 0          |
+| Open_tables              | 1          |
+| Open_files               | 2          |
+| Open_streams             | 0          |
+| Opened_tables            | 44600      |
+| Questions                | 2026873    |
+| Select_full_join         | 0          |
+| Select_full_range_join   | 0          |
+| Select_range             | 99646      |
+| Select_range_check       | 0          |
+| Select_scan              | 30802      |
+| Slave_running            | OFF        |
+| Slave_open_temp_tables   | 0          |
+| Slow_launch_threads      | 0          |
+| Slow_queries             | 0          |
+| Sort_merge_passes        | 30         |
+| Sort_range               | 500        |
+| Sort_rows                | 30296250   |
+| Sort_scan                | 4650       |
+| Table_locks_immediate    | 1920382    |
+| Table_locks_waited       | 0          |
+| Threads_cached           | 0          |
+| Threads_created          | 30022      |
+| Threads_connected        | 1          |
+| Threads_running          | 1          |
+| Uptime                   | 80380      |
++--------------------------+------------+
+</PRE>
+
+<P><A NAME="IDX593"></A>Переменные состояния, перечисленные выше, имеют
+следующие значения:
+
+</P><TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Переменная</STRONG></TD><TD><STRONG>Значение</STRONG></TD>
+</TR>
+<TR><TD><CODE>Aborted_clients</CODE></TD><TD>Число подключений, прерванных
+потому, что клиент не закрыл подключение правильно. Подробности в разделе
+"<A HREF="glava11.htm#Communication_errors">11.2.9 Ошибки связи/прерванные
+соединения</A>".</TD></TR>
+<TR><TD><CODE>Aborted_connects</CODE></TD><TD>Число попыток соединиться с
+сервером MySQL, которые потерпели неудачу. Подробности в разделе
+"<A HREF="glava11.htm#Communication_errors">11.2.9 Ошибки связи/прерванные
+соединения</A>".</TD></TR>
+<TR><TD><CODE>Bytes_received</CODE></TD><TD>Число байт, полученных с клиентов.
+</TD></TR>
+<TR><TD><CODE>Bytes_sent</CODE></TD><TD>Число байт, посланных клиентам.</TD>
+</TR>
+<TR><TD><CODE>Connections</CODE></TD><TD>Число попыток подключения к серверу
+MySQL.</TD></TR>
+<TR><TD><CODE>Created_tmp_disk_tables</CODE></TD><TD>Число неявных временных
+таблиц на диске, созданных при выполнении инструкций.</TD></TR>
+<TR><TD><CODE>Created_tmp_tables</CODE></TD><TD>Число неявных временных
+таблиц в памяти, созданных при выполнении инструкций.</TD></TR>
+<TR><TD><CODE>Created_tmp_files</CODE></TD><TD>Сколько временных файлов
+создал <CODE>mysqld</CODE>.</TD></TR>
+<TR><TD><CODE>Delayed_insert_threads</CODE></TD><TD>Число отсроченных потоков
+драйвера вставки в использовании.</TD></TR>
+<TR><TD><CODE>Delayed_writes</CODE></TD><TD>Число строк, записанных со
+<CODE>INSERT DELAYED</CODE>.</TD></TR>
+<TR><TD><CODE>Delayed_errors</CODE></TD><TD>Число строк, записанных со
+<CODE>INSERT DELAYED</CODE>, для которых произошла ошибка (вероятно, двойной
+ключ (<CODE>duplicate key</CODE>) был использован).</TD></TR>
+<TR><TD><CODE>Flush_commands</CODE></TD><TD>Число выполненных команд
+<CODE>FLUSH</CODE>.</TD></TR>
+<TR><TD><CODE>Handler_delete</CODE></TD><TD>Сколько раз строка была удалена
+из таблицы.</TD></TR>
+<TR><TD><CODE>Handler_read_first</CODE></TD><TD>Сколько раз первая запись
+читалась из индекса. Если это значение высоко, предполагается, что сервер
+делал много полных просмотров индекса, например, <CODE>SELECT col1 FROM
+foo</CODE>, считая, что col1 индексирован.</TD></TR>
+<TR><TD><CODE>Handler_read_key</CODE></TD><TD>Число запросов на чтение
+строки, основанных на ключе. Если это значение высоко, это значит, что Ваши
+запросы и таблицы были правильно индексированы.</TD></TR>
+<TR><TD><CODE>Handler_read_next</CODE></TD><TD>Число запросов на чтение
+следующей строки в порядке ключа. Это значение будет увеличено, если Вы
+запрашиваете индексный столбец с ограничением диапазона. Это также будет
+увеличено, если Вы делаете индексный просмотр.</TD></TR>
+<TR><TD><CODE>Handler_read_rnd</CODE></TD><TD>Число запросов на чтение строк,
+основанных на фиксированной позиции. Это значение будет высоким, если Вы
+делаете много запросов, которые требуют сортировки результата.</TD></TR>
+<TR><TD><CODE>Handler_read_rnd_next</CODE></TD><TD>Число запросов на чтение
+следующей строки в файле данных. Это значение будет высоким, если Вы делаете
+много просмотров таблицы. Вообще это предполагает, что Ваши таблицы не были
+правильно индексированы, или что Ваши запросы не используют индексы.</TD>
+</TR>
+<TR><TD><CODE>Handler_update</CODE></TD><TD>Число запросов на модификацию
+строк в таблице.</TD></TR>
+<TR><TD><CODE>Handler_write</CODE></TD><TD>Число запросов на вставку строки
+в таблицу.</TD></TR>
+<TR><TD><CODE>Key_blocks_used</CODE></TD><TD>Число используемых блоков в кэше
+ключа.</TD></TR>
+<TR><TD><CODE>Key_read_requests</CODE></TD><TD>Число запросов на чтение блока
+ключа из кэша.</TD></TR>
+<TR><TD><CODE>Key_reads</CODE></TD><TD>Число физических чтений блока ключа с
+диска, а не из кэша.</TD></TR>
+<TR><TD><CODE>Key_write_requests</CODE></TD><TD>Число запросов на запись
+блока ключа в кэш.</TD></TR>
+<TR><TD><CODE>Key_writes</CODE></TD><TD>Число физических записей блока ключа
+на диск, а не в кэш.</TD></TR>
+<TR><TD><CODE>Max_used_connections</CODE></TD><TD>Максимальное число
+подключений в использовании одновременно.</TD></TR>
+<TR><TD><CODE>Not_flushed_key_blocks</CODE></TD><TD>Число блоков ключей в
+кэше ключа, которые изменились, но не сброшены на диск.</TD></TR>
+<TR><TD><CODE>Not_flushed_delayed_rows</CODE></TD><TD>Число строк, ждущих
+записи в очередях запросов <CODE>INSERT DELAY</CODE>.</TD></TR>
+<TR><TD><CODE>Open_tables</CODE></TD><TD>Число таблиц, которые являются
+открытыми.</TD></TR>
+<TR><TD><CODE>Open_files</CODE></TD><TD>Число файлов, которые являются
+открытыми.</TD></TR>
+<TR><TD><CODE>Open_streams</CODE></TD><TD>Число потоков, которые являются
+открытыми (используемыми, главным образом, для протоколирования).</TD></TR>
+<TR><TD><CODE>Opened_tables</CODE></TD><TD>Число таблиц, которые были
+открыты.</TD></TR>
+<TR><TD><CODE>Select_full_join</CODE></TD><TD>Число объединений без ключей
+(должно быть 0).</TD></TR>
+<TR><TD><CODE>Select_full_range_join</CODE></TD><TD>Число объединений, где
+использовали поиск диапазона по таблице ссылок.</TD></TR>
+<TR><TD><CODE>Select_range</CODE></TD><TD>Число объединений, где использовали
+диапазоны в первой таблице. Это обычно не критическое, даже если это большое.
+</TD></TR>
+<TR><TD><CODE>Select_scan</CODE></TD><TD>Число объединений, где просмотрели
+первую таблицу.</TD></TR>
+<TR><TD><CODE>Select_range_check</CODE></TD><TD>Число объединений без ключей,
+где проверяем использование ключа после каждой строки (должно быть 0).</TD>
+</TR>
+<TR><TD><CODE>Questions</CODE></TD><TD>Число запросов, посланных серверу.
+</TD></TR>
+<TR><TD><CODE>Slave_open_temp_tables</CODE></TD><TD>Число временных таблиц, в
+настоящее время открытых подчиненным процессом.</TD></TR>
+<TR><TD><CODE>Slow_launch_threads</CODE></TD><TD>Число потоков, которым
+понадобилось для установления соединения больше, чем
+<CODE>slow_launch_time</CODE>.</TD></TR>
+<TR><TD><CODE>Slow_queries</CODE></TD><TD>Число запросов, которые заняли
+больше, чем <CODE>long_query_time</CODE>.</TD></TR>
+<TR><TD><CODE>Sort_merge_passes</CODE></TD><TD>Число объединений,
+потребовавших сортировки. Если это значение большое, Вы должны рассмотреть
+увеличение <CODE>sort_buffer</CODE>.</TD></TR>
+<TR><TD><CODE>Sort_range</CODE></TD><TD>Число сортировок с диапазонами.</TD>
+</TR>
+<TR><TD><CODE>Sort_rows</CODE></TD><TD>Число сортируемых строк.</TD></TR>
+<TR><TD><CODE>Sort_scan</CODE></TD><TD>Число сортировок выполненных,
+просматривая таблицу.</TD></TR>
+<TR><TD><CODE>Table_locks_immediate</CODE></TD><TD>Сколько раз блокировка
+таблицы применялась сразу. Доступно после версии 3.23.33.</TD></TR>
+<TR><TD><CODE>Table_locks_waited</CODE></TD><TD>Сколько раз блокировка
+таблицы не могла быть применена сразу и пришлось ждать. Если это значение
+высоко, и Вы имеете проблемы с эффективностью, Вы должны сначала
+оптимизировать Ваши запросы, а затем или разделить таблицу, или использовать
+репликацию. Доступно после 3.23.33.</TD></TR>
+<TR><TD><CODE>Threads_cached</CODE></TD><TD>Число потоков в кэше.</TD></TR>
+<TR><TD><CODE>Threads_connected</CODE></TD><TD>Сколько в настоящее время
+открыто подключений.</TD></TR>
+<TR><TD><CODE>Threads_created</CODE></TD><TD>Число потоков созданных, чтобы
+обработать подключения.</TD></TR>
+<TR><TD><CODE>Threads_running</CODE></TD><TD>Число потоков, которые сейчас
+не бездействуют.</TD></TR>
+<TR><TD><CODE>Uptime</CODE></TD><TD>Сколько секунд сервер уже работает.</TD>
+</TR></TABLE>
+
+<P>Некоторые комментарии относительно вышеупомянутого:</P>
+
+<UL><LI>Если <CODE>Opened_tables</CODE> велико, то переменная
+<CODE>table_cache</CODE>, вероятно, слишком маленькая.
+
+<LI>Если <CODE>key_reads</CODE> велико, то переменная <CODE>key_cache</CODE>,
+вероятно, слишком маленькая. Коэффицент кэширования может быть вычислен по
+формуле: <CODE>key_reads</CODE>/<CODE>key_read_requests</CODE>.
+
+<LI>Если <CODE>Handler_read_rnd</CODE> велико, то Вы, вероятно, имеете много
+запросов, которые требуют, чтобы MySQL просматривал целые таблицы, или Вы
+имеете объединения, которые не используют ключи правильно.
+
+<LI>Если <CODE>Threads_created</CODE> велико, то следует увеличить переменную
+<CODE>thread_cache_size</CODE>.</UL>
+
+<H4><A NAME="SHOW_VARIABLES">4.10.4 Синтаксис <CODE>SHOW VARIABLES</CODE></A>
+</H4>
+<PRE>
+SHOW VARIABLES [LIKE wild]
+</PRE>
+
+<P><CODE>SHOW VARIABLES</CODE> показывает значения некоторых переменных
+системы MySQL. Вы можете также получить эту информацию, используя команду
+<CODE>mysqladmin variables</CODE>.</P>
+
+<P>Вывод походит на показанное ниже, хотя формат и числа будут иными:</P>
+<PRE>
++-------------------------+---------------------------+
+| Variable_name           | Value                     |
++-------------------------+---------------------------+
+| ansi_mode               | OFF                       |
+| back_log                | 50                        |
+| basedir                 | /my/monty/                |
+| bdb_cache_size          | 16777216                  |
+| bdb_log_buffer_size     | 32768                     |
+| bdb_home                | /my/monty/data/           |
+| bdb_max_lock            | 10000                     |
+| bdb_logdir              |                           |
+| bdb_shared_data         | OFF                       |
+| bdb_tmpdir              | /tmp/                     |
+| binlog_cache_size       | 32768                     |
+| concurrent_insert       | ON                        |
+| connect_timeout         | 5                         |
+| datadir                 | /my/monty/data/           |
+| delay_key_write         | ON                        |
+| delayed_insert_limit    | 100                       |
+| delayed_insert_timeout  | 300                       |
+| delayed_queue_size      | 1000                      |
+| flush                   | OFF                       |
+| flush_time              | 0                         |
+| have_bdb                | YES                       |
+| have_innodb             | YES                       |
+| have_raid               | YES                       |
+| have_ssl                | NO                        |
+| init_file               |                           |
+| interactive_timeout     | 28800                     |
+| join_buffer_size        | 131072                    |
+| key_buffer_size         | 16776192                  |
+| language                | /my/monty/share/english/  |
+| large_files_support     | ON                        |
+| log                     | OFF                       |
+| log_update              | OFF                       |
+| log_bin                 | OFF                       |
+| log_slave_updates       | OFF                       |
+| long_query_time         | 10                        |
+| low_priority_updates    | OFF                       |
+| lower_case_table_names  | 0                         |
+| max_allowed_packet      | 1048576                   |
+| max_binlog_cache_size   | 4294967295                |
+| max_connections         | 100                       |
+| max_connect_errors      | 10                        |
+| max_delayed_threads     | 20                        |
+| max_heap_table_size     | 16777216                  |
+| max_join_size           | 4294967295                |
+| max_sort_length         | 1024                      |
+| max_tmp_tables          | 32                        |
+| max_write_lock_count    | 4294967295                |
+| myisam_recover_options  | DEFAULT                   |
+| myisam_sort_buffer_size | 8388608                   |
+| net_buffer_length       | 16384                     |
+| net_read_timeout        | 30                        |
+| net_retry_count         | 10                        |
+| net_write_timeout       | 60                        |
+| open_files_limit        | 0                         |
+| pid_file                | /my/monty/data/donna.pid  |
+| port                    | 3306                      |
+| protocol_version        | 10                        |
+| record_buffer           | 131072                    |
+| query_buffer_size       | 0                         |
+| safe_show_database      | OFF                       |
+| server_id               | 0                         |
+| skip_locking            | ON                        |
+| skip_networking         | OFF                       |
+| skip_show_database      | OFF                       |
+| slow_launch_time        | 2                         |
+| socket                  | /tmp/mysql.sock           |
+| sort_buffer             | 2097116                   |
+| table_cache             | 64                        |
+| table_type              | MYISAM                    |
+| thread_cache_size       | 4                         |
+| thread_stack            | 65536                     |
+| tmp_table_size          | 1048576                   |
+| tmpdir                  | /tmp/                     |
+| version                 | 3.23.29a-gamma-debug      |
+| wait_timeout            | 28800                     |
++-------------------------+---------------------------+
+</PRE>
+
+<P>Каждая опция описана ниже. Значения для буферных размеров, длин и размеров
+стека даны в байтах. Вы можете определять значения с суффиксами
+<SAMP>`K'</SAMP> или <SAMP>`M'</SAMP>, чтобы указать килобайты или мегабайты.
+Например, <CODE>16M</CODE> указывает 16 мегабайтов. Регистр символов суффикса
+не имеет значения: <CODE>16M</CODE> и <CODE>16m</CODE> эквивалентны.</P>
+
+<P><A NAME="IDX594"></A>
+<DL COMPACT>
+<DT><CODE><CODE>ansi_mode</CODE>.</CODE>
+<DD><CODE>ON</CODE>, если <CODE>mysqld</CODE> запущен с опцией
+<CODE>--ansi</CODE>. Подробности в разделе
+"<A HREF="glava01.htm#ANSI_mode">1.4.3 Запуск MySQL в режиме ANSI</A>".
+
+<DT><CODE><CODE>back_log</CODE></CODE>
+<DD>Сколько ожидающих обработки подключений может иметь MySQL. Это важно,
+когда главный процесс MySQL получает <STRONG>ОЧЕНЬ</STRONG> много запросов
+подключения за очень короткое время. Затем требуется некоторое время (хотя
+очень немного) для основного процесса, чтобы проверить подключение и
+запустить новый поток. Значение <CODE>back_log</CODE> указывает, сколько
+запросов могут быть сложены в стек в течение этого короткого времени прежде,
+чем MySQL на мгновение остановит ответы на новые запросы. Вы должны увеличить
+это только, если Вы ожидаете большое количество подключений за короткий
+периоде времени (сервер работает интенсивно).
+
+<P>Другими словами, это значение задает размер слушающей очереди для входящих
+подключений TCP/IP. Ваша операционная система имеет собственное ограничение
+размера этой очереди. В Unix man-страница <CODE>listen(2)</CODE> должна
+иметь большее количество деталей. Проверьте документацию на Вашу ОС для
+выяснения максимального значения для этой переменной. Попытка устанавливать
+<CODE>back_log</CODE> выше, чем это ограничение операционной системы, будет
+неэффективна, хотя и безопасна.
+
+<DT><CODE><CODE>basedir</CODE></CODE>
+<DD>Значение опции <CODE>--basedir</CODE>.
+
+<DT><CODE><CODE>bdb_cache_size</CODE></CODE>
+<DD>Буфер, который распределен, чтобы кэшировать индекс и строки для
+<CODE>BDB</CODE>-таблиц. Если Вы не используете таблицы <CODE>BDB</CODE>, Вы
+должны запустить <CODE>mysqld</CODE> с опцией <CODE>--skip-bdb</CODE>, чтобы
+не тратить впустую память для этого кэша.
+
+<DT><CODE><CODE>bdb_log_buffer_size</CODE></CODE>
+<DD>Буфер, который распределен, чтобы кэшировать протоколы для
+<CODE>BDB</CODE>-таблиц. Если Вы не используете таблицы <CODE>BDB</CODE>, Вы
+должны запустить <CODE>mysqld</CODE> с опцией <CODE>--skip-bdb</CODE>, чтобы
+не тратить впустую память для этого кэша.
+
+<DT><CODE><CODE>bdb_home</CODE></CODE>
+<DD>Значение опции <CODE>--bdb-home</CODE>.
+
+<DT><CODE><CODE>bdb_max_lock</CODE></CODE>
+<DD>Максимальное число блокировок (по умолчанию 1000), которые Вы можете
+иметь активным на BDB-таблице. Вы должны увеличить это значение, если Вы
+получаете ошибки типа <CODE>bdb: Lock table is out of available locks</CODE>
+или <CODE>Got error 12 from ...</CODE>, когда Вы делаете длинные транзакции,
+или когда <CODE>mysqld</CODE> должен исследовать много строк, чтобы
+вычислить и обработать запрос.
+
+<DT><CODE><CODE>bdb_logdir</CODE></CODE>
+<DD>Значение опции <CODE>--bdb-logdir</CODE>.
+
+<DT><CODE><CODE>bdb_shared_data</CODE></CODE>
+<DD><CODE>ON</CODE>, если Вы используете <CODE>--bdb-shared-data</CODE>.
+
+<DT><CODE><CODE>bdb_tmpdir</CODE></CODE>
+<DD>Значение опции <CODE>--bdb-tmpdir</CODE>.
+
+<DT><CODE>binlog_cache_size</CODE>.
+<DD>Размер кэша, чтобы хранить инструкции SQL для двоичного файла регистрации
+в течение транзакции. Если Вы часто используете большие, многооператорные
+транзакции, Вы можете увеличить это значение, чтобы получить большую
+эффективность. Подробности в разделе "<A HREF="glava09.htm#COMMIT">9.2.1
+Синтаксис <CODE>BEGIN/COMMIT/ROLLBACK</CODE></A>".
+
+<DT><CODE><CODE>character_set</CODE></CODE>
+<DD>Набор символов по умолчанию.
+
+<DT><CODE><CODE>character_sets</CODE></CODE>
+<DD>Поддерживаемые наборы символов.
+
+<DT><CODE><CODE>concurrent_inserts</CODE></CODE>
+<DD>Если <CODE>ON</CODE> (значение по умолчанию), MySQL позволит Вам
+использовать <CODE>INSERT</CODE> на таблицах системы <CODE>MyISAM</CODE> в то
+же самое время, когда Вы выполняете на них запросы <CODE>SELECT</CODE>.
+Вы можете выключить эту опцию запуском <CODE>mysqld</CODE> с параметрами
+<CODE>--safe</CODE> или <CODE>--skip-new</CODE>.
+
+<A NAME="IDX595"></A><DT><CODE><CODE>connect_timeout</CODE></CODE>
+<DD>Число секунд, которое сервер <CODE>mysqld</CODE> ждет подключения перед
+ответом <CODE>Bad handshake</CODE>.
+
+<DT><CODE><CODE>datadir</CODE></CODE>
+<DD>Значение опции <CODE>--datadir</CODE>.
+
+<DT><CODE><CODE>delay_key_write</CODE></CODE>
+<DD>Если включено (по умолчанию), MySQL учитывает опцию
+<CODE>delay_key_write</CODE> в <CODE>CREATE TABLE</CODE>. Это означает, что
+буфер ключей для таблиц с этой опцией не будет сбрасываться на каждой
+индексной модификации, а только когда таблица будет закрыта. Это ускорит
+работу по записи, но Вы должны добавить автоматическую проверку всех таблиц
+командой <CODE>myisamchk --fast --force</CODE>. Обратите внимание, что, если
+Вы запускаете <CODE>mysqld</CODE> с опцией
+<CODE>--delay-key-write-for-all-tables</CODE>, это означает, что все таблицы
+будут обрабатываться так, как будто они были созданы с опцией
+<CODE>delay_key_write</CODE>. Вы можете очищать этот флажок, запуская
+<CODE>mysqld</CODE> с параметрами <CODE>--skip-new</CODE> или
+<CODE>--safe-mode</CODE>.
+
+<DT><CODE><CODE>delayed_insert_limit</CODE></CODE>
+<DD>После вставки <CODE>delayed_insert_limit</CODE> строк, драйвер
+<CODE>INSERT DELAYED</CODE> проверит, имеется ли любая задержка инструкций
+<CODE>SELECT</CODE>. Если так, это позволяет им выполниться перед
+продолжением работ с таблицей.
+
+<DT><CODE><CODE>delayed_insert_timeout</CODE></CODE>
+<DD>Сколько времени поток <CODE>INSERT DELAYED</CODE> должен ждать инструкции
+<CODE>INSERT</CODE> перед своим завершением.
+
+<DT><CODE><CODE>delayed_queue_size</CODE></CODE>
+<DD>Каких размеров (в строках) очередь должна быть распределена для обработки
+<CODE>INSERT DELAYED</CODE>. Если очередь заполняется, любой пользователь,
+который вызвал <CODE>INSERT DELAYED</CODE>, будет ждать до появления
+свободного места в очереди.
+
+<DT><CODE><CODE>flush</CODE></CODE>
+<DD><CODE>ON</CODE>, если MySQL был запущен с опцией <CODE>--flush</CODE>.
+
+<DT><CODE><CODE>flush_time</CODE></CODE>
+<DD>Если это установлено в значение, отличное от нуля, то каждые
+<CODE>flush_time</CODE> секунд все таблицы будут закрыты (чтобы освободить
+ресурсы и сбросить данные на диск). Я рекомендую эту опцию только на Win95,
+Win98 или на системах, где Вы имеете очень небольшое количество ресурсов.
+
+<DT><CODE><CODE>have_bdb</CODE></CODE>
+<DD><CODE>YES</CODE>, если <CODE>mysqld</CODE> поддерживает таблицы Berkeley
+DB. <CODE>DISABLED</CODE>, если использован параметр
+<CODE>--skip-bdb</CODE>.
+
+<DT><CODE><CODE>have_innodb</CODE></CODE>
+<DD><CODE>YES</CODE>, если <CODE>mysqld</CODE> поддерживает таблицы InnoDB.
+<CODE>DISABLED</CODE>, если использован параметр <CODE>--skip-innodb</CODE>.
+
+<DT><CODE><CODE>have_raid</CODE></CODE>
+<DD><CODE>YES</CODE>, если <CODE>mysqld</CODE> поддерживает опцию
+<CODE>RAID</CODE>.
+
+<DT><CODE><CODE>have_ssl</CODE></CODE>
+<DD><CODE>YES</CODE>, если <CODE>mysqld</CODE> поддерживает SSL (шифрование)
+по протоколу клиент/сервер.
+
+<DT><CODE><CODE>init_file</CODE></CODE>
+<DD>Имя файла, определенного в параметре <CODE>--init-file</CODE> при запуске
+сервера. Это файл инструкций SQL, которые Вы хотите всегда выполнять при
+каждом запуске сервера.
+
+<DT><CODE><CODE>interactive_timeout</CODE></CODE>
+<DD>Число секунд, которое сервер ждет действий на активном подключении перед
+его закрытием. Интерактивный пользователь определен как пользователь, который
+применяет опцию <CODE>CLIENT_INTERACTIVE</CODE> для
+<CODE>mysql_real_connect()</CODE>. См. также <CODE>wait_timeout</CODE>.
+
+<DT><CODE><CODE>join_buffer_size</CODE></CODE>
+<DD>Размер буфера, который используется для полных объединений (объединения,
+которые не используют индексы). Буфер будет распределен один раз для каждого
+полного объединения между двумя таблицами. Увеличьте это значение, чтобы
+ускорить полное объединение, если добавление индексов невозможно. Обычно
+самый лучший способ получать быстрые объединения состоит в том, чтобы
+добавить индексы таблицы.
+
+<A NAME="IDX596"></A><DT><CODE><CODE>key_buffer_size</CODE></CODE>
+<DD>Индексные блоки буферизированы и разделяются всеми потоками.
+<CODE>key_buffer_size</CODE> как раз и задает размер буфера, используемого
+для индексных блоков. Увеличьте это значение, чтобы улучшить индексную
+обработку. Но если Вы сделаете его слишком большим (больше, чем 50% общей
+памяти?), Ваша система может начать использовать своп и стать ДЕЙСТВИТЕЛЬНО
+медленной. Не забудьте, что поскольку MySQL не кэширует чтение данных, Вы
+должны оставить некоторый участок памяти для кэша файловой системы ОС.
+
+<P>Вы можете проверять эффективность буфера ключей выполнением <CODE>show
+status</CODE> и изучением переменных <CODE>Key_read_requests</CODE>,
+<CODE>Key_reads</CODE>, <CODE>Key_write_requests</CODE> и
+<CODE>Key_writes</CODE>. Коэффициент <CODE>Key_reads/Key_read_request</CODE>
+обычно должен быть &#60; 0.01. <CODE>Key_write/Key_write_requests</CODE>
+обычно близко к 1, если Вы используете обычное обновление/удаление, но может
+быть намного меньше, если Вы имеете тенденцию делать модификации, которые
+воздействуют на много данных сразу, или если Вы используете
+<CODE>delay_key_write</CODE>. Подробности в разделе
+"<A HREF="#SHOW">4.10 Синтаксис <CODE>SHOW</CODE></A>".
+
+<P>Чтобы получить заметное ускорение при записи многих строк сразу,
+используйте <CODE>LOCK TABLES</CODE>. Подробности в разделе
+"<A HREF="glava09.htm#LOCK_TABLES">9.2.2 Синтаксис <CODE>LOCK
+TABLES/UNLOCK TABLES</CODE></A>".
+
+<DT><CODE><CODE>language</CODE></CODE>
+<DD>Язык, используемый для сообщений об ошибках.
+
+<DT><CODE><CODE>large_file_support</CODE></CODE>
+<DD>Если <CODE>mysqld</CODE> компилировался с параметрами для поддержки
+больших файлов.
+
+<DT><CODE><CODE>locked_in_memory</CODE></CODE>
+<DD>Если <CODE>mysqld</CODE> был блокирован в памяти опцией
+<CODE>--memlock</CODE>
+
+<DT><CODE><CODE>log</CODE></CODE>
+<DD>Если включено протоколирование всех запросов.
+
+<DT><CODE><CODE>log_update</CODE></CODE>
+<DD>Регистрации всех запросов допускается.
+
+<DT><CODE><CODE>log_bin</CODE></CODE>
+<DD>Файл регистрации модификации включен.
+
+<DT><CODE><CODE>log_slave_updates</CODE></CODE>
+<DD>Модификации с подчиненного регистрируются.
+
+<DT><CODE><CODE>long_query_time</CODE></CODE>
+<DD>Если запрос занимает больше, чем заданное здесь время (в секундах),
+счетчик <CODE>Slow_queries</CODE> будет увеличен. Если Вы используете
+<CODE>--log-slow-queries</CODE>, запрос будут регистрироваться в файле
+регистрации медленных запросов.
+
+<DT><CODE><CODE>lower_case_table_names</CODE></CODE>
+<DD>Если установлено в 1, имена таблиц будут сохранены на диске в нижнем
+регистре, и они не будут чувствительны к регистру. Подробности в разделе
+"<A HREF="glava03.htm#Name_case_sensitivity">3.3 Чувствительность к
+регистру символов в именах</A>".
+
+<DT><CODE><CODE>max_allowed_packet</CODE></CODE>
+<DD>Максимальный размер одного пакета. Буфер сообщений инициализирован для
+размера в <CODE>net_buffer_length</CODE> байт, но может вырасти до
+<CODE>max_allowed_packet</CODE> байт, когда необходимо. Это значение по
+умолчанию маленькое, но позволяет захватывать большие (возможно,
+неправильные) пакеты. Вы должны увеличить это значение, если используете
+большие столбцы <CODE>BLOB</CODE>. Он должно быть столь же большим как самый
+крупный <CODE>BLOB</CODE>, который Вы хотите использовать. Текущий протокол
+ограничивает <CODE>max_allowed_packet</CODE> размером 16M.
+
+<DT><CODE><CODE>max_binlog_cache_size</CODE></CODE>
+<DD>Если многооператорная транзакция требует больше, чем этот объем памяти,
+выйдет ошибочка "Multi-statement transaction required more than
+'max_binlog_cache_size' bytes of storage".
+
+<DT><CODE><CODE>max_binlog_size</CODE></CODE>
+<DD>Доступно после версии 3.23.33. Если запись в двоичный файл регистрации
+(для репликации) превышает данное значение, выполняется ротация файлов. Вы не
+можете устанавливать это значение меньше, чем в 1024 байта, или больше, чем
+1 GB. Значение по умолчанию 1 GB.
+
+<DT><CODE><CODE>max_connections</CODE></CODE>
+<DD>Число одновременно допущенных клиентов. Увеличение этого значения
+увеличивает число описателей файла, которых требует <CODE>mysqld</CODE>.
+Подробности в разделе "<A HREF="glava11.htm#Too_many_connections">11.2.5
+Ошибка <CODE>Too many connections</CODE></A>".
+
+<DT><CODE><CODE>max_connect_errors</CODE></CODE>
+<DD>Если имеется больше, чем это число, прерванных подключений с хоста, хост
+будет блокирован, и никакие подключения с него станут невозможными вообще.
+Вы можете снова открыть хост командой <CODE>FLUSH HOSTS</CODE>.
+
+<DT><CODE><CODE>max_delayed_threads</CODE></CODE>
+<DD>Не запускать больше, чем это число потоков, чтобы обработать инструкции
+<CODE>INSERT DELAYED</CODE>. Если Вы попробуете вставлять данные в новую
+таблицу после того, как все потоки <CODE>INSERT DELAYED</CODE> будут заняты,
+строка будет вставлена, как будто атрибут <CODE>DELAYED</CODE> не был
+определен вовсе, то есть немедленно.
+
+<DT><CODE><CODE>max_heap_table_size</CODE></CODE>
+<DD>Не позволять создание heap-таблиц больше этого числа.
+
+<DT><CODE><CODE>max_join_size</CODE></CODE>
+<DD>Объединения, которые, вероятно, собираются читать больше, чем сказано в
+<CODE>max_join_size</CODE>, возвращают ошибку. Установите это значение, если
+Ваши пользователи имеют тенденцию выполнять объединения, которые испытывают
+недостаток предложения <CODE>WHERE</CODE>, занимают много времени или
+возвращают миллионы строк.
+
+<DT><CODE><CODE>max_sort_length</CODE></CODE>
+<DD>Число байтов, чтобы использовать при сортировке значений
+<CODE>BLOB</CODE> или <CODE>TEXT</CODE> (только первые
+<CODE>max_sort_length</CODE> байтов из каждого значения реально используются,
+остальное игнорируется вообще).
+
+<DT><CODE><CODE>max_user_connections</CODE></CODE>
+<DD>Максимальное число активных подключений для одного пользователя (0 =
+нет никаких ограничений).
+
+<DT><CODE><CODE>max_tmp_tables</CODE></CODE>
+<DD>Максимальное число временных таблиц, которые пользователь может хранить
+открытыми в один момент времени.
+
+<DT><CODE><CODE>max_write_lock_count</CODE></CODE>
+<DD>После этого количества блоикоровок записи допускается выполнение между
+делом блокировок чтения.
+
+<DT><CODE><CODE>myisam_recover_options</CODE></CODE>
+<DD>Значение параметра <CODE>--myisam-recover</CODE>.
+
+<DT><CODE><CODE>myisam_sort_buffer_size</CODE></CODE>
+<DD>Буфер, который распределен для сортировки индекса при выполнении
+<CODE>REPAIR</CODE> или при создании индексов с помощью <CODE>CREATE
+INDEX</CODE> или <CODE>ALTER TABLE</CODE>.
+
+<DT><CODE><CODE>myisam_max_extra_sort_file_size</CODE>.</CODE>
+<DD>Если создание временного файла для быстрой генерации индекса много
+больше, чем использование кэша ключей. то предпочтительнее метод кэша. Это
+значение используется, главным образом, чтобы вынудить длинные символьные
+ключи в больших таблицах использовать более медленный метод создания индекса.
+<STRONG>ОБРАТИТЕ ВНИМАНИЕ</STRONG>, что этот параметр задан в мегабайтах!
+
+<DT><CODE><CODE>myisam_max_sort_file_size</CODE></CODE>
+<DD>Максимальный размер временного файла, который MySQL позволяет
+использовать при освежении индекса (в течение <CODE>REPAIR</CODE>,
+<CODE>ALTER TABLE</CODE> или <CODE>LOAD DATA INFILE</CODE>. Если размер файла
+больше, чем это значение, индекс будет создан через кэш ключа, который
+является более медленным. <STRONG>ОБРАТИТЕ ВНИМАНИЕ</STRONG>, что этот
+параметр задан в мегабайтах!
+
+<DT><CODE><CODE>net_buffer_length</CODE></CODE>
+<DD>Буфер связи будет приведен к этому размеру между запросами. Это обычно не
+должно изменяться, но если Вы имеете очень мало памяти, Вы можете
+устанавливать это значение в ожидаемый размер запроса. То есть в ожидаемую
+длину инструкций SQL, посланных клиентами. Если запрос превышает эту длину,
+буфер будет автоматически расширен до <CODE>max_allowed_packet</CODE> байт.
+
+<DT><CODE><CODE>net_read_timeout</CODE></CODE>
+<DD>Сколько секунд ждать данные из подключения перед прерыванием чтения.
+Обратите внимание, что, когда мы не ожидаем данные из подключения, время
+ожидания определено через <CODE>write_timeout</CODE>. См. также
+<CODE>slave_read_timeout</CODE>.
+
+<DT><CODE><CODE>net_retry_count</CODE></CODE>
+<DD>Если чтение на коммуникационном порте прервано, оно повторится несколько
+раз перед отменой попыток связи. Это значение должно быть очень велико на
+<CODE>FreeBSD</CODE>, поскольку там внутренние прерывания посланы всем
+серверным процессам чтения.
+
+<DT><CODE><CODE>net_write_timeout</CODE></CODE>
+<DD>Число секунд ожидания блока, который будет записан в подключение.
+
+<DT><CODE><CODE>open_files_limit</CODE></CODE>
+<DD>Если это не 0, <CODE>mysqld</CODE> использует это значение, чтобы
+резервировать описатели файла для применения с <CODE>setrlimit()</CODE>. Если
+это значение = 0, <CODE>mysqld</CODE> резервирует
+<CODE>max_connections*5</CODE> или <CODE>max_connections+table_cache*2</CODE>
+(используется большее из этих значений) число файлов. Вы должны попробовать
+увеличивать это значение, если <CODE>mysqld</CODE> выдает Вам ошибку
+'Too many open files'.
+
+<DT><CODE><CODE>pid_file</CODE></CODE>
+<DD>Значение параметра <CODE>--pid-file</CODE>.
+
+<DT><CODE><CODE>port</CODE></CODE>
+<DD>Значение параметра <CODE>--port</CODE>.
+
+<DT><CODE><CODE>protocol_version</CODE></CODE>
+<DD>Версия протокола, используемого сервером MySQL.
+
+<DT><CODE><CODE>record_buffer</CODE></CODE>
+<DD>Каждый поток, который делает последовательный просмотр, распределяет
+буфер этого размера для каждой таблицы, которую просматривает. Если Вы
+делаете много последовательных просмотров, стоит увеличить это значение.
+
+<DT><CODE><CODE>record_rnd_buffer</CODE></CODE>
+<DD>При чтении строк в сортируемом порядке после сортировки, строки читаются
+через этот буфер, чтобы избежать дисковых поисков. Если не задан, берется
+значение из переменной <CODE>record_buffer</CODE>.
+
+<DT><CODE><CODE>query_buffer_size</CODE></CODE>
+<DD>Начальное распределение буфера запросов. Если большинство Ваших запросов
+имеет большую длину, Вы должны увеличить это!
+
+<DT><CODE><CODE>safe_show_databases</CODE></CODE>
+<DD>Не показывать базы данных, для которых пользователь не имеет привилегий
+базы данных или таблицы. Это может улучшать защиту. См. также
+<CODE>skip_show_databases</CODE>.
+
+<DT><CODE><CODE>server_id</CODE></CODE>
+<DD>Значение опции <CODE>--server-id</CODE>.
+
+<DT><CODE><CODE>skip_locking</CODE></CODE>
+<DD>Если OFF, <CODE>mysqld</CODE> использует внешнюю блокировку.
+
+<DT><CODE><CODE>skip_networking</CODE></CODE>
+<DD>Если ON, допустимы только локальные (сокетные) подключения.
+
+<DT><CODE><CODE>skip_show_databases</CODE></CODE>
+<DD>Это предотвращает выполнение <CODE>SHOW DATABASES</CODE>, если
+пользователь не имеет привилегии <CODE>PROCESS_PRIV</CODE>. Это может
+улучшить защиту. См. также <CODE>safe_show_databases</CODE>.
+
+<DT><CODE><CODE>slave_read_timeout</CODE></CODE>
+<DD>Число секунд, которое надлежит ждать данные из главного/подчиненного
+подключения перед прерыванием чтения.
+
+<DT><CODE><CODE>slow_launch_time</CODE></CODE>
+<DD>Если создание потока занимает больше времени, чем это значение (в
+секундах), счетчик <CODE>Slow_launch_threads</CODE> будет увеличен.
+
+<DT><CODE><CODE>socket</CODE></CODE>
+<DD>Unix-сокет, используемый сервером.
+
+<DT><CODE><CODE>sort_buffer</CODE></CODE>
+<DD>Каждый поток, который должен делать сортировку, распределяет буфер этого
+размера. Увеличьте это значение для ускорения операций <CODE>ORDER BY</CODE>
+или <CODE>GROUP BY</CODE>. Подробности в разделе
+"<A HREF="glava11.htm#Temporary_files">11.4.4 Где MySQL
+хранит временные файлы</A>".
+
+<DT><CODE><CODE>table_cache</CODE></CODE>
+<DD>Число открытых таблиц для всех потоков. Увеличение этого значения
+увеличивает число описателей файла, которых требует <CODE>mysqld</CODE>.
+MySQL нуждается в двух описателях файла для каждой уникальной открытой
+таблицы. Вы можете проверять, должны ли Вы увеличить кэш таблицы, анализируя
+переменную <CODE>Opened_tables</CODE>. Подробности в разделе
+"<A HREF="#SHOW">4.10 Синтаксис <CODE>SHOW</CODE></A>".
+
+Удостоверьтесь, что Ваша операционная система может обрабатывать число
+описателей файла, подразумеваемых установкой <CODE>table_cache</CODE>. Если
+<CODE>table_cache</CODE> слишком велико, MySQL может исчерпать описатели
+файла и начать сбоить.
+
+<DT><CODE><CODE>table_type</CODE></CODE>
+<DD>Тип таблицы по умолчанию.
+
+<DT><CODE><CODE>thread_cache_size</CODE></CODE>
+<DD>Сколько потоков мы должны хранить в кэше для повторного использования.
+Когда пользователь отсоединяется, потоки пользователя будут помещены в кэш,
+если нет больше, чем <CODE>thread_cache_size</CODE> потоков. Все новые потоки
+сначала принимаются из кэша и только, когда кэш пуст, создаются новые. Эта
+переменная может увеличиваться, чтобы улучшить эффективность, если Вы имеете
+много новых подключений.
+
+<DT><CODE><CODE>thread_concurrency</CODE></CODE>
+<DD>На Solaris <CODE>mysqld</CODE> вызовет <CODE>thr_setconcurrency()</CODE>
+с этим значением. <CODE>thr_setconcurrency()</CODE> разрешает прикладной
+программе давать системе управления данные относительно желательного числа
+потоков, которые должны быть выполнены в одно и то же время.
+
+<DT><CODE><CODE>thread_stack</CODE></CODE>
+<DD>Размер стека для каждого потока. Многие из ограничений, обнаруженных
+тестом <CODE>crash-me</CODE>, зависят от этого значения. Значение по
+умолчанию достаточно большое для нормальной работы.
+
+<DT><CODE><CODE>timezone</CODE></CODE>
+<DD>Таймзона (часовой пояс) для сервера.
+
+<DT><CODE><CODE>tmp_table_size</CODE></CODE>
+<DD>Если временная таблица в памяти превышает этот размер, MySQL
+автоматически преобразует ее в таблицу <CODE>MyISAM</CODE> на диске.
+Увеличьте значение <CODE>tmp_table_size</CODE>, если Вы делаете много
+продвинутых запросов <CODE>GROUP BY</CODE>, и Вы имеете много памяти.
+
+<DT><CODE><CODE>tmpdir</CODE></CODE>
+<DD>Каталог, используемый для временных файлов и таблиц.
+
+<DT><CODE><CODE>version</CODE></CODE>
+<DD>Код версии сервера.
+
+<DT><CODE><CODE>wait_timeout</CODE></CODE>
+<DD>Число секунд, которое сервер ждет действий на подключении перед его
+закрытием. См. также <CODE>interactive_timeout</CODE>.</DL>
+
+<P>Раздел, который описывает настройку MySQL, содержит некоторую информацию
+относительно того, как настроить вышеупомянутые переменные.</P>
+
+<H4><A NAME="SHOW_LOGS">4.10.5 Синтаксис <CODE>SHOW LOGS</CODE></A></H4>
+<P><CODE>SHOW LOGS</CODE> показывает Вам информацию относительно состояния
+существующих журналов. В настоящее время этот вызов отображает только
+информацию относительно журналов Berkeley DB.</P>
+
+<UL><LI><CODE>File</CODE> показывает полный путь к журналу.
+<LI><CODE>Type</CODE> показывает тип журнала (<CODE>BDB</CODE> для журналов
+типа Berkeley DB).
+<LI><CODE>Status</CODE> показывает состояние журнала (<CODE>FREE</CODE> если
+файл может быть удален, или <CODE>IN USE</CODE> если файл необходим
+подсистеме транзакций).</UL>
+
+<H4><A NAME="SHOW_PROCESSLIST">4.10.6 Синтаксис <CODE>SHOW PROCESSLIST</CODE>
+</A></H4>
+<P><CODE>SHOW PROCESSLIST</CODE> показывает Вам, которые процессы работают.
+Вы можете также получать эту информацию, используя команду <CODE>mysqladmin
+processlist</CODE>. Если Вы имеете привилегию <STRONG>process</STRONG>, Вы
+можете видеть все процессы. Иначе Вы можете видеть только Ваши собственные
+процессы. Если Вы не используете опцию <CODE>FULL</CODE>, то только первые
+100 символов каждого запроса будут показаны. Подробности в разделе
+"<A HREF="#KILL">4.9 Синтаксис <CODE>KILL</CODE></A>".</P>
+
+<P>Эта команда очень полезна, если Вы получаете сообщения об ошибках 'too
+many connections' и хотите выяснить, что происходит. MySQL резервирует одно
+подключение дополнительно для пользователя с привилегией
+<CODE>Process_priv</CODE>, чтобы гарантировать, что Вы всегда способны ко
+входу в систему и ее проверке (эта ситуация не дает такую же привилегию всем
+Вашим пользователям).</P>
+
+<H4><A NAME="SHOW_GRANTS">4.10.7 Синтаксис <CODE>SHOW GRANTS</CODE></A></H4>
+<P><CODE>SHOW GRANTS FOR user</CODE> вносит в список команды, который должны
+быть выданы, чтобы дублировать права пользователя. Например:</P>
+<PRE>
+mysql&#62; SHOW GRANTS FOR root@localhost;
++---------------------------------------------------------------------+
+| Grants for root@localhost                                           |
++---------------------------------------------------------------------+
+| GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION |
++---------------------------------------------------------------------+
+</PRE>
+
+<H4><A NAME="SHOW_CREATE_TABLE">4.10.8
+Синтаксис <CODE>SHOW CREATE TABLE</CODE></A></H4>
+<P>Показывает инструкцию <CODE>CREATE TABLE</CODE>, которая создаст
+данную таблицу. Например:</P>
+<PRE>
+mysql&#62; show create table t\G
+*************************** 1. row ***************************
+       Table: t
+Create Table: CREATE TABLE t (
+  id int(11) default NULL auto_increment,
+  s char(60) default NULL,
+  PRIMARY KEY (id)
+) TYPE=MyISAM
+</PRE>
+
+<H3><A NAME="Option_files">4.11 Файл опций my.cnf</A></H3>
+<P>MySQL может, начиная с версии 3.22, читать заданные по умолчанию параметры
+запуска для клиентов и сервера из файлов опций.</P>
+
+<P>MySQL читает заданные по умолчанию параметры из следующих файлов (в Unix):
+</P>
+<P><TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Имя файла</STRONG></TD><TD><STRONG>Зачем он нужен</STRONG>
+</TD></TR>
+<TR><TD><CODE>/etc/my.cnf</CODE></TD><TD>Глобальные опции для всех</TD></TR>
+<TR><TD><CODE>DATADIR/my.cnf</CODE></TD><TD>Опции для сервера</TD></TR>
+<TR><TD><CODE>defaults-extra-file</CODE></TD><TD>Файл, определенный через
+--defaults-extra-file=#</TD></TR>
+<TR><TD><CODE>~/.my.cnf</CODE></TD><TD>Специфические для пользователей опции
+</TD></TR></TABLE></P>
+
+<P><CODE>DATADIR</CODE> представляет собой каталог данных MySQL (обычно
+<TT>/usr/local/mysql/data</TT> для бинарного дистрибутива или
+<TT>/usr/local/var</TT> для установки из исходников). Обратите внимание,
+что это тот каталог, который был определен в конфигурации, а не указан в
+опции <CODE>--datadir</CODE> при запуске <CODE>mysqld</CODE>! Параметр
+<CODE>--datadir</CODE> не имеет никакого эффекта в то время, когда сервер
+ищет файлы опций потому, что он их ищет прежде, чем обрабатывает любые
+параметры командной строки.</P>
+
+<P>MySQL читает заданные по умолчанию параметры из следующих файлов
+(только в ОС Windows):</P>
+<TABLE BORDER WIDTH="100%">
+<TR><TD><STRONG>Имя файла</STRONG></TD><TD><STRONG>Зачем он нужен</STRONG>
+</TD></TR>
+<TR><TD><CODE>windows-system-directory\my.ini</CODE></TD><TD>Глобальные опции
+</TD></TR>
+<TR><TD><CODE>C:\my.cnf</CODE></TD><TD>Глобальные опции</TD></TR>
+<TR><TD><CODE>C:\mysql\data\my.cnf</CODE></TD><TD>Опции для сервера</TD></TR>
+</TABLE>
+
+<P>Обратите внимание, что в Windows Вы должны определить все пути с
+<CODE>/</CODE> вместо <CODE>\</CODE>. Если Вы используете <CODE>\</CODE>, Вы
+должны определить это дважды, поскольку <CODE>\</CODE> символ ESC в MySQL.
+</P>
+
+<P><A NAME="IDX424"></A>MySQL пробует читать файлы опции в порядке,
+перечисленном выше. Если есть несколько файлов настроек, используется опция,
+определенная в том файле, который читается позже. Параметры, определенные в
+командной строке имеют приоритет над параметрами, определенными в любом файле
+опций. Некоторые параметры могут быть определены, используя системные
+переменные. Параметры, определенные в командной строке или в файлах опций
+имеют приоритет над значением соответствующей системной переменной.</P>
+
+<P>Следующие программы поддерживают файлы опций: <CODE>mysql</CODE>,
+<CODE>mysqladmin</CODE>, <CODE>mysqld</CODE>, <CODE>mysqldump</CODE>,
+<CODE>mysqlimport</CODE>, <CODE>mysql.server</CODE>, <CODE>myisamchk</CODE> и
+<CODE>myisampack</CODE>.</P>
+
+<P>Вы можете использовать файлы опций, чтобы определить любую длинную опцию,
+которую программа поддерживает! Выполните программу с параметром
+<CODE>--help</CODE>, чтобы получить список доступных параметров.</P>
+
+<P>Файл опций может содержать строки следующих форм:</P>
+<DL COMPACT>
+<DT><CODE>#comment</CODE>
+<DD>Строки комментария начинаются с <SAMP>`#'</SAMP> или с <SAMP>`;'</SAMP>.
+Пустые строки игнорируются.
+
+<DT><CODE>[group]</CODE>
+<DD><CODE>group</CODE> представляет собой имя программы или группы, для
+которой Вы хотите устанавливать параметры. После строки группы любая строка
+<CODE>option</CODE> или <CODE>set-variable</CODE> обращается к именованной
+группе, пока не будет достигнут конец файла опций или другая строка группы.
+
+<DT><CODE>option</CODE>
+<DD>Эквивалентно <CODE>--option</CODE> в командной строке.
+
+<DT><CODE>option=value</CODE>
+<DD>Эквивалентно <CODE>--option=value</CODE> в командной строке.
+
+<DT><CODE>set-variable = variable=value</CODE>
+<DD>Эквивалентно <CODE>--set-variable variable=value</CODE> в командной
+строке. Этот синтаксис должен использоваться, чтобы установить переменную
+<CODE>mysqld</CODE>.</DL>
+
+<P>Группа <CODE>client</CODE> позволяет Вам определять параметры, которые
+обращаются ко всей клиентуре MySQL (но не к <CODE>mysqld</CODE>). Это
+самая подходящая группа, чтобы определить в ней пароль, который Вы
+используете, чтобы соединиться с сервером. Но удостоверьтесь, что файл опций
+читаем и перезаписываем только Вами.</P>
+
+<P>Обратите внимание, что для параметров и значений все конечные и начальные
+пробелы автоматически удалены. Вы можете использовать управляющие
+последовательности <SAMP>\b</SAMP>, <SAMP>\t</SAMP>, <SAMP>\n</SAMP>,
+<SAMP>\r</SAMP>, <SAMP>\\</SAMP> и <SAMP>\s</SAMP> в Вашей строке
+(<SAMP>\s</SAMP>==пробел).</P>
+
+<P>Имеется типичный глобальный файл опций:</P>
+<PRE>
+[client]
+port=3306
+socket=/tmp/mysql.sock
+
+[mysqld]
+port=3306
+socket=/tmp/mysql.sock
+set-variable = key_buffer_size=16M
+set-variable = max_allowed_packet=1M
+
+[mysqldump]
+quick
+</PRE>
+
+<P>Имеется типичный файл опций пользователя:</P>
+<PRE>
+[client]
+# The following password will be sent to all standard MySQL clients
+password=my_password
+
+[mysql]
+no-auto-rehash
+set-variable=connect_timeout=2
+
+[mysqlhotcopy]
+interactive-timeout
+</PRE>
+
+<P><A NAME="IDX425"></A>Если Вы имеете дистрибутив с исходниками, Вы найдете,
+что типовые файлы конфигурации называются <TT>my-xxxx.cnf</TT> в каталоге
+<TT>support-files</TT>. А вот в двоичном дистрибутиве смотрите в каталоге
+<TT>DIR/support-files</TT>, где <CODE>DIR</CODE> задает имя пути к каталогу
+установки MySQL (обычно <TT>/usr/local/mysql</TT>). В настоящее время
+имеются типовые файлы конфигурации для маленькой, средней, большой и очень
+большой системы. Вы можете копировать <TT>my-xxxx.cnf</TT> в Ваш основной
+каталог (переименуйте копию в <TT>.my.cnf</TT>), чтобы экспериментировать.
+</P>
+
+<P>Вся клиентура MySQL, которая поддерживает файлы опций,
+использует и следующие параметры:</P>
+
+<TABLE BORDER WIDTH="100%">
+<TR><TD>--no-defaults</TD><TD>Не читать любые файлы опций.</TD></TR>
+<TR><TD>--print-defaults</TD><TD>Печатать имя программы и все параметры,
+которые ей передаются.</TD></TR>
+<TR><TD>--defaults-file=full-path-to-default-file</TD><TD>Использовать только
+данный файл конфигурации.</TD></TR>
+<TR><TD>--defaults-extra-file=full-path-to-default-file</TD><TD>Читать этот
+файл конфигурации после глобального файла опций, но перед чтением
+файла настроек пользователя.</TD></TR></TABLE>
+
+<P>Обратите внимание, что вышеупомянутые параметры должны быть первыми в
+командной строке, чтобы они работали! Однако, <CODE>--print-defaults</CODE>
+может использоваться непосредственно после команды
+<CODE>--defaults-xxx-file</CODE>.</P>
+
+<P>В скриптах оболочки Вы можете использовать команду
+<TT>my_print_defaults</TT>, чтобы анализировать файлы конфигурации:</P>
+<PRE>
+shell&#62; my_print_defaults client mysql
+--port=3306
+--socket=/tmp/mysql.sock
+--no-auto-rehash
+</PRE>
+
+<P>Вышеупомянутый вывод содержит все параметры для групп client и mysql.</P>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

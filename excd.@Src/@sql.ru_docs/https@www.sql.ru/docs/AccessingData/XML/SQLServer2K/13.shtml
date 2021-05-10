@@ -1,0 +1,356 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<TITLE>Доступ к XML и реляционным данным
+</TITLE>
+<META CONTENT="text/html; charset=windows-1251" http-equiv=Content-Type>
+<META NAME="Description" CONTENT="1. Введение">
+<META NAME="Keywords" CONTENT="SQL, Microsoft, Server">
+<META HTTP-EQUIV="Set-Cookie" CONTENT="cookie=set; path=/">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER="0" WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top  bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>Доступ к SQL Server по HTTP
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="14.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+
+
+</TD>
+</TR>
+</TABLE>
+<TABLE border="0" cellpadding="2" cellspacing="2" >
+<TR>
+<TD>
+<div align=justify>
+<p>
+Насколько вы заметили, в п.1 среди одного из ключевых преимуществ поддержки XML в СУБД называлась возможность доступа 
+по HTTP. Опять же, насколько вы заметили, HTTP у нас до сих пор, в общем-то, не пахло. Настало время исправить этот 
+недостаток. Напрямую по HTTP с SQL Server общаться нельзя. Во всяком случае пока между клиентом и SQL Server-ом 
+приходится иметь IIS. В состав SQLXML 3.0 входит ISAPI-фильтр ...\Program Files\Common Files\System\Ole DB\sqlis3.dll, 
+который принимает на себя обработку методов GET, HEAD, POST, вытаскивает из них тело запроса и отправляет его на SQL 
+Server. SQL Server его обрабатывает, ответ в виде XML передается Web-серверу, а от него по HTTP - клиенту. Таким 
+образом, второй участок пути (IIS - SQL Server) относится к локальному взаимодействию с SQL Server, с которым, я 
+надеюсь, все ясно, т.к. им мы занимались на протяжении 12-ти предыдущих параграфов. Чтобы разобраться с первым 
+участком (клиент - IIS), нам нужно понять две вещи: как правильно упаковать запрос в GET и POST-обращения и как их 
+отправить фильтру. С фильтром все происходит классически: на IISе создается виртуальная директория, к которой он 
+подвязывается. Для ее создания можно воспользоваться графической утилитой Configure IIS Support в SQLXML 3.0 (в 
+отличие от аналогичной утилиты в составе SQL Server она поддерживает все те новшества, которые были представлены в 
+этом релизе), либо сделать это программным путем, написав скрипт, похожий на тот, что представлен ниже.</p>
+<p></div><div align=left><pre><tt>
+<font color=blue>static void</font> Main()
+{
+	<font color=blue>const string</font> SQLSrv = "(local)";
+	<font color=blue>const string</font> DBName = "Northwind";
+	<font color=blue>string</font> SQLVirtDirName = "SQLXML3";
+	<font color=blue>string</font> SQLVirtDirPhysPath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
+
+	<font color=green>//Получаем ссылку на основной объект</font>
+	SQLVDIRLib.SQLVDirControl3 sqlVDirCtl = <font color=blue>new</font> SQLVDIRLib.SQLVDirControl3();
+		
+	<font color=green>//Соединяемся с сервером localhost и дефолтовым web-сайтом</font>
+	sqlVDirCtl.Connect("localhost", "1");
+		
+	<font color=green>//Получаем коллекцию виртуальных директорий</font>
+	SQLVDIRLib.IVRootEnum2 sqlVDirs = sqlVDirCtl.SQLVDirs;
+		
+	<font color=green>//Если вирт.дир. с таким именем существует, удаляем</font>
+	<font color=blue>if</font> (sqlVDirs.get_Exists(SQLVirtDirName))
+		sqlVDirs.xxxRemoveVirtualDirectory(SQLVirtDirName);
+		
+	<font color=green>//Создаем новую вирт.дир.</font>
+	SQLVDIRLib.ISQLVDir2 sqlVDir = sqlVDirs.AddVirtualDirectory(SQLVirtDirName);
+		
+	<font color=green>//1-я закладка New Virtual Directory Properties</font>
+	sqlVDir.PhysicalPath = SQLVirtDirPhysPath;
+		
+	<font color=green>//2-я закладка New Virtual Directory Properties</font>
+	sqlVDir.SecurityMode = SQLVDIRLib.tagSecurityModes.smINTEGRATED;
+		
+	<font color=green>//3-я закладка New Virtual Directory Properties</font>
+	sqlVDir.ServerName = SQLSrv; sqlVDir.DatabaseName = DBName;
+		
+	<font color=green>//4-я закладка New Virtual Directory Properties</font>
+	sqlVDir.AllowFlags = 
+	SQLVDIRLib.tagAllowFlags.afURL_QUERIES | SQLVDIRLib.tagAllowFlags.afTEMPLATES | 
+	SQLVDIRLib.tagAllowFlags.afXPATH | SQLVDIRLib.tagAllowFlags.afPOST;
+		
+	<font color=green>//5-я закладка New Virtual Directory Properties</font>
+	<font color=green>//Получить коллекцию виртуальных имен для данной вирт.дир.</font>
+	SQLVDIRLib.IVirtualNames2 sqlVDirVNames = sqlVDir.VirtualNames;
+	<font color=green>//Добавляем новые виртуальные имена</font></font>
+	<font color=green>//Параметры: название поддир., ее тип, отн.физ.путь (там, где не нужно - пустая строка)</font>
+	sqlVDirVNames.xxxAddVirtualName("dbobj", SQLVDIRLib.tagVirtualTypes.vtDBOBJECT, "");
+	sqlVDirVNames.xxxAddVirtualName("schem", SQLVDIRLib.tagVirtualTypes.vtSCHEMA, "Schemas");
+	sqlVDirVNames.xxxAddVirtualName("templ", SQLVDIRLib.tagVirtualTypes.vtTEMPLATE, "Templates");
+		
+	SQLVDIRLib.IVirtualName sqlWebSvc = sqlVDirVNames.xxxAddVirtualName("websvc", 
+	SQLVDIRLib.tagVirtualTypes.vtSOAP, "WebService");
+	sqlWebSvc.WebService = "SQLSoapSample"; sqlWebSvc.Domain = "localhost";
+		
+	sqlWebSvc.SoapMethods.AddStoredProcMethod("ЗаказыКлиентаЗаГод", "CustomerOrdersForYear", 1, 1, 
+	SQLVDIRLib.tagSoapMethodOutput.smoDATASET);
+	sqlWebSvc.SoapMethods.AddTemplateMethod("ПримерВызоваШаблона",
+	"..\\Templates\\XMLTemplate1.xml", 1);
+		
+	sqlWebSvc.SoapMethods.GenerateConfig(0, 0); sqlWebSvc.SoapMethods.GenerateWSDL();
+
+	<font color=green>//Отсоединяемся от сервера</font>
+	sqlVDirCtl.Disconnect();
+}</font></p></pre></tt>
+<p></div><div align=justify>
+<center>						
+<font color=blue><b>Скрипт 14</font></p></b></center>
+<p>
+Некоторые пояснения к тому, что здесь делалось. Для начала, чтобы воспользоваться функциональностью объекта 
+SQLVDirControl из .NET Framework, нужно импортировать  библиотеку классов соответствующей СОМовской dll'и - 
+...\Program Files\Common Files\System\Ole DB\sqlvdr3.dll. Процесс работы с этим объектом практически повторяет шаги, 
+выполняемые из графического интерфейса визарда по созданию виртуальной директории SQL Server. Для обслуживания 
+анонимных соединений с SQL Server по HTTP следует выбрать учетную запись Windows, авторизованную на доступ к SQL 
+Server, либо SQLный логин, под которыми анонимусы будут ходить на SQL Server. В локальных интранет-сценариях лучше 
+выбирать Windows Integrated Authentication, когда пользователь под своей доменной учетной записью сквозным образом 
+авторизуется на IIS и далее на SQL Server (что соответствует его интегрированному или смешанному режиму безопасности). 
+Basic Authentication (Clear Text) to SQL Server account, как следует из названия, будет запрашивать у пользователя при 
+обращении к виртуальной директории его логин и пароль на SQL Server. Так же, как базовая аутентификация на IISе, они 
+передаются в открытом виде, поэтому при выборе этого сценария следует применять HTTPS. Виртуальная директория, естественно, должна быть привязана к определенному экземпляру SQL Server (он может стоять на машине, отличной от той, где установлен IIS) и к определенной базе данных на нем. Естественно, все механизмы проверки полномочий при обращении к объектам сервера и совершении на нем каких-либо действий, остаются в силе, однако еще до того, как дело дойдет до SQL Server, можно ввести дополнительные ограничения на уровне виртуальной директории. Опция Allow URL queries (SQL, template) разрешает непосредственно по HTTP запрашивать SQL Server при помощи SELECT ... FOR XML или передав текст шаблона. По умолчанию она запрещена, чтобы кто ни попадя из Интернет не приставал к SQL Server с произвольными запросами. Конечно, если у человека нет прав, он и так будет послан, но зачем напрягать сервер и заставлять его тратить время на проверку. Если вы все-таки хотите открыть предыдущую опцию только для запросов на чтение, 
+запретите Allow posted updategrams - при этом будут отвергаться все ad hoc (т.е. те, которые приходят от пользователя, 
+как было показано в конце п.10, а не те, что подготовили вы и сохранили в поддиректории типа template) шаблоны типа 
+UpdateGrams. Allow XPath - то же, что первая опция, но для ad hoc XPath-запросов. Allow template queries - разрешить 
+пользователям вызывать хранящиеся на сервере шаблоны (а не направлять ему свои). Очень похоже на ситуацию, когда при 
+классическом доступе пользователям даются права только на вызовы определенных хранимых процедур, чтобы даже с теми 
+объектами, на которые у них есть права, они не творили, что хотели, а действовали в рамках предусмотренных бизнес-правил. 
+Allow POST - поскольку очень длинный запрос в GET не пролезет, то можно сделать доступной посылку запросов методом POST. 
+Maximum size of POST queries (in kilobytes) позволяет тем не менее ограничить сверху длину запроса.<br>
+Виртуальная директория может иметь подкаталоги следующих типов. Template - в них хранятся шаблоны (п.10) - 
+параметризованные сочетания SQL- и XPath-запросов, которые пользователи могут вызывать подобно хранимым процедурам. 
+Schema - для хранения аннотированных схем (п.9), определяющих различные XML-представления реляционной базы данных, 
+привязанной к текущей виртуальной директории, что дает возможность запрашивать ее при помощи XPath. Dbobject - для 
+адресации XPath-запросов напрямую без аннотированной схемы к объектам БД (используется представление по умолчанию, 
+рассмотренное в п.8). Поскольку в данном случае схем хранить не требуется, никакой физической директории ему не 
+отвечает. SOAP - рассмотрение этого типа подкаталогов, равно как и все, что касается конфигурирования поддержки 
+Web-сервисов, мы отложим до следующего параграфа.<br>
+После того, как виртуальная директория создана, все способы XML-взаимодействия с SQL Server: запросы SELECT ... 
+FOR XML, XPath-запросы напрямую и через аннотированные схемы, XML-шаблоны, включая UpdateGrams, - становятся доступны 
+через HTTP.</p>
+<p>
+FOR XML-запрос из Скриптов 3, 4 передается, например, так:</p>
+<p></div><div align=left><tt>
+http://localhost/SQLXML3?sql=SELECT c.ContactName, c.ContactTitle, o.OrderDate FROM Customers c INNER JOIN Orders o 
+ON c.CustomerID = o.CustomerID WHERE c.ContactName = ? and year(o.OrderDate) = ? FOR XML AUTO&amp;x=Maria 
+Anders&amp;y=1997&amp;root=root</p></font></p></tt>
+<p></div><div align=justify>
+Здесь SQLXML3 - название виртуальной директории SQL Server, параметр sql содержит текст FOR XML-запроса, параметры x 
+и y передают значения параметров запроса (имена параметров запроса в данном случае несущественны в отличие от, 
+например, шаблонов), параметр root - название корневого тэга. В параметре xsl может передаваться имя локального файла, 
+содержащего XSL-преобразование с тем, чтобы результаты запроса сразу получались отфильтрованными и отформатированными. 
+Скрипт 15 демонстрирует отправку этого запроса методом GET, как если бы вышеприведенная строка была просто набрана в 
+URL-строке браузера. Web-сервер отвечает Stream'ом, в котором передается XML-результат запроса от SQL Server. Этот 
+Stream загружается в XML-документ, с которым затем работает приложение.</p>
+<p></div><div align=left><pre><tt>
+<font color=blue>static void</font> Execute_FORXMLQuery_HTTPGET()
+{
+HttpWebRequest rqst = (HttpWebRequest) WebRequest.Create("http://localhost/SQLXML3?sql=SELECT 
+c.ContactName, c.ContactTitle, o.OrderDate FROM Customers c 
+INNER JOIN Orders o ON c.CustomerID = o.CustomerID 
+WHERE c.ContactName = ? and year(o.OrderDate) = ? 
+FOR XML AUTO&amp;x=Maria Anders&amp;y=1997&amp;root=root");
+	rqst.Method = "GET";
+	rqst.Credentials = CredentialCache.DefaultCredentials;
+	HttpWebResponse rspn = (HttpWebResponse) rqst.GetResponse();
+	Stream s = rspn.GetResponseStream();
+	XmlDocument xml = <font color=blue>new</font> XmlDocument();
+	xml.Load(s); rspn.Close(); 
+	...
+}</font></p></pre></tt>
+<p></div><div align=justify>
+<center>						
+<font color=blue><b>Скрипт 15</font></p></b></center>
+<p>
+Скрипт 16 делает то же самое методом POST. Строка запроса передается не в URL, а во входном Stream'е, предварительно 
+запрошенном у Web-сервера. Результаты получаются и обрабатываются аналогично предыдущему примеру.</p>
+<p></div><div align=left><pre><tt>
+<font color=blue>static void</font> Execute_FORXMLQuery_HTTPPOST()
+{
+	<font color=blue>string</font> query = "sql=SELECT c.ContactName, c.ContactTitle, o.OrderDate FROM Customers c 
+	INNER JOIN Orders o ON c.CustomerID = o.CustomerID WHERE c.ContactName = ? 
+	and year(o.OrderDate) = ? FOR XML AUTO&amp;x=Maria Anders&amp;y=1997&amp;root=root";
+	HttpWebRequest rqst = (HttpWebRequest) WebRequest.Create("http://localhost/SQLXML3");
+	rqst.Method = "POST";
+	rqst.Credentials = CredentialCache.DefaultCredentials;
+	rqst.ContentLength = query.Length;
+	StreamWriter sw = <font color=blue>new</font> StreamWriter(rqst.GetRequestStream());
+	sw.Write(query); sw.Close();
+	HttpWebResponse rspn = (HttpWebResponse) rqst.GetResponse();
+	XmlDocument xml = <font color=blue>new</font> XmlDocument();
+	xml.Load(rspn.GetResponseStream()); rspn.Close();
+	...
+}</font></p></pre></tt>
+<p></div><div align=justify>
+<center>						
+<font color=blue><b>Скрипт 16</font></p></b></center>
+<p>
+Форма, представленная в Скрипте 17, функционально эквивалентна 16. В случае формы параметры Web-запроса передаются в 
+полях (связка "имя параметра / значение" соответствует атрибутам name / value). Htm-файл с формой может находиться в 
+любом локальном каталоге, т.к. он служит только средством передачи Web-запроса с клиента на Web-сервер. При ссылках 
+на аннотированные схемы (например, когда из формы выполняется не SQL-запрос, а шаблон) следует иметь в виду, что 
+схемы должны находиться либо в текущем каталоге, либо в каком-нибудь из вложенных в него подкаталогов. Излишне 
+напоминать, что в случае использования русских названий и других расширенных символов файл нужно сохранять не в ANSI, 
+а как UTF-8 или подобном формате.</p>
+<p></div><div align=left><pre><tt>
+&lt;head>
+	&lt;TITLE>Пример FOR XML через POST из формы&lt;/TITLE>
+&lt;/head>
+&lt;body>
+	Демонстрирует отправку FOR XML-запроса методом POST из формы
+	&lt;form action="http://localhost/sqlxml3" method="POST">
+		&lt;B>Имя клиента&lt;/B> &lt;input type="text" name="name">
+		&lt;br>
+		&lt;B>Год&lt;/B> &lt;input type="text" name="year"> 
+		&lt;input type="hidden" name="contenttype" value="text/xml">
+		&lt;input type="hidden" name="sql" value="
+SELECT c.ContactName, c.ContactTitle, o.OrderDate FROM Customers c INNER JOIN Orders o 
+ON c.CustomerID = o.CustomerID WHERE c.ContactName like ? + '%' and year(o.OrderDate) = ? 
+FOR XML AUTO	
+">
+		&lt;input type="hidden" name="Root" value="Корень">
+		&lt;p>&lt;input type="submit" value="Сабмит">
+	&lt;/form>
+&lt;/body></font></p></pre></tt>
+<p></div><div align=justify>
+<center>						
+<font color=blue><b>Скрипт 17</font></p></b></center>
+<p>
+Все остальные типы XML-запросов к SQL Server передаются по HTTP совершенно аналогично Скриптам 15, 16. Различия 
+составляют только правила формирования строки запроса к Web-серверу. Вот пример передачи по HTTP прямого XPath-запроса 
+из п.8:</p>
+<p></div><div align=left><tt>
+http://localhost/SQLXML3/dbobj/Customers[@ContactName>=$НачБуква]/@ContactName?НачБуква='X'</font></p></tt>
+<p></div><div align=justify>
+Dbobj - подкаталог виртуальной директории типа Dbobject, определенной при создании виртуальной директории SQLXML3. 
+XPath-запрос входит в URI, параметром служит параметр XPath-запроса.</p>
+<p>
+Вот пример XPath-запроса через аннотированную схему, из п.9 (Скрипт 10).</p>
+<p></div><div align=left><tt>
+http://localhost/SQLXML3/schem/SQLSchema1.xsd/Клиент[Адрес/Страна='Spain'%20or%20Адрес/Страна='France']?root=Клиенты</font></p></tt>
+<p></div><div align=justify> 
+При желании можно передать параметры:</p>
+<p></div><div align=left><tt>
+http://localhost/SQLXML3/schem/SQLSchema1.xsd/Клиент[Адрес/Страна=$Country]?Country=Spain&amp;root=Клиенты</font></p></tt>
+<p></div><div align=justify>
+Schem - виртуальный подкаталог типа Schema, предполагается, что файл с аннотированной схемой SQLSchema1.xsd находится 
+в нем. В качестве еще одного параметра в строке URL можно передавать ...&amp;xsl=<Путь к файлу с XSLT-преобразованием>.<br>
+Шаблоны должны храниться в подкаталоге типа Template. Обращение к шаблону происходит следующим образом:</p>
+<p></div><div align=left><pre><tt>
+http://localhost/SQLXML3/templ/XmlTemplate1.xml?Колво=20</font></p></pre></tt>
+<p></div><div align=justify>
+По сути, это HTTP-реализация Скрипта 11: происходит вызов шаблона XmlTemplate1 и передача ему одного из параметров 
+(для другого используется значение по умолчанию). Текст шаблона приводился на рис.6. Кроме того, как мы видели в 
+завершение п.10, можно вызывать не только шаблоны, хранящиеся на сервере, но (при наличии прав), передать в 
+HTTP-запросе текст собственного шаблона, который сервер выполнит аналогично хранимым шаблонам (т.н. ad hoc-шаблон). 
+Это очень похоже на передачу FOR XML-запроса, только вместо параметра sql используется параметр template:</p>
+<p></div><div align=left><tt>
+http://localhost/SQLXML3?template=&lt;Root xmlns:sql='urn:schemas-microsoft-com:xml-sql'>&lt;sql:query>
+SELECT TOP 1 * FROM Employees FOR XML AUTO&lt;/sql:query>&lt;/Root></font></p></tt>
+<p></div><div align=justify>
+Большие ad-hoc шаблоны проще передавать методом POST:</p>
+<p></div><div align=left><pre><tt>
+<font color=blue>static void</font> Execute_FORXMLQuery_HTTPPOST()
+{
+	<font color=blue>string</font> query = "template=&lt;Солянка xmlns:sql='urn:schemas-microsoft-com:xml-sql'>
+	&lt;sql:header>&lt;sql:param name='q'>&lt;/sql:param>&lt;sql:param name='s'>1000
+	&lt;/sql:param>&lt;/sql:header>
+	&lt;sql:query client-side-xml='0'>SELECT TOP 1 * FROM Employees FOR XML AUTO&lt;/sql:query>
+	&lt;sql:query client-side-xml='1'>SELECT c.ContactName, COUNT(o.OrderDate) AS 'Кол-во' F
+	ROM Customers c INNER JOIN Orders o ON c.CustomerID = o.CustomerID GROUP BY c.ContactName 
+	HAVING COUNT(o.OrderDate) >= @q FOR XML NESTED&lt;/sql:query>
+	&lt;sql:xpath-query mapping-schema='Schemas\\SQLSchema1.xsd'>
+	Клиент[number(Заказы/Заказ/Стоимость)>$s]
+	&lt;/sql:xpath-query>
+	&lt;sql:xpath-query mapping-schema='Schemas\\SQLSchema2.xsd'>Сотрудник&lt;/sql:xpath-query>
+	&lt;Солянка>&amp;q=20";
+	HttpWebRequest rqst = (HttpWebRequest) WebRequest.Create("http://localhost/SQLXML3");
+	rqst.Method = "POST";
+	rqst.ContentType = "application/x-www-form-urlencoded";
+	<font color=blue>byte</font>[] postData = System.Text.Encoding.UTF8.GetBytes(query);
+	rqst.ContentLength = postData.Length;
+	rqst.Credentials = CredentialCache.DefaultCredentials;
+	rqst.GetRequestStream().Write(postData, 0, postData.Length);
+	HttpWebResponse rspn = (HttpWebResponse) rqst.GetResponse();
+	XmlDocument xml = <font color=blue>new</font> XmlDocument();
+	xml.Load(rspn.GetResponseStream()); rspn.Close(); 
+	...		
+}</font></p></pre></tt>
+<p></div><div align=justify>
+<center>						
+<font color=blue><b>Скрипт 18</font></p></b></center><p>
+</p>
+</DIV>
+<TD>
+<TR>
+</TABLE>
+<TABLE BORDER=0 WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>Доступ к SQL Server по HTTP
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="14.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+</TD>
+</TR>
+</TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>

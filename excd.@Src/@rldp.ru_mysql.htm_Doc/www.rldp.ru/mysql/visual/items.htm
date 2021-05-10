@@ -1,0 +1,350 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r" />
+  <title>Глава 8. MySQL Project Items</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="visual-studio-project-items"></a>Глава 8. MySQL Project Items
+</h1>
+<a class="indexterm" name="idm46260353174400"></a>
+<p>Эта обучающая программа с двумя частями использует шаблоны MySQL MVC Item,
+чтобы настроить веб-приложение MVC. Во второй части обучающей программы
+создается Windows Forms Item с возможностью соединения с MySQL.</p>
+
+<h2><a name="visual-studio-project-items-requirements"></a>
+Минимальные требования</h2>
+<ul><li class="listitem"><p>MySQL 5.5 на доступном хосте.</p></li>
+<li class="listitem"><p>MySQL for Visual Studio 1.2.5.</p></li>
+<li class="listitem"><p>Visual Studio 2012, the professional edition.
+</p></li>
+<li class="listitem"><p>MySQL Connector/NET требуется, чтобы использовать
+веб-провайдеров в произведенном веб-приложении.</p></li></ul>
+
+<h2><a name="visual-studio-project-items-mvc"></a>
+8.1. MySQL ASP.NET MVC Items</h2>
+<p>Чтобы добавить MySQL MVC Item к существующему проекту MVC, сначала
+добавьте модель MySQL Entity Framework. Пропустите этот шаг, если вы
+уже сделали это.</p>
+
+<p>Формируйте проект для работы MySQL с Entity Framework.
+Есть два способа сделать это:</p>
+<ul><li class="listitem"><p>Вручную добавьте необходимые ссылки
+(EntityFramework, MySql.Data &amp;MySql.Data.Entity) и добавьте необходимую
+конфигурацию к файлу <code class="filename">web.config</code>.</p></li>
+
+<li class="listitem"><p>Или (лучше) используйте
+<span class="guilabel">MySQL Website Configuration</span>, которая использует
+Entity Framework 5 или 6 с MySQL. Для получения дополнительной информации об
+этом инструменте см. <a href="config.htm">главу 7</a>.</p></li></ul>
+
+<p>Как только вы сформировали проект для работы MySQL с Entity Framework,
+продолжите создавать модель, используя типичный мастер
+<span class="guilabel">ADO.NET Entity Data Model</span>. Для шаблонов MySQL
+MVC Item необходимо добавить модель под папкой "Models",
+как иллюстрировано ниже:</p>
+
+<a name="rId10"></a><p><b>Рис. 8.1. ADO.NET Entity Data Model</b></p>
+<img src="images/entity-data-model-wizard-model.png" width="633" height="566"
+alt="ADO.NET Entity Data Model"><br class="figure-break">
+
+<a name="rId11"></a><p><b>Рис. 8.2. Выбирает или создает
+новое подключение MySQL</b></p>
+<img src="images/entity-data-model-wizard-connection.png" width="626"
+height="564" alt="Choose or create a new MySQL connection">
+<br class="figure-break">
+
+<a name="rId12"></a><p><b>Рис. 8.3. Создает новое подключение MySQL</b></p>
+<img src="images/entity-data-model-choose-ds.png" width="629"
+height="563" alt="Creating a new MySQL connection"><br class="figure-break">
+
+<p>После выбора подключения MySQL необходимо выбрать объекты базы данных,
+чтобы включить в модель.</p>
+<p>Опция <span class="guilabel">Pluralize or singularize generated object
+names</span> должна быть выключенаиначе шаблон MySQL MVC Item
+не будет функционировать правильно.</p>
+
+<a name="rId13"></a><p><b>Рис. 8.4. Выбор объекта базы данных,
+чтобы включить в модель</b></p>
+<img src="images/entity-data-model-choose-objects.png" width="626"
+height="560" alt="Selecting the database object to include in the model">
+<br class="figure-break">
+
+<p>Нажмите <span class="guibutton">Finish</span>, чтобы произвести модель,
+как продемонстрировано ниже:</p>
+<a name="rId14"></a><p><b>Рис. 8.5. Создание модели MySQL Entity Framework
+</b></p><img src="images/model-created.png" width="340" height="415"
+alt="Creating the MySQL Entity Framework model"><br class="figure-break">
+
+<p>Теперь, произведите новый MySQL MVC Item.
+Щелкните правой кнопкой мыши по проекту и выберите
+<span class="guimenu">Add New Item</span> из контекстного меню.</p>
+
+<a name="rId15"></a><p><b>Рис. 8.6. Добавление нового Item</b></p>
+<img src="images/add-new-item-context-menu.png" width="685" height="402"
+alt="Add New Item"><br class="figure-break">
+
+<p>Это запустит мастер <span class="guilabel">Add New Item</span>. Меню
+<span class="guilabel">MySQL</span> предлагает два варианта:
+<span class="guilabel">MySQL New MVC Item</span> и
+<span class="guilabel">MySQL New Windows Form</span>.
+Выберите <span class="guilabel">MySQL New MVC Item</span> и нажмите
+<span class="guibutton">Add</span>.</p>
+
+<a name="rId16"></a><p><b>Рис. 8.7. Меню опций MySQL</b></p>
+<img src="images/add-new-item-start.png" width="948" height="605"
+alt="The MySQL menu options"><br class="figure-break">
+
+<p>Откроется диалог <span class="guilabel">MVC Item Template</span>.
+Теперь выберите модель MySQL и окружение, которое вы хотите использовать,
+чтобы создать MVC item. Выпадающий список model наполнен на основе всех
+моделей MySQL Entity Framework, доступных в проекте, выпадающий список
+entities наполнен оружениями, доступными для отобранной модели.</p>
+
+<a name="rId17"></a><p><b>Рис. 8.8. Диалог MySQL MVC Item Template</b></p>
+<img src="images/item-template-select-model.png" width="758" height="469"
+alt="MySQL MVC Item Template Dialog"><br class="figure-break">
+
+<a name="rId18"></a><p><b>Рис. 8.9. Шаблон MySQL MVC Item</b></p>
+<img src="images/item-template-select-entity.png" width="758" height="466"
+alt="MySQL MVC Item Template"><br class="figure-break">
+
+<p>После отбора модели и окружения, чтобы создать пункт, нажмите
+<span class="guibutton">Finish</span>, новый диспетчер и представление,
+соответствующие отобранному окружению, будут добавлены к проекту.
+Они содержат необходимый код, чтобы отдать данные
+<span class="emphasis"><em>entity</em></span>.</p>
+
+<a name="rId19"></a><p><b>Рис. 8.10. Новый диспетчер и
+представление, добавленные к проекту</b></p>
+<img src="images/solution-explorer-entities.png" width="345" height="552"
+alt="New controller and view added to the project"><br class="figure-break">
+
+<p>Можно теперь выполнить приложение. В нашем примере мы использовали базу
+данных Sakila и произвели контроллер Actor:</p>
+<a name="rId20"></a><p><b>Рис. 8.11. Представление Actor</b></p>
+<img src="images/example-actor-list.png" width="1026" height="489"
+alt="The Actor View"><br class="figure-break">
+
+<h2><a name="visual-studio-project-items-forms"></a>
+8.2. MySQL Windows Forms Items</h2>
+<p>Эта часть обучающей программы описывает, как создать Windows Form
+с возможностью соединения с MySQL. Шаблон, чтобы использовать для этой
+операции называют <code class="literal">MySQL New Windows Form</code>.
+Чтобы открыть окно Add New Item, щелкните правой кнопкой мыши по своему
+приложению и выберите <span class="guilabel">MySQL</span>
+из списка установленных пунктов.</p>
+
+<p>Шаблондля добавления нового MySQL Windows Form подобен шаблону
+MySQL MVC item (см.
+<a href="#visual-studio-project-items-mvc">раздел 8.1</a>),
+но с тремя существенными различиями:</p>
+
+<ul><li class="listitem"><p>Можно создать модель MySQL Entity Framework под
+путем корня проекта.</p>
+<a name="rId22"></a><p><b>Рис. 8.12. Модель MySQL Entity Framework
+создается в приложении Windows Form</b></p>
+<img src="images/solution-explorer-select-model.png" width="344" height="260"
+alt="A MySQL Entity Framework model created in a Windows Form Application">
+<br class="figure-break"></li>
+
+<li class="listitem"><p>Выбирая желаемое окружение, можно также выбрать тип
+макета, в котором новая форма покажет данные.</p>
+<a name="rId23"></a><p><b>Рис. 8.13. Диалог "MySQL Windows Form"
+Item Template, с параметрами макета</b></p>
+<img src="images/item-template-forms-entity.png" width="756" height="466"
+alt='The "MySQL Windows Form" Item Template dialog, with the layout options'>
+<br class="figure-break"></li>
+
+<li class="listitem"><p>Папка <code class="filename">Resources</code>
+добавляется к проекту, который содержит изображения, используемые символами
+для произведенной формы.</p>
+
+<a name="rId24"></a><p><b>Рис. 8.14. Папка Resources и новая форма</b></p>
+<img src="images/solution-explorer-resources-folder.png" width="348"
+height="284" alt="The Resources Folder and New Form">
+<br class="figure-break"></li></ul>
+
+<p>У новой формы будет весь необходимый код, чтобы показать данные с
+пользовательским интерфейсом (UI) на основе ранее выбранного расположения.
+</p>
+<a name="rId25"></a><p><b>Рис. 8.15. Форма "frmactor" Form в режиме Design
+</b></p><img src="images/example-frmactor-form.png" width="639" height="587"
+alt='The "frmactor" Form in Design Mode'><br class="figure-break">
+
+<a name="rId26"></a><p><b>Рис. 8.16. Форма "frmactor", чтобы показать данные
+</b></p><img src="images/example-frmactor-data.png" width="590" height="424"
+alt='The "frmactor" Form to Display Data'><br class="figure-break">
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

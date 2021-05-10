@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<TITLE>Доступ к XML и реляционным данным
+</TITLE>
+<META CONTENT="text/html; charset=windows-1251" http-equiv=Content-Type>
+<META NAME="Description" CONTENT="1. Введение">
+<META NAME="Keywords" CONTENT="SQL, Microsoft, Server">
+<META HTTP-EQUIV="Set-Cookie" CONTENT="cookie=set; path=/">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER="0" WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top  bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>SQLXML-классы в .NET
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="06.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+
+
+</TD>
+</TR>
+</TABLE>
+<TABLE border="0" cellpadding="2" cellspacing="2" >
+<TR>
+<TD>
+<div align=justify>
+<p>
+После выхода SQL Server 2000 в августе 2000 г. дополнительная функциональность, в плане развития поддержки 
+XML, выпускалась в виде веб-релизов под названием SQLXML. SQLXML 1.0 содержал Updategrams, XML 
+Bulkload и усовершенствования в части производительности. В версии 2.0 ввели аннотированные XSD-схемы, 
+FOR XML на стороне клиента, SQLXMLOLEDB-провайдер и SQLXML Managed Classes (в плане интеграции с 
+ADO.Net). Наконец, веб-релиз версии 3.0, вышедший в марте 2002 г. и последний на момент подготовки 
+доклада, добавляет к этому поддержку SOAP, превращая SQL Server в Web-сервис. Некоторые из перечисленных 
+возможностей будут здесь разобраны.<br>
+Начнем с того, что в дальнейшем в примерах мы будем использовать управляемые (managed) библиотеки System.
+Data (ADO .Net) и Microsoft.Data.SqlXml. Первая является штатной функциональностью Visual Studio .Net, а вторая 
+устанавливается в составе SQLXML Web Release 2.0 и выше. Если Вы экспериментируете с приводимыми здесь 
+примерами, пожалуйста, отметьте эти библиотеки в References для своего проекта. Это вполне естественный 
+выбор при использовании .Net-средства разработки, который избавляет, например, от возни с СОМ-маршалингом, 
+при передаче массива интерфейсов IDispatch (Variant) в параметры ADODB.Command.. Не следует, впрочем, 
+полагать, что с этого момента все рассматриваемые задачи решаются только с помощью SQLXML Managed 
+Classes. Большинство разбираемых примеров вполне реализуются средствами классического СОМовского 
+ADO подобно тому, как показывалось в п.п. 2 - 4. Однако с помощью новых технологий доступа к данным, 
+специально предназначенных для работы в .NET Framework, этого можно достичь проще и быстрее. Скрипт 4 
+демонстрирует предыдущий пример (FOR XML-запрос на стороне сервера), переписанный с ADODB на SqlXml.</p>
+<p><tt><div align=left><font>
+<font color=blue>using</font> System.Xml;<br>
+<font color=blue>using</font> <b>Microsoft.Data.SqlXml</b>;<br>
+...<br>
+<font color=blue>static void</font> Execute_FORXMLQuery_SQLXML()<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SqlXmlCommand cmd = <font color=blue>new</font> SqlXmlCommand("Provider=SQLOLEDB;...");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.CommandText = "SELECT c.ContactName, c.ContactTitle, o.OrderDate FROM Customers c INNER JOIN Orders o ON c.CustomerID = o.CustomerID WHERE c.ContactName = ? and year(o.OrderDate) = ? FOR XML AUTO";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.RootTag = "Root";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.CommandType = SqlXmlCommandType.Sql;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.OutputEncoding = "UTF-8";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.CreateParameter().Value = "Maria Larsson";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmd.CreateParameter().Value = 1997;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Stream str = cmd.<b>ExecuteStream()</b>;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlDocument xml = <font color=blue>new</font> XmlDocument();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xml.Load(str); <br>
+...<br>
+}</p></tt><div align=justify></font><center>		
+<font color=blue><b>Скрипт 4</font></p></b></center>
+<p>
+Логика примера не изменилась - выполняется SQL-запрос, результаты получаются в виде XML и передаются 
+для последующей возможной работы в System.Xml.XmlDocument (аналог DOMDocument). Кроме того, для целей 
+демонстрации XML-поток сохраняется в файл, который затем открывается в браузере. Класс SqlXml.Command 
+для получения результатов в виде XML-потока имеет два метода: ExecuteStream() и ExecuteToStream(). Их 
+отличие состоит в том, что первый создает новый Stream, а второй пишет в уже существующий. Кроме того, 
+результаты запроса можно сразу получить как XmlReader (метод ExecuteXmlReader). В отличие от класса 
+XmlDocument (DOM) XmlReader является более легковесным, он не требует загрузки всего документа в память. 
+В терминологии баз данных его ближайшим аналогом будет forward-only read-only курсор. Свойство Dialect класса 
+Command в ADO соответствует свойству CommandType, а Output Encoding и XML Root перешли из расширенных 
+свойств в стандартные (OutputEncoding и RootTag).</p>
+</DIV>
+<TD>
+<TR>
+</TABLE>
+<TABLE BORDER=0 WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>SQLXML-классы в .NET
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="06.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+</TD>
+</TR>
+</TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>

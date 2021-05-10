@@ -1,0 +1,2786 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <title>Глава 10. Структура языка</title>
+<meta name="generator" content="DocBook XSL Stylesheets + chunker.py v1.9.2" />
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="language-structure"></a>Глава 10. Структура языка</h1>
+<p>Эта глава обсуждает правила для того, чтобы написать следующие элементы
+запросов <a href="glossary.htm#glos_sql">SQL</a>, используя MySQL:</p>
+
+<ul><li><p>Буквальные значения, такие как строки и числа.</li>
+<li>Идентификаторы, такие как база данных, таблица и имена столбцов.</li>
+<li>Ключевые и зарезервированные слова.</li>
+<li>Определяемые пользователем и системные переменные.</li>
+<li>Комментарии.</p></li></ul>
+
+<h2><a name="literals"></a>10.1. Буквальные значения</h2>
+<p>Этот раздел описывает, как написать буквальные значения в MySQL. Они
+включают строки, числа, шестнадцатеричные и битовые значения, булевы
+значения и <code>NULL</code>. Раздел также покрывает различные нюансы, с
+которыми Вы можете столкнуться, имея дело с этими основными типами в MySQL.
+</p>
+
+<h3><a name="string-literals"></a>10.1.1. Строковые литералы</h3>
+<p>Строка последовательность байтов или символов в пределах одинарных
+(<code>'</code>) или двойных (<code>"</code>) кавычек:
+<pre>
+'a string'
+"another string"
+</pre>
+
+<p>Заключенные в кавычки строки, помещенные друг рядом с другом, связаны в
+единственную строку. Следующие строки эквивалентны:
+<pre>
+'a string'
+'a' ' ' 'string'
+</pre>
+
+Если режим SQL <a href="server.htm#sqlmode_ansi_quotes"><code>ANSI_QUOTES
+</code></a> включен, строковые литералы могут быть заключены только в
+одинарные кавычки, потому что строка, заключенная в двойные кавычки,
+интерпретируется как идентификатор.</p>
+
+<p><span>Двоичная строка</span> строка байтов. У каждой двоичной строки есть
+набор символов и сопоставление <code>binary</code>. <span>Недвоичная строка
+</span> строка символов. У нее есть набор символов не <code>binary</code> и
+сопоставление, которое совместимо с набором символов.</p>
+
+<p>Для обоих типов строк сравнения основаны на числовых значениях строкового
+модуля. Для двоичных строк модуль байт, сравнения используют числовые
+значения байта. Для обычных строк модуль символ, и некоторые наборы символов
+поддерживают мультибайтные символы. Сравнения используют числовые значения
+кодов символов. Символьное упорядочивание кода функция строкового
+сопоставления. Для получения дополнительной информации см.
+<a href="global.htm#charset-binary-collations">раздел 11.1.8.5</a>.</p>
+
+<p>У буквальной строки символов может быть дополнительный набор символов
+introducer и пункт <code>COLLATE</code>, чтобы определять это как строку,
+которая использует особый набор символов и сопоставление:</p>
+<pre>
+[_<em><code>charset_name</code></em>]'<em><code>string</code></em>'
+[COLLATE <em><code>collation_name</code></em>]
+</pre>
+
+Примеры:
+<pre>
+SELECT _latin1'<em><code>string</code></em>';
+SELECT _binary'<em><code>string</code></em>';
+SELECT _utf8'<em><code>string</code></em>' COLLATE utf8_danish_ci;
+</pre>
+
+Вы можете использовать <code>N'<em><code>literal</code></em>'</code> (или
+<code>n'<em><code>literal</code></em>'</code>), чтобы создать строку в наборе
+национального характера. Эти запросы эквивалентны:
+<pre>
+SELECT N'some text';
+SELECT n'some text';
+SELECT _utf8'some text';
+</pre>
+
+Для информации об этих формах строкового синтаксиса см. разделы
+<a href="global.htm#charset-national">11.1.3.7</a> и
+<a href="global.htm#charset-introducer">11.1.3.8</a>.</p>
+
+<p>В пределах строки у определенных последовательностей нет особого
+значения, если включен SQL-режим
+<a href="server.htm#sqlmode_no_backslash_escapes"><code>NO_BACKSLASH_ESCAPES
+</code></a>. Каждая из этих последовательностей начинается с наклонной черты
+влево (<code>\</code>), известной как <span><em>escape character</em></span>.
+MySQL признает escape-последовательности, показанные в
+<a href="#character-escape-sequences">таблице 10.1</a>.
+Для всех других escape-последовательностей проигнорирована наклонная черта
+влево. Таким образом, экранированный символ интерпретируется, как будто его
+не экранировали. Например, <code>\x</code> означает <code>x</code>.
+Эти последовательности являются чувствительными к регистру. Например,
+<code>\b</code> интерпретируется как клавиша Backspace, но
+<code>\B</code> интерпретируется как <code>B</code>.
+Обработка Escape сделана согласно набору символов, обозначенному переменной
+<a href="server.htm#sysvar_character_set_connection"><code>
+character_set_connection</code></a>. Это истина даже для строк, которым
+предшествует introducer, который указывает на иной набор символов, как
+обсуждается в <a href="global.htm#charset-literal">разделе 11.1.3.6</a>.</p>
+
+<a name="character-escape-sequences"></a>
+<p><b>Таблица 10.1. Специальные символьные Escape-последовательности</b></p>
+<table border="1">
+<thead><tr><th scope="col">Escape-последовательность</th>
+<th scope="col">Символ, представленный последовательностью</th></tr></thead>
+<tbody><tr><td scope="row"><code>\0</code>
+</td><td>ASCII NUL (<code>X'00'</code>)</td></tr>
+<tr><td scope="row"><code>\'</code>
+</td><td>Одинарная кавычка (<code>'</code>)</td></tr>
+<tr><td scope="row"><code>\"</code>
+</td><td>Двойная кавычка (<code>"</code>)</td></tr>
+<tr><td scope="row"><code>\b</code>
+</td><td>backspace</td></tr>
+<tr><td scope="row"><code>\n</code>
+</td><td>newline (linefeed)</td></tr>
+<tr><td scope="row"><code>\r</code>
+</td><td>carriage return</td></tr>
+<tr><td scope="row"><code>\t</code>
+</td><td>Табуляция</td></tr>
+<tr><td scope="row"><code>\Z</code>
+</td><td>ASCII 26 (Control+Z)</td></tr>
+<tr><td scope="row"><code>\\</code>
+</td><td>backslash (<code>\</code>)</td></tr>
+<tr><td scope="row"><code>\%</code>
+</td><td><code>%</code></td></tr>
+<tr><td scope="row"><code>\_</code>
+</td><td><code>_</code></td></tr></tbody></table>
+
+<p>Символ ASCII 26 символов может быть закодирован как <code>\Z</code>,
+чтобы обойти проблему с ASCII 26 END-OF-FILE в Windows. ASCII 26
+в пределах файла вызывает проблемы, если Вы пытаетесь использовать
+<code>mysql <em><code>db_name</code></em> &lt;
+<em><code>file_name</code></em></code>.</p>
+
+<p><code>\%</code> и <code>\_</code> используются, чтобы искать буквальные
+случаи <code>%</code> и <code>_</code> в соответствующих образцу контекстах,
+где они иначе интерпретировались бы как подстановочные символы. См. описание
+оператора <a href="funct.htm#operator_like"><code>LIKE</code></a> в
+<a href="funct.htm#string-comparison-functions">разделе 13.5.1</a>.
+Если Вы используете <code>\%</code> или <code>\_</code> за пределами
+соответствующих образцу контекстов они оцениваются к строкам
+<code>\%</code> и <code>\_</code>, но не <code>%</code> и <code>_</code>.</p>
+
+<p>Есть несколько способов включать символы кавычки в пределах строки:</p>
+<ul><li><p><code>'</code> в строке, заключенной в кавычки с
+<code>'</code> может быть написана как <code>''</code>.</li>
+
+<li><code>"</code> в строке, заключенной в кавычки с
+<code>"</code> может быть написана как <code>""</code>.</li>
+<li>Предшествуйте символу кавычки символом ESC (<code>\</code>).</li>
+
+<li><code>'</code> в строке, заключенной в кавычки с <code>"</code> не
+требует никакого специального режима и не должна быть удвоена или
+экранирована. Таким же образом <code>"</code> в строке, заключенной в
+кавычки с <code>'</code> не требует никакого специального режима.
+</p></li></ul>
+
+<p>Следующие запросы <a href="sql.htm#select"><code>SELECT</code></a>
+демонстрируют, как работает заключение в кавычки:
+<pre>
+mysql&gt; SELECT 'hello', '"hello"', '""hello""', 'hel''lo', '\'hello';
++-------+---------+-----------+--------+--------+
+| hello | "hello" | ""hello"" | hel'lo | 'hello |
++-------+---------+-----------+--------+--------+
+
+mysql&gt; SELECT "hello", "'hello'", "''hello''", "hel""lo", "\"hello";
++-------+---------+-----------+--------+--------+
+| hello | 'hello' | ''hello'' | hel"lo | "hello |
++-------+---------+-----------+--------+--------+
+
+mysql&gt; SELECT 'This\nIs\nFour\nLines';
++--------------------+
+| This
+Is
+Four
+Lines                |
++--------------------+
+
+mysql&gt; SELECT 'disappearing\ backslash';
++------------------------+
+| disappearing backslash |
++------------------------+
+</pre>
+
+<p>Чтобы вставить двоичные данные в строковый столбец (например,
+<a href="types.htm#blob"><code>BLOB</code></a>), Вы должны представить
+определенные символы escape-последовательностями. Наклонная черта влево
+(<code>\</code>) и символ кавычки, используемый, чтобы заключить строку в
+кавычки, нужно экранировать. В определенной окружающей среде клиента может
+быть также необходимо экранировать <code>NUL</code> или Control+Z. Клиент
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+усекает заключенные в кавычки строки, содержащие символы <code>NUL</code>,
+если их не экранируют, а Control+Z может быть понят как END-OF-FILE в
+Windows, если не экранирован. Для escape-последовательностей, которые
+представляют каждый из этих символов см.
+<a href="#character-escape-sequences">таблицу 10.1</a>.</p>
+
+<p>Сочиняя приложения, любую строку, которая могла бы содержать любой из этих
+специальных символов, нужно должным образом экранировать прежде, чем строка
+используется в качестве значения данных в запросе SQL, который посылают в
+сервер MySQL. Вы можете сделать это двумя способами:</p>
+
+<ul><li><p>Обработайте строку с функцией, которая экранирует
+специальные символы. В программе C Вы можете использовать функцию C API
+<a href="connect.htm#mysql-real-escape-string-quote"><code>
+mysql_real_escape_string_quote()</code></a>. См.
+<a href="connect.htm#mysql-real-escape-string-quote">раздел 25.8.7.56</a>.
+В пределах запросов SQL, которые создают другие запросы SQL, Вы можете
+использовать функцию <a href="funct.htm#function_quote"><code>QUOTE()</code>
+</a>. Интерфейс Perl DBI обеспечивает метод <code>quote</code>, чтобы
+преобразовать специальные символы в надлежащие escape-последовательности. См.
+<a href="connect.htm#apis-perl">раздел 25.10</a>.
+Другие языковые интерфейсы могут обеспечить подобную способность.</li>
+
+<li>Как альтернатива явной экранировке специальных символов, многие MySQL API
+обеспечивают способность заполнителя, которая позволяет Вам вставить
+специальные маркеры в строку запроса, и затем связать значения данных с ними,
+когда Вы делаете запрос. В этом случае API заботится об экранировке
+специальных символов в значениях для Вас.</p></li></ul>
+
+<h3><a name="number-literals"></a>10.1.2. Числовые литералы</h3>
+<p>Числовые литералы включают точное значение (целое число и
+<a href="types.htm#fixed-point-types"><code>DECIMAL</code></a>) и
+литералы приблизительной точности (с плавающей запятой).</p>
+
+<p>Целые числа представлены как последовательность цифр. Числа могут включать
+<code>.</code> как десятичный разделитель. Числам может предшествовать
+<code>-</code> или <code>+</code>, чтобы указать на отрицательное или
+положительное значение, соответственно. Числа, представленные в
+экспоненциальном представлении с мантиссой и экспонентой, являются
+числами приблизительной точности.</p>
+
+<p>У числовых литералов точного значения есть целая часть или дробная часть,
+или обе. Они могут быть со знаком. Примеры:
+<code>1</code>, <code>.2</code>, <code>3.4</code>, <code>-5</code>,
+<code>-6.78</code>, <code>+9.10</code>.</p>
+
+<p>Числовые литералы приблизительной точности
+представлены в экспоненциальном представлении с мантиссой и экспонентой.
+Любая одна или обе части могут быть со знаком. Примеры: <code>1.2E3</code>,
+<code>1.2E-3</code>, <code>-1.2E3</code>, <code>-1.2E-3</code>.</p>
+
+<p>Два числа, которые выглядят подобными, могут быть обработаны по-другому.
+Например, <code>2.34</code> точное значение (фиксированная точка) число,
+тогда как <code>2.34E0</code> приблизительная точность
+число (с плавающей запятой).</p>
+
+<p>Тип данных <a href="types.htm#fixed-point-types"><code>DECIMAL</code></a>
+тип фиксированной точки, и вычисления точны. В MySQL тип
+<a href="types.htm#fixed-point-types"><code>DECIMAL</code></a>
+имеет несколько синонимов: <a href="types.htm#fixed-point-types">
+<code>NUMERIC</code></a>,
+<a href="types.htm#fixed-point-types"><code>DEC</code></a>,
+<a href="types.htm#fixed-point-types"><code>FIXED</code></a>.
+Типы целого числа также типы точного значения. Для получения дополнительной
+информации о вычислениях точного значения см.
+<a href="funct.htm#precision-math">раздел 13.20</a>.</p>
+
+<p>Типы данных <a href="types.htm#floating-point-types"><code>FLOAT</code>
+</a> и <a href="types.htm#floating-point-types"><code>DOUBLE</code></a>
+типы с плавающей запятой, и вычисления приблизительны. В MySQL типы, которые
+синонимичны с <a href="types.htm#floating-point-types"><code>FLOAT</code></a>
+или <a href="types.htm#floating-point-types"><code>DOUBLE</code></a> это
+<a href="types.htm#floating-point-types"><code>DOUBLE PRECISION</code></a> и
+<a href="types.htm#floating-point-types"><code>REAL</code></a>.</p>
+<p>Целое число может использоваться в контексте с плавающей запятой:
+это интерпретируется как эквивалентное число с плавающей запятой.</p>
+
+<h3><a name="date-and-time-literals"></a>10.1.3. Литералы Date и Time</h3>
+<p>Значения Date и time могут быть представлены в нескольких форматах, таких
+как заключенные в кавычки строки или как числа, в зависимости от точного типа
+значения и других факторов. Например, в контекстах, где MySQL ожидает дату,
+он интерпретирует любое из <code>'2015-07-20'</code>, <code>'20150720'</code>
+и <code>20150720</code> именно как дату.</p>
+
+<p>Этот раздел описывает приемлемые форматы для литералов времени и даты. Для
+получения дополнительной информации о временных типах данных, таких как
+диапазон разрешенных значений, консультирйтесь с этими разделами:</p>
+
+<ul><li><p><a href="types.htm#date-and-time-type-overview">раздел 12.1.2</a>.
+</li>
+<li><a href="types.htm#date-and-time-types">раздел 12.3</a>.</p></li></ul>
+
+<p><a name="date-and-time-standard-sql-literals"></a>
+<b>Стандартные литералы даты и времени SQL и ODBC. </b>
+Стандартный SQL разрешает временным литералам быть определенными, используя
+ключевое слово типа и строку. Пространство между ключевым словом и
+строкой является дополнительным.
+<pre>
+DATE '<em><code>str</code></em>'
+TIME '<em><code>str</code></em>'
+TIMESTAMP '<em><code>str</code></em>'
+</pre>
+
+MySQL признает те конструкции и также соответствующий синтаксис ODBC:
+<pre>
+{ d '<em><code>str</code></em>' }
+{ t '<em><code>str</code></em>' }
+{ ts '<em><code>str</code></em>' }
+</pre>
+
+MySQL использует ключевое слово типа, и эти конструкции производят значения
+<a href="types.htm#datetime"><code>DATE</code></a>,
+<a href="types.htm#time"><code>TIME</code></a> и
+<a href="types.htm#datetime"><code>DATETIME</code></a>, соответственно,
+включая дробную часть секунд, если определена. Синтаксис
+<a href="types.htm#datetime"><code>TIMESTAMP</code></a> производит значение
+<a href="types.htm#datetime"><code>DATETIME</code></a> в MySQL потому, что
+<a href="types.htm#datetime"><code>DATETIME</code></a> имеет диапазон,
+который более близко соответствует стандартному SQL-типу
+<a href="types.htm#datetime"><code>TIMESTAMP</code></a>,
+у которого есть диапазон года от <code>0001</code> до <code>9999</code>.
+В MySQL <a href="types.htm#datetime"><code>TIMESTAMP</code></a> диапазон года
+от <code>1970</code> до <code>2038</code>.</p>
+
+<p><a name="date-and-time-string-numeric-literals"></a><b>
+Строковые и числовые литералы в контексте даты и времени. </b>
+MySQL признает значения <a href="types.htm#datetime"><code>DATE</code></a>
+в этих форматах:</p>
+
+<ul><li><p>Как строка в формате <code>'YYYY-MM-DD'</code> или
+<code>'YY-MM-DD'</code>. Расслабленный синтаксис разрешен: любой символ
+пунктуации может использоваться в качестве разделителя между частями даты.
+Например, <code>'2012-12-31'</code>, <code>'2012/12/31'</code>,
+<code>'2012^12^31'</code> и <code>'2012@12@31'</code> эквивалентны.</li>
+
+<li>Как строка без разделителей в формате
+<code>'YYYYMMDD'</code> или <code>'YYMMDD'</code>, при условии, что строка
+имеет смысл как дата. Например, <code>'20070523'</code> и
+<code>'070523'</code> интерпретируются как <code>'2007-05-23'</code>, но
+<code>'071332'</code> незаконно (у этого значения есть бессмысленные части
+месяца и дня) и становится <code>'0000-00-00'</code>.</li>
+
+<li>Как число в формате <code>YYYYMMDD</code> или <code>YYMMDD</code>,
+при условии, что число имеет смысл как дата. Например,
+<code>19830905</code> и <code>830905</code> интерпретируются как
+<code>'1983-09-05'</code>.</p></li></ul>
+
+<p>MySQL признает <a href="types.htm#datetime"><code>DATETIME</code></a> и
+<a href="types.htm#datetime"><code>TIMESTAMP</code></a> в этих форматах:</p>
+<ul><li><p>Как строка в форматах <code>'YYYY-MM-DD HH:MM:SS'</code> или
+<code>'YY-MM-DD HH:MM:SS'</code>. <span>Расслабленный</span>
+синтаксис разрешен здесь также: любой символ пунктуации может использоваться
+в качестве разделителя между частями даты или времени. Например,
+<code>'2012-12-31 11:30:45'</code>, <code>'2012^12^31 11+30+45'</code>,
+<code>'2012/12/31 11*30*45'</code> и <code>'2012@12@31 11^30^45'</code>.</p>
+
+<p>Единственный разделитель, признанный между датой и дробной частью секунд
+в части времени, является десятичной запятой.</p>
+<p>Дата и части времени могут быть отделены <code>T</code> вместо пробела.
+Например, <code>'2012-12-31 11:30:45'</code> эквивалент
+<code>'2012-12-31T11:30:45'</code>.</li>
+
+<li>Как строка без разделителей в формате
+<code>'YYYYMMDDHHMMSS'</code> или <code>'YYMMDDHHMMSS'</code>,
+при условии, что строка имеет смысл как дата. Например,
+<code>'20070523091528'</code> и <code>'070523091528'</code>
+интерпретируются как <code>'2007-05-23 09:15:28'</code>, но
+<code>'071122129015'</code> незаконно (у этого значения есть бессмысленная
+часть минут) и становится <code>'0000-00-00 00:00:00'</code>.</li>
+
+<li>Как число в формате <code>YYYYMMDDHHMMSS</code> или
+<code>YYMMDDHHMMSS</code>, при условии, что число имеет смысл как дата.
+Например, <code>19830905132800</code> и <code>830905132800</code>
+интерпретируются как <code>'1983-09-05 13:28:00'</code>.</p></li></ul>
+
+<p>Значения <a href="types.htm#datetime"><code>DATETIME</code></a> или
+<a href="types.htm#datetime"><code>TIMESTAMP</code></a> могут включать
+дробную часть секунд с точностью до микросекунд (6 цифр). Дробная часть
+должна всегда отделяться от остальной части времени десятичной запятой:
+никакой другой дробный разделитель секунд не признан. Для информации о
+поддержке частей секунд в MySQL см. <a href="types.htm#fractional-seconds">
+раздел 12.3.6</a>.</p>
+
+<p>Даты, содержащие значения года с двумя цифрами, неоднозначны, потому что
+столетие неизвестно. MySQL интерпретирует значения года с двумя цифрами,
+используя эти правила:</p>
+
+<ul><li><p>Год в диапазоне <code>70-99</code> преобразован в <code>1970-1999
+</code>.</li>
+<li>Год в диапазоне <code>00-69</code> преобразован в <code>2000-2069</code>.
+</p></li></ul>
+
+<p>Для значений, определенных как строки, которые включают разделители части
+даты, не нужно определять две цифры для значений месяца или дня, которые
+меньше <code>10</code>. <code>'2015-6-9'</code> воспринимается как
+<code>'2015-06-09'</code>. Точно так же для значений, определенных как
+строки, которые включают разделители части времени, не нужно определять две
+цифры в значениях часа, минуты или секунды, которые меньше <code>10</code>.
+<code>'2015-10-30 1:2:3'</code> то же самое, как
+<code>'2015-10-30 01:02:03'</code>.</p>
+
+<p>Значения, определенные как числа, должны быть длиной в 6, 8, 12 или 14
+цифр. Если число 8 или 14 цифр, оно, как предполагается, находится в
+формате <code>YYYYMMDD</code> или <code>YYYYMMDDHHMMSS</code>, а
+год задан первыми 4 цифрами. Если число 6 или 12 цифр, оно, как
+предполагается, в формате <code>YYMMDD</code> или <code>YYMMDDHHMMSS</code>,
+а год задан первыми 2 цифрами. Числа, которые не являются ни одной из этих
+длин, дополняются начальными нулями к самой близкой длине.</p>
+
+<p>Значения, определенные как неразграниченные строки, интерпретируются
+согласно их длине. Для строки в 8 или 14 символов, год, как предполагается,
+задан первыми 4 символами. Иначе год, как предполагается, задан первыми 2
+символами. Строка интерпретируется слева направо, чтобы найти год, месяц,
+день, час, минуту и секунду. Это означает, что Вы не должны использовать
+строки, у которых есть меньше 6 символов. Например, если Вы определяете
+<code>'9903'</code>, считая, что это задает март 1999, MySQL преобразует это
+в <span>нулевую</span> дату. Это происходит, потому что значения
+года и месяца <code>99</code> и <code>03</code>, но дневная часть
+отсутствует. Однако, Вы можете явно определить значение ноля, чтобы
+представить недостающие части месяца или дня. Например, чтобы вставить
+значение <code>'1999-03-00'</code>, используйте <code>'990300'</code>.</p>
+
+<p>MySQL признает значения <a href="types.htm#time"><code>TIME</code></a>
+в этих форматах:</p>
+<ul><li><p>Как строка в формате <code>'D HH:MM:SS'</code>.
+Вы можете также использовать один из следующих вариантов:
+<code>'HH:MM:SS'</code>, <code>'HH:MM'</code>, <code>'D HH:MM'</code>,
+<code>'D HH'</code> или <code>'SS'</code>. Здесь <code>D</code> представляет
+дни и может иметь значение от 0 до 34.</li>
+
+<li>Как строка без разделителей в формате <code>'HHMMSS'</code>
+при условии, что это имеет смысл как время. Например, <code>'101112'</code>
+понято как <code>'10:11:12'</code>, но <code>'109712'</code> недопустимо
+(у этого есть бессмысленная минутная часть), и становится
+<code>'00:00:00'</code>.</li>
+
+<li>Как число в виде <code>HHMMSS</code> при условии, что это имеет смысл как
+время. Например, <code>101112</code> понимается как <code>'10:11:12'</code>.
+Следующие альтернативные форматы также поняты: <code>SS</code>,
+<code>MMSS</code> или <code>HHMMSS</code>.</p></li></ul>
+
+<p>Дробная часть секунд признана в форматах
+<code>'D HH:MM:SS.fraction'</code>, <code>'HH:MM:SS.fraction'</code>,
+<code>'HHMMSS.fraction'</code> и <code>HHMMSS.fraction</code>, здесь
+<code>fraction</code> дробная часть до микросекунд (6 цифр). Дробная часть
+должна всегда отделяться от остальной части времени десятичной запятой,
+никакой другой дробный разделитель секунд не признан. Для информации о
+дробной поддержке секунд в MySQL см.
+<a href="types.htm#fractional-seconds">раздел 12.3.6</a>.</p>
+
+<p>Для значений <a href="types.htm#time"><code>TIME</code></a>, определенных
+как строки, которые включают разделитель части времени, не нужно определять
+две цифры часов, минут или значений секунд, которые меньше <code>10</code>.
+<code>'8:3:2'</code> означает <code>'08:03:02'</code>.</p>
+
+<h3><a name="hexadecimal-literals"></a>10.1.4. Шестнадцатеричные литералы</h3>
+<p>Шестнадцатеричные литералы написаны, используя нотацию
+<code>X'<em><code>val</code></em>'</code> или
+<code>0x<em><code>val</code></em></code>, где <em><code>val</code></em>
+содержит шестнадцатеричные цифры (<code>0..9</code>, <code>A..F</code>).
+Регистр символов не имеет значения. Лидирующий <code>0x</code>
+является чувствительным к регистру и не может быть написан как
+<code>0X</code>.</p>
+
+<p>Допустимые шестнадцатеричные литералы:
+<pre>
+X'01AF'
+X'01af'
+x'01AF'
+x'01af'
+0x01AF
+0x01af
+</pre>
+
+Недопустимые шестнадцатеричные литералы:
+<pre>
+X'0G' (G не шестнадцатеричная цифра)
+0X01AF (0X должен быть записан как 0x)
+</pre>
+
+Значения, использующие формат <code>X'<em><code>val</code></em>'</code>
+должны содержать четное число цифр, или синтаксическая ошибка происходит.
+Чтобы исправить проблему, дополните значение начальным нулем:
+<pre>
+mysql&gt; SET @s = X'FFF';
+ERROR 1064 (42000): You have an error in your SQL syntax;
+check the manual that corresponds to your MySQL server
+version for the right syntax to use near 'X'FFF''
+
+mysql&gt; SET @s = X'0FFF';
+Query OK, 0 rows affected (0.00 sec)
+</pre>
+
+Значения, использующие формат <code>0x<em><code>val</code></em></code>,
+которые содержат нечетное число цифр, обработаны как будто есть начальный
+<code>0</code>. Например, <code>0xaaa</code> это <code>0x0aaa</code>.</p>
+
+<p>По умолчанию, шестнадцатеричный литерал двоичная строка, где каждая пара
+шестнадцатеричных цифр представляет символ:
+<pre>
+mysql&gt; SELECT X'4D7953514C', CHARSET(X'4D7953514C');
++---------------+------------------------+
+| X'4D7953514C' | CHARSET(X'4D7953514C') |
++---------------+------------------------+
+| MySQL         | binary                 |
++---------------+------------------------+
+
+mysql&gt; SELECT 0x5461626c65, CHARSET(0x5461626c65);
++--------------+-----------------------+
+| 0x5461626c65 | CHARSET(0x5461626c65) |
++--------------+-----------------------+
+| Table        | binary                |
++--------------+-----------------------+
+</pre>
+
+Шестнадцатеричный литерал может иметь дополнительный набор символов
+introducer и предложение <code>COLLATE</code>, чтобы определять это как
+строку, которая использует особый набор символов и сопоставление:</p>
+<pre>
+[_<em><code>charset_name</code></em>] X'<em><code>val</code></em>' [COLLATE <em><code>collation_name</code></em>]
+</pre>
+
+Примеры:
+<pre>
+SELECT _latin1 X'4D7953514C';
+SELECT _utf8 0x4D7953514C COLLATE utf8_danish_ci;
+</pre>
+Формат <code>0x<em><code>val</code></em></code> также позволяет introducer.
+</p>
+
+<p>В числовых контекстах MySQL обрабатывает шестнадцатеричный литерал как
+<a href="types.htm#integer-types"><code>BIGINT</code></a> (64-bit integer).
+Чтобы гарантировать числовую обработку шестнадцатеричного литерала,
+используйте это в числовом контексте. Способы сделать это включают добавление
+0 или использование <a href="funct.htm#function_cast"><code>CAST(... AS
+UNSIGNED)</code></a>. Например, шестнадцатеричный литерал, назначенный
+определяемой пользователем переменной, является двоичной строкой по
+умолчанию. Чтобы назначить значение в качестве числа, используйте
+это в числовом контексте:
+<pre>
+mysql&gt; SET @v1 = X'41';
+mysql&gt; SET @v2 = X'41'+0;
+mysql&gt; SET @v3 = CAST(X'41' AS UNSIGNED);
+mysql&gt; SELECT @v1, @v2, @v3;
++-----+-----+-----+
+| @v1 | @v2 | @v3 |
++-----+-----+-----+
+| A   | 65  | 65  |
++-----+-----+-----+
+</pre>
+
+Пустое шестнадцатеричное значение (<code>X''</code>) оценивается к двоичной
+строке с нулевой длиной. Преобразованная в число она производит 0:
+<pre>
+mysql&gt; SELECT CHARSET(X''), LENGTH(X'');
++--------------+-------------+
+| CHARSET(X'') | LENGTH(X'') |
++--------------+-------------+
+| binary       | 0           |
++--------------+-------------+
+
+mysql&gt; SELECT X''+0;
++-------+
+| X''+0 |
++-------+
+| 0     |
++-------+
+</pre>
+
+Формат <code>X'<em><code>val</code></em>'</code> основан на стандартном SQL.
+<code>0x</code> основан на ODBC, для которого шестнадцатеричные строки часто
+используются, чтобы поставлять значения для столбцов
+<a href="types.htm#blob"><code>BLOB</code></a>.</p>
+
+<p>Чтобы преобразовать строку или число к строке в шестнадцатеричном формате,
+используйте фугкцию <a href="funct.htm#function_hex"><code>HEX()</code></a>:
+<pre>
+mysql&gt; SELECT HEX('cat');
++------------+
+| HEX('cat') |
++------------+
+| 636174     |
++------------+
+mysql&gt; SELECT X'636174';
++-----------+
+| X'636174' |
++-----------+
+| cat       |
++-----------+
+</pre>
+
+<h3><a name="bit-value-literals"></a>10.1.5. Битовые строки</h3>
+<p>Битовые строки написаны, используя формат
+<code>b'<em><code>val</code></em>'</code> или
+<code>0b<em><code>val</code></em></code>. <em><code>val</code></em>
+двоичное значение, использующее 0 и 1. Регистр лидирующего <code>b</code>
+не имеет значения. <code>0b</code> является чувствительным к регистру и не
+может быть написан как <code>0B</code>.</p>
+
+<p>Допустимые литералы битового значения:
+<pre>
+b'01'
+B'01'
+0b01
+</pre>
+
+Недопустимые литералы битового значения:
+<pre>
+b'2'(2 не может быть использована)
+0B01 (0B надо писать как 0b)
+</pre>
+
+По умолчанию, буквальное битовое значение является двоичной строкой:
+<pre>
+mysql&gt; SELECT b'1000001', CHARSET(b'1000001');
++------------+---------------------+
+| b'1000001' | CHARSET(b'1000001') |
++------------+---------------------+
+| A          | binary              |
++------------+---------------------+
+
+mysql&gt; SELECT 0b1100001, CHARSET(0b1100001);
++-----------+--------------------+
+| 0b1100001 | CHARSET(0b1100001) |
++-----------+--------------------+
+| a         | binary             |
++-----------+--------------------+
+</pre>
+
+У буквального битового значения может быть дополнительный набор символов
+introducer и <code>COLLATE</code>, чтобы определять это как строку, которая
+использует особый набор символов и сопоставление:</p>
+<pre>
+[_<em><code>charset_name</code></em>] b'<em><code>val</code></em>' [COLLATE <em><code>collation_name</code></em>]
+</pre>
+
+Примеры:
+<pre>
+SELECT _latin1 b'1000001';
+SELECT _utf8 0b1000001 COLLATE utf8_danish_ci;
+</pre>
+
+<p>В числовых контекстах MySQL обрабатывает литералы как целое число. Чтобы
+гарантировать числовую обработку, используйте это в числовом контексте.
+Способы сделать это включают добавление 0 или использование
+<a href="funct.htm#function_cast"><code>CAST(... AS UNSIGNED)</code></a>.
+Например, литерал, назначенный определяемой пользователем переменной,
+является двоичной строкой по умолчанию. Чтобы назначить значение в качестве
+числа, используйте это в числовом контексте:
+<pre>
+mysql&gt; SET @v1 = b'1100001';
+mysql&gt; SET @v2 = b'1100001'+0;
+mysql&gt; SET @v3 = CAST(b'1100001' AS UNSIGNED);
+mysql&gt; SELECT @v1, @v2, @v3;
++-----+-----+-----+
+| @v1 | @v2 | @v3 |
++-----+-----+-----+
+| a   | 97  | 97  |
++-----+-----+-----+
+</pre>
+
+Пустое битовое значение (<code>b''</code>) оценивается к двоичной строке
+нулевой длины. Преобразованная в число она производит 0:
+<pre>
+mysql&gt; SELECT CHARSET(b''), LENGTH(b'');
++--------------+-------------+
+| CHARSET(b'') | LENGTH(b'') |
++--------------+-------------+
+| binary       | 0           |
++--------------+-------------+
+
+mysql&gt; SELECT b''+0;
++-------+
+| b''+0 |
++-------+
+| 0     |
++-------+
+</pre>
+Формат битового значения удобен для того, чтобы определить значения, которые
+будут назначены столбцам <a href="types.htm#bit-type"><code>BIT</code></a>:
+
+<pre>
+mysql&gt; CREATE TABLE t (b BIT(8));
+mysql&gt; INSERT INTO t SET b = b'11111111';
+mysql&gt; INSERT INTO t SET b = b'1010';
+mysql&gt; INSERT INTO t SET b = b'0101';
+</pre>
+
+Битовые значения в наборах результатов возвращены как двоичные значения,
+которые, возможно, не выводятся на экран хорошо. Чтобы преобразовать немного
+значения в пригодную для печати форму, используйте это в числовом контексте
+или используйте конверсионную функцию, например,
+<a href="funct.htm#function_bin"><code>BIN()</code></a>.
+Старший разряд 0 бита не выведен на экран в переделанном значении.
+<pre>
+mysql&gt; SELECT b+0, BIN(b), OCT(b), HEX(b) FROM t;
++-----+----------+--------+--------+
+| b+0 | BIN(b)   | OCT(b) | HEX(b) |
++-----+----------+--------+--------+
+| 255 | 11111111 | 377    | FF     |
+|  10 | 1010     | 12     | A      |
+|   5 | 101      | 5      | 5      |
++-----+----------+--------+--------+
+</pre>
+
+<h3><a name="boolean-literals"></a>10.1.6. Boolean</h3>
+<p>Константы <code>TRUE</code> и <code>FALSE</code> оцениваются как
+<code>1</code> и <code>0</code>, соответственно.
+Постоянные имена могут быть написаны в любом регистре.
+<pre>
+mysql&gt; SELECT TRUE, true, FALSE, false;
+    -&gt; 1, 1, 0, 0
+</pre>
+
+<h3><a name="null-values"></a>10.1.7. NULL</h3>
+<p>Значение <code>NULL</code> означает <span>"нет данных"</span>.
+<code>NULL</code> может быть написан в любом регистре символов.
+Синоним <code>\N</code> (чувствительный к регистру).</p>
+
+<p>Для экспорта и импорта текстовых файлов через
+<a href="sql.htm#load-data"><code>LOAD DATA INFILE</code></a> или
+<a href="sql.htm#select-into"><code>SELECT ... INTO OUTFILE</code></a>
+<code>NULL</code> представлен последовательностью <code>\N</code>. См.
+<a href="sql.htm#load-data">раздел 14.2.6</a>.</p>
+
+<p>Знайте что <code>NULL</code> отличается от таких значений, как
+<code>0</code> для числовых типов или пустой строки для строковых типов. Для
+получения дополнительной информации см.
+<a href="error.htm#problems-with-null">раздел B.5.4.3</a>.</p>
+
+<h2><a name="identifiers"></a>10.2. Названия объекта схемы</h2>
+<p>Определенные объекты в пределах MySQL, включая базу данных, таблицу,
+индекс, столбец, псевдоним, представление, хранимую процедуру, разделение,
+табличное пространство и другие названия объекта известны как идентификаторы.
+Этот раздел описывает допустимый синтаксис для идентификаторов в MySQL.
+<a href="#identifier-case-sensitivity">Раздел 10.2.2</a>
+описывает, какие типы идентификаторов являются чувствительными к регистру и
+при каких условиях.</p>
+
+<p>Идентификатор может быть заключен в кавычки или написан без них. Если
+идентификатор содержит специальные символы или является зарезервированным
+словом, Вы <span><em>должны</em></span> заключить его в кавычки всякий раз,
+когда Вы обращаетесь к нему. Исключение: зарезервированное слово, которое
+следует за периодом в полностью определенном имени, должно быть
+идентификатором, таким образом, оно не должно быть заключено в кавычки.
+Зарезервированные слова перечислены в
+<a href="#keywords">разделе 10.3</a>.</p>
+
+<p>Идентификаторы преобразованы в Unicode внутренне.
+Они могут содержать эти символы:</p>
+<ul><li><p>Разрешенные символы в идентификаторах:</p>
+<ul><li><p>ASCII: [0-9,a-z,A-Z$_] (основные латинские буквы,
+цифры 0-9, доллар, подчеркивание).</li>
+<li>Расширенные: U+0080 .. U+FFFF.</p></li></ul></li>
+
+<li><p>Разрешенные символы в заключенных в кавычки идентификаторах включают
+полный Unicode Basic Multilingual Plane (BMP), кроме U+0000:</p>
+<ul><li><p>ASCII: U+0001 .. U+007F.</li>
+<li>Расширенные: U+0080 .. U+FFFF.</p></li></ul></li>
+
+<li><p>ASCII NUL (U+0000) и дополнительные символы (U+10000 и выше) не
+разрешен в любых идентификаторах.</li>
+<li>Идентификаторы могут начаться с цифры, но если не заключены в кавычки,
+не могут состоять исключительно из цифр.</li>
+<li>База данных, таблица и имена столбцов не могут закончиться пробелами.
+</p></li></ul>
+
+<p>Символ кавычки идентификатора обратная галочка (<code>`</code>):
+<pre>
+mysql&gt; SELECT * FROM `select` WHERE `select`.id &gt; 100;
+</pre>
+
+Если включен режим SQL <a href="server.htm#sqlmode_ansi_quotes"><code>
+ANSI_QUOTES</code></a> также допустимо заключить идентификаторы в кавычки в
+пределах двойных кавычек:
+<pre>
+mysql&gt; CREATE TABLE "test" (col INT);
+ERROR 1064: You have an error in your SQL syntax...
+
+mysql&gt; SET sql_mode='ANSI_QUOTES';
+mysql&gt; CREATE TABLE "test" (col INT);
+Query OK, 0 rows affected (0.00 sec)
+</pre>
+
+Режим <a href="server.htm#sqlmode_ansi_quotes"><code>ANSI_QUOTES</code></a>
+заставляет сервер интерпретировать заключенные в двойные кавычки строки как
+идентификаторы. Следовательно, когда этот режим включен, строковые литералы
+должны быть указаны в пределах одинарных кавычек. Они не могут быть указаны в
+пределах двойных кавычек. Режим SQL управляют как описано в
+<a href="server.htm#sql-mode">разделе 6.1.8</a>.</p>
+
+<p>Символы кавычки идентификатора могут быть включены в пределах
+идентификатора, если Вы заключаете идентификатор в кавычки. Если символ,
+который будет включен в пределах идентификатора, является тем же самым,
+которым заключен идентификатор в кавычки непосредственно, то Вы должны
+удвоить символ. Следующий запрос составляет таблицу <code>a`b</code>,
+которая содержит столбец <code>c"d</code>:
+<pre>
+mysql&gt; CREATE TABLE `a``b` (`c"d` INT);
+</pre>
+
+<p>В избранном списке запроса заключенный в кавычки псевдоним столбца может
+быть определен, используя идентификатор или строковые
+символы заключения в кавычки:
+<pre>
+mysql&gt; SELECT 1 AS `one`, 2 AS 'two';
++-----+-----+
+| one | two |
++-----+-----+
+| 1   | 2   |
++-----+-----+
+</pre>
+
+В другом месте в запросе заключенные в кавычки ссылки на псевдоним должны
+использовать заключение в кавычки идентификатора, или ссылка будет обработана
+как буквальная строка.</p>
+
+<p>Рекомендуется, чтобы Вы не использовали имена, которые начинаются с
+<code><em><code>M</code></em>e</code> или
+<code><em><code>M</code></em>e<em><code>N</code></em></code>, где
+<em><code>M</code></em> и <em><code>N</code></em> целые числа. Например, надо
+избегать использования <code>1e</code> как идентификатора, потому что такое
+выражение, как <code>1e+3</code> неоднозначно. В зависимости от контекста это
+могло бы интерпретироваться как выражение <code>1e + 3</code>
+или как число <code>1e+3</code>.</p>
+
+<p>Будьте осторожны, используя <a href="funct.htm#function_md5"><code>
+MD5()</code></a>, чтобы произвести имена таблиц, потому что это может
+произвести имена в незаконных или неоднозначных форматах, таких, как
+только что описанные.</p>
+
+<p>Пользовательская переменная не может использоваться непосредственно в
+запросе SQL как идентификатор или как часть идентификатора. См.
+<a href="#user-variables">раздел 10.4</a>.</p>
+
+<p>Специальные символы в именах базы данных и таблиц закодированы в
+соответствующие имена файловой системы как описано в
+<a href="#identifier-mapping">разделе 10.2.3</a>.</p>
+
+<p>Следующая таблица описывает максимальную длину для
+каждого типа идентификатора.</p>
+<table border="1">
+<thead><tr><th scope="col">Идентификатор</th>
+<th scope="col">Максимальная длина (символов)</th></tr></thead>
+<tbody><tr><td scope="row">База данных</td><td>64</td></tr>
+<tr><td scope="row">Таблица</td><td>64</td></tr>
+<tr><td scope="row">Столбец</td><td>64</td></tr>
+<tr><td scope="row">Индекс</td><td>64</td></tr>
+<tr><td scope="row">Ограничение</td><td>64</td></tr>
+<tr><td scope="row">Сохраненная программа</td><td>64</td></tr>
+<tr><td scope="row">Представление</td><td>64</td></tr>
+<tr><td scope="row">Табличное пространство</td><td>64</td></tr>
+<tr><td scope="row">Сервер</td><td>64</td></tr>
+<tr><td scope="row">Группа файла журнала</td><td>64</td></tr>
+<tr><td scope="row">Псевдоним</td><td>256</td></tr>
+<tr><td scope="row">Составная метка запроса</td><td>16</td></tr>
+<tr><td scope="row">Определяемая пользователем переменная</td><td>64</td>
+</tr></tbody></table>
+
+<p>Псевдонимы для имен столбцов в <a href="sql.htm#create-view"><code>CREATE
+VIEW</code></a> проверены по максимальной длине столбца 64 символов (не
+максимальная длина псевдонима 256 символов).</p>
+
+<p>Идентификаторы сохранены, используя Unicode (UTF-8). Это относится к
+идентификаторам в табличных определениях и к идентификаторам, сохраненным в
+таблицах привилегий в базе данных <code>mysql</code>. Размеры строковых
+столбцов идентификатора в таблицах привилегий измерены в символах. Вы можете
+использовать мультибайтные символы, не сокращая количество символов,
+разрешенных для значений, сохраненных в этих столбцах. Как обозначено ранее,
+допустимые символы Unicode Basic Multilingual Plane (BMP).
+Дополнительные символы не разрешены.</p>
+
+<h3><a name="identifier-qualifiers"></a>10.2.1.
+Спецификаторы идентификатора</h3>
+<p>MySQL разрешает имена, которые состоят из единственного или многих
+идентификаторов. Компоненты имени многократной части должны быть отделены
+символом точки (<code>.</code>). Начальные части имени рассматриваются как
+спецификаторы, которые затрагивают контекст, в пределах которого
+интерпретируется заключительный идентификатор.</p>
+
+<p>В MySQL Вы можете сослаться на столбец таблицы, используя любую
+из следующих форм.</p>
+<table border="1">
+<thead><tr><th scope="col">Ссылка столбца</th><th scope="col">Значение
+</th></tr></thead>
+<tbody><tr><td scope="row"><em><code>col_name</code></em></td>
+<td>Столбец <em><code>col_name</code></em> из любой таблицы в запросе со
+столбцом с этим именем.</td></tr>
+<tr><td scope="row"><em><code>tbl_name.col_name</code></em></td>
+<td>Столбец <em><code>col_name</code></em> таблицы
+<em><code>tbl_name</code></em> из базы данных по умолчанию.</td></tr>
+<tr><td scope="row"><em><code>db_name.tbl_name.col_name</code></em></td>
+<td>Столбец <em><code>col_name</code></em> таблицы
+<em><code>tbl_name</code></em> базы данных
+<em><code>db_name</code></em>.</td></tr></tbody></table>
+
+<p>Символ спецификатора отдельный маркер и не должен быть непрерывным со
+связанными идентификаторами. Например,
+<em><code>tbl_name.col_name</code></em> и
+<em><code>tbl_name . col_name</code></em> эквивалентны.</p>
+
+<p>Если какие-либо компоненты имени составной части требуют заключения в
+кавычки, их заключают в кавычки индивидуально вместо того, чтобы заключить
+имя в кавычки в целом. Например, надо писать <code>`my-table`.`my-column`
+</code>, а не <code>`my-table.my-column`</code>.</p>
+
+<p>Зарезервированное слово, которое следует за точкой в полностью
+определенном имени, должно быть идентификатором, таким образом, в этом
+контексте оно не должно быть заключено в кавычки.</p>
+
+<p>Вы не должны определить префикс <em><code>tbl_name</code></em> или
+<em><code>db_name.tbl_name</code></em> для ссылки столбца в запросе, если
+ссылка не была бы неоднозначна. Предположите, что таблицы
+<code>t1</code> и <code>t2</code> содержат столбец
+<code>c</code>, и Вы получаете <code>c</code> в запросе
+<a href="sql.htm#select"><code>SELECT</code></a>, который использует
+<code>t1</code> и <code>t2</code>. В этом случае <code>c</code>
+неоднозначно, потому что это не уникально среди таблиц, используемых в
+запросе. Вы должны квалифицировать это с именем таблицы как
+<code>t1.c</code> или <code>t2.c</code>, чтобы указать, какую таблицу Вы
+имеете в виду. Точно так же, чтобы получить данные из таблиц
+<code>t</code> в базе данных <code>db1</code> и <code>t</code> в базе данных
+<code>db2</code> в том же самом запросе Вы должны обратиться к столбцам в тех
+таблицах как <code>db1.t.<em><code>col_name</code></em></code> и
+<code>db2.t.<em><code>col_name</code></em></code>.</p>
+
+<p>Синтаксис <code><em><code>.tbl_name</code></em></code> означает таблицу
+<em><code>tbl_name</code></em> в базе данных по умолчанию. Этот синтаксис
+принят для совместимости с ODBC, потому что некоторые программы ODBC передают
+имена таблиц с префиксным символом <code>.</code> .</p>
+
+<h3><a name="identifier-case-sensitivity"></a>10.2.2.
+Чувствительность к регистру идентификатора</h3>
+<p>В MySQL базы данных соответствуют каталогам в пределах каталога данных.
+Каждая таблица в пределах базы данных соответствует по крайней мере одному
+файлу в пределах каталога базы данных (возможно, больше, в зависимости от
+механизма хранения). Триггеры также соответствуют файлам. Следовательно,
+чувствительность к регистру операционной системы играет роль в
+чувствительности базы данных, таблицы и прочих имен. Это означает, что такие
+имена не являются чувствительными к регистру в Windows, но являются
+чувствительными к регистру в большинстве вариантов Unix. Одно известное
+исключение: OS X, которая основана на Unix, но использует тип файловой
+системы по умолчанию (HFS+), который не является чувствительным к регистру.
+Однако, OS X также поддерживает тома UFS, которые являются чувствительными к
+регистру так же, как в любой Unix. См.
+<a href="intro.htm#extensions-to-ansi">раздел 1.8.1</a>. Переменная
+<a href="server.htm#sysvar_lower_case_table_names"><code>
+lower_case_table_names</code></a> также затрагивает, как сервер обрабатывает
+чувствительность к регистру идентификатора, как описано позже в этом разделе.
+</p>
+
+<p>Хотя база данных, таблица и триггеры не являются чувствительными к
+регистру на некоторых платформах, Вы не должны обратиться к одному из них,
+используя разный регистр в пределах того же самого запросы. Следующий запрос
+не работает, потому что он отсылает к таблице <code>my_table</code> как к
+<code>MY_TABLE</code>:
+<pre>
+mysql&gt; SELECT * FROM my_table WHERE MY_TABLE.col=1;
+</pre>
+
+<p>Столбцы, индексы, сохраненные программы и имена событий не являются
+чувствительными к регистру на любой платформе.</p>
+<p>Однако, имена групп файла регистрации являются чувствительными к регистру.
+Это отличается от стандартного SQL.</p>
+
+<p>По умолчанию, табличные псевдонимы являются чувствительными к регистру в
+Unix, но это не так в Windows или OS X. Следующий запрос не работает в Unix,
+потому что это отсылает к псевдониму <code>a</code> как к <code>A</code>:
+<pre>
+mysql&gt; SELECT <em><code>col_name</code></em> FROM <em><code>tbl_name</code></em> AS a
+    -&gt;        WHERE a.<em><code>col_name</code></em> = 1 OR A.<em><code>col_name</code></em> = 2;
+</pre>
+
+Однако, этот же самый запрос разрешен в Windows. Чтобы избежать проблем,
+вызванных такими различиями, лучше принимать последовательное соглашение,
+такое как всегда создавать и обращаться к базам данных и таблицам, используя
+строчные имена. Это соглашение рекомендуется для максимальной
+мобильности и простоты использования.</p>
+
+<p>То, как имена таблиц и имена базы данных сохранены на диске и используются
+в MySQL, затронуто переменной
+<a href="server.htm#sysvar_lower_case_table_names"><code>
+lower_case_table_names</code></a>, которую Вы можете установить, запуская
+<a href="programs.htm#mysqld"><span><strong>mysqld</strong></span></a>.
+<a href="server.htm#sysvar_lower_case_table_names"><code>
+lower_case_table_names</code></a> может взять значения, показанные в
+следующей таблице. Эта переменная <span><em>не</em></span> затрагивает
+чувствительность к регистру идентификаторов триггеров. В Unix значение по
+умолчанию <a href="server.htm#sysvar_lower_case_table_names"><code>
+lower_case_table_names</code></a> 0. В Windows 1. В OS X 2.</p>
+
+<table border="1">
+<thead><tr><th scope="col">Значение</th><th scope="col">Смысл
+</th></tr></thead>
+<tbody><tr><td scope="row"><code>0</code></td>
+<td>Имена таблиц и баз данных сохранены на диске, используя нижний регистр,
+определенный в <a href="sql.htm#create-table"><code>CREATE
+TABLE</code></a> или <a href="sql.htm#create-database"><code>CREATE
+DATABASE</code></a>. Сравнения имен являются чувствительными к регистру. Вы
+не должны установить эту переменную в 0, если Вы выполняете MySQL на системе,
+у которой есть нечувствительные к регистру имена файла (Windows или OS X).
+Если Вы установите ее в 0 с
+<a href="server.htm#sysvar_lower_case_table_names"><code>
+--lower-case-table-names=0</code></a> на нечувствительной к регистру файловой
+системе и обратитесь к именам таблиц <code>MyISAM</code>, используя различный
+регистр, индекс может быть поврежден.</td></tr>
+<tr><td scope="row"><code>1</code></td><td>
+Имена таблиц сохранены в нижнем регистре на диске, и сравнения не являются
+чувствительными к регистру. MySQL преобразовывает все имена таблиц в нижний
+регистр при хранении и поиске. Это поведение также относится к именам базы
+данных и табличным псевдонимам.</td></tr>
+<tr><td scope="row"><code>2</code></td><td>
+Имена таблиц и баз данных сохранены на диске, используя регистр, определенный
+в <a href="sql.htm#create-table"><code>CREATE
+TABLE</code></a> или <a href="sql.htm#create-database"><code>CREATE
+DATABASE</code></a>, но MySQL преобразовывает их в нижний регистр при поиске.
+Сравнения имени не являются чувствительными к регистру. Это работает
+<span><em>только</em></span> с файловыми системами, которые не являются
+чувствительными к регистру! Имена таблиц <code>InnoDB</code> сохранены в
+нижнем регистре, как при <code>lower_case_table_names=1</code>.
+</td></tr></tbody></table>
+
+<p>Если Вы используете MySQL только на одной платформе, Вы не должны обычно
+изменять <a href="server.htm#sysvar_lower_case_table_names"><code>
+lower_case_table_names</code></a>. Однако, Вы можете столкнуться с
+трудностями, если Вы хотите передать таблицы между платформами, которые
+отличаются по чувствительности к регистру файловой системы. Например, в Unix
+у Вас может быть две различных таблицы, названные <code>my_table</code> и
+<code>MY_TABLE</code>, но в Windows эти два имени считают идентичными. Чтобы
+избежать проблем передачи данных, являющихся результатом регистра
+имен базы данных или таблиц, у Вас есть две опции:</p>
+
+<ul><li><p>Использовать <code>lower_case_table_names=1</code> на всех
+системах. Основной недостаток с этим: когда Вы используете
+<a href="sql.htm#show-tables"><code>SHOW TABLES</code></a> или
+<a href="sql.htm#show-databases"><code>SHOW DATABASES</code></a>,
+Вы не видите имена в их оригинальном регистре.</li>
+
+<li>Использовать <code>lower_case_table_names=0</code> в Unix и
+<code>lower_case_table_names=2</code> в Windows. Это сохраняет регистр
+имен базы данных и таблиц. Недостаток этого: Вы должны гарантировать, что
+Ваши запросы всегда относятся к Вашим именам базы данных и таблиц с
+правильным регистром в Windows. Если Вы передаете свои запросы Unix, где
+регистр является существенным, они не работают, если
+регистр является неправильным.</p>
+
+<p><span><strong>Исключение</strong></span>: Если Вы используете таблицы
+<code>InnoDB</code> и пытаетесь избежать этих проблем передачи данных, Вы
+должны установить <a href="server.htm#sysvar_lower_case_table_names"><code>
+lower_case_table_names</code></a> в 1 на всех платформах, чтобы вынудить
+преобразовать имена в нижний регистр.</p></li></ul>
+
+<p>Если Вы планируете установить
+<a href="server.htm#sysvar_lower_case_table_names"><code>
+lower_case_table_names</code></a> в 1 в Unix, Вы должны сначала преобразовать
+свою старую базу данных и имена таблиц к нижнему регистру прежде, чем
+остановить <a href="programs.htm#mysqld"><span><strong>mysqld</strong></span>
+</a> и перезапустить с новой переменной установкой. Чтобы сделать это для
+отдельной таблицы, надо использовать
+<a href="sql.htm#rename-table"><code>RENAME TABLE</code></a>:
+<pre>
+RENAME TABLE T1 TO t1;
+</pre>
+
+Чтобы преобразовать одну или более баз данных, выведите их перед установкой
+<a href="server.htm#sysvar_lower_case_table_names"><code>
+lower_case_table_names</code></a>, затем удалите базы данных и перезагрузите
+их после установки <a href="server.htm#sysvar_lower_case_table_names"><code>
+lower_case_table_names</code></a>:
+
+<ol type="1"><li><p>Используйте <a href="programs.htm#mysqldump"><span>
+<strong>mysqldump</strong></span></a>, чтобы вывести каждую базу данных:
+<pre>
+mysqldump --databases db1 &gt; db1.sql
+mysqldump --databases db2 &gt; db2.sql
+...
+</pre>
+Сделайте это для каждой базы данных, которая должна быть обновлена.</li>
+
+<li>Используйте <code>DROP DATABASE</code>, чтобы удалить
+каждую базу данных.</li>
+<li>Остановите сервер, установите
+<a href="server.htm#sysvar_lower_case_table_names"><code>
+lower_case_table_names</code></a> и перезапустите сервер.</li>
+
+<li>Перезагрузите файл дампа для каждой базы данных. Поскольку
+<a href="server.htm#sysvar_lower_case_table_names"><code>
+lower_case_table_names</code></a> установлена, каждое имя базы данных и
+таблицы будет преобразовано в нижний регистр, поскольку это обновлено:
+<pre>
+mysql &lt; db1.sql
+mysql &lt; db2.sql
+...
+</pre></li></ol>
+
+<p>Названия объекта можно считать дубликатами, если их формы верхнего
+регистра равны согласно двоичному сопоставлению. Это истина для названий
+курсоров, условий, процедур, функции, точек сохранения, местных переменных
+сохраненных программ и плагинов. Это не истина для названий столбцов,
+ограничений, баз данных, разделений, запросов, подготовленных с
+<a href="sql.htm#prepare"><code>PREPARE</code></a>, триггеров, таблиц,
+пользователей и определяемых пользователем переменных.</p>
+
+<p>Чувствительность к регистру файловой системы может затронуть поиски в
+строковых столбцах таблиц <code>INFORMATION_SCHEMA</code>. Подробности в
+<a href="global.htm#charset-collation-information-schema">разделе 11.1.8.7
+</a>.</p>
+
+<h3><a name="identifier-mapping"></a>10.2.3. Отображение идентификаторов
+к именам файлов</h3>
+<p>Есть связь между идентификаторами базы данных и таблиц и именами в
+файловой системе. Для базовой структуры MySQL представляет каждую базу данных
+как каталог в каталоге данных, и в зависимости от механизма хранения, каждая
+таблица может быть представлена одним или более файлами в соответствующем
+каталоге базы данных.</p>
+
+<p>Для файлов с данными и индексных файлов, точное представление на диске
+определено механизмом хранения. Эти файлы могут храниться в каталоге базы
+данных, или информация может храниться в отдельном файле. Данные
+<code>InnoDB</code> хранятся в файлах с данными InnoDB. Если Вы используете
+табличные пространства с <code>InnoDB</code>, тогда определенные файлы
+табличного пространства, которые Вы создаете, используются вместо этого.</p>
+
+<p>Любой символ является законным в идентификаторах, кроме ASCII NUL
+(<code>X'00'</code>). MySQL кодирует любые символы, которые проблематичны в
+соответствующих объектах файловой системы, когда создает каталоги базы данных
+или табличные файлы:</p>
+
+<ul><li><p>Латинские буквы (<code>a..zA..Z</code>), цифры
+(<code>0..9</code>) и подчеркивание (<code>_</code>) закодированы как есть.
+Следовательно, их чувствительность к регистру непосредственно зависит от
+особенностей файловой системы.</li>
+
+<li>Все другие национальные символы из алфавитов, у которых есть отображение
+верхнего/нижнего регистра, закодированы как показано в следующей таблице.
+Значения в столбце Code Range это значения UCS-2.</p>
+
+<table border="1">
+<thead><tr><th scope="col">Code Range</th><th scope="col">Шаблон</th>
+<th scope="col">Номер</th><th scope="col">Используется</th>
+<th scope="col">Не используется</th><th scope="col">Блоки</th></tr></thead>
+<tbody><tr><td scope="row">00C0..017F</td><td>[@][0..4][g..z]</td>
+<td>5*20= 100</td><td>97</td><td>3</td>
+<td>Latin-1 Supplement + Latin Extended-A</td></tr>
+<tr><td scope="row">0370..03FF</td><td>[@][5..9][g..z]</td><td>5*20= 100</td>
+<td>88</td><td>12</td><td>Greek and Coptic</td></tr>
+<tr><td scope="row">0400..052F</td><td>[@][g..z][0..6]</td><td>20*7= 140</td>
+<td>137</td><td>3</td><td>Cyrillic + Cyrillic Supplement</td></tr>
+<tr><td scope="row">0530..058F</td><td>[@][g..z][7..8]</td><td>20*2= 40</td>
+<td>38</td><td>2</td><td>Armenian</td></tr>
+<tr><td scope="row">2160..217F</td><td>[@][g..z][9]</td><td>20*1= 20</td>
+<td>16</td><td>4</td><td>Number Forms</td></tr>
+<tr><td scope="row">0180..02AF</td><td>[@][g..z][a..k]</td><td>20*11=220</td>
+<td>203</td><td>17</td><td>Latin Extended-B + IPA Extensions</td></tr>
+<tr><td scope="row">1E00..1EFF</td><td>[@][g..z][l..r]</td><td>20*7= 140</td>
+<td>136</td><td>4</td><td>Latin Extended Additional</td></tr>
+<tr><td scope="row">1F00..1FFF</td><td>[@][g..z][s..z]</td><td>20*8= 160</td>
+<td>144</td><td>16</td><td>Greek Extended</td></tr>
+<tr><td scope="row">.... ....</td><td>[@][a..f][g..z]</td><td>6*20= 120</td>
+<td>0</td><td>120</td><td>RESERVED</td></tr>
+<tr><td scope="row">24B6..24E9</td><td>[@][@][a..z]</td><td>26</td><td>26
+</td><td>0</td><td>Enclosed Alphanumerics</td></tr>
+<tr><td scope="row">FF21..FF5A</td><td>[@][a..z][@]</td><td>26</td><td>26
+</td><td>0</td><td>Halfwidth и Fullwidth формы</td></tr></tbody></table>
+
+<p>Один из байтов в последовательности кодирует регистр. Например:
+<code>LATIN CAPITAL LETTER A WITH GRAVE</code> кодируется как
+<code>@0G</code>, тогда как <code>LATIN SMALL LETTER A WITH GRAVE</code>
+кодируется как <code>@0g</code>. Здесь третий байт (<code>G</code> или
+<code>g</code>) указывает на регистр. На нечувствительной к регистру файловой
+системе оба символа будут обработаны как то же самое.</p>
+
+<p>Для некоторых блоков, таких как Cyrillic, второй байт определяет
+регистр. Для других блоков, таких как Latin1 Supplement, третий байт
+определяет регистр. Если два байта в последовательности символы (как в
+Greek Extended), крайние левые символы определяют регистр. Все другие байты
+должны быть в нижнем регистре.</li>
+
+<li>Все небуквенные символы кроме подчеркивания (<code>_</code>), так же как
+буквы алфавитов, у которых нет отображения верхнего/нижнего регистра (такого,
+как иврит) закодированы, используя шестнадцатеричное представление, используя
+строчные буквы для шестнадцатеричных цифр <code>a..f</code>:
+<pre>
+0x003F -&gt; @003f
+0xFFFF -&gt; @ffff
+</pre>
+Шестнадцатеричные значения соответствуют символьным значениям в
+двухбайтовом наборе символов <code>ucs2</code>.</p></li></ul>
+
+<p>В Windows некоторые имена, например, <code>nul</code>, <code>prn</code> и
+<code>aux</code> закодированы, добавляя <code>@@@</code> к имени, когда
+сервер создает соответствующий файл или каталог. Это происходит на всех
+платформах для мобильности соответствующего объекта базы
+данных между платформами.</p>
+
+<h3><a name="function-resolution"></a>10.2.4.
+Парсинг имени функции и разрешение</h3>
+<p>MySQL 8.0 поддерживает встроенные функции, определяемые пользователем
+(UDF) и сохраненные функции. Этот раздел описывает, как сервер признает,
+используется ли название встроенной функции в качестве вызова функции или в
+качестве идентификатора, и как сервер определяет, какую функцию использовать
+в случаях, когда функции различных типов существуют с этим именем.</p>
+
+<p><span><strong>Встроенный парсинг имени функции</strong></span></p>
+<p>Анализатор использует правила значения по умолчанию для того, чтобы
+разобрать названия встроенных функций. Эти правила могут быть изменены,
+включая режим SQL <a href="server.htm#sqlmode_ignore_space"><code>
+IGNORE_SPACE</code></a>.</p>
+
+<p>Когда анализатор сталкивается со словом, которое является названием
+встроенной функции, это должно определить, показывает ли имя вызов функции
+или является вместо этого ссылкой на такой идентификатор, как имя таблицы или
+столбца. Например, в следующих запросах, первая ссылка на
+<code>count</code> вызов функции, тогда как вторая ссылка имя таблицы:
+<pre>
+SELECT COUNT(*) FROM mytable;
+CREATE TABLE count (i INT);
+</pre>
+
+Анализатор должен признать название встроенной функции как указание на вызов
+функции только, разбирая то, что будет выражением. Таким образом, не в
+контексте выражения имена функций разрешены как идентификаторы.</p>
+
+<p>Однако, у некоторых встроенных функций есть специальные соображения
+парсинга или выполнения, таким образом, анализатор использует следующие
+правила по умолчанию, чтобы различить, используются ли их имена в качестве
+вызовов функции или в качестве идентификаторов не в контексте выражения:</p>
+
+<ul><li><p>Чтобы использовать имя в качестве вызова функции в выражении, не
+должно быть никакого пробела между именем и следующим символом круглой скобки.
+</li>
+<li>Наоборот, чтобы использовать имя функции в качестве идентификатора, это
+не должно немедленно сопровождаться круглой скобкой.</p></li></ul>
+
+<p>Требование, чтобы вызовы функции быть написанными без пробела
+между именем и круглой скобкой применимы только к встроенным функциям, у
+которых есть специальные соображения. <code>COUNT</code> одно такое имя.
+Исходный файл <code>sql/lex.h</code> перечисляет названия этих специальных
+функций, для которых следующий пробел определяет их интерпретацию: имена,
+определенные макросом <code>SYM_FN()</code> в массиве <code>symbols[]</code>.
+</p>
+
+<p>В MySQL 8.0 есть приблизительно 30 таких имен функций. Вы можете счесть
+самым легким не обрабатывать ничего без пробела
+как относящееся ко всем вызовам функции.</p>
+
+<p>Следующяя таблица показывает имена функций, которые затронуты
+<a href="server.htm#sqlmode_ignore_space"><code>IGNORE_SPACE</code></a>
+и перечислены как особенные в файле <code>sql/lex.h</code>.</p>
+
+<table border="1">
+<tbody><tr><td scope="row"><code>ADDDATE</code></td>
+<td><code>BIT_AND</code></td><td><code>BIT_OR</code></td>
+<td><code>BIT_XOR</code></td></tr>
+<tr><td scope="row"><code>CAST</code></td><td><code>COUNT</code></td>
+<td><code>CURDATE</code></td><td><code>CURTIME</code></td></tr>
+<tr><td scope="row"><code>DATE_ADD</code></td><td><code>DATE_SUB</code></td>
+<td><code>EXTRACT</code></td><td><code>GROUP_CONCAT</code></td></tr>
+<tr><td scope="row"><code>MAX</code></td><td><code>MID</code></td>
+<td><code>MIN</code></td><td><code>NOW</code></td></tr>
+<tr><td scope="row"><code>POSITION</code></td><td><code>SESSION_USER</code>
+</td><td><code>STD</code></td><td><code>STDDEV</code></td></tr>
+<tr><td scope="row"><code>STDDEV_POP</code></td><td><code>STDDEV_SAMP</code>
+</td><td><code>SUBDATE</code></td><td><code>SUBSTR</code></td></tr>
+<tr><td scope="row"><code>SUBSTRING</code></td><td><code>SUM</code></td>
+<td><code>SYSDATE</code></td><td><code>SYSTEM_USER</code></td></tr>
+<tr><td scope="row"><code>TRIM</code></td><td><code>VARIANCE</code></td>
+<td><code>VAR_POP</code></td><td><code>VAR_SAMP</code></td>
+</tr></tbody></table>
+
+<p>Для функций, не перечисленных как особенные в <code>sql/lex.h</code>,
+пробел не имеет значения. Они интерпретируются как вызовы функции только
+когда используются в контексте выражения и могут использоваться свободно в
+качестве идентификаторов иначе. <code>ASCII</code> одно такое имя. Однако,
+для этих незатронутых имен функций, интерпретация может измениться
+по контексту выражения: <code><em><code>func_name</code></em> ()</code>
+интерпретируется как встроенная функция, если она одна с именем,
+в противном случае <code><em><code>func_name</code></em> ()</code>
+интерпретируется как определяемая пользователем или сохраненная функция.</p>
+
+<p>Режим SQL <a href="server.htm#sqlmode_ignore_space"><code>IGNORE_SPACE
+</code></a> может использоваться, чтобы изменить, как анализатор обрабатывает
+имена функций, которые чувствительны к пробелу:</p>
+
+<ul><li><p>С выключенным <a href="server.htm#sqlmode_ignore_space"><code>
+IGNORE_SPACE</code></a> анализатор интерпретирует имя как вызов функции,
+когда нет никакого пробела между именем и следующей круглой скобкой. Это
+происходит, даже когда имя функции используется не в контексте выражения:
+<pre>
+mysql&gt; CREATE TABLE count(i INT);
+ERROR 1064 (42000): You have an error in your SQL syntax ...
+near 'count(i INT)'
+</pre>
+
+Чтобы устранить ошибку и заставить имя быть обработанным как идентификатор,
+используйте пробел после имени или напишите это как заключенный в кавычки
+идентификатор (или оба действия сразу):
+<pre>
+CREATE TABLE count (i INT);
+CREATE TABLE `count`(i INT);
+CREATE TABLE `count` (i INT);
+</pre></li>
+
+<li>С включенным <a href="server.htm#sqlmode_ignore_space"><code>IGNORE_SPACE
+</code></a> анализатор ослабляет требование, что не должно быть никакого
+пробела между именем функции и следующей круглой скобкой. Это обеспечивает
+больше гибкости в написании вызовов функции. Например, любой из следующих
+вызовов функции являются законным:
+<pre>
+SELECT COUNT(*) FROM mytable;
+SELECT COUNT (*) FROM mytable;
+</pre>
+
+Однако, включение
+<a href="server.htm#sqlmode_ignore_space"><code>IGNORE_SPACE</code></a>
+также имеет побочный эффект, что анализатор обрабатывает затронутые имена
+функций как зарезервированные слова (см. <a href="#keywords">раздел
+10.3</a>). Это означает, что пробел после имени больше не показывает свое
+использование в качестве идентификатора. Имя может использоваться в вызовах
+функции с или без следующего пробела, но вызывает синтаксическую ошибку не в
+контексте выражения, если это не заключено в кавычки. Например, с
+<a href="server.htm#sqlmode_ignore_space"><code>IGNORE_SPACE</code></a>
+оба следующих запроса терпят неудачу с синтаксической ошибкой, потому что
+анализатор интерпретирует <code>count</code> как зарезервированное слово:
+<pre>
+CREATE TABLE count(i INT);
+CREATE TABLE count (i INT);
+</pre>
+
+Чтобы использовать имя функции не в контексте выражения, напишите это как
+заключенный в кавычки идентификатор:
+<pre>
+CREATE TABLE `count`(i INT);
+CREATE TABLE `count` (i INT);
+</pre></li></ul>
+
+<p>Чтобы включить режим SQL <a href="server.htm#sqlmode_ignore_space"><code>
+IGNORE_SPACE</code></a>, используйте этот запрос:
+<pre>
+SET sql_mode = 'IGNORE_SPACE';
+</pre>
+
+<a href="server.htm#sqlmode_ignore_space"><code>IGNORE_SPACE</code></a>
+также включен другими сложными режимами, например,
+<a href="server.htm#sqlmode_ansi"><code>ANSI</code></a>
+включает это в их значение:
+<pre>
+SET sql_mode = 'ANSI';
+</pre>
+
+Изучите <a href="server.htm#sql-mode">раздел 6.1.8</a>,
+чтобы видеть, которые сложные режимы включают
+<a href="server.htm#sqlmode_ignore_space"><code>IGNORE_SPACE</code></a>.</p>
+
+<p>Чтобы минимизировать зависимость SQL от
+<a href="server.htm#sqlmode_ignore_space"><code>IGNORE_SPACE</code></a>:</p>
+<ul><li><p>Избегайте создавать UDF или сохраненные функции, у которых есть то
+же самое имя, как у встроенной функции.</li>
+
+<li>Избегайте использования имен функций не в контексте выражения. Например,
+эти запросы используют <code>count</code> (одно из имен функций, затронутых
+<a href="server.htm#sqlmode_ignore_space"><code>IGNORE_SPACE</code></a>),
+таким образом, они терпят неудачу с или без пробела после имени, если включен
+<a href="server.htm#sqlmode_ignore_space"><code>IGNORE_SPACE</code></a>:
+<pre>
+CREATE TABLE count(i INT);
+CREATE TABLE count (i INT);
+</pre>
+
+Если Вы должны использовать имя функции не в контексте выражения, напишите
+это как заключенный в кавычки идентификатор:
+<pre>
+CREATE TABLE `count`(i INT);
+CREATE TABLE `count` (i INT);
+</pre></li></ul>
+
+<p><span><strong>Разрешение имени функции</strong></span></p>
+<p>Следующие правила описывают, как сервер решает ссылки на имена функций
+для функционального создания:</p>
+
+<ul><li><p>Встроенные функции и определяемые пользователем функции.</p>
+<p>Ошибка происходит, если Вы пытаетесь создать UDF с тем же самым именем,
+как встроенная функция.</li>
+
+<li>Встроенные и сохраненные функции.</p>
+<p>Возможно создать сохраненную функцию с тем же самым именем, как встроенная
+функция, но чтобы вызвать сохраненную функцию, необходимо квалифицировать это
+с именем схемы. Например, если Вы создаете сохраненную функцию, названную
+<code>PI</code> в схеме <code>test</code>, вызовите это как
+<code>test.PI()</code> потому что сервер решает
+<a href="funct.htm#function_pi"><code>PI()</code></a> без спецификатора как
+ссылка на встроенную функцию. Сервер производит предупреждение, если
+сохраненное имя функции сталкивается со встроенным именем функции.
+Предупреждение может быть выведено на экран с
+<a href="sql.htm#show-warnings"><code>SHOW WARNINGS</code></a>.</li>
+
+<li>Определяемые пользователем и сохраненные функции.</p>
+<p>Определяемые пользователем и сохраненные функции совместно используют то
+же самое пространство имен, таким образом, Вы не можете создать UDF и
+сохраненную функцию с тем же самым именем.</p></li></ul>
+
+<p>У предыдущих правил разрешения имени функции есть значения для того, чтобы
+обновить до версий MySQL, которые осуществляют новые встроенные функции:</p>
+<ul><li><p>Если Вы уже создали определяемую пользователем функцию с именем и
+обновляете MySQL до версии, которая осуществляет новую встроенную функцию с
+тем же самым именем, UDF становится недоступным. Чтобы исправить это, надо
+использовать <a href="sql.htm#drop-function"><code>DROP FUNCTION</code></a>,
+чтобы удалить UDF и <a href="sql.htm#create-function"><code>CREATE FUNCTION
+</code></a>, чтобы пересоздать UDF с иным непротиворечивым именем. Затем
+измените любой затронутый код, чтобы использовать новое имя.</li>
+
+<li>Если новая версия MySQL осуществляет встроенную функцию с тем же самым
+именем как существующая сохраненная функция, у Вас есть два выбора:
+переименуйте сохраненную функцию, чтобы использовать непротиворечивое имя,
+или измените вызов функции так, чтобы он использовал спецификатор схемы (то
+есть, надо использовать синтаксис <code><em><code>schema_name</code></em>.
+<em><code>func_name</code></em>()</code>). В любом случае
+измените любой затронутый код соответственно.</p></li></ul>
+
+<h2><a name="keywords"></a>10.3. Ключевые и зарезервированные слова</h2>
+<p>Ключевые слова это такие слова, у которых есть значение в SQL.
+Определенные ключевые слова такие, как
+<a href="sql.htm#select"><code>SELECT</code></a>,
+<a href="sql.htm#delete"><code>DELETE</code></a> или
+<a href="types.htm#integer-types"><code>BIGINT</code></a>,
+требуют специального режима для использования в качестве идентификаторов,
+таких как имена таблиц и имена столбцов. Это может также быть истиной для
+названий встроенных функций.</p>
+
+<p>Несохраненные ключевые слова разрешены как идентификаторы без заключения в
+кавычки. Зарезервированные слова разрешены как идентификаторы, если Вы
+заключаете их в кавычки как описано в <a href="#identifiers">разделе
+10.2</a>:
+<pre>
+mysql&gt; CREATE TABLE interval (begin INT, end INT);
+ERROR 1064 (42000): You have an error in your SQL syntax ...
+near 'interval (begin INT, end INT)'
+</pre>
+
+<code>BEGIN</code> и <code>END</code> ключевые слова, но не сохраненные,
+таким образом, их использование в качестве идентификаторов не требует
+заключения в кавычки. <code>INTERVAL</code> сохраненное ключевое слово и
+должно быть заключено в кавычки, чтобы
+использоваться в качестве идентификатора:
+<pre>
+mysql&gt; CREATE TABLE `interval` (begin INT, end INT);
+Query OK, 0 rows affected (0.01 sec)
+</pre>
+
+Исключение: слово, которое следует за точкой в полностью определенном имени,
+должно быть идентификатором, таким образом, оно не должно быть заключено в
+кавычки, даже если оно сохранено:
+<pre>
+mysql&gt; CREATE TABLE mydb.interval (begin INT, end INT);
+Query OK, 0 rows affected (0.01 sec)
+</pre>
+
+Названия встроенных функций разрешены как идентификаторы. Например,
+<code>COUNT</code> является приемлемым как имя столбца. Однако, по умолчанию
+никакой пробел не разрешен в функциональных вызовах между именем функции и
+следующей <code>(</code>. Это требование позволяет анализатору различить,
+используется ли имя в вызове функции или в нефункциональном контексте.
+Для получения дальнейшей информации о распознавании имен функций см.
+<a href="#function-resolution">раздел 10.2.4</a>.</p>
+
+<p>Следующая таблица показывает ключевые слова и зарезервированные слова в
+MySQL 8.0, наряду с изменениями отдельных слов от версии к версии.
+Сохраненные ключевые слова отмечены (R).
+Кроме того, <code>_FILENAME</code> сохранено.</p>
+
+<p>В некоторый момент, Вы могли бы обновиться до более высокой версии,
+таким образом, хорошая идея взглянуть на будущие зарезервированные слова
+также. Вы можете найти их в руководствах, которые касаются более высоких
+версий MySQL. Большинство зарезервированных слов в таблице запрещены
+стандартным SQL как имена столбцов или имена таблиц (например,
+<code>GROUP</code>). Некоторые сохранены, потому что MySQL нуждается в них и
+использует парсер <span><strong>yacc</strong></span>.</p>
+
+<a name="table-keywords-8.0-detailed"></a><p><b>Таблица 10.2.
+Ключевые и зарезервированные слова в MySQL 8.0</b></p>
+<table><tbody><tr><td><code>ACCESSIBLE</code> (R)</td>
+<td><code>ACCOUNT</code></td>
+<td><code>ACTION</code></td></tr>
+<tr><td><code>ADD</code> (R)</td>
+<td><code>ADMIN</code> (R)</td>
+<td><code>AFTER</code></td></tr>
+<tr><td><code>AGAINST</code></td>
+<td><code>AGGREGATE</code></td>
+<td><code>ALGORITHM</code></td></tr>
+<tr><td><code>ALL</code> (R)</td>
+<td><code>ALTER</code> (R)</td>
+<td><code>ALWAYS</code></td></tr>
+<tr><td><code>ANALYSE</code></td>
+<td><code>ANALYZE</code> (R)</td>
+<td><code>AND</code> (R)</td></tr>
+<tr><td><code>ANY</code></td>
+<td><code>AS</code> (R)</td>
+<td><code>ASC</code> (R)</td></tr>
+<tr><td><code>ASCII</code></td>
+<td><code>ASENSITIVE</code> (R)</td>
+<td><code>AT</code></td></tr>
+<tr><td><code>AUTOEXTEND_SIZE</code></td>
+<td><code>AUTO_INCREMENT</code></td>
+<td><code>AVG</code></td></tr>
+<tr><td><code>AVG_ROW_LENGTH</code></td>
+<td><code>BACKUP</code></td>
+<td><code>BEFORE</code> (R)</td></tr>
+<tr><td><code>BEGIN</code></td>
+<td><code>BETWEEN</code> (R)</td>
+<td><code>BIGINT</code> (R)</td></tr>
+<tr><td><code>BINARY</code> (R)</td>
+<td><code>BINLOG</code></td>
+<td><code>BIT</code></td></tr>
+<tr><td><code>BLOB</code> (R)</td>
+<td><code>BLOCK</code></td>
+<td><code>BOOL</code></td></tr>
+<tr><td><code>BOOLEAN</code></td>
+<td><code>BOTH</code> (R)</td>
+<td><code>BTREE</code></td></tr>
+<tr><td><code>BY</code> (R)</td>
+<td><code>BYTE</code></td>
+<td><code>CACHE</code></td></tr>
+<tr><td><code>CALL</code> (R)</td>
+<td><code>CASCADE</code> (R)</td>
+<td><code>CASCADED</code></td></tr>
+<tr><td><code>CASE</code> (R)</td>
+<td><code>CATALOG_NAME</code></td>
+<td><code>CHAIN</code></td></tr>
+<tr><td><code>CHANGE</code> (R)</td>
+<td><code>CHANGED</code></td>
+<td><code>CHANNEL</code></td></tr>
+<tr><td><code>CHAR</code> (R)</td>
+<td><code>CHARACTER</code> (R)</td>
+<td><code>CHARSET</code></td></tr>
+<tr><td><code>CHECK</code> (R)</td>
+<td><code>CHECKSUM</code></td>
+<td><code>CIPHER</code></td></tr>
+<tr><td><code>CLASS_ORIGIN</code></td>
+<td><code>CLIENT</code></td>
+<td><code>CLOSE</code></td></tr>
+<tr><td><code>COALESCE</code></td>
+<td><code>CODE</code></td>
+<td><code>COLLATE</code> (R)</td></tr>
+<tr><td><code>COLLATION</code></td>
+<td><code>COLUMN</code> (R)</td>
+<td><code>COLUMNS</code></td></tr>
+<tr><td><code>COLUMN_FORMAT</code></td>
+<td><code>COLUMN_NAME</code></td>
+<td><code>COMMENT</code></td></tr>
+<tr><td><code>COMMIT</code></td>
+<td><code>COMMITTED</code></td>
+<td><code>COMPACT</code></td></tr>
+<tr><td><code>COMPLETION</code></td>
+<td><code>COMPONENT</code></td>
+<td><code>COMPRESSED</code></td></tr>
+<tr><td><code>COMPRESSION</code></td>
+<td><code>CONCURRENT</code></td>
+<td><code>CONDITION</code> (R)</td></tr>
+<tr><td><code>CONNECTION</code></td>
+<td><code>CONSISTENT</code></td>
+<td><code>CONSTRAINT</code> (R)</td></tr>
+<tr><td><code>CONSTRAINT_CATALOG</code></td>
+<td><code>CONSTRAINT_NAME</code></td>
+<td><code>CONSTRAINT_SCHEMA</code></td></tr>
+<tr><td><code>CONTAINS</code></td>
+<td><code>CONTEXT</code></td>
+<td><code>CONTINUE</code> (R)</td></tr>
+<tr><td><code>CONVERT</code> (R)</td>
+<td><code>CPU</code></td>
+<td><code>CREATE</code> (R)</td></tr>
+<tr><td><code>CROSS</code> (R)</td>
+<td><code>CUBE</code></td>
+<td><code>CURRENT</code></td></tr>
+<tr><td><code>CURRENT_DATE</code> (R)</td>
+<td><code>CURRENT_TIME</code> (R)</td>
+<td><code>CURRENT_TIMESTAMP</code> (R)</td></tr>
+<tr><td><code>CURRENT_USER</code> (R)</td>
+<td><code>CURSOR</code> (R)</td>
+<td><code>CURSOR_NAME</code></td></tr>
+<tr><td><code>DATA</code></td>
+<td><code>DATABASE</code> (R)</td>
+<td><code>DATABASES</code> (R)</td></tr>
+<tr><td><code>DATAFILE</code></td>
+<td><code>DATE</code></td>
+<td><code>DATETIME</code></td></tr>
+<tr><td><code>DAY</code></td>
+<td><code>DAY_HOUR</code> (R)</td>
+<td><code>DAY_MICROSECOND</code> (R)</td></tr>
+<tr><td><code>DAY_MINUTE</code> (R)</td>
+<td><code>DAY_SECOND</code> (R)</td>
+<td><code>DEALLOCATE</code></td></tr>
+<tr><td><code>DEC</code> (R)</td>
+<td><code>DECIMAL</code> (R)</td>
+<td><code>DECLARE</code> (R)</td></tr>
+<tr><td><code>DEFAULT</code> (R)</td>
+<td><code>DEFAULT_AUTH</code></td>
+<td><code>DEFINER</code></td></tr>
+<tr><td><code>DELAYED</code> (R)</td>
+<td><code>DELAY_KEY_WRITE</code></td>
+<td><code>DELETE</code> (R)</td></tr>
+<tr><td><code>DESC</code> (R)</td>
+<td><code>DESCRIBE</code> (R)</td>
+<td><code>DES_KEY_FILE</code></td></tr>
+<tr><td><code>DETERMINISTIC</code> (R)</td>
+<td><code>DIAGNOSTICS</code></td>
+<td><code>DIRECTORY</code></td></tr>
+<tr><td><code>DISABLE</code></td>
+<td><code>DISCARD</code></td>
+<td><code>DISK</code></td></tr>
+<tr><td><code>DISTINCT</code> (R)</td>
+<td><code>DISTINCTROW</code> (R)</td>
+<td><code>DIV</code> (R)</td></tr>
+<tr><td><code>DO</code></td>
+<td><code>DOUBLE</code> (R)</td>
+<td><code>DROP</code> (R)</td></tr>
+<tr><td><code>DUAL</code> (R)</td>
+<td><code>DUMPFILE</code></td>
+<td><code>DUPLICATE</code></td></tr>
+<tr><td><code>DYNAMIC</code></td>
+<td><code>EACH</code> (R)</td>
+<td><code>ELSE</code> (R)</td></tr>
+<tr><td><code>ELSEIF</code> (R)</td>
+<td><code>ENABLE</code></td>
+<td><code>ENCLOSED</code> (R)</td></tr>
+<tr><td><code>ENCRYPTION</code></td>
+<td><code>END</code></td>
+<td><code>ENDS</code></td></tr>
+<tr><td><code>ENGINE</code></td>
+<td><code>ENGINES</code></td>
+<td><code>ENUM</code></td></tr>
+<tr><td><code>ERROR</code></td>
+<td><code>ERRORS</code></td>
+<td><code>ESCAPE</code></td></tr>
+<tr><td><code>ESCAPED</code> (R)</td>
+<td><code>EVENT</code></td>
+<td><code>EVENTS</code></td></tr>
+<tr><td><code>EVERY</code></td>
+<td><code>EXCEPT</code> (R)</td>
+<td><code>EXCHANGE</code></td></tr>
+<tr><td><code>EXECUTE</code></td>
+<td><code>EXISTS</code> (R)</td>
+<td><code>EXIT</code> (R)</td></tr>
+<tr><td><code>EXPANSION</code></td>
+<td><code>EXPIRE</code></td>
+<td><code>EXPLAIN</code> (R)</td></tr>
+<tr><td><code>EXPORT</code></td>
+<td><code>EXTENDED</code></td>
+<td><code>EXTENT_SIZE</code></td></tr>
+<tr><td><code>FALSE</code> (R)</td>
+<td><code>FAST</code></td>
+<td><code>FAULTS</code></td></tr>
+<tr><td><code>FETCH</code> (R)</td>
+<td><code>FIELDS</code></td>
+<td><code>FILE</code></td></tr>
+<tr><td><code>FILE_BLOCK_SIZE</code></td>
+<td><code>FILTER</code></td>
+<td><code>FIRST</code></td></tr>
+<tr><td><code>FIXED</code></td>
+<td><code>FLOAT</code> (R)</td>
+<td><code>FLOAT4</code> (R)</td></tr>
+<tr><td><code>FLOAT8</code> (R)</td>
+<td><code>FLUSH</code></td>
+<td><code>FOLLOWS</code></td></tr>
+<tr><td><code>FOR</code> (R)</td>
+<td><code>FORCE</code> (R)</td>
+<td><code>FOREIGN</code> (R)</td></tr>
+<tr><td><code>FORMAT</code></td>
+<td><code>FOUND</code></td>
+<td><code>FROM</code> (R)</td></tr>
+<tr><td><code>FULL</code></td>
+<td><code>FULLTEXT</code> (R)</td>
+<td><code>FUNCTION</code></td></tr>
+<tr><td><code>GENERAL</code></td>
+<td><code>GENERATED</code> (R)</td>
+<td><code>GEOMETRY</code></td></tr>
+<tr><td><code>GEOMETRYCOLLECTION</code></td>
+<td><code>GET</code> (R)</td>
+<td><code>GET_FORMAT</code></td></tr>
+<tr><td><code>GLOBAL</code></td>
+<td><code>GRANT</code> (R)</td>
+<td><code>GRANTS</code></td></tr>
+<tr><td><code>GROUP</code> (R)</td>
+<td><code>GROUP_REPLICATION</code></td>
+<td><code>HANDLER</code></td></tr>
+<tr><td><code>HASH</code></td>
+<td><code>HAVING</code> (R)</td>
+<td><code>HELP</code></td></tr>
+<tr><td><code>HIGH_PRIORITY</code> (R)</td>
+<td><code>HOST</code></td>
+<td><code>HOSTS</code></td></tr>
+<tr><td><code>HOUR</code></td>
+<td><code>HOUR_MICROSECOND</code> (R)</td>
+<td><code>HOUR_MINUTE</code> (R)</td></tr>
+<tr><td><code>HOUR_SECOND</code> (R)</td>
+<td><code>IDENTIFIED</code></td>
+<td><code>IF</code> (R)</td></tr>
+<tr><td><code>IGNORE</code> (R)</td>
+<td><code>IGNORE_SERVER_IDS</code></td>
+<td><code>IMPORT</code></td></tr>
+<tr><td><code>IN</code> (R)</td>
+<td><code>INDEX</code> (R)</td>
+<td><code>INDEXES</code></td></tr>
+<tr><td><code>INFILE</code> (R)</td>
+<td><code>INITIAL_SIZE</code></td>
+<td><code>INNER</code> (R)</td></tr>
+<tr><td><code>INOUT</code> (R)</td>
+<td><code>INSENSITIVE</code> (R)</td>
+<td><code>INSERT</code> (R)</td></tr>
+<tr><td><code>INSERT_METHOD</code></td>
+<td><code>INSTALL</code></td>
+<td><code>INSTANCE</code></td></tr>
+<tr><td><code>INT</code> (R)</td>
+<td><code>INT1</code> (R)</td>
+<td><code>INT2</code> (R)</td></tr>
+<tr><td><code>INT3</code> (R)</td>
+<td><code>INT4</code> (R)</td>
+<td><code>INT8</code> (R)</td></tr>
+<tr><td><code>INTEGER</code> (R)</td>
+<td><code>INTERVAL</code> (R)</td>
+<td><code>INTO</code> (R)</td></tr>
+<tr><td><code>INVISIBLE</code></td>
+<td><code>INVOKER</code></td>
+<td><code>IO</code></td></tr>
+<tr><td><code>IO_AFTER_GTIDS</code> (R)</td>
+<td><code>IO_BEFORE_GTIDS</code> (R)</td>
+<td><code>IO_THREAD</code></td></tr>
+<tr><td><code>IPC</code></td>
+<td><code>IS</code> (R)</td>
+<td><code>ISOLATION</code></td></tr>
+<tr><td><code>ISSUER</code></td>
+<td><code>ITERATE</code> (R)</td>
+<td><code>JOIN</code> (R)</td></tr>
+<tr><td><code>JSON</code></td>
+<td><code>KEY</code> (R)</td>
+<td><code>KEYS</code> (R)</td></tr>
+<tr><td><code>KEY_BLOCK_SIZE</code></td>
+<td><code>KILL</code> (R)</td>
+<td><code>LANGUAGE</code></td></tr>
+<tr><td><code>LAST</code></td>
+<td><code>LEADING</code> (R)</td>
+<td><code>LEAVE</code> (R)</td></tr>
+<tr><td><code>LEAVES</code></td>
+<td><code>LEFT</code> (R)</td>
+<td><code>LESS</code></td></tr>
+<tr><td><code>LEVEL</code></td>
+<td><code>LIKE</code> (R)</td>
+<td><code>LIMIT</code> (R)</td></tr>
+<tr><td><code>LINEAR</code> (R)</td>
+<td><code>LINES</code> (R)</td>
+<td><code>LINESTRING</code></td></tr>
+<tr><td><code>LIST</code></td>
+<td><code>LOAD</code> (R)</td>
+<td><code>LOCAL</code></td></tr>
+<tr><td><code>LOCALTIME</code> (R)</td>
+<td><code>LOCALTIMESTAMP</code> (R)</td>
+<td><code>LOCK</code> (R)</td></tr>
+<tr><td><code>LOCKS</code></td>
+<td><code>LOGFILE</code></td>
+<td><code>LOGS</code></td></tr>
+<tr><td><code>LONG</code> (R)</td>
+<td><code>LONGBLOB</code> (R)</td>
+<td><code>LONGTEXT</code> (R)</td></tr>
+<tr><td><code>LOOP</code> (R)</td>
+<td><code>LOW_PRIORITY</code> (R)</td>
+<td><code>MASTER</code></td></tr>
+<tr><td><code>MASTER_AUTO_POSITION</code></td>
+<td><code>MASTER_BIND</code> (R)</td>
+<td><code>MASTER_CONNECT_RETRY</code></td></tr>
+<tr><td><code>MASTER_DELAY</code></td>
+<td><code>MASTER_HEARTBEAT_PERIOD</code></td>
+<td><code>MASTER_HOST</code></td></tr>
+<tr><td><code>MASTER_LOG_FILE</code></td>
+<td><code>MASTER_LOG_POS</code></td>
+<td><code>MASTER_PASSWORD</code></td></tr>
+<tr><td><code>MASTER_PORT</code></td>
+<td><code>MASTER_RETRY_COUNT</code></td>
+<td><code>MASTER_SERVER_ID</code></td></tr>
+<tr><td><code>MASTER_SSL</code></td>
+<td><code>MASTER_SSL_CA</code></td>
+<td><code>MASTER_SSL_CAPATH</code></td></tr>
+<tr><td><code>MASTER_SSL_CERT</code></td>
+<td><code>MASTER_SSL_CIPHER</code></td>
+<td><code>MASTER_SSL_CRL</code></td></tr>
+<tr><td><code>MASTER_SSL_CRLPATH</code></td>
+<td><code>MASTER_SSL_KEY</code></td>
+<td><code>MASTER_SSL_VERIFY_SERVER_CERT</code> (R)</td></tr>
+<tr><td><code>MASTER_TLS_VERSION</code></td>
+<td><code>MASTER_USER</code></td>
+<td><code>MATCH</code> (R)</td></tr>
+<tr><td><code>MAXVALUE</code> (R)</td>
+<td><code>MAX_CONNECTIONS_PER_HOUR</code></td>
+<td><code>MAX_QUERIES_PER_HOUR</code></td></tr>
+<tr><td><code>MAX_ROWS</code></td>
+<td><code>MAX_SIZE</code></td>
+<td><code>MAX_UPDATES_PER_HOUR</code></td></tr>
+<tr><td><code>MAX_USER_CONNECTIONS</code></td>
+<td><code>MEDIUM</code></td>
+<td><code>MEDIUMBLOB</code> (R)</td></tr>
+<tr><td><code>MEDIUMINT</code> (R)</td>
+<td><code>MEDIUMTEXT</code> (R)</td>
+<td><code>MEMORY</code></td></tr>
+<tr><td><code>MERGE</code></td>
+<td><code>MESSAGE_TEXT</code></td>
+<td><code>MICROSECOND</code></td></tr>
+<tr><td><code>MIDDLEINT</code> (R)</td>
+<td><code>MIGRATE</code></td>
+<td><code>MINUTE</code></td></tr>
+<tr><td><code>MINUTE_MICROSECOND</code> (R)</td>
+<td><code>MINUTE_SECOND</code> (R)</td>
+<td><code>MIN_ROWS</code></td></tr>
+<tr><td><code>MOD</code> (R)</td>
+<td><code>MODE</code></td>
+<td><code>MODIFIES</code> (R)</td></tr>
+<tr><td><code>MODIFY</code></td>
+<td><code>MONTH</code></td>
+<td><code>MULTILINESTRING</code></td></tr>
+<tr><td><code>MULTIPOINT</code></td>
+<td><code>MULTIPOLYGON</code></td>
+<td><code>MUTEX</code></td></tr>
+<tr><td><code>MYSQL_ERRNO</code></td>
+<td><code>NAME</code></td>
+<td><code>NAMES</code></td></tr>
+<tr><td><code>NATIONAL</code></td>
+<td><code>NATURAL</code> (R)</td>
+<td><code>NCHAR</code></td></tr>
+<tr><td><code>NDB</code></td>
+<td><code>NDBCLUSTER</code></td>
+<td><code>NEVER</code></td></tr>
+<tr><td><code>NEW</code></td>
+<td><code>NEXT</code></td>
+<td><code>NO</code></td></tr>
+<tr><td><code>NODEGROUP</code></td>
+<td><code>NONE</code></td>
+<td><code>NOT</code> (R)</td></tr>
+<tr><td><code>NO_WAIT</code></td>
+<td><code>NO_WRITE_TO_BINLOG</code> (R)</td>
+<td><code>NULL</code> (R)</td></tr>
+<tr><td><code>NUMBER</code></td>
+<td><code>NUMERIC</code> (R)</td>
+<td><code>NVARCHAR</code></td></tr>
+<tr><td><code>OFFSET</code></td>
+<td><code>ON</code> (R)</td>
+<td><code>ONE</code></td></tr>
+<tr><td><code>ONLY</code></td>
+<td><code>OPEN</code></td>
+<td><code>OPTIMIZE</code> (R)</td></tr>
+<tr><td><code>OPTIMIZER_COSTS</code> (R)</td>
+<td><code>OPTION</code> (R)</td>
+<td><code>OPTIONALLY</code> (R)</td></tr>
+<tr><td><code>OPTIONS</code></td>
+<td><code>OR</code> (R)</td>
+<td><code>ORDER</code> (R)</td></tr>
+<tr><td><code>OUT</code> (R)</td>
+<td><code>OUTER</code> (R)</td>
+<td><code>OUTFILE</code> (R)</td></tr>
+<tr><td><code>OWNER</code></td>
+<td><code>PACK_KEYS</code></td>
+<td><code>PAGE</code></td></tr>
+<tr><td><code>PARSER</code></td>
+<td><code>PARTIAL</code></td>
+<td><code>PARTITION</code> (R)</td></tr>
+<tr><td><code>PARTITIONING</code></td>
+<td><code>PARTITIONS</code></td>
+<td><code>PASSWORD</code></td></tr>
+<tr><td><code>PERSIST</code> (R)</td>
+<td><code>PHASE</code></td>
+<td><code>PLUGIN</code></td></tr>
+<tr><td><code>PLUGINS</code></td>
+<td><code>PLUGIN_DIR</code></td>
+<td><code>POINT</code></td></tr>
+<tr><td><code>POLYGON</code></td>
+<td><code>PORT</code></td>
+<td><code>PRECEDES</code></td></tr>
+<tr><td><code>PRECISION</code> (R)</td>
+<td><code>PREPARE</code></td>
+<td><code>PRESERVE</code></td></tr>
+<tr><td><code>PREV</code></td>
+<td><code>PRIMARY</code> (R)</td>
+<td><code>PRIVILEGES</code></td></tr>
+<tr><td><code>PROCEDURE</code> (R)</td>
+<td><code>PROCESSLIST</code></td>
+<td><code>PROFILE</code></td></tr>
+<tr><td><code>PROFILES</code></td>
+<td><code>PROXY</code></td>
+<td><code>PURGE</code> (R)</td></tr>
+<tr><td><code>QUARTER</code></td>
+<td><code>QUERY</code></td>
+<td><code>QUICK</code></td></tr>
+<tr><td><code>RANGE</code> (R)</td>
+<td><code>READ</code> (R)</td>
+<td><code>READS</code> (R)</td></tr>
+<tr><td><code>READ_ONLY</code></td>
+<td><code>READ_WRITE</code> (R)</td>
+<td><code>REAL</code> (R)</td></tr>
+<tr><td><code>REBUILD</code></td>
+<td><code>RECOVER</code></td>
+<td><code>REDOFILE</code></td></tr>
+<tr><td><code>REDO_BUFFER_SIZE</code></td>
+<td><code>REDUNDANT</code></td>
+<td><code>REFERENCES</code> (R)</td></tr>
+<tr><td><code>REGEXP</code> (R)</td>
+<td><code>RELAY</code></td>
+<td><code>RELAYLOG</code></td></tr>
+<tr><td><code>RELAY_LOG_FILE</code></td>
+<td><code>RELAY_LOG_POS</code></td>
+<td><code>RELAY_THREAD</code></td></tr>
+<tr><td><code>RELEASE</code> (R)</td>
+<td><code>RELOAD</code></td>
+<td><code>REMOVE</code></td></tr>
+<tr><td><code>RENAME</code> (R)</td>
+<td><code>REORGANIZE</code></td>
+<td><code>REPAIR</code></td></tr>
+<tr><td><code>REPEAT</code> (R)</td>
+<td><code>REPEATABLE</code></td>
+<td><code>REPLACE</code> (R)</td></tr>
+<tr><td><code>REPLICATE_DO_DB</code></td>
+<td><code>REPLICATE_DO_TABLE</code></td>
+<td><code>REPLICATE_IGNORE_DB</code></td></tr>
+<tr><td><code>REPLICATE_IGNORE_TABLE</code></td>
+<td><code>REPLICATE_REWRITE_DB</code></td>
+<td><code>REPLICATE_WILD_DO_TABLE</code></td></tr>
+<tr><td><code>REPLICATE_WILD_IGNORE_TABLE</code></td>
+<td><code>REPLICATION</code></td>
+<td><code>REQUIRE</code> (R)</td></tr>
+<tr><td><code>RESET</code></td>
+<td><code>RESIGNAL</code> (R)</td>
+<td><code>RESTORE</code></td></tr>
+<tr><td><code>RESTRICT</code> (R)</td>
+<td><code>RESUME</code></td>
+<td><code>RETURN</code> (R)</td></tr>
+<tr><td><code>RETURNED_SQLSTATE</code></td>
+<td><code>RETURNS</code></td>
+<td><code>REVERSE</code></td></tr>
+<tr><td><code>REVOKE</code> (R)</td>
+<td><code>RIGHT</code> (R)</td>
+<td><code>RLIKE</code> (R)</td></tr>
+<tr><td><code>ROLE</code> (R)</td>
+<td><code>ROLLBACK</code></td>
+<td><code>ROLLUP</code></td></tr>
+<tr><td><code>ROTATE</code></td>
+<td><code>ROUTINE</code></td>
+<td><code>ROW</code></td></tr>
+<tr><td><code>ROWS</code></td>
+<td><code>ROW_COUNT</code></td>
+<td><code>ROW_FORMAT</code></td></tr>
+<tr><td><code>RTREE</code></td>
+<td><code>SAVEPOINT</code></td>
+<td><code>SCHEDULE</code></td></tr>
+<tr><td><code>SCHEMA</code> (R)</td>
+<td><code>SCHEMAS</code> (R)</td>
+<td><code>SCHEMA_NAME</code></td></tr>
+<tr><td><code>SECOND</code></td>
+<td><code>SECOND_MICROSECOND</code> (R)</td>
+<td><code>SECURITY</code></td></tr>
+<tr><td><code>SELECT</code> (R)</td>
+<td><code>SENSITIVE</code> (R)</td>
+<td><code>SEPARATOR</code> (R)</td></tr>
+<tr><td><code>SERIAL</code></td>
+<td><code>SERIALIZABLE</code></td>
+<td><code>SERVER</code></td></tr>
+<tr><td><code>SESSION</code></td>
+<td><code>SET</code> (R)</td>
+<td><code>SHARE</code></td></tr>
+<tr><td><code>SHOW</code> (R)</td>
+<td><code>SHUTDOWN</code></td>
+<td><code>SIGNAL</code> (R)</td></tr>
+<tr><td><code>SIGNED</code></td>
+<td><code>SIMPLE</code></td>
+<td><code>SLAVE</code></td></tr>
+<tr><td><code>SLOW</code></td>
+<td><code>SMALLINT</code> (R)</td>
+<td><code>SNAPSHOT</code></td></tr>
+<tr><td><code>SOCKET</code></td>
+<td><code>SOME</code></td>
+<td><code>SONAME</code></td></tr>
+<tr><td><code>SOUNDS</code></td>
+<td><code>SOURCE</code></td>
+<td><code>SPATIAL</code> (R)</td></tr>
+<tr><td><code>SPECIFIC</code> (R)</td>
+<td><code>SQL</code> (R)</td>
+<td><code>SQLEXCEPTION</code> (R)</td></tr>
+<tr><td><code>SQLSTATE</code> (R)</td>
+<td><code>SQLWARNING</code> (R)</td>
+<td><code>SQL_AFTER_GTIDS</code></td></tr>
+<tr><td><code>SQL_AFTER_MTS_GAPS</code></td>
+<td><code>SQL_BEFORE_GTIDS</code></td>
+<td><code>SQL_BIG_RESULT</code> (R)</td></tr>
+<tr><td><code>SQL_BUFFER_RESULT</code></td>
+<td><code>SQL_CACHE</code></td>
+<td><code>SQL_CALC_FOUND_ROWS</code> (R)</td></tr>
+<tr><td><code>SQL_NO_CACHE</code></td>
+<td><code>SQL_SMALL_RESULT</code> (R)</td>
+<td><code>SQL_THREAD</code></td></tr>
+<tr><td><code>SQL_TSI_DAY</code></td>
+<td><code>SQL_TSI_HOUR</code></td>
+<td><code>SQL_TSI_MINUTE</code></td></tr>
+<tr><td><code>SQL_TSI_MONTH</code></td>
+<td><code>SQL_TSI_QUARTER</code></td>
+<td><code>SQL_TSI_SECOND</code></td></tr>
+<tr><td><code>SQL_TSI_WEEK</code></td>
+<td><code>SQL_TSI_YEAR</code></td>
+<td><code>SSL</code> (R)</td></tr>
+<tr><td><code>STACKED</code></td>
+<td><code>START</code></td>
+<td><code>STARTING</code> (R)</td></tr>
+<tr><td><code>STARTS</code></td>
+<td><code>STATS_AUTO_RECALC</code></td>
+<td><code>STATS_PERSISTENT</code></td></tr>
+<tr><td><code>STATS_SAMPLE_PAGES</code></td>
+<td><code>STATUS</code></td>
+<td><code>STOP</code></td></tr>
+<tr><td><code>STORAGE</code></td>
+<td><code>STORED</code> (R)</td>
+<td><code>STRAIGHT_JOIN</code> (R)</td></tr>
+<tr><td><code>STRING</code></td>
+<td><code>SUBCLASS_ORIGIN</code></td>
+<td><code>SUBJECT</code></td></tr>
+<tr><td><code>SUBPARTITION</code></td>
+<td><code>SUBPARTITIONS</code></td>
+<td><code>SUPER</code></td></tr>
+<tr><td><code>SUSPEND</code></td>
+<td><code>SWAPS</code></td>
+<td><code>SWITCHES</code></td></tr>
+<tr><td><code>TABLE</code> (R)</td>
+<td><code>TABLES</code></td>
+<td><code>TABLESPACE</code></td></tr>
+<tr><td><code>TABLE_CHECKSUM</code></td>
+<td><code>TABLE_NAME</code></td>
+<td><code>TEMPORARY</code></td></tr>
+<tr><td><code>TEMPTABLE</code></td>
+<td><code>TERMINATED</code> (R)</td>
+<td><code>TEXT</code></td></tr>
+<tr><td><code>THAN</code></td>
+<td><code>THEN</code> (R)</td>
+<td><code>TIME</code></td></tr>
+<tr><td><code>TIMESTAMP</code></td>
+<td><code>TIMESTAMPADD</code></td>
+<td><code>TIMESTAMPDIFF</code></td></tr>
+<tr><td><code>TINYBLOB</code> (R)</td>
+<td><code>TINYINT</code> (R)</td>
+<td><code>TINYTEXT</code> (R)</td></tr>
+<tr><td><code>TO</code> (R)</td>
+<td><code>TRAILING</code> (R)</td>
+<td><code>TRANSACTION</code></td></tr>
+<tr><td><code>TRIGGER</code> (R)</td>
+<td><code>TRIGGERS</code></td>
+<td><code>TRUE</code> (R)</td></tr>
+<tr><td><code>TRUNCATE</code></td>
+<td><code>TYPE</code></td>
+<td><code>TYPES</code></td></tr>
+<tr><td><code>UNCOMMITTED</code></td>
+<td><code>UNDEFINED</code></td>
+<td><code>UNDO</code> (R)</td></tr>
+<tr><td><code>UNDOFILE</code></td>
+<td><code>UNDO_BUFFER_SIZE</code></td>
+<td><code>UNICODE</code></td></tr>
+<tr><td><code>UNINSTALL</code></td>
+<td><code>UNION</code> (R)</td>
+<td><code>UNIQUE</code> (R)</td></tr>
+<tr><td><code>UNKNOWN</code></td>
+<td><code>UNLOCK</code> (R)</td>
+<td><code>UNSIGNED</code> (R)</td></tr>
+<tr><td><code>UNTIL</code></td>
+<td><code>UPDATE</code> (R)</td>
+<td><code>UPGRADE</code></td></tr>
+<tr><td><code>USAGE</code> (R)</td>
+<td><code>USE</code> (R)</td>
+<td><code>USER</code></td></tr>
+<tr><td><code>USER_RESOURCES</code></td>
+<td><code>USE_FRM</code></td>
+<td><code>USING</code> (R)</td></tr>
+<tr><td><code>UTC_DATE</code> (R)</td>
+<td><code>UTC_TIME</code> (R)</td>
+<td><code>UTC_TIMESTAMP</code> (R)</td></tr>
+<tr><td><code>VALIDATION</code></td>
+<td><code>VALUE</code></td>
+<td><code>VALUES</code> (R)</td></tr>
+<tr><td><code>VARBINARY</code> (R)</td>
+<td><code>VARCHAR</code> (R)</td>
+<td><code>VARCHARACTER</code> (R)</td></tr>
+<tr><td><code>VARIABLES</code></td>
+<td><code>VARYING</code> (R)</td>
+<td><code>VIEW</code></td></tr>
+<tr><td><code>VIRTUAL</code> (R)</td>
+<td><code>VISIBLE</code></td>
+<td><code>WAIT</code></td></tr>
+<tr><td><code>WARNINGS</code></td>
+<td><code>WEEK</code></td>
+<td><code>WEIGHT_STRING</code></td></tr>
+<tr><td><code>WHEN</code> (R)</td>
+<td><code>WHERE</code> (R)</td>
+<td><code>WHILE</code> (R)</td></tr>
+<tr><td><code>WITH</code> (R)</td>
+<td><code>WITHOUT</code></td>
+<td><code>WORK</code></td></tr>
+<tr><td><code>WRAPPER</code></td>
+<td><code>WRITE</code> (R)</td>
+<td><code>X509</code></td></tr>
+<tr><td><code>XA</code></td>
+<td><code>XID</code></td>
+<td><code>XML</code></td></tr>
+<tr><td><code>XOR</code> (R)</td>
+<td><code>YEAR</code></td>
+<td><code>YEAR_MONTH</code> (R)</td></tr>
+<tr><td><code>ZEROFILL</code> (R)</td>
+<td> </td><td> </td></tr></tbody></table>
+
+<p>Следующая таблица показывает ключевые слова и зарезервированные слова,
+которые добавлены в MySQL 8.0. Сохраненные ключевые слова отмечены (R).</p>
+<a name="table-keywords-new-8.0"></a>
+<p><b>Таблица 10.3. Ключевые и зарезервированные слова, добавленные в MySQL
+8.0 по сравнению с MySQL 5.7</b></p>
+<table>
+<tbody><tr><td><code>ADMIN</code> (R)</td>
+<td><code>COMPONENT</code></td>
+<td><code>EXCEPT</code> (R)</td></tr>
+<tr><td><code>INVISIBLE</code></td>
+<td><code>PERSIST</code> (R)</td>
+<td><code>ROLE</code> (R)</td></tr>
+<tr><td><code>VISIBLE</code></td>
+<td> </td><td> </td></tr></tbody></table>
+
+<p>Следующая таблица показывает ключевые и зарезервированные слова, которые
+удалены в MySQL 8.0. Сохраненные ключевые слова отмечены (R).</p>
+<a name="table-keywords-removed-8.0"></a><p><b>Таблица 10.4. Ключевые и
+зарезервированные слова, удаленные в MySQL 8.0 по сравнению с MySQL 5.7
+</b></p>
+<table>
+<tbody><tr><td><code>PARSE_GCOL_EXPR</code></td>
+<td> </td>
+<td> </td>
+</tr></tbody></table>
+
+<h2><a name="user-variables"></a>10.4. Определяемые пользователем переменные
+</h2>
+<p>Вы можете сохранить значение в определяемой пользователем переменной в
+одном запросе и обратиться к нему позже в другом запросе. Это позволяет Вам
+передать значения от одного запроса другому.</p>
+
+<p>Пользовательские переменные написаны как
+<code>@<em><code>var_name</code></em></code>, где имя переменной
+<em><code>var_name</code></em> состоит из алфавитно-цифровых символов,
+<code>.</code>, <code>_</code> и <code>$</code>. Пользовательское имя
+переменной может содержать другие символы, если Вы заключаете его в кавычки
+как строку или идентификатор (например, <code>@'my-var'</code>,
+<code>@"my-var"</code> или <code>@`my-var`</code>).</p>
+
+<p>Определяемые пользователем переменные определены в рамках сеанса.
+Пользовательская переменная, определенная одним клиентом, не может быть
+замечена или использоваться другими клиентами. Исключение: пользователь с
+доступом к таблице
+<a href="perfor.htm#performance-schema-user-variable-tables">
+<code>user_variables_by_thread</code></a> в Performance Schema
+может видеть все пользовательские переменные для всех сеансов. Все переменные
+для данного сеанса клиента автоматически освобождены, когда клиент выходит.
+</p>
+
+<p>Пользовательские имена переменной не являются чувствительными к регистру.
+У имен есть максимальная длина 64 символа.</p>
+<p>Один способ установить определяемую пользователем переменную, применив
+<a href="sql.htm#set-variable"><code>SET</code></a>:
+<pre>
+SET @<em><code>var_name</code></em> = <em><code>expr</code></em> [, @<em><code>var_name</code></em> = <em><code>expr</code></em>] ...
+</pre>
+
+Для <a href="sql.htm#set-variable"><code>SET</code></a>,
+<a href="funct.htm#operator_assign-equal"><code>=</code></a> или
+<a href="funct.htm#operator_assign-value"><code>:=</code></a>
+может использоваться в качестве оператора назначения.</p>
+
+<p>Вы можете также назначить значение на пользовательскую переменную в
+запросах кроме <a href="sql.htm#set-variable"><code>SET</code></a>.
+В этом случае оператор назначения должен быть
+<a href="funct.htm#operator_assign-value"><code>:=</code></a>, но не
+<a href="funct.htm#operator_assign-equal"><code>=</code></a>, так как
+последний обработан как оператор сравнения
+<a href="funct.htm#operator_equal"><code>=</code></a> не в запросах
+<a href="sql.htm#set-variable"><code>SET</code></a>:
+<pre>
+mysql&gt; SET @t1=1, @t2=2, @t3:=4;
+mysql&gt; SELECT @t1, @t2, @t3, @t4 := @t1+@t2+@t3;
++-----+-----+-----+--------------------+
+| @t1 | @t2 | @t3 | @t4 := @t1+@t2+@t3 |
++-----+-----+-----+--------------------+
+| 1   | 2   | 4   | 7                  |
++-----+-----+-----+--------------------+
+</pre>
+
+Пользовательским переменным можно назначить значение из ограниченного набора
+типов данных: целое число, десятичная, двоичная или недвоичная строка с
+плавающей запятой или <code>NULL</code>. Назначение десятичных и реальных
+значений не сохраняет точность или масштаб значения. Значение типа кроме
+одного из допустимых типов преобразовано в допустимый тип. Например,
+значение, имеющее временный или пространственный тип данных, преобразовано в
+двоичную строку. Значение, имеющее тип
+<a href="types.htm#json"><code>JSON</code></a> преобразовано в строку с
+набором символов <code>utf8mb4</code> и сопоставлением
+<code>utf8mb4_bin</code>.</p>
+
+<p>Если пользовательской переменной назначают недвоичное (символьное)
+строковое значение, у нее есть тот же самый набор символов и сопоставление,
+как у строки. coercibility пользовательских переменных неявен. Это тот же
+самый coercibility, что касается значений столбца таблицы.</p>
+
+<p>Шестнадцеричные или битовые значения, назначенные на пользовательские
+переменные, обработаны как двоичные строки. Чтобы назначить шестнадцатеричное
+или битовое значение в качестве числа пользовательской переменной,
+используйте это в числовом контексте. Например, добавьте 0 или используйте
+<a href="funct.htm#function_cast"><code>CAST(... AS UNSIGNED)</code></a>:
+<pre>
+mysql&gt; SET @v1 = X'41';
+mysql&gt; SET @v2 = X'41'+0;
+mysql&gt; SET @v3 = CAST(X'41' AS UNSIGNED);
+mysql&gt; SELECT @v1, @v2, @v3;
++-----+-----+-----+
+| @v1 | @v2 | @v3 |
++-----+-----+-----+
+| A   | 65  | 65  |
++-----+-----+-----+
+
+mysql&gt; SET @v1 = b'1000001';
+mysql&gt; SET @v2 = b'1000001'+0;
+mysql&gt; SET @v3 = CAST(b'1000001' AS UNSIGNED);
+mysql&gt; SELECT @v1, @v2, @v3;
++-----+-----+-----+
+| @v1 | @v2 | @v3 |
++-----+-----+-----+
+| A   | 65  | 65  |
++-----+-----+-----+
+</pre>
+Если значение пользовательской переменной выбрано в наборе результатов, оно
+возвращено клиенту как строка.</p>
+
+<p>Если Вы обращаетесь к переменной, которая не была инициализирована, у нее
+есть значение <code>NULL</code> и тип строки.</p>
+<p>Пользовательские переменные могут использоваться в большинстве контекстов,
+где выражения разрешены. Это в настоящее время не включает контексты, которые
+явно требуют буквального значения такие, как в предложении <code>LIMIT</code>
+запроса <a href="sql.htm#select"><code>SELECT</code></a> или в предложении
+<code>IGNORE <em><code>N</code></em> LINES</code> запроса
+<a href="sql.htm#load-data"><code>LOAD DATA</code></a>.</p>
+
+<p>Как правило, кроме запросов
+<a href="sql.htm#set-variable"><code>SET</code></a> Вы никогда не должны
+назначать значение пользовательской переменной и читать значение в пределах
+того же самого запроса. Например, чтобы постепенно увеличить переменную:
+<pre>
+SET @a = @a + 1;
+</pre>
+
+Для других запросов, например,
+<a href="sql.htm#select"><code>SELECT</code></a>,
+Вы могли бы получить результаты, которые Вы ожидаете, но это не
+гарантируется. В следующем запросе Вы могли бы думать, что MySQL оценит
+сначала <code>@a</code>, а потом выполнит присвоение:
+<pre>
+SELECT @a, @a:=@a+1, ...;
+</pre>
+Однако, порядок оценки для выражений, вовлекающих
+пользовательские переменные, неопределен.</p>
+
+<p>Другая проблема с назначением значения переменной и чтению значения в
+пределах того же самого не <a href="sql.htm#set-variable"><code>SET</code>
+</a> то, что тип результата значения по умолчанию переменной основан на ее
+типе в начале запроса. Следующий пример иллюстрирует это:
+<pre>
+mysql&gt; SET @a='test';
+mysql&gt; SELECT @a,(@a:=20) FROM <em><code>tbl_name</code></em>;
+</pre>
+
+Для <a href="sql.htm#select"><code>SELECT</code></a> MySQL сообщает клиенту,
+что столбец строка и преобразовывает все доступы к <code>@a</code> в
+строки, даже при том, что @a установлен в число для второй строки. После
+выполнения <a href="sql.htm#select"><code>SELECT</code></a> <code>@a</code>
+расценена как число для следующего запроса.</p>
+
+<p>Чтобы избежать проблем с этим поведением, не назначайте значение и не
+читайте значение той же самой переменной в пределах единственного запроса
+или иначе устанавливайте переменную в <code>0</code>,
+<code>0.0</code> или <code>''</code>, чтобы
+определить тип прежде, чем Вы будете использовать это.</p>
+
+<p>В запросе <a href="sql.htm#select"><code>SELECT</code></a>
+каждое выражение оценено только когда послано клиенту. Это означает, что
+<code>HAVING</code>, <code>GROUP BY</code> или <code>ORDER BY</code>,
+относящихся к переменной, которой назначают значение в избранном списке
+выражения, <span><em>НЕ</em></span> работает как ожидалось:
+<pre>
+mysql&gt; SELECT (@aa:=id) AS a, (@aa+3) AS b FROM
+                 <em><code>tbl_name</code></em> HAVING b=5;
+</pre>
+
+Ссылка на <code>b</code> в <code>HAVING</code>
+относится к псевдониму для выражения в избранном списке, который использует
+<code>@aa</code>. Это не работает как ожидалось: <code>@aa</code> содержит
+значение <code>id</code> из предыдущей выбранной строки, а не от текущей.</p>
+
+<p>Пользовательские переменные предназначены, чтобы обеспечить значения
+данных. Они не могут использоваться непосредственно в запросе SQL как
+идентификатор или как часть идентификатора, как в контекстах, где имя таблицы
+или базы данных ожидаются, или как зарезервированное слово, например,
+<a href="sql.htm#select"><code>SELECT</code></a>. Это истина, даже если
+переменная заключена в кавычки, как показано в следующем примере:
+<pre>
+mysql&gt; SELECT c1 FROM t;
++----+
+| c1 |
++----+
+| 0  |
++----+
+| 1  |
++----+
+2 rows in set (0.00 sec)
+
+mysql&gt; SET @col = "c1";
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; SELECT @col FROM t;
++------+
+| @col |
++------+
+| c1   |
++------+
+1 row in set (0.00 sec)
+
+mysql&gt; SELECT `@col` FROM t;
+<span>ERROR 1054 (42S22): Unknown column '@col' in 'field list'</span>
+
+mysql&gt; SET @col = "`c1`";
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; SELECT @col FROM t;
++------+
+| @col |
++------+
+| `c1` |
++------+
+1 row in set (0.00 sec)
+</pre>
+
+Исключение к этому принципу, что пользовательские переменные не могут
+использоваться, чтобы обеспечить идентификаторы: когда Вы создаете строку для
+использования в качестве готового запроса, чтобы выполнить позже.
+В этом случае пользовательские переменные могут использоваться, чтобы
+обеспечить любую часть запроса. Следующий пример иллюстрирует, как это
+может быть сделано:
+<pre>
+mysql&gt; SET @c = "c1";
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; SET @s = CONCAT("SELECT ", @c, " FROM t");
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; PREPARE stmt FROM @s;
+Query OK, 0 rows affected (0.04 sec)
+Statement prepared
+
+mysql&gt; EXECUTE stmt;
++----+
+| c1 |
++----+
+| 0  |
++----+
+| 1  |
++----+
+2 rows in set (0.00 sec)
+
+mysql&gt; DEALLOCATE PREPARE stmt;
+Query OK, 0 rows affected (0.00 sec)
+</pre>
+См. <a href="sql.htm#sql-syntax-prepared-statements">раздел 14.5</a>.</p>
+
+<p>Подобный метод может использоваться в приложениях, чтобы создать запросы
+SQL, используя переменные программы, как показано здесь, используя PHP 5:
+<pre>
+&lt;?php
+$mysqli = new mysqli("localhost", "user", "pass", "test");
+if (mysqli_connect_errno())
+   die("Connection failed: %s\n", mysqli_connect_error());
+$col = "c1";
+$query = "SELECT $col FROM t";
+$result = $mysqli-&gt;query($query);
+while($row = $result-&gt;fetch_assoc()) {
+  echo "&lt;p&gt;" . $row["$col"] . "&lt;/p&gt;\n";
+}
+$result-&gt;close();
+$mysqli-&gt;close();
+?&gt;
+</pre>
+Сборка запроса SQL этим способом иногда известна как
+<span>динамический SQL</span>.</p>
+
+<h2><a name="expressions"></a>10.5. Синтаксис выражения</h2>
+<p>Следующие правила определяют синтаксис выражения в MySQL. Грамматика,
+показанная здесь, основана на файле <code>sql/sql_yacc.yy</code>
+исходных текстов MySQL.
+<pre>
+<em><code>expr</code></em>:
+<em><code>expr</code></em> OR <em><code>expr</code></em>
+| <em><code>expr</code></em> || <em><code>expr</code></em>
+| <em><code>expr</code></em> XOR <em><code>expr</code></em>
+| <em><code>expr</code></em> AND <em><code>expr</code></em>
+| <em><code>expr</code></em> &amp;&amp; <em><code>expr</code></em>
+| NOT <em><code>expr</code></em>
+| ! <em><code>expr</code></em>
+| <em><code>boolean_primary</code></em> IS [NOT] {TRUE | FALSE | UNKNOWN}
+| <em><code>boolean_primary</code></em>
+
+<em><code>boolean_primary</code></em>:
+<em><code>boolean_primary</code></em> IS [NOT] NULL
+| <em><code>boolean_primary</code></em> &lt;=&gt; <em><code>predicate</code></em>
+| <em><code>boolean_primary</code></em> <em><code>comparison_operator</code></em> <em><code>predicate</code></em>
+| <em><code>boolean_primary</code></em> <em><code>comparison_operator</code></em>
+  {ALL | ANY} (<em><code>subquery</code></em>)
+| <em><code>predicate</code></em>
+
+<em><code>comparison_operator</code></em>: = | &gt;= | &gt; | &lt;= | &lt; | &lt;&gt; | !=
+<em><code>predicate</code></em>:
+<em><code>bit_expr</code></em> [NOT] IN (<em><code>subquery</code></em>)
+| <em><code>bit_expr</code></em> [NOT] IN (<em><code>expr</code></em> [,
+  <em><code>expr</code></em>] ...)
+| <em><code>bit_expr</code></em> [NOT] BETWEEN <em><code>bit_expr</code></em> AND
+  <em><code>predicate</code></em>
+| <em><code>bit_expr</code></em> SOUNDS LIKE <em><code>bit_expr</code></em>
+| <em><code>bit_expr</code></em> [NOT] LIKE <em><code>simple_expr</code></em>
+  [ESCAPE <em><code>simple_expr</code></em>]
+| <em><code>bit_expr</code></em> [NOT] REGEXP <em><code>bit_expr</code></em>
+| <em><code>bit_expr</code></em>
+
+<em><code>bit_expr</code></em>:
+<em><code>bit_expr</code></em> | <em><code>bit_expr</code></em>
+| <em><code>bit_expr</code></em> &amp; <em><code>bit_expr</code></em>
+| <em><code>bit_expr</code></em> &lt;&lt; <em><code>bit_expr</code></em>
+| <em><code>bit_expr</code></em> &gt;&gt; <em><code>bit_expr</code></em>
+| <em><code>bit_expr</code></em> + <em><code>bit_expr</code></em>
+| <em><code>bit_expr</code></em> - <em><code>bit_expr</code></em>
+| <em><code>bit_expr</code></em> * <em><code>bit_expr</code></em>
+| <em><code>bit_expr</code></em> / <em><code>bit_expr</code></em>
+| <em><code>bit_expr</code></em> DIV <em><code>bit_expr</code></em>
+| <em><code>bit_expr</code></em> MOD <em><code>bit_expr</code></em>
+| <em><code>bit_expr</code></em> % <em><code>bit_expr</code></em>
+| <em><code>bit_expr</code></em> ^ <em><code>bit_expr</code></em>
+| <em><code>bit_expr</code></em> + <em><code>interval_expr</code></em>
+| <em><code>bit_expr</code></em> - <em><code>interval_expr</code></em>
+| <em><code>simple_expr</code></em>
+
+<em><code>simple_expr</code></em>:
+<em><code>literal</code></em>
+| <em><code>identifier</code></em>
+| <em><code>function_call</code></em>
+| <em><code>simple_expr</code></em> COLLATE <em><code>collation_name</code></em>
+| <em><code>param_marker</code></em>
+| <em><code>variable</code></em>
+| <em><code>simple_expr</code></em> || <em><code>simple_expr</code></em>
+| + <em><code>simple_expr</code></em>
+| - <em><code>simple_expr</code></em>
+| ~ <em><code>simple_expr</code></em>
+| ! <em><code>simple_expr</code></em>
+| BINARY <em><code>simple_expr</code></em>
+| (<em><code>expr</code></em> [, <em><code>expr</code></em>] ...)
+| ROW (<em><code>expr</code></em>, <em><code>expr</code></em> [,
+  <em><code>expr</code></em>] ...)
+| (<em><code>subquery</code></em>)
+| EXISTS (<em><code>subquery</code></em>)
+| {<em><code>identifier</code></em> <em><code>expr</code></em>}
+| <em><code>match_expr</code></em>
+| <em><code>case_expr</code></em>
+| <em><code>interval_expr</code></em>
+</pre>
+
+<p>Для приоритета операторов см.
+<a href="funct.htm#operator-precedence">раздел 13.3.1</a>.</p>
+<p>Для синтаксиса буквального значения см.
+<a href="#literals">раздел 10.1</a>.</p>
+<p>Для синтаксиса идентификатора см.
+<a href="#identifiers">раздел 10.2</a>.</p>
+
+<p>Переменные могут быть пользовательскими, системными или
+местными переменными или параметрами сохраненной программы:</p>
+<ul><li><p>Пользовательские переменные:
+<a href="#user-variables">раздел 10.4</a>.</li>
+<li>Системные переменные:
+<a href="server.htm#using-system-variables">раздел 6.1.6</a>.</li>
+
+<li>Местные переменные: <a href="sql.htm#declare-local-variable">
+раздел 14.6.4.1</a>.</li>
+<li>Параметры: <a href="sql.htm#create-procedure">раздел 14.1.13</a>.
+</p></li></ul>
+
+<p><em><code>param_marker</code></em> это <code>?</code> как использующийся в
+готовых запросах для заполнителей. См.
+<a href="sql.htm#prepare">раздел 14.5.1</a>.</p>
+
+<p><code>(<em><code>subquery</code></em>)</code> указывает на подзапрос,
+который возвращает единственное значение, то есть, скалярный подзапрос. См.
+<a href="sql.htm#scalar-subqueries">раздел 14.2.10.1</a>.</p>
+
+<p><code>{<em><code>identifier</code></em> <em><code>expr</code></em>}</code>
+синтаксис escape ODBC и принят для совместимости с ODBC. Значение
+<em><code>expr</code></em>. Фигурные скобки в синтаксисе должны быть написаны
+буквально: они не метасинтаксис, как используются в другом
+месте в описаниях синтаксиса.</p>
+
+<p><em><code>match_expr</code></em> указывает на выражение
+<a href="funct.htm#function_match"><code>MATCH</code></a>. См.
+<a href="funct.htm#fulltext-search">раздел 13.9</a>.</p>
+
+<p><em><code>case_expr</code></em> указывает на выражение
+<a href="funct.htm#operator_case"><code>CASE</code></a>. См.
+<a href="funct.htm#control-flow-functions">раздел 13.4</a>.</p>
+
+<p><em><code>interval_expr</code></em> представляет временной интервал.
+Синтаксис: <code>INTERVAL <em><code>expr</code></em> <em><code>unit</code>
+</em></code>, где <em><code>unit</code></em> такой спецификатор, как
+<code>HOUR</code>, <code>DAY</code> или <code>WEEK</code>.
+Для полного списка спецификаторов <em><code>unit</code></em> см. описание
+функции <a href="funct.htm#function_date-add"><code>DATE_ADD()</code></a> в
+<a href="funct.htm#date-and-time-functions">разделе 13.7</a>.</p>
+
+<p>Значение некоторых операторов зависит от режима SQL:</p>
+<ul><li><p>По умолчанию <a href="funct.htm#operator_or"><code>||</code></a>
+логический оператор <a href="funct.htm#operator_or"><code>OR</code></a>.
+В режиме <a href="server.htm#sqlmode_pipes_as_concat"><code>PIPES_AS_CONCAT
+</code></a> <a href="funct.htm#operator_or"><code>||</code></a> станет
+конкатенацией строк с приоритетом между
+<a href="funct.htm#operator_bitwise-xor"><code>^</code></a>
+и одноместными операторами.</li>
+
+<li>По умолчанию <a href="funct.htm#operator_not"><code>!</code></a> имеет
+более высокий приоритет, чем <code>NOT</code>. В режиме
+<a href="server.htm#sqlmode_high_not_precedence"><code>HIGH_NOT_PRECEDENCE
+</code></a> <a href="funct.htm#operator_not"><code>!</code></a> и
+<code>NOT</code> имеют тот же самый приоритет.</p></li></ul>
+<p>См. <a href="server.htm#sql-mode">раздел 6.1.8</a>.</p>
+
+<h2><a name="comments"></a>10.6. Синтаксис комментария</h2>
+<p>MySQL Server поддерживает три стиля комментария:</p>
+<ul><li><p>От символа <code>#</code> до конца строки.</li>
+
+<li>От последовательности <code>-- </code> до конца строки. В MySQL
+стиль комментария <code>-- </code> (двойное тире) требует, чтобы второе тире
+сопровождалось по крайней мере одним пробелом или управляющим символом (таким
+как табуляция newline и т.д.). Этот синтаксис отличается немного от
+стандартного синтаксиса комментария SQL, обсужденного в
+<a href="intro.htm#ansi-diff-comments">разделе 1.8.2.4,</a>.</li>
+
+<li>От последовательности <code>/*</code> до следующей последовательности
+<code>*/</code>, как на языке программирования C. Этот синтаксис позволяет
+комментарию простираться по многим строкам, потому что начальная и
+заключительная последовательности не должны быть на той же самой строке.
+</p></li></ul>
+
+<p>Следующий пример демонстрирует все три стиля комментария:<pre>
+mysql&gt; SELECT 1+1; # This comment continues to the end of line
+mysql&gt; SELECT 1+1; -- This comment continues to the end of line
+mysql&gt; SELECT 1 /* this is an in-line comment */ + 1;
+mysql&gt; SELECT 1+
+/*
+this is a
+multiple-line comment
+*/
+1;
+</pre>
+
+Вложенные комментарии не поддержаны. При некоторых условиях вложенные
+комментарии могли бы быть разрешены, но обычно нет, и пользователи
+должны избежать их.
+</p>
+
+<p>MySQL Server поддерживает некоторые разновидности комментариев C-стиля.
+Они позволяют Вам написать код, который включает расширения MySQL, но все еще
+портативен, при использовании комментариев следующей формы:
+<pre>
+/*! <em><code>MySQL-specific code</code></em> */
+</pre>
+
+В этом случае сервер MySQL разбирает и выполняет код в пределах комментария,
+как если бы это был, любой другой запрос SQL, но другие SQL-серверы
+проигнорируют расширения. Например, сервер MySQL признает ключевое слово
+<code>STRAIGHT_JOIN</code> в следующем запросе, но другие серверы не будут:
+<pre>
+SELECT /*! STRAIGHT_JOIN */ col1 FROM table1,table2 WHERE ...
+</pre>
+
+Если Вы добавляете номер версии после символа <code>!</code>,
+синтаксис в пределах комментария выполнен, только если версия MySQL больше
+чем или равна указанному номеру версии. Ключевое слово
+<code>KEY_BLOCK_SIZE=1024</code> в следующем комментарии выполнено только
+серверами MySQL 5.1.10 или выше:
+<pre>
+CREATE TABLE t1(a INT, KEY (a)) /*!50110 KEY_BLOCK_SIZE=1024 */;
+</pre>
+
+Синтаксис комментария относится к тому, как сервер
+<a href="programs.htm#mysqld"><span><strong>mysqld</strong></span></a>
+разбирает запросы SQL. Программа клиента <a href="programs.htm#mysql"><span>
+<strong>mysql</strong></span></a> также выполняет некоторый парсинг запросов
+прежде, чем послать их в сервер. Это делается, чтобы решить, где границы
+запроса в случае многострочного запроса.</p>
+
+<p>Комментарии в этом формате, <code>/*!12345 ... */</code>, не сохранены на
+сервере. Если этот формат будет использоваться, чтобы прокомментировать
+сохраненные программы, то комментарии не будут сохранены на сервере.</p>
+
+<p>Другая разновидность синтаксиса комментария C-стиля используется, чтобы
+определить подсказки оптимизатора. Комментарии подсказки включают
+символ <code>+</code> после вводной последовательности комментария
+<code>/*</code>. Пример:
+<pre>
+SELECT /*+ BKA(t1) */ FROM ... ;
+</pre>
+См. <a href="optimiz.htm#optimizer-hints">раздел 9.9.3</a>.</p>
+
+<p>Использование кратких команд
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a> таких,
+как <code>\C</code>, в пределах многострочного комментария <code>/* ... */
+</code> пока не поддерживается.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

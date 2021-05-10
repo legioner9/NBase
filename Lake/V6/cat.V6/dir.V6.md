@@ -1,0 +1,8 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\Lake\V6\cat.V6\dir.V6.md">V6</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\Lake\V6\V6.md">V6.md</a>
+        - *## [Моделирование бизнес-процессов](https://www.youtube.com/playlist?list=PLEU6YIHP1uoQJ64mjlXQSlfM0sH83Gx0I)
+        - *@@ WTS BPM sistems
+        - *### 1 lecure
+        - *#### object of modeling is process
+        - *#### model is discribing
+        - *#### process is action ANYWAY - result is FECK

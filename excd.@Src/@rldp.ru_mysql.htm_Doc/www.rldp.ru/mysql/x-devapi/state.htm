@@ -1,0 +1,1215 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 8. Выполнение запросов</title>
+  <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="devapi-users-statement-execution"></a>
+Глава 8. Выполнение запросов</h1>
+<p>Этот раздел объясняет выполнение запроса с информацией о том, как
+обращаться с транзакциями и ошибками.</p>
+
+<h2><a name="transaction-handling"></a>8.1. Операционная обработка</h2>
+<p>Транзакции можно использовать в групповых операциях атомно.
+Или все операции имеют успех, когда они передаются, или ни одна.
+Возможно отменить транзакцию, пока это не было передано.</p>
+
+<p>Транзакции могут быть начаты в сессии, используя метод
+<code class="literal">startTransaction()</code>, переданы через
+<code class="literal">commitTransaction()</code> и отменены через
+<code class="literal">rollbackTransaction()</code>.
+Это иллюстрировано в следующем примере. Пример предполагает, что
+испытательная схема существует и что коллекция
+<code class="literal">my_collection</code> не существует.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+var mysqlx = require('mysqlx');
+// Connect to server
+var session = mysqlx.getSession( {
+  host: 'localhost', port: 33060,
+  user: 'user', password: '<em class="replaceable"><code>password</code></em>' } );
+
+// Get the Schema test
+var db = session.getSchema('test');
+// Create a new collection
+var myColl = db.createCollection('my_collection');
+
+// Start a transaction
+session.startTransaction();
+try {
+  myColl.add({name: 'Rohit', age: 18, height: 1.76}).execute();
+  myColl.add({name: 'Misaki', age: 24, height: 1.65}).execute();
+  myColl.add({name: 'Leon', age: 39, height: 1.9}).execute();
+  // Commit the transaction if everything went well
+  session.commit();
+  print('Data inserted successfully.');
+}
+catch (err) {
+  // Rollback the transaction in case of an error
+  session.rollback();
+  // Printing the error message
+  print('Data could not be inserted: ' + err.message);
+}
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+from mysqlsh import mysqlx
+# Connect to server
+session = mysqlx.get_session( {
+  'host': 'localhost', 'port': 33060,
+  'user': 'user', 'password': '<em class="replaceable"><code>password</code></em>' } )
+
+# Get the Schema test
+db = session.get_schema('test')
+# Create a new collection
+myColl = db.create_collection('my_collection')
+# Start a transaction
+session.start_transaction()
+try:
+  myColl.add({'name': 'Rohit', 'age': 18, 'height': 1.76}).execute()
+  myColl.add({'name': 'Misaki', 'age': 24, 'height': 1.65}).execute()
+  myColl.add({'name': 'Leon', 'age': 39, 'height': 1.9}).execute()
+
+# Commit the transaction if everything went well
+session.commit()
+print('Data inserted successfully.')
+except Exception as err:
+# Rollback the transaction in case of an error
+session.rollback()
+
+# Printing the error message
+print('Data could not be inserted: %s' % str(err))
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+// Connect to server
+var session = MySQLX.GetSession("server=localhost;port=33060;user=user;password=<em class="replaceable"><code>password</code></em>;");
+
+// Get the Schema test
+var db = session.GetSchema("test");
+// Create a new collection
+var myColl = db.CreateCollection("my_collection");
+
+// Start a transaction
+session.StartTransaction();
+try
+{
+  myColl.Add(new { name = "Rohit", age = 18, height = 1.76}).Execute();
+  myColl.Add(new { name = "Misaki", age = 24, height = 1.65}).Execute();
+  myColl.Add(new { name = "Leon", age = 39, height = 1.9}).Execute();
+  // Commit the transaction if everything went well
+  session.Commit();
+  Console.WriteLine("Data inserted successfully.");
+}
+catch(Exception err)
+{
+  // Rollback the transaction in case of an error
+  session.Rollback();
+  // Printing the error message
+  Console.WriteLine("Data could not be inserted: " + err.Message);
+}
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+import mysqlx
+
+# Connect to server
+my_session = mysqlx.get_session({
+  'host': 'localhost', 'port': 33060,
+  'user': 'user', 'password': 'password'
+})
+
+# Get the Schema test
+my_schema = my_session.get_schema('test')
+# Create a new collection
+my_coll = my_schema.create_collection('my_collection')
+
+# Start a transaction
+session.start_transaction()
+try:
+my_coll.add({'name': 'Rohit', 'age': 18, 'height': 1.76}).execute()
+my_coll.add({'name': 'Misaki', 'age': 24, 'height': 1.65}).execute()
+my_coll.add({'name': 'Leon', 'age': 39, 'height': 1.9}).execute()
+
+# Commit the transaction if everything went well
+my_session.commit()
+print('Data inserted successfully.')
+except Exception as err:
+# Rollback the transaction in case of an error
+my_session.rollback()
+# Printing the error message
+print('Data could not be inserted: {0}'.format(str(err)))
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+import com.mysql.cj.xdevapi.*;
+
+// Connect to server
+Session mySession = new SessionFactory().getSession("mysqlx://localhost:33060/test?user=user&amp;password=password");
+Schema db = mySession.getSchema("test");
+
+// Create a new collection
+Collection myColl = db.createCollection("my_collection");
+// Start a transaction
+mySession.startTransaction();
+try {
+  myColl.add("{\"name\":\"Rohit\", \"age\":18}", "{\"name\":\"Misaki\", \"age\":24}", "{\"name\":\"Leon\", \"age\":39}");
+  mySession.commit();
+  System.out.println("Data inserted successfully.");
+} catch (Exception err) {
+  // Rollback the transaction in case of an error
+  mySession.rollback();
+  // Printing the error message
+  System.out.println("Data could not be inserted: " + err.getMessage());
+}
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+// Connect to server
+Session session(SessionOption::HOST, "localhost",
+SessionOption::PORT, 33060,
+SessionOption::USER, "user",
+SessionOption::PWD, "password");
+
+// Get the Schema test
+Schema db = session.getSchema("test");
+// Create a new collection
+Collection myColl = db.createCollection("my_collection");
+
+// Start a transaction
+session.startTransaction();
+try {
+  myColl.add(R"({"name": "Rohit", "age": 18, "height": 1.76})").execute();
+  myColl.add(R"({"name": "Misaki", "age": 24, "height": 1.65})").execute();
+  myColl.add(R"({"name": "Leon", "age": 39, "height": 1.9})").execute();
+  // Commit the transaction if everything went well
+  session.commit();
+  cout &lt;&lt; "Data inserted successfully." &lt;&lt; endl;
+}
+catch (const Error &amp;err) {
+  // Rollback the transaction in case of an error
+  session.rollback();
+  // Printing the error message
+  cout &lt;&lt; "Data could not be inserted: " &lt;&lt; err &lt;&lt; endl;
+}
+</pre>
+
+<h3><a name="processing-warnings"></a>8.1.1. Обработка предупреждений</h3>
+<p>Подобно выполнению отдельных операторов или отмене транзакции
+можно также получить предупреждения. Чтобы быть в состоянии обработать эти
+предупреждения, должен быть проверен объект результата
+<code class="literal">Session.commit();</code> или
+<code class="literal">Session.rollback();</code>.</p>
+
+<p>Это показывают в следующем примере. Пример предполагает, что испытательная
+схема существует и что коллекция
+<code class="literal">my_collection</code> не существует.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+var mysqlx = require('mysqlx');
+// Connect to server
+var mySession = mysqlx.getSession( {
+  host: 'localhost', port: 33060,
+  user: 'user', password: '<em class="replaceable"><code>password</code></em>' } );
+
+// Get the Schema test
+var myDb = mySession.getSchema('test');
+// Create a new collection
+var myColl = myDb.createCollection('my_collection');
+
+// Start a transaction
+mySession.startTransaction();
+try
+{
+  myColl.add({'name': 'Rohit', 'age': 18, 'height': 1.76}).execute();
+  myColl.add({'name': 'Misaki', 'age': 24, 'height': 1.65}).execute();
+  myColl.add({'name': 'Leon', 'age': 39, 'height': 1.9}).execute();
+  // Commit the transaction if everything went well
+  var reply = mySession.commit();
+  // handle warnings
+  if (reply.warningCount)
+  {
+     var warnings = reply.getWarnings();
+     for (index in warnings)
+     {
+       var warning = warnings[index];
+       print ('Type ['+ warning.level + '] (Code ' + warning.code +
+              '): ' + warning.message + '\n');
+     }
+  }
+  print ('Data inserted successfully.');
+}
+catch(err)
+{
+  // Rollback the transaction in case of an error
+  reply = mySession.rollback();
+  // handle warnings
+  if (reply.warningCount)
+  {
+     var warnings = reply.getWarnings();
+     for (index in warnings)
+     {
+       var warning = warnings[index];
+       print ('Type ['+ warning.level + '] (Code ' + warning.code + '): ' +
+              warning.message + '\n');
+     }
+  }
+  // Printing the error message
+  print ('Data could not be inserted: ' + err.message);
+}
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+from mysqlsh import mysqlx
+
+# Connect to server
+mySession = mysqlx.get_session( {
+  'host': 'localhost', 'port': 33060,
+  'user': 'user', 'password': '<em class="replaceable"><code>password</code></em>' } )
+
+# Get the Schema test
+myDb = mySession.get_schema('test')
+# Create a new collection
+myColl = myDb.create_collection('my_collection')
+
+# Start a transaction
+mySession.start_transaction()
+try:
+myColl.add({'name': 'Rohit', 'age': 18, 'height': 1.76}).execute()
+myColl.add({'name': 'Misaki', 'age': 24, 'height': 1.65}).execute()
+myColl.add({'name': 'Leon', 'age': 39, 'height': 1.9}).execute()
+
+# Commit the transaction if everything went well
+reply = mySession.commit()
+
+# handle warnings
+if reply.warning_count:
+for warning in result.get_warnings():
+print('Type [%s] (Code %s): %s\n' % (warning.level, warning.code, warning.message))
+
+print('Data inserted successfully.')
+except Exception as err:
+# Rollback the transaction in case of an error
+reply = mySession.rollback()
+
+# handle warnings
+if reply.warning_count:
+for warning in result.get_warnings():
+print('Type [%s] (Code %s): %s\n' % (warning.level, warning.code, warning.message))
+# Printing the error message
+print('Data could not be inserted: %s' % str(err))
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+// Connect to server
+var session = MySQLX.GetSession("server=localhost;port=33060;user=user;password=<em class="replaceable"><code>password</code></em>;");
+
+// Get the Schema test
+var db = session.GetSchema("test");
+// Create a new collection
+var myColl = db.CreateCollection("my_collection");
+
+// Start a transaction
+session.StartTransaction();
+int warningCount = 0;
+try
+{
+  var result = myColl.Add(new { name = "Rohit", age = 18,
+                                height = 1.76}).Execute();
+  warningCount += result.Warnings.Count;
+  result = myColl.Add(new { name = "Misaki", age = 24,
+                            height = 1.65}).Execute();
+  warningCount += result.Warnings.Count;
+  result = myColl.Add(new { name = "Leon", age = 39,
+                            height = 1.9}).Execute();
+  warningCount += result.Warnings.Count;
+  // Commit the transaction if everything went well
+  session.Commit();
+  if (warningCount &gt; 0)
+  {
+     // handle warnings
+  }
+  Console.WriteLine("Data inserted successfully.");
+} catch (Exception err) {
+  // Rollback the transaction in case of an error
+  session.Rollback();
+  if (warningCount &gt; 0)
+  {
+     // handle warnings
+  }
+  // Printing the error message
+  Console.WriteLine("Data could not be inserted: " + err.Message);
+}
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+import mysqlx
+# Connect to server
+my_session = mysqlx.get_session({
+  'host': 'localhost', 'port': 33060,
+  'user': 'user', 'password': 'password'
+})
+
+# Get the Schema test
+my_schema = my_session.get_schema('test')
+# Create a new collection
+my_coll = my_schema.create_collection('my_collection')
+
+# Start a transaction
+my_session.start_transaction()
+try:
+my_coll.add({'name': 'Rohit', 'age': 18, 'height': 1.76}).execute()
+my_coll.add({'name': 'Misaki', 'age': 24, 'height': 1.65}).execute()
+my_coll.add({'name': 'Leon', 'age': 39, 'height': 1.9}).execute()
+
+# Commit the transaction if everything went well
+result = my_session.commit()
+# handle warnings
+if result.get_warnings_count() &gt; 0:
+for warning in result.get_warnings():
+print('Type [{0}] (Code {1}): {2}'.format(warning['level'], warning['code'], warning['msg']))
+
+print('Data inserted successfully.')
+except Exception as err:
+# Rollback the transaction in case of an error
+result = my_session.rollback()
+
+# handle warnings
+if result.get_warnings_count() &gt; 0:
+for warning in result.get_warnings():
+print('Type [{0}] (Code {1}): {2}'.format(warning['level'], warning['code'], warning['msg']))
+
+# Printing the error message
+print('Data could not be inserted: {0}'.format(err))
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+// c.f. "standard transaction handling"
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+/*
+Connector/C++ does not yet provide access to transaction warnings
+-- Session methods commit() and rollback() do not return a result object.
+*/
+</pre>
+
+<p>По умолчанию все предупреждения посылают с сервера клиенту.
+Если операция производит много предупреждений, и предупреждения не
+представляют ценности, их отправку можно выключить.
+Это помогает экономить пропускную способность.
+<code class="literal">session.setFetchWarnings()</code>
+управляет тем, отказываются ли от предупреждений в сервере или посылают их
+клиенту. <code class="literal">session.getFetchWarnings()</code>
+используется, чтобы узнать текущие настройки.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+var mysqlx = require('mysqlx');
+
+function process_warnings(result)
+{
+  if (result.getWarningCount())
+  {
+     var warnings = result.getWarnings();
+     for (index in warnings)
+     {
+       var warning = warnings[index];
+       print ('Type ['+ warning.level + '] (Code ' + warning.code + '): ' +
+              warning.message + '\n');
+     }
+  } else {
+    print ("No warnings were returned.\n");
+  }
+}
+
+// Connect to server
+var mySession = mysqlx.getSession( {
+  host: 'localhost', port: 33060,
+  user: 'user', password: '<em class="replaceable"><code>password</code></em>' } );
+
+// Disables warning generation
+mySession.setFetchWarnings(false);
+var result = mySession.sql('drop schema if exists unexisting').execute();
+process_warnings(result);
+
+// Enables warning generation
+mySession.setFetchWarnings(true);
+var result = mySession.sql('drop schema if exists unexisting').execute();
+process_warnings(result);
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+from mysqlsh import mysqlx
+def process_warnings(result):
+if result.get_warnings_count():
+for warning in result.get_warnings():
+print('Type [%s] (Code %s): %s\n' % (warning.level, warning.code, warning.message))
+else:
+print("No warnings were returned.\n")
+
+# Connect to server
+mySession = mysqlx.get_session( {
+  'host': 'localhost', 'port': 33060,
+  'user': 'user', 'password': '<em class="replaceable"><code>password</code></em>' } );
+
+# Disables warning generation
+mySession.set_fetch_warnings(False)
+result = mySession.sql('drop schema if exists unexisting').execute()
+process_warnings(result)
+
+# Enables warning generation
+mySession.set_fetch_warnings(True)
+result = mySession.sql('drop schema if exists unexisting').execute()
+process_warnings(result)
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+// Connect to server
+Session mySession = new SessionFactory().getSession("mysqlx://localhost:33060/test?user=user&amp;password=password");
+Schema db = mySession.getSchema("test");
+// Create a new collection
+Collection myColl = db.createCollection("my_collection");
+// Start a transaction
+mySession.startTransaction();
+try {
+  Result res = myColl.add("{\"name\":\"Rohit\", \"age\":18}",
+                          "{\"name\":\"Misaki\", \"age\":24}",
+                          "{\"name\":\"Leon\", \"age\":39}").execute();
+  System.out.println(res.getWarningsCount());
+  Iterator&lt;Warning&gt; warnings = res.getWarnings();
+  while (warnings.hasNext()) {
+    Warning warn = warnings.next();
+    System.out.println(warn.getCode() + ", " + warn.getLevel() + ", " +
+                       warn.getMessage());
+  }
+  mySession.commit();
+  System.out.println("Data inserted successfully.");
+} catch (Exception err) {
+  // Rollback the transaction in case of an error
+  mySession.rollback();
+  // Printing the error message
+  System.out.println("Data could not be inserted: " + err.getMessage());
+}
+</pre>
+
+<h3><a name="error-handling"></a>8.1.2. Обработка ошибок</h3>
+<p>Разрабатывая скрипты для MySQL Shell, можно часто просто полагаться на
+обработку исключений, сделанную MySQL Shell. Для всех других языков
+надлежащая обработка исключений требуется, чтобы фиксировать ошибки, или
+традиционный образец обработки ошибок должен использоваться, если язык
+не поддерживает исключения.</p>
+
+<p>Обработка ошибок по умолчанию может быть изменена, создав
+<code class="literal">SessionContext</code> и передав его функции
+<code class="literal">mysqlx.getSession()</code>. Это позволяет переключиться
+с исключений на проверку на ошибки.</p>
+
+<p>Следующие примеры показывают, как выполнить надлежащую обработку ошибок
+для различных языков. Пример предполагает, что испытательная схема существует
+и что коллекция <code class="literal">my_collection</code> тоже существует.
+</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+var mysqlx = require('mysqlx');
+var mySession;
+try {
+  // Connect to server on localhost
+  mySession = mysqlx.getSession( {
+    host: 'localhost', port: 33060,
+    user: 'user', password: '<em class="replaceable"><code>password</code></em>' } );
+} catch (err) {
+  print('The database session could not be opened: ' + err.message);
+}
+try {
+  var myDb = mySession.getSchema('test');
+  // Use the collection 'my_collection'
+  var myColl = myDb.getCollection('my_collection');
+  // Find a document
+  var myDoc = myColl.find('name like :param').limit(1)
+      .bind('param','L%').execute();
+  // Print document
+  print(myDoc.first());
+} catch (err) {
+  print('The following error occurred: ' + err.message);
+}
+finally {
+  // Close the session in any case
+  mySession.close();
+}
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+from mysqlsh import mysqlx
+mySession
+try:
+# Connect to server on localhost
+mySession = mysqlx.get_session( {
+  'host': 'localhost', 'port': 33060,
+  'user': 'user', 'password': '<em class="replaceable"><code>password</code></em>' } )
+
+except Exception as err:
+print('The database session could not be opened: %s' % str(err))
+try:
+  myDb = mySession.get_schema('test')
+
+# Use the collection 'my_collection'
+myColl = myDb.get_collection('my_collection')
+# Find a document
+myDoc = myColl.find('name like :param').limit(1).bind('param','L%').execute()
+# Print document
+print(myDoc.first())
+except Exception as err:
+print('The following error occurred: %s' % str(err))
+finally:
+# Close the session in any case
+mySession.close()
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+var mysqlx = require('@mysql/xdevapi');
+// Connect to server on localhost
+mysqlx
+.getSession({
+  host: 'localhost',
+  port: 33060,
+  user: 'user',
+  password: 'password'
+})
+.then(function (mySession) {
+  // This can't throw an error as we check existence at a later operation only
+  var myDb = mySession.getSchema('test');
+  // Use the collection 'my_collection'
+  // This can't throw an error as we check existence at a later operation only
+  var myColl = myDb.getCollection('my_collection');
+  // Find a document
+  return myColl
+  .find('name like :param')
+  .limit(1)
+  .bind('param','L%')
+  .execute(function (row) {
+    console.log(row);
+  })
+  .then(function () {
+    return session.close();
+  })
+  .catch(function (err) {
+    console.log('The following error occurred: ' + err.message);
+  });
+})
+.catch (err) {
+  console.log('The database session could not be opened: ' + err.message);
+});
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+Session mySession = null;
+try
+{
+  // Connect to server on localhost
+  mySession = MySQLX.GetSession("mysqlx://user:password@localhost:33060");
+  try
+  {
+    Schema myDb = mySession.GetSchema("test");
+    // Use the collection 'my_collection'
+    Collection myColl = myDb.GetCollection("my_collection");
+    // Find a document
+    DocResult myDoc = myColl.Find("name like :param").Limit(1).
+                             Bind("param", "L%").Execute();
+    // Print document
+    Console.WriteLine(myDoc.FetchOne());
+  } catch (Exception err) {
+    Console.WriteLine("The following error occurred: " + err.Message);
+  } finally {
+    // Close the session in any case
+    mySession.Close();
+  }
+} catch (Exception err) {
+  Console.WriteLine("The database session could not be opened: "+err.Message);
+}
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+import mysqlx
+
+# Connect to server
+my_session = mysqlx.get_session({
+  'host': 'localhost', 'port': 33060,
+  'user': 'user', 'password': 'password'
+})
+
+# Get the Schema test
+my_schema = my_session.get_schema('test')
+# Create a new collection
+my_coll = my_schema.create_collection('my_collection')
+
+# Start a transaction
+my_session.start_transaction()
+try:
+my_coll.add({'name': 'Rohit', 'age': 18, 'height': 1.76}).execute()
+my_coll.add({'name': 'Misaki', 'age': 24, 'height': 1.65}).execute()
+my_coll.add({'name': 'Leon', 'age': 39, 'height': 1.9}).execute()
+
+# Commit the transaction if everything went well
+result = my_session.commit()
+# handle warnings
+if result.get_warnings_count() &gt; 0:
+for warning in result.get_warnings():
+print('Type [{0}] (Code {1}): {2}'.format(warning['level'], warning['code'], warning['msg']))
+
+print('Data inserted successfully.')
+except Exception as err:
+# Rollback the transaction in case of an error
+my_session.rollback()
+
+# handle warnings
+if reply.get_warnings_count() &gt; 0:
+for warning in result.get_warnings():
+print('Type [{0}] (Code {1}): {2}'.format(warning['level'], warning['code'], warning['msg']))
+
+# Printing the error message
+print('Data could not be inserted: {0}'.format(err))
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+import com.mysql.cj.xdevapi.*;
+
+Session mySession;
+try {
+// Connect to server on localhost
+mySession = new SessionFactory().getSession("mysqlx://localhost:33060/test?user=user&amp;password=password");
+
+try {
+Schema myDb = mySession.getSchema("test");
+// Use the collection 'my_collection'
+Collection myColl = myDb.getCollection("my_collection");
+// Find a document
+DocResult myDoc = myColl.find("name like :param").limit(1).bind("param", "L%").execute();
+// Print document
+System.out.println(myDoc.fetchOne());
+} catch (XDevAPIError err) { // special exception class for server errors
+System.err.println("The following error occurred: " + err.getMessage());
+} finally {
+  // Close the session in any case
+  mySession.close();
+}} catch (Exception err) {
+System.err.println("The database session could not be opened: " + err.getMessage());
+}
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+#include &lt;mysqlx/xdevapi.h&gt;
+try
+{
+  // Connect to server on localhost
+  Session session(33060, "user", "password");
+  try
+  {
+    Schema db = session.getSchema("test");
+    // Use the collection 'my_collection'
+    Collection myColl = db.getCollection("my_collection");
+    // Find a document
+    auto myDoc = myColl.find("name like :param").limit(1).
+                        bind("param", "L%").execute();
+    // Print document
+    cout &lt;&lt; myDoc.fetchOne() &lt;&lt; endl;
+    // Exit with success code
+    exit(0);
+  } catch (const Error &amp;err) {
+    cout &lt;&lt; "The following error occurred: " &lt;&lt; err &lt;&lt; endl;
+    exit(1);
+  }
+  // Note: session is closed automatically when session
+  // object is destructed.
+} catch (const Error &amp;err) {
+  cout &lt;&lt; "The database session could not be opened: " &lt;&lt; err &lt;&lt; endl;
+  // Exit with error code
+  exit(1);
+}
+</pre>
+
+<h2><a name="working-with-savepoints"></a>8.2. Работа с точками сохранения
+</h2>
+<p>X DevAPI поддерживает точки сохранения, которые позволяют вам установить
+названный пункт в транзакции, к которому можно вернуться.
+Устанавливая точки сохранения в транзакции,
+можно позже использовать функциональность отката, чтобы отменить любые
+запросы, сделанные после создания точки сохранения. Точки сохранения могут
+быть рсвобождены, если вы больше в них не нуждаетесь. Этот раздел покажет,
+как работать с точками сохранения в X DevAPI. См.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/savepoint.html"
+target="_top"><code class="literal">SAVEPOINT</code></a>.</p>
+
+<h3><a name="x-devapi-setting-savepoint"></a>Установка точки сохранения</h3>
+<p>Точки сохранения определяются именем строки. Последовательность может
+содержать любой символ, разрешенный для идентификатора. Чтобы создать точку
+сохранения, используйте <code class="literal">session.setSavepoint()</code>,
+которая отобраается на SQL-запрос
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/savepoint.html"
+target="_top"><code class="literal">SAVEPOINT
+<em class="replaceable"><code>name</code></em>;</code></a>.
+Если вы не определяете <code class="literal">name</code>,
+оно автоматически произведено. Например:</p>
+
+<pre class="programlisting">
+session.setSavepoint()
+</pre>
+
+<p>Операционная точка сохранения создается с автоматически произведенным
+именем, и последовательность возвращена с названием точки сохранения.
+Это имя может использоваться с
+<code class="literal">session.rollbackTo()</code> или
+<code class="literal">session.releaseSavepoint()</code>. Операция
+<code class="literal">session.setSavepoint()</code> может быть вызвана
+многократно в сессии, каждый раз уникальное название
+точки сохранения произведено.</p>
+
+<p>Также возможно вручную определить название точки сохранения, передавая
+строку <em class="replaceable"><code>name</code></em> так:</p>
+<pre class="programlisting">
+session.setSavepoint('<em class="replaceable"><code>name</code></em>')
+</pre>
+
+<p>Результат: операционная точка сохранения с указанным
+<em class="replaceable"><code>name</code></em>,
+которое возвращено операцией как последовательность.
+<code class="literal">session.setSavepoint('<em class="replaceable"><code>
+name</code></em>')</code> можно вызвать многократно таким образом, и если
+<em class="replaceable"><code>name</code></em> уже использовалось для точки
+сохранения, предыдущая точка сохранения удалена и установлена новая.</p>
+
+<h3><a name="rollingback-savepoint"></a>Откат назад к точке сохранения</h3>
+<p>Когда у сессии есть операционные точки сохранения, можно отменить любые
+последующие транзакции, используя
+<code class="literal">session.rollbackTo()</code>, что отображается на
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/savepoint.html"
+target="_top"><code class="literal">ROLLBACK TO name</code></a>:</p>
+
+<pre class="programlisting">
+session.rollbackTo('<em class="replaceable"><code>name</code></em>')
+</pre>
+
+<p>откатывает назад к операционной точке сохранения
+<em class="replaceable"><code>name</code></em>.
+Эта операция имеет успех, пока данная точка сохранения не была освобождена.
+Откат назад к точке сохранения, которая была создана до других результатов
+точек сохранения в последующих или освобождаемых точках
+сохранения или удалена:</p>
+
+<pre class="programlisting">
+session.startTransaction()
+(some data modifications occur...)
+session.setSavepoint('point1') &lt;---- succeeds
+(some data modifications occur...)
+session.setSavepoint('point2') &lt;---- succeeds
+(some data modifications occur...)
+session.rollbackTo('point1') &lt;---- succeeds
+session.rollbackTo('point1') &lt;---- still succeeds, but position stays the same
+session.rollbackTo('point2') &lt;---- generates an error because lines above already cleared point2
+session.rollbackTo('point1') &lt;---- still succeeds
+</pre>
+
+<h3><a name="releasing-savepoint"></a>Отмена точки сохранения</h3>
+<p>Отменить точку сохранения, например, когда она более не требуется,
+можно через <code class="literal">releaseSavepoint()</code> с передачей
+имени точки сохранения:</p>
+
+<pre class="programlisting">
+session.releaseSavepoint('<em class="replaceable"><code>name</code></em>')
+</pre>
+<p>освобождает точку сохранения <em class="replaceable"><code>name</code>
+</em>.</p>
+
+<h3><a name="savepoints-and-implicit-transaction-behavior"></a>
+Точки сохранения и поведение неявной транзакции</h3>
+<p>Точное поведение точек сохранения определяется сервером, и
+определено как autocommit, см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/innodb-autocommit-commit-rollback.html"
+target="_top">autocommit, Commit, and Rollback</a>.</p>
+
+<p>Например, рассмотрите следующие запросы без явного
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/commit.html" target="_top">
+<code class="literal">BEGIN</code></a>,
+<code class="literal">session.startTransaction()</code>
+или подобных запросов:</p>
+
+<pre class="programlisting">
+session.setSavepoint('testsavepoint');
+session.releaseSavepoint('testsavepoint');
+</pre>
+
+<p>Если включен autocommit на сервере, эти запросы вернут ошибку
+потому, что нет точки сохранения
+<code class="literal">testsavepoint</code>. Это потому, что
+<code class="literal">session.setSavepoint()</code>
+создает транзакцию, точку сохранения и непосредственно передает ее.
+Результат состоит в том, что точки сохранения не существует к моменту вызова
+<code class="literal">releaseSavepoint()</code>, который находится вместо
+этого в своей собственной транзакции. В этом случае, чтобы точка сохранения
+работала нормально, надо начать блок явной транзакции сначала.</p>
+
+<h2><a name="working-with-locking"></a>8.3. Работа с блокировками</h2>
+<p>X DevAPI понимает блокировки MySQL через методы
+<code class="literal">lockShared()</code> и
+<code class="literal">lockExclusive()</code> для
+Collection.find() и Table.select().
+Это позволяет вам управлять блокировкой строки, чтобы гарантировать
+безопасные обновления транзакционного документа на коллекциях и избежать
+проблем параллелизма, например используя методы
+<code class="literal">lockShared()</code> и
+<code class="literal"><code class="literal">lockExclusive()</code></code>.
+Для большего количества справочной информации о блокировках см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/innodb-locking-reads.html"
+target="_top">Locking Reads</a>.</p>
+
+<p>Методы <code class="literal">lockShared()</code> и
+<code class="literal">lockExclusive()</code> имеют
+следующие свойства, используются ли они с коллекцией или таблицей.</p>
+
+<ul><li class="listitem"><p>Множественные вызовы методов блокировки
+разрешены. Если запрос выполняется, в то время как иная транзакция
+держит ту же самую блокировку, запрос ждет, пока другая транзакция не
+освободит блокировку. Если множественные вызовы методов сделаны, последний
+вызванный метод имеет приоритет. Другими словами,
+<code class="literal">find().lockShared().lockExclusive()</code>
+эквивалент <code class="literal">find().lockExclusive()</code>.</p></li>
+
+<li class="listitem"><p><code class="literal">lockShared()</code>
+имеет ту же самую семантику, как
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/innodb-locking-reads.html"
+target="_top"><code class="literal">SELECT ... LOCK IN SHARE MODE</code></a>.
+Устанавливает коллективную блокировку на любых строках, которые прочитаны.
+Другие сессии могут прочитать строки, но не могут изменить их, пока ваша
+транзакция не передается. Если какая-либо из этих строк была изменена другой
+транзакцией, которая еще не передана, ваш запрос ждет до конца той транзакции
+и затем использует последние значения.</p></li>
+
+<li class="listitem"><p><code class="literal">lockExclusive()</code>
+имеет ту же самую семантику, как
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/innodb-locking-reads.html"
+target="_top"><code class="literal">SELECT ... FOR UPDATE</code></a>.
+Поскольку любой индекс делает запись ограничений поиска, он захватывает
+строки любые связанные элементы индекса, таким же образом как будто вы
+применили <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/update.html"
+target="_top"><code class="literal">UPDATE</code></a> для тех строк.
+Другие транзакции заблокированы на обновление тех строк при работе
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/innodb-locking-reads.html"
+target="_top"><code class="literal">SELECT ... LOCK IN SHARE MODE</code></a>
+или от чтения данных на определенных уровнях изоляции транзакции.
+Последовательное чтение игнорирует любой набор блокировок на записях, которые
+существуют в прочитанном представлении. Старые версии записей не могут быть
+блокированы, они восстановлены применинем журнала отмены к
+копии записи в памяти.</p></li>
+
+<li class="listitem"><p>Блокировки проводятся столько, сколько транзакции, в
+которых они были приобретены, существуют. Они немедленно освобождены после
+того, как запрос завершен, если транзакция не открыта
+или autocommit выключен.</p></li></ul>
+
+<p>Оба метода поддерживают режимы <code class="literal">NOWAIT</code> и
+<code class="literal">SKIP LOCKED</code> для
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/innodb-storage-engine.html"
+target="_top"><code class="literal">InnoDB</code></a>, см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/innodb-locking-reads.html#innodb-locking-reads-nowait-skip-locked"
+target="_top">Locking Read Concurrency with NOWAIT and SKIP LOCKED</a>.
+Чтобы использовать эти способы с методами блокировки, используйте:</p>
+
+<ul><li class="listitem"><p><code class="literal">NOWAIT</code>,
+если функция сталкивается с блокировкой строки, она прерывается и производит
+ошибку <code class="literal">ER_LOCK_NOWAIT</code>.</p></li>
+
+<li class="listitem"><p><code class="literal">SKIP_LOCKED</code>,
+если функция сталкивается с блокировкой строки, она
+пропускает строку и продолжается.</p></li>
+
+<li class="listitem"><p><code class="literal">DEFAULT</code>,
+если функция сталкивается с блокировкой строки, она ждет снятия блокировки.
+Эквивалент запроса метода блокировки без указания способа.</p></li></ul>
+
+<h3><a name="locking-considerations"></a>Советы по блокировкам</h3>
+<p>Прпи работе с режимом блокировки, учитывайте, что:</p>
+<ul><li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_autocommit"
+target="_top"><code class="literal">autocommit</code></a>
+означает, что всегда есть открытая транзакция, которая передается
+автоматически, когда SQL-оператор выполняется.</p></li>
+
+<li class="listitem"><p>По умолчанию сессии находятся в режиме autocommit.
+</p></li>
+<li class="listitem"><p>Вы отключаете autocommit неявно, когда
+вызываете <code class="literal">startTransaction()</code>.</p></li>
+
+<li class="listitem"><p>В режиме autocommit, если блокировка получена,
+она снята после того, как запрос заканчивается. Это может принудить вас
+приходить к заключению, что блокировки не были приобретены, но
+дело не в этом.</p></li>
+
+<li class="listitem"><p>Точно так же, при попытке приобрести блокировку,
+которая уже принадлежит кому-то еще, запрос ждет, пока другая блокировка
+не будет снята.</p></li></ul>
+
+<h2><a name="working-with-prepared-statements"></a>
+8.4. Работа с подготовленными запросами</h2>
+<p><span class="emphasis"><em>Сделано в MySQL 8.0.16 и выше:</em></span>
+X DevAPI улучшает работу для каждого запроса CRUD, который неоднократно
+выполняется при помощи подготовленного запроса серверной стороны для его
+второго и последующего выполнения. Это происходит внутренне: приложения
+не должны делать ничего дополнительного, чтобы использовать эту особенность,
+пока тот же самый объект операции снова используется.</p>
+
+<p>Когда запрос выполняется второй раз с изменениями только в значениях
+данных или в значениях, которые уточняют результаты выполнения
+(например, отличающийся <code class="literal">offset()</code> или
+<code class="literal">limit()</code>), сервер готовит запрос
+к последующему выполнению, так, чтобы не было никакой потребности повторно
+разобрать его, когда этим управляют снова. Новым значениям для повторных
+выполнений подготовленного запроса предоставляют привязку параметров.
+Когда запрос изменяется, привязывая к нему метод, который уточняет результат
+(например, <code class="literal">sort()</code>, <code class="literal">skip()
+</code>, <code class="literal">limit()</code> или
+<code class="literal">offset()</code>), запрос повторно подготовлен.
+Следующий псевдокод и комментарии к нему демонстрируют эту особенность:</p>
+
+<pre class="programlisting">
+var f = coll.find("field = :field");
+f.bind("field", 1).execute(); // Normal execution
+f.bind("field", 2).execute(); // Same statement executed with a different parameter value triggers statement preparation
+f.bind("field", 3).execute(); // Prepared statement executed with a new value
+f.bind("field", 3).limit(10).execute(); // Statement reprepared as it is modified with limit()
+f.bind("field", 4).limit(20).execute(); // Reprepared statement executed with new parameters </pre>
+
+<p>Заметьте, что, чтобы использовать в своих интересах эту особенность, тот
+же самый объект операции должен быть снова использован в повторениях запроса.
+Посмотрите на этот пример:</p>
+
+<pre class="programlisting">
+for (i=0; i&lt;100; ++i)
+{
+  collection.find().execute();
+}
+</pre>
+
+<p>Цикл не может использовать особенность подготовленного запроса
+потому, что объект операции
+<code class="literal">collection.find()</code> воссоздается при каждом
+повторении цикла <code class="literal">for</code>.
+Теперь посмотрите на этот пример:</p>
+
+<pre class="programlisting">
+for (i=0; i&lt;100; ++i)
+{
+  var op = collection.find()
+  op.execute();
+}
+</pre>
+
+<p>Повторный запрос подготовлен однажды и затем снова использован потому,
+что тот же самый объект операции
+<code class="literal">collection.find()</code> повторно выполняется при
+каждом повторении цикла <code class="literal">for</code>.</p>
+
+<p>Подготовленные запросы это часть <code class="literal">Session</code>.
+Когда <code class="literal">Client</code> перезапускает
+<code class="literal">Session</code> (например, через
+<code class="literal">Mysqlx.Session.Reset</code>),
+подготовленные запросы удалены.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

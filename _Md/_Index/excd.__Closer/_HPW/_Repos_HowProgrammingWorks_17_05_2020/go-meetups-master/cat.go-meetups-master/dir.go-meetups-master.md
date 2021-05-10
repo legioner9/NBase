@@ -1,0 +1,6 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\go-meetups-master\cat.go-meetups-master\dir.go-meetups-master.md">go-meetups-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\go-meetups-master\README.md">README.md</a>
+        - *## Installing go tools
+        - *## Installing present cmd tool
+        - *## Starting slides server
+        - *## Watch slides

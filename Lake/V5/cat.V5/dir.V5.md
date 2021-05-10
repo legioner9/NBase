@@ -1,0 +1,4 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\Lake\V5\cat.V5\dir.V5.md">V5</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\Lake\V5\V5.md">V5.md</a>
+        - *## ILK new [Node.js: подробный курс (2021, в процессе)](https://www.youtube.com/watch?v=gYU0pFtbNAw&list=PLDyvV36pndZEs5ZKs7ckHoZNcTjUOSVWi&ab_channel=JavaScript.ru)
+        - *%% WTS Nodejs доходчиво

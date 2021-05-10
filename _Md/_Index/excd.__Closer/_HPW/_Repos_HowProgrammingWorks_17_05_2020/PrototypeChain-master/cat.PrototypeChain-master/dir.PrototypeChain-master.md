@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\PrototypeChain-master\cat.PrototypeChain-master\dir.PrototypeChain-master.md">PrototypeChain-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\PrototypeChain-master\README.md">README.md</a>
+        - *## Прототипное программирование и прототипное наследование

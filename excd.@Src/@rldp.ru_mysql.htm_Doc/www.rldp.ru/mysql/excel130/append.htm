@@ -1,0 +1,422 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r" />
+  <title>Глава 6. Добавление данных Excel в MySQL</title>
+  <meta name="generator" content="DocBook XSL Stylesheets + chunker.py v1.9.2" />
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="mysql-for-excel-append"></a>
+Глава 6. Добавление данных Excel в MySQL</h1>
+<p>Данные из рабочего листа Microsoft Excel
+могут быть приложены к таблице базы данных MySQL при помощи действия
+<span class="guilabel">Append Excel Data to Table</span>.
+Далее описывается, как предварительно просмотреть и отобразить
+данные от рабочего листа.</p>
+
+<h2><a name="mysql-for-excel-append-mapping-columns"></a>
+6.1. Отображения столбцов</h2>
+<p>Отображение колонок Excel к столбцам MySQL может быть выполнено
+автоматически, вручную или при помощи сохраненного режима отображения.
+Автоматический режим отображения применен по умолчанию и может быть
+настроен, если каждая колонка не может быть подобрана автоматически.
+Следующие данные показывают несколько колонок данных Excel, отобранных в
+оригинальном рабочем листе и диалог Append Data после нажатия
+<span class="guilabel">Append Excel Data to Table</span>.</p>
+
+<a name="mysql-for-excel-append-data-automatic"></a>
+<p><b>Рис. 6.1. Добавление данных Excel в MySQL (автоматическое отображение)
+</b></p>
+<img src="images/mysql-for-excel-append-data-automatic.png" width="800"
+height="792" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="mysql-for-excel-append-mapping-information"></a>
+Общая информация об отображении</h3>
+<p>Несколько примечаний о ручном процессе отображения:</p>
+
+<ul><li class="listitem"><p>Ручное отображение выполняется, перемещая
+колонку от верхней исходной сетки (рабочий лист Excel) и бросая в
+более низкий целевой столбец сетки таблицы MySQL. Щелкните где угодно в
+рамках колонки, чтобы включить этот режим перемещения.</p></li>
+
+<li class="listitem"><p>Цвет области заголовка для каждой колонки определяет
+текущий статус отображения колонки. Цвета включают:</p>
+<ul><li class="listitem"><p>
+<span class="bold"><strong>Зеленый</strong></span>: столбец источника
+отображен к целевому столбцу.</p></li>
+
+<li class="listitem"><p><span class="bold"><strong>Красный</strong></span>:
+целевой столбец не отображен вообще.</p></li>
+<li class="listitem"><p><span class="bold"><strong>Серый</strong></span>:
+столбец источника не отображен.</p></li></ul></li>
+
+<li class="listitem"><p>Столбец источника может быть отображен к нескольким
+целевым столбцам, хотя это действие производит диалог предупреждения.</p></li>
+<li class="listitem"><p>Щелчок правой кнопкой мыши по целевому столбцу
+показывает контекстное меню с вариантами
+<span class="guimenu">Remove Column Mapping</span> для отдельного столбца
+или <span class="guimenu">Clear All Mappings</span>
+для всех. Перемещение целевого столбца за пределы сетки удаляет отображение.
+</p></li></ul>
+
+<h3><a name="mysql-for-excel-append-mapping-methods"></a>Методы отображения
+</h3>
+<p>Три метода отображения описаны следующим образом:</p>
+
+<ul><li class="listitem"><p>
+<span class="guilabel">Автоматический</span> пытается согласовать имена из
+Excel с целевыми названиями столбца таблицы MySQL. Тогда возможно вручную
+настроить отображение позже.</p>
+
+<p>Если автоматический процесс не находит соответствующие колонки, то
+предпринято простое соответствие 1 в 1. То есть
+SourceColumn #1 отображен на TargetColumn #1, SourceColumn отображен на
+TargetColumn #2 и т.д.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Ручной</span>: имена столбца источника вручную
+сопоставляются именам целевого столбца. Ручное соотношение может также быть
+выполнено после того, как выбран автоматический метод.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Сохраненный</span>: ручные стили отображения могут
+быть сохранены, используя кнопку
+<span class="guibutton">Store Mapping</span>,
+которая также запросит имя и затем сохранит его, используя схему
+"<em class="replaceable"><code>name</code></em> (dbname.tablename)".
+Стиль отображения тогда будет доступен вместе с опциями
+<span class="guilabel">Automatic</span> и
+<span class="guilabel">Manual</span>. Сохраненные отображения могут быть
+удалены или переименованы в рамках диалога
+<a href="#mysql-for-excel-append-options-advanced">
+Advanced Options</a>.</p></li></ul>
+
+<h2><a name="mysql-for-excel-append-options-advanced"></a>6.2.
+Расширенные настройки Append</h2>
+<p>Расширенные настройки позволяют вам управлять способом, которым MySQL для
+Excel добавляет данные из рабочего листа Excel. Используйте
+<span class="guibutton">Reset to Defaults</span>, чтобы
+восстановить оригинальные настройки.</p>
+<p>Ряд расширенных настроек затрагивает текущую операцию добавления
+данных, как описано ниже.</p>
+
+<h3><a name="mysql-for-excel-append-options-advanced-column-mapping"></a>
+Вкладка Columns Mapping</h3>
+<p>Следующее число показывает опции отображения колонок,
+которые относятся к операциям добавления данных.</p>
+
+<a name="mysql-for-excel-append-options-advanced-column-mapping-fig"></a>
+<p><b>Рис. 6.2. Добавление данные в MySQL for Excel:
+опции отображения колонок</b></p>
+<img src="images/mysql-for-excel-append-adv-option-column-mapping.png"
+width="502" height="340" alt="Content is described in the surrounding text.">
+<br class="figure-break"><p>Опции отображения колонок:</p>
+
+<ul><li class="listitem"><p>
+<span class="guilabel">Perform an automatic mapping when dialog
+opens</span>: Автоматически отобразить цель и источник, когда открывается
+диалог Append Data. Эта опция выбрана по умолчанию.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Automatically store the column mapping for the
+given table</span>: Хранить каждый режим отображения после нажатия
+<span class="guibutton">Append</span> в диалоге Append Data.
+Режим отображения сохранен, используя формат
+"tablenameMapping (dbname.tablename)".
+Это может также быть выполнено вручную при нажатии
+<span class="guibutton">Store Mapping</span>. Это выбрано по умолчанию,
+эта опция была добавлена в MySQL for Excel 1.1.0.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Reload stored column mapping for the selected
+table automatically</span>: Если существует сохраненный режим отображения,
+который соответствует всем именам столбцов в исходной сетке
+с целевой сеткой, то это автоматически загружается. Эта опция выбрана по
+умолчанию, она была добавлена в MySQL for Excel 1.1.0.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Confirm column mapping overwriting</span>:
+Уведомляет вас прежде, чем переписать ранее сохраненные
+отображения колонки и позволяет принять или отменить действие.
+Эта опция выключена по умолчанию, выбор был добавлен в
+MySQL for Excel 1.3.7.</p></li></ul>
+
+<h3><a name="mysql-for-excel-append-options-advanced-stored-mapping"></a>
+Вкладка Stored Mappings</h3>
+<p>Это показывает показывает сохраненные варианты отображений, которые
+относятся к операциям добавления данных.</p>
+
+<a name="mysql-for-excel-append-options-advanced-stored-mapping-fig"></a>
+<p><b>Рис. 6.3. Опции Stored Mapping</b></p>
+<img src="images/mysql-for-excel-append-adv-option-stored-mapping.png"
+width="502" height="339" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p><span class="guilabel">Stored Mappings</span> показывает список
+отображений колонок, которые были сохранены опцией
+<span class="guilabel">Automatically store the column mapping for the given
+table</span> (в диалоге <span class="guilabel">Column Mapping</span>)
+или вручную при нажатии <span class="guibutton">Store Mapping</span> в
+диалоге Append Data.</p>
+
+<h3><a name="mysql-for-excel-append-options-advanced-field-data"></a>
+Вкладка Field Data</h3>
+<p>Показывает варианты данных, которые относятся к операциям добавления.</p>
+
+<a name="mysql-for-excel-append-options-advanced-field-data-fig"></a>
+<p><b>Рис. 6.4. Добавление данных таблицы в MySQL for Excel:
+опции полей данных</b></p>
+<img src="images/mysql-for-excel-append-adv-option-field-data.png"
+width="500" height="338" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Опции полей данных</p>
+
+<ul><li class="listitem"><p>
+<span class="guilabel">Use the first</span>
+<em class="replaceable"><code>100</code></em> (по умолчанию) строк данных
+Excel, чтобы предварительно просмотреть и вычислить типы данных. Это
+определяет количество строк, которые предварительный просмотр показывает, и
+значения, которые затрагивают автоматическое отображение.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Use formatted values</span>: данные из Excel
+рассматриваются как <code class="literal">Text</code>,
+<code class="literal">Double</code> или <code class="literal">Date</code>.
+Это выбрано по умолчанию. Когда не выбрано, данные никогда не рассматриваются
+как <code class="literal">Date</code>, так например, это означает, что дата
+была бы представлена как число.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Show column data types above column
+names</span>: При выборе тип данных каждой колонки появляется выше имени
+столбца в обоих, входной и выходной, сетках. Это выключено по умолчанию.
+</p></li></ul>
+
+<h3><a name="mysql-for-excel-append-options-advanced-sql-queries"></a>
+Вкладка SQL Queries</h3>
+<p>показывает варианты SQL-запросов, которые относятся к
+операциям добавления данных.</p>
+
+<a name="mysql-for-excel-append-options-advanced-sql-queries-fig"></a>
+<p><b>Рис. 6.5. Опции запросов SQL</b></p>
+<img src="images/mysql-for-excel-append-adv-option-sql-queries.png"
+width="503" height="339" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Опции запросов SQL:</p>
+
+<ul><li class="listitem"><p>
+<span class="guilabel">Generate an INSERT statement for each data
+row</span>: Когда выбрано, запросы
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html" target="_top">
+<code class="literal">INSERT</code></a> для каждой строки данных
+произведен в получающемся SQL-запросе, посланном в сервер MySQL.
+Иначе будет один запрос
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html" target="_top">
+<code class="literal">INSERT</code></a>
+как оптовая операция, которая выступает лучше, чем многократные
+multiple <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html"
+target="_top"><code class="literal">INSERT</code></a>.
+Выключено по умолчанию.</p>
+
+<ul><li class="listitem"><p>
+<span class="guilabel">Disable table indexes to speed-up rows
+insertion</span>: Выключено по умолчанию, потому что необходимо
+удостовериться что, если уникальные индексы присутствуют, отображаемые
+значения не содержат двойные данные. Этот выбор был добавлен в
+MySQL for Excel 1.2.1.</p></li></ul></li></ul>
+
+<ul><li class="listitem"><p>Когда новые строки содержат значения
+уникального ключа, которые дублируют старые:</p>
+<ul><li class="listitem"><p>
+<span class="guilabel">Error out and abort the append
+operation</span>: (по умолчанию) сохраняет поведение предыдущих версий
+MySQL for Excel, в которых сервер возвращает ошибку, если какие-либо двойные
+значения уникального ключа найдены. Этот выбор был добавлен в MySQL for Excel
+1.3.7.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Ignore rows with duplicate unique key values</span>:
+строки, содержащие двойные значения для уникальных ключей, проигнорированы
+или пропущены. Только строки без двойных значений вставляются в базу данных.
+Этот выбор был добавлен в MySQL for Excel 1.3.7.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Replace the values in the old rows with the
+ones in new rows</span>: строки, содержащие двойные значения для
+уникальных ключей, заменяют значения соответствующих строк в базе данных.
+Этот выбор был добавлен в MySQL for Excel 1.3.7.</p></li></ul></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlelements\umlelementsstructural\colloccurrence\cat.colloccurrence\dir.colloccurrence.md">colloccurrence</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlelements\umlelementsstructural\colloccurrence\colloccurrence.md">colloccurrence.md</a>
+        - *### [Collaboration Use](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/colloccurrence.html) Совместное использование

@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\stereotypedlg\applying_stereotypes\cat.applying_stereotypes\dir.applying_stereotypes.md">applying_stereotypes</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\stereotypedlg\applying_stereotypes\applying_stereotypes.md">applying_stereotypes.md</a>
+        - *### [Apply Stereotypes](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/applying_stereotypes.html) Применяйте стереотипы

@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\+Учебная практика (ознакомительная практика) 1\_ancons\cat._ancons\dir._ancons.md">_ancons</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\+Учебная практика (ознакомительная практика) 1\_ancons\ReadMe.md">ReadMe.md</a>
+        - *## [А.И.Стешин ИНФОРМАЦИОННЫЕ СИСТЕМЫВ ОРГАНИЗАЦИИ• 2019](http://www.iprbookshop.ru/epd-reader?publicationId=79629)

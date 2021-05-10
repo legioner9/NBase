@@ -1,0 +1,5 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\Part_I\content\Courses\IP9X\cat.IP9X\dir.IP9X.md">IP9X</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\Part_I\content\Courses\IP9X\_IP9X.md">_IP9X.md</a>
+        - *# Материалы курса IP9X: Основы инженерии программного обеспечения
+        - *## Ссылки
+        - *## Программа на 1й семестр

@@ -1,0 +1,684 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=">
+  <title>Глава 15. Проблемы с приложениями Connector/J</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-j-usagenotes-troubleshooting"></a>
+Глава 15. Проблемы с приложениями Connector/J</h1>
+<a class="indexterm" name="idm45064738581456"></a>
+<a class="indexterm" name="idm45064738579968"></a>
+<a class="indexterm" name="idm45064738578480"></a>
+<p>Эта секция объясняет признаки и решения
+для проблем, с которыми обычно сталкиваются с приложениями,
+используя MySQL Connector/J.</p>
+
+<p><span class="bold"><strong>Вопросы и ответы</strong></span></p>
+<p><a name="qandaitem-15-1-1"></a><span class="bold"><strong>
+15.1: </strong></span><span class="bold"><strong>
+Когда я пытаюсь соединиться с базой данных с MySQL Connector/J, я
+получаю следующее исключение:</strong></span></p>
+
+<pre class="programlisting">
+SQLException: Server configuration denies access to data source
+SQLState: 08001
+VendorError: 0
+</pre>
+
+<p><span class="bold"><strong>Я могу соединиться клиентом
+командной строки MySQL.</strong></span></p>
+<p>Connector/J обычно использует сокеты TCP/IP, чтобы соединиться с MySQL
+(см. разделы <a href="refer.htm#connector-j-unix-socket">6.8</a> и
+<a href="refer.htm#connector-j-named-pipe">6.9</a> для исключений).
+Менеджер безопасности на сервере MySQL использует свои таблицы привилегий,
+чтобы определить, разрешена ли связь TCP/IP. Необходимо поэтому добавить
+необходимые параметры безопасности серверу MySQL для связи командой
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/grant.html"
+target="_top"><code class="literal">GRANT</code></a> на вашем сревере MySQL,
+см. <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/grant.html"
+target="_top">GRANT Statement</a>.</p>
+
+<p>Неправильное изменение привилегий и разрешений на MySQL может потенциально
+заставить вашу установку сервера иметь неоптимальные свойства безопасности.
+</p>
+
+<p>Тестирование вашей возможности соединения клиентом командной строки
+<span class="command"><strong>mysql</strong></span>
+не будет работать, если вы не добавите опцию
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/mysql-command-options.html#option_mysql_host"
+target="_top"><code class="option">--host</code></a> и используете что-то
+другое, чем <code class="literal">localhost</code> для хоста. Клиент
+<span class="command"><strong>mysql</strong></span>
+попытается использовать сокет Unix, если вы будете использовать специальное
+имя хоста <code class="literal">localhost</code>.
+Если вы проверяете возможность соединения TCP/IP к
+<code class="literal">localhost</code>, используйте как имя хоста
+<code class="literal">127.0.0.1</code>.</p>
+
+<p><a name="qandaitem-15-1-2"></a><span class="bold"><strong>15.2:
+</strong></span><span class="bold"><strong>
+Мое приложение бросает SQLException 'No Suitable Driver'.
+Почему это происходит?</strong></span></p>
+
+<p>Есть три возможных причины для этой ошибки:</p>
+<ul><li><p>Драйвер Connector/J не находится в вашем
+<code class="literal">CLASSPATH</code>, см.
+<a href="install.htm">главу 4</a>.</p></li>
+
+<li><p>Формат вашей связи URL неправильный, или вы ссылаетесь на
+ошибочный драйвер JDBC.</p></li>
+<li><p>Используя DriverManager, системное свойство
+<code class="literal">jdbc.drivers</code> не было задано
+с местоположением драйвера Connector/J.</p></li></ul>
+
+<p><a name="qandaitem-15-1-3"></a><span class="bold">
+<strong>15.3: </strong></span><span class="bold"><strong>
+Я пытаюсь использовать MySQL Connector/J в апплете или приложении, и
+получаю исключение, подобное</strong></span></p>
+
+<pre class="programlisting">
+SQLException: Cannot connect to MySQL server on host:3306.
+Is there a MySQL server running on the machine/port you
+are trying to connect to?
+
+(java.security.AccessControlException)
+SQLState: 08S01
+VendorError: 0
+</pre>
+
+<p>Ваш сервер MySQL был настроен с включенной опцией
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_skip_networking"
+target="_top"><code class="literal">skip_networking</code></a>
+или у вашего сервера MySQL есть неправильно настроенный брандмауэр.</p>
+
+<p>Апплеты могут установить сетевые связи только назад с машиной, которая
+управляет веб-сервером, который обрабатывает файл .class апплета.
+Это означает, что MySQL должен работать на той же самой машине (или у вас
+должно быть своего рода переназначение порта). Это также означает, что вы не
+будете в состоянии проверить апплеты от своей локальной файловой системы, но
+должны всегда развертывать их к веб-серверу.</p>
+
+<p>Connector/J обычно использует сокеты TCP/IP, чтобы соединиться с MySQL
+normally uses TCP/IP sockets to connect to MySQL
+(см. разделы <a href="refer.htm#connector-j-unix-socket">6.8</a> и
+<a href="refer.htm#connector-j-named-pipe">6.9</a> для исключений).
+Связь TCP/IP с MySQL может быть затронута переменной
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_skip_networking"
+target="_top"><code class="literal">skip_networking</code></a>
+или брандмауэром сервера. Если MySQL был запущен с включенной опцией
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_skip_networking"
+target="_top"><code class="literal">skip_networking</code></a>,
+необходимо закомментировать ее в файле
+<code class="filename">/etc/mysql/my.cnf</code> или
+<code class="filename">/etc/my.cnf</code>, чтобы включить соединения по
+TCP/IP. Обратите внимание на то, что ваш конфигурационный файл сервера мог бы
+также существовать в каталоге <code class="filename">data</code> сервера
+MySQL или где-то в другом месте, в зависимости от того, как MySQL был собран,
+двоичные пакеты Oracle всегда ищут
+<code class="filename">/etc/my.cnf</code> и
+<code class="filename"><em class="replaceable"><code>datadir</code></em>
+/my.cnf</code>, см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/option-files.html"
+target="_top">Using Option Files</a>. Если ваш сервер MySQL был защищен
+брандмауэром, необходимо будет формировать брандмауэр, чтобы позволить связи
+TCP/IP от хоста, где работает код Java, к серверу MySQL на порт, который
+MySQL слушает (по умолчанию это 3306).</p>
+
+<p><a name="qandaitem-15-1-4"></a><span class="bold"><strong>15.4:
+</strong></span><span class="bold"><strong>
+У меня есть сервлет/приложение, который хорошо работает в течение дня, а
+затем прекращает работать в течение ночи.</strong></span></p>
+
+<p>MySQL закрывает связи после 8 часов бездеятельности.
+Или необходимо использовать пул связи, который обращается с несвежими
+связями, или используйте опцию <code class="option">autoReconnect</code>
+(см. <a href="refer.htm#connector-j-reference-configuration-properties">
+раздел 6.3</a>).</p>
+
+<p>Кроме того, обработайте <code class="literal">SQLExceptions</code>
+в вашем приложении вместо того, чтобы размножить их полностью до вылета ваших
+программ. Это просто хорошая практика программирования. MySQL Connector/J
+установит <code class="literal">SQLState</code> (см.
+<code class="literal">java.sql.SQLException.getSQLState()</code> в
+ваших описаниях API) в <code class="literal">08S01</code>,
+когда это сталкивается с проблемами сетевого соединения во
+время обработки запроса.</p>
+
+<p>Следующий (упрощенный) пример показывает то, что код, который может
+обращаться с этими исключениями, мог бы быть похожим на это:</p>
+<p><a name="connector-j-examples-transaction-retry"></a>
+<b>Пример 15.1. Connector/J: Пример транзакции с логикой повторной попытки
+</b></p>
+
+<pre class="programlisting">
+public void doBusinessOp() throws SQLException {
+  Connection conn = null;
+  Statement stmt = null;
+  ResultSet rs = null;
+
+  // How many times do you want to retry the transaction
+  // (or at least _getting_ a connection)?
+  int retryCount = 5;
+  boolean transactionCompleted = false;
+  do {
+    try {
+      conn = getConnection();
+      // assume getting this from a
+      // javax.sql.DataSource, or the
+      // java.sql.DriverManager
+      conn.setAutoCommit(false);
+
+      // Okay, at this point, the 'retry-ability' of the
+      // transaction really depends on your application logic,
+      // whether or not you're using autocommit (in this case
+      // not), and whether you're using transactional storage engines
+      //
+      // For this example, we'll assume that it's _not_ safe
+      // to retry the entire transaction, so we set retry
+      // count to 0 at this point
+      //
+      // If you were using exclusively transaction-safe tables,
+      // or your application could recover from a connection going
+      // bad in the middle of an operation, then you would not
+      // touch 'retryCount' here, and just let the loop repeat
+      // until retryCount == 0.
+      retryCount = 0;
+      stmt = conn.createStatement();
+      String query = "SELECT foo FROM bar ORDER BY baz";
+      rs = stmt.executeQuery(query);
+      while (rs.next()) { }
+      rs.close();
+      rs = null;
+      stmt.close();
+      stmt = null;
+      conn.commit();
+      conn.close();
+      conn = null;
+      transactionCompleted = true;
+    } catch (SQLException sqlEx) {
+      // The two SQL states that are 'retry-able' are 08S01
+      // for a communications error, and 40001 for deadlock.
+      //
+      // Only retry if the error was due to a stale connection,
+      // communications problem or deadlock
+      String sqlState = sqlEx.getSQLState();
+      if ("08S01".equals(sqlState) || "40001".equals(sqlState)) {
+         retryCount -= 1;
+      } else {
+        retryCount = 0;
+      }
+    } finally {
+      if (rs != null) {
+         try {
+           rs.close();
+         } catch (SQLException sqlEx) {
+           // You'd probably want to log this...
+         }
+      }
+      if (stmt != null) {
+         try {
+           stmt.close();
+         } catch (SQLException sqlEx) {
+           // You'd probably want to log this as well...
+         }
+      }
+      if (conn != null) {
+         try {
+           // If we got here, and conn is not null, the
+           // transaction should be rolled back, as not
+           // all work has been done
+           try {
+             conn.rollback();
+           } finally {
+             conn.close();
+           }
+         } catch (SQLException sqlEx) {
+           // If we got an exception here, something
+           // pretty serious is going on, so we better
+           // pass it up the stack, rather than just logging it...
+           throw sqlEx;
+         }
+      }
+    }
+  } while (!transactionCompleted &amp;&amp; (retryCount &gt; 0));
+}
+</pre>
+
+<p>Использование опции <code class="option">autoReconnect</code>
+не рекомендуется, потому что нет никакого надежного метода повторного
+подключения к серверу MySQL, не рискуя повреждением состояния связи или
+информации о статусе базы данных. Вместо этого используйте пул
+связи, который позволит вашему запросу соединиться с сервером MySQL,
+используя доступную связь из пула. Опция <code class="option">autoReconnect
+</code> устарела и может быть удалена в будущем выпуске.</p>
+
+<p><a name="qandaitem-15-1-5"></a><span class="bold"><strong>15.5:
+</strong></span><span class="bold"><strong>
+Я не могу соединиться с сервером MySQL, используя Connector/J, и я уверен,
+что параметры связи правильны.</strong></span></p>
+
+<p>Удостоверьтесь, что переменная
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_skip_networking"
+target="_top"><code class="literal">skip_networking</code></a> выключена на
+на вашем сервере. Connector/J должен быть в состоянии общаться с вашим
+сервером по TCP/IP, именованные сокеты не поддерживаются. Также гарантируйте,
+что вы не пропускаете связи через брандмауэр или другую систему защиты сети.
+Для получения дополнительной информации посмотрите
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/can-not-connect-to-server.html"
+target="_top">Can't connect to [local] MySQL server</a>.</p>
+
+<p><a name="qandaitem-15-1-6"></a><span class="bold"><strong>15.6:
+</strong></span><span class="bold"><strong>
+Приложение развернуто через JBoss, и я использую транзакции, чтобы
+обращаться с запросами к базе данных MySQL. Под большими нагрузками я получаю
+ошибку и трассировку стека, но они происходят только после установленного
+срока тяжелой деятельности.</strong></span></p>
+
+<p>Это проблема JBoss, а не Connector/J, связана с использованием
+транзакций. Под большими нагрузками может увеличиться время, потраченное для
+транзакций, и ошибка вызывается, потому что вы превысили
+предопределенный тайм-аут.</p>
+
+<p>Можно увеличить тайм-аут, установив атрибут
+<code class="literal">TransactionTimeout</code> в
+<code class="literal">TransactionManagerService</code> в файле
+<code class="filename">/conf/jboss-service.xml</code>
+(pre-4.0.3) или <code class="filename">/deploy/jta-service.xml</code> для
+JBoss 4.0.3 или позже, см.
+<a href="../../../wiki.jboss.org/wiki/Wiki.jsp@page=TransactionTimeout"
+target="_top">TransactionTimeout</a> в JBoss wiki
+для получения дополнительной информации.</p>
+
+<p><a name="qandaitem-15-1-7"></a><span class="bold"><strong>15.7:
+</strong></span><span class="bold"><strong>
+Обновление таблицы, которая содержит
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_primary_key"
+target="_top">primary key</a>, который является также
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/floating-point-types.html"
+target="_top"><code class="literal">FLOAT</code></a>
+или составным первичным ключом, который использует
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/floating-point-types.html"
+target="_top"><code class="literal">FLOAT</code></a>,
+не обновляет таблицу и поднимает исключение.</strong></span></p>
+
+<p>Connector/J добавляет условия к <code class="literal">WHERE</code>
+во время <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/update.html"
+target="_top"><code class="literal">UPDATE</code></a>, чтобы проверять старые
+значения первичного ключа. Если там нет совпадения, то Connector/J
+считает это условием неудачи и поднимает исключение.</p>
+
+<p>Проблема состоит в том, что округление различий между значениями,
+поставляемыми и сохраненными в базе данных, может означать, что
+значения никогда не соответствуют, и следовательно обновление терпит неудачу.
+Проблема затронет все запросы, а не только от Connector/J.</p>
+
+<p>Чтобы предотвратить эту проблему, используйте первичный ключ, который не
+использует <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/floating-point-types.html"
+target="_top"><code class="literal">FLOAT</code></a>.
+Если необходимо использовать столбец с плавающей точкой в первичном ключе,
+можно использовать типы
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/floating-point-types.html"
+target="_top"><code class="literal">DOUBLE</code></a> или
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/fixed-point-types.html"
+target="_top"><code class="literal">DECIMAL</code></a> вместо
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/floating-point-types.html"
+target="_top"><code class="literal">FLOAT</code></a>.</p>
+
+<p><a name="qandaitem-15-1-8"></a><span class="bold"><strong>15.8:
+</strong></span><span class="bold"><strong> Я получаю исключение
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-error-reference.html#error_er_net_packet_too_large"
+target="_top"><code class="literal">ER_NET_PACKET_TOO_LARGE</code></a>
+даже при том, что размер blob, который я хочу вставить с использованием JDBC,
+безопасно ниже размера
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_max_allowed_packet"
+target="_top"><code class="literal">max_allowed_packet</code></a>.
+</strong></span></p>
+
+<p>Это потому, что метод <code class="literal">hexEscapeBlock()</code> в
+<code class="literal">com.mysql.cj.AbstractPreparedQuery.streamToBytes()
+</code> почти удваивает размер ваших данных.</p>
+
+<p><a name="qandaitem-15-1-9"></a><span class="bold"><strong>15.9:
+</strong></span><span class="bold"><strong>
+Что делать, если я получаю сообщения об ошибках, подобные следующему:
+<span class="quote">Communications link failure - Last packet sent to the
+server was X ms ago?</strong></span></p>
+
+<p>Вообще говоря, эта ошибка предполагает, что сетевое соединение было
+закрыто. Может быть несколько первопричин:</p>
+<ul><li><p>Брандмауэры или маршрутизаторы могут пресечь неработающие связи.
+</p></li>
+
+<li><p>MySQL Server может закрывать неработающие связи, которые превышают
+<code class="literal">wait_timeout</code> или
+<code class="literal">interactive_timeout</code>.</p></li></ul>
+
+<p>Хотя сетевые соединения могут быть изменчивыми, следующее может быть
+полезным в предотвращении проблем:</p>
+<ul><li><p>Гарантируйте, что связи действительны, когда используются из пула
+связи. Используйте запрос, который начинается с
+<code class="literal">/* ping */</code> для пинга вместо полного запроса.
+Отметьте, синтаксис должен быть точно как определен здесь.</p></li>
+
+<li><p>Минимизируйте время, которое объект связи оставляют неработающим, в то
+время как другая прикладная логика выполняется.</p></li>
+<li><p>Явно проверьте связь перед использованием, если связь оставили
+неработающей в течение длительного периода времени.</p></li>
+
+<li><p>Гарантируйте, что <code class="literal">wait_timeout</code> и
+<code class="literal">interactive_timeout</code>
+установлены достаточно высоко.</p></li>
+
+<li><p>Гарантируйте, что включена опция
+<code class="literal">tcpKeepalive</code>.</p></li>
+<li><p>Гарантируйте, что любые конфигурируемые параметры брандмауэра или
+маршрутизатора допускают максимальное ожидаемое время простоя связи.
+</p></li></ul>
+
+<p>Не ожидайте, что будете в состоянии снова использовать связь без проблем,
+если у нее был длительный простой. Если связь должна быть снова использована,
+будучи неработающей в течение какого-либо отрезка времени, надо
+гарантировать, чтобы вы явно проверили ее прежде, чем снова использовать.</p>
+
+<p><a name="qandaitem-15-1-10"></a><span class="bold"><strong>
+15.10: </strong></span><span class="bold"><strong>
+Почему не делает Connector/J реконнект с MySQL после сбоя связи вместо того,
+чтобы бросить исключение, даже при том, что я использую опцию
+<code class="literal">autoReconnect</code> строки подключения?
+</strong></span></p>
+
+<p>Есть несколько причин этого. Первой является целостность транзакций.
+Справочник MySQL указывает, что
+<span class="quote">нет никакого надежного метода повторного подключения к
+серверу MySQL, не рискуя повреждением состояния связи или информации о
+статусе базы данных</span>. Рассмотрите следующий ряд запросов, например:</p>
+
+<pre class="programlisting">
+conn.createStatement().execute(
+    "UPDATE checking_account SET balance = balance - 1000.00
+    WHERE customer='Smith'");
+conn.createStatement().execute(
+    "UPDATE savings_account SET balance = balance + 1000.00
+    WHERE customer='Smith'");
+conn.commit();
+</pre>
+
+<p>Рассмотрите случай, где связь с сервером прерывается после
+<code class="literal">UPDATE</code> для
+<code class="literal">checking_account</code>.
+Если никакое исключение не будет брошено, и приложение никогда не узнает о
+проблеме, оно продолжит выполняться. Однако сервер не передал первую
+транзакцию в этом случае, так что она была отменена.
+Но выполнение продолжает следующую транзакцию и увеличивает
+<code class="literal">savings_account</code> на 1000.
+Приложение не получило исключение, таким образом, оно продолжалось
+независимо, в конечном счете передавая вторую транзакцию, поскольку
+передача относится только к изменениям, внесенным в новой связи.</p>
+
+<p>Отметьте, что работа с включенной <code class="literal">autocommit</code>
+не решает эту проблему. Когда Connector/J сталкивается с проблемой
+коммуникации, нет никакого средства определить, обработал ли сервер в
+настоящее время выполняющийся запрос или нет. Следующие теоретические
+состояния одинаково возможны:</p>
+
+<ul><li><p>Сервер никогда не получал запрос, поэтому никакая связанная
+обработка не произошла на сервере.</p></li>
+<li><p>Сервер получил запрос, выполнил его полностью, но ответ
+не был получен клиентом.</p></li></ul>
+
+<p>Если вы раболтаете с включенной <code class="literal">autocommit</code>,
+невозможно гарантировать статус данных по серверу, когда с коммуникационным
+исключением сталкиваются. Запрос, возможно, достиг сервера.
+Все, что вы знаете: коммуникация прервана в какой-то момент прежде, чем
+клиент получил подтверждение (или данные) от сервера. Это не только
+затрагивает <code class="literal">autocommit</code>.
+Если проблема коммуникации произошла во время
+<code class="literal">Connection.commit()</code>, возникает вопрос: была ли
+транзакция передана на сервере прежде, чем коммуникация прервалась.</p>
+
+<p>Вторая причина для создания исключений: рассмотренные транзакцией
+контекстные данные могут быть уязвимыми, например:</p>
+<ul><li><p>Временные таблицы.</p></li>
+<li><p>Пользовательские переменные.</p></li>
+<li><p>Серверная сторона подготовленного запроса.</p></li></ul>
+
+<p>Эти пункты потеряны, когда связь прерывается, и если связь тихо снова
+соединяется, не производя исключение, это могло бы быть вредно для
+правильного выполнения вашего запроса.</p>
+
+<p>Таким образом, ошибки связи производят условия, которые для Connector/J
+может быть небезопасно просто проигнорировать, тихо снова соединившись.
+Необходимо для приложения обработать ситуацию. Для разработчика приложений
+важно решить, как продолжить в случае ошибок связи.</p>
+
+<p><a name="qandaitem-15-1-11"></a><span class="bold"><strong>15.11:
+</strong></span><span class="bold"><strong>
+Как я могу использовать 3-байтовый UTF8 с Connector/J?</strong></span></p>
+
+<p><span class="emphasis"><em>8.0.12 и раньше:</em></span> чтобы использовать
+3-байтовый UTF8 с Connector/J, установите
+<code class="literal">characterEncoding=utf8</code> и
+<code class="literal">useUnicode=true</code> в строке подключения.</p>
+
+<p><span class="emphasis"><em>8.0.13 и позже:</em></span>
+Поскольку нет никакого названия набора символов Java-стиля для
+<code class="literal">utfmb3</code>, который можно использовать с опцией
+связи <code class="literal">charaterEncoding</code>, единственный способ
+использовать <code class="literal">utf8mb3</code> как ваш набор символов
+связи, это использовать сопоставление
+<code class="literal">utf8mb3</code> (например,
+<code class="literal">utf8_general_ci</code>) для опции
+<code class="literal">connectionCollation</code>, что вызывает набор символов
+<code class="literal">utf8mb3</code>, который будет использоваться. См.
+<a href="refer.htm#connector-j-reference-charsets">раздел 6.6</a>.</p>
+
+<p><a name="qandaitem-15-1-12"></a><span class="bold"><strong>15.12:
+</strong></span><span class="bold"><strong> Как использовать 4-байтовый UTF8
+(<code class="literal">utf8mb4</code>) с Connector/J?</strong></span></p>
+
+<p>Чтобы использовать 4-байтовый UTF8 с Connector/J настройте сервер MySQL с
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_character_set_server"
+target="_top"><code class="literal">character_set_server=utf8mb4</code></a>.
+Connector/J будет тогда использовать эту настройку, если
+<code class="literal">characterEncoding</code> и
+<code class="literal">connectionCollation</code> не были установлены в строке
+подключения. Это эквивалентно автообнаружению набора символов. Посмотрите
+<a href="refer.htm#connector-j-reference-charsets">раздел 6.6</a> для деталей.
+<span class="emphasis"><em>8.0.13 позже:</em></span> можно использовать
+<code class="literal">characterEncoding=UTF-8</code>, чтобы использовать
+<code class="literal">utf8mb4</code>, даже если
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_character_set_server"
+target="_top"><code class="literal">character_set_server</code></a>
+на сервере установлена во что-то еще.</p>
+
+<p><a name="qandaitem-15-1-13"></a><span class="bold"><strong>
+15.13: </strong></span><span class="bold"><strong>
+Использование <code class="literal">useServerPrepStmts=false</code> и
+определенные кодировки символов могут привести к повреждению, вставляя BLOB.
+Как этого можно избежать?</strong></span></p>
+
+<p>Используя определенные кодировки символов, такие как SJIS, CP932 и BIG5,
+возможно, что данные BLOB содержат знаки, которые могут интерпретироваться
+как управляющие символы, например, наклонная черта влево, '\'.
+Это может привести к испорченным данным, вставляя BLOB в базу данных.
+Есть две вещи, которые должны быть сделаны, чтобы избежать этого:</p>
+
+<ol type="1"><li><p>Установите опцию строки подключения
+<code class="literal">useServerPrepStmts</code> =
+<code class="literal">true</code>.</p></li>
+<li><p>Установите <code class="literal">SQL_MODE</code> =
+<code class="literal">NO_BACKSLASH_ESCAPES</code>.</p></li></ol>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

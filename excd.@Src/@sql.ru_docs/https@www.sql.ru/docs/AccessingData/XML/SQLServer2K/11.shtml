@@ -1,0 +1,407 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<TITLE>Доступ к XML и реляционным данным
+</TITLE>
+<META CONTENT="text/html; charset=windows-1251" http-equiv=Content-Type>
+<META NAME="Description" CONTENT="1. Введение">
+<META NAME="Keywords" CONTENT="SQL, Microsoft, Server">
+<META HTTP-EQUIV="Set-Cookie" CONTENT="cookie=set; path=/">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER="0" WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top  bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>UpdateGrams
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="12.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+
+
+</TD>
+</TR>
+</TABLE>
+<TABLE border="0" cellpadding="2" cellspacing="2" >
+<TR>
+<TD>
+<div align=justify>
+<p>
+До сих пор под XML-взаимодействием с SQL Server понималось, в основном, чтение данных с 
+сервера в XML-формате с помощью SELECT ... FOR XML или XPath. Возникает вопрос: можно 
+ли их модифицировать в рамках XML-представления. Про возможность модификации косвенно 
+упоминалось пару раз: когда мы говорили про возможности ADO.Net (п.7) и про шаблоны (п.10). 
+Первый способ предусматривает связь с сервером через DataAdapter и работу с DataSet в рамках 
+его XMLной ипостаси. Второй можно реализовать, поместив запросы на обновление в секцию 
+&lt;sql:query> шаблона:</p>
+<p></div><div align=left><pre><tt><font color=#990000>
+<font color=blue>&lt;</font>Root xmlns:<font color=red>sql</font><font color=blue>="urn:schemas-microsoft-com:xml-sql"></font>
+  &lt;sql:header>
+     <font color=blue>&lt;</font>sql:param <font color=red>name</font><font color=blue>="Имя">&lt;/</font>sql:param<font color=blue>>
+     &lt;</font>sql:param <font color=red>name</font><font color=blue>="Фамилия">&lt;/</font>sql:param<font color=blue>>
+  &lt;/</font>sql:header<font color=blue>></font>
+  <font color=blue>&lt;</font>sql:query<font color=blue>></font></font>
+    UPDATE Customers SET ContactName = 'Maria Anders' WHERE CustomerID = 'ALFKI'
+    INSERT Employees (FirstName, LastName) Values (@Имя, @Фамилия)<font color=#990000>
+  <font color=blue>&lt;/</font>sql:query<font color=blue>></font>
+<font color=blue>&lt;/</font>Root<font color=blue>></font></font></p></pre></tt>
+<p></div><div align=justify>
+Его выполнение:</p>
+<p></div><div align=left><pre><tt>
+<font color=blue>static void</font> Execute_UpdateTemplate_SQLXML()
+{
+	...
+	cmd.CommandText = "..\\Templates\\XMLTemplate3.xml";
+	cmd.CommandType = SqlXmlCommandType.TemplateFile;
+	SqlXmlParameter prm = cmd.CreateParameter();
+	prm.Name = "@Имя"; prm.Value = "ааа"; 
+	prm = cmd.CreateParameter();
+	prm.Name = "@Фамилия"; prm.Value = "ббб"; 
+	cmd.ExecuteNonQuery();
+}</font></p></pre></tt><div align=justify>
+<p>
+равнозначно тому, как если бы эти запросы были выполнены обычным путем. Возникает 
+вопрос: можно ли модифицировать данные непосредственно на сервере (не кэшируя их 
+предварительно в DataSet) и работая с ними, как с XML, а не через реляционные операторы. 
+Такой способ предоставляет UpdateGrams.<br>
+Пример файла UpdateGrams, с которым мы будем работать, приведен на рис.8.</p>
+<p></div><div align=left><pre><tt><font color=#990000>
+<font color=blue>&lt;?</font>xml <font color=red>version</font><font color=blue>="1.0"</font> <font color=red>encoding</font><font color=blue>="utf-8" ?> 
+&lt;</font>ROOT xmlns<font color=red>:updg</font><font color=blue>="urn:schemas-microsoft-com:xml-updategram">
+
+&lt;</font>updg:header<font color=blue>>
+	&lt;</font>updg:param <font color=red>name</font><font color=blue>="Дата"/>
+	&lt;</font>updg:param <font color=red>name</font><font color=blue>="Стоимость" />
+&lt;/</font>updg:header<font color=blue>>
+
+&lt;</font>updg:sync <font color=red>mapping-schema</font><font color=blue>="..\Schemas\SQLSchema1.xsd">
+ 	
+	&lt;</font>updg:before<font color=blue>>
+		&lt;</font>Клиент <font color=red>Имя</font><font color=blue>="Ana Trujillo"</font> updg<font color=red>:id</font><font color=blue>="x" />
+		&lt;</font>Клиент <font color=red>Имя</font><font color=blue>="Antonio Moreno"</font> updg<font color=red>:id</font><font color=blue>="y" /> 
+	&lt;/</font>updg:before<font color=blue>>
+	&lt;</font>updg:after<font color=blue>>
+		&lt;</font>Клиент updg<font color=red>:id</font><font color=blue>="y"</font>
+		<font color=red>Фирма</font><font color=blue>="Рога&amp;Копыта"</font> 
+		<font color=red>Имя</font><font color=blue>="Дон Педро" />
+	&lt;/</font>updg:after<font color=blue>>
+	
+	&lt;</font>updg:before<font color=blue>>
+		&lt;</font>Клиент <font color=red>CustomerID</font><font color=blue>="ALFKI" />
+	&lt;/</font>updg:before<font color=blue>>
+	&lt;</font>updg:after<font color=blue>>
+		&lt;</font>Клиент <font color=red>CustomerID</font><font color=blue>="ALFKI">
+			&lt;</font>Заказы<font color=blue>>
+				&lt;</font>Заказ<font color=blue>>
+					&lt;</font>Дата<font color=blue>></font>
+						</font>$Дата<font color=#990000>
+					<font color=blue>&lt;/</font>Дата<font color=blue>>
+					&lt;</font>Стоимость<font color=blue>></font>
+						</font>cast(@Стоимость as money)<font color=#990000>
+					<font color=blue>&lt;/</font>Стоимость<font color=blue>>
+				&lt;/</font>Заказ<font color=blue>>
+			&lt;/</font>Заказы<font color=blue>>
+		&lt;/</font>Клиент<font color=blue>>
+  &lt;/</font>updg:after<font color=blue>>
+
+&lt;/</font>updg:sync<font color=blue>>
+
+&lt;</font>updg:sync <font color=red>mapping-schema</font><font color=blue>="..\Schemas\SQLSchema2.xsd">
+   
+	&lt;</font>updg:after<font color=blue>>
+		&lt;</font>Сотрудник updg<font color=red>:at-identity</font><font color=blue>="x"</font> 
+		<font color=red>Имя</font><font color=blue>="Альбус"</font> 
+		<font color=red>Фамилия</font><font color=blue>="Дамблдор" >
+			&lt;</font>Сотрудник <font color=red>Имя</font><font color=blue>="Минерва"</font> 
+			<font color=red>Фамилия</font><font color=blue>="МакГонагалл"</font> 
+			<font color=red>ReportsTo</font><font color=blue>="x" />
+		&lt;/</font>Сотрудник<font color=blue>>
+	
+	&lt;/</font>updg:after<font color=blue>>
+
+&lt;/</font>updg:sync<font color=blue>>
+
+&lt;/</font>ROOT<font color=blue>></font></font></p></pre></tt>
+<p></div><div align=justify>
+Поскольку я постарался напихать в него по максимуму показательных вещей, разберем 
+данный updategrams по частям. Начнем с того, что это XML-файл, структура которого довольно 
+близка к уже рассмотренным нами шаблонам. В <font color=blue>&lt;/</font><font color=#990000>updg:sync</font><font color=blue>></font>
+ может задаваться аннотированная 
+схема, которая отображает реляционную схему на XSD и благодаря которой мы можем работать 
+с информацией в БД как с XML. Если схема не указана, предполагается отображение по 
+умолчанию: каждая запись таблицы - элемент, поля в ней - атрибуты. По большому счету 
+updategrams состоит из секций трех типов: <font color=blue>&lt;</font><font color=#990000>updg:header</font><font color=blue>></font>
+ - в ней передаются возможные 
+параметры; <font color=blue>&lt;</font><font color=#990000>updg:before</font><font color=blue>></font> и 
+<font color=blue>&lt;</font><font color=#990000>updg:after</font><font color=blue>></font>. 
+Если запись фигурирует только в <font color=blue>&lt;</font><font color=#990000>updg:before</font><font color=blue>></font>,  она 
+удаляется; если только в <font color=blue>&lt;</font><font color=#990000>updg:after</font><font color=blue>></font> - вставляется; если и там, и там - обновляется. Рассмотрим, 
+например, ситуацию, когда весь updategrams состоит только из</p>
+<p></div><div align=left><pre><tt><font color=#990000>
+<font color=blue>&lt;</font>updg:sync <font color=red>mapping-schema</font><font color=blue>="SQLSchema1.xsd">
+    	&lt;</font>updg:before<font color=blue>>
+		&lt;</font>Клиент <font color=red>Имя</font><font color=blue>="Ana Trujillo" />
+&lt;/</font>updg:before<font color=blue>>
+	&lt;</font>updg:after<font color=blue>>
+	&lt;/</font>updg:after<font color=blue>>
+&lt;/</font>updg:sync<font color=blue>></font></font></p></pre></tt>
+<p></div><div align=justify>
+В процессе его выполнения на SQL Server происходит следующее:</p>
+<p></div><div align=left><tt>
+SET XACT_ABORT ON<br>
+BEGIN TRAN<br>
+DECLARE @eip INT, @r__ int, @e__ int<br>
+SET @eip = 0<br>
+DELETE Customers WHERE  ( ContactName=N'Ana Trujillo' ) ;<br>
+SELECT @e__ = @@ERROR, @r__ = @@ROWCOUNT<br>
+IF (@e__ != 0 OR @r__ != 1) SET @eip = 1<br>
+IF (@r__ > 1) RAISERROR<br>
+( N'SQLOLEDB Error Description: Ambiguous delete, unique identifier required  Transaction aborted ', 16, 1)<br>
+ELSE IF (@r__ &lt; 1) RAISERROR<br>
+( N'SQLOLEDB Error Description: Empty delete, no deletable rows found  Transaction aborted ', 16, 1)<br>
+IF (@eip != 0) ROLLBACK ELSE COMMIT<br>
+SET XACT_ABORT OFF</p></tt>
+<p></div><div align=justify>
+Из этого сразу видно несколько важных вещей. Первое: каждая секция 
+<font color=blue>&lt;</font><font color=#990000>updg:sync</font><font color=blue>></font>
+открывает отдельную транзакцию (см. BEGIN TRAN). Второе: описание модифицируемого 
+элемента (<font color=blue>&lt;</font><font color=#990000>Клиент</font> <font color=red>Имя</font><font color=blue>="Ana Trujillo" /></font>) 
+в <font color=blue>&lt;</font><font color=#990000>updg:before</font><font color=blue>></font> 
+и/или <font color=blue>&lt;</font><font color=#990000>updg:after</font><font color=blue>></font> должно 
+соответствовать одной записи, неважно, идет ли маппирование по дефолту или через 
+аннотированную схему. Если записей, отвечающих эквивалентному условию WHERE не 
+находится (@r__ &lt; 1) или больше одной (@r__ > 1), будет сгенерирована ошибка (RAISERROR) 
+и транзакция откатится (ROLLBACK).<br>
+Поскольку в каждой секции  <font color=blue>&lt;</font><font color=#990000>updg:before</font><font color=blue>></font>
+и <font color=blue>&lt;</font><font color=#990000>updg:after</font><font color=blue>></font> может находиться несколько записей, 
+то необходимо как-то сопоставить их друг другу в случае обновления. Например, при парсинге 
+этого шаблона</p>
+<p></div><div align=left><pre><tt><font color=#990000>
+	<font color=blue>&lt;</font>updg:before<font color=blue>>
+		&lt;</font>Клиент <font color=red>Имя</font><font color=blue>="Ana Trujillo"</font> updg<font color=red>:id</font><font color=blue>="x" />
+		&lt;</font>Клиент <font color=red>Имя</font><font color=blue>="Antonio Moreno"</font> updg<font color=red>:id</font><font color=blue>="y" /> 
+	&lt;/</font>updg:before<font color=blue>>
+	&lt;</font>updg:after<font color=blue>>
+		&lt;</font>Клиент updg<font color=red>:id</font><font color=blue>="y"</font>
+		<font color=red>Фирма</font><font color=blue>="Рога&amp;Копыта"</font> 
+		<font color=red>Имя</font><font color=blue>="Дон Педро" />
+	&lt;/</font>updg:after<font color=blue>></font></font></p></pre></tt>
+<p></div><div align=justify>
+SqlXml должен понимать, что клиента по имени Ana Trujillo мы хотим просто удалить, а клиента 
+по имени Antonio Moreno обновляем, поэтому строка 
+<font color=blue>&lt;</font><font color=#990000>Клиент updg</font><font color=red>:id</font><font color=blue>="y"</font> 
+<font color=red>Фирма</font><font color=blue>="Рога&amp;Копыта"</font> <font color=red>Имя</font><font color=blue>="Дон Педро" /></font>
+в <font color=blue>&lt;</font><font color=#990000>updg:after</font></font><font color=blue>></font> 
+соответствует именно ему. Это можно 
+сделать двумя способами. Первый - пометить их одним и тем же <font color=#990000>updg</font><font color=red>:id</font>. Второй способ - 
+однозначно идентифицировать записи при помощи первичного ключа таблицы. Для этого нужно 
+а) определить ключ в аннотированной схеме (вспоминайте аннотацию 
+<font color=#990000>ms</font><font color=red>:key-fields</font>) и б) явно 
+сослаться на него в 
+<font color=blue>&lt;</font><font color=#990000>updg:before</font><font color=blue>></font>/<font color=blue>&lt;</font><font color=#990000>updg:after</font><font color=blue>></font> 
+(скажем, <font color=blue>&lt;<font color=#990000>Сотрудник</font> <font color=red>ID_Сотрудника</font>="..." /></font>).</p>
+<p> 
+Следующая часть</p>
+<p></div><div align=left><pre><tt><font color=#990000>
+	<font color=blue>&lt;</font>updg:before<font color=blue>>
+		&lt;</font>Клиент <font color=red>CustomerID</font><font color=blue>="ALFKI" />
+	&lt;/</font>updg:before<font color=blue>>
+	&lt;</font>updg:after<font color=blue>>
+		&lt;</font>Клиент <font color=red>CustomerID</font><font color=blue>="ALFKI">
+			&lt;</font>Заказы<font color=blue>>
+				&lt;</font>Заказ<font color=blue>>
+					&lt;</font>Дата<font color=blue>></font>
+						</font>$Дата<font color=#990000>
+					<font color=blue>&lt;/</font>Дата<font color=blue>>
+					&lt;</font>Стоимость<font color=blue>></font>
+						</font>cast(@Стоимость as money)<font color=#990000>
+					<font color=blue>&lt;/</font>Стоимость<font color=blue>>
+				&lt;/</font>Заказ<font color=blue>>
+			&lt;/</font>Заказы<font color=blue>>
+		&lt;/</font>Клиент<font color=blue>>
+  &lt;/</font>updg:after<font color=blue>></font></font></p></pre></tt>
+<p></div><div align=justify>
+производит обновление и вставку одновременно. В заказы, сделанные клиентом с 
+идентификатором <font color=blue><tt>ALFKI</tt></font> добавляется еще один заказ. При этом SQL Server сам распознает, что 
+новую запись в таблице Orders нужно подчинить данному клиенту в таблице Customers и 
+автоматически устанавливает для нее CustomerID в "ALFKI".</p>
+<p></div><div align=left><pre><tt>
+exec sp_executesql N'... 
+INSERT Orders (OrderDate, Freight, <b>CustomerID</b>) 
+VALUES (@Дата, cast(@Стоимость as money), N''<b>ALFKI</b>'') ... ', 
+        N'@Дата nvarchar(19),@Стоимость sql_variant', 
+        N'08.04.2002 18:41:34', 100</p></pre></tt>
+<p></div><div align=justify>
+Это происходит благодаря тому, что поле CustomerID указано в качестве связующего в 
+<font color=blue>&lt;<font color=#990000>ms:relationship</font>></font> схемы SQLSchema1.xsd. Обратите внимание, что несмотря на то, что в 
+аннотирующей схеме ему явно не соответствует никакой элемент/атрибут, на него можно 
+ссылаться в updategrams-файле. Для автоматического подчинения родительскую запись в 
+<font color=blue>&lt;</font><font color=#990000>updg:before</font><font color=blue>></font>/<font color=blue>&lt;</font><font color=#990000>updg:after</font><font color=blue>></font> 
+необходимо идентифицировать именно по CustomerID, которое 
+значится как <font color=red>parent-key</font> в схеме (<font color=red>parent-key</font><font color=blue>="CustomerID"</font>). 
+Определение записи по другим 
+атрибутам, пусть даже однозначно ее идентифицирующим (например,  <font color=blue>&lt;<font color=#990000>Клиент</font> 
+<font color=red>Имя</font>="Maria Anders" <font color=red>Фирма</font>="Alfreds Futterkiste" ...></font>), к такому эффекту не приводит.
+Следующая часть updategrams-файла:</p>
+<p></div><div align=left><pre><tt><font color=#990000>
+<font color=blue>&lt;</font>updg:sync <font color=red>mapping-schema</font><font color=blue>="..\Schemas\SQLSchema2.xsd">
+   
+	&lt;</font>updg:after<font color=blue>>
+		&lt;</font>Сотрудник <b>updg</b><font color=red>:at-identity</font><font color=blue>="x"</font> 
+		<font color=red>Имя</font><font color=blue>="Альбус"</font> 
+		<font color=red>Фамилия</font><font color=blue>="Дамблдор" >
+			&lt;</font>Сотрудник <font color=red>Имя</font><font color=blue>="Минерва"</font> 
+			<font color=red>Фамилия</font><font color=blue>="МакГонагалл"</font> 
+			<font color=red>ReportsTo</font><font color=blue>="x" />
+		&lt;/</font>Сотрудник<font color=blue>>
+	
+	&lt;/</font>updg:after<font color=blue>>
+
+&lt;/</font>updg:sync<font color=blue>></font></font></p></pre></tt>
+<p></div><div align=justify>
+открывает другую транзакцию и работает с другой аннотирующей схемой, которая, как вы 
+помните, превращает parent-child таблицу в XML-иерархию. Здесь демонстрируется не 
+автоматическое, а "ручное" подчинение. Мы вставляем одновременно две записи. Чтобы 
+подчинить вторую первой, нужно значение поля <font color=red>ReportsTo</font> для второй установить в первичный 
+ключ первой. Положение осложняется тем, что первичный ключ - это identity, и его значение 
+априори неизвестно. Выйти из положения позволяет аннотация <font color=#990000>updg<font color=red>:at-identity</font></font>. Кстати, здесь 
+мы снова обращаемся к полю (ReportsTo), которое нигде в схеме не засвечено, а используется 
+только в описании отношения (<font color=blue>&lt;<font color=#990000>ms:relationship</font>></font>). <br>
+Дата и стоимость заказа передаются в виде параметров. Если параметр подставляется standalone, 
+можно использовать XPath-обозначение (<tt>$Дата</tt>), если же над ним по ходу выполняются какие-то 
+SQL-преобразования - то SQLное (<tt>@Стоимость</tt>).<br>
+Я не стал дальше усложнять пример, но хотел бы отметить еще две полезных аннотации. 
+<font color=blue>&lt;<font color=#990000>updg:nullvalue</font>></font> позволяет оговорить SQLный NULL:
+<p></div><div align=left><pre><tt><font color=#990000>
+<font color=blue>&lt;</font>updg:sync <font color=red>mapping-schema</font><font color=blue>="SQLSchema2.xsd"</font> updg<font color=red>:nullvalue</font><font color=blue>="Пусто">
+	&lt;</font>updg:after<font color=blue>>
+		&lt;</font>Сотрудник updg<font color=red>:at-identity</font><font color=blue>="x"</font> 
+		<font color=red>Имя</font><font color=blue>="Альбус"</font> 
+		<font color=red>Фамилия</font><font color=blue>="Дамблдор" >
+			&lt;</font>Сотрудник <font color=red>Имя</font><font color=blue>="Минерва"</font> 
+			<font color=red>Фамилия</font><font color=blue>="МакГонагалл"</font> 
+			<font color=red>ReportsTo</font><font color=blue>="Пусто" />
+		&lt;/</font>Сотрудник<font color=blue>>
+	
+	&lt;/</font>updg:after<font color=blue>>
+
+&lt;/</font>updg:sync<font color=blue>></font></font></p></pre></tt>
+<p></div><div align=justify>
+В этом случае второй сотрудник не будет подчинен первому, т.к. несмотря на то, что в XML эта 
+запись вложена, при занесении ее в таблицу ей не будет назначено никакого руководителя 
+(<tt><font color=red>ReportsTo<font color=blue>=NULL</font></font></tt>).<br>
+Аннотация <font color=#990000>ms<font color=red>:inverse</font></font> применяется не в UpdateGrams, а при описании аннотированной схемы. 
+Мы не рассматривали ее в п.9, потому что она имеет смысл только тогда, когда та используется 
+затем в updategrams. Дело в том, что SQL Server считает, что иерархия "родитель-потомок" в 
+XML соответствует ограничению первичный - внешний для ключей связанных таблиц. 
+Рассмотрим updategrams вида</p>
+<p></div><div align=left><pre><tt><font color=#990000>
+<font color=blue>&lt;</font>updg:sync <font color=red>mapping-schema</font><font color=blue>="..\Schemas\SQLSchema2.xsd">
+	&lt;</font>updg:before<font color=blue>>
+		&lt;</font>Клиент <font color=red>CustomerID</font><font color=blue>="ALFKI">
+			&lt;</font>Заказы<font color=blue>>
+				&lt;</font>Заказ <font color=blue>/>
+			&lt;/</font>Заказы<font color=blue>>
+		&lt;/</font>Клиент<font color=blue>>
+	&lt;/</font>updg:before<font color=blue>>
+&lt;/</font>updg:sync<font color=blue>></font></font></p></pre></tt>
+<p></div><div align=justify>
+Сразу ясно, что этот пример вызовет ошибку, поскольку данный клиент сделал более одного 
+заказа, а условием UpdateGrams является однозначная идентификация записи. Но дело не в этом. 
+На сервере будут выполнены действия в следующем порядке: DELETE Orders WHERE  
+CustomerID = N'ALFKI'; DELETE Customers WHERE  CustomerID = N'ALFKI'. (Использование 
+атрибутов, не входящих в определение <font color=blue>&lt;<font color=#990000>ms:relationship</font>></font>, 
+- напр., <font color=blue>&lt;<font color=#990000>Клиент <font color=red>Имя</font></font>="Maria Anders"></font> 
+приведет к полному DELETE Orders). Из этой последовательности видно, что SqlXml сначала 
+пытается произвести обновления / удаления в дочерней таблице, а уже потом из родительской, 
+чтобы по возможности не противоречить referential constraints. В жизни бывают ситуации, когда 
+схема может задавать вложенность элементов, противоположную направлению действия 
+ограничения primary key/foreign key в таблицах. Тогда SqlXml, предполагая, что вложенный 
+элемент соответствует внешнему ключу, полезет на самом деле в первичную таблицу, получит 
+от SQL Server по рукам и откатит транзакцию. Чтобы побороть такую ситуацию, в <font color=blue>&lt;<font color=#990000>ms:relationship</font>></font> 
+нужно поставить <font color=#990000>ms<font color=red>:inverse<font color=blue>="true"</font></font></font>. <br>
+Полный список аннотаций, как всегда, можно найти в документации к SQLXML 3.0.
+Вызов UpdateGrams из приложения происходит аналогично вызову шаблона через файл (см. 
+Скрипт 12) или Stream. При его тестировании в БД Northwind предварительно нужно превратить 
+связь Orders -> [Order Details] из строгой в каскадную. Поскольку [Order Details] не участвует в 
+updategrams, ее FK будет препятствовать обновлению Orders (в отличие от Customer -> Orders, 
+где это учитывается автоматически за счет указания в relationship в аннотированной схеме).
+<p></div><div align=left><tt>
+...<br>
+cmd.CommandText = "..\\Templates\\UpdateGrams1.xml";<br>
+cmd.CommandType = SqlXmlCommandType.TemplateFile;<br>
+SqlXmlParameter prm = cmd.CreateParameter();<br>
+prm.Name = "@Дата"; prm.Value = DateTime.Now.ToString();<br>
+prm = cmd.CreateParameter();<br>
+prm.Name = "@Стоимость"; prm.Value = 100;<br>
+cmd.ExecuteNonQuery();</p></tt>
+<p></div><center>						
+<font color=blue><b>Скрипт 12</font></p></b></center>
+<p><div align=justify></p>
+</DIV>
+<TD>
+<TR>
+</TABLE>
+<TABLE BORDER=0 WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>UpdateGrams
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="12.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+</TD>
+</TR>
+</TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>

@@ -1,0 +1,920 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 4. Установка Connector/C++ из исходных текстов</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-cpp-installation-source"></a>
+Глава 4. Установка Connector/C++ из исходных текстов</h1>
+<p>В этой главе описываются, как установить Connector/C++, используя исходные
+тексты или копию исходного хранилища Git.</p>
+
+<h2><a name="connector-cpp-installation-source-prerequisites"></a>
+4.1. Инсталляционные системные предпосылки</h2>
+<p>Чтобы установить Connector/C++ из исходных текстов,
+следующие системные требования должны быть удовлетворены:</p>
+
+<h3><a name="connector-cpp-installation-source-prerequisites-build-tools">
+</a>Инструменты для сборки</h3>
+<p>У вас должен быть кросс-платформенный инструмент
+<span class="command"><strong>CMake</strong></span> (3.0 или выше).</p>
+<p>У вас должен быть компилятор C++, который поддерживает C++ 11.</p>
+
+<h3><a name="connector-cpp-installation-source-prerequisites-client-library">
+</a>MySQL Client Library</h3>
+<p>Чтобы собрать Connector/C++ из исходных текстов, библиотека клиента MySQL
+C API может потребоваться:</p>
+
+<ul><li><p>Сборка соединителя JDBC требует библиотеки клиента
+от MySQL 8.0 (8.0.11 или выше) или MySQL 5.7 (5.7.9 или выше).
+Это происходит, когда Connector/C++ формируется с опцией
+<a href="#option_cmake_with_jdbc">
+<code class="option">WITH_JDBC</code></a> для
+<span class="command"><strong>CMake</strong></span>, чтобы
+включить соединитель JDBC.</p></li>
+
+<li><p>Для Connector/C++ без соединителя JDBC, библиотека
+клиента не требуется.</p></li></ul>
+<p>Как правило, библиотека клиента MySQL устанавливается, когда MySQL
+устанавливается. Однако проверьте свою документацию по операционной системе
+на другие опции инсталляции.</p>
+
+<p>Чтобы определить, где найти библиотеку клиента, установите
+<code class="literal">MYSQL_DIR</code> в
+<span class="command"><strong>CMake</strong></span>
+соответственно во время конфигурации по мере необходимости (см.
+<a href="#connector-cpp-source-configuration-options">раздел 4.4
+</a>).</p>
+
+<h3><a name="connector-cpp-installation-source-prerequisites-boost"></a>
+Библиотеки Boost C++</h3>
+<p>Чтобы собрать Connector/C++ библиотеки Boost C++ необходимы, только если
+вы компилируете legacy JDBC API или если версия библиотеки стандарта C++ в
+вашей системе не осуществляет конвертер UTF8
+(<code class="literal">codecvt_utf8</code>).</p>
+
+<p>Если библиотеки Boost C++ необходимы, Boost 1.59.0 или выше
+должен быть установлен. Чтобы получить Boost и его инструкции по установке,
+посетите <a href="../../../www.boost.org/default.htm" target="_top">официальный сайт Boost
+</a>.</p>
+
+<p>После установки Boost используйте опцию
+<a href="#option_cmake_with_boost"><code class="option">
+WITH_BOOST</code></a> для
+<span class="command"><strong>CMake</strong></span>, чтобы
+указать, где искать файлы Boost (см.
+<a href="#connector-cpp-source-configuration-options">раздел 4.4
+</a>):</p>
+
+<pre class="programlisting">
+cmake [other_options] -DWITH_BOOST=/usr/local/boost_1_59_0
+</pre>
+
+<h3><a name="connector-cpp-installation-source-prerequisites-ssl"></a>
+Поддержка SSL</h3>
+<p>Используйте опцию <a href="#option_cmake_with_ssl">
+<code class="option">WITH_SSL</code></a> в
+<span class="command"><strong>CMake</strong></span>, чтобы определить,
+которую библиотеку SSL использовать, собирая Connector/C++. OpenSSL 1.0.x
+или выше требуется. С Connector/C++ 8.0.18 возможно собрать с OpenSSL 1.1.
+</p>
+
+<p>Для получения дополнительной информации об опции
+<a href="#option_cmake_with_ssl">
+<code class="option">WITH_SSL</code></a> и библиотеках SSL, посмотрите
+<a href="#connector-cpp-source-configuration-options">раздел 4.4
+</a>.</p>
+
+<h2><a name="connector-cpp-installation-source-distribution"></a>
+4.2. Получение и распаковка исходного текста Connector/C++</h2>
+<p>Чтобы получить исходный текст Connector/C++, посетите
+<a href="../../../https@dev.mysql.com/downloads/connector/cpp/default.htm" target="_top">
+Connector/C++ downloads page</a>. Альтернативно, клонируйте исходное
+хранилище Connector/C++ Git.</p>
+
+<p>Исходные тексты Connector/C++ упакованы как сжатый файл
+<span class="command"><strong>tar</strong></span> или архив Zip,
+обозначенный здесь как
+<code class="filename"><em class="replaceable"><code>PACKAGE</code></em>
+.tar.gz</code> или
+<code class="filename"><em class="replaceable"><code>PACKAGE</code></em>.zip
+</code>. Исходные тексты в файле <span class="command"><strong>tar</strong>
+</span> или Zip могут использоваться на любой поддерживаемой платформе.</p>
+
+<p>Дистрибутив, когда распакован, включает файл
+<code class="filename">INFO_SRC</code>,
+который предоставляет информацию о версии продукта и исходном хранилище, из
+которого был произведен. Пакет также включает другие файлы документации,
+такие как перечисленные в <a href="install.htm">главе 3</a>.</p>
+
+<p>Чтобы распаковать сжатый файл <span class="command"><strong>tar</strong>
+</span>, используйте эту команду в намеченном инсталляционном каталоге:</p>
+<pre class="programlisting">
+tar zxvf <em class="replaceable"><code>PACKAGE</code></em>.tar.gz
+</pre>
+
+<p>После распаковки пакета, соберите его, используя соответствующие
+инструкции для вашей платформы далее в этой главе.</p>
+<p>Чтобы установить из пакета Zip (файл <code class="filename">.zip</code>),
+используйте <span class="command"><strong>WinZip</strong></span>
+или другой инструмент, который может читать файлы
+<code class="filename">.zip</code>, чтобы распаковать файл в место по вашему
+выбору. После распаковки пакета соберите его, используя соответствующие
+инструкции для вашей платформы далее в этой главе.</p>
+
+<p>Чтобы клонировать код Connector/C++ из
+репозитория исходного кода, расположенного на GitHub в
+<a href="../../../https@github.com/mysql/mysql-connector-cpp" target="_top">
+https://github.com/mysql/mysql-connector-cpp</a>:</p>
+
+<pre class="programlisting">
+git clone https://github.com/mysql/mysql-connector-cpp.git
+</pre>
+
+<p>Эта команда должна создать каталог
+<code class="filename">mysql-connector-cpp</code>, содержащий копию всего
+исходного дерева Connector/C++.</p>
+
+<p>Команда <span class="command"><strong>git clone</strong></span>
+устанавливает источником образ <code class="literal">master</code>,
+который содержит последние исходные тексты. Опубликованный код находится в
+образе <code class="literal">8.0</code> (образ
+<code class="literal">8.0</code> содержит те же самые исходные тексты, что и
+<code class="literal">master</code>). Если необходимо, используйте
+<span class="command"><strong>git checkout</strong></span> в исходном
+каталоге, чтобы выбрать желаемый образ.
+Например, чтобы построить Connector/C++ 8.0:</p>
+
+<pre class="programlisting">
+cd mysql-connector-cpp
+git checkout 8.0
+</pre>
+
+<p>После клонирования хранилища постройте пакет, используя соответствующие
+инструкции для вашей платформы далее в этой главе.</p>
+<p>После операции checkout, чтобы получить исходное дерево, выполняйте
+периодически <span class="command"><strong>git pull</strong></span>, чтобы
+обновить ваши данные до последней версии.</p>
+
+<h2><a name="connector-cpp-installation-source-cpp"></a>
+4.3. Установка Connector/C++ из исходных текстов</h2>
+<p>Чтобы установить Connector/C++ из исходных текстов, проверьте, что ваша
+система удовлетворяет требования, обрисованные в общих чертах в
+<a href="#connector-cpp-installation-source-prerequisites">разделе
+4.1</a>.</p>
+
+<h3><a name="connector-cpp-installation-source-configure"></a>
+Настройка Connector/C++</h3>
+<p>Используйте <span class="command"><strong>CMake</strong></span>, чтобы
+формировать и построить Connector/C++. Настройка выполняется этой командой,
+где <em class="replaceable"><code>concpp_source</code></em> это каталог,
+содержащий исходный код  Connector/C++:</p>
+
+<pre class="programlisting">
+cmake <em class="replaceable"><code>concpp_source</code></em>
+</pre>
+
+<p>Может быть необходимо определить другие варианты в
+команде конфигурации. Некоторые примеры:</p>
+<ul><li><p>По умолчанию эти инсталляционные места используются:</p>
+
+<ul><li><p><code class="filename">/usr/local/mysql/connector-c++-8.0
+</code> (Unix-системы).</p></li>
+<li><p><code class="filename"><em class="replaceable"><code>User_home</code>
+</em>/MySQL/"MySQL Connector C++ 8.0"</code> (Windows).</p></li></ul>
+
+<p>Чтобы определить инсталляционное место явно, используйте опцию
+<a href="#option_cmake_cmake_install_prefix"><code class="option">
+CMAKE_INSTALL_PREFIX</code></a>:</p>
+
+<pre class="programlisting">
+-DCMAKE_INSTALL_PREFIX=<em class="replaceable"><code>path_name</code></em>
+</pre></li>
+
+<li><p>В Windows можно использовать опцию <code class="option">-G</code>,
+чтобы выбрать конкретный генератор:</p>
+<ul><li><p><code class="option">-G "Visual Studio 14 2015 Win64"</code>
+(сборки 64-bit).</p></li>
+<li><p><code class="option">-G "Visual Studio 14 2015"</code>
+(сборки 32-bit).</p></li></ul>
+
+<p>Консультируйтесь с руководством <span class="command"><strong>CMake
+</strong></span> или <code class="literal">cmake --help</code>, чтобы
+узнать, какие генераторы поддерживаются вашей версией
+<span class="command"><strong>CMake</strong></span>.
+Однако может случиться так, что ваша версия
+<span class="command"><strong>CMake</strong></span> поддерживает больше
+генераторов, чем можно на самом деле использовать,
+чтобы построить Connector/C++.</p></li>
+
+<li><p>Если нужны библиотеки Boost C++, используйте опцию
+<a href="#option_cmake_with_boost">
+<code class="option">WITH_BOOST</code></a>,
+чтобы определить их местоположение:</p>
+
+<pre class="programlisting">
+-DWITH_BOOST=<em class="replaceable"><code>path_name</code></em>
+</pre></li>
+
+<li><p>По умолчанию создаются динамические (общие) библиотеки.
+Чтобы построить статические библиотеки, включите опцию
+<a href="#option_cmake_build_static">
+<code class="option">BUILD_STATIC</code></a>:</p>
+
+<pre class="programlisting">
+-DBUILD_STATIC=ON
+</pre></li>
+
+<li><p>По умолчанию соединитель legacy JDBC не строится. Если вы планируете
+построить этот соединитель, дополнительная команда
+<span class="command"><strong>git</strong></span>
+необходима, чтобы выполнить инициализацию подмодуля
+(сделайте это в исходном каталоге верхнего уровня):</p>
+
+<pre class="programlisting">
+git submodule update --init
+</pre>
+
+<p>Чтобы включать соединитель JDBC в сборку, включите опцию
+<a href="#option_cmake_with_jdbc"><code class="option">
+WITH_JDBC</code></a>:</p>
+
+<pre class="programlisting">
+-DWITH_JDBC=ON
+</pre></li></ul>
+
+<p>Если вы формируете и строите тестовые программы позже, используйте те же
+самые опции <span class="command"><strong>CMake</strong></span>, как при
+сборке Connector/C++ (<code class="option">-G</code>,
+<a href="#option_cmake_with_boost">
+<code class="option">WITH_BOOST</code></a>,
+<a href="#option_cmake_build_static">
+<code class="option">BUILD_STATIC</code></a> и прочие).
+Исключения: аргументы пути будут отличаться, и вы не должны определять
+<a href="#option_cmake_cmake_install_prefix">
+<code class="option">CMAKE_INSTALL_PREFIX</code></a>.</p>
+
+<p>Для получения информации о параметрах конфигурации
+<span class="command"><strong>CMake</strong></span> см.
+<a href="#connector-cpp-source-configuration-options">раздел 4.4
+</a>.</p>
+
+<h3><a name="connector-cpp-installation-source-build"></a>
+Сборка Connector/C++</h3>
+<p>После формирования Connector/C++ соберите
+его, используя эту команду:</p>
+
+<pre class="programlisting">
+cmake --build . --config <em class="replaceable"><code>build_type</code></em>
+</pre>
+
+<p>Опция <code class="option">--config</code> необязательна.
+Это определяет конфигурацию сборки, чтобы использовать, такую как
+<code class="literal">Release</code> или <code class="literal">Debug</code>.
+Если вы опускаете <code class="option">--config</code>,
+значение по умолчанию <code class="literal">Debug</code>.</p>
+
+<p>Если вы определяете <code class="option">--config</code>, определите то же
+самое значение <code class="option">--config</code> для более поздних шагов,
+таких как шаги, которые устанавливают Connector/C++
+или строят тестовые программы.</p>
+
+<p>Если сборка прошла успешно, она создает библиотеки соединителя в каталоге
+сборки. Для Windows ищите библиотеки в подкаталоге с тем же самым именем,
+что и значение <em class="replaceable"><code>build_type</code></em> опции
+<code class="option">--config</code>.</p>
+
+<ul><li><p>Если вы строите динамические библиотеки, у них есть эти имена:</p>
+<ul><li><p><code class="filename">libmysqlcppconn8.so.1</code> (Unix).
+</p></li>
+<li><p><code class="filename">libmysqlcppconn8.1.dylib</code> (macOS).
+</p></li>
+<li><p><code class="filename">mysqlcppconn8-1-vs14.dll</code> (Windows).
+</p></li></ul></li>
+
+<li><p>Если вы строите статические библиотеки, у них есть эти имена:</p>
+<ul><li><p><code class="filename">libmysqlcppconn8-static.a</code> (Unix,
+macOS).</p></li>
+<li><p><code class="filename">mysqlcppconn8-static.lib</code> (Windows).
+</p></li></ul></li></ul>
+
+<p>Если вы включили опцию
+<a href="#option_cmake_with_jdbc"><code class="option">WITH_JDBC
+</code></a>, чтобы включить соединитель JDBC, следующие дополнительные
+файлы библиотеки создаются.</p>
+
+<ul><li><p>Если вы строите динамические библиотеки, у них есть эти имена:</p>
+<ul><li><p><code class="filename">libmysqlcppconn.so.7</code> (Unix).
+</p></li>
+<li><p><code class="filename">libmysqlcppconn.7.dylib</code> (macOS).
+</p></li>
+<li><p><code class="filename">mysqlcppconn-7-vs14.dll</code> (Windows).
+</p></li></ul></li>
+
+<li><p>Если вы строите статические библиотеки, у них есть эти имена:</p>
+<ul><li><p><code class="filename">libmysqlcppconn-static.a</code> (Unix,
+macOS).</p></li>
+<li><p><code class="filename">mysqlcppconn-static.lib</code> (Windows).
+</p></li></ul></li></ul>
+
+<h3><a name="connector-cpp-installation-source-install"></a>
+Установка Connector/C++</h3>
+<p>Чтобы установить Connector/C++, используйте эту команду:</p>
+
+<pre class="programlisting">
+cmake --build . --target install --config build_type
+</pre>
+
+<h3><a name="connector-cpp-installation-source-verification"></a>
+Подтверждение функциональности Connector/C++</h3>
+<p>Чтобы проверить функциональность соединителя, постройте и запустите
+одну или больше тестовых программ, включенных в каталог
+<code class="filename">testapp</code>. Создайте тестовый каталог и
+перейдите в него. Тогда дайте следующие команды:
+</p>
+
+<pre class="programlisting">
+cmake [other_options] -DWITH_CONCPP=concpp_install concpp_source/testapp
+cmake --build . --config=<em class="replaceable"><code>build_type</code></em>
+</pre>
+
+<p><code class="option">WITH_CONCPP</code> используется только, чтобы
+формировать тестовое приложение. <em class="replaceable"><code>other_options
+</code></em> состоит из опций, с которыми вы раньше формировали сам
+Connector/C++ (<code class="option">-G</code>,
+<a href="#option_cmake_with_boost">
+<code class="option">WITH_BOOST</code></a>,
+<a href="#option_cmake_build_static">
+<code class="option">BUILD_STATIC</code></a> и т.д.).
+<em class="replaceable"><code>concpp_source</code></em> это каталог,
+содержащий исходный код Connector/C++, <em class="replaceable"><code>
+concpp_install</code></em> это каталог, где устанавливается Connector/C++:
+</p>
+
+<p>Предыдущие команды должны создать программы
+<span class="command"><strong>devapi_test</strong></span> и
+<span class="command"><strong>xapi_test</strong></span> в каталоге
+<code class="filename">run</code>. Если вы включили
+<a href="#option_cmake_with_jdbc"><code class="option">WITH_JDBC
+</code></a> формируя тестовые программы, также создается программа
+<span class="command"><strong>jdbc_test</strong></span>.</p>
+
+<p>Перед тестовыми программами гарантируйте, что экземпляр
+сервера MySQL с включенным X Plugin.
+Самый легкий способ устроить это состоит в том, чтобы использовать скрипт
+<span class="command"><strong>mysql-test-run.pl</strong></span> из
+дистрибутива MySQL. Для MySQL 8.0 X Plugin позволен по умолчанию, поэтому
+выполните эту команду в каталоге <code class="filename">mysql-test</code>:
+</p>
+
+<pre class="programlisting">
+perl mysql-test-run.pl --start-and-exit
+</pre>
+
+<p>Для MySQL 5.7 X Plugin должен быть позволеен явно, поэтому добавьте опцию:
+</p>
+<pre class="programlisting">
+perl mysql-test-run.pl --start-and-exit --mysqld=--plugin-load=mysqlx
+</pre>
+
+<p>Команда должна запустить испытательный экземпляр сервера, слушающий на
+порте 13009 вместо стандартного порта (33060) с включенным X Plugin.</p>
+<p>Теперь можно управлять одной из тестовых программ. Они принимают аргумент
+строки подключения, поэтому если сервер был запущен как описано, можно
+управлять ими так:</p>
+
+<pre class="programlisting">
+run/devapi_test mysqlx://root@127.0.0.1:13009
+run/xapi_test mysqlx://root@127.0.0.1:13009
+</pre>
+
+<p>Строка подключения принимает доступность учетной записи пользователя
+<code class="literal">root</code> без любого пароля и программа предполагает,
+что есть схема <code class="literal">test</code>.</p>
+
+<p>Чтобы проверить <span class="command"><strong>jdbc_test</strong></span>,
+вам нужен сервер MySQL, но не требуется X Plugin. Кроме того, опции связи
+должны быть в форме, определенной API JDBC. Передайте имя пользователя как
+второй аргумент. Например:</p>
+
+<pre class="programlisting">
+run/jdbc_test tcp://127.0.0.1:13009 root
+</pre>
+
+<h2><a name="connector-cpp-source-configuration-options"></a>
+4.4. Параметры конфигурации исходного текста Connector/C++</h2>
+<p>Connector/C++ понимает опции <code class="literal">CMake</code>,
+которые описаны в этой секции.</p>
+
+<a name="idm45670547612576"></a><p><b>
+Таблица 4.1. Параметры конфигурации исходного текста Connector/C++</b></p>
+<table frame="box">
+<thead><tr><th scope="col">Форматы</th>
+<th scope="col">Описание</th>
+<th scope="col">Значение по умолчанию</th>
+<th scope="col">Пояснение</th></tr></thead>
+<tbody><tr><td scope="row"><a href="#option_cmake_build_static">
+<code class="literal">BUILD_STATIC</code></a></td>
+<td>Построить ли статические библиотеки</td>
+<td><code class="literal">OFF</code></td><td></td></tr>
+<tr><td scope="row"><a href="#option_cmake_bundle_dependencies">
+<code class="literal">BUNDLE_DEPENDENCIES</code></a></td>
+<td>Связать ли внешние библиотеки зависимости с соединителем</td>
+<td><code class="literal">OFF</code></td><td></td></tr>
+<tr><td scope="row"><a href="#option_cmake_cmake_build_type">
+<code class="literal">CMAKE_BUILD_TYPE</code></a></td>
+<td>Тип выполняемой сборки</td>
+<td><code class="literal">Debug</code></td><td></td></tr>
+<tr><td scope="row"><a href="#option_cmake_cmake_install_docdir">
+<code class="literal">CMAKE_INSTALL_DOCDIR</code></a></td>
+<td>Инсталляционный каталог документации</td><td></td><td>8.0.14</td></tr>
+<tr><td scope="row">
+<a href="#option_cmake_cmake_install_includedir">
+<code class="literal">CMAKE_INSTALL_INCLUDEDIR</code></a></td>
+<td>Инсталляционный каталог заголовочных файлов</td><td></td>
+<td>8.0.14</td></tr>
+<tr><td scope="row"><a href="#option_cmake_cmake_install_libdir">
+<code class="literal">CMAKE_INSTALL_LIBDIR</code></a></td>
+<td>Инсталляционный каталог библиотек</td><td></td><td>8.0.14</td></tr>
+<tr><td scope="row"><a href="#option_cmake_cmake_install_prefix">
+<code class="literal">CMAKE_INSTALL_PREFIX</code></a></td>
+<td>Основной каталог установки</td>
+<td><code class="literal">/usr/local</code></td><td></td></tr>
+<tr><td scope="row"><a href="#option_cmake_maintainer_mode">
+<code class="literal">MAINTAINER_MODE</code></a></td>
+<td>Только для внутреннего использования</td>
+<td><code class="literal">OFF</code></td><td>8.0.12</td></tr>
+<tr><td scope="row">
+<a href="#option_cmake_mysqlclient_static_binding">
+<code class="literal">MYSQLCLIENT_STATIC_BINDING</code></a></td>
+<td>Компоновать ли с общей библиотекой клиента MySQL</td>
+<td><code class="literal">ON</code></td><td>8.0.16</td></tr>
+<tr><td scope="row">
+<a href="#option_cmake_mysqlclient_static_linking">
+<code class="literal">MYSQLCLIENT_STATIC_LINKING</code></a></td>
+<td>Компоновать ли статически с библиотекой клиента MySQL</td>
+<td><code class="literal">ON</code></td><td>8.0.16</td></tr>
+<tr><td scope="row">
+<a href="#option_cmake_mysql_config_executable">
+<code class="literal">MYSQL_CONFIG_EXECUTABLE</code></a></td>
+<td>Путь к программе mysql_config</td>
+<td><code class="literal">${MYSQL_DIR}/bin/mysql_config</code></td>
+<td></td></tr>
+<tr><td scope="row"><a href="#option_cmake_mysql_dir">
+<code class="literal">MYSQL_DIR</code></a></td>
+<td>Каталог установки MySQL Server</td><td></td><td></td></tr>
+<tr><td scope="row"><a href="#option_cmake_static_msvcrt">
+<code class="literal">STATIC_MSVCRT</code></a></td>
+<td>Использовать статическую библиотеку времени выполнения</td>
+<td></td><td></td></tr>
+<tr><td scope="row"><a href="#option_cmake_with_boost">
+<code class="literal">WITH_BOOST</code></a></td>
+<td>Каталог исходных текстов Boost</td><td></td><td></td></tr>
+<tr><td scope="row"><a href="#option_cmake_with_doc">
+<code class="literal">WITH_DOC</code></a></td>
+<td>Произвести ли документацию Doxygen</td>
+<td><code class="literal">OFF</code></td><td></td></tr>
+<tr><td scope="row"><a href="#option_cmake_with_jdbc">
+<code class="literal">WITH_JDBC</code></a></td>
+<td>Построить ли библиотеку legacy JDBC</td>
+<td><code class="literal">OFF</code></td><td>8.0.7</td></tr>
+<tr><td scope="row"><a href="#option_cmake_with_ssl">
+<code class="literal">WITH_SSL</code></a></td><td>Тип поддержки SSL</td>
+<td><code class="literal">system</code></td>
+<td>8.0.7</td></tr></tbody></table><br class="table-break">
+
+<ul><li><p><a name="option_cmake_build_static"></a>
+<code class="literal">-DBUILD_STATIC=<em class="replaceable"><code>bool
+</code></em></code></p>
+
+<a class="indexterm" name="idm45670547518608"></a>
+<a class="indexterm" name="idm45670547517216"></a>
+<p>По умолчанию динамические (общие) библиотеки строятся. Если этот выбор
+позволен, статические библиотеки строятся вместо этого.</p></li>
+
+<li><p><a name="option_cmake_bundle_dependencies"></a>
+<code class="literal">-DBUNDLE_DEPENDENCIES=<em class="replaceable">
+<code>bool</code></em></code></p>
+
+<a class="indexterm" name="idm45670547513392"></a>
+<a class="indexterm" name="idm45670547512000"></a>
+<p>Это внутренний выбор, используемый для создания пакетов Connector/C++.
+</p></li>
+
+<li><p><a name="option_cmake_cmake_build_type"></a>
+<code class="literal">-DCMAKE_BUILD_TYPE=<em class="replaceable"><code>
+type</code></em></code></p>
+
+<a class="indexterm" name="idm45670547508208"></a>
+<a class="indexterm" name="idm45670547506816"></a>
+<p>Это тип сборки:</p>
+
+<ul><li><p><code class="literal">Debug</code>: Отключить оптимизацию и
+произвести отладочную информацию. Это умолчание.</p></li>
+<li><p><code class="literal">Release</code>: Включить оптимизацию.</p></li>
+
+<li><p><code class="literal">RelWithDebInfo</code>: Включить оптимизацию и
+произвести отладочную информацию.</p></li></ul></li>
+<li><p><a name="option_cmake_cmake_install_docdir"></a>
+<code class="literal">-DCMAKE_INSTALL_DOCDIR=<em class="replaceable"><code>
+dir_name</code></em></code></p>
+
+<a class="indexterm" name="idm45670547498368"></a>
+<a class="indexterm" name="idm45670547496976"></a>
+<p>Инсталляционный каталог документации, относительно
+<a href="#option_cmake_cmake_install_prefix"><code class="option">
+CMAKE_INSTALL_PREFIX</code></a>. Если не определен, то установить в
+<a href="#option_cmake_cmake_install_prefix"><code class="option">
+CMAKE_INSTALL_PREFIX</code></a>.</p>
+
+<p>Этот выбор требует включения опции
+<a href="#option_cmake_with_doc"><code class="option">WITH_DOC
+</code></a>. Этот выбор был добавлен в Connector/C++ 8.0.14.</p></li>
+
+<li><p><a name="option_cmake_cmake_install_includedir"></a>
+<code class="literal">-DCMAKE_INSTALL_INCLUDEDIR=<em class="replaceable">
+<code>dir_name</code></em></code></p>
+
+<a class="indexterm" name="idm45670547490032"></a>
+<a class="indexterm" name="idm45670547488640"></a>
+<p>Инсталляционный каталог заголовков относительно
+<a href="#option_cmake_cmake_install_prefix"><code class="option">
+CMAKE_INSTALL_PREFIX</code></a>. Если не определен, установить в
+<code class="filename">include</code>.
+Этот выбор был добавлен в Connector/C++ 8.0.14.</p></li>
+
+<li><p><a name="option_cmake_cmake_install_libdir"></a>
+<code class="literal">-DCMAKE_INSTALL_LIBDIR=<em class="replaceable"><code>
+dir_name</code></em></code></p>
+
+<a class="indexterm" name="idm45670547483040"></a>
+<a class="indexterm" name="idm45670547481648"></a>
+<p>Инсталляционный каталог библиотеки, относительно
+<a href="#option_cmake_cmake_install_prefix"><code class="option">
+CMAKE_INSTALL_PREFIX</code></a>. Если не определен, установить в
+<code class="filename">lib64</code> или <code class="filename">lib</code>.
+Этот выбор был добавлен в Connector/C++ 8.0.14.</p></li>
+
+<li><p><a name="option_cmake_cmake_install_prefix"></a>
+<code class="literal">-DCMAKE_INSTALL_PREFIX=<em class="replaceable"><code>
+dir_name</code></em></code></p>
+
+<a class="indexterm" name="idm45670547475440"></a>
+<a class="indexterm" name="idm45670547474048"></a>
+<p>Где установить Connector/C++.</p></li>
+
+<li><p><a name="option_cmake_maintainer_mode"></a>
+<code class="literal">-DMAINTAINER_MODE=<em class="replaceable"><code>bool
+</code></em></code></p>
+
+<a class="indexterm" name="idm45670547470288"></a>
+<a class="indexterm" name="idm45670547468896"></a>
+<p>Это внутренний выбор, используемый для создания
+пакетов, добавлен в Connector/C++ 8.0.12.</p></li>
+
+<li><p><a name="option_cmake_mysqlclient_static_binding"></a>
+<code class="literal">-DMYSQLCLIENT_STATIC_BINDING=<em class="replaceable">
+<code>bool</code></em></code></p>
+
+<a class="indexterm" name="idm45670547465072"></a>
+<a class="indexterm" name="idm45670547463680"></a>
+<p>Связаться ли с общей библиотекой клиента MySQL. Этот выбор используется
+только если отключена
+<a href="#option_cmake_mysqlclient_static_linking">
+<code class="option">MYSQLCLIENT_STATIC_LINKING</code></a>,
+чтобы позволить динамическое подключение библиотеки клиента MySQL.
+В этом случае, если включена
+<a href="#option_cmake_mysqlclient_static_binding">
+<code class="option">MYSQLCLIENT_STATIC_BINDING</code></a> (по умолчанию),
+Connector/C++ компонуется с общей библиотекой клиента MySQL.
+Иначе общая библиотека клиента MySQL загружена и отображена
+во время выполнения.</p>
+
+<p>Этот выбор применяется, только если вы строите legacy JDBC
+(то есть, только если включена
+<a href="#option_cmake_with_jdbc"><code class="option">WITH_JDBC
+</code></a>). Это было добавлено в Connector/C++ 8.0.16.</p></li>
+
+<li><p><a name="option_cmake_mysqlclient_static_linking"></a>
+<code class="literal">-DMYSQLCLIENT_STATIC_LINKING=<em class="replaceable">
+<code>bool</code></em></code></p>
+
+<a class="indexterm" name="idm45670547456672"></a>
+<a class="indexterm" name="idm45670547455280"></a>
+<p>Компоновать ли статически с библиотекой клиента MySQL. По умолчанию
+<code class="literal">ON</code> (используйте статическую компоновку с
+библиотекой клиента). Выключение этого выбора позволяет динамическую
+компоновку с библиотекой клиента.</p>
+
+<p>Этот выбор применяется, только если вы собираете legacy JDBC
+(то есть, только если включена опция
+<a href="#option_cmake_with_jdbc"><code class="option">WITH_JDBC
+</code></a>). Это было добавлено в Connector/C++ 8.0.16.</p></li>
+
+<li><p><a name="option_cmake_mysql_config_executable"></a>
+<code class="literal">-DMYSQL_CONFIG_EXECUTABLE=<em class="replaceable">
+<code>file_name</code></em></code></p>
+
+<a class="indexterm" name="idm45670547449360"></a>
+<a class="indexterm" name="idm45670547447968"></a>
+<p>Путь к программе <span class="command"><strong>mysql_config</strong>
+</span>.</p>
+
+<p>Не в Windows <span class="command"><strong>CMake</strong></span>
+проверяет, установлена ли опция
+<a href="#option_cmake_mysql_config_executable">
+<code class="option">MYSQL_CONFIG_EXECUTABLE</code></a>.
+Если нет, <span class="command"><strong>CMake</strong></span>
+пытается определить местонахождение
+<code class="filename">mysql_config</code> в местах по умолчанию.</p>
+
+<p>Этот выбор применяется, только если вы собираете legacy JDBC
+(то есть, только если включена опция
+<a href="#option_cmake_with_jdbc"><code class="option">WITH_JDBC
+</code></a>).</p></li>
+
+<li><p><a name="option_cmake_mysql_dir"></a>
+<code class="literal">-DMYSQL_DIR=<em class="replaceable"><code>dir_name
+</code></em></code></p>
+
+<a class="indexterm" name="idm45670547439392"></a>
+<a class="indexterm" name="idm45670547438000"></a>
+<p>Каталог, где MySQL устанавливается.</p>
+
+<p>Этот выбор применяется, только если вы собираете legacy JDBC
+(то есть, только если включена опция
+<a href="#option_cmake_with_jdbc"><code class="option">WITH_JDBC
+</code></a>).</p></li>
+
+<li><p><a name="option_cmake_static_msvcrt"></a>
+<code class="literal">-DSTATIC_MSVCRT=<em class="replaceable"><code>bool
+</code></em></code></p>
+
+<a class="indexterm" name="idm45670547432976"></a>
+<a class="indexterm" name="idm45670547431584"></a>
+<p>Только Windows. Использовать статическую библиотеку времени выполнения
+(опция компилятора <code class="literal">/MT*</code>).
+Этот выбор мог бы быть необходимым, если код, который использует
+Connector/C++, также пользуется статической библиотекой времени выполнения.
+</p></li>
+
+<li><p><a name="option_cmake_with_boost"></a>
+<code class="literal">-DWITH_BOOST=<em class="replaceable"><code>dir_name
+</code></em></code></p>
+
+<a class="indexterm" name="idm45670547427040"></a>
+<a class="indexterm" name="idm45670547425648"></a>
+<p>Каталог установки исходных текстов Boost.</p></li>
+
+<li><p><a name="option_cmake_with_doc"></a>
+<code class="literal">-DWITH_DOC=<em class="replaceable">
+<code>bool</code></em></code></p>
+
+<a class="indexterm" name="idm45670547421888"></a>
+<a class="indexterm" name="idm45670547420496"></a>
+<p>Позволить ли произвести документацию Doxygen. С Connector/C++ 8.0.16
+этот выбор также строит документацию Doxygen для цели
+<code class="literal">all</code>.</p></li>
+
+<li><p><a name="option_cmake_with_jdbc"></a>
+<code class="literal">-DWITH_JDBC=<em class="replaceable"><code>bool</code>
+</em></code></p>
+
+<a class="indexterm" name="idm45670547416000"></a>
+<a class="indexterm" name="idm45670547414608"></a>
+<p>Построить ли legacy JDBC. Этот выбор отключен по умолчанию.
+Если это позволено, приложения Connector/C++ 8.0 могут использовать
+legacy JDBC API, аналогично Connector/C++ 1.1.</p></li>
+
+<li><p><a name="option_cmake_with_ssl"></a>
+<code class="literal">-DWITH_SSL={<em class="replaceable">
+<code>ssl_type</code></em></code>|<em class="replaceable">
+<code>path_name</code></em>}</p>
+
+<a class="indexterm" name="idm45670547410288"></a>
+<a class="indexterm" name="idm45670547408896"></a>
+<p>Этот выбор определяет, которую библиотеку SSL использовать, собирая
+Connector/C++. Значение выбора указывает на тип поддержки SSL, чтобы включить
+или путь к установкн SSL, чтобы использовать:</p>
+
+<ul><li><p><em class="replaceable"><code>ssl_type</code></em> может быть
+одним из следующих:</p>
+<ul><li><p><code class="literal">system</code>:
+Используйте системную библиотеку OpenSSL.</p>
+
+<p>Запуская приложение, которое скомпоновано с динамической библиотекой
+соединителя, библиотеки OpenSSL, от которых зависит соединитель, должны быть
+правильно найдены, если они размещаются в файловой системе рядом с
+библиотекой соединителя. Приложение должно также работать, когда библиотеки
+OpenSSL устанавливаются в стандартных местах в масштабе всей системы.
+Это предполагает, что версия OpenSSL ожидаема Connector/C++.</p>
+
+<p>Сжатые файлы <span class="command"><strong>tar</strong></span> или
+Zip для Windows, Linux и macOS должны содержать необходимые библиотеки
+OpenSSL в том же самом месте, как библиотека соединителя.</p>
+
+<p>За исключением Windows, должно быть возможно запустить приложение,
+скомпонованное с динамической библиотекой соединителя, когда библиотека
+соединителя и библиотеки OpenSSL размещаются в нестандартном месте, при
+условии, что эти места были сохранены как пути во время выполнения, создавая
+приложение (опция <span class="command"><strong>gcc</strong></span>
+<code class="option">-rpath</code>).</p>
+
+<p>В Windows может быть запущено приложение, которое скомпоновано
+с разделенной библиотекой соединителя, только если библиотека соединителя и
+библиотеки OpenSSL сохранены:</p>
+
+<ul><li><p>В системной папке Windows.</p></li>
+<li><p>В той же самой папке, где приложение.</p></li>
+<li><p>В папке, перечисленной в <code class="literal">PATH</code>.
+</p></li></ul>
+
+<p>Если приложение скомпоновано со статической библиотекой соединителя,
+остается верным, что необходимые библиотеки OpenSSL должны быть найдены в
+одном из предыдущих мест.</p></li></ul></li>
+
+<li><p><em class="replaceable"><code>path_name</code></em> это
+путь к установке SSL, чтобы использовать. Это должно быть путем к
+установленной библиотеке OpenSSL и должно указать на каталог, содержащий
+подкаталог <code class="filename">lib</code> с библиотеками OpenSSL.</p>
+
+<p>Определение пути для установки OpenSSL может быть предпочтительнее
+использования значения <em class="replaceable"><code>ssl_type</code></em> =
+<code class="literal">system</code> потому, что это может препятствовать
+тому, чтобы <span class="command"><strong>CMake</strong></span> обнаружил и
+использовал более старую или неправильную версию
+OpenSSL, установленную в системе.</p></li></ul></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

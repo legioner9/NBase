@@ -1,0 +1,1036 @@
+<HTML>
+<HEAD>
+  <TITLE>Руководство по MyODBC 3.51.03</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1><A NAME="General_Information">2 Общая информация относительно
+ODBC и MyODBC 3.51</A></H1>
+<P>Эта глава содержит общую информацию относительно ODBC и MyODBC.</P>
+
+<H2><A NAME="Introduction_to_ODBC">2.1 Введение в ODBC</A></H2>
+<P>Open Database Connectivity (ODBC) представляет собой интерфейс прикладной
+программы (API) для доступа к базам данных. Это основано на спецификациях
+Call-Level Interface (CLI) от X/Open и ISO/IEC для API баз данных. Как язык
+доступа к базам данных применяется Structured Query Language (SQL).</P>
+
+<P>ODBC разработан для максимальной способности к взаимодействию, то есть
+одна прикладная программа может без изменения своего исходного текста
+работать через интерфейс с какой угодно СУБД. Прикладные программы вызывают
+функции интерфейса ODBC, которые выполнены в специфических для базы данных
+модулях, названных драйверами. Использование драйверов изолирует прикладные
+программы от специфических для базы данных обращений. Подробнее об этом
+можно почитать на <a HREF="../../../www.microsoft.com/data">
+http://www.microsoft.com/data</a>.</P>
+
+<H2><A NAME="What_is_ODBC">2.2 Что такое ODBC</A></H2>
+<P>Первое и главное: ODBC является спецификацией для API базы данных. Этот
+API независим от любой СУБД, операционной системы или языка программирования.
+</P>
+
+<P>ODBC API основан на спецификациях CLI от X/Open и ISO/IEC. ODBC 3.x
+полностью соответствует обоим этим спецификациям, более ранние версии ODBC
+были основаны на предварительных версиях этих спецификаций, но полностью не
+выполняли их, зато добавили свойства, нужные только разработчикам оконных
+приложений, например, прокручиваемые курсоры.</P>
+
+<P>Разработчики драйверов для СУБД выполняют функции ODBC API. Приложения
+вызывают функции в этих драйверах, чтобы обратиться к данным способом,
+независимым от базы данных. Администратор драйверов (Driver Manager)
+управляет связью между прикладными программами и драйверами.</P>
+
+<H2><A NAME="ODBC_Standard">2.3 Как ODBC стандартизирует доступ к базе данных
+</A></H2>
+<P>Имеются два архитектурных требования:</P>
+
+<OL><LI>Прикладные программы должны быть способны обратиться ко многим СУБД,
+используя тот же самый исходный текст без того, чтобы его перетранслировать
+или заново компоновать.
+
+<LI>Прикладные программы должны быть способны обратиться ко многим СУБД
+одновременно (через разные драйверы).</OL>
+
+<P>ODBC успешно решает эти проблемы следующим способом:</P>
+<DL COMPACT>
+<DT><STRONG>ODBC является интерфейсом уровня вызовов:</STRONG>
+<DD>Чтобы решить проблему с тем, как прикладные программы обращаются ко
+многим СУБД, используя один и тот же исходный текст, существует стандарт CLI.
+ODBC содержит все функции в спецификации CLI и обеспечивает дополнительные
+функции, обычно требуемые прикладными программами.
+
+<BR><DT><STRONG>ODBC определяет стандартный синтаксис SQL:</STRONG>
+<DD>В дополнение к стандартному интерфейсу уровня обращения (вызова), ODBC
+определяет стандартный синтаксис SQL. Он базируется на спецификации X/Open
+SQL CAE. Если используемый ODBC синтаксис отличается от того, который
+применяет конкретная СУБД, производится преобразование на лету. Однако, такие
+преобразования редки потому, что большинство СУБД уже используют стандартный
+синтаксис языка SQL.
+
+<BR><DT><STRONG>ODBC предоставляет Driver Manager для управления
+одновременным доступом к многим СУБД:</STRONG>
+<DD>Хотя использование драйверов решает проблему одновременного доступа ко
+многим базам данных, код, необходимый, чтобы сделать это, может быть сложен.
+Прикладные программы которые разработаны, чтобы работать со всеми драйверами,
+не могут быть статически связаны с любыми драйверами. Вместо этого они
+должны загрузить драйверы во время выполнения и вызывать функции в них через
+таблицу указателей функций. Ситуация становится более сложной, если
+прикладная программа использует много драйверов сразу. Чтобы избавить
+программу от проблем с этим, ODBC обеспечивает Driver Manager. Администратор
+драйверов (Driver Manager) осуществляет все функции ODBC обычно как вызовы
+функций ODBC в драйверах и статически связан с прикладной программой или
+загружен прикладной программой во время выполнения. Таким образом, вызовы из
+прикладной программы функций ODBC по именам обрабатываются в Driver Manager
+вместо того, чтобы обращаться по указателю к каждому драйверу. ODBC
+предоставляет много возможностей СУБД, но не требует, чтобы каждый драйвер
+поддерживал их все.</DL>
+
+<H2><A NAME="ODBC_Architecture">2.4 Архитектура (My)ODBC</A></H2>
+<P>Архитектура MyODBC имеет 5 главных компонентов как показано ниже:</P>
+
+<DL COMPACT>
+<DT><STRONG>Приложение:</STRONG>
+<DD>Это программа, которая вызывает ODBC API, чтобы обратиться к данным с
+сервера (MySQL). Прикладная программа общается с администратором драйверов
+или драйвером, непосредственно использующим стандарт ODBC-обращения.
+Прикладная программа не заботится, где данные сохранены, как они сохранены
+или как система конфигурирована, чтобы обратиться к данным. Единственное, что
+реально надо знать, имя источника данных (Data Source Name, DSN). Ряд задач
+является общим для всех программ, независимо от того, как они используют
+ODBC. Эти задачи:
+<UL><LI>Выбор сервера (MySQL) и связь с ним.
+<LI>Передача на рассмотрение инструкции SQL для выполнения.
+<LI>Получение результатов (если они есть).
+<LI>Обработка ошибок.
+<LI>Обработка транзакции или обратная перемотка.
+<LI>Отсоединение от сервера.</UL>
+
+Самыми главными тут являются передача на рассмотрение инструкции SQL для
+выполнения и получение результатов запроса (если они есть).
+
+<BR><DT><STRONG>Driver manager:</STRONG>
+<DD>Driver Manager представляет собой библиотеку, которая управляет связью
+между прикладной программой и драйвером или драйверами. Это делает:
+<UL><LI>Обработку Data Source Names (DSN).
+<LI>Загрузку и выгрузку драйверов.
+<LI>Обрабатку ODBC-обращения к функции или передачу вызова драйверу.</UL>
+
+<BR><DT><STRONG>Драйвер MyODBC:</STRONG>
+<DD>Драйвер MyODBC представляет собой библиотеку, которая осуществляет
+функции в ODBC API. Это обрабатывает ODBC-обращения к функции, представляет
+на рассмотрение запросы SQL на сервер MySQL и возвращает результаты обратно
+прикладной программе. В случае необходимости, драйвер изменяет запрос
+прикладной программы так, чтобы запрос соответствовал синтаксису MySQL.
+
+<BR><DT><STRONG>ODBC.INI:</STRONG>
+<DD>ODBC.INI является главным файлом настройки ODBC, который хранит драйвер и
+информацию о базе данных, требуемую, чтобы соединиться с сервером. Это
+используется Driver Manager, чтобы определить который драйвер надо загрузить,
+используя Data Source Name. Драйвер использует этот файл, чтобы прочитать
+параметры подключения, основанные на определенном DSN. Для получения большего
+количества информации прочтите раздел
+"<A HREF="myodbc3.htm#Configuring_MyODBC_DSN">3.2 Настройка MyODBC DSN</A>".
+
+<BR><DT><STRONG>MySQL SERVER:</STRONG>
+<DD>Это источник данных.</DL>
+
+<H2><A NAME="Types_of_MySQL_ODBC_Drivers">2.5 Типы ODBC-драйверов MySQL</A>
+</H2>
+<P>Как описано ранее, MySQL AB поддерживает два драйвера ODBC с открытыми
+исходными текстами, а именно MyODBC и MySQL ODBC 3.51, для работы с MySQL
+через ODBC API.</P>
+
+<H2><A NAME="Where_Can_I_Get_MyODBC">2.6 Где взять MyODBC</A></H2>
+<P>MySQL AB распространяет все свои программы под General Public License
+(GPL). Самую свежую версию MyODBC или MyODBC 3.51 (двоичные коды и исходные
+тексты) можно скачать с <a HREF="../../../www.mysql.com/default.htm">
+http://www.mysql.com</a>. Подробно о MySQL ODBC рассказано на
+<a HREF="../../../www.mysql.com/downloads/api-myodbc.html">
+http://www.mysql.com/downloads/api-myodbc.html</a>.</P>
+
+<H2><A NAME="How_To_Install_MyODBC">2.7 Как инсталлировать MyODBC</A></H2>
+
+<H3><A NAME="Binary_Windows_Installation">2.7.1 Двоичная версия на Windows
+</A></H3>
+<P>Для установки MyODBC на Windows Вы должны скачать соответствующий
+дистрибутивный файл для Вашей операционной системы с
+<a HREF="../../../www.mysql.com/downloads/api-myodbc.html">
+http://www.mysql.com/downloads/api-myodbc.html</a>, распаковать его и
+выполнить файл <TT>SETUP.EXE</TT>.</P>
+
+<H3><A NAME="Source_Windows_Installation">2.7.2 Установка из исходных
+текстов под Windows</A></H3>
+
+<H4>2.7.2.1 Требования</H4>
+<UL><LI><STRONG>MDAC</STRONG>, Microsoft Data Access SDK с
+<a HREF="www.microsoft.com/data">www.microsoft.com/data</a>.
+
+<LI><STRONG>Клиентская библиотека и включаемые файлы MySQL</STRONG> из
+3.23.14 или выше. Это требуется потому, что MyODBC использует новые
+обращения, которые существуют только начиная с этой версии.
+<a HREF="../../../www.mysql.com/downloads/index.html">
+http://www.mysql.com/downloads/index.html</a>.</UL>
+
+<H4>2.7.2.2 Построение MyODBC 3.51</H4>
+<P><CODE>MyODBC 3.51</CODE> поставляется в виде исходников с
+<STRONG>Makefile</STRONG>, который использует <TT>nmake</TT>. В дистрибутиве
+есть <TT>WIN_Makefile</TT> для формирования нормальной версии и
+<TT>WIN_Makefile_debug</TT> для формирования отладочной версии драйвера и
+DLL-библиотек. Для построения драйвера:</P>
+
+<P>Скачайте исходники и распакуйте их в какой-нибудь каталог, скажем,
+<TT>myodbc3-src</TT>. Дальше выполните следующие команды для
+создания нормальной версии:
+<PRE>
+Command&#62; cd myodbc3-src
+Command&#62; nmake -f Win_Makefile
+Command&#62; nmake -f Win_Makefile install
+</PRE></P>
+
+<P><TT>nmake -f Win_Makefile</TT> формирует версию драйвера и помещает
+двоичные файлы в подкаталог <TT>release</TT>. Команда
+<TT>nmake -f Win_Makefile install</TT> инсталлирует (вообще-то просто
+копирует) библиотеку драйвера и его DLL (<TT>myodbc3.lib</TT> и
+<TT>myodbc3.dll</TT>) в системный каталог ОС. Аналогично Вы можете
+сформировать версию для отладки, используя <TT>Win_Makefile_Debug</TT>:
+<PRE>
+Command&#62; nmake -f Win_Makefile_debug
+Command&#62; nmake -f Win_Makefile_debug install
+</PRE></P>
+
+<P>Вы можете oчищать и восстанавливать драйвер, используя команды:
+<PRE>
+Command&#62; nmake -f Win_Makefile clean
+Command&#62; nmake -f Win_Makefile install
+</PRE></P>
+
+<P>ОБРАТИТЕ ВНИМАНИЕ: Удостоверитесь, что определили правильные библиотеки
+пользователей MySQL и путь файлов заголовка в Makefile. Это принимает
+заданный по умолчанию путь <TT>C:\mysql\include</TT> и
+<TT>C:\mysql\lib\opt</TT> (для обычных DLL) или <TT>C:\mysql\lib\debug</TT>
+для отладочной версии.</P>
+
+<P><STRONG>Тестирование библиотек драйвера:</STRONG> после того, как
+библиотеки драйвера скопированы в системный каталог, Вы можете проверить
+качество их построения используя выборки, обеспеченные в подкаталоге
+<TT>samples</TT> каталога исходного текста:
+<PRE>
+Command&#62; cd samples
+Command&#62; nmake -f Win_Makefile all
+</PRE></P>
+
+<H4>2.7.2.3 Построение MyODBC 2.50</H4>
+<P><CODE>MyODBC</CODE> распространяется в исходниках как VC Project для
+Windows. Можно формировать драйвер, используя прямые файлы проекта VC (.dsp и
+.dsw), имеющиеся в дистрибутиве.</P>
+
+<H3><A NAME="Source_Installation_Unix">2.7.3 Установка из исходных
+текстов под Unix</A></H3>
+<P>Чтобы формировать драйвер самостоятельно под Linux, Вы должны иметь:</P>
+
+<H4>2.7.3.1 Требования</H4>
+<UL><LI><STRONG>Клиентская библиотека и включаемые файлы MySQL</STRONG> из
+3.23.14 или выше. Это требуется потому, что MyODBC использует новые
+обращения, которые существуют только начиная с этой версии.
+<a HREF="../../../www.mysql.com/downloads/index.html">
+http://www.mysql.com/downloads/index.html</a>
+
+<LI>Библиотека MySQL должна быть конфигурирована с опцией
+--with-thread-safe-client. libmysqlclient должна быть установлена в системе
+как разделяемая библиотека.
+
+<LI>Должен быть установлен один из администраторов драйверов unix ODBC:<BR>
+<STRONG>iodbc</STRONG> 3.0 или старше (http://www.iodbc.org) или<BR>
+<STRONG>unixodbc</STRONG> Alpha 3 или старше (http://www.unixodbc.org).
+
+<LI>Если Вы используете <STRONG>character set</STRONG>, который не
+компилируется в библиотеку MySQL (по умолчанию там будут: latin1, big5,
+czech, euc_kr, gb2312, gbk, sjis, tis620 и ujis), Вы должны установить
+символьные определения mysql из каталога charset в SHAREDIR (по умолчанию это
+<TT>/usr/local/mysql/share/mysql/charsets</TT>). Они должны уже быть на
+месте, если Вы установили сервер MySQL на той же самой машине.</UL>
+
+<P>Как только Вы поимеете все требуемые файлы и распакуете исходные файлы в
+отдельный каталог, начинайте сборку драйвера как показано ниже.</P>
+
+<H4>2.7.3.2 Настройка</H4>
+<P>Единственные требуемые параметры; <CODE>--with-mysql-libs=DIR</CODE> и
+<CODE>--with-mysql-includes=DIR</CODE>. Здесь <CODE>DIR</CODE> задает
+каталог, где искать библиотеки и включаемые файлы mysql.</P>
+
+<P>При использовании <CODE>iodbc</CODE>, если <CODE>iodbc</CODE> не
+установлен в заданное по умолчанию расположение (<TT>/usr/local</TT>), Вам
+придется использовать <CODE>--with-iodbc=DIR</CODE> или, если заголовки
+iODBC не находятся в <TT>DIR/include</TT>, придется использовать опцию
+<CODE>--with-iodbc-includes=INCDIR</CODE>. То же самое касается и библиотек:
+если они не в <TT>DIR/lib</TT>, примените явное указание параметром
+<CODE>--with-iodbc-libs=LIBDIR</CODE>.</P>
+
+<P>При использовании <CODE>unixODBC</CODE> для создания <TT>configure</TT>
+ищите <CODE>unixODBC</CODE> вместо <CODE>iODBC</CODE> и используйте параметр
+<CODE>--with-unixODBC=DIR</CODE>. Здесь <CODE>DIR</CODE> задает то место, где
+установлен unixODBC.</P>
+
+<P>Если звголовки и библиотеки unixODBC расположены не там, где надо (а надо
+в <TT>DIR/include</TT> и <TT>DIR/lib</TT> соответственно), укажите на них
+параметрами <CODE>--with-unixODBC-libs=LIBDIR</CODE> и
+<CODE>--with-unixODBC-includes=INCDIR</CODE>.</P>
+
+<P>Вы можете определять другой префикс вместо <TT>/usr/local</TT> для
+установки, например, хранить MyODBC-драйверы в <TT>/usr/local/odbc/lib</TT>,
+для этого надо указать параметр <CODE>--prefix=/usr/local/odbc</CODE>.</P>
+
+<P>Окончательно пример настройки выглядит так:
+<PRE>
+$ ./configure --prefix=/usr/local --with-iodbc=/usr/local \
+              --with-mysql-libs=/usr/local/mysql/lib/mysql \
+              --with-mysql-includes=/usr/local/mysql/include/mysql
+</PRE></P>
+
+<H4>2.7.3.3 Построение библиотек драйвера</H4>
+<P>Для построения библиотек драйвера Вы должны только выполнить:
+<PRE>
+$ make
+</PRE></P>
+
+<P>Это должно сформировать библиотеки. Если происходят какие-то ошибки,
+исправьте их и продолжите построение. Если Вы не можете собрать пакет,
+пошлите детальный отчет по e-mail на <a HREF="mailto:myodbc@lists.mysql.com">
+myodbc@lists.mysql.com</a>.</P>
+
+<H4>2.7.3.4 Установка библиотек драйвера</H4>
+<PRE>
+$ make install
+</PRE></P>
+
+<P>Устанавливает следующий набор библиотек:
+<UL><LI>libmyodbc3.so, libmyodbc3-3.51.01.so, здесь 3.51.01 является версией
+драйвера и libmyodbc3.a для <STRONG>MyODBC 3.51</STRONG> или
+
+<LI>libmyodbc.so, libmyodbc-2.50.39.so, здесь 2.50.39 является версией
+драйвера и libmyodbc.a для <STRONG>MyODBC 2.50</STRONG></UL>
+
+<P><CODE><STRONG>Обратите внимание</STRONG></CODE>, если Вы пробуете
+использовать <TT>make</TT> из <CODE>SUN</CODE>, Вы закончите с ошибками. С
+другой стороны, <TT>Make</TT> от <CODE>GNU</CODE> должен работать прекрасно
+на всех платформах.</P>
+
+<H4>2.7.3.5 Замечания для Mac OS X</H4>
+<P>Если Вы хотите формировать драйвер на Mac OS (Darwin), то используйте
+следующий пример выбора конфигурации:
+<PRE>
+$ ./configure --prefix=/usr/local --with-unixodbc=/usr/local \
+              --with-mysql-libs=/usr/local/mysql/lib/mysql \
+              --with-mysql-includes=/usr/local/mysql/include/mysql \
+              --disable-shared --enable-gui=no --host=powerpc-apple
+</PRE></P>
+
+<P>Это предполагает, что unixodbc и mysql установлены в заданные по умолчанию
+расположения. Если это не так, сконфигурируйте все соответственно.</P>
+
+<H4>2.7.3.6 Создание файлов .so</H4>
+<P>На большинстве платформ MySQL не формирует или поддерживает .so файлы, так
+как формирование с общедоступными библиотеками вызывало проблемы в прошлом.
+</P>
+
+<P>В таких случаях пользователь должен скачать дистрибутив MySQL и
+скомпилировать его с помощью:
+<PRE>
+--without-server --enable-shared
+</PRE></P>
+
+<P>Если Вы все же хотите формировать общедоступные библиотеки драйвера, Вы
+должны определить опцию настройки <CODE><STRONG>--enable-shared</STRONG>
+</CODE>.</P>
+
+<P>Если Вы конфигурировали пакет с опцией <CODE><STRONG>--disable-shared
+</STRONG></CODE>, то Вы можете формировать .so-файл, используя следующее:
+<PRE>
+$ cd MyODBC-3.51.01
+$ make
+$ cc -bundle -undefined error -o .libs/libmyodbc3-3.51.01.so *.o \
+     -lz -lc -lmysqlclient -L/usr/local/mysql/lib/mysql/ \
+     -compatibility_version 2 -current_version 2.0
+  Это формирует и помещает файл libmyodbc3-3.51.01.so в каталог .libs
+  Скопируйте этот файл в каталог библиотек MyODBC (/usr/local/lib или что
+  Вы там определили в --prefix).
+$ cd .libs
+$ cp libmyodbc3-3.51.01.so /usr/local/lib
+$ cd /usr/local/lib
+$ ln -s libmyodbc3-3.51.01.so libmyodbc3.so
+</PRE></P>
+
+<H3><A NAME="Development_Source_Tree_Installation">2.7.4 Установка из дерева
+исходных текстов для разработки</A></H3>
+<P>Предостережение: Вы должны читать этот раздел только, если Вы
+заинтересованы в разработке пакета. Если Вы только хотите получить
+<CODE>MyODBC 3.51</CODE>, Вы должны использовать стандартный дистрибутив
+(исходный текст или двоичные модули).</P>
+
+<P>Чтобы получить самое современное дерево исходных текстов для
+разработчиков, сделайте следующее:
+<UL><LI>Скачайте <CODE>BitKeeper</CODE> с
+<a HREF="../../../www.bitmover.com/cgi-bin/download.cgi">
+http://www.bitmover.com/cgi-bin/download.cgi</a>. Вам нужен
+<CODE>Bitkeeper 2.0</CODE> или более новый, чтобы обратиться к архиву.
+
+<LI>Установите его согласно прилагаемым инструкциям.
+<LI>Когда BitKeeper установлен, сначала перейдите в каталог, откуда хотите
+работать, а затем используйте эту команду, если Вы хотите получить снимок
+исходных текстов MyODBC 3.51:
+<PRE>
+shell&#62; bk clone bk://work.mysql.com:7002/myodbc-3.51
+</PRE>
+
+В вышеупомянутых примерах исходное дерево будет установлено в подкаталог
+<TT>myodbc-3.51</TT> Вашего текущего каталога.
+
+<LI>Вам понадобятся <CODE>GNU autoconf 2.13</CODE>,
+<CODE>automake 1.4</CODE>, <CODE>libtool</CODE> и <CODE>m4</CODE>, чтобы
+выполнить следующий набор команд:
+<PRE>
+shell&#62; cd myodbc-3.51
+shell&#62; bk -r edit
+shell&#62; aclocal; autoheader; autoconf; automake;
+shell&#62; ./configure    # Здесь напишите параметры
+shell&#62; make
+</PRE>
+
+Под Windows используйте <TT>WIN-Makefile</TT> и <TT>WIN-Makefile_debug</TT>.
+
+<LI>Когда пакет собран, выполните <CODE>make install</CODE>. Эта команда
+установит драйвер <CODE>MyODBC 3.51</CODE> на Вашей системе. Если Вы
+установили последние версии требуемых инструментальных средств GNU, и они
+разрушаются при попытке обработать файлы конфигурации, пожалуйста, сообщите
+об этом на myodbc@lists.mysql.com. Однако, если Вы выполняете
+<CODE>aclocal</CODE> и получаете ошибку "command not found" или подобную
+проблему, не сообщайте об этом. Вместо этого, удостоверьтесь, что все
+необходимые инструментальные средства установлены, и что Ваша переменная PATH
+задана правильно, так что оболочка может найти их.
+
+<LI>После того, как команда <CODE>bk clone</CODE> скачает дерево исходных
+текстов, Вы должны периодически выполнять <CODE>bk pull</CODE>, чтобы
+получить очередные модификации.
+
+<LI>Вы можете исследовать хронологию изменения дерева со всеми дифами (diff),
+используя <CODE>bk sccstool</CODE>. Если Вы видите некоторый странный диф или
+непонятный код, спрашивайте по e-mail <a HREF="mailto:myodbc@lists.mysql.com">
+myodbc@lists.mysql.com</a>. Также, если Вы думаете, что имеете лучшую идею
+относительно того, как что-то сделать, пришлите патч на тот же адрес. Патч
+изготовляется командой <CODE>bk diffs</CODE> после внесения правок в исходные
+тексты. Если Вы не имеете времени писать код, пошлите описание своей идеи.
+
+<LI><CODE>BitKeeper</CODE> имеет хорошую утилиту справочника, к которой Вы
+можете обращаться через <CODE>bk helptool</CODE>.</UL>
+
+<H2><A NAME="Supported_Platforms">2.8 Поддерживаемые платформы</A></H2>
+<P>Драйвер MySQL ODBC может использоваться на всех основных
+платформах, поддерживаемых MySQL:</P>
+
+<UL><LI>Все версии Windows: 95/98/NT/ME/2000/XP
+<LI>OS/2
+<LI>Mac OS X Server
+<LI>Amiga
+<LI>Все версии Unix:
+<UL><LI>AIX
+<LI>BSDI
+<LI>DEC
+<LI>FreeBSD
+<LI>HP-UX
+<LI>Linux
+<LI>NetBSD
+<LI>OpenBSD
+<LI>SGI Irix
+<LI>Solaris
+<LI>SunOS
+<LI>SCO OpenServer
+<LI>SCO UnixWare
+<LI>Tru64 Unix</UL></UL>
+
+<P>Вообще, MyODBC (3.51) поддержан на всех платформах, которые MySQL
+поддерживает. Если двоичный дистрибутив не доступен для специфической
+платформы, то Вы можете формировать драйвер самостоятельно, скачав его
+исходники. А чтобы это стало простым для других пользователей, пошлите
+готовые двоичные модули на <a HREF="mailto:myodbc@lists.mysql.com">
+myodbc@lists.mysql.com</a>.</P>
+
+<H2><A NAME="MyODBC_Mailing_List">2.9 Список рассылки MyODBC</A></H2>
+<P>MySQL обеспечивает семейство пользователей своих пакетов списком рассылки,
+где новички получают решения от опытных пользователей, посылая запросы на
+<a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a>.</P>
+
+<P>Чтобы подписаться на список рассылки MyODBC, пошлите сообщение на
+<a HREF="mailto:myodbc-subscribe@lists.mysql.com">
+myodbc-subscribe@lists.mysql.com</a>. Чтобы отписаться от списка рассылки
+MyODBC, пошлите сообщение на
+<a HREF="mailto:myodbc-unsubscribe@lists.mysql.com">
+myodbc-unsubscribe@lists.mysql.com</a>. Вы можете также просматривать архив
+списка рассылки на <a HREF="../../../lists.mysql.com/default.htm">http://lists.mysql.com
+</a>.</P>
+
+<H2><A NAME="MyODBC_Support">2.10 Поддержка MyODBC</A></H2>
+<P>Есть возможность получить поддержку пакета. Если Вы хотите, чтобы:
+<UL><LI>Ошибки исправлялись быстро.
+<LI>Решать любые проблемы с MyODBC или MySQL.
+<LI>Была возможность заказывать свойство в драйвере.
+<LI>Иметь расширение драйвера.
+<LI>Иметь патчи, поставленные непосредственно в Ваш почтовый ящик.
+<LI>Иметь прямое взаимодействие с разработчиками MySQL и MyODBC.</UL></P>
+
+<P>Вы должны получить контракт поддержки от <CODE>MySQL AB</CODE>. Фирма
+<CODE>MySQL AB</CODE> поддерживает различные типы лицензий поддержки, чтобы
+помочь Вам выбрать именно то, что нужно. Для получения большего количества
+информации относительно поддержки MySQL, посетите сайт
+<a HREF="../../../https@order.mysql.com/default.htm">https://order.mysql.com</a> или пошлите
+e-mail на <a HREF="mailto:licensing@mysql.com">licensing@mysql.com</a>.</P>
+
+<P>Как только Вы купите поддержку, Вы сможете посылать запросы или отчеты об
+ошибках, используя MySQL support wizard на
+<a HREF="../../../support.mysql.com/default.htm">http://support.mysql.com</a>, затем группа
+разработки MySQL начнет работать над Вашей проблемой немедленно.</P>
+
+<H2><A NAME="Reporting_Problems">2.11 Как сообщать об ошибках и
+проблемах с MyODBC</A></H2>
+<P>Если Вы сталкиваетесь с трудностями с <CODE>MyODBC</CODE> или с
+<CODE>MyODBC 3.51</CODE>, Вы должны запустить создание файла протокола из
+<CODE>ODBC Manager</CODE> (протокол Вы получаете при запросе файлов
+регистрации из <CODE>ODBC ADMIN</CODE>) или протокол <CODE>MyODBC</CODE> (или
+<CODE>MyODBC 3.51</CODE>).</P>
+
+<P><STRONG>Для получения трассировки ODBC через Driver Manager, Вы
+должны сделать следующее:</STRONG></P>
+
+<UL><STRONG>Открыть ODBC Data Source Administrator:</STRONG>
+<UL><LI>Кликните на <CODE><STRONG>Start</STRONG></CODE>, укажите на
+<CODE><STRONG>Settings</STRONG></CODE> и запустите
+<CODE><STRONG>Control Panel</STRONG></CODE>.
+
+<LI>На компьютерах под <CODE><STRONG>Microsoft Windows 2000</STRONG></CODE>,
+сделайте двойной щелчок на <CODE><STRONG>Administrative Tools</STRONG></CODE>
+и сделайте двойной щелчок на <CODE><STRONG>Data Sources (ODBC)</STRONG>
+</CODE>.
+
+На компьютерах с более ранней версией <CODE><STRONG>Microsoft Windows
+</STRONG></CODE> дважды щелкните на <CODE><STRONG>32-bit ODBC</STRONG></CODE>
+или на <CODE><STRONG>ODBC</STRONG></CODE>.
+
+<STRONG>Появится диалоговое окно <CODE><STRONG>ODBC Data Source Administrator
+</STRONG></CODE>.</UL>
+
+<STRONG>Чтобы включить трассировку, Вы должны сделать следующее:</STRONG>
+<UL><LI>Вкладка <CODE><STRONG>Tracing</STRONG></CODE> диалогового окна
+<CODE><STRONG>ODBC Data Source Administrator</STRONG></CODE> нужна, чтобы
+сконфигурировать путь ODBC-обращения к функции трассировки.
+
+<LI>Когда Вы активизируете трассировку из вкладки <CODE><STRONG>Tracing
+</STRONG></CODE>, <CODE><STRONG>Driver Manager</STRONG></CODE> регистрирует
+все ODBC-обращения к функциям для всех впоследствии выполненных программ.
+
+<LI>ODBC-обращения к функциям из прикладных программ, запущенных ранее, не
+регистрируются. ODBC-обращения к функциям будут зарегистрированы в журнале,
+который Вы определяете.
+
+<LI>Трассировка прекращается только после того, как Вы нажимаете Stop Tracing
+Now. Не забудьте, что при включенной трассировке журнал постоянно растет, а
+это воздействует на эффективность всех Ваших прикладных программ ODBC.
+<STRONG>Под Unix</STRONG> Вы должны явно установить опцию <CODE><STRONG>TRACE
+</STRONG></CODE> в файле настроек <CODE><STRONG>ODBC.INI</STRONG></CODE>.
+Установите трассировку в <CODE>ON</CODE> или в <CODE>OFF</CODE>, используя
+параметры TRACE или TRACEFILE в <TT>odbc.ini</TT>. Например, так:
+<PRE>
+TraceFile = /tmp/odbc.trace
+Trace = 1
+</PRE>
+
+Здесь TRACEFILE определяет имя и полный путь файла протокола, а TRACE
+установлен в ON или в OFF. Вы можете также использовать 1 или YES для ON и 0
+или NO для OFF.<BR>
+
+<STRONG>Обратите внимание</STRONG>, если Вы используете <TT>ODBCConfig</TT>
+из <CODE>unixODBC</CODE>, то следуйте командам из HOWTO-ODBCConfig на
+<a HREF="../../../www.unixodbc.org/config.html">
+http://www.unixodbc.org/config.html</a> для трассировки вызовов unixODBC.
+</UL>
+
+<STRONG>Чтобы получить протокол драйвера <CODE>MyODBC</CODE> или <CODE>MyODBC
+3.51</CODE>, надо сделать следующее:</STRONG>
+<UL><LI>Гарантируйте, что Вы используете <TT>myodbc3d.dll</TT>, но не
+<TT>myodbc3.dll</TT> для <CODE>MyODBC 3.51</CODE> (или <TT>myodbcd.dll</TT>
+для <CODE>MyODBC</CODE>). Самый простой способ сделать это состоит в том,
+чтобы получить <TT>myodbc3d.dll</TT> (или <TT>myodbcd.dll</TT>) из
+дистрибутива <CODE>MyODBC 3.51</CODE> и скопировать поверх
+<TT>myodbc3.dll</TT> (или <TT>myodbc.dll</TT>), который, скорей всего,
+расположен в каталоге <TT>C:\windows\system32</TT> или в
+<TT>C:\winnt\system32</TT>. Обратите внимание, что Вы, вероятно, захотите
+восстановить старый файл <TT>myodbc.dll</TT> после окончания отладки,
+поскольку он работает намного быстрее, чем <TT>myodbc3d.dll</TT> (или
+<TT>myodbcd.dll</TT>), так что сделайте резервную копию оригинальной DLL.
+
+<LI>Отметьте опцию <CODE><STRONG>Trace MyODBC</STRONG></CODE> на экране
+конфигурирования соединения через MyODBC. Протокол будет записан в файл
+<TT>C:\myodbc.log</TT>. Если опция трассировки отсутствует на вышеупомянутом
+экране, это означает, что Вы не используете драйвер <TT>myodbcd.dll</TT>. Под
+Linux или если Вы используете связь DSN-Less, Вы должны обеспечить в строке
+подключения параметр <CODE>OPTION=4</CODE>.
+
+<LI>Запустите Вашу прикладную программу и попробуйте получить то, что вызвало
+проблемы. Проверьте файл протокола MyODBC, чтобы выяснить, что же могло быть
+неправильно. Если Вы выясняете, что пошло не так, пожалуйста, пошлите
+сообщение на <a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com
+</a> (если у Вас контракт о поддержке с MySQL AB, пишите на
+<a HREF="mailto:support@mysql.com">support@mysql.com</a>) с кратким описанием
+проблемы и со следующей дополнительной информацией:
+<UL><LI>Версия MyODBC
+<LI>Версия и тип используемого ODBC Driver Manager
+<LI>Версия сервера MySQL
+<LI>ODBC0трассировка из Driver Manager
+<LI>Файл протокола драйвера MyODBC
+<LI>Простой воспроизводимый пример</UL></UL>
+
+Не забудьте, что большее количество информации, которую Вы можете
+обеспечивать, повышает шансы на решение проблемы! Также стоит почитать архив
+списка рассылки MyODBC на <a HREF="../../../lists.mysql.com/default.htm">
+http://lists.mysql.com</a> перед отправкой сообщения: вдруг уже кто-то имел
+такую проблему и решил ее?</UL>
+
+<H2><A NAME="Programs_Known_to_Work_With_MyODBC">2.12 Программы, точно
+работающие с драйвером MyODBC</A></H2>
+<P>Большинство программ должно работать с <STRONG>MyODBC</STRONG>, но для
+каждой из перечисленных ниже это было проверено непосредственно.</P>
+
+<DL COMPACT>
+<DT><STRONG>Программа</STRONG>
+<DD><STRONG>Комментарий</STRONG>
+
+<DT>Access
+<DD>Чтобы работать с Access:
+<UL><LI>Если Вы используете Access 2000, Вы должны получить и установить
+самый новый (версия 2.6 или выше) пакет Microsoft MDAC (<CODE>Microsoft Data
+Access Components</CODE>) с <a HREF="../../../www.microsoft.com/data">
+http://www.microsoft.com/data</a>. Это устранит следующую ошибку в Access:
+когда Вы экспортируете данные в MySQL, имена таблицы и столбца не определены.
+Другой путь обхода этой ошибки состоит в том, чтобы поставить MyODBC не ниже
+2.50.33 и MySQL не ниже 3.23, которые вместе обеспечивают обход этой ошибки.
+Вы должны также получить и применить Microsoft Jet 4.0 Service Pack 5 (SP5),
+который может быть найден на
+<a HREF="../../../support.microsoft.com/default.aspx@scid=kb;EN-US;q239114">
+http://support.microsoft.com/default.aspx?scid=kb;EN-US;q239114</a>. Это
+исправит ряд ситуаций, в которых столбцы помечаются как удаленные
+(<CODE>#deleted#</CODE>) в Access. Обратите внимание, что, если Вы
+используете MySQL 3.22, Вы должны применить патч для MDAC и использовать
+MyODBC 2.50.32 или 2.50.34 и выше для решения проблемы.
+
+<LI>Для всех версий Access Вы должны включить опцию MyODBC <CODE>Return
+matching rows</CODE>. Для Access 2.0 Вы должны дополнительно включить опцию
+<CODE>Simulate ODBC 1.0</CODE>.
+
+<LI>Вы должны иметь timestamp во всех таблицах, которые Вы хотите
+модифицировать. Для максимальной мобильности <CODE>TIMESTAMP(14)</CODE> или
+просто <CODE>TIMESTAMP</CODE> рекомендуются вместо других вариантов
+<CODE>TIMESTAMP(X)</CODE>.
+
+<LI>Вы должны иметь первичный ключ в таблице. Если это не так, новые или
+модифицируемые строки могут обнаруживаться как <CODE>#DELETED#</CODE>.
+
+<LI>Используйте только поля <CODE>DOUBLE</CODE> с плавающей точкой. Access
+рушится при сравнении с single-полями с плавающей точкой. Это приводит к
+тому, что новые или модифицируемые строки могут обнаруживаться как
+<CODE>#DELETED#</CODE>, или Вы не можете находить или модифицировать строки.
+
+<LI>Если Вы связываете таблицу, которая имеет <CODE>BIGINT</CODE> как один из
+столбца, через MyODBC, то результаты будут отображаться как
+<CODE>#DELETED</CODE>. Обойти это можно так:
+
+<UL><LI>Создайте еще один фиктивный столбец с <CODE>TIMESTAMP</CODE> как тип
+данных, предпочтительно <CODE>TIMESTAMP(14)</CODE>.
+
+<LI>Проверьте <CODE>Change BIGINT columns to INT</CODE> в диалоге опций
+соединения в ODBC DSN Administrator.
+<LI>Удалите связь таблицы из и пересоздайте ее.</UL>
+
+Это все еще отображает предыдущие записи как <CODE>#DELETED#</CODE>, но новые
+записи будут отображаться правильно.
+
+<LI>Если Вы все еще получаете ошибку <CODE>Another user has changed your data
+</CODE> после добавления столбца <CODE>TIMESTAMP</CODE>, следующий прием
+может помочь: не используйте представление листа данных таблицы. Создайте
+взамен форму с полями, которые Вы хотите видеть, и используйте вид
+<CODE>form</CODE> листа данных. Вы должны установить реквизит
+<CODE>DefaultValue</CODE> для столбца <CODE>TIMESTAMP</CODE> в
+<CODE>NOW()</CODE>. Стоит сделать столбец <CODE>TIMESTAMP</CODE> скрытым.
+
+<LI>В некоторых случаях Access может генерировать запрещенные запросы SQL,
+которые MySQL не может понимать. Вы можете исправить это, выбирая
+<CODE>Query|SQLSpecific|Pass-Through</CODE> из меню Access.
+
+<LI>Access под NT показывает столбцы <CODE>BLOB</CODE> как <CODE>OLE
+OBJECTS</CODE>. Если Вы хотите иметь столбцы <CODE>MEMO</CODE> вместо этого,
+Вы должны изменить тип столбца на <CODE>TEXT</CODE> с помощью
+команды <CODE>ALTER TABLE</CODE>.
+
+<LI>Access не может всегда обрабатывать столбцы <CODE>DATE</CODE> правильно.
+Если Вы имеете проблему с ними, измените столбцы на <CODE>DATETIME</CODE>: с
+ними путаницы нет.
+
+<LI>Если Вы имеете в Access столбец, определенный как <CODE>BYTE</CODE>,
+Access пробует экспортировать это как <CODE>TINYINT</CODE> вместо
+<CODE>TINYINT UNSIGNED</CODE>. Это задаст Вам проблем, если Вы имеете
+значения &#62; 127 в этом столбце!</UL>
+
+<DT>ADO
+<DD>Когда Вы программируете с ADO API и <STRONG>MyODBC</STRONG> Вы должны
+обратить внимание на некоторые заданные по умолчанию свойства, которые пока
+не поддержаны сервером MySQL. Например, использование свойства
+<CODE>CursorLocation Property</CODE> как <CODE>adUseServer</CODE> возвратит
+для реквизита <CODE>RecordCount Property</CODE> -1. Чтобы иметь правильное
+значение, Вы должны установить это свойство в <CODE>adUseClient</CODE>, как
+показано в этом коде на VB:
+<PRE>
+Dim myconn As New ADODB.Connection
+Dim myrs As New Recordset
+Dim mySQL As String
+Dim myrows As Long
+
+myconn.Open "DSN=MyODBCsample"
+mySQL = "SELECT * from user"
+myrs.Source = mySQL
+Set myrs.ActiveConnection = myconn
+myrs.CursorLocation = adUseClient
+myrs.Open
+myrows = myrs.RecordCount
+
+myrs.Close
+myconn.Close
+</PRE>
+
+Другой обход: использовать инструкцию <CODE>SELECT COUNT(*)</CODE> для
+подобного запроса, чтобы получить правильное число строк.
+
+<DT>Active server pages (ASP)
+<DD>Вы должны использовать параметр <CODE>Return matching rows</CODE>.
+
+<DT>Приложения BDE
+<DD>Вы должны установить параметры <CODE>Don't optimize column widths</CODE>
+и <CODE>Return matching rows</CODE>. Тогда все должно работать.
+
+<DT>Borland Builder 4
+<DD>Когда Вы запускаете запрос, Вы можете использовать свойство
+<CODE>Active</CODE> или метод <CODE>Open</CODE>. Обратите внимание, что
+<CODE>Active</CODE> запускается автоматически при выдаче запроса
+<CODE>SELECT * FROM ...</CODE>, что медленно, если Ваши таблицы большие.
+
+<DT>ColdFusion (под Unix)
+<DD>Следующая информация найдена в документации на ColdFusion: используйте
+следующую информацию, чтобы конфигурировать ColdFusion Server для Linux,
+чтобы использовать драйвер unixODBC с <STRONG>MyODBC</STRONG> для источников
+данных MySQL. Известно, что <STRONG>MyODBC</STRONG> Version 2.50.26 работает
+с MySQL Version 3.22.27 и с ColdFusion для Linux. Любая более новая версия
+должна также работать. Вы можете скачать <STRONG>MyODBC</STRONG> с
+<a HREF="../../../www.mysql.com/downloads/api-myodbc.html">
+http://www.mysql.com/downloads/api-myodbc.html</a>. ColdFusion Version 4.5.1
+позволяет использовать ColdFusion Administrator, чтобы добавлять источник
+данных MySQL. Однако, драйвер не включен в поставку ColdFusion Version 4.5.1.
+Прежде, чем драйвер MySQL появится в раскрывающемся списке ODBC datasources,
+Вы должны сформировать и скопировать драйвер <STRONG>MyODBC</STRONG> в
+<TT>/opt/coldfusion/lib/libmyodbc.so</TT>. Каталог Contrib хранит программу
+mydsn-xxx.zip, которая позволяет Вам формировать и удалять DSN-файл
+системного реестра для драйвера MyODBC в программах Coldfusion.
+
+<DT>DataJunction
+<DD>Вы должны обновить пакет, иначе будет выводиться <CODE>ENUM</CODE>
+вместо <CODE>VARCHAR</CODE>: проблемы с протоколом.
+
+<DT>Excel
+<DD>Работает нормально. Некоторые советы:
+
+<UL><LI>Если Вы имеете проблемы с датами, попробуйте выбирать их как строки,
+использующие функцию <CODE>CONCAT()</CODE>. Например:
+<PRE>
+select CONCAT(rise_time), CONCAT(set_time) from sunrise_sunset;
+</PRE>
+
+Значения, полученные как строки этим способом, должны быть правильно
+распознаны как значения времени Excel97. Цель <CODE>CONCAT()</CODE> в этом
+примере состоит в том, чтобы ввести в заблуждение ODBC в плане того, что
+столбец имеет строковый тип. Без <CODE>CONCAT()</CODE> ODBC знает, что
+столбец имеет тип time, а Excel не понимает этого. Обратите внимание, что это
+ошибка в Excel, поскольку он автоматически преобразовывает строку в time,
+хотя никто его об этом не просит. Это было бы большим удобством, если
+источником является текстовый файл, но просто глупо, когда в качестве
+источника данных выступает ODBC-подключение, которое сообщает точные типы
+для каждого столбца.</UL>
+
+<DT>Word
+<DD>Чтобы получать данные из MySQL в документах Word/Excel, надо использовать
+драйвер <CODE>MyODBC</CODE> и Add-in Microsoft Query help. Например, создайте
+базу данных с таблицей, содержащей 2 столбца текста:
+
+<UL><LI>Вставьте строки, используя инструмент командной строки
+<CODE>mysql</CODE>.
+
+<LI>Создайте DSN-файл, использующий MyODBC-драйвер, например, my.
+<LI>Откройте Word.
+<LI>Создайте пустой новой документ.
+<LI>При использовании панели инструментов Database, нажмите
+кнопку insert database.
+<LI>Нажмите кнопку Get Data.
+<LI>С правой стороны окна Get Data нажмите кнопку Ms Query.
+<LI>В Ms Query создайте New Data Source, используя DSN-файл my.
+<LI>Выберите новый запрос.
+<LI>Выберите столбцы, которые Вы хотите.
+<LI>Создайте фильтр, если он нужен.
+<LI>Выполните сортировку, если она нужна.
+<LI>Установите Return Data в Microsoft Word.
+<LI>Нажмите кнопку Finish.
+<LI>Нажмите Insert data и выберите записи.
+<LI>Теперь после нажатия на OK строки появятся в Вашем документе Word.</UL>
+
+<DT>Delphi
+<DD>Вы должны использовать BDE Version 3.2 или более новую. Установите опцию
+<CODE>Don't optimize column width</CODE> при соединении с MySQL. Также
+имеется некоторый потенциально полезный Delphi-код, который устанавливает
+ODBC-вход и BDE-вход для <STRONG>MyODBC</STRONG> (BDE-вход требует BDE Alias
+Editor, который можно свободно скачать с Delphi Super Page.
+<PRE>
+fReg:= TRegistry.Create;
+  fReg.OpenKey('\Software\ODBC\ODBC.INI\DocumentsFab', True);
+  fReg.WriteString('Database', 'Documents');
+  fReg.WriteString('Description', ' ');
+  fReg.WriteString('Driver', 'C:\WINNT\System32\myodbc.dll');
+  fReg.WriteString('Flag', '1');
+  fReg.WriteString('Password', '');
+  fReg.WriteString('Port', ' ');
+  fReg.WriteString('Server', 'xmark');
+  fReg.WriteString('User', 'winuser');
+  fReg.OpenKey('\Software\ODBC\ODBC.INI\ODBC Data Sources', True);
+  fReg.WriteString('DocumentsFab', 'MySQL');
+  fReg.CloseKey;
+  fReg.Free;
+
+  Memo1.Lines.Add('DATABASE NAME=');
+  Memo1.Lines.Add('USER NAME=');
+  Memo1.Lines.Add('ODBC DSN=DocumentsFab');
+  Memo1.Lines.Add('OPEN MODE=READ/WRITE');
+  Memo1.Lines.Add('BATCH COUNT=200');
+  Memo1.Lines.Add('LANGDRIVER=');
+  Memo1.Lines.Add('MAX ROWS=-1');
+  Memo1.Lines.Add('SCHEMA CACHE DIR=');
+  Memo1.Lines.Add('SCHEMA CACHE SIZE=8');
+  Memo1.Lines.Add('SCHEMA CACHE TIME=-1');
+  Memo1.Lines.Add('SQLPASSTHRU MODE=SHARED AUTOCOMMIT');
+  Memo1.Lines.Add('SQLQRYMODE=');
+  Memo1.Lines.Add('ENABLE SCHEMA CACHE=FALSE');
+  Memo1.Lines.Add('ENABLE BCD=FALSE');
+  Memo1.Lines.Add('ROWSET SIZE=20');
+  Memo1.Lines.Add('BLOBS TO CACHE=64');
+  Memo1.Lines.Add('BLOB SIZE=32');
+
+  AliasEditor.Add('DocumentsFab','MySQL',Memo1.Lines);
+</PRE>
+
+<DT>C++ Builder
+<DD>Тестировался с BDE Version 3.0. Единственная известная проблема состоит в
+том, что, когда схема таблицы изменилась, поля запроса не модифицируются.
+BDE, кажется, не распознает первичные ключи, только PRIMARY индекс, хотя это
+не было проблемой.
+
+<DT>Vision
+<DD>Вы должны использовать параметр <CODE>Return matching rows</CODE>.
+
+<DT>Visual Basic
+<DD>Чтобы модифицировать таблицу, Вы должны определить первичный ключ для
+таблицы. Visual Basic с ADO не может обрабатывать большие целые числа. Это
+означает, что некоторые запросы подобно <CODE>SHOW PROCESSLIST</CODE> не
+будут работать правильно. Установите опцию <CODE>OPTION=16834</CODE> в строке
+подключения ODBC или задайте параметр <CODE>Change BIGINT columns to INT
+</CODE> на экране соединения MyODBC. Вы можете также устанавливать опцию
+<CODE>Return matching rows</CODE>.
+
+<DT>VisualInterDev
+<DD>Если Вы получаете ошибку <CODE>[Microsoft][ODBC Driver Manager] Driver
+does not support this parameter</CODE>, причина может быть в том, что Вы
+имеете <CODE>BIGINT</CODE> в Вашем результате. Попробуйте установить параметр
+<CODE>Change BIGINT columns to INT</CODE> на экране соединения MyODBC.
+
+<DT>Visual Objects
+<DD>Вы должны использовать параметр <CODE>Don't optimize column widths</CODE>.
+
+<DT>MS Visio Enterprise 2000
+<DD>Пользователи сделали диаграмму модели базы данных, подключаясь из MS
+Vision Enterprise 2000 к MySQL через MyODBC (2.50.37 или более новый) и
+используя функцию обратной разработки в Visio, чтобы восстановить информацию
+относительно базы данных (Visio показывает все определения столбца, первичные
+ключи, индексы и так далее). Также разрабатывали новые таблицы в Visio и
+экспортировали их в MySQL через MyODBC. Все работало.</DL>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

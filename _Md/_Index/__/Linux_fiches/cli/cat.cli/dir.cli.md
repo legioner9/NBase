@@ -1,0 +1,18 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\__\Linux_fiches\cli\cat.cli\dir.cli.md">cli</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\__\Linux_fiches\cli\copy_dir_correct.md">copy_dir_correct.md</a>
+        - *## [correct cp - copy dir recurcsve](https://habr.com/ru/company/ruvds/blog/471092/)
+        - *## [copy OSWINDOWS](https://ab57.ru/cmdlist/xcopy.html)
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\__\Linux_fiches\cli\Pingvinus.md">Pingvinus.md</a>
+        - *# Секреты и трюки Командной строки Linux. Стань гуру. Впервые конкурс
+        - *## history
+        - *# ! , :p , * 
+        - *## HotKeys
+        - *## priority command &
+        - *## ; 
+        - *## logics && ||
+        - *## cat less more 
+        - *## head tail
+        - *## clear reset
+        - *## find
+        - *## grep 
+        - *## apropos - finder in all commands

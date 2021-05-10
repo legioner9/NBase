@@ -1,0 +1,7 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\FaaS-master\cat.FaaS-master\dir.FaaS-master.md">FaaS-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\FaaS-master\JavaScript\cat.JavaScript\dir.JavaScript.md">JavaScript</a>
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\FaaS-master\JavaScript\1-aws-handler.md">1-aws-handler.md</a>
+            - *# HTTP Request with Async Function and Promises
+        - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\FaaS-master\JavaScript\3-aws-pg.md">3-aws-pg.md</a>
+            - *# Read record from PostgreSQL
+    

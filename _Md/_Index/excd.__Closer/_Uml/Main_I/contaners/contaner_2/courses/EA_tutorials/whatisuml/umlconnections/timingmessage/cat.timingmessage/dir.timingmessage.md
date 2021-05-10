@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\timingmessage\cat.timingmessage\dir.timingmessage.md">timingmessage</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\timingmessage\timingmessage.md">timingmessage.md</a>
+        - *##### [Message (Timing Diagram)](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/timingmessage.html)

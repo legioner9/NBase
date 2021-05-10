@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\StackTrace-master\cat.StackTrace-master\dir.StackTrace-master.md">StackTrace-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\StackTrace-master\README.md">README.md</a>
+        - *## Stack Trace problem in Node.js

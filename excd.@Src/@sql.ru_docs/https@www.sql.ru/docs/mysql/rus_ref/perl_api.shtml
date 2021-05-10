@@ -1,0 +1,622 @@
+<HTML>
+<HEAD>
+<TITLE>Интерфейс с perl (MySQL perl API). [SQL.RU]</TITLE>
+<META http-equiv="Content-Type" CONTENT="text/html; charset=windows-1251">
+<META HTTP-EQUIV="Window-target" CONTENT="_top">
+<META HTTP-EQUIV="Last-Modified" CONTENT="29-03-2001">
+<META NAME="Description" CONTENT="Использование языка SQL, создание клиент-серверных систем. Конференция по MSSQL, Oracle, Interbase, MySQL. Полезные ссылки, документация, рекомендации по разработке информационных систем, сертификация, заказ книг и многое другое.">
+<META NAME="Keywords" CONTENT="SQL, конференция, Database Server, Oracle, Interbase, MySQL, документация, статьи, примеры, книги, ссылки, сертификация, работа, СУБД">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER=0 CELLSPACING=10><TR><TD>
+<CENTER>
+<H2 class="headline">Интерфейс с perl (MySQL perl API)</H2></CENTER>
+
+<UL><LI><B>Интерфейс с perl (MySQL perl API)</B>
+<UL><LI><A HREF="#Overview">Коротко о главном</A></LI>
+<LI><A HREF="#Main">Основной интерфейс с perl</A></LI>
+<LI><A HREF="#LongLong">Очень большие числа</A></LI>
+<LI><A HREF="#Connect">Connect</A></LI>
+<LI><A HREF="#ChangePort">Смена порта</A></LI>
+<LI><A HREF="#SelectDB">SelectDB</A></LI>
+<LI><A HREF="#ListFields">ListFields</A></LI>
+<LI><A HREF="#Query">Query</A></LI>
+<LI><A HREF="#ListDBs">ListDBs</A></LI>
+<LI><A HREF="#ListTables">ListTables</A></LI>
+<LI><A HREF="#FetchCol">FetchCol</A></LI>
+<LI><A HREF="#FetchHash">FetchHash</A></LI>
+<LI><A HREF="#FetchRow">FetchRow</A></LI>
+<LI><A HREF="#DataSeek">DataSeek</A></LI>
+<LI><A HREF="#Escape_Binary">Обработка двоичных строк</A></LI>
+<LI><A HREF="#NoClose">Потерянные значения</A></LI>
+<LI><A HREF="#Metadata">Метаданные</A></LI>
+<LI><A HREF="#DatabaseHandle">Дескриптор базы данных</A></LI>
+<LI><A HREF="#StatementHandle">Операторный дескриптор</A></LI></UL>
+<LI><A HREF="#Prerequisites">Предупреждение</A></LI>
+<LI><A HREF="#Author">Об авторе интерфейса</A></LI>
+<P><LI><B><A HREF="perl_api.shtml">MySQL DBD PERL API</A></B></LI>
+<LI>MySQL DBD/DBI Perl Interface</LI></UL></UL><HR>
+
+<H2><CENTER><B><A NAME="Overview">Коротко о главном</B></H2>
+</CENTER>
+<P>Есть два способа обращения из программы на perl к базе данных MySQL. Дело
+в том, что два разных человека написали в общем-то одинаково хорошие, хотя и
+разные библиотеки для такого доступа. Решено включить в поставку оба варианта
+perl API.
+
+<P>Наличие perl API дает огромные возможности по доступу к базам данных MySQL
+из скриптов на этом языке. Учитывая, что perl очень часто используется в
+интернете (для написания CGI-скриптов), этот интерфейс позволяет создавать
+web-ориентированные базы данных.
+
+<H2><CENTER><B><A NAME="Main">Простой интерфейс с perl СУБД MySQL</B></H2>
+</CENTER>
+<P>Этот интерфейс представляет собой первый способ обратиться к базе данных
+MySQL из программы на perl.
+
+<P><B>Коротко о главном:</B>
+<PRE>
+  use Mysql;
+
+  $dbh = Mysql->Connect;
+  $dbh = Mysql->Connect($host);
+  $dbh = Mysql->Connect($host,$database);
+  $dbh = Mysql->Connect($host,$database,$password);
+  $dbh = Mysql->Connect($host,$database,$password,$user);
+  $dbh->SelectDB($database);
+
+  $sth = $dbh->ListFields($table);
+     @arr = @{$sth->name};
+     @arr = @{$sth->length};
+     $value = $sth->numfields;
+     @arr = @{$sth->type};
+     @arr = @{$sth->is_num};
+     @arr = @{$sth->is_blob};
+     @arr = @{$sth->is_not_null};
+
+  $sth = $dbh->Query($sql_statement);
+  @arr = $dbh->ListDBs;
+  @arr = $dbh->ListTables;
+  @arr = $sth->FetchRow;
+  %hash = FetchHash $sth;
+  $sth->DataSeek($row_number);
+  $scalar = $dbh->sock;
+  $scalar = $dbh->host;
+  $scalar = $dbh->database;
+  $scalar = $dbh->quote($binary_string);
+</PRE>
+
+<P>Ну что, всем все ясно? Кому еще не ясно, объясняю.
+
+<P>При разработке этого пакета, его старались сделать как можно более
+похожим на C API.
+
+<P>Вы будете иметь дело с двумя классами: <tt>
+Mysql::Statement</tt>
+работаете с ним через операторный дескриптор, возвращенный командами Query
+или ListFields. Единственный класс, который Вы называете явно - Mysql. Это
+предоставляет Вам команду Connect.
+
+<CENTER><H2><A NAME="LongLong">Очень большие числа</H2><P></CENTER>
+<P>Из-за ограничений perl по обработке числовых значений, Вы будете иметь
+проблемы при использовании чисел больше чем signed LONG (2147483647). Это
+может происходить при использовании в MySQL типов данных unsigned LONG
+(DOUBLE) или LONGLONG (BIGINT). Perl хранит возвращаемые значения как строки,
+но автоматически преобразуют их в числа, когда Вы используете значения в
+числовом контексте. Это их усечет до 2147483647, так как perl использует
+тип signed LONG, чтобы хранить такие числа.
+
+<P>Вы можете использовать один способ это обойти. Прежде всего всегда
+обрабатывайте значения, которые могут быть ОЧЕНЬ большими, как строки, а не
+как числа. Пока Вы делаете это, они могут отображаться и заново вставляться в
+базу данных без инцидентов. То же самое можно посоветовать для вставки новых
+значений в таблицы. Если Вы устанавливаете переменную, названную $tmpvar,
+равную "4147483647" и затем выполняете INSERT, чтобы вставить ее в базу
+данных, все будет нормально. Обратите внимание, что кавычки здесь очень
+важны, так как они заставляют perl обрабатывать значение как строку.
+
+<P>Если Вы должны делать вычисления, включающие большие числа, то их нужно
+выполнять через начальный SELECT.
+
+<P><HR WIDTH="100%">
+<CENTER><H2><A NAME="Connect">Connect</H2></CENTER>
+<tt>$dbh = Mysql->Connect;</tt><BR>
+<tt>$dbh = Mysql->Connect($host);</tt><BR>
+<tt>$dbh = Mysql->Connect($host,$database);</tt><BR>
+<tt>$dbh = Mysql->Connect($host,$database,$password);</tt><BR>
+<tt>$dbh = Mysql->Connect($host,$database,$password,$user);</tt>
+
+<P>Эта команда устанавливает соединение с сервером и базой данных. Без
+аргумента или с пустой строкой в качестве первого аргумента он связывается с
+устройством UNIX /dev/mysql, который сильно повышает эффективность. Имя базы
+данных во втором аргументе указывает с какой именно базой данных надо
+связаться. Возвращается дескриптор базы данных, если команда Connect
+выполнена успешно. В противном случае возвращаемое значение не определено.
+Если Вы используете mysqld, скомпилированный с библиотекой потоков MIT, Вы
+не сможете использовать устройства. В этом случае укажите имя сервера в
+переменной host. А вообще библиотека потоков MIT такое глюкало...
+
+<P>Можно указать имя пользователя и пароль. Если имя пользователя не указано,
+используется текущий логин. Если не указан пароль, а пользователь его имеет,
+связь установить не получится.
+
+<P>Возвращаемый дескриптор нужен для обращения к базе данных. Можно отдать
+несколько команд <tt>Connect</tt>
+переменных ($dbh1,$dbh2, $dbh3, ...)
+
+<P>Из полученного дескриптора можно извлечь сведения о имени сервера, порте
+и имени базы данных:
+
+<P><tt>$scalar = $dbh->sock;</tt><BR>
+<tt>$scalar = $dbh->host;</tt><BR>
+<tt>$scalar = $dbh->database;</tt>
+
+<P>Имя базы данных не определено, если при вызове команды <tt>Connect
+</tt>было указано только имя сервера.
+
+<CENTER><H2><A NAME="ChangePort">Смена порта</A></H2></CENTER>
+Сменить порт, к которому присоединился MysqlPerl можно так:
+
+<P><tt>$ENV{"MYSQL_TCP_PORT"}=3334;</tt><BR>
+<tt>$ENV{"MYSQL_UNIX_PORT"}="/tmp/mysql_new.sock";</tt><BR>
+<tt>use Mysql;</tt><BR>
+<tt>$dbh = Mysql->Connect($host);</tt>
+
+<P><HR WIDTH="100%">
+<CENTER><H2><A NAME="SelectDB">SelectDB</A></H2></CENTER>
+<P>Выбор базы данных для использования.
+
+<P><B>СИНТАКСИС:</B>
+<P><TT>$dbh->SelectDB($database);</TT>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Если база данных не выбрана в команде <tt>Connect</tt>, или если
+нужно связаться с другой базой данных, то используется дескриптор базы данных
+из предыдущего вызова команды <tt>Connect</tt>. Он используется командой
+SelectDB.
+
+<P><HR WIDTH="100%">
+<CENTER><H2><A NAME="ListFields">ListFields</A></H2></CENTER>
+<P>Список полей в таблице.
+
+<P><B>СИНТАКСИС:</B>
+<P><tt>$sth = ListFields $dbh $table;</tt>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>ListFields возвращает операторный дескриптор, который может
+использоваться, чтобы выяснить, что именно сервер должен Вам передать.
+В случае ошибки возвращаемое значение не определено.
+
+<P>MySQL ListFields не работает так же как mSQL ListFields. В MySQL Вы
+используете следующие команды, чтобы получить информацию после вызова
+ListFields.
+
+<P>Перед использованием следующих функций, Вы должны выполнить успешное
+обращение к ListFields.
+
+<P><TABLE border=1>
+<TR><TD>@arr = @{$sth-&gt;name};</TD>
+<TD>Возвращает массив имен столбцов</TD></TR>
+<TR><TD>@arr = @{$sth-&gt;length};</TD>
+<TD>Возвращает массив длин столбцов</TD></TR>
+<TR><TD>$value = $sth-&gt;numfields;</TD>
+<TD>Возвращает количество столбцов в таблице</TD></TR>
+<TR><TD>@arr = @{$sth-&gt;type};</TD>
+<TD>Массив MySQL типов</TD></TR>
+<TR><TD>@arr = @{$sth-&gt;is_num};</TD>
+<TD>Массив 0 и 1, где 1 указывает что столбец числовой</TD></TR>
+<TR><TD>@arr = @{$sth-&gt;is_blob};</TD>
+<TD>Массив 0 и 1, где 1 указывает что столбец - blob</TD></TR>
+<TR><TD>@arr = @{$sth-&gt;is_not_null};</TD>
+<TD>Массив 0 и 1, где 1 указывает что столбец - не NULL</TD></TR></TABLE>
+
+<P><HR WIDTH="100%">
+<CENTER><H2><A NAME="Query">Query</H2></CENTER>
+<P>Выполнить запрос.
+
+<P><B>СИНТАКСИС:</B>
+<P><UL><tt>$sth = $dbh->Query($sql_statement);</tt></UL>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Эта функция позволяет Вам посылать запрос базе данных. Вы должны
+использовать FetchRow, чтобы получить результат.
+
+<P><B>ПРИМЕР:</B>
+<P><PRE>
+  $sth = $dbh-&gt;Query("SELECT * FROM Widget_Table
+                        WHERE widget_id = 1") or die $Mysql::db_errstr;
+
+    $foo = $record[0];
+    $bar = $record[1];
+  }
+</PRE>
+
+<P>Хорошая идея - всегда проверить ошибки. В этом примере такой проверкой
+занимается блок "or die..." оператора Query.</UL>
+
+<P><HR WIDTH="100%">
+<CENTER><H2><A NAME="ListDBs">ListDBs</H2></CENTER>
+<P>Список доступных баз данных.
+
+<P><B>СИНТАКСИС:</B>
+<P><UL><tt>@arr = $dbh-&gt;ListDBs;</tt></UL>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>ListDBs возвращает массив, который содержит один элемент для имени
+каждой базы данных, управляемой MySQL.
+
+<P><B>ПРИМЕР:</B>
+<P><PRE>
+  @dbs = $dbh-&gt;ListDBs; # Возвращает массив имен баз данных.
+  $count = $#dbs;          # Вычисляет сколько элементов.
+  for ($i=0;$i&lt;=$count;$i++) {
+    print("   ".$dbs[$i]."\n");
+  }
+</PRE>
+
+<P><HR WIDTH="100%">
+<CENTER><H2><A NAME="ListTables">ListTables</A></H2></CENTER>
+<P>Список таблиц, доступных в базе данных.
+
+<P><B>СИНТАКСИС:</B>
+<P><tt>@arr = $dbh-&gt;ListTables;</tt>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Возвращает массив с одним элементом для каждого имени таблицы в базе
+данных. Вы должны были, определить базу данных при вызове Connect или
+SelectDB.
+
+<P><B>ПРИМЕР:</B>
+<P><PRE>
+  @tables = $dbh-&gt;ListTables;    # Assumes that $dbh points
+                                    # to a valid database
+  $count = $#tables;                # Figure out how many elements.
+  for ($i=0;$i&lt;=$count;$i++) {   # Print out the table names.
+    print("   ".$tables[$i]."\n");
+  }
+</PRE>
+
+<HR WIDTH="100%">
+<CENTER><H2><A NAME="FetchCol">FetchCol</H2></CENTER>
+<P>Возвращает массив, содержащий один столбец, состоящий из значений.
+
+<P><B>СИНТАКСИС:</B>
+<P><tt>@arr = $sth->FetchCol($col);</tt>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Возвращает массив значений для столбца номер $col. FetchRow возвращает
+следующую строку результата запроса. FetchCol возвращает весь одиночный
+столбец результата запроса.
+
+<P>Обратите внимание, что эта функция сбросит текущий указатель строки на
+конец таблицы; вы должны использовать DataSeek(0), чтобы переустановить его.
+
+<HR WIDTH="100%">
+<CENTER><H2><A NAME="FetchHash">FetchHash</H2></CENTER>
+<P>Возвращает результат запроса.
+
+<P><B>СИНТАКСИС:</B>
+<P><UL><tt>%hash = $sth->FetchHash;</tt></UL>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Возвращает ассоциативный массив, содержащий следующую строку, полученную
+с сервера.
+
+<P><HR WIDTH="100%">
+<CENTER><H2><A NAME="FetchRow">FetchRow</A></H2></CENTER>
+<P>Возвращает строку результатов.
+
+<P><B>СИНТАКСИС:</B>
+<P><tt>@arr = $sth->FetchRow;</tt>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Возвращает массив значений следующей строки, полученной с сервера.
+
+<HR WIDTH="100%">
+<CENTER><H2><A NAME="DataSeek">DataSeek</H2></CENTER>
+<P>Позиционируется на произвольную позицию в данных.
+
+<P><B>СИНТАКСИС:</B>
+<P><tt>DataSeek $sth $row_number;</tt>
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Дает возможность Вам определить смещение в данных, связанное с операторным
+дескриптором. Следующий вызов FetchRow возвратит соответствующую строку
+(первая строка имеет смещение = 0).
+
+<HR WIDTH="100%">
+<CENTER><H2><A NAME="Escape_Binary">Обработка двоичных строк</H2></CENTER>
+<P>Некоторых символов нужно избежать прежде, чем двоичные строки могут быть
+   вставлены в базу данных MySQL. MySQL perl API обеспечивает следующую
+   функцию, чтобы делать это автоматически.
+
+<P><B>СИНТАКСИС:</B>
+<P>$scaler = $dbh->quote($binary_string)
+
+<P><B>ОПИСАНИЕ:</B>
+<P>Конвертирует строку: пропускает все символы ' и \, а также конвертирует
+   \0 и \n.
+
+<HR WIDTH="100%">
+<CENTER><H2> <A NAME="NoClose">Потерянные значения</H2></CENTER>
+<P>Всякий раз, когда обработчик, который обеспечивает доступ к базе данных,
+обрабатывает потерянное значение, Mysql выбирает соответствующее действие
+(освобождает результат или закрывает подключение к базе данных). Так, если Вы
+хотите освободить результат или закрыть подключение, Вы можете делать одно из
+следующих действий:
+
+<P><UL><LI>Разопределить дескриптор</LI>
+<LI>Использовать дескриптор для другой цели</LI>
+<LI>Использовать дескриптор внутри блока и объявите его с <TT>my()</TT></LI>
+<LI>Выйдите из программы</LI></UL>
+
+<P><HR WIDTH="100%">
+<H1><CENTER><A NAME="Metadata">Метаданные</A></CENTER></H1>
+<P>Теперь пересмотрим вышеупомянутые методы в отношении метаданных.
+
+<P><H2><CENTER><A NAME="DatabaseHandle">Дескриптор базы данных</A></H2>
+</CENTER>
+<P>Как упомянуто выше, Вы получаете дескриптор базы данных с помощью:
+<P>$dbh = Connect Mysql $host, $database;
+
+<P>Дескриптор базы данных хранит сведения о хост-имени сервера, его порте и
+имени базы данных, с которой установлена связь. Эти три значения можно
+получить так:
+
+<P><tt>$scalar = $dbh->sock;</tt><BR>
+<tt>$scalar = $dbh->host;</tt><BR>
+<tt>$scalar = $dbh->database;</tt>
+
+<P>База данных не определена, если связь установлена без аргументов или
+только с одним аргументом.
+
+<P><HR WIDTH="100%">
+<CENTER><H2><A NAME="StatementHandle">Операторный дескриптор</H2></CENTER>
+<P>Два конструктора возвращают операторный дескриптор:
+
+<P>$sth = ListFields  $dbh $table;<BR>
+   $sth = Query       $dbh $sql_statement;
+
+<P><STRONG>$sth</STRONG> хранит все метаданные, предоставляемые API:
+
+<P><TABLE border=1>
+<TR><TD>$scalar = $sth-&gt;affected_rows;</TD>
+<TD>Сколько записей вставлено или изменено.</TD></TR>
+<TR><TD>$scalar = $sth-&gt;info;</TD>
+<TD>Статистика о предыдущих запросах ALTER TABLE или LOAD DATA FROM INFILE.
+</TD></TR>
+<TR><TD>$arrref = $sth-&gt;is_blob;</TD>
+<TD>Массив битов, специфицирующих является ли данное поле BLOB.</TD></TR>
+<TR><TD>$arrref = $sth-&gt;is_not_null;</TD>
+<TD>Массив битов, специфицирующих является ли данное поле NULL.
+</TD></TR>
+<TR><TD>$arrref = $sth-&gt;is_pri_key;</TD>
+<TD>Массив битов, специфицирующих является ли данное поле первичным
+    ключом.</TD></TR>
+<TR><TD>$arrref = $sth-&gt;is_num;</TD>
+<TD>Массив битов, специфицирующих является ли данное поле числом.</TD>
+</TR>
+<TR><TD>$scalar = $sth-&gt;insert_id;</TD>
+<TD>Значение, присвоенное столбцу с помощью AUTO_INCREMENT последним INSERT.
+</TD></TR>
+<TR><TD>$arrref = $sth-&gt;length;</TD>
+<TD>Массив длин всех полей в байтах.</TD></TR>
+<TR><TD>$arrref = $sth-&gt;name;</TD>
+<TD>Имена всех столбцов.</TD></TR>
+<TR><TD>$scalar = $sth-&gt;numrows;</TD>
+<TD>Количество возвращаемых записей.</TD></TR>
+<TR><TD>$scalar = $sth-&gt;numfields;</TD>
+<TD>Количество возвращаемых полей.</TD></TR>
+<TR><TD>$arrref = $sth-&gt;table;</TD>
+<TD>Имена каждого столбца в таблице.</TD></TR>
+<TR><TD>$arrref = $sth-&gt;type;</TD>
+<TD>Тип каждого столбца, определен в mysql.h. Доступен с помощью
+    &Mysql::CHAR_TYPE, &Mysql::INT_TYPE, &Mysql::REAL_TYPE</TD></TR></TABLE>
+
+<P><HR WIDTH="100%">
+<CENTER><H2>Опция -w</H2></CENTER>
+<P>Опция -w может быть очень полезной в случае проблем с отладкой. Если Вы
+вызываете программу на perl с опцией -w, то предупреждения, обычно хранимые в
+<STRONG>$Mysql::db_errstr</STRONG> будут выводиться в STDERR (стандартный
+поток ошибок). Таким образом, Вы получите сообщения об ошибках сервера
+MySQL без обработки их в Вашей программе.
+
+<P>Если надо использовать опцию -w, но не надо, чтобы сообщения об ошибках
+увидел демон MySQL, можно установить переменную <STRONG>$Mysql::QUIET
+</STRONG> в любое ненулевое значение.
+
+<CENTER><H2><A NAME="Prerequisites">Предупреждение</H2></CENTER>
+<P>MySQL использует библиотеку libmysql.a, написанную Михаэлем Видениусом
+(Michael Widenius). Эта библиотека обязательно должна быть установлена до
+использования этого интерфейса с perl.
+
+<CENTER><H2><A NAME="Author">Об авторе интерфейса</H2></CENTER>
+MySQL perl API основан на mSQL perl API версии 1.17, разработанной Андреасом
+Коенигом (Andreas Koenig's <A HREF="MAILTO:koenig@franz.ww.TU-Berlin.DE">
+koenig@franz.ww.TU-Berlin.DE</A>).
+
+<P><HR WIDTH="100%"><H2><CENTER><A NAME="DBI2">Драйвер MySQL DBD Perl</H2>
+</CENTER>
+<P>Этот драйвер представляет собой второй способ обратиться к базе данных
+MySQL из программы на perl.
+
+<P>В настоящее время эта часть описания интерфейса с perl только немного
+переработана, относительно версии стандартной pod-документации. Данная часть
+описания изготовлена с помощью команды pod2html -mke.
+
+<P><B>Обзор:</B>
+<P><TABLE border=0 cellpadding=10 bgcolor=black><TR><TD>
+<PRE><FONT COLOR=white>
+  use DBI;
+
+  $dbh = DBI->connect( $host, $database, $user, 'mysql' [, $password] );
+  # or
+  $dbh = DBI->connect('', '', '', 'mysql', {hostname => "localhost",
+                      port => 3333, database => "test",
+                      username => "myname", password => "mypassword",});
+</FONT></PRE></TD></TR></TABLE>
+
+<P><B>ПРИМЕР:</B>
+<P><TABLE border=0 cellpadding=10 bgcolor=black><TR><TD>
+<PRE><FONT COLOR=white>
+#!/usr/bin/perl
+
+use DBI;
+
+$drh = DBI->install_driver('mysql');
+$dbh = $drh->connect('','test','','') or die "Error connecting to database";
+$dbh->do("DROP TABLE foo");
+$dbh->do("CREATE TABLE foo ( Field_1 VARCHAR(60) )");
+$count = 1;
+
+while ($count < 500) {
+  $sth = $dbh->prepare("INSERT INTO foo VALUES('XXXYYYZZZ')");
+  $sth->execute;
+  $sth->finish; # Очень важно вызвать finish, иначе не освободится память.
+  print "$count\n" unless $count % 10;
+  $count = $count + 1;
+}
+</FONT></PRE></TD></TR></TABLE>
+
+<CENTER><H2><A NAME="DBI_Overview">Коротко о главном</A></H2></CENTER>
+<P>DBD::mysql является драйвером для работы с базой данных, управляемой
+СУБД MySQL. Он портирован Michael 'Monty' Widenius of Alligator Descartes'
+<TT>DBD::msql</TT>. Вы должны установить DBI-модуль перед использованием
+<TT>DBD::mysql</TT>.
+
+<P><TT><B>$host</B></TT> может быть просто именем сервера (``up.botik.ru'')
+или именем сервера с указанием порта (``up.botik.ru:3333'').
+
+<P><TT><B>$database</B></TT> задает имя базы данных с которой надо связаться.
+
+<P><TT><B>$user</B></TT> задает имя пользователя для доступа к базе данных.
+(если не указано, используется идентификатор пользователя текущего процесса).
+
+<P><TT><B>$password</B></TT> является опциональным и нужно только для
+аккаунтов, которые имеют не пустые пароли.
+
+<P>Системные переменные, которые использует <TT>DBD::mysql</TT>:
+<P><UL><LI><tt>hostname</tt></LI>
+<LI><tt>database</tt></LI>
+<LI><tt>username</tt></LI>
+<LI><tt>password</tt></LI>
+<LI><tt>port</tt></LI></UL>
+
+<P>Значения в системных переменных отменяют значения, переданные раньше.
+TCP номер порта, отменяет TCP номер порта, переданный в hostname.
+
+<P>Можно разрешить отладку, установив переменную <tt>MYSQL_DEBUG</tt>
+'d:t:O,filename'</tt> (где <tt>filename</tt> является именем файла для
+записи протокола). Протокол будет записан в файл только если libmysql
+откомпилирована с поддержкой отладки (опция DBUG).
+
+<P>Поддерживаются следующие тэги:
+<P><UL><LI><tt>TABLE</tt></LI>
+<LI><tt>TYPE</tt></LI>
+<LI><tt>IS_PRI_KEY</tt></LI>
+<LI><tt>IS_NOT_NULL</tt></LI>
+<LI><tt>LENGTH</tt></LI>
+<LI><tt>MAXLENGTH</tt></LI>
+<LI><tt>IS_KEY</tt></LI>
+<LI><tt>IS_BLOB</tt></LI>
+<LI><tt>IS_NUM</tt></LI></UL>
+
+<P>Для получения значения поля <tt>AUTO_INCREMENT</tt>
+<tt>INSERT</tt>, надо:
+
+<P><PRE>
+  $id = $dbh->func("_InsertID");
+</PRE>
+
+<CENTER><H2><A NAME="LongLong2">Очень большие числа</H2><P></CENTER>
+<P>Ограничения на работу с ОЧЕНЬ БОЛЬШИМИ числами специфичны для языка perl
+вообще, а не для какого-либо API в частности. Так что <a href="#LongLong">
+все, что об этом сказано выше,</a> справедливо и в данном случае.
+
+<CENTER><A NAME="BinStr"><H2>Вставка двоичных строк</H2></CENTER>
+<P>В случае вставки двоичных данных в базу данных Вы должны обойти некоторые
+символы. Вы можете использовать следующий метод:
+
+<P><PRE>
+  $mystring = $dbh->quote($rawstring);
+</PRE>
+
+<CENTER><H2><A NAME="Author2">Об авторе интерфейса</H2></CENTER>
+<P>Msqlperl разработан (C)1997 Alligator Descartes. Модифицирован
+Msqlperl by Michael 'Monty' Widenius. Все изменения доступны на условиях
+public domain. Pod-документация, на которой основана данная глава, и <tt>
+_InsertID</tt>
+
+<CENTER><H2><A NAME="See_Also">Что можно почитать</A></H2></CENTER>
+DBI(3) для информации об использовании DBD/DBI.<BR>
+<A HREF="../../../../www.hermetica.com/technologia/perl/DBI">
+http://www.hermetica.com/technologia/perl/DBI</A> домашняя страничка DBI,<BR>
+<A HREF="../../../../www.tcx.se/default.htm">http://www.tcx.se</A> домашняя страничка mysql,
+<BR><A HREF="../../../../www.hughes.com.au/default.htm">www.hughes.com.au</A> домашняя
+страничка msql.<P>
+
+<P>В заключение хочется попросить Вас, если Вам понравилась эта страничка или
+пригодилась изложенная здесь информация,
+<A href="mailto:rldp@ftp.botik.ru?subject=Спасибо!&body=Спасибо за
+работу!">послать благодарность автору.</A> Это поможет мне
+вести статистику того, скольким людям пригодилось хоть что-то из моих трудов.
+
+<P><A href="perl_api.shtml">Локальное оглавление.</A>
+<P><A href="mysqlrus.shtml">На главную страничку.</A>
+
+</TD></TR></TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>
+

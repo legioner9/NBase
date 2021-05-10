@@ -1,0 +1,1371 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 2. Связи и понятие сессии</title>
+  <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="devapi-connection-concepts"></a>
+Глава 2. Связи и понятие сессии</h1>
+<p>Этот раздел объясняет понятие связей и сессий, как используются в X
+DevAPI. Примеры кода для соединения с MySQL Document Store (см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/document-store.html"
+target="_top">Using MySQL as a Document Store</a>) и применения сессий.</p>
+
+<p>Сессия X DevAPI это понятие сессии базы данных высокого уровня, которое
+отличается от работы с традиционными подключениями низкого уровня MySQL.
+Сессии могут заключить в капсулу одно или несколько фактических подключений
+MySQL, используя X-протокол. Использование этого более высокого уровня
+абстракции отцепляет физическую установку MySQL от кода приложения.
+Сессии оказывают полную поддержку X DevAPI и ограниченную поддержку SQL.
+При использовании MySQL Shell, когда подключение mysql низкого уровня
+к единственному серверу MySQL необходимо, это все еще поддерживается при
+помощи ClassicSession, который оказывает полную поддержку SQL.</p>
+<p>Перед рассмотрением понятий более подробно, следующие примеры
+показывают, как соединиться с использованием сессии.</p>
+
+<h2><a name="database-connection-example"></a>2.1.
+Пример соединения с базой данных</h2>
+<p>Код, который необходим, чтобы соединиться с MySQL document store,
+походит на традиционный код подключения mysql, но теперь запросы
+могут установить логические сессии к серверу MySQL с X Plugin.
+Сессии производятся <code class="literal">mysqlx</code>
+и возвращенные сессии могут заключить в капсулу доступ к одному или более
+экземпляру сервера MySQL с X Plugin. Приложения, которые используют
+объекты сессии по умолчанию, могут быть развернуты на единственном сервере и
+на кластере базы данных без кодовых изменений. Создайте сессию, используя
+<code class="literal">mysqlx.getSession(connection)</code>.
+Вы передаете параметры связи, чтобы соединиться с сервером MySQL, такие как
+имя хоста, пользователь и так далее, как код в одном из классического API.
+Параметры связи могут быть определены как любая последовательность типа URI,
+например, <code class="literal">user:@localhost:33060</code>,
+или как словарь данных, например,
+<code class="literal">{user: myuser, password: mypassword, host:
+example.com, port: 33060}</code>. См.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/connecting-using-uri-or-key-value-pairs.html"
+target="_top">Connecting to the Server Using URI-Like Strings or
+Key-Value Pairs</a>.</p>
+
+<p>Учетная запись пользователя MySQL, используемая для связи, должна
+использовать любой плагин
+<code class="literal">mysql_native_password</code> или
+<code class="literal">caching_sha2_password</code>, см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/pluggable-authentication.html"
+target="_top">Pluggable Authentication</a>.
+Сервер, с которым вы соединяетесь, должен зашифровать позволенные связи,
+по умолчанию как MySQL 8.0. Это гарантирует, что клиент использует
+механизм пароля X Protocol <code class="literal">PLAIN</code>, который
+работает с учетными записями пользователей, которые используют любой из
+плагинов идентификации. При попытке соединиться с сервером, у которого нет
+поддержки зашифрованных связей для учетных записей пользователей, которые
+используют плагин <code class="literal">mysql_native_password</code>,
+применяя формат <code class="literal">MYSQL41</code> и
+<code class="literal">caching_sha2_password</code>, задействуется
+идентификация <code class="literal">SHA256_MEMORY</code>.</p>
+
+<p>Следующий пример кода показывает, как соединиться с сервером MySQL и
+получить документ от коллекции <code class="literal">my_collection</code>,
+у которой есть поле <code class="literal">name</code>, начиная с
+<code class="literal">S</code>. Пример предполагает, что названная схема
+<code class="literal">test</code> существует, как и коллекция
+<code class="literal">my_collection</code>.
+Чтобы заставить пример работать, замените
+<code class="literal">user</code> вашим именем пользователя и
+<code class="literal"><em class="replaceable"><code>password</code></em>
+</code> паролем. Если вы соединяетесь с иным хостом или через иной порт,
+поменяйте <code class="literal">localhost</code> и порт как надо.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+var mysqlx = require('mysqlx');
+
+// Connect to server on localhost
+var mySession = mysqlx.getSession( {
+  host: 'localhost', port: 33060,
+  user: 'user', password: '<em class="replaceable"><code>password</code></em>' } );
+
+var myDb = mySession.getSchema('test');
+// Use the collection 'my_collection'
+var myColl = myDb.getCollection('my_collection');
+
+// Specify which document to find with Collection.find() and
+// fetch it from the database with .execute()
+var myDocs = myColl.find('name like :param').limit(1).
+                    bind('param', 'S%').execute();
+
+// Print document
+print(myDocs.fetchOne());
+mySession.close();
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+from mysqlsh import mysqlx
+
+# Connect to server on localhost
+mySession = mysqlx.get_session( {
+  'host': 'localhost', 'port': 33060,
+  'user': 'user', 'password': '<em class="replaceable"><code>password</code></em>' } )
+
+myDb = mySession.get_schema('test')
+
+# Use the collection 'my_collection'
+myColl = myDb.get_collection('my_collection')
+
+# Specify which document to find with Collection.find() and
+# fetch it from the database with .execute()
+myDocs = myColl.find('name like :param').limit(1).bind('param', 'S%').execute()
+
+# Print document
+document = myDocs.fetch_one()
+print(document)
+mySession.close()
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+var mysqlx = require('@mysql/xdevapi');
+
+// Connect to server on localhost
+mysqlx
+.getSession({
+  user: 'user',
+  password: 'password',
+  host: 'localhost',
+  port: '33060'
+})
+.then(function (session) {
+  var db = session.getSchema('test');
+  // Use the collection 'my_collection'
+
+  var myColl = db.getCollection('my_collection');
+  // Specify wich document to find with Collection.find() and
+  // fetch it from the database with .execute()
+  return myColl
+  .find('name like :param')
+  .limit(1)
+  .bind('param', 'S%')
+  .execute(function (doc) {
+    console.log(doc);
+  });
+})
+.catch(function (err) {
+  // Handle error
+});
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+// Connect to server on localhost
+var mySession = MySQLX.GetSession("server=localhost;port=33060;user=user;password=<em class="replaceable"><code>password</code></em>;");
+var myDb = mySession.GetSchema("test");
+
+// Use the collection "my_collection"
+var myColl = myDb.GetCollection("my_collection");
+// Specify which document to find with Collection.Find() and
+// fetch it from the database with .Execute()
+var myDocs = myColl.Find("name like :param").Limit(1)
+                   .Bind("param", "S%").Execute();
+
+// Print document
+Console.WriteLine(myDocs.FetchOne());
+mySession.Close();
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+import mysqlx
+# Connect to server on localhost
+my_session = mysqlx.get_session({
+  'host': 'localhost', 'port': 33060,
+  'user': 'user', 'password': 'password'
+})
+
+my_schema = my_session.get_schema('test')
+# Use the collection 'my_collection'
+my_coll = my_schema.get_collection('my_collection')
+
+# Specify which document to find with Collection.find() and
+# fetch it from the database with .execute()
+docs = my_coll.find('name like :param').limit(1).bind('param', 'S%').execute()
+
+# Print document
+doc = docs.fetch_one()
+print(doc)
+my_session.close()
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+import com.mysql.cj.xdevapi.*;
+// Connect to server on localhost
+Session mySession = new SessionFactory().getSession("mysqlx://localhost:33060/test?user=user&amp;password=password");
+
+Schema myDb = mySession.getSchema("test");
+// Use the collection 'my_collection'
+Collection myColl = myDb.getCollection("my_collection");
+
+// Specify which document to find with Collection.find() and
+// fetch it from the database with .execute()
+DocResult myDocs = myColl.find("name like :param").limit(1).bind("param", "S%").execute();
+
+// Print document
+System.out.println(myDocs.fetchOne());
+mySession.close();
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+#include &lt;mysqlx/xdevapi.h&gt;
+
+// Scope controls life-time of objects such as session or schema
+{
+  Session sess("localhost", 33060, "user", "password");
+  Schema db= sess.getSchema("test");
+  // or Schema db(sess, "test");
+
+  Collection myColl = db.getCollection("my_collection");
+  // or Collection myColl(db, "my_collection");
+  DocResult myDocs = myColl.find("name like :param")
+    .limit(1)
+    .bind("param","S%").execute();
+    cout &lt;&lt; myDocs.fetchOne();
+}
+</pre>
+
+<h2><a name="connecting-to-a-session"></a>2.2. Соединение с сессией</h2>
+<p>Есть несколько способов использовать сессию, чтобы соединиться с MySQL в
+зависимости от определенной установки в использовании.</p>
+
+<h3><a name="connecting-to-a-single-mysqld-node-setup"></a>
+2.2.1. Соединение с единственным сервером MySQL</h3>
+<p>В этом примере связь с местным сервером MySQL, управляющим X Plugin на
+порту TCP/IP 33060 устанавливается, используя учетную запись пользователя
+MySQL <em class="replaceable"><code>user</code></em> с его паролем.
+Поскольку никакие другие параметры не устанавливаются, значения
+по умолчанию используются.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+// Passing the parameters in the { param: value } format
+var dictSession = mysqlx.getSession( {
+  host: 'localhost', 'port': 33060,
+  user: 'user', password: '<em class="replaceable"><code>password</code></em>' } )
+
+var db1 = dictSession.getSchema('test')
+// Passing the parameters in the URI format
+var uriSession = mysqlx.getSession('user:<em class="replaceable"><code>password</code></em>@localhost:33060')
+var db2 = uriSession.getSchema('test')
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+# Passing the parameters in the { param: value } format
+dictSession = mysqlx.get_session( {
+  'host': 'localhost', 'port': 33060,
+  'user': 'user', 'password': '<em class="replaceable"><code>password</code></em>' } )
+
+db1 = dictSession.get_schema('test')
+# Passing the parameters in the URI format
+uriSession = mysqlx.get_session('user:<em class="replaceable"><code>password</code></em>@localhost:33060')
+db2 = uriSession.get_schema('test')
+</pre>
+
+<p>Следующий пример показывает, как соединиться с единственным сервером
+MySQL, обеспечив TCP/IP адрес <span class="quote">localhost</span>
+с той же самой учетной записи пользователя как прежде.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+// Passing the parameters in the { param: value } format
+// Query the user for the account information
+print("Please enter the database user information.");
+var usr = shell.prompt("Username: ", {defaultValue: "user"});
+var pwd = shell.prompt("Password: ", {type: "password"});
+
+// Connect to MySQL Server on a network machine
+mySession = mysqlx.getSession( {
+  host: 'localhost', 'port': 33060,
+  user: usr, password: pwd} );
+myDb = mySession.getSchema('test');
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+# Passing the parameters in the { param: value } format
+# Query the user for the account information
+print("Please enter the database user information.")
+usr = shell.prompt("Username: ", {'defaultValue': "user"})
+pwd = shell.prompt("Password: ", {'type': "password"})
+
+# Connect to MySQL Server on a network machine
+mySession = mysqlx.get_session( {
+  'host': 'localhost', 'port': 33060,
+  'user': usr, 'password': pwd} )
+myDb = mySession.get_schema('test')
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+// Query the user for the user information
+Console.WriteLine("Please enter the database user information.");
+Console.Write("Username: ");
+var usr = Console.ReadLine();
+Console.Write("Password: ");
+var pwd = Console.ReadLine();
+
+// Connect to server on localhost using a connection URI
+var mySession = MySQLX.GetSession(string.Format("mysqlx://localhost:33060/test?user={0}&amp;password={1}", usr, pwd));
+var myDb = mySession.GetSchema("test");
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+# Passing the parameters in the { param: value } format
+dict_session = mysqlx.get_session({
+  'host': 'localhost', 'port': 33060,
+  'user': 'user', 'password': 'password'
+})
+
+my_schema_1 = dict_session.get_schema('test')
+# Passing the parameters in the URI format
+uri_session = mysqlx.get_session('user:password@localhost:33060')
+my_schema_2 = uri_session.get_schema('test')
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+import com.mysql.cj.xdevapi.*;
+
+// Connect to server on localhost using a connection URI
+Session mySession = new SessionFactory().getSession("mysqlx://localhost:33060/test?user=user&amp;password=password");
+Schema myDb = mySession.getSchema("test");
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+// This code sample assumes that we have function prompt() defined somewhere.
+string usr = prompt("Username:");
+string pwd = prompt("Password:");
+
+// Connect to MySQL Server on a network machine
+Session mySession(SessionOption::HOST, "localhost",
+  SessionOption::PORT, 33060,
+  SessionOption::USER, usr,
+  SessionOption::PWD, pwd);
+
+// An alternative way of defining session settings.
+SessionSettings settings(SessionOption::HOST,"localhost",
+  SessionOption::PORT, 33060);
+
+settings.set(SessionOption::USER, usr);
+settings.set(SessionOption::PWD, pwd);
+Session mySession(settings);
+Schema myDb= mySession.getSchema("test");
+</pre>
+
+<h3><a name="connecting-connection-pool"></a>
+2.2.2. Соединение с единственным сервером MySQL,
+используя объединение связи</h3>
+<p>X DevAPI поддерживает объединение связи, которое может уменьшить
+издержки для запросов, которые открывают много связей с сервером MySQL.
+Связи организованы как пул объектов клиента. Открывая новую сессию с
+клиентом, прежде чем новое сетевое соединение открыто, будет предпринята
+попытка, чтобы восстановить из пула существующую и в настоящее время
+неиспользованную связь, которая перезагружается и снова используется.</p>
+
+<p>Пул связи формируется, используя единственную пару ключ/значение (см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/connecting-using-uri-or-key-value-pairs.html#connecting-using-key-value-pairs"
+target="_top">Connecting Using Key-Value Pairs</a>) с единственным именем
+ключа <code class="literal">pooling</code>. Значение ключа
+<code class="literal">polling</code> это набор пар ключ/значение, содержащих
+любую комбинацию ключей, описанных в следующей таблице:</p>
+
+<a name="idm140047873590736"></a><p>
+<b>Таблица 2.1. Опции для формирования пула связи</b></p>
+<table frame="all">
+<thead><tr><th scope="col">Опция</th><th scope="col">Смысл</th>
+<th scope="col">По умолчанию</th></tr></thead>
+<tbody><tr><td scope="row">enabled</td>
+<td>Объединение связи позволено. Когда выбор установлен в
+<code class="literal">false</code>, возвращена регулярная, необъединенная
+связь, и другие упомянутые ниже опции проигнорированы.</td>
+<td>true</td></tr>
+
+<tr><td scope="row">maxSize</td>
+<td>Максимальное количество связей в пуле.</td>
+<td>25</td></tr>
+
+<tr><td scope="row">maxIdleTime</td>
+<td>Максимальное количество миллисекунд, которое связь может не работать в
+очереди прежде чем ее закроют. Нулевое значение означает бесконечность.</td>
+<td>0</td></tr>
+
+<tr><td scope="row">queueTimeout</td>
+<td>Максимальное количество миллисекунд, которое запросу позволяют ждать
+связи. Нулевое значение означает бесконечность.</td>
+<td>0</td></tr></tbody></table><br class="table-break">
+
+<p>Закрытие сессии отмечает основную связь как неиспользованную и возвращает
+ее к пулу связи объекта клиента.</p>
+<p>Закрытие объекта клиента закрывает все связи, с которыми он работает,
+все сессии, которые клиент создал и разрушает пул.</p>
+<p>Объединение связи не поддерживается MySQL Shell.</p>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">var mysqlx = require('@mysql/xdevapi');
+var client = mysqlx.getClient(
+  { user: 'root', host: 'localhost', port: 33060 },
+  { pooling: { enabled: true, maxIdleTime: 30000, maxSize: 25, queueTimeout: 10000 } }
+);
+client.getSession()
+  .then(session =&gt; {
+    console.log(session.inspect())
+    return session.close() // the connection becomes idle in the client pool
+})
+  .then(() =&gt; {
+    return client.getSession()
+  })
+  .then(session =&gt; {
+    console.log(session.inspect())
+  return client.close() // closes all connections and destroys the pool
+})
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+using (Client client = MySQLX.GetClient("server=localhost;user=root:port=33060;",
+new { pooling = new { Enabled = true, MaxSize = 100, MaxIdleTime=30000, QueueTimeout = 10000 } }))
+{
+using (Session session = client.GetSession())
+  {
+    foreach (Collection coll in session.Schema.GetCollections())
+    {
+      Console.WriteLine(coll.Name);
+    }
+  } // session.Dispose() is called and the session becomes idle in the pool
+} // client.Dispose() is called then all sessions are closed and pool is destroyed
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+connection_string = {
+  'host': 'localhost',
+  'port': 37210,
+  'user': 'user',
+  'password': 'password'
+}
+
+client_options = {
+  'pooling': {
+    "max_size": 10,
+    "max_idle_time": 30000
+  }
+}
+
+client = mysqlx.get_client(connection_string, client_options)
+session1 = client.get_session()
+session2 = client.get_session()
+# closing all the sessions
+client.close()
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+// Obtain new ClientFactory
+ClientFactory cf = new ClientFactory();
+
+// Obtain Client from ClientFactory
+Client cli = cf.getClient(this.baseUrl, "{\"pooling\":{\"enabled\":true, \"maxSize\":8,
+             \"maxIdleTime\":30000, \"queueTimeout\":10000} }");
+Session sess = cli.getSession();
+
+//Use Session as usual
+//Close Client after use
+cli.close();
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+using namespace mysqlx;
+
+Client cli("user:password@host_name/db_name", ClientOption::POOL_MAX_SIZE, 7);
+Session sess = cli.getSession();
+// use Session sess as usual
+cli.close();  // close all Sessions
+</pre>
+
+<p><span class="strong"><strong>Connector/C++ Code using
+X DevAPI for C</strong></span></p>
+<pre class="programlisting">
+char error_buf[255];
+interror_code;
+
+mysqlx_client_t *cli = mysqlx_get_client_from_url(
+  "user:password@host_name/db_name", "{ \"maxSize\": 7 }", error_buf, &amp;error_code
+);
+mysqlx_session_t *sess = mysqlx_get_session_from_client(cli);
+// use sess as before
+mysqlx_close_client(cli);  // close session sess
+</pre>
+
+<h3><a name="connection-option-summary"></a>2.2.3.
+Обзор опций связи</h3>
+<p>Используя сессию, следующие опции доступны, чтобы формировать связь.</p>
+
+<table border="1">
+<thead><tr><th scope="col"><p>Опция</p></th>
+<th scope="col"><p>Имя</p></th><th scope="col"><p>Обязательность</p></th>
+<th scope="col"><p>По умолчанию</p></th>
+<th scope="col"><p>Примечания</p></th></tr></thead>
+<tbody><tr><td scope="row"><p>TCP/IP Host</p></td>
+<td><p>host</p></td>
+<td><p>-</p></td><td> </td>
+<td><p>localhost, имя хоста IPv4, не IP-диапазон</p></td></tr>
+
+<tr><td scope="row"><p>TCP/IP Port</p></td>
+<td><p>port</p></td>
+<td><p>Yes</p></td>
+<td><p>33060</p></td>
+<td><p>Стандартный порт X Plugin 33060</p></td></tr>
+
+<tr><td scope="row"><p>MySQL user</p></td>
+<td><p>dbUser</p></td>
+<td><p>-</p></td><td> </td>
+<td><p>Пользователь БД MySQL</p></td></tr>
+
+<tr><td scope="row"><p>MySQL password</p></td>
+<td><p>dbPassword</p></td>
+<td><p>-</p></td><td> </td>
+<td><p>Пароль для MySQL</p></td></tr></tbody></table>
+
+<p>Поддержанные методы аутентификации:</p>
+<ul><li class="listitem"><p>PLAIN</p></li>
+<li class="listitem"><p>MYSQL 4.1</p></li></ul>
+
+<p>Элементы URI и формат.</p>
+<a name="x-connect-uri-1"></a><p><b>Рис. 2.1. URI соединения</b></p>
+<img src="images/connecturi1.png" width="518" height="36"
+alt="Content is described in the surrounding text."><br class="figure-break">
+<p>ConnectURI1::= 'dbUser' ':' 'dbPassword' '@' 'host' ':' 'port'</p>
+
+<h2><a name="working-with-a-session-object"></a>
+2.3. Работа с объектом сессии</h2>
+<p>Все предыдущие примеры, использовали
+<code class="literal">getSchema()</code> или
+<code class="literal">getDefaultSchema()</code> методы объекта Session,
+которые возвращают объект схемы. Вы используете эту схему, чтобы получить
+доступ к коллекциям и таблицам. Большинство примеров использует способность
+X DevAPI связать все конструкции объекта в цепь, позволяя вам добраться до
+объекта схемы в одной строке:</p>
+
+<pre class="programlisting">
+schema = mysqlx.getSession(...).getSchema();
+</pre>
+
+<p>Эта цепь объекта эквивалентна следующей, с тем
+различием, что промежуточный шаг опущен:</p>
+<pre class="programlisting">
+session = mysqlx.getSession();
+schema = session.getSchema().
+</pre>
+
+<p>Нет никакого постоянного требования к цепи, пока вы не получаете объект
+схемы. Если вы хотите работать с объектом сессии, например, вызвать метод
+объекта сессии <code class="literal">getSchemas()</code>,
+нет никакой потребности доходить до схемы:</p>
+
+<pre class="programlisting">
+session = mysqlx.getSession(); session.getSchemas().
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+// Connecting to MySQL and working with a Session
+var mysqlx = require('mysqlx');
+// Connect to a dedicated MySQL server using a connection URI
+var mySession = mysqlx.getSession('user:<em class="replaceable"><code>password</code></em>@localhost');
+
+// Get a list of all available schemas
+var schemaList = mySession.getSchemas();
+print('Available schemas in this session:\n');
+
+// Loop over all available schemas and print their name
+for (index in schemaList) {
+  print(schemaList[index].name + '\n');
+}
+mySession.close();
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+# Connecting to MySQL and working with a Session
+from mysqlsh import mysqlx
+# Connect to a dedicated MySQL server using a connection URI
+mySession = mysqlx.get_session('user:<em class="replaceable"><code>password</code></em>@localhost')
+
+# Get a list of all available schemas
+schemaList = mySession.get_schemas()
+print('Available schemas in this session:\n')
+# Loop over all available schemas and print their name
+for schema in schemaList:
+  print('%s\n' % schema.name)
+mySession.close()
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+// Connecting to MySQL and working with a Session
+var mysqlx = require('@mysql/xdevapi');
+
+// Connect to a dedicated MySQL server using a connection URI
+mysqlx
+  .getSession('user:password@localhost')
+  .then(function (mySession) {
+    // Get a list of all available schemas
+    return mySession.getSchemas();
+  })
+  .then(function (schemaList) {
+    console.log('Available schemas in this session:\n');
+    // Loop over all available schemas and print their name
+    schemaList.forEach(function (schema) {
+      console.log(schema.getName() + '\n');
+    });
+  });
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+// Connect to a dedicated MySQL server node using a connection URI
+var mySession = MySQLX.GetSession("mysqlx://user:password@localhost:33060");
+
+// Get a list of all available schemas
+var schemaList = mySession.GetSchemas();
+Console.WriteLine("Available schemas in this session:");
+
+// Loop over all available schemas and print their name
+foreach (var schema in schemaList)
+{
+  Console.WriteLine(schema.Name);
+}
+mySession.Close();
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+# Connector/Python
+# Connecting to MySQL and working with a Session
+from mysqlsh import mysqlx
+
+# Connect to a dedicated MySQL server using a connection URI
+mySession = mysqlx.get_session('user:<em class="replaceable"><code>password</code></em>@localhost')
+# Get a list of all available schemas
+schemaList = mySession.get_schemas()
+print('Available schemas in this session:\n')
+
+# Loop over all available schemas and print their name
+for schema in schemaList:
+print('%s\n' % schema.name)
+mySession.close()
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+import java.util.List;
+import com.mysql.cj.api.xdevapi.*;
+import com.mysql.cj.xdevapi.*;
+
+// Connecting to MySQL and working with a Session
+// Connect to a dedicated MySQL server using a connection URI
+Session mySession = new SessionFactory().getSession("mysqlx://localhost:33060/test?user=user&amp;password=password");
+
+// Get a list of all available schemas
+List&lt;Schema&gt; schemaList = mySession.getSchemas();
+System.out.println("Available schemas in this session:");
+
+// Loop over all available schemas and print their name
+for (Schema schema : schemaList) {
+  System.out.println(schema.getName());
+}
+mySession.close();
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+#include &lt;mysqlx/xdevapi.h&gt;
+// Connecting to MySQL and working with a Session
+
+// Connect to a dedicated MySQL server using a connection URI
+string url = "mysqlx://localhost:33060/test?user=user&amp;password=password";
+{
+  Session mySession(url);
+  // Get a list of all available schemas
+  std::list&lt;Schema&gt; schemaList = mySession.getSchemas();
+  cout &lt;&lt; "Available schemas in this session:" &lt;&lt; endl;
+  // Loop over all available schemas and print their name
+  for (Schema schema : schemaList) {
+    cout &lt;&lt; schema.getName() &lt;&lt; endl;
+  }
+}
+</pre>
+
+<p>В этом примере функция <code class="literal">mysqlx.getSession()</code>
+используется, чтобы открыть сессию. Тогда функция
+<code class="literal">Session.getSchemas()</code>
+используется, чтобы получить список всех доступных схем и напечатать
+их на консоль.</p>
+
+<h2><a name="using-sql"></a>2.4. Использование SQL с сессией</h2>
+<p>В дополнение к упрощенному синтаксису X DevAPI объекта сессии у объекта
+сессии есть функция <code class="literal">sql()</code>, которая берет любой
+SQL-оператор в качестве последовательности.</p>
+<p>Следующий пример использует сессию, чтобы назвать хранимую процедуру SQL
+на определенном узле.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+var mysqlx = require('mysqlx');
+// Connect to server using a Session
+var mySession = mysqlx.getSession('user:<em class="replaceable"><code>password</code></em>@localhost');
+
+// Switch to use schema 'test'
+mySession.sql("USE test").execute();
+// In a Session context the full SQL language can be used
+mySession.sql("CREATE PROCEDURE my_add_one_procedure " +
+              " (INOUT incr_param INT) " +
+              "BEGIN " + "SET incr_param = incr_param + 1;" +
+              "END;").execute();
+mySession.sql("SET @my_var = ?;").bind(10).execute();
+mySession.sql("CALL my_add_one_procedure(@my_var);").execute();
+mySession.sql("DROP PROCEDURE my_add_one_procedure;").execute();
+
+// Use an SQL query to get the result
+var myResult = mySession.sql("SELECT @my_var").execute();
+// Gets the row and prints the first column
+var row = myResult.fetchOne();
+print(row[0]);
+mySession.close();
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+from mysqlsh import mysqlx
+
+# Connect to server using a Session
+mySession = mysqlx.get_session('user:<em class="replaceable"><code>password</code></em>@localhost')
+# Switch to use schema 'test'
+mySession.sql("USE test").execute()
+
+# In a Session context the full SQL language can be used
+sql = """CREATE PROCEDURE my_add_one_procedure
+      (INOUT incr_param INT)
+      BEGIN
+      SET incr_param = incr_param + 1;
+      END
+      """
+mySession.sql(sql).execute()
+mySession.sql("SET @my_var = ?").bind(10).execute()
+mySession.sql("CALL my_add_one_procedure(@my_var)").execute()
+mySession.sql("DROP PROCEDURE my_add_one_procedure").execute()
+
+# Use an SQL query to get the result
+myResult = mySession.sql("SELECT @my_var").execute()
+# Gets the row and prints the first column
+row = myResult.fetch_one()
+print(row[0])
+mySession.close()
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+var mysqlx = require('@mysql/xdevapi');
+var session;
+
+// Connect to server using a Low-Level Session
+mysqlx
+  .getSession('root:password@localhost')
+  .then(function (s) {
+    session = s;
+    return session.getSchema('test');
+  })
+  .then(function () {
+    return Promise.all([
+    // Switch to use schema 'test'
+    session.sql('USE test').execute(),
+    // In a Session context the full SQL language can be used
+    session.sql('CREATE PROCEDURE my_add_one_procedure' +
+                ' (INOUT incr_param INT) ' +
+                'BEGIN ' +
+                'SET incr_param = incr_param + 1;' +
+                'END;').execute(),
+    session.executeSql('SET @my_var = ?;', 10).execute(),
+    session.sql('CALL my_add_one_procedure(@my_var);').execute(),
+    session.sql('DROP PROCEDURE my_add_one_procedure;').execute()
+  ])
+})
+.then(function() {
+  // Use an SQL query to get the result
+  return session.sql('SELECT @my_var').execute(function (row) {
+    // Print result
+    console.log(row);
+  });
+});
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+// Connect to server using a Session
+var mySession = MySQLX.GetSession("server=localhost;port=33060;user=user;password=<em class="replaceable"><code>password</code></em>;");
+
+// Switch to use schema "test"
+mySession.SQL("USE test").Execute();
+// In a Session context the full SQL language can be used
+mySession.SQL("CREATE PROCEDURE my_add_one_procedure " +
+              " (INOUT incr_param INT) " +
+              "BEGIN " +
+              "SET incr_param = incr_param + 1;" +
+              "END;").Execute();
+              mySession.SQL("SET @my_var = 10;").Execute();
+              mySession.SQL("CALL my_add_one_procedure(@my_var);").Execute();
+              mySession.SQL("DROP PROCEDURE my_add_one_procedure;").Execute();
+
+// Use an SQL query to get the result
+var myResult = mySession.SQL("SELECT @my_var").Execute();
+// Gets the row and prints the first column
+var row = myResult.FetchOne();
+Console.WriteLine(row[0]);
+mySession.Close();
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+# Connector/Python
+from mysqlsh import mysqlx
+
+# Connect to server using a Session
+mySession = mysqlx.get_session('user:<em class="replaceable"><code>password</code></em>@localhost')
+# Switch to use schema 'test'
+mySession.sql("USE test").execute()
+
+# In a Session context the full SQL language can be used
+sql = """CREATE PROCEDURE my_add_one_procedure
+      (INOUT incr_param INT)
+      BEGIN
+      SET incr_param = incr_param + 1;
+      END
+      """
+mySession.sql(sql).execute()
+mySession.sql("SET @my_var = ?").bind(10).execute()
+mySession.sql("CALL my_add_one_procedure(@my_var)").execute()
+mySession.sql("DROP PROCEDURE my_add_one_procedure").execute()
+
+# Use an SQL query to get the result
+myResult = mySession.sql("SELECT @my_var").execute()
+# Gets the row and prints the first column
+row = myResult.fetch_one()
+print(row[0])
+mySession.close()
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+import com.mysql.cj.xdevapi.*;
+
+// Connect to server on localhost
+Session mySession = new SessionFactory().getSession("mysqlx://localhost:33060/test?user=user&amp;password=password");
+// Switch to use schema 'test'
+mySession.sql("USE test").execute();
+
+// In a Session context the full SQL language can be used
+mySession.sql("CREATE PROCEDURE my_add_one_procedure " +
+              " (INOUT incr_param INT) " + "BEGIN " +
+              "SET incr_param = incr_param + 1;" + "END")
+.execute();
+mySession.sql("SET @my_var = ?").bind(10).execute();
+mySession.sql("CALL my_add_one_procedure(@my_var)").execute();
+mySession.sql("DROP PROCEDURE my_add_one_procedure").execute();
+
+// Use an SQL query to get the result
+SqlResult myResult = mySession.sql("SELECT @my_var").execute();
+// Gets the row and prints the first column
+Row row = myResult.fetchOne();
+System.out.println(row.getInt(0));
+mySession.close();
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+#include &lt;mysqlx/xdevapi.h&gt;
+
+// Connect to server on localhost
+string url = "mysqlx://localhost:33060/test?user=user&amp;password=password";
+Session mySession(url);
+
+// Switch to use schema 'test'
+mySession.sql("USE test").execute();
+// In a Session context the full SQL language can be used
+mySession.sql("CREATE PROCEDURE my_add_one_procedure "
+              " (INOUT incr_param INT) "
+              "BEGIN "
+              "SET incr_param = incr_param + 1;"
+              "END;")
+  .execute();
+mySession.sql("SET @my_var = ?;").bind(10).execute();
+mySession.sql("CALL my_add_one_procedure(@my_var);").execute();
+mySession.sql("DROP PROCEDURE my_add_one_procedure;").execute();
+
+// Use an SQL query to get the result
+auto myResult = mySession.sql("SELECT @my_var").execute();
+// Gets the row and prints the first column
+Row row = myResult.fetchOne();
+cout &lt;&lt; row[0] &lt;&lt; endl;
+</pre>
+
+<p>Используя буквальный/дословный SQL, общие образцы API это
+главным образом то же самое, как с использованием DML и операций CRUD на
+таблицах и коллекциях. Существуют два различия: указание текущей схемы
+и возможность экранировать имена.</p>
+
+<h2><a name="setting-the-current-schema"></a>2.5.
+Установка текущей схемы</h2>
+<p>Схема по умолчанию для сессии может быть определена, используя атрибут
+<code class="literal">schema</code> в
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/connecting-using-uri-or-key-value-pairs.html"
+target="_top">URI-строке подключения или парах ключ/значение</a>,
+открывая сессию связи. Метод <code class="literal">getDefaultSchema()</code>
+возвращает схему по умолчанию для <code class="literal">Session</code>.</p>
+
+<p>Если никакая схема по умолчанию не была выбрана, функция
+<code class="literal">setCurrentSchema()</code> может использоваться, чтобы
+установить текущую схему.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+var mysqlx = require('mysqlx');
+// Direct connect with no client-side default schema specified
+var mySession = mysqlx.getSession('user:<em class="replaceable"><code>password</code></em>@localhost');
+mySession.setCurrentSchema("test");
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+from mysqlsh import mysqlx
+
+# Direct connect with no client-side default schema specified
+mySession = mysqlx.get_session('user:<em class="replaceable"><code>password</code></em>@localhost')
+mySession.set_current_schema("test")
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+/*
+Connector/Node.js does not support the setCurrentSchema() method.
+One can specify the default schema in the connection string.
+*/
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+// Direct connect with no client-side default schema specified
+var mySession = MySQLX.GetSession("server=localhost;port=33060;user=user;password=<em class="replaceable"><code>password</code></em>;");
+mySession.SetCurrentSchema("test");
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+# Connector/Python
+from mysqlsh import mysqlx
+
+# Direct connect with no client-side default schema specified
+mySession = mysqlx.get_session('user:<em class="replaceable"><code>password</code></em>@localhost')
+mySession.set_current_schema("test")
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+/*
+Connector/J does not support the setCurrentSchema() method.
+One can specify the default schema in the connection string.
+*/
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+/*
+Connector/C++ does not support the setCurrentSchema() method.
+One can specify the default schema in the connection string.
+*/
+</pre>
+
+<p>Заметьте, что <code class="literal">setCurrentSchema()</code>
+не изменяет схему сессии по умолчанию, которая остается неизменной в течение
+сессии или остается <code class="literal">null</code>, если не задана
+при связи. Схема, установленная
+<code class="literal">setCurrentSchema()</code>, может быть возвращена
+<code class="literal">getCurrentSchema()</code>.</p>
+
+<p>Альтернативный способ установить текущую схему состоит в том, чтобы
+использовать метод <a href="#using-sql">sql()</a> и оператор
+<code class="literal">
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/use.html" target="_top">USE
+</a> <em class="replaceable"><code>db_name</code></em></code>.</p>
+
+<h2><a name="dynamic-sql"></a>2.6. Динамический SQL</h2>
+<p>Функция цитирования существует, чтобы избежать имен SQL и идентификаторов.
+<code class="literal">Session.quoteName()</code> экранирует идентификатор,
+данный в соответствии с параметрами настройки текущей связи.</p>
+
+<p>Функция цитирования не должна использоваться, чтобы экранировать значения.
+Используйте привязку значений <code class="literal">Session.sql()</code>, см.
+<a href="#using-sql">раздел 2.4</a> для подробностей.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+function createTestTable(session, name) {
+  // use escape function to quote names/identifier
+  quoted_name = session.quoteName(name);
+  session.sql("DROP TABLE IF EXISTS " + quoted_name).execute();
+
+  var create = "CREATE TABLE ";
+  create += quoted_name;
+  create += " (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT)";
+  session.sql(create).execute();
+  return session.getCurrentSchema().getTable(name);
+}
+
+var mysqlx = require('mysqlx');
+var session = mysqlx.getSession('user:<em class="replaceable"><code>password</code></em>@localhost:33060/test');
+var default_schema = session.getDefaultSchema().name;
+session.setCurrentSchema(default_schema);
+
+// Creates some tables
+var table1 = createTestTable(session, 'test1');
+var table2 = createTestTable(session, 'test2');
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+def createTestTable(session, name):
+
+# use escape function to quote names/identifier
+quoted_name = session.quote_name(name)
+session.sql("DROP TABLE IF EXISTS " + quoted_name).execute()
+
+create = "CREATE TABLE "
+create += quoted_name
+create += " (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT)"
+session.sql(create).execute()
+return session.get_current_schema().get_table(name)
+from mysqlsh import mysqlx
+session = mysqlx.get_session('user:<em class="replaceable"><code>password</code></em>@localhost:33060/test')
+default_schema = session.get_default_schema().name
+session.set_current_schema(default_schema)
+
+# Creates some tables
+table1 = createTestTable(session, 'test1')
+table2 = createTestTable(session, 'test2')
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+var mysqlx = require('mysqlx');
+
+function createTestTable(session, name) {
+var create = 'CREATE TABLE ';
+create += name;
+create += ' (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT)';
+
+return session
+  .sql('DROP TABLE IF EXISTS ' + name)
+  .execute()
+  .then(function () {
+    return session.sql(create).execute();
+  });
+}
+
+var session;
+mysqlx
+.getSession({
+  user: 'user',
+  password: 'password'
+})
+.then(function (s) {
+  session = s;
+  return session
+  .sql('use myschema')
+  .execute()
+})
+.then(function () {
+  // Creates some tables
+  return Promise.map([
+    createTestTable(session, 'test1'),
+    createTestTable(session, 'test2')
+  ])
+})
+.then(function () {
+  session.close();
+})
+});
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+var session = MySQLX.GetSession("server=localhost;port=33060;user=user;password=<em class="replaceable"><code>password</code></em>;");
+session.SQL("use test;").Execute();
+session.GetSchema("test");
+
+// Creates some tables
+var table1 = CreateTestTable(session, "test1");
+var table2 = CreateTestTable(session, "test2");
+</pre>
+
+<pre class="programlisting">
+private Table CreateTestTable(Session session, string name)
+{
+  // use escape function to quote names/identifier
+  string quoted_name = "`" + name + "`";
+  session.SQL("DROP TABLE IF EXISTS " + quoted_name).Execute();
+  var create = "CREATE TABLE ";
+  create += quoted_name;
+  create += " (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT)";
+  session.SQL(create).Execute();
+  return session.Schema.GetTable(name);
+}
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+# Connector/Python
+def createTestTable(session, name):
+
+# use escape function to quote names/identifier
+quoted_name = session.quote_name(name)
+session.sql("DROP TABLE IF EXISTS " + quoted_name).execute()
+
+create = "CREATE TABLE "
+create += quoted_name
+create += " (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT)"
+session.sql(create).execute()
+return session.get_current_schema().get_table(name)
+from mysqlsh import mysqlx
+session = mysqlx.get_session('user:<em class="replaceable"><code>password</code></em>@localhost:33060/test')
+default_schema = session.get_default_schema().name
+session.set_current_schema(default_schema)
+
+# Creates some tables
+table1 = createTestTable(session, 'test1')
+table2 = createTestTable(session, 'test2')
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+Java does not currently support the quoteName() method.
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+#include &lt;mysqlx/xdevapi.h&gt;
+
+// Note: The following features are not yet implemented by
+// Connector/C++:
+// - DataSoure configuration files,
+// - quoteName() method.
+
+Table createTestTable(Session &amp;session, const string &amp;name)
+{
+  string quoted_name = string("`") + session.getDefaultSchemaName() +
+                       L"`.`" + name + L"`";
+  session.sql(string("DROP TABLE IF EXISTS") + quoted_name).execute();
+  string create = "CREATE TABLE ";
+  create += quoted_name;
+  create += L"(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT)";
+  session.sql(create).execute();
+  return session.getDefaultSchema().getTable(name);
+}
+Session session(33060, "user", "password");
+Table table1 = createTestTable(session, "test1");
+Table table2 = createTestTable(session, "test2");
+</pre>
+<p>Код, который использует X DevAPI, не должен экранировать идентификаторы.
+Это верно для работы с коллекциями и таблицами.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

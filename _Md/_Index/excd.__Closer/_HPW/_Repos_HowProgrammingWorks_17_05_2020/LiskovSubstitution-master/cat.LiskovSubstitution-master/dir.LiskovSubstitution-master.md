@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\LiskovSubstitution-master\cat.LiskovSubstitution-master\dir.LiskovSubstitution-master.md">LiskovSubstitution-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\LiskovSubstitution-master\README.md">README.md</a>
+        - *## The Liskov Substitution Principle

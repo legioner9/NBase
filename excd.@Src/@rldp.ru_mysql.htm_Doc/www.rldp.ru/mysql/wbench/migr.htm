@@ -1,0 +1,2408 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 10. Мастер миграции базы данных</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="wb-migration"></a>Глава 10. Мастер миграции базы данных</h1>
+<p>MySQL Workbench обеспечивает способность мигрировать
+ODBC-базы данных к MySQL.
+
+<ul><li>Переносит различные типы БД, включая MySQL между серверами.</li>
+<li>Преобразует таблицы и скопирует данные, но не преобразует хранимые
+процедуры, триггеры или представления.</li>
+<li>Позволяет настройку и редактирование во время процесса миграции.</li>
+<li>Работает в Linux, macOS и Microsoft Windows.</li></ul>
+
+<p>Это не исчерпывающий список. Следующие разделы обсуждают эти и
+дополнительные возможности миграции.</p>
+<p>Установка может быть самым сложным аспектом использования мастера
+MySQL Workbench Migration. Есть <a href="#wb-migration-install">
+раздел</a>, который описывает подготовку требований ODBC для Linux, macOS и
+Microsoft Windows и <a href="#wb-migration-database-concepts">другой
+раздел</a>, который поясняет условия установки для каждого RDBMS.</p>
+
+<h2><a name="wb-migration-install"></a>10.1.
+Общие требования к установке</h2>
+<p>MySQL Workbench Migration Wizard использует ODBC, чтобы соединиться с
+исходной базой данных, за исключением MySQL. Вам будет нужен установленный
+драйвер ODBC, который соответствует базе данных, от которой вы хотите
+мигрировать. Например, PostgreSQL может мигрировать с драйвером psqlodbc
+ODBC driver, Microsoft SQL Server может мигрировать со своим драйвером
+Microsoft SQL Server driver в Windows или FreeTDS в Linux и macOS.</p>
+
+<p>Следующие данные показывают общие компоненты, вовлеченные в связь ODBC:
+драйвер ODBC для сервера MySQL и другой системы управления реляционными
+базами данных, ODBC Driver Manager и MySQL Workbench.</p>
+
+<a name="wb-migration-install-odbc-diagram"></a>
+<p><b>Рис. 10.1. Схема установки миграции MySQL Workbench</b></p>
+<img src="images/wb-migration-install-odbc-diagram.png" width="800"
+height="353" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Определяя источник RDBMS, можно использовать источник данных, формируемый
+внешне, или предоставить отдельные параметры связи MySQL Workbench.
+Если вам уже формировали источник данных ODBC в вашей системе, то можно
+использовать это в MySQL Workbench.
+
+<p>Процесс миграции не поддерживает источник или цель для связей через SSH.
+</p>
+<p>Обход должен настроить зашифрованный тоннель, а затем рассматривать цель
+MySQL как стандартную TCP (незашифрованную) связь.</p>
+
+<h3><a name="wb-migration-install-odbc-libraries"></a>
+10.1.1. Библиотеки ODBC</h3>
+<p>Эта секция может быть пропущена, используя MySQL Workbench от Oracle.</p>
+<p>Библиотека ODBC Driver Manager должна присутствовать.
+Windows и macOS обеспечивают ее.</p>
+
+<h4><a name="idm140523189580768"></a>Linux</h4>
+<p><code class="literal">iODBC</code>: MySQL Workbench от Oracle
+уже включает iODBC и никакое дополнительное действие не требуется.
+Если вы собираете пакет сами, необходимо установить iODBC или unixODBC.
+iODBC рекомендуется. Можно пользоваться библиотекой iODBC, обеспеченной
+дистрибутивом, устанавливая пакет libiodbc2 на Debian или libiodbc в RPM.</p>
+
+<p><code class="literal">pyodbc</code>: модуль Python, используемый
+MySQL Workbench, чтобы взаимодействовать с ODBC, может использоваться, чтобы
+мигрировать базы данных ODBC, такие как PostgreSQL и DB2. В Windows и macOS
+это включено в Workbench. В Linux исполняемые модули от Oracle
+также включают pyodbc.</p>
+
+<p>При использовании самособранных модулей удостоверьтесь, что у вас есть
+последняя версия, и что она собрана с библиотекой менеджера ODBC, которую вы
+выбрали. С версии 3.0.6 pyodbc собирается с unixODBC по умолчанию.
+Если вы собираете с iODBC, необходимо выполнить следующие шаги:</p>
+
+<ol type="1"><li><p>Для компилирования удостоверьтесь, что вы установили
+заголовки iODBC. Для Linux имя зависит от диспетчера пакетов вашей системы,
+но общие названия <code class="literal">libiodbc-devel</code> (RPM) или
+<code class="literal">libiodbc2-dev</code> (Debian). Для macOS заголовки идут
+с системой, и никакое дополнительное действие не требуется для этого шага.
+</li>
+
+<li>В исходном каталоге pyodbc отредактируйте файл setup.py и
+около строки 157 замените
+<code class="literal">settings['libraries'].append('odbc')</code> на
+<code class="literal">settings['libraries'].append('iodbc')</code>.</li>
+
+<li>Выполните следующую команду как пользователь root:
+<code class="literal">CFLAGS=`iodbc-config --cflags`
+LDFLAGS=`iodbc-config --libs` python setup.py install</code>
+</p></li></ol>
+
+<h3><a name="wb-migration-install-odbc-drivers"></a>10.1.2. Драйверы ODBC</h3>
+<p>Для каждого RDBMS вам нужен его соответствующий драйвер ODBC, который
+должен также быть установлен на той же самой машине, что и MySQL Workbench.
+Его обычно предоставляет производитель RDBMS, но в некоторых случаях его
+могут также предоставить сторонние продавцы или проекты с
+открытым исходным кодом.</p>
+
+<p>Операционные системы обычно обеспечивают графический интерфейс,
+чтобы помочь установить драйверы ODBC и источники данных. Используйте это,
+чтобы установить драйвер (заставьте менеджера ODBC видеть недавно
+установленный драйвер ODBC). Можно также использовать его, чтобы создать
+источник данных для определенного случая базы данных, используя ранее
+установленный драйвер. Как правило, необходимо обеспечить название источника
+данных (DSN), в дополнение к IP сервера базы данных, порту, имени
+пользователя и иногда базу данных, к которой у пользователя есть доступ.</p>
+
+<p>Если MySQL Workbench будет в состоянии определить местонахождение
+менеджера ODBC GUI для вашей системы, то кнопка <span class="guibutton">
+Open ODBC Administrator</span> на странице обзора мастера
+миграции откроет его.
+
+<ul><li><code class="literal">Linux</code>: Есть несколько утилит GUI,
+некоторые из которых включены в unixODBC. Обратитесь к документации для
+вашего дистрибутива. iODBC обеспечивает
+<code class="literal">iodbcadm-gtk</code>.</li>
+
+<li><code class="literal">macOS</code>: Можно использовать ODBC
+Administrator, который является отдельной загрузкой с Apple, или ODBC
+Management от различного продавца. Если инструмент устанавливается в папку
+<code class="filename">/Applications/Utilities</code>, можно запустить его,
+используя кнопку <span class="guibutton">Open ODBC Administrator</span>.</li>
+
+<li><code class="literal">Microsoft Windows</code>: Можно использовать
+Data Sources (ODBC) в Administrative Tools. Если существует, кнопка
+<span class="guibutton">Open ODBC Administrator</span> его запустит.
+</p></li></ul>
+
+<p>Архитектура драйвера ODBC.
+<p>Так как драйвер ODBC должен быть установлен на клиентской стороне, вам
+будет нужен драйвер ODBC, который поддерживает вашу операционную систему
+клиента и архитектуру. Например, если вы управляете
+MySQL Workbench в Linux x64, тогда вам нужен драйвер Linux x64 ODBC.
+В macOS MySQL Workbench строится как 32-битное приложение, таким образом, вам
+нужны 32-битные драйверы.</p>
+
+<h2><a name="wb-migration-overview"></a>10.2. Обзор миграции</h2>
+<p>Migration Wizard выполняет следующие шаги, мигрируя базу данных к MySQL:
+</p>
+
+<ol type="1"><li><p>Соединяет с источником RDBMS и получает список доступных
+баз данных/схем.</li>
+<li>Перепроектирует выбранную базу данных/схемы во внутреннее представление,
+определенное для источника RDBMS. Этот шаг также выполнит переименование
+объектов/схем в зависимости от типа метода отображения имени
+объекта, который выбран.</li>
+<li>Автоматически мигрирует объекты RDBMS в конкретные объекты MySQL.</p>
+
+<ol type="a"><li><p>Создаются целевые объекты схемы.</li>
+<ol type="i"><li><p>Столбцы для каждой таблицы копируются.</p>
+<ol type="A"><li><p>Типы данных отображаются к типам данных MySQL.</li>
+<li>Значения по умолчанию отображаются к поддержанным значениям по умолчанию
+MySQL, если это возможно.</p></li></ol></li>
+
+<li><p>Индексы преобразовываются.</li>
+<li>Primary Keys преобразовываются.</li>
+<li>Триггеры копируются и комментируются, если источник не MySQL.
+</p></li></ol></li>
+
+<li><p>Foreign Keys для всех таблиц (всех схем) преобразовываются.</li>
+<li>Объекты представления копируются и комментируются, если
+источник не MySQL.</li>
+<li>Хранимые процедуры и функциональные объекты копируются и комментируются,
+если источник не MySQL.</p></li></ol></li>
+
+<li><p>Обеспечивается возможность рассмотреть изменения для редактирования и
+исправления ошибок в объектах.</li>
+<li>Создаются объекты в целевом сервере MySQL. Если есть ошибки, можно
+возвратиться к предыдущему шагу, исправить их и повторить целевое создание.
+</li>
+<li>Копируются данные таблиц из источника в MySQL.</p></li></ol>
+
+<p>MySQL Workbench оказывает поддержку для перемещения от некоторых
+определенных продуктов RDBMS. Мастер миграции обеспечит лучшие результаты,
+мигрируя от таких продуктов. Однако в некоторых случаях другие неподдержанные
+продукты базы данных могут также мигрироваться при помощи универсальной
+поддержки БД, пока у вас есть драйвер ODBC. В этом случае миграция будет
+менее автоматической, но тем не менее должна работать.</p>
+
+<h3><a name="wb-migration-overview-steps"></a>
+10.2.1. Визуальный справочник по выполнению миграции базы данных</h3>
+<p>Этот пример мигрирует базу данных Microsoft SQL Server к MySQL и включает
+изображение для каждого шага.</p>
+
+<p>В MySQL Workbench выберите <span class="guimenu">Database</span> и
+<span class="guimenu">Migrate</span>, чтобы открыть мастера миграции и
+показать обзор миграции.</p>
+
+<h4><a name="idm140523189529168"></a>Overview</h4>
+<a name="wb-migration-overview-overview"></a>
+<p><b>Рис. 10.2. Миграция в MySQL Workbench: обзор</b></p>
+<img src="images/wb-migration-overview.png" width="800" height="460"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>Это описывает предпосылки и требования, которые должны быть поняты прежде,
+чем продолжить. Опция <span class="guibutton">Open ODBC Administrator</span>
+загрузит <code class="filename">odbcad32.exe</code> и используется, чтобы
+подтвердить, что драйвер ODBC для SQL Server установлен и сделать изменения
+конфигурации в случае необходимости.</p>
+<p>Нажмите <span class="guibutton">Start Migration</span>.</p>
+
+<h4><a name="idm140523189517296"></a>Исходный выбор</h4>
+<p>Выберите источник, который мигрирует к MySQL. Выберите
+<span class="guilabel">Database System</span>, которая мигрирует, другие
+параметры связи изменятся соответственно.</p>
+
+<a name="wb-migration-overview-source-selection-parameters"></a>
+<p><b>Рис. 10.3. Миграция MySQL Workbench: исходный выбор (параметры)</b></p>
+<img src="images/wb-migration-source-selection-parameters.png"
+width="800" height="460" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h4><a name="idm140523189507152"></a>Целевой выбор</h4>
+<p>Цель это база данных MySQL, которая будет содержать недавно мигрировавшую
+базу данных. Текущие подключения Workbench MySQL будут доступны здесь или
+можно выбрать <span class="guimenu">Manage DB Connections</span>, чтобы
+создать новую связь.</p>
+
+<a name="wb-migration-overview-target-selection"></a>
+<p><b>Рис. 10.4. Миграция MySQL Workbench: Целевой выбор</b></p>
+<img src="images/wb-migration-target-selection.png" width="800" height="460"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h4><a name="idm140523189497936"></a>Список схем</h4>
+<p>Список Схем получается от обоих RDBMS, входной и выходной.
+Это автоматизированный информационный шаг, который сообщает, что связанные
+со связью ошибки и/или общую информацию. Нажмите
+<span class="guibutton">Next</span>.</p>
+
+<a name="wb-migration-overview-fetch-schemata-list"></a>
+<p><b>Рис. 10.5. MySQL Workbench: список схем</b></p>
+<img src="images/wb-migration-fetch-schemata-list.png" width="800"
+height="526" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h4><a name="idm140523189488704"></a>Выбор схем</h4>
+<p>Выберите схемы, которые вы хотите мигрировать.</p>
+<p>Опции "Schema Name Mapping Method" для миграции с
+Microsoft SQL Server:
+
+<ul><li>Сохраните схемы так: Catalog.Schema.Table -&gt;
+Schema.Table: Это создаст много баз данных, одну на схему.</li>
+<li>Only one schema: Catalog.Schema.Table -&gt; Catalog.Table:
+Merges each schema into a single database.
+Следующие данные показывают пример этого метода отображения.</li>
+
+<li>Only one schema, keep current schema names as a prefix:
+Catalog.Schema.Table -&gt; Catalog.Schema_table:
+Сохраняет название схемы как префикс.</p></li></ul>
+
+<a name="wb-migration-overview-schemata-selection"></a>
+<p><b>Рис. 10.6. MySQL Workbench: Выбор схем</b></p>
+<img src="images/wb-migration-schemata-selection.png" width="800"
+height="462" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h4><a name="idm140523189475136"></a>Перепроектируйте источник</h4>
+<p>Исходные метаданные получены из источника и затем перепроектированы.
+Это автоматизированный информационный шаг, который сообщает о связанных
+ошибках и общей информации. Просмотрите журнал и затем нажмите
+<span class="guibutton">Next</span>.</p>
+
+<a name="wb-migration-overview-reverse-engineer-source"></a>
+<p><b>Рис. 10.7. MySQL Workbench: Перепроектируйте источник</b></p>
+<img src="images/wb-migration-reverse-engineer-source.png" width="800"
+height="530" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h4><a name="idm140523189465808"></a>Исходные объекты</h4>
+<p>Обнаруженные на стадии <span class="guilabel">Reverse Engineer
+Source</span> объекты показаны и сделаны доступными. Результаты включают
+таблицу, представление и сохраненные подпрограммы,
+только объекты таблицы выбраны по умолчанию.</p>
+
+<a name="wb-migration-overview-source-objects"></a>
+<p><b>Рис. 10.8. MySQL Workbench: Исходные объекты</b></p>
+<img src="images/wb-migration-source-objects.png" width="800" height="530"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h4><a name="idm140523189456544"></a>Миграция</h4>
+<p>Процесс миграции теперь преобразовывает выбранные объекты в совместимые
+объекты MySQL.</p>
+
+<a name="wb-migration-overview-migration"></a>
+<p><b>Рис. 10.9. MySQL Workbench: миграция</b></p>
+<img src="images/wb-migration-migration.png" width="800" height="596"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h4><a name="idm140523189448176"></a>Ручное редактирование</h4>
+<p>Есть три секции, чтобы отредактировать, которые выбраны при помощи
+блока <span class="guilabel">View</span> справа вверху. Кнопка
+<span class="guibutton">Show Code and Messages</span> доступна с каждым
+представлением, она покажет произведенный код MySQL, который
+соответствует выбранному объекту.
+
+<ul><li><span class="guimenu">Проблемы миграции</span>:
+Это сообщит о проблемах или покажет "No mapping problems found.".</p>
+
+<a name="wb-migration-overview-manual-editing-problems"></a>
+<p><b>Рис. 10.10. MySQL Workbench: Редактирование (проблемы миграции)</b></p>
+<img src="images/wb-migration-manual-editing-problems.png" width="800"
+height="463" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li><p><span class="guimenu">All Objects</span>: представление объекта,
+которое позволяет вам рассматривать и редактировать определения объектов.
+Дважды щелкните по строке, чтобы изменить имя целевых объектов.</p>
+
+<a name="wb-migration-overview-manual-editing-all-objects"></a>
+<p><b>Рис. 10.11. MySQL Workbench: Редактирование (все объекты)</b></p>
+<img src="images/wb-migration-manual-editing-all-objects.png"
+width="800" height="700" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li><p><span class="guimenu">Column Mappings</span>:
+показывает все отображения столбца таблицы и позволяет вам индивидуально
+просматривать и исправлять отображение для всех типов столбца, значений по
+умолчанию и других признаков.</p>
+
+<a name="wb-migration-overview-manual-editing-column-mappings"></a>
+<p><b>Рис. 10.12. MySQL Workbench: Редактирование (отображения столбцов)
+</b></p>
+<img src="images/wb-migration-manual-editing-column-mappings.png" width="800"
+height="563" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li></ul>
+
+<h4><a name="idm140523189418176"></a>Целевые варианты создания</h4>
+<p>Схема может быть создана добавлением к целевой RDBMS, создав файл скрипта
+SQL или обоими способами.</p>
+
+<a name="wb-migration-overview-target-creation-options"></a>
+<p><b>Рис. 10.13. MySQL Workbench: Целевые варианты создания</b></p>
+<img src="images/wb-migration-target-creation-options.png" width="800"
+height="429" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h4><a name="idm140523189409728"></a>Создание схемы</h4>
+<p>Теперь схема создается. Полный журнал также доступен здесь.</p>
+<a name="wb-migration-overview-create-schemata"></a>
+<p><b>Рис. 10.14. MySQL Workbench: Создание схемы</b></p>
+<img src="images/wb-migration-create-schemata.png" width="800" height="519"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h4><a name="idm140523189401344"></a>Создайте целевые результаты</h4>
+<p>Произведенные объекты в этом примере перечисляются наряду с сообщениями
+об ошибках, если они есть.</p>
+
+<p>Код миграции может также быть рассмотрен и отредактирован здесь.
+Чтобы внести изменения, выберите объект, отредактируйте код запроса и затем
+нажмите <span class="guibutton">Apply</span>. Повторите этот процесс для
+каждого объекта, который будет отредактирован. Наконец, нажмите
+<span class="guibutton">Recreate Objects</span>, чтобы сохранить результаты.
+<span class="guibutton">Recreate Objects</span> требуется, чтобы сохранить
+любые изменения здесь. Это тогда выполнит предыдущий шаг миграции
+(<span class="guilabel">Create Schema</span>) с измененным кодом, и затем
+продолжит процесс миграции. Это также означает, что ранее сохраненная
+схема будет сброшена.</p>
+
+<a name="wb-migration-overview-create-target-results"></a>
+<p><b>Рис. 10.15. MySQL Workbench: создайте целевые результаты</b></p>
+<img src="images/wb-migration-create-target-results.png" width="800"
+height="519" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h4><a name="idm140523189388448"></a>Установка передачи данных</h4>
+<p>Следующий шаг передает данные из источника RDBMS к целевой базе данных
+MySQL. Экран установки включает следующие варианты:</p>
+
+<p><span class="bold"><strong>Data Copy</strong></span>:
+<ul><li><span class="guilabel">Online copy of table data to target RDBMS
+</span>: Этот метод (по умолчанию) скопирует данные к целевой RDBMS.</li>
+
+<li><span class="guilabel">Create a batch file to copy the data
+at another time</span>: Данные могут также быть сброшены в дамп, который
+может прочитаться в более позднее время или использоваться в качестве
+резервной копии. Это использует подключение MySQL, чтобы передать данные.
+</li>
+
+<li><span class="guilabel">Create a shell script to use native server dump
+and load abilities for fast migration</span>: В отличие от простого пакетного
+файла, который выполняет живую копию онлайн, это производит скрипт, который
+будет выполнен на хосте <span class="emphasis"><em>источника</em></span>,
+чтобы произвести zip-файл, содержащий все данные и информацию, чтобы
+мигрировать данные локально. Скопируйте и распакуйте произведенный zip-файл
+на целевом хосте и затем выполните скрипт импорта (на целевом хосте),
+чтобы импортировать данные в MySQL, используя LOAD DATA.</p>
+
+<p>Этот более быстрый метод избегает потребности передачи всех данных через
+MySQL Workbench или иметь постоянное сетевое соединение между серверами
+MySQL. Этот выбор был добавлен в MySQL Workbench 6.3.0.</li></ul>
+
+<p>Опции:<ul><li>Truncate target tables before copying data:
+В случае, если целевая база данных уже существует, это удалит ее.</li>
+<li>Worker tasks: The default value is <code class="literal">2</code>.
+Это количество задач (соединений с базой данных),
+используемых, копируя данные.</li>
+<li>Enable debug output for table copy: Поазать отладочную информацию.
+</p></li></ul>
+
+<a name="wb-migration-overview-data-transfer-setup"></a>
+<p><b>Рис. 10.16. MySQL Workbench: установка передачи данных</b></p>
+<img src="images/wb-migration-data-transfer-setup.png" width="800"
+height="494" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h4><a name="idm140523189366944"></a>Оптовая передача данных</h4>
+<p>В зависимости от выбранного выбора это передаст данные целевой RDMS
+(по умолчанию), произведет простой скрипт для передачи данных онлайн или
+произведет скрипт, чтобы выполнить на исходном хосте, который тогда
+производит zip-файл, содержащий скрипт передачи и данные, который будет
+выполнен на целевом хосте. Произвольно, просмотрите журнал в поисках ошибок.
+</p>
+
+<a name="wb-migration-overview-bulk-data-transfer"></a>
+<p><b>Рис. 10.17. MySQL Workbench: оптовая передача данных</b></p>
+<img src="images/wb-migration-bulk-data-transfer.png" width="800"
+height="512" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h4><a name="idm140523189358224"></a>Отчет о миграции</h4>
+<p>И наконец, отчет о миграции доступен и суммирует весь процесс миграции.
+</p>
+<a name="wb-migration-overview-migration-report"></a>
+<p><b>Рис. 10.18. MySQL Workbench: Отчет о миграции</b></p>
+<img src="images/wb-migration-migration-report.png" width="800" height="473"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>Нажим <span class="guibutton">Finish</span> закроет окно миграции.
+Если вы выбрали копию онлайн, база данных может теперь быть просмотрена в
+MySQL Workbench SQL editor.</p>
+
+<a name="wb-migration-sql-editor-adventureworks"></a>
+<p><b>Рис. 10.19. MySQL Workbench: просмотр мигрировавшей базы данных</b></p>
+<img src="images/wb-migration-sql-editor-adventureworks.png"
+width="800" height="598" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Если вкладка MySQL Workbench SQL Editor уже открыта, то список схем в
+Object Browser должен быть освежен, чтобы просмотреть
+недавно импортированную схему.</p>
+
+<h3><a name="wb-migration-overview-supported"></a>
+10.2.2. Миграция от поддержанных баз данных</h3>
+<p>Когда поддержанный продукт RDBMS будет использован для миграции, мастер
+MySQL Workbench Migration Wizard автоматически преобразует столько
+информации, сколько может, но все еще надо вручную редактировать
+автоматически перенесенную схему для трудных случаев
+или когда отображение по умолчанию не такое.</p>
+
+<p>Вообще говоря, только информация о таблице
+и ее данные автоматически преобразовываются в MySQL. Кодовые объекты, такие
+как представления, хранимые процедуры и триггеры, нет. Но поддержанные
+данные RDBMS будут получены и показаны в мастере. Можно тогда вручную
+преобразовать их или сохранить для преобразования в более позднее время.</p>
+
+<p>Следующие продукты RDBMS и версии в настоящее время проверяются и
+поддерживаются мастером MySQL Workbench Migration Wizard,
+хотя другие продукты RDBMS могут быть также перенесены, см.
+<a href="#wb-migration-overview-generic">раздел 10.2.3</a>:
+
+<ul><li>Microsoft SQL Server 2000 и позже.</li>
+<li>Microsoft Access 2007 и позже.</li>
+<li>MySQL Server 5.6 и позже как источник, MySQL Server
+5.6 и позже как цель.</li>
+
+<li>PostgreSQL 8.0 и позже.</li>
+<li>SQL Anywhere</li>
+<li>SQLite</li>
+<li>Sybase Adaptive Server Enterprise 15.x и позже.</p></li></ul>
+
+<h3><a name="wb-migration-overview-generic"></a>
+10.2.3. Миграция от неподдержанных баз данных</h3>
+<p>Большинство баз данных ODBC может мигрировать, используя универсальную
+поддержку БД. В этом случае кодовые объекты не будут восстановлены из
+исходной базы данных, переносятся только таблицы и данные.</p>
+
+<p>Используя универсальную поддержку, типы данных столбцов отображены,
+используя следующие шаги:</p>
+<ol type="1"><li><p>Это ищет первый вход в <span class="guimenu">Generic
+Datatype Mapping Table</span> для исходного имени типа. Если длина/диапазоны
+входа будет соответствовать столбцу источника, это выберет тот тип.
+Иначе это продолжает искать.</li>
+
+<li>Если никакие совпадения не были найдены в универсальной
+таблице, то система пытается непосредственно отобразить
+исходный тип к типу MySQL с тем же самым именем.</li>
+
+<li>Если исходное имя типа не соответствует ни одному из типов данных MySQL,
+то оно не преобразовывается, и ошибка будет зарегистрирована.
+Отсюда можно определить целевой тип данных на шаге
+<span class="guilabel">Manual Object Editing</span> в мастере.</p></li></ol>
+
+<h2><a name="wb-migration-database-concepts"></a>
+10.3. Концептуальные эквиваленты DBMS</h2>
+<p>Следующая таблица показывает сравнение между каждым продуктом DBMS,
+поддержанным мастером Migration Wizard и MySQL.</p>
+
+<a name="wb-migration-database-concepts-table"></a>
+<p><b>Таблица 10.1. Концептуальные эквиваленты между поддержанными
+продуктами DBMS и MySQL</b></p>
+<table><thead><tr>
+<th scope="col">Понятие</th>
+<th scope="col">MS SQL Server</th>
+<th scope="col">Sybase ASE</th>
+<th scope="col">PostgreSQL</th>
+<th scope="col">MySQL</th>
+<th scope="col">Примечание</th></tr></thead>
+<tbody><tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/security.html" target="_top">
+Идентификация</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/example-auto-increment.html"
+target="_top">Auto_Increment</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">PostgreSQL использует последовательности для Auto_Increment.
+</td></tr>
+<tr><td scope="row">Резервная копия</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">См.
+<a href="../../../www.mysql.com/products/enterprise/backup.html" target="_top">
+MySQL Enterprise Backup</a>.</td></tr>
+<tr><td scope="row">Catalog</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">N/A</td>
+<td scope="row">Можно отобразить каталог в схему и пропустить ownerobject,
+использовать владельца в качестве названия схемы или слить владельца и
+имя объекта вместе.</td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/constraints.html"
+target="_top">Constraints</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">Data Dictionary</td>
+<td scope="row"></td>
+<td scope="row"></td>
+<td scope="row"></td>
+<td scope="row">N/A</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/create-database.html"
+target="_top">Database</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">Database Instance</td>
+<td scope="row"></td>
+<td scope="row"></td>
+<td scope="row"></td>
+<td scope="row"></td>
+<td scope="row"></td></tr>
+<tr><td scope="row">Дамп</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"><span class="command"><strong>mysqldump</strong>
+</span></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/event-scheduler.html"
+target="_top">События</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/create-table.html"
+target="_top">Foreign Keys</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/fulltext-search.html"
+target="_top">Full Text Search</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">В InnoDB, начиная с MySQL Server 5.6 и во
+всех версиях MyISAM.</td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/optimization-indexes.html"
+target="_top">Индекс</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/information-schema.html"
+target="_top">Information Schema</a></td>
+<td scope="row">Да</td>
+<td scope="row">No</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/identifier-case-sensitivity.html"
+target="_top">Чувствительность к регистру имен объектов</a></td>
+<td scope="row">Зависит от сопоставления</td>
+<td scope="row">Зависит от сопоставления</td>
+<td scope="row">Смешано</td>
+<td scope="row">Смешано</td>
+<td scope="row">MySQL: чувствительность имен базы данных, таблиц и триггеров
+зависит от операционной системы, другие имена объектов нечувствительны к
+регистру. PostgreSQL: соответственно стандарту SQL-99, непроцитированные
+имена объектов рассматриваются как нечувствительные к регистру, в то время
+как цитированные имена объектов чувствительные к регистру. В отличие от
+стандарта, непроцитированные имена объектов преобразовываются в строчные
+буквы вместо верхнего регистра.</td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/language-structure.html"
+target="_top">Соглашения об именах объекта</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">Packages</td>
+<td scope="row">N/A</td>
+<td scope="row">N/A</td>
+<td scope="row">N/A</td>
+<td scope="row">N/A</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/partitioning.html"
+target="_top">Разделение</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/performance-schema.html"
+target="_top">Performance Schema</a></td>
+<td scope="row">N/A</td>
+<td scope="row">N/A</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/privilege-system.html"
+target="_top">Права доступа и управления</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/primary-key-optimization.html"
+target="_top">Primary Key</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/create-table.html"
+target="_top">Ссылочная целостность</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Sybase ASE: ссылочная целостность только через триггеры.
+</td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/replication.html"
+target="_top">Репликация</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">Роли</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">N/A</td>
+<td scope="row">Роли не доступны в MySQL на уровне базы данных.</td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/create-database.html"
+target="_top">Schema</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да*</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Эквивалентно базе данных в MySQL. Sybase ASE:
+схемы соответствуют именам пользователей.</td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/example-auto-increment.html"
+target="_top">Sequences</a></td>
+<td scope="row">Да*</td>
+<td scope="row">Да*</td>
+<td scope="row">Да</td>
+<td scope="row">Да*</td>
+<td scope="row">Автономные объекты последовательности не поддерживаются в
+MySQL. Схожая функциональность может быть получена со столбцами IDENTITY в
+MSSQL и AUTO_INCREMENT в MySQL.</td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/sql-mode.html"
+target="_top">Режимы SQL</a></td>
+<td scope="row">Да</td>
+<td scope="row"></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">SET_ANSI_* в MSSQL</td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/storage-engines.html"
+target="_top">Механизмы хранения</a></td>
+<td scope="row">N/A</td>
+<td scope="row">N/A</td>
+<td scope="row">Да*</td>
+<td scope="row">Да</td>
+<td scope="row">PostgreSQL поддерживает и использует только один механизм
+хранения (Postgresql). Другие компании добавили дополнительные механизмы
+хранения к PostgreSQL.</td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/create-procedure.html"
+target="_top">Stored Procedures</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">Синонимы</td>
+<td scope="row">N/A</td>
+<td scope="row">N/A</td>
+<td scope="row">N/A</td>
+<td scope="row">N/A</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/create-table.html"
+target="_top">Таблица</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">Табличное простанство</td>
+<td scope="row">Да</td>
+<td scope="row">Да*</td>
+<td scope="row">Да</td>
+<td scope="row">N/A</td>
+<td scope="row">MSSQL группирует таблицы в схемах (что-то вроде
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/create-tablespace.html"
+target="_top">CREATE TABLESPACE</a>). Sybase ASE: таблицы сгруппированы в
+схемах, которые больше похожи на имена пользователей.</td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/create-table.html"
+target="_top">Временные таблицы</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/commit.html"
+target="_top">Транзакции</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/triggers.html"
+target="_top">Триггеры</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/adding-functions.html"
+target="_top">UDF</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/charset-unicode.html"
+target="_top">Unicode</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/create-table.html"
+target="_top">Unique Key</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/create-user.html"
+target="_top">Пользователь</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/create-view.html"
+target="_top">Представления</a></td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row">Да</td>
+<td scope="row"></td></tr></tbody></table><br class="table-break">
+
+<p>Обработка структурных различий Microsoft SQL Server и MySQL.
+<p>База данных Microsoft SQL Server составлена из одного каталога и одной или
+более схем. MySQL только поддерживает одну схему для каждой базы данных (или
+скорее база данных MySQL это схема), таким образом, это различие в дизайне
+должно быть запланировано. Mастер Migration Wizard должен знать, как
+обращаться с миграцией схем для исходной базы данных (Microsoft SQL Server).
+Это может сохранить все схемы как есть (мастер миграции создаст одну базу
+данных на схему) или слить их в единственную базу данных MySQL.
+Дополнительные варианты включают: удалить названия схемы (мастер миграции
+будет обращаться с возможными столкновениями имен, которые могут появиться по
+ходу дела) или добавить название схемы к именам объектов базы
+данных как префикс.</p>
+
+<h2><a name="wb-migration-database-access"></a>10.4.
+Миграция Microsoft Access</h2>
+<p>Эта опция была добавлена в MySQL Workbench 6.2.0.</p>
+
+<h3><a name="wb-migration-database-access-general"></a>
+Общая информация</h3>
+<p>Microsoft Windows требуется, потому что драйверы Microsoft Access ODBC
+доступны только в Windows. Что касается места назначения, сервер MySQL может
+быть на той же самой машине или в другом месте в вашей сети.</p>
+
+<h3><a name="wb-migration-database-access-prepare"></a>
+Подготовка базы данных Microsoft Access для миграции</h3>
+<p>Microsoft Access Microsoft Access хранит информацию отношений/внешнего
+ключа во внутренней таблице под названием
+<span class="bold"><strong>MSysRelationships</strong></span>.
+Таблица защищена от доступа для чтения даже пользователем Admin,
+поэтому при попытке мигрировать, не открывая доступ к ней,
+вы получите ошибку:
+<pre>
+[42000] [Microsoft][ODBC Microsoft Access Driver] Record(s)
+        cannot be read; no read permission on 'msysobjects'.
+        (-1907) (SQLExecDirectW)
+</pre>
+
+<p>Шаги, чтобы предоставить доступ для чтения роли
+Admin (Microsoft Access 2007):
+<ul><li>Откройте базу данных в Microsoft Access.</li>
+<li>Из ленты <span class="guimenu">Database Tools</span> нажмите
+<span class="guimenu">Visual Basic</span>, чтобы открыть консоль
+Visual Basic (VB).</p>
+
+<a name="wb-migration-access-visual-basic-macro-figure"></a>
+<p><b>Рис. 10.20. Местонахождение инструмента Visual Basic Macro Database
+</b></p>
+<img src="images/wb-migration-access-visual-basic-macro.png" width="788"
+height="245" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li><p>Чтобы подтвердить, что вы вошли как пользователь "Admin",
+определите местонахождение панели <span class="guilabel">Immediate</span>,
+напечатайте "? CurrentUser" и нажмите <span class="guibutton">Enter</span>.
+Это должно вывести "Admin" под "? CurrentUser" в панели.</li>
+
+<li>Также в <span class="guilabel">Immediate</span> введите
+следующую команду, чтобы предоставить доступ:
+<pre>
+CurrentProject.Connection.Execute "GRANT SELECT ON MSysRelationships TO Admin"
+</pre>
+
+<a name="wb-migration-access-grant-msysrelationships-access-figure"></a>
+<p><b>Рис. 10.21. GRANT SELECT ON MSysRelationships TO Admin</b></p>
+<img src="images/wb-migration-access-grant-msysrelationships-access.png"
+width="800" height="443" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+<li><p>Закройте Microsoft Access.</p></li></ul>
+
+<h3><a name="wb-migration-database-access-start"></a>
+Запуск мастера MySQL Workbench Migration Wizard</h3>
+<p>От главного экрана MySQL Workbench можно запустить мастер Migration
+Wizard, щелкнув по кнопке (<span class="inlinemediaobject">
+<img src="images/wb-migration-wizard-button.png" align="middle" width="20"
+height="20"></span>) в боковой панели Workbench или выбрав из главного меню
+<span class="guimenu">Database</span>,
+<span class="guimenu">Migration Wizard</span>.</p>
+
+<a name="wb-migration-access-overview-page-figure"></a>
+<p><b>Рис. 10.22. Страница обзора миграции</b></p>
+<img src="images/wb-migration-overview-page.png" width="800" height="530"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h3><a name="wb-migration-database-access-odbc-drivers"></a>
+Подготовка драйверов ODBC</h3>
+<p>Чтобы проверить, что вы установили драйвер ODBC, нажмите
+<span class="guibutton">Open ODBC Administrator</span>
+со страницы обзора миграции MySQL Workbench, чтобы открыть системный
+инструмент ODBC. Затем выберите вкладку
+<span class="guilabel">Drivers</span>.</p>
+
+<a name="wb-migration-access-odbc-drivers-figure"></a>
+<p><b>Рис. 10.23. Проверка драйверов ODBC для Access</b></p>
+<img src="images/wb-migration-access-odbc-drivers.png" width="473"
+height="388" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>У MySQL Workbench есть 64-битный исполняемый файл. Драйверы ODBC, которые
+вы используете, должны иметь ту же самую архитектуру.
+Если во время миграции вы получаете ошибку ODBC
+"architecture mismatch between the Driver and Application",
+вы установили неверную версию MySQL Workbench.</p>
+
+<p>На вкладке <span class="guilabel">User DSN</span> нажмите
+<span class="guibutton">Add</span>, чтобы создать DSN для вашего
+файла базы данных.</p>
+
+<a name="wb-migration-access-dsn-new-figure"></a>
+<p><b>Рис. 10.24. Добавление нового DSN</b></p>
+<img src="images/wb-migration-access-dsn-new.png" width="470" height="389"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h3><a name="wb-migration-database-access-source-selection"></a>
+Подготовка исходных параметров</h3>
+<p>Нажмите <span class="guibutton">Start Migration</span> на странице
+Overview, чтобы продвинуться на страницу
+<span class="guilabel">Source Selection</span>. Здесь необходимо предоставить
+информацию о базе данных Access, с которой вы мигрируете, драйвере ODBC и
+параметры для связи.</p>
+
+<p>Откройте комбинированное окно <span class="guilabel">Database System
+</span> для списка поддерживаемых RDBMS и выберите
+<span class="bold"><strong>Microsoft Access</strong></span> из списка.
+Есть другое комбинированное окно ниже <span class="guilabel">Stored
+Connection</span>. Это перечисляет сохраненные настройки подключения для этой
+RDBMS. Можно сохранить связи, отметив флажок внизу страницы,
+наряду с названием связи.</p>
+
+<p>Следующее комбинированное окно выбирает <span class="guilabel">Connection
+Method</span>. На этот раз мы собираемся выбрать <span class="emphasis">
+<em>ODBC Data Source</em></span> из списка. Это позволяет вам выбирать
+созданные ранее DSN, которые вы формировали в своей системе.</p>
+
+<p>Список <span class="guilabel">DSN</span> имеет все DSN, которые
+вы определили в своей системе. Выберите тот, который вы создали для
+базы данных Access.</p>
+
+<p>В поле <span class="guilabel">Default Character Set</span>
+можно выбрать набор символов базы данных. Если ваша версия Access
+использует символы western/latin, можно оставить по умолчанию
+<span class="emphasis"><em>cp1252</em></span>.
+Однако, если вы используете локализованную версию Access, необходимо
+ввести правильный набор символов, используемый выпуском Microsoft Office,
+иначе данные будут скопированы неправильно.</p>
+
+<a name="wb-migration-access-source-selection-figure"></a>
+<p><b>Рис. 10.25. Исходный выбор Access</b></p>
+<img src="images/wb-migration-access-source-selection.png" width="800"
+height="555" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Наконец, нажмите <span class="guibutton">Test Connection</span>, чтобы
+проверить, может ли связь ODBC быть установлена. Если вы вошли в правильные
+параметры, то увидите сообщение об успешной попытке подключения.</p>
+
+<h3><a name="wb-migration-database-access-target-selection"></a>
+Подготовка целевых параметров</h3>
+<p>Затем, настройте целевые параметры базы данных (MySQL), определив
+параметры, которые соединяются с вашим экземпляром MySQL Server.
+По окончании нажмите <span class="guibutton">Test Connection</span>,
+чтобы проверить определение связи.</p>
+
+<a name="wb-migration-access-target-selection-figure"></a>
+<p><b>Рис. 10.26. Целевой выбор базы данных</b></p>
+<img src="images/wb-migration-access-target-selection.png" width="800"
+height="502" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="wb-migration-database-access-select-objects"></a>
+Выберите объекты миграции</h3>
+<p>Необходимо просмотреть инженерный анализ выбранных объектов базы данных.
+В этом пункте мастер миграции получает релевантную информацию о включенных
+объектах базы данных (таких как имена таблиц, столбцы таблицы, первичные и
+внешние ключи, индексы, представления, триггеры и т.д.).</p>
+
+<a name="wb-migration-access-reverse-engineer-source-figure"></a>
+<p><b>Рис. 10.27. Результат анализа источника</b></p>
+<img src="images/wb-migration-access-reverse-engineer-source.png" width="799"
+height="513" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Надо проверить, что все подходит. Затем <span class="guilabel">Source
+Objects</span> показывает список объектов, которые были получены и
+доступны для миграции.</p>
+
+<a name="wb-migration-access-source-objects-figure"></a>
+<p><b>Рис. 10.28. Исходные объекты</b></p>
+<img src="images/wb-migration-access-source-objects.png" width="799"
+height="513" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>В предыдущем примере мастер миграции обнаружил таблицу и объекты
+представления для исходной базы данных. Только объект таблицы выбран по
+умолчанию для миграции. Можно также выбрать объекты представления, но
+необходимо также предоставить их соответствующий MySQL эквивалентный код
+позже (никакая автоматическая миграция недоступна для них),
+таким образом, наш пример оставит представления непроверенными.
+То же самое касается хранимых процедур, функций и триггеров.</p>
+
+<p>Нажмите <span class="guibutton">Show Selection</span>, чтобы формировать
+точно, какие объекты вы хотите мигрировать.</p>
+
+<a name="wb-migration-access-source-objects-selection-figure"></a>
+<p><b>Рис. 10.29. Выбор исходных объектов</b></p>
+<img src="images/wb-migration-access-source-objects-selection.png"
+width="799" height="513" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Объекты справа будут мигрироваться. Фильтр может отфильтровать список
+(подстановочные знаки позволены, как продемонстрировано выше). При помощи
+кнопок стрелки можно отфильтровать объекты, которые вы не хотите мигрировать.
+Очистите текст фильтра, чтобы проверить полный список выбранных объектов. Наш
+пример мигрирует все объекты таблицы, таким образом, все они находятся в
+списке <span class="guilabel">Objects to Migrate</span> и флажок
+<span class="guilabel">Migrate Table Objects</span> отмечен.</p>
+
+<h3><a name="wb-migration-database-access-review-proposed-migration"></a>
+Рассмотрите предложенную миграцию</h3>
+<p>В этом пункте мастер миграции преобразовывает выбранные объекты в их
+эквивалентные объекты целевого сервера MySQL, это также производит код MySQL,
+который должен был создать их. Вам, возможно, придется ждать, прежде чем
+шаг <span class="guilabel">Manual Editing</span> покажет начальную страницу.
+</p>
+
+<a name="wb-migration-access-manual-editing-wait-figure"></a>
+<p><b>Рис. 10.30. Редактирование вручную: начальная страница</b></p>
+<img src="images/wb-migration-access-manual-editing-wait.png" width="799"
+height="513" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Блок <span class="guilabel">View</span> изменяет способ, которым
+показывают мигрировавшие объекты базы данных. Нажмите
+<span class="guibutton">Show Code</span>, чтобы смотреть и отредактировать
+произведенный код MySQL, который соответствует выбранному объекту.
+Кроме того, можно дважды щелкнуть по элементу в дереве объектов, чтобы
+отредактировать имя объекта или дважды щелкнуть по строке базы данных, чтобы
+изменить ее название.</p>
+
+<a name="wb-migration-access-manual-editing-all-figure"></a>
+<p><b>Рис. 10.31. Редактирование вручную: все объекты</b></p>
+<img src="images/wb-migration-access-manual-editing-all.png" width="799"
+height="513" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Блок <span class="guilabel">View</span> также имеет опцию
+<span class="guilabel">Column Mappings</span>. Это показывает столбцы таблицы
+и позволяет вам просматривать и менять отображение типов столбца, значения по
+умолчанию и другие признаки.</p>
+
+<a name="wb-migration-access-manual-editing-column-mappings-figure"></a>
+<p><b>Рис. 10.32. Отображения столбцов</b></p>
+<img src="images/wb-migration-access-manual-editing-column-mappings.png"
+width="799" height="513" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="wb-migration-database-access-create-objects"></a>
+Создайте объекты базы данных</h3>
+<p>Теперь откроется страница
+<span class="guilabel">Target Creation Options</span>.</p>
+
+<a name="wb-migration-access-target-creation-options-figure"></a>
+<p><b>Рис. 10.33. Целевые варианты создания</b></p>
+<img src="images/wb-migration-access-target-creation-options.png" width="800"
+height="497" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Используйте варианты целевого создания, чтобы выполнить произведенный код
+в целевой RDBMS или можно сбросить его в файл скрипта SQL.
+Код SQL будет выполнен на целевом сервере MySQL. Можно рассмотреть его
+работу на странице <span class="guilabel">Create Schemas</span>.</p>
+
+<a name="wb-migration-access-create-schemata-figure"></a>
+<p><b>Рис. 10.34. Создает схемы</b></p>
+<img src="images/wb-migration-access-create-schemata.png" width="799"
+height="513" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Когда создание схем и объектов, закончено можно перейти к странице
+<span class="guilabel">Create Target Results</span>. Это представляет список
+созданных объектов и включает любые произведенные ошибки, в то время как
+они были созданы.</p>
+
+<a name="wb-migration-access-create-target-results-figure"></a>
+<p><b>Рис. 10.35. Созданы целевые результаты</b></p>
+<img src="images/wb-migration-access-create-target-results.png" width="799"
+height="513" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Можно отредактировать код миграции, используя код справа и сохранить
+изменения при нажатии <span class="guibutton">Apply</span>.
+Если правки были сделаны, все еще необходимо создать объекты с измененным
+кодом, чтобы выполнить изменения. Это сделано при нажатии
+<span class="guibutton">Recreate Objects</span>. В этой обучающей программе
+мы ничего не изменяем, так что оставьте код как есть и переходите к странице
+<span class="guilabel">Data Transfer Setup</span>.</p>
+
+<h3><a name="wb-migration-database-access-transfer-data"></a>
+Передайте данные базе данных MySQL</h3>
+<p>Следующий шаг передает данные из исходной базы данных Access в вашу
+недавно созданную целевую базу данных MySQL. Страница Data Transfer Setup
+позволяет вам формировать этот процесс.</p>
+
+<a name="wb-migration-access-data-transfer-setup-figure"></a>
+<p><b>Рис. 10.36. Data Transfer Setup</b></p>
+<img src="images/wb-migration-access-data-transfer-setup.png" width="800"
+height="497" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Есть два варианта. Первый позволяет вам выполнять живой перенос
+и/или сбросить данные в пакетный файл, который можно выполнить позже.
+Другой вариант позволяет вам изменять этот процесс.</p>
+
+<p>Эта обучающая программа использует значения по умолчанию для вариантов на
+этой странице. Затем данные передаются. В этом пункте соответствующая
+страница прогресса подтверждает выполняемые задачи.</p>
+
+<a name="wb-migration-access-bulk-data-transfer-figure"></a>
+<p><b>Рис. 10.37. Оптовая передача данных</b></p>
+<img src="images/wb-migration-access-bulk-data-transfer.png" width="799"
+height="513" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Как только это заканчивается, перейдите на следующую страницу.
+Вам будет представлена страница отчета, суммирующая целый процесс.
+Теперь просмотрите и нажмите <span class="guilabel">Finish</span>,
+чтобы закрыть мастер.</p>
+
+<h3><a name="wb-migration-database-access-verification"></a>Проверка</h3>
+<p>Теперь, когда база данных успешно мигрировала, можно рассмотреть
+результаты. Откройте SQL Editor, который связан с вашим сервером MySQL, затем
+запросите базу данных. Например, выполните запрос
+<code class="literal">SELECT * FROM northwind.customers</code>,
+который наполнит сетку результата.</p>
+
+<a name="wb-migration-access-verify-figure"></a>
+<p><b>Рис. 10.38. Проверка ваших результатов</b></p>
+<img src="images/wb-migration-access-verify.png" width="800" height="553"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h2><a name="wb-migration-database-mssql"></a>10.5.
+Миграция Microsoft SQL Server</h2>
+<p>MySQL Workbench Migration Wizard проверен для следующих версий
+Microsoft SQL Server: 2000, 2005, 2008 и 2012.</p>
+
+<h3><a name="wb-migration-database-mssql-prepare"></a>
+10.5.1. Приготовления</h3>
+<p>Чтобы быть в состоянии мигрировать от Microsoft SQL
+Server, гарантируйте следующее:
+
+<ul><li>Исходный экземпляр SQL Server работает
+и принимает соединения по протоколу TCP.</li>
+<li>Вы знаете IP и порт исходного экземпляра SQL Server. Если вы будете
+мигрировать, используя драйвер Microsoft ODBC для SQL Server (умолчание в
+Windows), необходимо знать имя хоста и название экземпляра SQL Server.</li>
+
+<li>Удостоверьтесь, что SQL Server достижим от машины с MySQL Workbench.
+Более определенно проверьте параметры настройки брандмауэра.</li>
+<li>Удостоверьтесь, что у учетной записи пользователя есть надлежащие
+привилегии к базе данных, которая будет мигрировать.</p></li></ul>
+
+<h3><a name="wb-migration-database-mssql-drivers"></a>10.5.2. Драйверы</h3>
+<p>Microsoft Windows не требует дополнительные драйверы, которые будут
+устанавливаться и формироваться, но Linux (и macOS) потребуют.
+Следующие разделы включают конкретные инструкции для каждого типа системы.
+</p>
+
+<h4><a name="wb-migration-database-mssql-drivers-windows"></a>
+10.5.2.1. Microsoft Windows</h4>
+<p>Microsoft Windows XP и более новые включают по крайней мере одного драйвер
+ODBC для Microsoft SQL Server, таким образом, дополнительные действия,
+вероятно, не требуются на вашей системе. Много вариантов драйвера SQL Server
+существуют, как описано в этой секции.</p>
+
+<p>Можно проверить информацию о драйвере ODBC, запустив
+Windows ODBC Data Source Administrator, который доступен с
+домашней страницы мастера миграции MySQL Workbench.
+Альтернативно, откройте терминал Windows и выполните
+<code class="filename">odbcad32.exe</code>. Откройте вкладку
+<span class="guilabel">Drivers</span>, чтобы видеть что-то подобное:</p>
+
+<a name="wb-migration-database-mssql-drivers-windows-driver-view"></a>
+<p><b>Рис. 10.39. Windows ODBC Data Source Administrator: Драйверы SQL Server
+</b></p><img src="images/wb-migration-database-mssql-drivers-windows.png"
+width="470" height="390" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Общие драйверы ODBC, доступные в Windows:
+<ul><li><span class="bold"><strong>SQL Driver</strong></span>:
+предварительно установленный в Windows, но ограничивается функциональностью,
+обеспеченной SQL Server 2000. Это функционирует хорошо, если ваша база данных
+не использует функции и типы данных, введенные после SQL Server 2000, таким
+образом, это должно быть достаточно для вас, если ваша база данных не
+использует новые особенности и типы данных, введенные после этой
+версии SQL Server.</li>
+
+<li><span class="bold"><strong>SQL Server Native Client XX.X</strong></span>:
+если у вас будет экземпляр SQL Server на той же самой машине, где MySQL
+Workbench, то у вас также будет этот дополнительный драйвер. Это идет с SQL
+Server и полностью поддерживает сопутствующую версию SQL Server. Если это не
+находится на вашей системе, тогда можно загрузить и установить. Например,
+загрузите <a href="../../../www.microsoft.com/en-us/download/details.aspx@id=42295"
+target="_top">Microsoft SQL Server 2014 Feature Pack</a>, чтобы установить
+Native Client, который поддерживает SQL Server 2014 и ранее.
+
+<p>XX.X представляет номер основной версии для SQL Server, таким образом,
+подлинное имя могло бы быть "SQL Server Native Client 11.0".</li></ul>
+<p>Решите, какой драйвер вы хотите использовать, и помните его имя как
+показано в ODBC Data Source Administrator. Это собственное имя используется в
+MySQL Workbench, чтобы соединиться с вашим экземпляром SQL Server.</p>
+
+<h4><a name="wb-migration-database-mssql-drivers-linux"></a>
+10.5.2.2. Linux</h4>
+<p>Подготовка драйверов в Linux.</p>
+
+<h5><a name="idm140523188760976"></a>FreeTDS</h5>
+<p>FreeTDS version 0.92 или больше требуется. Многие дистрибутивы предлагают
+более старые версии FreeTDS, таким образом, это, возможно, должно быть
+установлено отдельно. Кроме того, версия FreeTDS, обеспеченная дистрибутивом,
+может также быть собрана для неправильной библиотеки ODBC (обычно unixODBC
+вместо iODBC, с которой работает MySQL Workbench). Из-за этого необходимо
+будет, вероятно, построить эту библиотеку самому.</p>
+
+<p>Скрипт предоставлен, чтобы собрать FreeTDS, используя варианты, требуемые
+для MySQL Workbench. Можно найти его в
+<code class="filename">/usr/share/mysql-workbench/extras/build_freetds.sh
+</code> в Linux или в <code class="filename">
+MySQLWorkbench.app/Contents/SharedSupport/build_freetds.sh</code> в macOS.
+Чтобы использовать его, выполните эти шаги:</p>
+
+<p>Использование FreeTDS с iODBC.
+<p>Собирая FreeTDS для использования с iODBC, это должно быть собрано с
+командной строкой <code class="literal">--enable-odbc-wide</code>.
+Обеспеченный скрипт <code class="filename">build_freetds.sh</code>
+делает это для вас.</p>
+
+<ol type="1"><li><p>Для компилирования удостоверьтесь, что установили
+заголовки iODBC. Для Linux имя зависит от диспетчера пакетов вашей системы,
+но общие названия <code class="literal">libiodbc-devel</code> (RPM-системы)
+или <code class="literal">libiodbc2-dev</code> (Debian-системы).
+Для macOS заголовки идут с системой, и никакое дополнительное действие не
+требуется для этого шага.
+
+<p>При использовании Oracle Enterprise Linux, Redhat, CentOS и подобных
+необходимо настроить хранилище EPEL в yum, чтобы найти пакет
+<code class="literal">libiodbc-devel</code>. См.
+<a href="inst.htm#wb-installing-linux-installing-oel">здесь</a>.</li>
+
+<li><code class="literal">mkdir ~/freetds</code>, чтобы создать каталог
+в рамках пользовательского корневого каталога.</li>
+<li>Скопируйте скрипт <code class="filename">build_freetds.sh</code> в
+<code class="filename">~/freetds</code>.</li>
+
+<li>Получите последние исходные тексты FreeTDS с
+<a href="../../../ftp@ftp.freetds.org/pub/freetds/default.htm" target="_top">
+ftp://ftp.freetds.org/pub/freetds/</a> и поместите файл
+<code class="literal">.tar.gz</code> в каталог
+<code class="filename">~/freetds</code>. Удостоверьтесь, что получили версию
+0.92 FreeTDS или более новую.</li>
+
+<li><code class="literal">cd ~/freetds</code></li>
+<li>Выполните <code class="filename">build_freetds.sh</code>.</li>
+<li>После того, как компиляция сделана, установите пакет с помощью
+<code class="literal">make install</code> из пути, данного скриптом.</li>
+
+<li>Установите драйвер, используя ODBC Administrator так, чтобы подсистема
+ODBC признала его. Откройте ODBC Administrator с вкладки
+миграции в MySQL Workbench.</p>
+
+<a name="wb-migration-database-mssql-drivers-linux-driver-open-odbc-admin">
+</a><p><b>Рис. 10.40. Откройте ODBC Administrator</b></p>
+<img src="images/wb-odbc-driver-add-linux-open-odbc-admin.png" width="606"
+height="348" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Название файла драйвера <code class="filename">libtdsodbc.so</code>,
+он расположен в <code class="filename">/usr/lib</code> или
+<code class="filename">/usr/local/lib</code>. Например, на вкладке
+<span class="guilabel">ODBC Drivers</span> нажмите
+<span class="guibutton">Add Driver</span> и заполните описание (имя) и
+путь к файлу драйвера. Помните имя, которое вы определяете здесь, поскольку
+оно будет необходимо позже. Сохраните драйвер.</p>
+
+<a name="wb-migration-database-mssql-drivers-linux-driver"></a>
+<p><b>Рис. 10.41. ODBC Driver Add/Setup</b></p>
+<img src="images/wb-odbc-driver-add-linux.png" width="606" height="502"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>Только имя файла драйвера требуется, в то время как имя настроечного файла
+может остаться неопределенным.</li>
+<li>Закройте ODBC Administrator и нажмите <span class="guibutton">Start
+Migration</span>. Для получения информации о создании связи Microsoft SQL
+Server, используя MySQL Workbench, см.
+<a href="#wb-migration-database-mssql-connection-linux">раздел
+10.5.3.2</a>.</p></li></ol>
+
+<h4><a name="wb-migration-database-mssql-drivers-osx"></a>10.5.2.3. macOS
+</h4>
+<p>Посмотрите примечания установки FreeTDS для Linux,
+<a href="#wb-migration-database-mssql-drivers-linux">раздел
+10.5.2.2</a>.</p>
+
+<h3><a name="wb-migration-database-mssql-connection"></a>10.5.3.
+Установка связи</h3>
+<p>Эта секция сосредотачивается на создании связи с исходным
+Microsoft SQL Server, потому что создание подключения MySQL
+является стандартной операцией.
+
+<p>Предпосылка: вы уже установили и формировали необходимый
+<a href="#wb-migration-database-mssql-drivers">драйвер Microsoft
+SQL Server</a> на системе с MySQL Workbench.</p>
+
+<h4><a name="wb-migration-database-mssql-connection-windows"></a>
+10.5.3.1. Microsoft Windows</h4>
+<p>Выберите <span class="guimenuitem">Microsoft SQL Server</span>
+как систему баз данных и заполните опции, как описано в этой секции.</p>
+
+<a name="wb-migration-database-mssql-connection-windows-example"></a>
+<p><b>Рис. 10.42. SQL Server Connection Parameters: пример в Windows</b></p>
+<img src="images/wb-migration-mssql-target-connection-parameters-windows.png"
+width="470" height="390" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<ul><li><p><span class="guilabel">Database System</span>:
+Microsoft SQL Server</li>
+<li><span class="guilabel">Connection Method</span>: выберите
+<span class="guimenuitem">ODBC (native)</span>, чтобы использовать драйвер
+native ODBC, который предоставляет Microsoft. Альтернативы включают
+"ODBC data sources" и "ODBC FreeTDS". FreeTDS это популярный драйвер с
+открытым исходным кодом для SQL Server и Sybase.</li>
+
+<li><span class="guilabel">Driver</span>: используйте имя драйвера SQL
+Server, как описано в
+<a href="#wb-migration-database-mssql-drivers-windows">разделе
+10.5.2.1</a>. Как правило, это будет "SQL Server" или что-то вроде
+"SQL Server Native Client 11.0".</li>
+
+<li><span class="guilabel">Server</span>: адрес и произвольно имя экземпляра
+SQL-сервера, например, "example.com" или "example.org\SQLEXPRESS".</li>
+<li><span class="guilabel">Username</span>: имя пользователя SQL Server.</li>
+
+<li><span class="guilabel">Password</span>: произвольно введите пароль, чтобы
+сохранить его локально, или оставьте его незаполненным, чтобы ввести пароль,
+когда связь с SQL Server будет установлена позже.</li>
+
+<li><span class="guilabel">Database</span>: произвольно имя базы данных.
+Оставьте его незаполненным, чтобы выбрать имя базы данных после того, как
+мастер MySQL Workbench получит доступные базы данных.</li>
+
+<li><span class="guilabel">Store connection for future</span>:
+произвольно сохраните детали связи локально для будущего использования,
+ставя этот флажок и вводя имя для связи.</li>
+<li><span class="guilabel">Advanced</span>: произвольно
+войдите в дополнительные опции.</li></ul>
+<p>Нажмите <span class="guibutton">Test Connection</span>, чтобы
+подтвердить, что параметры правильны.</p>
+
+<h4><a name="wb-migration-database-mssql-connection-linux"></a>10.5.3.2.
+Linux</h4>
+<p>Выберите <span class="guimenuitem">Microsoft SQL Server</span> как
+исходную систему баз данных и заполните опции, как описано в этой секции.</p>
+
+<a name="wb-migration-database-mssql-connection-linux-example"></a>
+<p><b>Рис. 10.43. SQL Server Connection Parameters: пример в Linux</b></p>
+<img src="images/wb-migration-mssql-target-connection-parameters-linux.png"
+width="800" height="460" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Параметры связи включают:
+<ul><li>
+<span class="guilabel">Database System</span>: Microsoft SQL Server.</li>
+
+<li><span class="guilabel">Connection Method</span>: выберите
+<span class="guimenuitem">ODBC (FreeTDS)</span>, чтобы использовать местный
+FreeTDS, который был установлен раньше. Для получения дополнительной
+информации о том, как установить драйвер FreeTDS в Linux, который будет
+работать с мастером миграции MySQL Workbench, см.
+<a href="#wb-migration-database-mssql-drivers-linux">раздел 10.5.2.2
+</a>.</p>
+
+<p>Альтернативно, выберите <span class="guimenuitem">ODBC Data Source
+(FreeTDS)</span>, если вы определили DSN, создавая драйвер SQL Server.
+Доступные предварительно сконфигурированные варианты DSN будут
+доступны, чтобы выбрать.</li>
+
+<li><span class="guilabel">Driver</span>: имя драйвера, которое вы создали с
+ODBC Administrator, см.
+<a href="#wb-migration-database-mssql-drivers-linux">раздел 10.5.2.2
+</a>.</p>
+
+<p>Имя в качестве примера "Workbench FreeTDS" или "FreeTDS",
+но это имя, которое вы определили ранее, таким образом, это может или может
+не быть "FreeTDS". Используйте ODBC Administrator, чтобы найти правильное имя
+драйвера, поскольку иначе связь прервется.</li>
+
+<li><span class="guilabel">Hostname</span>: адрес и имя экземпляра
+SQL-сервера, например, "example.org".</li>
+<li><span class="guilabel">Port</span>: номер порта. Номер порта 1433 обычно
+используется для сервера Microsoft SQL.</li>
+
+<li><span class="guilabel">Username</span>: имя пользователя на SQL-сервере.
+</li>
+<li><span class="guilabel">Password</span>: произвольно введите пароль
+или оставьте его незаполненным, чтобы ввести пароль, когда связь с SQL
+Server будет установлена.</li>
+
+<li><span class="guilabel">Database</span>: произвольно имя базы данных.
+Оставьте его незаполненным, чтобы выбрать имя базы данных после того, как
+мастер MySQL Workbench получит доступные базы данных.</li>
+
+<li><span class="guilabel">Store connection for future</span>:
+произвольно сохраните детали связи для будущего использования, ставя этот
+флажок и вводя имя для связи.</li>
+
+<li><span class="guilabel">Advanced</span>: Отключите опцию
+<span class="guilabel">Driver sends Unicode data as UTF-8</span>,
+чтобы использовать UCS-2.
+
+<p>Если ваша связь сервера MSSQL работает, но импорт данных потерпел неудачу,
+это могло бы быть потому, что эта опция включена.</li></ul>
+<p>Нажмите <span class="guibutton">Test Connection</span>, чтобы подтвердить,
+что параметры правильны.</p>
+
+<h4><a name="wb-migration-database-mssql-connection-osx"></a>10.5.3.3. macOS
+</h4>
+<p>Параметры связи подобны Linux, см.
+<a href="#wb-migration-database-mssql-connection-linux">раздел
+10.5.3.2</a>.</p>
+
+<h3><a name="wb-migration-database-mssql-typemapping"></a>10.5.4.
+Отображение типов Microsoft SQL Server</h3>
+<p>Следующая таблица показывает отображение между типами данных
+Microsoft SQL Server (источник) и MySQL.</p>
+
+<a name="wb-migration-database-mssql-typemapping-table"></a>
+<p><b>Таблица 10.2. Отображение типов</b></p>
+<table><thead><tr>
+<th scope="col">Исходный тип</th>
+<th scope="col">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/data-types.html"
+target="_top">Тип в MySQL</a></th>
+<th scope="col">Комментарий</th>
+</tr></thead><tbody><tr>
+<td scope="row">INT</td>
+<td scope="row">INT</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">TINYINT</td>
+<td scope="row">TINYINT</td>
+<td scope="row">Флаг UNSIGNED установлен в MySQL.</td></tr>
+<tr><td scope="row">SMALLINT</td>
+<td scope="row">SMALLINT</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">BIGINT</td>
+<td scope="row">BIGINT</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">BIT</td>
+<td scope="row">TINYINT(1)</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">FLOAT</td>
+<td scope="row">FLOAT</td>
+<td scope="row">Значение точности используется для размера
+ресурса хранения в обоих.</td></tr>
+<tr><td scope="row">REAL</td>
+<td scope="row">FLOAT</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">NUMERIC</td>
+<td scope="row">DECIMAL</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">DECIMAL</td>
+<td scope="row">DECIMAL</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">MONEY</td>
+<td scope="row">DECIMAL</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">SMALLMONEY</td>
+<td scope="row">DECIMAL</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">CHAR</td>
+<td scope="row">CHAR/LONGTEXT</td>
+<td scope="row">В зависимости от его длины. У MySQL Server 5.6 и выше могут
+быть столбцы CHAR с длиной до 255 знаков. Что-либо большее
+мигрируется как LONGTEXT.</td></tr>
+<tr><td scope="row">NCHAR</td>
+<td scope="row">CHAR/LONGTEXT</td>
+<td scope="row">В зависимости от его длины. У MySQL Server 5.6 и выше могут
+быть столбцы VARCHAR с длиной до 65535 знаков. Что-либо большее
+мигрируется к одному из типов TEXT. В MySQL набор символов строки зависит от
+набора символов столбца вместо типа данных.</td></tr>
+<tr><td scope="row">VARCHAR</td>
+<td scope="row">VARCHAR/MEDIUMTEXT/LONGTEXT</td>
+<td scope="row">В зависимости от его длины. У MySQL Server 5.6 и выше могут
+быть столбцы VARCHAR с длиной до 65535 знаков. Что-либо большее
+мигрируется к одному из типов TEXT.</td></tr>
+<tr><td scope="row">NVARCHAR</td>
+<td scope="row">VARCHAR/MEDIUMTEXT/LONGTEXT</td>
+<td scope="row">В зависимости от его длины. У MySQL Server 5.6 и выше могут
+быть столбцы VARCHAR с длиной до 65535 знаков. Что-либо большее
+мигрируется к одному из типов TEXT. В MySQL набор символов строки зависит от
+набора символов столбца вместо типа данных.</td></tr>
+<tr><td scope="row">DATE</td>
+<td scope="row">DATE</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">DATETIME</td>
+<td scope="row">DATETIME</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">DATETIME2</td>
+<td scope="row">DATETIME</td>
+<td scope="row">Диапазон дат в MySQL: от '1000-01-01 00:00:00.000000' до
+'9999-12-31 23:59:59.999999'. Доли секунды сохранены,
+начиная с MySQL Server 5.6.4.</td></tr>
+<tr><td scope="row">SMALLDATETIME</td>
+<td scope="row">DATETIME</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">DATETIMEOFFSET</td>
+<td scope="row">DATETIME</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">TIME</td>
+<td scope="row">TIME</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">TIMESTAMP</td>
+<td scope="row">TIMESTAMP</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">ROWVERSION</td>
+<td scope="row">TIMESTAMP</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">BINARY</td>
+<td scope="row">BINARY/MEDIUMBLOB/LONGBLOB</td>
+<td scope="row">В зависимости от его длины.</td></tr>
+<tr><td scope="row">VARBINARY</td>
+<td scope="row">VARBINARY/MEDIUMBLOB/LONGBLOB</td>
+<td scope="row">В зависимости от его длины.</td></tr>
+<tr><td scope="row">TEXT</td>
+<td scope="row">VARCHAR/MEDIUMTEXT/LONGTEXT</td>
+<td scope="row">В зависимости от его длины.</td></tr>
+<tr><td scope="row">NTEXT</td>
+<td scope="row">VARCHAR/MEDIUMTEXT/LONGTEXT</td>
+<td scope="row">В зависимости от его длины.</td></tr>
+<tr><td scope="row">IMAGE</td>
+<td scope="row">TINYBLOB/MEDIUMBLOB/LONGBLOB</td>
+<td scope="row">В зависимости от его длины.</td></tr>
+<tr><td scope="row">SQL_VARIANT</td>
+<td scope="row">Миграция не поддерживается.</td>
+<td scope="row">Нет определенной поддержки этого типа данных.</td></tr>
+<tr><td scope="row">TABLE</td>
+<td scope="row">Миграция не поддерживается.</td>
+<td scope="row">Нет определенной поддержки этого типа данных.</td></tr>
+<tr><td scope="row">HIERARCHYID</td>
+<td scope="row">Миграция не поддерживается.</td>
+<td scope="row">Нет определенной поддержки этого типа данных.</td></tr>
+<tr><td scope="row">UNIQUEIDENTIFIER</td>
+<td scope="row">VARCHAR(64)</td>
+<td scope="row">Уникальный флаг установлен в MySQL.
+Нет определенной поддержки вставки значений уникального идентификатора.
+</td></tr>
+<tr><td scope="row">SYSNAME</td>
+<td scope="row">VARCHAR(160)</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">XML</td>
+<td scope="row">TEXT</td>
+<td scope="row"></td></tr></tbody></table><br class="table-break">
+
+<h2><a name="wb-migration-database-postgresql"></a>10.6.
+Миграция PostgreSQL</h2>
+<h3><a name="wb-migration-database-postgresql-prepare"></a>
+10.6.1. Подготовка</h3>
+<p>Перед переходом вам будет нужно следующее:
+
+<ul><li>Следуйте инструкции по установке iODBC на вашей системе.
+Для получения дополнительной информации посмотрите
+<a href="#wb-migration-install">раздел 10.1</a>.</li>
+
+<li>Доступ к серверу PostgreSQL с привилегиями для базы данных, которую
+вы хотите мигрировать. Migration Wizard официально поддерживает PostgreSQL
+8.0 и позже, хотя более старые версии могут работать.</li>
+
+<li>Доступ к MySQL Server с привилегиями для базы данных, которую
+вы хотите мигрировать. Migration Wizard официально
+поддерживает MySQL 5.0 и позже.</p></li></ul>
+
+<h3><a name="wb-migration-database-postgresql-drivers"></a>10.6.2. Драйверы
+</h3>
+<h4><a name="wb-migration-database-postgresql-drivers-windows"></a>
+10.6.2.1. Microsoft Windows</h4>
+<p>Загрузите и установите пакет MSI для psqlODBC. Выберите новейший файл на
+<a href="../../../www.postgresql.org/ftp/odbc/versions/msi/default.htm" target="_top">
+http://www.postgresql.org/ftp/odbc/versions/msi/</a>,
+который будет внизу страницы загрузок. Это установит psqlODBC
+на вашей системе и позволит вам мигрировать от Postgresql на MySQL
+с помощью MySQL Workbench.</p>
+
+<h4><a name="wb-migration-database-postgresql-drivers-linux"></a>
+10.6.2.2. Linux</h4>
+<p>После установки iODBC, продолжите устанавливать драйверы
+PostgreSQL ODBC.</p>
+
+<p>Загрузите исходные тексты psqlODBC с
+<a href="../../../www.postgresql.org/ftp/odbc/versions/src/default.htm" target="_top">
+http://www.postgresql.org/ftp/odbc/versions/src/</a>. Имя файла будет
+выглядеть подобно <code class="filename">psqlodbc-09.03.0400.tar.gz</code>.
+Распакуйте архив, откройте терминал и
+перейдите в нужный каталог. Процесс установки:
+<pre>
+shell&gt; <strong class="userinput"><code>cd the/src/directory</code></strong>
+shell&gt; <strong class="userinput"><code>./configure --with-iodbc --enable-pthreads</code></strong>
+shell&gt; <strong class="userinput"><code>make</code></strong>
+shell&gt; <strong class="userinput"><code>sudo make install</code></strong>
+</pre>
+
+<p>Проверьте установку, подтвердив, что файл
+<code class="filename">psqlodbcw.so</code> в каталоге
+<code class="filename">/usr/local/lib</code>.</p>
+
+<p>Затем необходимо зарегистрировать новый драйвер ODBC.</p>
+<p>Откройте iODBC Data Source Administrator, выполнив
+<code class="filename">iodbcadm-gtk</code> в командной строке или запуском со
+страницы <span class="guilabel">Overview</span> в MySQL Workbench Migration
+Wizard, нажав кнопку <span class="guibutton">Open ODBC Administrator</span>.
+</p>
+
+<p>Откройте вкладку <span class="guilabel">ODBC Drivers</span>
+в iODBC Data Source Administrator.</p>
+<a name="wb-migration-install-iodbc-data-source"></a>
+<p><b>Рис. 10.44. iODBC Data Source Administrator</b></p>
+<img src="images/wb-migration-iodbcadm-gtk.png" width="602" height="479"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>Нажмите <span class="guibutton">Add a driver</span> и
+заполните форму следующими значениями:
+<ul><li><span class="guilabel">Description of the driver</span>: psqlODBC.
+</li>
+
+<li><span class="guilabel">Driver file name</span>:
+<code class="filename">/usr/local/lib/psqlodbcw.so</code>.</li>
+<li><span class="guilabel">Setup file name</span>: Пустая строка.</li></ul>
+<p>Нажмите кнопку <span class="guibutton">OK</span>.</p>
+
+<h4><a name="wb-migration-database-postgresql-drivers-osx"></a>10.6.2.3.
+macOS</h4>
+<p>Чтобы собрать <code class="filename">psqlODBC</code> в macOS, нужен
+Xcode и его компонент "Command Line Tools", поскольку это включает
+необходимый компилятор <code class="literal">gcc</code>. Xcode свободен и
+доступен в AppStore. После установки XCode, откройте его и перейдите в
+to <span class="guimenu">Preferences</span>,
+<span class="guilabel">Downloads</span>,
+<span class="guilabel">Components</span>, затем установите компонент
+"Command Line Tools".</p>
+
+<p>Загрузите исходные тексты psqlODBC с
+<a href="../../../www.postgresql.org/ftp/odbc/versions/src/default.htm" target="_top">
+http://www.postgresql.org/ftp/odbc/versions/src/</a>.
+Используйте последнюю версию доступную для скачивания. Распакуйте архив во
+временную папку, откройте терминал и
+перейдите в эту папку. Процесс установки:
+<pre>
+shell&gt; <strong class="userinput"><code>cd the/src/directory</code></strong>
+shell&gt; <strong class="userinput"><code>./configure --with-iodbc --enable-pthreads</code></strong>
+shell&gt; <strong class="userinput"><code>CFLAGS="-arch i386 -arch x86_64" make</code></strong>
+shell&gt; <strong class="userinput"><code>sudo make install</code></strong>
+</pre>
+
+<h3><a name="wb-migration-database-postgresql-connection"></a>10.6.3.
+Установка связи</h3>
+<p>После загрузки мастера Migration Wizard нажмите
+<span class="guibutton">Start Migration</span> на странице
+<span class="guilabel">Overview</span>, чтобы начать процесс миграции.
+Вы сначала соединитесь с исходной базой данных PostgreSQL. Здесь вы
+предоставите информацию о PostgreSQL RDBMS, драйвере ODBC, который будет
+использоваться для миграции, и все параметры, требуемые для связи.
+Имя драйвера ODBC это то, которое вы настраиваете, когда зарегистрировали
+драйвер psqlODBC в менеджере драйверов.</p>
+
+<p>Откройте список <span class="guilabel">Database System</span>.
+Он покажет каждую RDBMS, которая поддерживается на вашей системе. Выберите
+PostgreSQL. Ниже этого списка есть дополнительный список
+<span class="guilabel">Stored Connection</span>.
+Сохраненные связи будут перечислены здесь, которые являются связями,
+сохраненными после определения связи с
+<span class="guilabel">Store connection for future use as</span>.</p>
+
+<p>Три варианта <span class="guilabel">Connection Method</span>:
+<ul><li><code class="literal">ODBC (manually entered parameters)</code>:
+Каждый параметр, например, имя пользователя, определяется отдельно.</li>
+
+<li><code class="literal">ODBC Data Source</code>:
+Для предварительно сконфигурированных источников данных (DSN) можно
+произвольно создать DSN с использованием ODBC Administrator.</li>
+<li><code class="literal">ODBC (direct connection string)</code>:
+Полная строка подключения ODBC.</p></li></ul>
+
+<p>Драйвер psqlODBC не позволяет связь, не определяя имя базы данных.</p>
+<p>Процесс миграции подобен другим базам данных. Посмотрите
+<a href="#wb-migration-database-postgresql-typemapping">
+раздел 10.6.4</a> для получения информации о том, как мастер миграции
+мигрирует типы от PostgreSQL в MySQL и
+<a href="#wb-migration-overview-steps">раздел 10.2.1</a>
+для общего руководства по миграции.</p>
+
+<h3><a name="wb-migration-database-postgresql-typemapping"></a>10.6.4.
+Отображение типов данных PostgreSQL</h3>
+<p>Следующая таблица показывает отображение между типами данных
+PostgreSQL (источник) и MySQL.</p>
+
+<a name="wb-migration-database-postgresql-typemapping-table"></a>
+<p><b>Таблица 10.3. Отображение типов</b></p>
+<table><thead><tr><th scope="col">Исходный тип</th>
+<th scope="col">
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/data-types.html"
+target="_top">Тип MySQL</a></th>
+<th scope="col">Комментарий</th></tr></thead>
+<tbody><tr><td scope="row">INT</td>
+<td scope="row">INT</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">SMALLINT</td>
+<td scope="row">SMALLINT</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">BIGINT</td>
+<td scope="row">BIGINT</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">SERIAL</td>
+<td scope="row">INT</td>
+<td scope="row">Установит AUTO_INCREMENT в определении таблицы.</td></tr>
+<tr><td scope="row">SMALLSERIAL</td>
+<td scope="row">SMALLINT</td>
+<td scope="row">Установит AUTO_INCREMENT в определении таблицы.</td></tr>
+<tr><td scope="row">BIGSERIAL</td>
+<td scope="row">BIGINT</td>
+<td scope="row">Установит AUTO_INCREMENT в определении таблицы.</td></tr>
+<tr><td scope="row">BIT</td>
+<td scope="row">BIT</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">BOOLEAN</td>
+<td scope="row">TINYINT(1)</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">REAL</td>
+<td scope="row">FLOAT</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">DOUBLE PRECISION</td>
+<td scope="row">DOUBLE</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">NUMERIC</td>
+<td scope="row">DECIMAL</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">DECIMAL</td>
+<td scope="row">DECIMAL</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">MONEY</td>
+<td scope="row">DECIMAL(19,2)</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">CHAR</td>
+<td scope="row">CHAR/LONGTEXT</td>
+<td scope="row">В зависимости от его длины. У MySQL Server 5.6 и выше могут
+быть столбцы CHAR с длиной до 255 знаков. Что-либо большее
+мигрируется как LONGTEXT.</td></tr>
+<tr><td scope="row">NATIONAL CHARACTER</td>
+<td scope="row">CHAR/LONGTEXT</td>
+<td scope="row">В зависимости от его длины. У MySQL Server 5.6 и выше могут
+быть столбцы VARCHAR с длиной до 65535 знаков. Что-либо большее
+мигрируется к одному из типов TEXT. В MySQL набор символов строки зависит
+от набора символов столбца вместо типа данных.</td></tr>
+<tr><td scope="row">VARCHAR</td>
+<td scope="row">VARCHAR/MEDIUMTEXT/LONGTEXT</td>
+<td scope="row">В зависимости от его длины. У MySQL Server 5.6 и выше могут
+быть столбцы VARCHAR знаков. Что-либо большее мигрируется к одному
+из типов TEXT.</td></tr>
+<tr><td scope="row">NATIONAL CHARACTER VARYING</td>
+<td scope="row">VARCHAR/MEDIUMTEXT/LONGTEXT</td>
+<td scope="row">В зависимости от его длины. У MySQL Server 5.6 и выше могут
+быть столбцы VARCHAR знаков. Что-либо большее мигрируется к одному
+из типов TEXT. В MySQL набор символов строки зависит от набора символов
+столбца вместо типа данных.</td></tr>
+<tr><td scope="row">DATE</td>
+<td scope="row">DATE</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">TIME</td>
+<td scope="row">TIME</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">TIMESTAMP</td>
+<td scope="row">DATETIME</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">INTERVAL</td>
+<td scope="row">TIME</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">BYTEA</td>
+<td scope="row">LONGBLOB</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">TEXT</td>
+<td scope="row">LONGTEXT</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">CIDR</td>
+<td scope="row">VARCHAR(43)</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">INET</td>
+<td scope="row">VARCHAR(43)</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">MACADDR</td>
+<td scope="row">VARCHAR(17)</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">UUID</td>
+<td scope="row">VARCHAR(36)</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">XML</td>
+<td scope="row">LONGTEXT</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">JSON</td>
+<td scope="row">LONGTEXT</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">TSVECTOR</td>
+<td scope="row">LONGTEXT</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">TSQUERY</td>
+<td scope="row">LONGTEXT</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">ARRAY</td>
+<td scope="row">LONGTEXT</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">POINT</td>
+<td scope="row">POINT</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">LINE</td>
+<td scope="row">LINESTRING</td>
+<td scope="row">Хотя длина LINE бесконечна, а LINESTRING конечен в
+MySQL, это приближено.</td></tr>
+<tr><td scope="row">LSEG</td>
+<td scope="row">LINESTRING</td>
+<td scope="row">A LSEG похож на LINESTRING только с двумя точками.</td></tr>
+<tr><td scope="row">BOX</td>
+<td scope="row">POLYGON</td>
+<td scope="row">A BOX это POLYGON с пятью точками и прямыми углами.</td></tr>
+<tr><td scope="row">PATH</td>
+<td scope="row">LINESTRING</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">POLYGON</td>
+<td scope="row">POLYGON</td>
+<td scope="row"></td></tr>
+<tr><td scope="row">CIRCLE</td>
+<td scope="row">POLYGON</td>
+<td scope="row">A POLYGON используется, чтобы представить CIRCLE.</td></tr>
+<tr><td scope="row">TXID_SNAPSHOT</td>
+<td scope="row">VARCHAR</td>
+<td scope="row"></td></tr></tbody></table><br class="table-break">
+
+<h2><a name="wb-migration-database-mysql"></a>10.7. Миграция MySQL</h2>
+<p>Выполните модернизацию версии сервера MySQL, чтобы перейти на последнюю
+версию. Типичный мастер миграции может мигрировать MySQL к MySQL, и более
+простой мастер <span class="guilabel">Schema Transfer Wizard</span>
+может также использоваться.</p>
+
+<h3><a name="wb-migration-database-mysql-schema-transfer"></a>
+MySQL Schema Transfer Wizard</h3>
+<p>Мастер MySQL Schema Transfer помогает вам переместить свои данные от более
+старой версии сервера MySQL в иную (как правило, более позднюю) версию MySQL.
+Этот инструмент миграции предназначается для разработчиков, поскольку это
+более просто, чем типичный мастер миграции, потому что это мигрирует только
+MySQL к MySQL. Данные передаются не на основе последовательного снимка,
+таким образом, они работают лучше всего на локальных серверах MySQL.
+Вы не должны использовать этого мастера на производственных серверах MySQL.
+
+<p>Чтобы открыть мастера, выберите <span class="guimenu">Database</span>,
+<span class="guimenuitem">Schema Transfer Wizard</span>
+из главного меню.</p>
+
+<a name="wb-migration-mysql-schema-transfer-overview"></a>
+<p><b>Рис. 10.45. MySQL Schema Transfer Wizard: Обзор</b></p>
+<img src="images/wb-migration-mysql-schema-transfer-overview.png" width="800"
+height="490" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Прочитайте текст обзора и нажмите
+<span class="guibutton">Start the Wizard</span>.</p>
+<a name="wb-migration-mysql-schema-transfer-connection-selection"></a>
+<p><b>Рис. 10.46. MySQL Schema Transfer Wizard: выбор связи</b></p>
+<img src="images/wb-migration-mysql-schema-transfer-connection-selection.png"
+width="800" height="490" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Выберите свои целевое и исходное подключения MySQL.
+После выбора и тестирования ваших подключений MySQL нажмите
+<span class="guibutton">Next</span>.</p>
+
+<a name="wb-migration-mysql-schema-transfer-schema-selection"></a>
+<p><b>Рис. 10.47. MySQL Schema Transfer Wizard: выбор схемы</b></p>
+<img src="images/wb-migration-mysql-schema-transfer-schema-selection.png"
+width="800" height="490" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Выберите схемы для миграции и нажмите <span class="guibutton">Start
+Copy</span>, чтобы начать копировать выбранные схемы с источника.</p>
+<a name="wb-migration-mysql-schema-transfer-copy-databases"></a>
+<p><b>Рис. 10.48. MySQL Schema Transfer Wizard: копирование базы данных</b>
+</p><img src="images/wb-migration-mysql-schema-transfer-copy-databases.png"
+width="800" height="492" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Просмотрите <span class="guilabel">Message Log</span>, чтобы подтвердить,
+что миграция, закончена с успехом. Нажмите <span class="guibutton">Next
+</span>, чтобы смотреть резюме результатов.</p>
+
+<a name="wb-migration-mysql-schema-transfer-results"></a>
+<p><b>Рис. 10.49. MySQL Schema Transfer Wizard: Результаты</b></p>
+<img src="images/wb-migration-mysql-schema-transfer-results.png" width="800"
+height="490" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Нажмите <span class="guibutton">Finish</span>, чтобы закрыть мастер.</p>
+
+<h2><a name="wb-migration-wizard"></a>
+10.8. Использование мастера MySQL Workbench Migration</h2>
+<p>Для визуальной пошаговой демонстрации мастера миграции посмотрите
+<a href="#wb-migration-overview-steps">раздел 10.2.1</a>.</p>
+
+<h3><a name="wb-migration-wizard-connection"></a>
+10.8.1. Соединение с базами данных</h3>
+<p>Связь установлена с входными и выходными серверами баз данных.</p>
+
+<h4><a name="wb-migration-wizard-connection-source"></a>Исходная связь</h4>
+<p>Выберите источник, который мигрирует к MySQL. Выберите
+<span class="guilabel">Database System</span>, которая мигрирует,
+и другие параметры связи изменятся соответственно.
+
+<p>Это определение связи может быть сохранено, используя
+<code class="literal">Store connection for future use as</code>,
+есть также опция <span class="guibutton">Test Connection</span>.</p>
+
+<a name="wb-migration-wizard-connection-source-image"></a>
+<p><b>Рис. 10.50. MySQL Workbench: Выбор источника (параметры)
+</b></p><img src="images/wb-migration-source-selection-parameters.png"
+width="800" height="460" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h4><a name="wb-migration-wizard-connection-target"></a>Целевой выбор</h4>
+<p>Цель это база данных MySQL, которая будет содержать мигрировавшие данные.
+Выберите существующую связь MySQL Workbench или
+<span class="guimenu">Manage Stored Connections</span>
+из выпадающего списка, чтобы создать новое подключение MySQL.</p>
+
+<a name="wb-migration-wizard-connection-target-image"></a>
+<p><b>Рис. 10.51. MySQL Workbench: Выбор цели</b></p>
+<img src="images/wb-migration-target-selection.png" width="800" height="460"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h3><a name="wb-migration-wizard-schemata"></a>
+10.8.2. Поиск схемы и выбор</h3>
+<p>Получите список доступных баз данных и выберите определенные базы данных
+(и таблицы), которые вы хотите мигрировать к MySQL.</p>
+
+<h4><a name="wb-migration-wizard-schemata-retrieve"></a>Список схем</h4>
+<p>Список схем получается от входной и выходной RDBMS.
+Учетная запись, используемая для связи, должна иметь соответствующие
+привилегии для листинга и чтения схем, которые вы хотите мигрировать.
+Целевые настройки подключения RDBMS будут также проверены.
+Это автоматизированный информационный шаг, который сообщает,
+ошибки и общую информацию.</p>
+
+<p>Шаги, которые выполняются, включают: соединение с источником,
+проверку связи и получение списка схем из источника.</p>
+<a name="wb-migration-wizard-schemata-retrieve-image"></a>
+<p><b>Рис. 10.52. MySQL Workbench: получение списка схем</b></p>
+<img src="images/wb-migration-fetch-schemata-list.png" width="800"
+height="526" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h4><a name="wb-migration-wizard-schemata-select"></a>Выбор схем</h4>
+<p>Выберите базы данных, которые вы хотите мигрировать к MySQL.</p>
+<p>Шаг <span class="guilabel">Schema Name Mapping Method</span>
+предоставляет следующие возможности для перехода с
+Microsoft SQL Server:
+
+<p>Этот пример использует Microsoft SQL Server в качестве источника RDMS.
+Хотя варианты будут отличаться для других систем баз данных, логика остается
+той же самой.
+
+<ul><li><span class="guilabel">Keep schemas as they are: Catalog.Schema.Table
+-&gt; Schema.Table</span>: Это создаст много баз данных, одну на схему.</li>
+<li><span class="guilabel">Only one schema: Catalog.Schema.Table -&gt;
+Catalog.Table</span>: Сливает каждую схему в единую базу данных.</li>
+
+<li><span class="guilabel">Only one schema, keep current schema names as a
+prefix: Catalog.Schema.Table -&gt; Catalog.Schema_table</span>:
+Сохраняет название схемы как префикс.</p></li></ul>
+
+<a name="wb-migration-wizard-schemata-select-image"></a>
+<p><b>Рис. 10.53. MySQL Workbench Migration: выбор схем</b></p>
+<img src="images/wb-migration-schemata-selection.png" width="800"
+height="462" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="wb-migration-wizard-reverse-engineering"></a>
+10.8.3. Инженерный анализ</h3>
+<p>Исходные метаданные получены из источника RDBMS и перепроектированы.
+Это автоматизированный информационный шаг, который сообщает об
+ошибках и общей информации. Просмотрите записи и затем нажмите
+<span class="guibutton">Next</span>.</p>
+
+<a name="wb-migration-wizard-reverse-engineering-image"></a>
+<p><b>Рис. 10.54. MySQL Workbench: анализ источника</b></p>
+<img src="images/wb-migration-reverse-engineer-source.png" width="800"
+height="530" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="wb-migration-wizard-object-selection"></a>
+10.8.4. Выбор объектов</h3>
+<p>Объекты, обнаруженные стадией <span class="guilabel">Reverse Engineer
+Source</span>, сделаны доступными здесь. Доступные объекты включают таблицы,
+представления и хранимые подпрограммы, но только объекты таблицы выбраны
+по умолчанию. Используйте <span class="guibutton">Show Selection</span>,
+чтобы отключить отдельные объекты таблицы.</p>
+
+<a name="wb-migration-wizard-object-selection-image"></a>
+<p><b>Рис. 10.55. MySQL Workbench: Исходные объекты</b></p>
+<img src="images/wb-migration-source-objects.png" width="800" height="530"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h3><a name="wb-migration-wizard-migration"></a>10.8.5. Миграция</h3>
+<p>Перепроектированные объекты из источника RDBMS автоматически
+преобразовываются в MySQL-совместимые объекты. Тип данных по умолчанию и
+отображения значения столбца по умолчанию используются, произведенные
+объекты и определения столбца могут быть просмотрены и отредактированы
+на следующем шаге.</p>
+
+<p>Выполненные шаги включают перемещение выбранных объектов и создание
+запросов SQL CREATE.</p>
+<a name="wb-migration-wizard-migration-image"></a>
+<p><b>Рис. 10.56. MySQL Workbench Migration: миграция</b></p>
+<img src="images/wb-migration-migration.png" width="800" height="596"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h3><a name="wb-migration-wizard-manual-editing"></a>10.8.6.
+Ручное редактирование</h3>
+<p>Используйте блок <span class="guilabel">View</span>, чтобы выбрать секцию,
+чтобы отредактировать. Кнопка
+<span class="guibutton">Show Code and Messages</span> доступна на каждой
+странице, и это показывает произведенный код MySQL, который
+соответствует выбранному объекту.
+
+<ul><li><span class="guimenu">Migration Problems</span>:
+Это сообщает о проблемах или покажет "No mapping problems found.".</p>
+<a name="wb-migration-wizard-manual-editing-problems"></a>
+<p><b>Рис. 10.57. MySQL Workbench: Редактирование вручную</b></p>
+<img src="images/wb-migration-manual-editing-problems.png" width="800"
+height="463" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li><p><span class="guimenu">All Objects</span>:
+представление объекта, которое позволяет вам рассматривать и редактировать
+определения объектов. Дважды щелкните по строке, чтобы изменить
+имена целевых объектов.</p>
+
+<a name="wb-migration-wizard-manual-editing-all-objects"></a>
+<p><b>Рис. 10.58. MySQL Workbench: редактирование вручную (все объекты)
+</b></p>
+<img src="images/wb-migration-manual-editing-all-objects.png" width="800"
+height="700" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li>
+
+<li><p><span class="guimenu">Column Mappings</span>:
+покажет все отображения столбца таблицы и позволяет вам индивидуально
+просмотреть и исправить отображение для всех типов столбца, значений по
+умолчанию и других признаков.</p>
+
+<a name="wb-migration-wizard-manual-editing-column-mappings"></a>
+<p><b>Рис. 10.59. MySQL Workbench Migration:
+редактирование вручную (отображения столбцов)</b></p>
+<img src="images/wb-migration-manual-editing-column-mappings.png" width="800"
+height="563" alt="Content is described in the surrounding text.">
+<br class="figure-break"></li></ul>
+
+<h3><a name="wb-migration-wizard-schema-target-options"></a>
+10.8.7. Целевые варианты создания</h3>
+<p>Определяет дополнительные параметры настройки для целевой схемы.
+Параметры конфигурации включают:
+
+<ul><li><span class="guilabel">Create schema in target RDBMS</span></li>
+<li><span class="guilabel">Create an SQL script file</span></li>
+<li><span class="guilabel">Keep the schemas if they already exist. Objects
+that already exist will not be recreated or update.</span></p></li></ul>
+
+<a name="wb-migration-wizard-schema-target-options-image"></a>
+<p><b>Рис. 10.60. MySQL Workbench Migration: целевые варианты создания</b></p>
+<img src="images/wb-migration-target-creation-options.png" width="800"
+height="429" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="wb-migration-wizard-schema-creation"></a>10.8.8.
+Создание схемы</h3>
+<p>Скрипты SQL, произведенные для мигрировавших объектов схемы, будут теперь
+выполнены в целевой базе данных. Можно контролировать выполнение, если ошибки
+будут, то они будут исправлены на следующем шаге. Данные о таблице также
+будут мигрироваться в более позднем шаге.</p>
+
+<a name="wb-migration-wizard-schema-creation-image"></a>
+<p><b>Рис. 10.61. MySQL Workbench Migration: создание схем</b></p>
+<img src="images/wb-migration-create-schemata.png" width="800" height="519"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h3><a name="wb-migration-wizard-create-target"></a>
+10.8.9. Создайте целевые результаты</h3>
+<p>Произведенные объекты перечисляются здесь, наряду с
+сообщениями об ошибках.</p>
+
+<p>Код миграции также может быть рассмотрен и отредактирован здесь.
+Чтобы внести изменения, выберите объект, отредактируйте код запроса и нажмите
+<span class="guibutton">Apply</span>. Повторите этот процесс для каждого
+объекта, который будет отредактирован. Наконец, нажмите
+<span class="guibutton">Recreate Objects</span>, чтобы сохранить результаты.
+
+<p><span class="guibutton">Recreate Objects</span> требуется, чтобы сохранить
+любые изменения здесь. Это выполнит предыдущий шаг миграции
+(<span class="guilabel">Create Schemas</span>) с измененным кодом, затем
+продолжит процесс миграции. Это также означает, что ранее сохраненная
+схема будет удалена.</p>
+
+<a name="wb-migration-wizard-create-target-image"></a>
+<p><b>Рис. 10.62. MySQL Workbench Migration: создайте целевые результаты</b>
+</p><img src="images/wb-migration-create-target-results.png" width="800"
+height="519" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="wb-migration-wizard-data-migration-setup"></a>10.8.10
+Передача данных и установка миграции</h3>
+<p>Данные передаются из источника RDBMS к целевой базе данных MySQL.
+Экран установки включает следующие варианты:</p>
+
+<p><span class="bold"><strong>Data Copy</strong></span>:
+<ul><li><span class="guilabel">Online copy of table data to target RDBMS
+</span>: Это (по умолчанию) скопирует данные к целевой RDBMS.</li>
+
+<li><span class="guilabel">Create a batch file to copy the data at another
+time</span>: данные также могут быть записаны в файлу, который может
+выполняться в более позднее время или использоваться в качестве резервной
+копии. Этот скрипт использует подключение MySQL, чтобы передать данные.</li>
+
+<li><span class="guilabel">Create a shell script to use native server dump
+and load abilities for fast migration</span>: В отличие от простого пакетного
+файла, который выполняет живую копию онлайн, это производит скрипт, который
+будет выполнен на <span class="emphasis"><em>источнике</em></span>, чтобы
+произвести zip-файл, содержащий все данные. Скопируйте и распакуйте
+произведенный zip-файл на целевом хосте и затем выполните скрипт импорта (на
+целевом хосте), чтобы импортировать данные в MySQL, используя LOAD DATA.</p>
+
+<p>Этот более быстрый метод избегает передачи данных через MySQL Workbench
+ине требует иметь постоянное сетевое соединение между серверами MySQL.
+Этот выбор был добавлен в MySQL Workbench 6.3.0.</li></ul>
+
+<p>Допустимые здесь опции:
+<ul><li>Truncate target tables before copying data:
+В случае, если целевая база данных уже существует, это удалит данные.</li>
+
+<li>Worker tasks: The default value is <code class="literal">2</code>.
+Это количество задач (соединений с базой данных),
+используемых, копируя данные.</li>
+<li>Enable debug output for table copy: Показать данные отладки.
+</p></li></ul>
+
+<a name="wb-migration-wizard-data-migration-setup-image"></a>
+<p><b>Рис. 10.63. MySQL Workbench Migration: Data Transfer Setup</b></p>
+<img src="images/wb-migration-data-transfer-setup.png" width="800"
+height="494" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="wb-migration-wizard-data-migration-transfer"></a>
+10.8.11. Оптовая передача данных</h3>
+<p>В зависимости от выбранного варианта это передаст данные целевой RDMS
+(по умолчанию), произведет простой скрипт для передачи данных онлайн или
+произведет скрипт, чтобы выполнить на исходном хосте, который производит
+zip-файл, содержащий скрипт передачи и данные, который будет выполнен на
+целевом хосте. Произвольно, смотрите журнал, чтобы подтвердить.</p>
+
+<a name="wb-migration-wizard-data-migration-transfer-image"></a>
+<p><b>Рис. 10.64. MySQL Workbench Migration: оптовая передача данных</b></p>
+<img src="images/wb-migration-bulk-data-transfer.png" width="800"
+height="512" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h3><a name="wb-migration-wizard-report"></a>10.8.12. Отчет о миграции</h3>
+<p>Показывает итоговый отчет, который суммирует процесс миграции.
+Следующие данные показывают пример отчета о миграции.</p>
+
+<a name="wb-migration-wizard-report-image"></a>
+<p><b>Рис. 10.65. MySQL Workbench Migration: Отчет о миграции</b></p>
+<img src="images/wb-migration-migration-report.png" width="800" height="473"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h2><a name="wb-migration-faq"></a>10.9.
+MySQL Workbench Migration Wizard FAQ</h2>
+<p>Часто задаваемые вопросы с ответами.</p>
+
+<a name="idm140523188025424"></a><dl><dt>
+10.9.1. <a href="#idm140523188025168">Используя драйвер Postgresql
+psqlodbc, я получаю ошибку: ('08001', '[08001] Already
+connected. (202) (SQLDriverConnect)').</a></dt></dl>
+
+<table border="0"><col align="left" width="1%"><col>
+<tbody><tr><td align="left" valign="top"><a name="idm140523188025168"></a>
+<a name="idm140523188024912"></a><p><b>10.9.1.</b></p></td>
+<td align="left" valign="top"><p>Используя драйвер Postgresql
+psqlodbc, я получаю ошибку: <code class="literal">('08001', '[08001] Already
+connected. (202) (SQLDriverConnect)')</code>.</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Это означает, что PostgreSQL не настроен, чтобы принять связи
+от IP источника.</p></td></tr></tbody></table>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\NODEJS\cat.NODEJS\dir.NODEJS.md">NODEJS</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Docs\NODEJS\README.md">README.md</a>
+        - *# Планы обучения для "Программной инженерии" по треку Node.js
+        - *## Введение в технологию
+        - *## Курс переподготовки JavaScript разработчиков
+        - *## Курс обучения для студентов КПИ

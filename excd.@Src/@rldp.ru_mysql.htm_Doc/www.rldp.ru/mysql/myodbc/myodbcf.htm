@@ -1,0 +1,698 @@
+<HTML>
+<HEAD>
+  <TITLE>MyODBC 3.51.03: тонкости и советы</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1>5 MyODBC 3.51.03: тонкости и советы</H1>
+<H1><A NAME="Connection_Related">5.1 Проблемы с подключением</A></H1>
+<H2><A NAME="Data_Source_Name">5.1.1 Что такое имя источника данных?</A></H2>
+<P>Источник данных идентифицирует путь для данных, который может включать
+сетевую библиотеку, сервер, базу данных и другие атрибуты, в данном случае
+источник данных задает путь к базе данных <CODE>MySQL</CODE>. Чтобы
+соединиться с источником данных, Driver Manager проверяет системный реестр
+Windows для сбора специфической информации для подключения.</P>
+
+<P><CODE>ODBC Driver Manager</CODE> и <CODE>MyODBC Drivers</CODE> используют
+вход системного реестра, созданный <CODE>ODBC Data Source
+Administrator</CODE>. Этот вход содержит информацию относительно каждого
+источника данных и связанного с ним драйвера. Прежде, чем Вы сможете
+соединяться с источником данных, информация для конкретного подключения
+должна быть добавлена к системному реестру.</P>
+
+<H2><A NAME="DSN_Types">5.1.2 В чем разница между
+источниками данных машины и файлов?</A></H2>
+<P><CODE><STRONG>Машинные источники данных</STRONG></CODE> сохраняют
+информацию подключения в системном реестре Windows на специфическом
+компьютере с определяемым пользователем именем. Вы можете использовать
+машинные источники данных только на компьютере, на котором они определены.
+Имеются два типа машинных источников данных: <CODE>пользовательские</CODE> и
+<CODE>системные</CODE>.
+
+<P><CODE><STRONG>Пользовательские источники данных</STRONG></CODE> могут
+использоваться только текущим пользователем и видны только этому
+пользователю. <CODE><STRONG>Системные источники данных</STRONG></CODE> могут
+использоваться всеми пользователями на компьютере и видны всем пользователям
+компьютерных и системных сервисов, типа Microsoft Windows NT services.</P>
+
+<P>Машинный источник данных особенно полезен, когда Вы хотите обеспечивать
+дополнительную защиту, поскольку только зарегистрировавшиеся пользователи
+могут рассматривать машинный источник данных, и он не может быть скопирован
+удаленным пользователем на другой компьютер.</P>
+
+<P><CODE><STRONG>Файловые источники данных</STRONG></CODE> (также известны
+как <CODE>DSN-файлы</CODE>) сохраняют информацию подключения в текстовом
+файле, и вообще более гибки в использовании, чем машинные источники данных.
+Например, Вы можете копировать файловый источник данных на любой компьютер с
+правильным ODBC-драйвером так, чтобы Ваша прикладная программа могла
+полагаться на непротиворечивую и точную информацию подключения на всех
+компьютеры, которые это используют. Или Вы можете помещать источник данных на
+сервер, совместно использовать его многими компьютерами в сети и легко
+поддерживать информацию подключения в одном месте.</P>
+
+<P><CODE>Файловый источник данных</CODE> может также быть неразделяемым.
+Такой источник данных дислоцируется на одном компьютере и указывает на
+машинный источник данных. Вы можете использовать неразделяемые источники
+данных, чтобы обратиться к существующим источникам данных машины из
+файловых источников данных.</P>
+
+<H2><A NAME="Remote_connection">5.1.3 Как установить удаленное
+подключение с системы A на систему B?</A></H2>
+<P>Если Вы хотите соединяться с <TT>системы A</TT> с <TT>системой B</TT> с
+именем пользователя <TT>myuser</TT> и паролем <TT>mypassword</TT>, надо:</P>
+
+<P><STRONG><CODE>На системе "B"</CODE>:</STRONG></P>
+<UL><LI>Запустите сервер MySQL.
+<LI>Командой GRANT предоставьте соответствующие привилегии пользователю
+<TT>myuser</TT> так, чтобы пользователь мог соединяться из <TT>системы A</TT>
+под паролем <TT>mypassword</TT>:
+<PRE>
+GRANT ALL ON *.* to "myuser"@"A" IDENTIFIED BY "mypassword"
+</PRE>
+
+<LI>Вышеупомянутая команда предоставляет все привилегии пользователю
+<TT>myuser</TT> для связи из <TT>системы A</TT> под паролем
+<TT>mypassword</TT>.</UL>
+
+<P><STRONG><CODE>На системе "A"</CODE>:</STRONG></P>
+<UL><LI>Настройте MyODBC или MyODBC 3.51 DSN со следующими параметрами:
+<PRE>
+DSN = remote_test
+SERVER or HOST = B (или IP-адрес системы B)
+DATABASE = test (или определите имя нужной базы данных)
+USER = myuser
+PASSWORD = mypassword
+</PRE>
+
+<LI>Проверьте, можете ли Вы связаться с <TT>системой B</TT> с <TT>системы A
+</TT>, используя ping или другие средства. Если Вы не способны связаться с
+системой B, значит что-то не так с сетью.
+
+<LI>Теперь попробуйте использовать подключение с
+<STRONG><CODE>"DSN=remote_test"</CODE></STRONG>. Если это терпит неудачу,
+изучите протокол ошибок MyODBC и действуйте на основании полученной
+информации. Если ничего не получается, пишите на
+<a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a>.</UL>
+
+<P>Вы можете также использовать довольно простой HOWTO с
+<a HREF="../../../www.phphelp.com/tutorial/using-myodbc-to-connect-to-a-remote-database.html">
+http://www.phphelp.com/tutorial/using-myodbc-to-connect-to-a-remote-database.html</a>.
+</P>
+
+<H2><A NAME="setup-error">5.1.4 Всякий раз, когда я пробую конфигурировать
+MyODBC DSN через ODBC Administrator, я получаю ошибку <CODE>"Could Not Load
+Translator or Setup Library"</CODE>. В чем дело?</A></H2>
+<P>Подробности на MS KB Article(Q260558) по адресу
+<a HREF="../../../support.microsoft.com/default.aspx@scid=kb;EN-US;q260558">
+http://support.microsoft.com/default.aspx?scid=kb;EN-US;q260558</a>. Также
+убедитесь, что имеете самый современный файл
+<TT>ctl3d32.dll</TT> в системном каталоге.</P>
+
+<H2><A NAME="Connection_pool">5.1.5 Относительно ODBC Connection Pooling</A>
+</H2>
+<P>Информацию по объединению подключений смотрите на
+<a HREF="../../../support.microsoft.com/default.aspx@scid=kb;EN-US;q169470">
+http://support.microsoft.com/default.aspx?scid=kb;EN-US;q169470"</a>.</P>
+
+<H1><A NAME="MS_Access_Related">5.2 Проблемы с MS Access</A></H1>
+<H2><A NAME="MS_Access_with_MyODBC">5.2.1 Как настроить MS Access для
+работы с MySQL через MyODBC (3.51)?</A></H2>
+<OL><LI>Если Вы используете MS Access 2000, может быть необходимо установить
+самый новый (версия 2.6 или выше) Microsoft <CODE>MDAC</CODE> (Microsoft Data
+Access Components) с <a HREF="../../../www.microsoft.com/data">
+http://www.microsoft.com/data</a>.
+
+<LI>Вы должны также получить и применить Microsoft Jet 4.0 Service Pack 5
+(SP5) с
+<a HREF="../../../support.microsoft.com/support/kb/articles/Q239/1/14.ASP">
+http://support.microsoft.com/support/kb/articles/Q239/1/14.ASP</a>. Это
+устранит некоторые случаи, в которых столбцы отмечены как
+<CODE>#deleted#</CODE> в Access. Обратите внимание, что если Вы используете
+MySQL Version 3.22, Вы должны применить заплату <CODE>MDAC</CODE> и
+использовать MyODBC 2.50.32, 2.50.34 или выше.
+
+<LI>Установите последнюю версию <STRONG><CODE>MySQL</CODE></STRONG> с
+<a HREF="../../../www.mysql.com/downloads/index.html">
+http://www.mysql.com/downloads/index.html</a>.
+
+<LI>Установите последнюю версию <STRONG><CODE>MyODBC 3.51</CODE></STRONG> или
+<STRONG><CODE>MyODBC</CODE></STRONG> с
+<a HREF="../../../www.mysql.com/downloads/api-myodbc.html">
+http://www.mysql.com/downloads/api-myodbc.html</a>.
+
+<LI>Для всех версий Access Вы должны включить опцию <CODE>Return matching
+rows</CODE> в <STRONG><CODE>MyODBC (3.51)</CODE></STRONG>
+
+<LI>Теперь запустите работу с Access как внешний интерфейс для сервера
+<STRONG><CODE>MySQL</CODE></STRONG> через <STRONG><CODE>MyODBC</CODE>
+</STRONG> или <STRONG><CODE>MyODBC 3.51</CODE></STRONG>.</OL>
+
+<H2><A NAME="Export_of_Data">5.2.2 Как экспортировать таблицу или
+сделать запрос из Access к MySQL?</A></H2>
+<P>Вы не можете экспортировать таблицу или сделать запрос к базе данных
+MySQL, если Вы не установили драйвер <CODE>MyODBC</CODE> или <CODE>MyODBC
+3.51</CODE>.</P>
+
+<P><STRONG>Чтобы экспортировать таблицу из Access в MySQL:</STRONG></P>
+<OL><LI>В окне Database (это то самое окно, которое появляется в Access,
+когда Вы открываете базу данных или проект Access, оно отображает ярлыки для
+создания новых объектов базы данных и открытия существующих объектов):
+<LI>Щелкните по имени <CODE>таблицы</CODE> или <CODE>запроса</CODE> и затем
+из меню <CODE>File</CODE> выберите <CODE>Export</CODE>.
+
+<LI>В окне <CODE>Export Object Type</CODE> введите имя объекта, а в окне Save
+As Type нажмите на <CODE>ODBC Databases()</CODE>.
+
+<LI>В диалоге <CODE>Export</CODE> введите имя для файла (или используйте
+предложенное имя), затем нажмите на <CODE>OK</CODE>.
+
+<LI>Появится окно Select Data Source: оно вносит в список определенные
+источники данных для любых ODBC-драйверов, установленных на Вашем
+компьютере. Нажмите File Data Source или Machine Data Source, затем дважды
+щелкните по источнику данных <CODE>MyODBC</CODE> или <CODE>MyODBC 3.51</CODE>,
+в который Вы хотите экспортировать информацию.</OL>
+
+<P>Microsoft Access свяжется с сервером <CODE>MySQL</CODE> через этот
+источник данных и экспортирует новые таблицы и/или данные.</P>
+
+<H2><A NAME="Import_of_Data">5.2.3 Как импортировать или привязать
+базу данных MySQL к таблице в Access?</A></H2>
+<OL><LI>Откройте базу данных или переключитесь на окно Database для
+открытой базы данных.
+
+<LI>Чтобы импортировать таблицы, в меню <CODE>File</CODE> укажите <CODE>Get
+External Data</CODE> и выберите <CODE>Import</CODE>. Чтобы связывать таблицы,
+в меню File укажите на <CODE>Get External Data</CODE> и
+выберите <CODE>Link Tables</CODE>.
+
+<LI>В диалоговом <CODE>Import</CODE> (или <CODE>Link</CODE>) в блоке Files Of
+Type выберите <CODE>ODBC Databases()</CODE>. Диалоговое окно Select Data
+Source вносит в список определенные источники данных для любых
+ODBC-драйверов, установленных на Вашем компьютере. Нажмите File Data Source
+или Machine Data Source и дважды щелкните по источнику данных
+<CODE>MyODBC</CODE> или <CODE>MyODBC 3.51</CODE>.
+
+<LI>Если источник данных ODBC, который Вы выбрали, требует чтобы Вы входили в
+систему, введите Ваши логин и пароль (дополнительная информация может также
+требоваться), и затем нажмите <CODE>OK</CODE>.
+
+<LI>Microsoft Access свяжется с сервером <CODE>MySQL</CODE> через <CODE>ODBC
+data source</CODE> и отобразит список таблиц, которые Вы можете импортировать
+(<CODE>import</CODE>) или привязать (<CODE>link</CODE>).
+
+<LI>Нажмите на каждую таблицу, которую Вы хотите импортировать или связать, а
+затем выберите <CODE>OK</CODE>. Если Вы связываете таблицу, а она не имеет
+индекса, который уникально идентифицирует каждую запись, то Microsoft Access
+отображает список полей в связанной таблице. Нажмите на поле или на
+комбинацию полей, которые уникально идентифицируют каждую запись, а
+затем на <CODE>OK</CODE>.</OL>
+
+<H2><A NAME="Linked_Tables">5.2.4 Структура или расположение связанной
+таблицы были изменены. Я могу увидеть эти изменения в связанных таблицах?</A>
+</H2>
+<P>Конечно. Используйте следующую процедуру, чтобы рассмотреть или обновить
+связи, когда структура или расположение связанной таблицы изменились. Linked
+Table Manager вносит в список пути ко всем в настоящее
+время связанным таблицам.</P>
+
+<P><STRONG>Чтобы посмотреть или обновить запись:</STRONG></P>
+<OL><LI>Откройте базу данных, которая содержит связи с таблицами.
+<LI>В меню <CODE>Tools</CODE> укажите <CODE>Add-ins</CODE> и выберите
+<CODE>Linked Table Manager</CODE>.
+<LI>Выберите переключатель для таблиц, чьи связи Вы хотите обновить.
+<LI>Нажмите OK, чтобы обновить связи.</OL>
+
+<P>Microsoft Access подтвердит успешную регенерацию или, если таблица не была
+найдена, отобразит диалоговое окно <CODE>Select New Location of</CODE>
+&#60;имя таблицы&#62;, в котором Вы можете определять новое расположение
+таблицы. Если несколько выбранных таблиц передвигались в новое расположение,
+которое Вы определяете, Linked Table Manager ищет все выбранные таблицы и
+модифицирует все связи.</P>
+
+<P><STRONG>Чтобы сменить путь для набора связанных таблиц:</STRONG></P>
+<OL><LI>Откройте базу данных, которая содержит связи с таблицами.
+<LI>В меню <CODE>Tools</CODE> укажите <CODE>Add-ins</CODE> и выберите
+<CODE>Linked Table Manager</CODE>.
+<LI>Выберите <CODE>Always Prompt For A New Location</CODE>.
+<LI>Выберите переключатель для таблиц, чьи связи Вы хотите изменить, а
+затем нажмите <CODE>OK</CODE>.
+<LI>В диалоговом окне <CODE>Select New Location of</CODE> &#60;имя таблицы
+&#62; определите новое расположение, нажмите <CODE>Open</CODE>, а затем
+<CODE>OK</CODE>.</OL>
+
+<H2><A NAME="DELETED_problem">5.2.5 Когда я вставляю или модифицирую запись в
+связанных таблицах, она помечается как <CODE>#Deleted#</CODE>. Что делать?
+</A></H2>
+<P>Если вставленные или модифицируемые записи показываются как
+<CODE>#DELETED#</CODE> в Access:</P>
+
+<UL><LI>Если Вы используете MS Access 2000, может быть необходимо установить
+самый новый (версия 2.6 или выше) Microsoft <CODE>MDAC</CODE> (Microsoft Data
+Access Components) с <a HREF="../../../www.microsoft.com/data">
+http://www.microsoft.com/data</a>.
+
+<LI>Вы должны также получить и применить Microsoft Jet 4.0 Service Pack 5
+(SP5) с
+<a HREF="../../../support.microsoft.com/support/kb/articles/Q239/1/14.ASP">
+http://support.microsoft.com/support/kb/articles/Q239/1/14.ASP</a>. Это
+устранит некоторые случаи, в которых столбцы отмечены как
+<CODE>#deleted#</CODE> в Access. Обратите внимание, что если Вы используете
+MySQL Version 3.22, Вы должны применить заплату <CODE>MDAC</CODE> и
+использовать MyODBC 2.50.32, 2.50.34 или выше.
+
+<LI>Для всех версий Access Вы должны включить опцию <CODE>Return matching
+rows</CODE> в <STRONG><CODE>MyODBC (3.51)</CODE></STRONG>. Для Access 2.0 Вы
+должны дополнительно включить опцию <CODE>Simulate ODBC 1.0</CODE>.
+
+<LI>Вы должны иметь timestamp во всех таблицах, которые Вы хотите
+модифицировать. Для максимальной мобильности рекомендуются TIMESTAMP(14) или
+простой TIMESTAMP вместо разных версий TIMESTAMP(X).
+
+<LI>Вы должны иметь первичный ключ в таблице. Если это не так, новые или
+модифицируемые строки могут обнаруживаться как #DELETED#.
+
+<LI>Используйте только поля DOUBLE с плавающей точкой. Access не понимает
+поля single с плавающей точкой.
+
+<LI>Если Вы связываете таблицу через MyODBC, которая имеет BIGINT как один из
+столбцов, то результаты будут отображаться как #DELETED#. Решение:
+<UL><LI>Создайте еще один фиктивный столбец с типом данных TIMESTAMP,
+предпочтительно с типом TIMESTAMP(14).
+
+<LI>Проверьте опцию 'Change BIGINT columns to INT' в опциях диалога
+подключения в ODBC DSN Administrator
+
+<LI>Удалите связь с таблицей из Access и пересоздайте ее.</UL>
+<LI>Это все еще отображает предыдущие записи как #DELETED#, но новые или
+модифицируемые записи будут отображаться правильно.</UL>
+
+<H2><A NAME="row-delete">5.2.6 Когда я пробую удалять или модифицировать
+запись, я получаю ошибку <CODE>"Row cannot be located for updating.
+Some values may have been changed since it was last read"</CODE></A></H2>
+<P>Проверьте параметр <CODE>Return Matching Rows</CODE> диалога настройки DSN
+или укажите параметр подключения <CODE>OPTION=2</CODE>.</P>
+
+<H2><A NAME="Access97_Export">5.2.7 Всякий раз, когда я экспортирую таблицу
+из Access 97, я получаю ошибку <CODE>"syntax error"</CODE>.</A></H2>
+<P>Это странная проблема Access 97, ее уже нет в Access 2000 или в 2002. Вы
+можете решить проблему, обновив драйвер MyODBC до MyODBC 3.51.02 или выше.
+</P>
+
+<H2><A NAME="Modified_error">5.2.8 Access возвращает ошибку <CODE>"Another
+user has modified the record that you have modified"</CODE>
+при редактировании записей</A></H2>
+<P>В большинстве случаев это может быть решено, делая одно из следующего:</P>
+<UL><LI>Добавьте первичный ключ для таблицы, если его еще нет.
+<LI>Добавьте timestamp-столбец, если его еще нет.
+<LI>Используйте только поля double с плавающей точкой. Некоторые программы
+могут некорректно обрабатывают single-поля с плавающей точкой.</UL>
+
+<P>Если вышеупомянутое не помогает, Вы должны сделать файл трассировки
+<CODE>MyODBC</CODE> и попробовать вычислить, что пошло не так.</P>
+
+<H2><A NAME="Trapping_ODBC_Errors">5.2.9 Как отслеживать сообщения ODBC
+об ошибках входа в систему в Access?</A></H2>
+<P>Обратитесь к интерактивному справочнику на
+<a HREF="../../../support.microsoft.com/support/kb/articles/Q124/9/01.asp@LN=EN-US&SD=gn&FR=0_253CP_253E">
+http://support.microsoft.com/support/kb/articles/Q124/9/01.asp?LN=EN-US&#38;SD=gn&#38;FR=0%3CP%3E</a>.
+</P>
+
+<H2><A NAME="Optimize_Access">5.2.10 Как оптимизировать эффективность
+пары Access и (My)ODBC ?</A></H2>
+<UL><LI>Оптимизация производительности пары клиент-сервер:
+<a HREF="../../../support.microsoft.com/support/kb/articles/Q128/8/08.asp@LN=EN-US&SD=gn&FR=0_253CP_253E">
+http://support.microsoft.com/support/kb/articles/Q128/8/08.asp?LN=EN-US&#38;SD=gn&#38;FR=0%3CP%3E</a>.
+
+<LI>Советы по конвертации прикладных программ для использования ODBCDirect:
+<a HREF="../../../support.microsoft.com/support/kb/articles/Q164/4/81.asp@LN=EN-US&SD=gn&FR=0_253CP_253E">
+http://support.microsoft.com/support/kb/articles/Q164/4/81.asp?LN=EN-US&#38;SD=gn&#38;FR=0%3CP%3E</a>.
+
+<LI>Советы по оптимизации запросов на SQL-таблицах:
+<a HREF="../../../support.microsoft.com/default.aspx@scid=kb;EN-US;q99321">
+http://support.microsoft.com/default.aspx?scid=kb;EN-US;q99321</a>.</UL>
+
+<H2><A NAME="MySQL_tools_with_Access">5.2.11 Есть ли другие инструментальные
+средства для работы из Access с MySQL, кроме MyODBC?</A></H2>
+<P>Конечно, есть. Список доступных инструментальных средств есть на странице
+конверторов: <a HREF="../../../www.mysql.com/downloads/contrib.html#SEC643">
+http://www.mysql.com/downloads/contrib.html#SEC643</a>.</P>
+
+<H2><A NAME="Access-Long_Tables">5.2.12 Я имею очень длинные таблицы. Какова
+самая лучшая конфигурация для MyODBC, чтобы обратиться к этим таблицам?</A>
+</H2>
+<P>Выключите следующие три параметра (или задайте в строке подключения
+OPTION=2059):
+<UL><LI>Don't optimize column width (1),
+<LI>Return Matching Rows (2),
+<LI>Allow BIG Results (8) и
+<LI>Use compressed protocol (2048).</UL>
+
+<H1><A NAME="VB_Related">5.3 MyODBC с VB, ADO, DAO, RDO и ASP</A></H1>
+<H2><A NAME="COUNT(*)_with_MyODBC">5.3.1 При выполнении запроса
+<CODE>"SELECT count (*) FROM table ..."</CODE> в
+MyODBC (3.51) возвращается ошибка.</A></H2>
+<P>Это потому, что выражение <CODE>COUNT(*)</CODE> возвращает BIGINT и ADO
+не может работать с такими величинами. Установите опцию, чтобы обработать
+BIGINT как INT в MyODBC (option=16384).</P>
+
+<H2><A NAME="AppendChunk()_and_GetChunk()">5.3.2 Когда я использую методы
+ADO AppendChunk() или GetChunk(), я получаю ошибку <CODE>Multiple-step
+operation generated errors. Check each status value</CODE></A></H2>
+<P>Методы ADO <CODE>GetChunk()</CODE> и <CODE>AppendChunk()</CODE> не
+работают так, как от них ожидается, когда расположение курсора определено как
+<CODE>adUseServer</CODE>. Но все работает с применением
+<CODE>adUseClient</CODE>.</P>
+
+<P>Простой пример можно найти на
+<a HREF="../../../www.dwam.net/iishelp/ado/docs/adomth02_4.htm">
+http://www.dwam.net/iishelp/ado/docs/adomth02_4.htm</a>.</P>
+
+<H2><A NAME="Total_number_of_rows">5.3.3 Как найти общее количество строк,
+на которые воздействует специфическая инструкция SQL в ADO?</A></H2>
+<P>Вы можете использовать свойство ADO <CODE>RecordsAffected</CODE>. Для
+получения большего количества информации относительно использования метода
+execute, обратитесь к ресурсу
+<a HREF="../../../msdn.microsoft.com/library/default.asp@url=_2Flibrary_2Fen-us_2Fado270_2Fhtm_2Fmdmthcnnexecute.asp">
+http://msdn.microsoft.com/library/default.asp?url=/library/en-us/ado270/htm/mdmthcnnexecute.asp
+</a>.</P>
+
+<H2><A NAME="SAMPLE_-_VB">5.3.4 Примеры VB с ADO, DAO и RDO</A></H2>
+<P>Простые примеры использования ADO, DAO и RDO с VB есть по адресам:</P>
+<UL><LI>ADO:
+<a HREF="../../../www.mysql.com/products/myodbc/manual.html#MyODBC_With_VB">
+http://www.mysql.com/products/myodbc/manual.html#MyODBC_With_VB</a>,
+
+<LI>DAO:
+<a HREF="../../../www.mysql.com/products/myodbc/manual.html#MyODBC_With_VB">
+http://www.mysql.com/products/myodbc/manual.html#MyODBC_With_VB</a>,
+
+<LI>RDO:
+<a HREF="../../../www.mysql.com/products/myodbc/manual.html#MyODBC_With_VB">
+http://www.mysql.com/products/myodbc/manual.html#MyODBC_With_VB</a>.</UL>
+
+<P>Если у Вас есть хорошие примеры применения ADO/DAO/RDO или соображения по
+этим вопросам, напишите на <a HREF="mailto:myodbc@lists.mysql.com">
+myodbc@lists.mysql.com</a>.</P>
+
+<H2><A NAME="ASP_with_MyODBC">5.3.5 ASP и MySQL с MyODBC</A></H2>
+<P>Подробная информация по доступу к MySQL через ASP с использованием MyODBC
+есть по следующим адресам:
+<UL><LI>Применение MyODBC для доступа к базам данных MySQL через ASP:
+<a HREF="../../../www.devarticles.com/art/1/50">
+http://www.devarticles.com/art/1/50</a>.
+
+<LI>ASP и MySQL на DWAM.NT:
+<a HREF="../../../www.dwam.net/mysql/asp_myodbc.asp">
+http://www.dwam.net/mysql/asp_myodbc.asp</a>.</UL>
+
+<H1><A NAME="tools">5.4 Утилиты для ODBC</A></H1>
+<H2><A NAME="MSDTS">5.4.1 Когда я пробую экспортировать таблицы из MS DTS в
+MySQL, используя MyODBC, я получаю ошибку синтаксиса</A></H2>
+<P>Это проблема Access 97 и происходит она когда Ваша таблица состоит из
+полей с типами TEXT или VARCHAR. Вы можете обойти эту ошибку, обновив
+MyODBC до версии 3.51.02 или выше.</P>
+
+<H2><A NAME="HOWTO-CF">5.4.2 Настройка связки
+MySQL+MyODBC+unixODBC+ColdFusion на Solaris</A></H2>
+<P>Есть статья по настройке на
+<a HREF="../../../dbforums.com/showthread.php@threadid=174934">
+http://dbforums.com/showthread.php?threadid=174934</a>.</P>
+
+<H1><A NAME="General_Functionality">5.5 Базисная функциональность</A></H1>
+<H2><A NAME="Dynamic_Cursor">5.5.1 MyODBC 3.51 поддерживает
+динамический тип курсора?</A></H2>
+<P>Да. MyODBC 3.51 поддерживает <CODE><STRONG>динамический</STRONG></CODE>,
+<CODE><STRONG>"только вперед"</STRONG></CODE> и
+<CODE><STRONG>статический</STRONG></CODE> типы курсора.</P>
+
+<P>Из-за проблем эффективности, драйвер не поддерживает это свойство по
+умолчанию. Можно его включить, определяя параметр опции подключения как
+<CODE><STRONG>OPTION=32</STRONG></CODE> или проверяя опцию
+<CODE><STRONG>Enable Dynamic Cursor</CODE></STRONG> из настройки DSN.</P>
+
+<H2><A NAME="MyODBC_Compatibility">5.5.2 Можно ли использовать
+программы MyODBC 2.50 с MyODBC 3.51?</A></H2>
+<P>Можно. Если Вы находите, что что-то не работает с MyODBC 3.51, но работает
+с MyODBC 2.50, напишите об этом на <a HREF="mailto:myodbc@lists.mysql.com">
+myodbc@lists.mysql.com</a>.</P>
+
+<H2><A NAME="MyODBC-Net">5.5.3 MyODBC работает с провайдерами .NET?</A></H2>
+<P>Работает. Это было проверено с провайдерами Microsoft .NET, список которых
+можно найти на:
+<a HREF="../../../www.mysql.com/products/myodbc/manual.html#MyODBC_With_.NET">
+http://www.mysql.com/products/myodbc/manual.html#MyODBC_With_.NET</a>.
+
+<P><STRONG>Предостережение</STRONG>: при использовании ODBC.NET с MyODBC, при
+выборке пустой строки (нулевой длины) это начинает давать исключительную
+ситуацию SQL_NO_DATA. Вы можете получить заплатку для этого с
+<a HREF="../../../support.microsoft.com/default.aspx@scid=kb;EN-US;q319243">
+http://support.microsoft.com/default.aspx?scid=kb;EN-US;q319243</a>.</P>
+
+<H2><A NAME="Tested_Applications">5.5.4 Проверенные прикладные программы,
+работающие с MyODBC</A></H2>
+<P>MyODBC был проверен со следующими прикладными программами:</P>
+<UL><LI>MS Access 95, 97, 2000 и 2002,
+<LI>C++-Builder, Borland Builder 4,
+<LI>Centura Team Developer (Gupta SQL/Windows),
+<LI>ColdFusion (на Solaris и NT с svc pack 5),
+<LI>Crystal Reports,
+<LI>DataJunction,
+<LI>Delphi,
+<LI>ERwin,
+<LI>MS Excel,
+<LI>iHTML,
+<LI>FileMaker Pro,
+<LI>FoxPro,
+<LI>Notes 4.5/4.6,
+<LI>MS Visio Enterprise 2000,
+<LI>Vision,
+<LI>Visual Objects,
+<LI>Visual Interdev,
+<LI>SBSS,
+<LI>Perl DBD-ODBC,
+<LI>Paradox,
+<LI>Powerbuilder,
+<LI>Powerdesigner 32 bit,
+<LI>MS Visuaal C++
+<LI>Visual Basic и
+<LI>ODBC.NET через CSharp (C#), VB и C++.
+<LI>Data Architect (<a HREF="../../../thekompany.com/products/dataarchitect">
+http://thekompany.com/products/dataarchitect</a>)
+<LI>SQLExpress for Xbase++ (<a HREF="../../../www.sqlexpress.net/default.htm">
+http://www.SQLExpress.net</a>)
+<LI>Open Office (<a HREF="../../../www.openoffice.org/default.htm">
+http://www.openoffice.org</a>)
+<LI>Star Office
+(<a HREF="../../../wwws.sun.com/software/star/staroffice/6.0/index.html">
+http://wwws.sun.com/software/star/staroffice/6.0/index.html</a>)</UL>
+
+<P>Если Вы знаете о любых других прикладных программах, которые работают с
+MyODBC, пожалуйста, напишите об этом на
+<a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a>.</P>
+
+<H1>5.6 Coldfusion и MyODBC</H1>
+<P>Файл <CODE>mydsn.dll</CODE> должен использоваться, чтобы формировать и
+удалять DSN-файл системного реестра для драйвера MyODBC в прикладных
+программах Coldfusion. Чтобы сформировать DLL, Вам понадобятся VC++ 6.0 и
+окружение для компилятора C++, указывающее место дислокации файла <CODE>CFAPI
+header, cfx.h</CODE>. Также добавьте путь <CODE>include</CODE>
+для Вашей среды:
+<PRE>
+\cfusion\cfx\include
+</PRE>
+
+<P>Чтобы использовать <CODE>mydsn.dll</CODE>, Вы должны использовать
+администратор CFX Coldfusion, чтобы зарегистрировать заказной тэг
+<CODE>CFX_MYDSN</CODE>. Вы имеете две функции: <CODE>ADD</CODE> добавляет
+DSN, а <CODE>REMOVE</CODE> удаляет. Чтобы добавить запись, Вы
+используете следующий синтаксис:
+<PRE>
+&lt;CFX_MYDSN ACTION="ADD" DSN="DSN=DSNname"
+SERVER="SERVER=ServerNameOrIPAddress" DATABASE="DATABASE=DBname"
+USERNAME="UID=UserName" PASSWORD="PWD=UserPassword" PORT="PORT=3307"
+OPTION="OPTION=12"&gt;
+</PRE>
+
+<P>Обратите внимание, что <CODE>OPTION</CODE> здесь задает два параметра:
+<CODE>Trace MyODBC (4)</CODE> и <CODE>Allow Big Results (8)</CODE>,
+так что в сумме 4+8 = 12.
+
+<P>Чтобы удалить DSN-запись, Вы должны использовать:
+<PRE>
+&lt;CFX_MYDSN ACTION="REMOVE" DSN="DSN=DSNname"&gt;
+</PRE>
+
+<P>Чтобы работать правильно, Ваша среда нуждается в пакете MDAC 2.0 или выше.
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

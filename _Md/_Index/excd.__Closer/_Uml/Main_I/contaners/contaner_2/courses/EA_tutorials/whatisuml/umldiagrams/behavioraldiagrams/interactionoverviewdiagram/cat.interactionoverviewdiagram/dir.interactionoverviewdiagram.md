@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umldiagrams\behavioraldiagrams\interactionoverviewdiagram\cat.interactionoverviewdiagram\dir.interactionoverviewdiagram.md">interactionoverviewdiagram</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umldiagrams\behavioraldiagrams\interactionoverviewdiagram\interactionoverviewdiagram.md">interactionoverviewdiagram.md</a>
+        - *#### [Interaction Overview Diagram](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/interactionoverviewdiagram.html)

@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\SingleResponsibility-master\cat.SingleResponsibility-master\dir.SingleResponsibility-master.md">SingleResponsibility-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\SingleResponsibility-master\README.md">README.md</a>
+        - *# Single Responsibility Principle

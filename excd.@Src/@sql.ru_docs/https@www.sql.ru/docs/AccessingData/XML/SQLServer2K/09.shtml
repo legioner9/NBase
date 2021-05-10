@@ -1,0 +1,310 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<TITLE>Доступ к XML и реляционным данным
+</TITLE>
+<META CONTENT="text/html; charset=windows-1251" http-equiv=Content-Type>
+<META NAME="Description" CONTENT="1. Введение">
+<META NAME="Keywords" CONTENT="SQL, Microsoft, Server">
+<META HTTP-EQUIV="Set-Cookie" CONTENT="cookie=set; path=/">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER="0" WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top  bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>Аннотированные схемы
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="10.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+
+
+</TD>
+</TR>
+</TABLE>
+<TABLE border="0" cellpadding="2" cellspacing="2" >
+<TR>
+<TD>
+<div align=justify>
+<p>
+По своей структуре это обычные XSD-схемы, в которых допускаются специальные аннотации, задающие их 
+привязку к сущностям реляционной структуры: таблицам, полям, первичным и внешним ключам, отношениям 
+между таблицами и т.д., благодаря чему данные, хранящиеся на SQL Server, можно привести к желаемой XSD-
+структуре и запрашивать затем как XML-документ (XPath, XQuery). В VS .Net входит удобный редактор XSD-схем, 
+позволяющий собирать их, натаскивая drag-n-drop'ом элементы, атрибуты, типы и т.д. из панели инструментов. 
+Редактор имеет две панели: одна показывает традиционный XML-код схемы, а другая - ее реляционный 
+эквивалент в виде таблиц и связей между ними. При переключении происходит автоматическая валидация 
+схемы, доступная также из меню (Schema -> Validate). В нем есть цветовое выделение синтаксических конструкций, 
+intelisense-подсказки и многие другие приятные вещи. Итак, с помощью этого замечательного редактора я создаю 
+вид моего XML-документа, который будет содержать, допустим, информацию по клиентам и сделанных ими 
+заказах.
+<p><pre><tt><font color=#990000>
+<font color=blue>&lt;?</font>xml <font color=red>version</font><font color=blue>="1.0"</font> <font color=red>encoding</font><font color=blue>="utf-8" ?></font>
+<font color=blue>&lt;</font>xs:schema <font color=red>id</font><font color=blue>="XMLSchema1" xmlns</font><font color=red>:xs</font><font color=blue>="http://www.w3.org/2001/XMLSchema"></font>
+	<font color=blue>&lt;</font>xs:complexType <font color=red>name</font><font color=blue>="Клиент"></font>
+		<font color=blue>&lt;</font>xs:sequence<font color=blue>></font>
+			<font color=blue>&lt;</font>xs:element <font color=red>name</font><font color=blue>="Адрес"</font> <font color=red>type</font><font color=blue>="Адрес" /></font>
+			<font color=blue>&lt;</font>xs:element <font color=red>name</font><font color=blue>="Заказы"</font> <font color=red>type</font><font color=blue>="Заказы" /></font>
+		<font color=blue>&lt;/</font>xs:sequence<font color=blue>></font>
+		<font color=blue>&lt;</font>xs:attribute <font color=red>name</font><font color=blue>="Имя"</font> <font color=red>type</font><font color=blue>="xs:string" /></font>
+		<font color=blue>&lt;</font>xs:attribute <font color=red>name</font><font color=blue>="Должность"</font> <font color=red>type</font><font color=blue>="xs:string" /></font>
+		<font color=blue>&lt;</font>xs:attribute <font color=red>name</font><font color=blue>="Фирма"</font> <font color=red>type</font><font color=blue>="xs:string" /></font>
+	<font color=blue>&lt;/</font>xs:complexType<font color=blue>></font>
+	<font color=blue>&lt;</font>xs:complexType <font color=red>name</font><font color=blue>="Адрес"></font>
+		<font color=blue>&lt;</font>xs:sequence<font color=blue>></font>
+			<font color=blue>&lt;</font>xs:element <font color=red>name</font><font color=blue>="Страна"</font> <font color=red>type</font><font color=blue>="xs:string" /></font>
+			<font color=blue>&lt;</font>xs:element <font color=red>name</font><font color=blue>="Город"</font> <font color=red>type</font><font color=blue>="xs:string" /></font>
+			<font color=blue>&lt;</font>xs:element <font color=red>name</font><font color=blue>="Улица_дом"</font> <font color=red>type</font><font color=blue>="xs:string" /></font>
+			<font color=blue>&lt;</font>xs:element <font color=red>name</font><font color=blue>="Индекс"</font> <font color=red>type</font><font color=blue>="xs:string" /></font>
+		<font color=blue>&lt;/</font>xs:sequence<font color=blue>></font>
+	<font color=blue>&lt;/</font>xs:complexType<font color=blue>></font>
+	<font color=blue>&lt;</font>xs:complexType <font color=red>name</font><font color=blue>="Заказы"</font><font color=blue>></font>
+		<font color=blue>&lt;</font>xs:sequence<font color=blue>></font>
+			<font color=blue>&lt;</font>xs:element <font color=red>name</font><font color=blue>="Заказ"</font> <font color=red>type</font><font color=blue>="Заказ"</font> <font color=red>minOccurs</font><font color=blue>="0"</font>
+			<font color=red>maxOccurs</font><font color=blue>="unbounded" /></font>
+		<font color=blue>&lt;/</font>xs:sequence<font color=blue>></font>
+	<font color=blue>&lt;/</font>xs:complexType<font color=blue>></font>
+	<font color=blue>&lt;</font>xs:complexType <font color=red>name</font><font color=blue>="Заказ"></font>
+		<font color=blue>&lt;</font>xs:sequence<font color=blue>></font>
+			<font color=blue>&lt;</font>xs:element <font color=red>name="Дата"</font> <font color=red>type</font><font color=blue>="xs:date" /></font>
+			<font color=blue>&lt;</font>xs:element <font color=red>name="Стоимость"</font> <font color=red>type</font><font color=blue>="xs:float" /></font>
+		<font color=blue>&lt;/</font>xs:sequence<font color=blue>></font>
+	<font color=blue>&lt;/</font>xs:complexType<font color=blue>></font>
+<font color=blue>&lt;/</font>xs:schema<font color=blue>></font></p></pre></tt>
+<p>
+<div align=justify></font><center>						
+<font color=blue><b>Рис.3</font></p></b></center>
+<p>
+Теперь, чтобы по этой схеме представить данные из SQL Server, сопоставим их элементам и атрибутам при 
+помощи аннотаций - см. рис.4 - для поддержки которых в схеме делается ссылка на соответствующее 
+пространство имен (<font color=#990000>xmlns</font><font color=red>:ms</font><font color=blue>="urn:schemas-microsoft-com:mapping-schema"</font>).
+<p><pre><tt><font color=blue>
+&lt;?<font color=#990000>xml</font> <font color=red>version</font>="1.0" <font color=red>encoding</font>="utf-8" ?>
+&lt;<font color=#990000>xs:schema</font> <font color=red>id</font>="SQLSchema1" <font color=#990000><b>xmlns</b></font><font color=red>:xs</font>="http://www.w3.org/2001/XMLSchema" 
+xmlns:ms="urn:schemas-microsoft-com:mapping-schema">
+	&lt;<font color=#990000>xs:annotation</font>>
+		&lt;<font color=#990000>xs:appinfo</font>>
+			&lt;<font color=#990000><b>ms</font><font color=red>:relationship</b> name</font>="CustOrds" <font color=red>parent</font>="Customers" <font color=red>parent-key</font>="CustomerID" 
+			<font color=red>child</font>="Orders" <font color=red>child-key</font>="CustomerID" />
+		&lt;/<font color=#990000>xs:appinfo</font>>
+	&lt;<font color=#990000>/xs:annotation</font>>
+	&lt;<font color=#990000>xs:complexType</font> <font color=red>name</font>="Клиент">
+		&lt;<font color=#990000>xs:sequence</font>>
+			&lt;<font color=#990000>xs:element</font> <font color=red>name</font>="Адрес" <font color=red>type</font>="Адрес" <font color=#990000><b>ms</font></b><font color=red>:is-constant</font>="1" />
+			&lt;<font color=#990000>xs:element</font> <font color=red>name</font>="Заказы" <font color=red>type</font>="Заказы" <font color=#990000><b>ms</font></b><font color=red>:is-constant</font>="1" />
+		&lt;/<font color=#990000>xs:sequence</font>>
+		&lt;<font color=#990000>xs:attribute</font> <font color=red>name</font>="Имя" <font color=red>type</font>="xs:string" <font color=#990000><b>ms</font></b><font color=red>:field</font>="ContactName" />
+		&lt;<font color=#990000>xs:attribute</font> <font color=red>name</font>="Должность" <font color=red>type=</font>"xs:string" <font color=#990000><b>ms</font></b><font color=red>:field</font>="ContactTitle" />
+		&lt;<font color=#990000>xs:attribute</font> <font color=red>name</font>="Фирма" <font color=red>type</font>="xs:string" <font color=#990000><b>ms</font></b><font color=red>:field</font>="CompanyName" />
+	&lt;/<font color=#990000>xs:complexType</font>>
+	&lt;<font color=#990000>xs:complexType</font> <font color=red>name=</font>"Адрес">
+		&lt;<font color=#990000>xs:sequence</font>>
+			&lt;<font color=#990000>xs:element</font> <font color=red>name=</font>"Страна" <font color=red>type=</font>"xs:string" <font color=#990000><b>ms</font></b><font color=red>:field</font>="Country" />
+			&lt;<font color=#990000>xs:element</font> <font color=red>name=</font>"Город" <font color=red>type=</font>"xs:string" <font color=#990000><b>ms</font></b><font color=red>:field</font>="City" />
+			&lt;<font color=#990000>xs:element</font> <font color=red>name=</font>"Улица_дом" <font color=red>type=</font>"xs:string" <font color=#990000><b>ms</font></b><font color=red>:field</font>="Address" />
+			&lt;<font color=#990000>xs:element</font> <font color=red>name=</font>"Индекс" <font color=red>type=</font>"xs:string" <font color=#990000><b>ms</font></b><font color=red>:mapped</font>="false" />
+		&lt;/<font color=#990000>xs:sequence</font>>
+	&lt;/<font color=#990000>xs:complexType</font>>
+	&lt;<font color=#990000>xs:complexType</font> <font color=red>name</font>="Заказы">
+		&lt;<font color=#990000>xs:sequence</font>>
+			&lt;<font color=#990000>xs:element</font> <font color=red>name=</font>"Заказ" <font color=red>type=</font>"Заказ" <font color=red>minOccurs</font>="0" 
+			<font color=red>maxOccurs</font>="unbounded" 
+			<font color=#990000><b>ms</font></b><font color=red>:relation</font>="Orders" <font color=#990000><b>ms</font></b><font color=red>:relationship</font>="CustOrds" />
+		&lt;/<font color=#990000>xs:sequence</font>>
+	&lt;/<font color=#990000>xs:complexType</font>>
+	&lt;<font color=#990000>xs:complexType</font> <font color=red>name</font>="Заказ">
+		&lt;<font color=#990000>xs:sequence</font>>
+			&lt;<font color=#990000>xs:element</font> <font color=red>name</font>="Дата" <font color=red>type</font>="xs:date" <font color=#990000><b>ms</font></b><font color=red>:field</font>="OrderDate" />
+			&lt;<font color=#990000>xs:element</font> <font color=red>name</font>="Стоимость" <font color=red>type</font>="xs:float" <font color=#990000><b>ms</font></b><font color=red>:field</font>="Freight" />
+		&lt;/<font color=#990000>xs:sequence</font>>
+		&lt;<font color=#990000>xs:attribute</font> <font color=red>name</font>="Номер" <font color=red>type</font>="xs:string" <font color=#990000><b>ms</font></b><font color=red>:field</font>="OrderID" />
+	&lt;/<font color=#990000>xs:complexType</font>>
+	&lt;<font color=#990000>xs:element</font> <font color=red>name</font>="Клиент" <font color=red>type</font>="Клиент" <font color=#990000><b>ms</font></b><font color=red>:relation</font>="Customers" />
+&lt;/<font color=#990000>xs:schema</font>></font></p></pre></tt>
+<p>
+<div align=justify></font><center>						
+<font color=blue><b>Рис.4</font></p></b></center>
+<p>
+Аннотация sql:relation используется для отображения узла на таблицу. Она не поддерживается в тэгах определения 
+типа, т.е. только в <font color=#990000>xs:element</font> и <font color=#990000>xs:attribute</font>, 
+поэтому нам пришлось ввести в схему элемент составного типа 
+"Клиент": <font color=blue>&lt;<font color=#990000>xs:element</font> <font color=red>name</font>="Клиент" 
+<font color=red>type</font>="Клиент" <font color=#990000>ms</font><font color=red>:relation</font>="Customers" /></font>. 
+Вложенные элементы соответствуют 
+записям дочерней таблицы, поэтому для них требуется еще задать <font color=#990000>ms</font><font color=red>:relationship</font>. 
+Отношения между таблицами 
+в терминах родительской и дочерней таблиц (<font color=red>parent / child</font>) и полей, по которым устанавливается связь 
+(<font color=red>parent-key / child-key</font>), определяются как атрибуты элемента <font color=blue>&lt;<font color=#990000>ms:relationship</font>></font> в разделе определения аннотаций 
+<font color=blue>&lt;<font color=#990000>xs:annotation</font>></font>, <font color=blue>&lt;<font color=#990000>xs:appinfo</font>></font>. 
+Затем это отношение можно использовать, чтобы вложить дочерние записи внутрь 
+родительского элемента <font color=blue>&lt;<font color=#990000>xs:element</font> <font color=red>name</font>="Заказ" 
+<font color=red>type</font>="Заказ"... <font color=#990000><b>ms</font></b><font color=red>:relation</font>="Orders" 
+<font color=#990000><b>ms</font></b><font color=red>:relationship</font>="CustOrds"/></font>. 
+Если вложенный элемент не соответствует никакой дочерней таблице, а несет чисто контейнерную функцию 
+(как, например, <font color=blue>Адрес</font>), то он помечается атрибутом <font color=#990000><b>ms</b></font><font color=red>:is-constant</font><font color=blue>="1"</font>: 
+<font color=blue>&lt;<font color=#990000>xs:element</font> <font color=red>name</font>="Адрес" <font color=red>type=</font>"Адрес" 
+<font color=#990000><b>ms</b></font><font color=red>:is-constant</font>="1"/&gt;</font>. 
+Аннотация <font color=#990000><b>ms</b></font><font color=red>:field</font> привязывает XML-узел к полю таблицы. 
+Она не требуется, когда название 
+атрибута совпадает с названием поля. Непривязанные атрибуты также не допускаются. Если мы не планируем 
+брать значение узла из БД, но в силу каких-либо причин не можем исключить его из схемы, его нужно пометить 
+аннотацией <font color=#990000><b>ms</b></font><font color=red>:mapped</font><font color=blue>="false"</font>: 
+ <font color=blue>&lt;<font color=#990000>xs:element</font> <font color=red>name</font>="Индекс" <font color=red>
+ type</font>="xs:string" <font color=#990000><b>ms</b></font><font color=red>:mapped</font>="false" /></font>. 
+От <font color=red>is-constant</font> она отличается тем, что узел вообще 
+исключается из результирующего XML-документа.<br>
+Разберем еще несколько аннотаций на примере схемы, которая воссоздает по таблице parent-child дерево 
+иерархии в виде XML:
+<p><pre><tt><font color=blue>
+&lt;?<font color=#990000>xml</font> <font color=red>version</font>="1.0" <font color=red>encoding</font>="utf-8" ?>
+&lt;<font color=#990000>xs:schema</font> <font color=red>xmlns:xs</font>="http://www.w3.org/2001/XMLSchema" 
+<font color=red>xmlns:ms</font>="urn:schemas-microsoft-com:mapping-schema" 
+<font color=red>id</font>="SQLSchema2">
+	&lt;<font color=#990000>xs:annotation</font>>
+		&lt;<font color=#990000>xs:appinfo</font>>
+			&lt;<font color=#990000><b>ms</b></font><font color=red>:relationship name</font>="Начальник-Подчиненный" 
+			<font color=red>parent</font>="Employees" <font color=red>parent-key</font>="EmployeeID" 
+			<font color=red>child</font>="Employees" <font color=red>child-key</font>="ReportsTo" />
+		&lt;/<font color=#990000>xs:appinfo</font>>
+	&lt;/<font color=#990000>xs:annotation</font>>
+	&lt;<font color=#990000>xs:element</font> <font color=red>name</font>="Сотрудник" <font color=red>type</font>="Тип_Сотрудник" 
+	<font color=#990000><b>ms</b></font><font color=red>:relation</font>="Employees" <font color=#990000><b>ms</b></font><font color=red>:key-fields</font>="EmployeeID" 
+	<font color=red>ms:limit-field</font>="ReportsTo" />
+	&lt;<font color=#990000>xs:complexType</font> <font color=red>name</font>="Тип_Сотрудник">
+		&lt;<font color=#990000>xs:sequence</font>>
+			&lt;<font color=#990000>xs:element</font> <font color=red>name</font>="Сотрудник" <font color=red>type</font>="Тип_Сотрудник" 
+			<font color=#990000><b>ms</b></font><font color=red>:relation</font>="Employees" <font color=red>ms:key-fields</font>="EmployeeID" 
+			<font color=#990000><b>ms</b></font><font color=red>:relationship</font>="Начальник-Подчиненный" <font color=red>ms:max-depth</font>="3" />
+		&lt;/<font color=#990000>xs:sequence</font>>
+		&lt;<font color=#990000>xs:attribute</font> <font color=red>name</font>="ID_сотрудника" <font color=red>type</font>="xs:ID" 
+		<font color=#990000><b>ms</b></font><font color=red>:field</font>="EmployeeID" <font color=#990000><b>ms</b></font><font color=red>:hide</font>="true" />
+		&lt;<font color=#990000>xs:attribute</font> <font color=red>name</font>="Имя" type="xs:string" <font color=#990000><b>ms</b></font><font color=red>:field</font>="FirstName" />
+		&lt;<font color=#990000>xs:attribute</font> <font color=red>name</font>="Фамилия" <font color=red>type</font>="xs:string" 
+		<font color=#990000><b>ms</b></font><font color=red>:field</font>="LastName" />
+	&lt;/<font color=#990000>xs:complexType</font>>
+&lt;/<font color=#990000>xs:schema</font>></font></p></pre></tt>
+<p>
+<div align=justify></font><center>						
+<font color=blue><b>Рис.5</font></p></b></center>
+<p>
+Он взят из документации к SQLXML 3.0. Таблица Employees содержит записи по сотрудникам и связана сама с 
+собой, т.е. в поле ReportsTo для каждого сотрудника указывается EmployeeID его начальника.<br>
+<font color=#990000><b>ms</b></font><font color=red>:max-depth</font> задает максимальную глубину 
+вложенности рекурсии при раскрытии отношения "родитель-потомок". 
+В отличие от предыдущей ситуации, где количество уровней в иерархии определялось длиной максимальной 
+ветки связанных таблиц, глубина дерева в случае parent-child таблицы зависит от ветки, по которой мы идем от 
+корня, и априори неочевидна. Не обладая в текущей версии специальным оператором построения иерархии по 
+такому типу связи, SQL Server разрешает ее в последовательность соединенных UNION'ами SELECT'ов, каждый 
+из которых соответствует уровню иерархии. Поэтому их число (<font color=#990000><b>ms</b></font><font color=red>:max-depth</font>) 
+SQL Server должен знать заранее. 
+Максимальное значение для него волевым образом установлено в 50.<br>
+Другая аннотация - <font color=#990000><b>ms</b></font><font color=red>:limit-field</font> - позволяет 
+провести ограничение (WHERE) по какому-либо полю еще на уровне 
+схемы, т.е. до того, как дело дойдет до XPath. Обычно она употребляется в паре с ms:limit-value, которая задает 
+значение критерия. В данном случае эта аннотация опущена, что означает, что по умолчанию берется значение 
+NULL. Таким образом, верхним уровнем в данной иерархии будут самые-самые начальники (у которых начальников 
+нет: ReportsTo = Null).<br>
+Почему атрибут ID_сотрудника аннотирован как  <font color=#990000><b>ms</b></font><font color=red>:hide</font><font color=blue>="true"</font>? Он несет чисто служебную информацию и вряд 
+ли понадобится в XML-результате. Но его не  хочется выключать из схемы при помощи 
+<font color=#990000><b>ms</b></font><font color=red>:mapped</font><font color=blue>="false"</font>, потому 
+что он действительно привязан к информации в БД, которая понадобится в дальнейшем. Например, он может 
+фигурировать в критерии XPath-запроса: <tt>cmd.CommandText = "Сотрудник[@ID_сотрудника='4']"</tt> (Чтобы этот 
+запрос возвратил сотрудника с EmployeeID = 4, нужно убрать фильтрацию в схеме - <font color=#990000><b>ms</b></font><font color=red>:limit-field</font>). 
+Наконец, еще одна аннотация, которая сейчас необязательна, но встретится нам через параграф - это <font color=#990000><b>ms</b></font><font color=red>:key-fields</font>. 
+Она задает значения полей, составляющих первичный ключ таблицы.<br>
+Полный список аннотаций, естественно, не ограничивается теми, которые встретились в этих двух простых 
+примерах схем. Он достаточно обширен и позволяет строить довольно нетривиальные соответствия между 
+XML-схемой и реляционным содержанием. Его можно найти в документации на SQLXML 3.0.
+<p><pre><tt>
+<font color=blue>static void</font> Annotated_XPathQuery_SQLXML()
+{
+	...
+	cmd.CommandText = "Клиент[Адрес/Страна='Spain' or Адрес/Страна='France']";
+	cmd.<b>SchemaPath</b> = "..\\Schemas\\SQLSchema1.xsd";
+	cmd.CommandType = SqlXmlCommandType.XPath;
+	cmd.RootTag = "Клиенты";
+	XmlDocument xml = <font color=blue>new</font> XmlDocument();
+	xml.Load(cmd.ExecuteStream());
+	...
+}</p></pre></tt>
+<p>
+<div align=justify></font><center>						
+<font color=blue><b>Скрипт 10</font></p></b></center>
+<p>
+В Скрипте 10, как и в предыдущем примере (Скрипт 9), на SQL Server посылается XPath-запрос, однако теперь 
+данные рассматриваются через призму выбранной аннотированной схемы (указывается в свойстве 
+SqlXmlCommand.SchemaPath) и трактуются в соответствии с задаваемой ею структурой. В данном случае запрос 
+выбирает всех клиентов из Испании и Франции и сделанные ими заказы. Встроенной поддержкой XPath 
+(а также XQuery) SQL Server в настоящее время не располагает, поэтому XPath по дороге превращается в то, что 
+ему более понятно, а именно - в SQL-запрос. Если быть совсем точным, то в запрос типа FOR XML EXPLICIT. 
+Ради любопытства можете открыть Profiler и посмотреть его для Скрипта 10 (здесь я его приводить не буду, 
+потому что он занял бы еще как минимум страницу). Поддерживается подмножество стандартного синтаксиса 
+XPath в части осей, функций и операторов. Отрадно, что каждым SQLXML веб-релизом это подмножество 
+расширяется.</p>
+</DIV>
+<TD>
+<TR>
+</TABLE>
+<TABLE BORDER=0 WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top bgcolor=#DDDDDD>
+<TD ALIGN=LEFT><B>
+<A HREF="index.shtml">XML в MS SQL Server 2000 и технологиях доступа к данным</A> | <b>Аннотированные схемы
+</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="10.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+</TD>
+</TR>
+</TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>

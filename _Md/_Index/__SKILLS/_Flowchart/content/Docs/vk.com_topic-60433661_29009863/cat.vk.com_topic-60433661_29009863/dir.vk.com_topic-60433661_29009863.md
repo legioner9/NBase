@@ -1,0 +1,6 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\__SKILLS\_Flowchart\content\Docs\vk.com_topic-60433661_29009863\cat.vk.com_topic-60433661_29009863\dir.vk.com_topic-60433661_29009863.md">vk.com_topic-60433661_29009863</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\__SKILLS\_Flowchart\content\Docs\vk.com_topic-60433661_29009863\vk.com_topic-60433661_29009863.md">vk.com_topic-60433661_29009863.md</a>
+        - *# https://pro-prof.com/archives/1462
+        - *## Схема данных 
+        - *## Схема программы 
+        - *## Схема ресурсов системы 

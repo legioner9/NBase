@@ -1,0 +1,5 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Benchmark-master\cat.Benchmark-master\dir.Benchmark-master.md">Benchmark-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Benchmark-master\README.md">README.md</a>
+        - *# Измерение производительности кода и оптимизация
+        - *## Оптимизация
+        - *## Замер скорости

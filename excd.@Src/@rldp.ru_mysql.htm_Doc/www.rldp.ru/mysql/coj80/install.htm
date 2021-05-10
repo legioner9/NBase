@@ -1,0 +1,998 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=">
+  <title>Глава 4. Установка Connector/J</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="connector-j-installing"></a>Глава 4. Установка Connector/J</h1>
+<p>Можно установить пакет Connector/J, используя дистрибутив исполняемых
+модулей или исходный код. В то время как двоичный дистрибутив
+предоставляет самый легкий метод для установки, исходный текст
+позволяет вам настроить свою установку. Оба типа пакетов доступны с
+<a href="../../../https@dev.mysql.com/downloads/connector/j/default.htm" target="_top">
+Connector/J Download page</a>. Исходный текст Connector/J
+также доступен на GitHub в
+<a href="../../../https@github.com/mysql/mysql-connector-j" target="_top">
+https://github.com/mysql/mysql-connector-j</a>.</p>
+
+<p>Connector/J также доступен как Maven artifact в Central Repository.
+См. <a href="#connector-j-installing-maven">раздел 4.2</a>.</p>
+<p>Если вы обновляетесь от предыдущей версии, прочитайте информацию о
+модернизации в <a href="#connector-j-installing-upgrading">разделе
+4.4</a>.</p>
+
+<p><a name="connector-j-third-party-libs"></a>
+Вы, возможно, также должны установить следующие сторонние библиотеки в
+своей системе для Connector/J 8.0:</p>
+
+<ul><li><p>Protocol Buffers (надо для X DevAPI).</p></li>
+<li><p>Simple Logging Facade API (надо для использования регистрирующих
+возможностей, обеспеченных реализацией по умолчанию
+<code class="literal">org.slf4j.Logger.Slf4JLogger</code> в Connector/J).
+</p></li></ul>
+
+<p>Эти и другие сторонние библиотеки требуются для
+<a href="#connector-j-installing-source">сборки Connector/J
+из исходных текстов</a> (см. раздел для получения дополнительной
+информации о необходимых библиотеках).</p>
+
+<h2><a name="connector-j-binary-installation"></a>
+4.1. Установка Connector/J из двочиного дистрибутива</h2>
+<a class="indexterm" name="idm45064741493264"></a>
+
+<h3><a name="idm45064741491872"></a>Получение и использование пакетов</h3>
+<p>Различные типы двоичных пакетов для Connector/J доступны на
+<a href="../../../https@dev.mysql.com/downloads/connector/j/default.htm" target="_top">
+Connector/J Download page</a>. Следующее объясняет, как использовать каждый
+тип пакетов, чтобы установить Connector/J.</p>
+
+<p><span class="emphasis"><em>Используя независимые от платформы архивы:
+</em></span><code class="filename">.tar.gz</code> или
+<code class="filename">.zip</code> доступны для установки Connector/J на
+любой платформе. Используя соответствующую графическую утилиту
+или командной строки (например, <span class="command"><strong>tar</strong>
+</span> для <code class="filename">.tar.gz</code> и
+<span class="command"><strong>WinZip</strong></span> для .zip),
+извлеките архив JAR из <code class="filename">.tar.gz</code> или
+<code class="filename">.zip</code>.</p>
+
+<p>Поскольку есть потенциально длинные имена файлов, архивы Connector/J
+используют формат архива GNU Tar. Используйте GNU Tar или совместимое
+приложение, чтобы распаковать <code class="filename">.tar.gz</code>.</p>
+
+<p><span class="emphasis"><em>Используя пакеты для систем управления пакетами
+программного обеспечения на платформах Linux:</em></span> RPM и Debian
+доступны для установки Connector/J в ряде дистрибутивов Linux, таких как
+Oracle Linux, Debian, Ubuntu, SUSE и так далее. Установите эти пакеты,
+используя систему управления пакетами программного обеспечения вашей системы.
+</p>
+
+<h3><a name="connector-j-installing-classpath"></a>
+Настройка <code class="literal">CLASSPATH</code></h3>
+<a class="indexterm" name="idm45064741480464"></a>
+<p>Когда <code class="filename">mysql-connector-java-<em class="replaceable">
+<code>version</code></em>.jar</code> был извлечен из двоичного пакета,
+закончите установку драйвера, разместив архив JAR в вашем Java classpath,
+добавив его полный путь к файлу к вашей переменной окружения
+<code class="literal">CLASSPATH</code> или непосредственно определяя путь к
+файлу опцией командной строки <code class="literal">-cp</code>, запуская JVM.
+</p>
+
+<p>Например, на платформах Linux, добавьте драйвер Connector/J к вашей
+<code class="literal">CLASSPATH</code> с использованием одной из следующих
+форм, в зависимости от командного процессора:</p>
+
+<pre class="programlisting">
+# Bourne-compatible shell (sh, ksh, bash, zsh):
+shell&gt; export CLASSPATH=/path/mysql-connector-java-<em class="replaceable"><code>ver</code></em>.jar:$CLASSPATH
+# C shell (csh, tcsh):
+shell&gt; setenv CLASSPATH /path/mysql-connector-java-<em class="replaceable"><code>ver</code></em>.jar:$CLASSPATH
+</pre>
+
+<p>Можно также установить <code class="literal">CLASSPATH</code>
+в файле профиля, любой в местном масштабе для пользователя в файле
+<code class="literal">.profile</code>,
+<code class="literal">.login</code> или другом файле входа в систему, или
+глобально, редактируя файл <code class="literal">/etc/profile</code>.</p>
+
+<p>Для Windows вы устанавливаете переменную окружения через
+System Control Panel.</p>
+<p>Не забудьте также добавить местоположения
+<a href="#connector-j-third-party-libs">сторонних библиотек,
+требуемых для использования Connector/J</a> в CLASSPATH.</p>
+
+<h3><a name="connector-j-installing-app-server"></a>
+Настройка Connector/J для серверов приложений</h3>
+<p>Чтобы использовать MySQL Connector/J с сервером приложений, таким как
+GlassFish, Tomcat или JBoss, изучите документацию вашего поставщика для
+получения информации о том, как формировать сторонние библиотеки классов,
+поскольку большинство серверов приложений игнорирует переменную
+<code class="literal">CLASSPATH</code>. Для примеров конфигурации некоторых
+серверов приложений J2EE см. <a href="pooling.htm">главу 8</a>, разделы
+<a href="multi.htm#connector-j-usagenotes-j2ee-concepts-managing-load-balanced-connections">
+9.3</a> и
+<a href="multi.htm#connector-j-usagenotes-j2ee-concepts-load-balancing-failover">
+9.5</a>. Однако авторитетный источник для конфигурационной информации пула
+связи JDBC это документация для вашего собственного сервера приложений.</p>
+
+<p>Если вы разрабатываете сервлеты или JSP, и ваш сервер приложений
+J2EE-совместим, можно поместить файл <code class="literal">.jar</code>
+драйвера в подкаталог <code class="filename">WEB-INF/lib</code> вашего
+веб-приложения, поскольку это стандартное место для сторонних библиотек
+классов в веб-приложениях J2EE. Можно также использовать классы
+<code class="classname">MysqlDataSource</code> или
+<code class="classname">MysqlConnectionPoolDataSource</code> пакета
+the <code class="literal">com.mysql.cj.jdbc</code>,
+если ваш сервер приложений J2EE поддерживает или требует их. Интерфейс
+<code class="literal">javax.sql.XADataSource</code> осуществляется, используя
+класс <code class="literal">com.mysql.cj.jdbc.MysqlXADataSource</code>,
+который поддерживает распределенные транзакции XA. Различные классы
+<code class="classname">MysqlDataSource</code>
+поддерживают следующие параметры (через мутаторы стандартного набора):</p>
+
+<p></p><ul><li><p><code class="literal">user</code></p></li>
+<li><p><code class="literal">password</code></p></li>
+<li><p><code class="literal">serverName</code></p></li>
+<li><p><code class="literal">databaseName</code></p></li>
+<li><p><code class="literal">port</code></p></li></ul>
+
+<h2><a name="connector-j-installing-maven"></a>
+4.2. Установка Connector/J через Maven</h2>
+<a class="indexterm" name="idm45064741450144"></a>
+<p>Можно также использовать менеджер зависимостей Maven, чтобы установить и
+формировать библиотеку Connector/J в проекте. Connector/J есть в
+<a href="../../../https@search.maven.org/search@q=g_3Amysql%20AND%20a_3Amysql-connector-java"
+target="_top">Maven Central Repository</a> с
+"<code class="literal">GroupId: mysql</code>" и
+"<code class="literal">ArtifactId: mysql-connector-java</code>"
+и может быть связан с вашим проектом, включив следующую зависимость в файле
+<code class="filename">pom.xml</code>:</p>
+
+<pre class="programlisting">
+&lt;dependency&gt;
+  &lt;groupId&gt;mysql&lt;/groupId&gt;
+  &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+  &lt;version&gt;x.y.z&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>Обратите внимание на то, что, если вы используете Maven, чтобы управлять
+вашими зависимостями проекта, вы не должны явно обращаться к библиотеке
+<code class="literal">protobuf-java</code> поскольку это решено
+транзитивностью зависимости. Однако, если вы не хотите использовать функции X
+DevAPI, можно также хотеть добавить исключение зависимости, чтобы избежать
+связывать ненужную подбиблиотеку. Например:</p>
+
+<pre class="programlisting">
+&lt;dependency&gt;
+  &lt;groupId&gt;mysql&lt;/groupId&gt;
+  &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+  &lt;version&gt;x.y.z&lt;/version&gt;
+  &lt;exclusions&gt;
+    &lt;exclusion&gt;
+      &lt;groupId&gt;com.google.protobuf&lt;/groupId&gt;
+      &lt;artifactId&gt;protobuf-java&lt;/artifactId&gt;
+    &lt;/exclusion&gt;
+  &lt;/exclusions&gt;
+&lt;/dependency&gt;
+</pre>
+
+<h2><a name="connector-j-installing-source"></a>
+4.3. Установка из исходных текстов</h2>
+<p>Прочитайте эту секцию, только если вы хотите построить настроенную версию
+Connector/J из исходных текстов или если вы интересуетесь помощью нам, чтобы
+проверить наш новый код. Чтобы просто получить MySQL Connector/J и работать с
+ним на вашей системе, установите Connector/J с использованием стандартного
+двоичного дистрибутива, см
+<a href="#connector-j-binary-installation">раздел 4.1</a>.</p>
+
+<p>Чтобы установить MySQL Connector/J из исходных текстов
+удостоверьтесь, что у вас есть следующее программное обеспечение
+на вашей системе:</p>
+
+<ul><li><p>Клиент Git, если вы хотите получить исходные тексты от нашего
+хранилища GitHub (доступны с <a href="../../../git-scm.com/downloads"
+target="_top">http://git-scm.com/downloads</a>).</p></li>
+
+<li><p>Apache Ant version 1.8.2 или новее (доступно с
+<a href="../../../ant.apache.org/default.htm" target="_top">http://ant.apache.org/</a>).
+</p></li>
+
+<li><p>JDK 1.8.x (доступно с
+<a href="../../../https@www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html"
+target="_top">https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</a>).
+</p></li>
+
+<li><p>Следующие сторонние библиотеки:</p>
+<ul><li><p>JUnit 4.12 (<code class="filename">junit-4.12.jar</code>, есть на
+<a href="../../../https@github.com/junit-team/junit/wiki/Download-and-Install"
+target="_top">https://github.com/junit-team/junit/wiki/Download-and-Install
+</a>).</p></li>
+
+<li><p>Javassist 3.19 или новее
+(<code class="filename">javassist.jar</code>, есть на
+<a href="../../../jboss-javassist.github.io/javassist/default.htm" target="_top">
+http://jboss-javassist.github.io/javassist/</a>).</p></li>
+
+<li><p>Protocol Buffers Java API 3.6.1
+(<code class="filename">protobuf-java-3.6.1.jar</code>, есть в Maven Central
+Repository <a href="../../../https@repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.6.1/default.htm"
+target="_top">https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.6.1/
+</a>).</p></li>
+
+<li><p>C3P0 0.9.1 или новее (<code class="filename">c3p0-0.9.1.x.jar</code> и
+<code class="filename">c3p0-0.9.1.x.src.zip</code>), есть на
+<a href="../../../https@sourceforge.net/projects/c3p0/default.htm" target="_top">
+https://sourceforge.net/projects/c3p0/</a>).</p></li>
+
+<li><p>JBoss common JDBC wrapper 3.2.3 или новее
+(<code class="filename">jboss-common-jdbc-wrapper-3.2.3.jar</code>, есть в
+Maven Central Repository на
+<a href="../../../central.maven.org/maven2/jboss/jboss-common-jdbc-wrapper/default.htm"
+target="_top">http://central.maven.org/maven2/jboss/jboss-common-jdbc-wrapper/
+</a>).</p></li>
+
+<li><p>Simple Logging Facade API 1.6.1 или новее
+(<code class="filename">slf4j-api-1.6.1.jar</code>, есть на
+<a href="../../../https@www.slf4j.org/download.html" target="_top">
+https://www.slf4j.org/download.html</a>).</p></li></ul></li></ul>
+
+<p>Чтобы построить MySQL Connector/J из исходных текстов
+выполните эти шаги:</p>
+<ol type="1"><li><p>Удостоверьтесь, что у вас есть установленный JDK 1.8.x.
+</p></li>
+
+<li><p>Получите исходные тексты Connector/J одним из следующих средств:</p>
+<ul><li><p>Загрузите независимый от платформы архив
+(<code class="filename">.tar.gz</code> или
+<code class="filename">.zip</code>) для Connector/J, который содержит
+исходные тексты, с <a href="../../../https@dev.mysql.com/downloads/connector/j/default.htm"
+target="_top">Connector/J Download page</a>.
+Распакуйте архив в папку названную, например,
+<code class="filename">mysql-connector-j</code>.</p></li>
+
+<li><p>Загрузите пакет RPM для Connector/J с
+<a href="../../../https@dev.mysql.com/downloads/connector/j/default.htm" target="_top">
+Connector/J Download page</a> и установите его.</p></li>
+
+<li><p>Проверьте код из репозитория исходного кода для MySQL Connector/J,
+расположенного на GitHub в
+<a href="../../../https@github.com/mysql/mysql-connector-j" target="_top">
+https://github.com/mysql/mysql-connector-j</a>.
+Последний выпуск ряда Connector/J 8.0 это образ
+<code class="literal">release/8.0</code>,
+используйте следующую команду, чтобы проверить его:</p>
+
+<pre class="programlisting">
+shell&gt; git clone --branch release/8.0 \
+              https://github.com/mysql/mysql-connector-j.git
+</pre>
+
+<p>Под текущим каталогом команда создает подкаталог
+<code class="filename">mysql-connector-j</code>,
+который содержит код, который вы хотите.</p></li></ul></li>
+
+<li><p>Разместите все необходимые сторонние библиотеки в отдельном каталоге,
+например, <code class="filename">/home/username/ant-extralibs</code>.
+</p></li>
+
+<li><p>Измените свой текущий рабочий каталог на созданный на втором шаге
+каталог <code class="filename">mysql-connector-j</code>.</p></li>
+<li><p>Создайте файл <code class="filename">build.properties</code>,
+чтобы указать Ant на местоположения корневых каталогов для вашего JDK 1.8.x,
+а также дополнительных библиотек. Файл должен содержать следующие параметры
+настройки, части <span class="quote"><em class="replaceable"><code>path_to_*
+</code></em></span> заменяются соответствующими путями к файлам:</p>
+
+<pre class="programlisting">
+com.mysql.cj.build.jdk=<em class="replaceable"><code>path_to_jdk_1.8</code></em>
+com.mysql.cj.extra.libs=<em class="replaceable"><code>path_to_folder_for_extra_libraries</code></em>
+</pre>
+
+<p>Альтернативно, можно установить значения тех свойств через опции
+<code class="option">-D</code> в Ant.</p>
+<p>Переходя от Connector/J 5.1 до 8.0, много свойств Ant для сборки
+Connector/J были переименованы или удалены, посмотрите
+<a href="#connector-j-build-props-changes">раздел 4.4.1.4
+</a>.</p></li>
+
+<li><p>Дайте следующую команду, чтобы собрать драйвер и создать файл
+<code class="filename">.jar</code> для Connector/J:</p>
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>ant dist</code></strong>
+</pre>
+
+<p>Это создает каталог <code class="filename">build</code> в
+текущем каталоге, куда идет весь результат сборки. Каталог создается под
+каталогом <code class="filename">build</code>, имя которого включает номер
+версии выпуска, который вы строите. Тот каталог содержит исходные тексты,
+собранные файлы <code class="filename">.class</code> и файл
+<code class="filename">.jar</code> для развертывания.</p>
+
+<p>Для получения информации обо всех целях сборки, включая те, которые
+создают полностью упакованный дистрибутив, дайте следующую команду:</p>
+<pre class="programlisting">
+shell&gt; <strong class="userinput"><code>ant -projecthelp</code></strong>
+</pre></li>
+
+<li><p>Установите недавно созданный файл <code class="filename">.jar</code>
+для драйвера JDBC как вы установили бы скачанный файл
+<code class="filename">.jar</code>, следуя инструкциям, данным
+<a href="#connector-j-installing-classpath">здесь</a> или
+<a href="#connector-j-installing-app-server">здесь</a>.
+</p></li></ol>
+
+<h2><a name="connector-j-installing-upgrading"></a>
+4.4. Модернизация от более старой версии</h2>
+<p>В этой секции есть информация для пользователей, которые переходят от
+одной версии Connector/J к другой, или к новой версии сервера MySQL, который
+поддерживает более свежий уровень JDBC. Более новая версия Connector/J может
+включать изменения, чтобы поддерживать новые функции, улучшить существующую
+функциональность или выполнить новые стандарты.</p>
+
+<h3><a name="connector-j-upgrading-to-8.0"></a>
+4.4.1. Модернизация до MySQL Connector/J 8.0</h3>
+<p>Модернизация приложения, разработанного для Connector/J 5.1, чтобы
+использовать Connector/J 8.0, могла бы потребовать определенных изменений
+вашего кода или окружающей среды, в которой это работает.
+Вот некоторые изменения для Connector/J от 5.1 до 8.0, для которых могли бы
+требоваться ваши усилия:</p>
+
+<h4><a name="connector-j-java-8"></a>
+4.4.1.1. Запуск на Java 8</h4>
+<p>Connector/J 8.0 создается, чтобы работать с Java 8.
+В то время как Java 8 совместима с более ранними версиями Java,
+несовместимости действительно существуют, и код, разработанный, чтобы
+работать с Java 7, возможно, должен был бы быть приспособлен прежде, чем
+выполнять его Java 8. Разработчики должны обратиться к
+<a href="../../../www.oracle.com/technetwork/java/javase/8-compatibility-guide-2156366.html#A999198"
+target="_top">incompatibility information</a> от Oracle.</p>
+
+<h4><a name="connector-j-properties-changed"></a>
+4.4.1.2. Изменения в свойствах связи</h4>
+<p>Полный список свойств связи Connector/J 8.0 доступен в
+<a href="../../../https@dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-configuration-properties.html#connector-j-reference-set-config"
+target="_top">connector-j-reference-set-config</a>. Следующее это свойства
+связи, которые были изменены при переходе Connector/J от 5.1 к 8.0.</p>
+
+<p>Свойства, которые были удалены:</p>
+<ul><li><p><code class="literal">useDynamicCharsetInfo</code></p></li>
+<li><p><code class="literal">useBlobToStoreUTF8OutsideBMP</code>,
+<code class="literal">utf8OutsideBmpExcludedColumnNamePattern</code> и
+<code class="literal">utf8OutsideBmpIncludedColumnNamePattern</code>:
+MySQL 5.6 и более поздние поддерживают набор символов utf8mb4, который
+является набором символов, который должен использоваться приложениями
+Connector/J для поддержки знаков вне Basic Multilingual Plane
+(BMP) Unicode Version 3.</p></li>
+
+<li><p><code class="literal">useJvmCharsetConverters</code>:
+Преобразование набора символов JVM теперь используется во всех случаях.
+</p></li>
+
+<li><p>Следующие свойства даты и времени:</p>
+<ul><li><p><code class="literal">dynamicCalendars</code></p></li>
+<li><p><code class="literal">noTzConversionForTimeType</code></p></li>
+<li><p><code class="literal"><code class="literal">
+noTzConversionForDateType</code></code></p></li>
+<li><p><code class="literal">cacheDefaultTimezone</code></p></li>
+<li><p><code class="literal">useFastIntParsing</code></p></li>
+<li><p><code class="literal">useFastDateParsing</code></p></li>
+<li><p><code class="literal">useJDBCCompliantTimezoneShift</code></p></li>
+<li><p><code class="literal">useLegacyDatetimeCode</code></p></li>
+<li><p><code class="literal">useSSPSCompatibleTimezoneShift</code></p></li>
+<li><p><code class="literal">useTimezone</code></p></li>
+<li><p><code class="literal">useGmtMillisForDatetimes</code></p>
+</li></ul></li>
+<li><p><code class="literal">dumpMetadataOnColumnNotFound</code></p></li>
+<li><p><code class="literal">relaxAutoCommit</code></p></li>
+<li><p><code class="literal">strictFloatingPoint</code></p></li>
+<li><p><code class="literal">runningCTS13</code></p></li>
+<li><p><code class="literal">retainStatementAfterResultSetClose</code>
+</p></li>
+<li><p><code class="literal">nullNamePatternMatchesAll</code> (удалено в
+8.0.9).</p></li></ul>
+
+<p>Свойства, которые были добавлены:</p>
+<ul><li><p><code class="literal">mysqlx.useAsyncProtocol</code></p></li></ul>
+
+<p>Сптсок переименованных свойств:</p>
+<ul><li><p><code class="literal">
+com.mysql.jdbc.faultInjection.serverCharsetIndex</code> переименовано в
+<code class="literal">
+com.mysql.cj.testsuite.faultInjection.serverCharsetIndex</code>.</p></li>
+
+<li><p><code class="literal">loadBalanceEnableJMX</code> переименовано в
+<code class="literal">ha.enableJMX</code>.</p></li>
+<li><p><code class="literal">replicationEnableJMX</code> переименовано в
+<code class="literal">ha.enableJMX</code>.</p></li></ul>
+
+<p>Свойства, которым изменили значения по умолчанию:</p>
+<ul><li><p><code class="literal">nullCatalogMeansCurrent</code> теперь по
+умолчанию <code class="literal">false</code>.</p></li></ul>
+
+<h4><a name="connector-j-api-changes"></a>
+4.4.1.3. Изменения в Connector/J API</h4>
+<p>Эта секция описывает некоторые более важные изменения в Connector/J API
+при переходе с 5.1 на 8.0. Вы, возможно, должны были бы приспособить свои
+вызовы API соответственно:</p>
+
+<ul><li><p>Название класса, который осуществляет
+<code class="literal">java.sql.Driver</code> в MySQL Connector/J
+изменено с <code class="literal">com.mysql.jdbc.Driver</code> на
+<code class="literal">com.mysql.cj.jdbc.Driver</code>.
+Старое имя класса устарело.</p></li>
+
+<li><p>Названия этих обычно используемых классов и интерфейсов
+были также изменены:</p>
+<ul><li><p>ExceptionInterceptor: с
+<code class="literal">com.mysql.jdbc.ExceptionInterceptor</code> на
+<code class="literal">com.mysql.cj.exceptions.ExceptionInterceptor</code>.
+</p></li>
+
+<li><p>StatementInterceptor: с
+<code class="literal">com.mysql.jdbc.StatementInterceptorV2</code> на
+<code class="literal">com.mysql.cj.interceptors.QueryInterceptor</code>.
+</p></li>
+
+<li><p>ConnectionLifecycleInterceptor: с
+<code class="literal">com.mysql.jdbc.ConnectionLifecycleInterceptor</code> на
+<code class="literal">
+com.mysql.cj.jdbc.interceptors.ConnectionLifecycleInterceptor</code>.
+</p></li>
+
+<li><p>AuthenticationPlugin: с
+<code class="literal">com.mysql.jdbc.AuthenticationPlugin</code> на
+<code class="literal">com.mysql.cj.protocol.AuthenticationPlugin</code>.
+</p></li>
+
+<li><p>BalanceStrategy: с
+<code class="literal">com.mysql.jdbc.BalanceStrategy</code> на
+<code class="literal">com.mysql.cj.jdbc.ha.BalanceStrategy</code>.</p></li>
+
+<li><p>MysqlDataSource: с
+<code class="literal">com.mysql.jdbc.jdbc2.optional.MysqlDataSource</code>
+на <code class="literal">com.mysql.cj.jdbc.MysqlDataSource</code>.</p></li>
+
+<li><p>MysqlDataSourceFactory: с
+<code class="literal">com.mysql.jdbc.jdbc2.optional.MysqlDataSourceFactory
+</code> на <code class="literal">
+com.mysql.cj.jdbc.MysqlDataSourceFactory</code>.</p></li>
+
+<li><p>MysqlConnectionPoolDataSource: с <code class="literal">
+com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource</code> на
+<code class="literal">com.mysql.cj.jdbc.MysqlConnectionPoolDataSource</code>.
+</p></li>
+
+<li><p>MysqlXADataSource: с
+<code class="literal">com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</code>
+на <code class="literal">com.mysql.cj.jdbc.MysqlXADataSource</code>.</p></li>
+
+<li><p>MysqlXid: с
+<code class="literal">com.mysql.jdbc.jdbc2.optional.MysqlXid</code> на
+<code class="literal">com.mysql.cj.jdbc.MysqlXid</code>.
+</p></li></ul></li></ul>
+
+<h4><a name="connector-j-build-props-changes"></a>
+4.4.1.4. Изменения для свойств сборки</h4>
+<p>Много свойств Ant для
+<a href="#connector-j-installing-source">сборки Connector/J
+из исходных текстов</a> были переименованы, см.
+<a href="#connector-j-table-build-props-changes">таблицу 4.1</a>.
+</p>
+
+<a name="connector-j-table-build-props-changes"></a>
+<p><b>Таблица 4.1. Изменения свойств сборки Connector/J с 5.1 на 8.0</b></p>
+<table><thead><tr>
+<th>Старое имя</th><th>Новое имя</th></tr></thead>
+<tbody><tr><td><code class="literal">com.mysql.jdbc.extra.libs</code></td>
+<td><code class="literal">com.mysql.cj.extra.libs</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.jdk</code></td>
+<td><code class="literal">com.mysql.cj.build.jdk</code></td></tr>
+<tr><td><code class="literal">debug.enable</code></td>
+<td><code class="literal">com.mysql.cj.build.addDebugInfo</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.noCleanBetweenCompiles</code>
+</td><td><code class="literal">com.mysql.cj.build.noCleanBetweenCompiles
+</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.commercialBuild</code></td>
+<td><code class="literal">com.mysql.cj.build.commercial</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.filterLicense</code></td>
+<td><code class="literal">com.mysql.cj.build.filterLicense</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.noCryptoBuild</code></td>
+<td><code class="literal">com.mysql.cj.build.noCrypto</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.noSources</code></td>
+<td><code class="literal">com.mysql.cj.build.noSources</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.noMavenSources</code></td>
+<td><code class="literal">com.mysql.cj.build.noMavenSources</code></td></tr>
+<tr><td><code class="literal">major_version</code></td><td>
+<code class="literal">com.mysql.cj.build.driver.version.major</code></td></tr>
+<tr><td><code class="literal">minor_version</code></td><td>
+<code class="literal">com.mysql.cj.build.driver.version.minor</code></td></tr>
+<tr><td><code class="literal">subminor_version</code></td><td>
+<code class="literal">com.mysql.cj.build.driver.version.subminor</code></td>
+</tr>
+<tr><td><code class="literal">version_status</code></td>
+<td><code class="literal">com.mysql.cj.build.driver.version.status
+</code></td></tr>
+<tr><td><code class="literal">extra.version</code></td>
+<td><code class="literal">com.mysql.cj.build.driver.version.extra
+</code></td></tr>
+<tr><td><code class="literal">snapshot.version</code></td>
+<td><code class="literal">com.mysql.cj.build.driver.version.snapshot
+</code></td></tr>
+<tr><td><code class="literal">version</code></td>
+<td><code class="literal">com.mysql.cj.build.driver.version</code></td></tr>
+<tr><td><code class="literal">full.version</code></td>
+<td><code class="literal">com.mysql.cj.build.driver.version.full
+</code></td></tr>
+<tr><td><code class="literal">prodDisplayName</code></td>
+<td><code class="literal">com.mysql.cj.build.driver.displayName
+</code></td></tr>
+<tr><td><code class="literal">prodName</code></td>
+<td><code class="literal">com.mysql.cj.build.driver.name</code></td></tr>
+<tr><td><code class="literal">fullProdName</code></td>
+<td><code class="literal">com.mysql.cj.build.driver.fullName</code></td></tr>
+<tr><td><code class="literal">buildDir</code></td>
+<td><code class="literal">com.mysql.cj.build.dir</code></td></tr>
+<tr><td><code class="literal">buildDriverDir</code></td>
+<td><code class="literal">com.mysql.cj.build.dir.driver</code></td></tr>
+<tr><td><code class="literal">mavenUploadDir</code></td>
+<td><code class="literal">com.mysql.cj.build.dir.maven</code></td></tr>
+<tr><td><code class="literal">distDir</code></td>
+<td><code class="literal">com.mysql.cj.dist.dir</code></td></tr>
+<tr><td><code class="literal">toPackage</code></td>
+<td><code class="literal">com.mysql.cj.dist.dir.prepare</code></td></tr>
+<tr><td><code class="literal">packageDest</code></td>
+<td><code class="literal">com.mysql.cj.dist.dir.package</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.docs.sourceDir</code></td>
+<td><code class="literal">com.mysql.cj.dist.dir.prebuilt.docs</code></td>
+</tr></tbody></table><br class="table-break">
+
+<h4><a name="connector-j-test-props-changes"></a>
+4.4.1.5. Изменения тестовых свойств</h4>
+<p>Много свойств Ant для <a href="#connector-j-testing">
+тестирования Connector/J</a> были переименованы или удалены, см.
+<a href="#connector-j-table-test-props-changes">таблицу 4.2</a>.</p>
+
+<a name="connector-j-table-test-props-changes"></a>
+<p><b>Таблица 4.2. Изменения тестовых свойств Connector/J с 5.1 на 8.0</b></p>
+<table><thead><tr>
+<th>Старое имя</th><th>Новое имя</th></tr></thead>
+<tbody><tr><td><code class="literal">buildTestDir</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.build.dir</code></td></tr>
+<tr><td><code class="literal">junit.results</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.junit.results</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.testsuite.jvm</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.jvm</code></td></tr>
+<tr><td><code class="literal">test</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.test.class</code></td></tr>
+<tr><td><code class="literal">methods</code></td><td>
+<code class="literal">com.mysql.cj.testsuite.test.methods</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.testsuite.url</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.url</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.testsuite.admin-url</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.url.admin</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.testsuite.ClusterUrl</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.url.cluster</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.testsuite.url.sha256default
+</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.url.openssl</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.testsuite.cantGrant</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.cantGrant</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.testsuite.no-multi-hosts-tests
+</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.disable.multihost.tests
+</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.test.ds.host</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.ds.host</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.test.ds.port</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.ds.port</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.test.ds.db</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.ds.db</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.test.ds.user</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.ds.user</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.test.ds.password</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.ds.password</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.test.tabletype</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.loadstoreperf.tabletype
+</code></td></tr>
+<tr><td><code class="literal">
+com.mysql.jdbc.testsuite.loadstoreperf.useBigResults</code></td>
+<td><code class="literal">
+com.mysql.cj.testsuite.loadstoreperf.useBigResults</code></td></tr>
+<tr><td><code class="literal">
+com.mysql.jdbc.testsuite.MiniAdminTest.runShutdown</code></td>
+<td><code class="literal">com.mysql.cj.testsuite.miniAdminTest.runShutdown
+</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.testsuite.noDebugOutput</code>
+</td><td><code class="literal">com.mysql.cj.testsuite.noDebugOutput
+</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.testsuite.retainArtifacts</code>
+</td><td><code class="literal">com.mysql.cj.testsuite.retainArtifacts
+</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.testsuite.runLongTests</code>
+</td><td><code class="literal">com.mysql.cj.testsuite.runLongTests
+</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.test.ServerController.basedir
+</code></td><td><code class="literal">
+com.mysql.cj.testsuite.serverController.basedir</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.ReplicationConnection.isSlave
+</code></td><td>
+<code class="literal">com.mysql.cj.testsuite.replicationConnection.isSlave
+</code></td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.test.isLocalHostnameReplacement
+</code></td><td>Удалено</td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.testsuite.driver</code></td>
+<td>Удалено</td></tr>
+<tr><td><code class="literal">com.mysql.jdbc.testsuite.url.default</code>
+</td><td>Удалено. Больше не надо: тесты multi-JVM были удалены
+из набора тестов.</td></tr></tbody></table><br class="table-break">
+
+<h4><a name="connector-j-exceptions-changes"></a>
+4.4.1.6. Изменения для исключений</h4>
+<p>Некоторые исключения были удалены из Connector/J при переходе от 5.1 к
+8.0. Приложения, которые раньше ловили удаленные исключительные ситуации,
+должны теперь поймать соответствующие исключения, перечисленные в
+<a href="#connector-j-changed-exceptions">таблице 4.3</a>.</p>
+
+<p>Некоторые из этих исключений продублированы в пакете
+com.mysql.jdbc.exception.jdbc4, это обозначается меткой
+<span class="quote">[jdbc4.]</span> в их именах в
+<a href="#connector-j-changed-exceptions">таблице 4.3</a>.</p>
+
+<a name="connector-j-changed-exceptions"></a>
+<p><b>Таблица 4.3. Изменения для исключений</b></p>
+<table><thead><tr>
+<th scope="col">Исключение удалено в Connector/J 5.1</th>
+<th scope="col">Исключение, чтобы поймать в Connector/J 8.0</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">
+com.mysql.jdbc.exceptions.jdbc4.CommunicationsException</code></td>
+<td><code class="literal">
+com.mysql.cj.jdbc.exceptions.CommunicationsException</code></td></tr>
+<tr><td scope="row"><code class="literal">
+com.mysql.jdbc.exceptions.[jdbc4.]MySQLDataException</code></td>
+<td><code class="literal">java.sql.SQLDataException</code></td></tr>
+<tr><td scope="row"><code class="literal">
+com.mysql.jdbc.exceptions.[jdbc4.]MySQLIntegrityConstraintViolationException
+</code></td><td><code class="literal">
+java.sql.SQLIntegrityConstraintViolationException</code></td></tr>
+<tr><td scope="row"><code class="literal">
+com.mysql.jdbc.exceptions.[jdbc4.]MySQLInvalidAuthorizationSpecException
+</code></td><td><code class="literal">
+java.sql.SQLInvalidAuthorizationSpecException</code></td></tr>
+<tr><td scope="row"><code class="literal">
+com.mysql.jdbc.exceptions.[jdbc4.]MySQLNonTransientConnectionException
+</code></td><td><code class="literal">
+java.sql.SQLNonTransientConnectionException</code></td></tr>
+<tr><td scope="row"><code class="literal">
+com.mysql.jdbc.exceptions.[jdbc4.]MySQLNonTransientException</code></td>
+<td><code class="literal">java.sql.SQLNonTransientException</code></td></tr>
+<tr><td scope="row"><code class="literal">
+com.mysql.jdbc.exceptions.[jdbc4.]MySQLQueryInterruptedException</code></td>
+<td><code class="literal">
+com.mysql.cj.jdbc.exceptions.MySQLQueryInterruptedException</code></td></tr>
+<tr><td scope="row"><code class="literal">
+com.mysql.jdbc.exceptions.MySQLStatementCancelledException</code></td>
+<td><code class="literal">
+com.mysql.cj.jdbc.exceptions.MySQLStatementCancelledException</code></td></tr>
+<tr><td scope="row"><code class="literal">
+com.mysql.jdbc.exceptions.[jdbc4.]MySQLSyntaxErrorException</code></td>
+<td><code class="literal">java.sql.SQLSyntaxErrorException</code></td></tr>
+<tr><td scope="row"><code class="literal">
+com.mysql.jdbc.exceptions.[jdbc4.]MySQLTimeoutException</code></td>
+<td><code class="literal">java.sql.SQLTimeoutException</code></td></tr>
+<tr><td scope="row"><code class="literal">
+com.mysql.jdbc.exceptions.[jdbc4.]MySQLTransactionRollbackException</code>
+</td><td><code class="literal">java.sql.SQLTransactionRollbackException
+</code></td></tr>
+<tr><td scope="row"><code class="literal">
+com.mysql.jdbc.exceptions.[jdbc4.]MySQLTransientConnectionException</code>
+</td><td>j<code class="literal">ava.sql.SQLTransientConnectionException
+</code></td></tr>
+<tr><td scope="row"><code class="literal">
+com.mysql.jdbc.exceptions.[jdbc4.]MySQLTransientException</code></td>
+<td><code class="literal">java.sql.SQLTransientException</code></td></tr>
+<tr><td scope="row"><code class="literal">
+com.mysql.jdbc.exceptions.[jdbc4.]MySQLIntegrityConstraintViolationException
+</code></td><td><code class="literal">
+java.sql.SQLIntegrityConstraintViolationException</code></td>
+</tr></tbody></table><br class="table-break">
+
+<h4><a name="connector-j-other-changes"></a>4.4.1.7. Другие изменения</h4>
+<p>Вот другие изменения в Connector/J 8.0:</p>
+<ul><li><p>Удален <code class="literal">ReplicationDriver</code>.
+Вместо того, чтобы использовать отдельный драйвер, можно теперь получить
+связь для установки репликации только при помощи схемы
+<code class="literal">jdbc:mysql:replication://</code>.</p></li>
+
+<li><p>См. <a href="install.htm">главу 4</a>
+<a href="#connector-j-third-party-libs">сторонних библиотек,
+требуемых для работы Connector/J 8.0</a>.</p></li>
+
+<li><p>Connector/J 8.0 всегда выполняет смещение времени на значениях даты и
+времени, и подстройка требует, чтобы одно из следующих было верно:</p>
+<ul><li><p>Сервер MySQL формируется с каноническим часовым поясом, который
+является распознаваемым Java (например, Europe/Paris, Etc/GMT-5, UTC и т.д.).
+</p></li>
+
+<li><p>Часовой пояс сервера перекрыт настройкой связи Connector/J
+<code class="literal">serverTimezone</code> (например,
+<code class="literal">serverTimezone=Europe/Paris</code>).
+</p></li></ul></li></ul>
+
+<h2><a name="connector-j-testing"></a>4.5. Тестирование Connector/J</h2>
+<p>Репозиторий исходного кода Connector/J или пакеты с исходным кодом
+включают обширный набор тестов, содержащий тестовые скрипты, которые могут
+быть выполнены независимо. Тестовые скрипты разделены на следующие категории:
+</p>
+
+<ul><li><p><span class="emphasis"><em>Unit tests:</em></span>
+это методы, расположенные в пакетах с классами, которые они проверяют.
+</p></li>
+
+<li><p><span class="emphasis"><em>Functional tests:</em></span>
+классы из пакета <code class="classname">testsuite.simple</code>.
+Включают тестовый код для главных особенностей Connector/J.</p></li>
+
+<li><p><span class="emphasis"><em>Performance tests:</em></span>
+классы из пакета <code class="classname">testsuite.perf</code>.
+Включают тестовый код, чтобы сделать измерения для исполнения Connector/J.
+</p></li>
+
+<li><p><span class="emphasis"><em>Regression tests:</em></span> классы из
+пакета <code class="classname">testsuite.regression</code>.
+Включают тестовый код для тестирования меры регресса и ошибок.</p></li>
+
+<li><p><span class="emphasis"><em>X DevAPI and X Protocol tests:</em></span>
+классы из пакета <code class="classname">testsuite.x</code>
+для тестирования X DevAPI и функциональности X Protocol.</p></li></ul>
+
+<p>Связанный файл Ant содержит цели, подобные
+<code class="literal">test</code>, которые могут облегчить процесс запуска
+тестов Connector/J, см. целевые описания в файле build.
+Помимо требований для сборки Connector/J из исходных текстов, описанной в
+<a href="#connector-j-installing-source">разделе 4.3</a>,
+много тестов также требуют File System Service Provider 1.2 для
+Java Naming and Directory Interface (JNDI), доступного с
+<a href="../../../www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-java-plat-419418.html"
+target="_top">http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-java-plat-419418.html</a>,
+поместите файлы jar, загруженные оттуда в каталог
+<code class="filename">lib</code> или в любой каталог, указанный в свойстве
+<code class="literal">com.mysql.cj.extra.libs</code>.</p>
+
+<p>Чтобы запустить тест, используя Ant, в дополнение к свойствам, требуемым
+для <a href="#connector-j-installing-source">раздела 4.3</a>,
+необходимо установить следующие свойства в файле
+<code class="filename">build.properties</code> или через опцию
+Ant <code class="option">-D</code>:</p>
+
+<ul><li><p><code class="literal">com.mysql.cj.testsuite.jvm</code>:
+JVM, которая будет использоваться для тестов. Если значение не установлено,
+применяется JVM, поставляемая <code class="literal">com.mysql.cj.build.jdk
+</code>.</p></li>
+
+<li><p><code class="literal">com.mysql.cj.testsuite.url</code>:
+это определяет JDBC URL для связи с испытательным сервером MySQL, посмотрите
+<a href="refer.htm#connector-j-reference-jdbc-url-format">раздел 6.2</a>.
+</p></li>
+
+<li><p><code class="literal">com.mysql.cj.testsuite.url.openssl</code>:
+это определяет JDBC URL для связи с испытательным сервером MySQL, собранным с
+OpenSSL, посмотрите <a href="refer.htm#connector-j-reference-jdbc-url-format">
+раздел 6.2</a>.</p></li>
+
+<li><p><code class="literal">com.mysql.cj.testsuite.mysqlx.url</code>:
+это определяет X DevAPI URL для связи с испытательным сервером MySQL, см.
+<a href="refer.htm#connector-j-reference-jdbc-url-format">раздел 6.2</a>.
+</p></li>
+
+<li><p><code class="literal">com.mysql.cj.testsuite.mysqlx.url.openssl
+</code>: это определяет X DevAPI URL для связи с испытательным сервером
+MySQL, собранным с OpenSSL, см.
+<a href="refer.htm#connector-j-reference-jdbc-url-format">раздел 6.2</a>.
+</p></li></ul>
+
+<p>После установки этих параметров, запустите тесты следующими способами:</p>
+<ul><li><p>Сборка цели <code class="literal">test</code> с
+<code class="literal">ant test</code> выполнит все тестовые скрипты
+по умолчанию на единственном сервере. Если вы хотите управлять конкретным
+тестовым скриптом, вставьте полностью компетентные имена классов теста в
+переменную <code class="literal">com.mysql.cj.testsuite.test.class</code>:
+</p>
+
+<pre class="programlisting">
+shell &gt; ant -Dcom.mysql.cj.testsuite.test.class=testsuite.simple.StringUtilsTest test
+</pre>
+
+<p>Можно также запустить отдельные тесты в тестовом скрипте,
+определив названия соответствующих методов в переменной
+<code class="literal">com.mysql.cj.testsuite.test.methods</code>,
+отделяя методы запятыми, например:</p>
+
+<pre class="programlisting">
+shell &gt; ant -Dcom.mysql.cj.testsuite.test.class=testsuite.simple.StringUtilsTest \
+               -Dcom.mysql.cj.testsuite.test.methods=testIndexOfIgnoreCase,testGetBytes test
+</pre></li></ul>
+
+<p>В то время как о результатах испытаний частично сообщает консоль,
+предоставлены полные отчеты в форматах HTML и XML. Рассмотрите отчет HTML,
+открыв <code class="filename">buildtest/junit/report/index.html</code>.
+Версия XML отчетов расположена в папке
+<code class="filename">buildtest/junit</code>.</p>
+
+<p>При переходе от Connector/J 5.1 в 8.0 много свойств Ant для тестирования
+Connector/J были переименованы или удалены, посмотрите
+<a href="#connector-j-test-props-changes">раздел 4.4.1.5</a>.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

@@ -1,0 +1,675 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+   <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+   <META NAME="Author" CONTENT="Alexey V. Pautov">
+   <title>Глава 11. Ограничения свойств</title>
+</head>
+
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084"
+      alink="#0000FF">
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+
+<h2><a name="restrictions"></a>Глава 11. Ограничения свойств</h2>
+<p>Обсуждение здесь описывает ограничения, которые относятся к использованию
+свойств MySQL типа подзапросов или просмотров.</p>
+
+<h2><a name="routine-restrictions"></a>11.1. Ограничения на сохраненные
+подпрограммы и триггеры</h2>
+<p>Некоторые из ограничений, отмеченных здесь, относятся ко всем сохраненным
+подпрограммам, то есть к сохраненным процедурам и сохраненным функциям.
+Некоторые из ограничений применяются только к сохраненным функциям, но
+не к сохраненным процедурам. Все ограничения для сохраненных функций
+также относятся к триггерам.</p>
+
+<p>Сохраненные подпрограммы не могут содержать произвольные инструкции SQL.
+Следующие инструкции отвергнуты:</p>
+<ul type="disc"><li><p>Инструкции блокировки <code>LOCK TABLES</code> и
+<code>UNLOCK TABLES</code>.</p></li>
+
+<li><p><code>LOAD DATA</code> и <code>LOAD TABLE</code>.</p></li>
+<li><p>Подготовленные инструкции SQL (<code>PREPARE</code>,
+<code>EXECUTE</code>, <code>DEALLOCATE PREPARE</code>). Вы не можете
+использовать динамический SQL внутри сохраненных подпрограмм (где Вы создаете
+динамически инструкции как строки, а затем выполняете их). Это ограничение
+снимается в MySQL 5.0.13 для сохраненных процедур, но это все еще применяется
+к сохраненным функциям и триггерам.</p></li></ul>
+
+<p>Для сохраненных функций (но не для процедур) следующие дополнительные
+инструкции или операции отвергнуты:</p>
+<ul type="disc"><li><p>Инструкции, которые делают явный или неявный
+commit или rollback.</p></li>
+
+<li><p>Инструкции, которые возвращают набор результатов. Это включает
+инструкции <code>SELECT</code>, которые не имеют предложения
+<code>INTO <em><code>var_list</code></em></code>, и инструкции
+<code>SHOW</code>. Функция может обрабатывать набор результатов через
+<code>SELECT ... INTO <em><code>var_list</code></em></code> или используя
+курсор и инструкции <code>FETCH</code>.</p></li>
+
+<li><p>Все инструкции <code>FLUSH</code>.</p></li>
+<li><p>Инструкции рекурсии. То есть, сохраненные функции не
+могут использоваться рекурсивно.</p></li>
+
+<li><p>Внутри сохраненной функции или триггера не разрешается изменять
+таблицу, которая уже используется (для чтения или записи) инструкцией,
+которая вызвала функцию или триггер.</p></li></ul>
+
+<p>Обратите внимание, что, хотя некоторые ограничения обычно относятся к
+сохраненным функциям и триггерам, но не к сохраненным процедурам, эти
+ограничения относятся к сохраненным процедурам, если они вызываются изнутри
+сохраненной функции или триггера. Например, хотя Вы можете использовать
+<code>FLUSH</code> в сохраненной процедуре, такая сохраненная процедура не
+может быть вызвана из сохраненной функции или из триггера.</p>
+
+<p>Тот же самый идентификатор можно использовать для стандартного параметра,
+локальной переменной и столбца таблицы. Также, то же самое локальное
+переменное имя может использоваться во вложенных блоках. Например:</p>
+
+<pre>
+CREATE PROCEDURE p (i INT)
+BEGIN
+  DECLARE i INT DEFAULT 0;
+  SELECT i FROM t;
+  BEGIN
+    DECLARE i INT DEFAULT 1;
+    SELECT i FROM t;
+  END;
+END;
+</pre>
+
+<p>В таких случаях идентификатор неоднозначен, и следующие
+правила старшинства применяются:</p>
+<ul type="disc"><li><p>Локальная переменная имеет приоритет над стандартным
+параметром или столбцом таблицы.</p></li>
+
+<li><p>Стандартный параметр имеет приоритет над столбцом таблицы.</p></li>
+<li><p>Локальная переменная во внутреннем блоке имеет приоритет над
+локальной переменной во внешнем блоке.</p></li></ul>
+
+<p>Поведение, что столбцы таблицы не имеют приоритет
+над переменными, ненормативно.</p>
+<p>Использование сохраненных подпрограмм может вызывать проблемы
+дублирования. Эта проблема рассмотрена далее.</p>
+
+<p><code>INFORMATION_SCHEMA</code> еще не имеет таблицу
+<code>PARAMETERS</code>, так что прикладные программы, которым надо собирать
+стандартную информацию параметров во время выполнения должны использовать
+методы типа синтаксического анализа вывода
+инструкций <code>SHOW CREATE</code>.</p>
+
+<p>Не имеется никакой системы отладки сохраненных подпрограмм.</p>
+<p>Инструкции <code>CALL</code> не могут быть подготовлены.</p>
+<p>Драйверы <code>UNDO</code> не обеспечиваются.</p>
+<p>Циклы <code>FOR</code> не обеспечиваются.</p>
+
+<p>Чтобы предотвращать проблемы взаимодействия между потоками сервера, когда
+пользователь выдает инструкцию, сервер использует кадр подпрограмм и вызывает
+доступные для выполнения инструкции. То есть, сервер вычисляет список
+процедур, функций и триггеров, который может использоваться в течение
+выполнения инструкции, загружает их, и затем продолжает выполнять инструкцию.
+Это означает, что, в то время как инструкция выполняется, она не будет видеть
+изменения для подпрограмм, выполняемых другими потоками сервера.</p>
+
+<p>Инструкция <code>RENAME DATABASE</code> не перемещает сохраненные
+подпрограммы к новому имени схемы.</p>
+<p>Для триггеров следующие дополнительные инструкции или операции отвергнуты:
+</p>
+
+<ul type="disc"><li><p>Триггеры в настоящее время не активизированы
+действиями внешнего ключа.</p></li>
+<li><p>Инструкция <code>RETURN</code> запрещена в триггере, который не может
+возвращать значение. Чтобы выходить из него немедленно,
+используйте инструкцию <code>LEAVE</code>.</p></li>
+<li><p>Триггеры не позволяются на таблицах в базе данных <code>mysql</code>.
+</p></li></ul>
+
+<h2><a name="cursor-restrictions">11.2. Ограничения на курсоры сервера
+</h2>
+<p>Курсоры стороны сервера выполнены в C API через функцию
+<code>mysql_stmt_attr_set()</code>. Та же самая реализация используется для
+курсоров в сохраненных подпрограммах. Курсор стороны сервера позволяет набору
+результатов быть сгенерированным на стороне сервера, но не перемещен
+пользователю, кроме тех строк, которые пользователь запрашивает. Например,
+если пользователь выполняет запрос, но заинтересован только первой строкой,
+остающиеся строки не будут перемещены.</p>
+
+<p>В MySQL серверные курсоры осуществлены сквозь временную таблицу.
+Первоначально это таблица <code>MEMORY</code>, но преобразованная в таблицу
+<code>MyISAM</code>, если размер достигает значения переменной системы
+<code>max_heap_table_size</code>. Одно ограничение реализации в том, что для
+большого набора результатов получение строк через курсор
+может быть медленным.</p>
+
+<p>Курсоры предназначены пока только для чтения: Вы не можете использовать
+курсор, чтобы модифицировать строки. А поэтому обновляемые курсоры не
+обеспечиваются. Следовательно, <code>UPDATE WHERE CURRENT OF</code> и
+<code>DELETE WHERE CURRENT OF</code> не выполнены.</p>
+
+<p>Курсоры не сохраняются открытыми после передачи.</p>
+<p>Курсоры не прокручиваемые.</p>
+<p>Курсоры не именованы. Операторный драйвер действует как курсор ID.</p>
+
+<p>Вы можете иметь открытым только один курсор на подготовленную инструкцию.
+Если Вы нуждаетесь в нескольких курсорах,
+Вы должны подготовить несколько инструкций.</p>
+
+<p>Вы не можете использовать курсор для инструкции, которая генерирует набор
+результатов, если инструкция не обеспечивается в подготовленном режиме. Это
+включает инструкции типа <code>CHECK TABLES</code>,
+<code>HANDLER READ</code> и <code>SHOW BINLOG EVENTS</code>.</p>
+
+<h2><a name="subquery-restrictions">11.3. Ограничения на подзапросы</h2>
+<ul type="disc"><li><p>Известная ошибка, которая будет фиксирована позже:
+если Вы сравниваете значение <code>NULL</code> с подзапросом, использующим
+<code>ALL</code>, <code>ANY</code> или <code>SOME</code>, и подзапрос
+возвращают пустой результат, сравнение может быть оценено к ненормативному
+результату <code>NULL</code>, а не к <code>TRUE</code> или <code>FALSE</code>.
+</p></li>
+
+<li><p>Внешняя инструкция подзапроса может быть любой из
+<code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>,
+<code>DELETE</code>, <code>SET</code> или <code>DO</code>.</p></li>
+
+<li><p>Оптимизация подзапроса для <code>IN</code> не как эффективна, как для
+оператора <code>=</code> или для конструкции
+<code>IN(<em><code>value_list</code></em>)</code>.</p>
+
+<p>Типичный случай для недостаточной эффективности подзапроса
+<code>IN</code>: когда подзапрос возвращает маленькое число строк, но внешний
+запрос возвращает большое количество строк, которые нужно
+сравнить с результатом подзапроса.</p>
+
+<p>Проблема состоит в том, что для инструкции, которая использует в
+подзапросе <code>IN</code>, оптимизатор перезаписывает это как соотнесенный
+подзапрос. Рассмотрите следующую инструкцию, которая
+использует несоотнесенный подзапрос:</p>
+
+<pre>
+SELECT ... FROM t1 WHERE t1.a IN (SELECT b FROM t2);
+</pre>
+
+<p>Оптимизатор переписывает инструкцию к соотнесенному подзапросу:</p>
+<pre>
+SELECT ... FROM t1 WHERE EXISTS (SELECT 1 FROM t2 WHERE t2.b = t1.a);
+</pre>
+
+<p>Если внутренние и внешние запросы возвращают
+<em><code>M</code></em> и <em><code>N</code></em> строк соответственно, время
+выполнения становится порядка
+<code>O(<em><code>M</code></em>^<em><code>N</code></em>)</code>, а не
+<code>O(<em><code>M</code></em>+<em><code>N</code></em>)</code>, как это было
+бы для несоотнесенного подзапроса.</p>
+
+<p>Подзапрос <code>IN</code> может быть намного медленнее, чем запрос,
+написанный с использованием конструкции
+<code>IN(<em><code>value_list</code></em>)</code>, которая вносит в список те
+же самые значения, которые возвратил бы подзапрос.</p></li>
+
+<li><p>Вообще, Вы не можете изменять таблицу и выбирать из той же самой
+таблицы в подзапросе. Например, это ограничение применяется к
+инструкциям следующих форм:</p>
+
+<pre>
+DELETE FROM t WHERE ... (SELECT ... FROM t ...);
+UPDATE t ... WHERE col = (SELECT ... FROM t ...);
+{INSERT|REPLACE} INTO t (SELECT ... FROM t ...);
+</pre>
+
+<p>Исключительная ситуация: предшествующее запрещение не применяется, если Вы
+используете подзапрос для изменяемой таблицы в
+предложении <code>FROM</code>. Пример:</p>
+
+<pre>
+UPDATE t ... WHERE col = (SELECT (SELECT ... FROM t...) AS _t ...);
+</pre>
+
+<p>Здесь запрещение не применяется, потому что результат от подзапроса в
+предложении <code>FROM</code> сохранен как временная таблица, так что
+релевантные строки в <code>t</code> уже были выбраны
+ко времени модификации <code>t</code>.</p></li>
+
+<li><p>Операции сравнения строк обеспечиваются пока только частично:
+</p>
+
+<ul type="circle"><li><p>Для <code><em><code>expr</code></em> IN
+(<em><code>subquery</code></em>)</code>, <em><code>expr</code></em>
+может быть <em><code>n</code></em>-кортеж (определенный через синтаксис
+конструктора строки) и подзапрос может
+возвращать строки <em><code>n</code></em>-кортежей.</p></li>
+
+<li><p>Для <code><em><code>expr</code></em>
+<em><code>op</code></em> {ALL|ANY|SOME}
+(<em><code>подзапрос</code></em>)</code>, <em><code>expr</code></em>
+должен быть скалярным значением, и подзапрос должен быть подзапросом столбца,
+это не может возвращать строки с многими столбцами.</p></li></ul>
+
+<p>Другими словами, для подзапроса, который возвращает строки
+<em><code>n</code></em>-кортежей, это обеспечивается:</p>
+<pre>
+(<em><code>val_1</code></em>, ..., <em><code>val_n</code></em>) IN
+(<em><code>subquery</code></em>)
+</pre>
+
+<p>Но это не обеспечивается:</p>
+<pre>
+(<em><code>val_1</code></em>, ..., <em><code>val_n</code></em>)
+<em><code>op</code></em> {ALL|ANY|SOME} (<em><code>subquery</code></em>)
+</pre>
+
+<p>Причина для обеспечения сравнений строки для <code>IN</code>, но не для
+других: <code>IN</code> выполнен, перезаписывая это как последовательность
+сравнений <code>=</code> и операций <code>AND</code>. Этот подход не может
+использоваться для <code>ALL</code>, <code>ANY</code> или <code>SOME</code>.
+</p></li>
+
+<li><p>Конструкторы строк не оптимизированы хорошо. Следующие два выражения
+эквивалентны, но только второе может быть оптимизировано:</p>
+<pre>
+(col1, col2, ...) = (val1, val2, ...)
+col1 = val1 AND col2 = val2 AND ...
+</pre></li>
+
+<li><p>Подзапросы в предложении <code>FROM</code> не могут быть соотнесены
+подзапросам. Они осуществлены (выполнены, чтобы произвести набор результатов)
+перед оценкой внешнего запроса, так что они не могут быть оценены на
+строку внешнего запроса.</p></li>
+
+<li><p>Оптимизатор более отлажен для объединений, чем для подзапросов, так
+что во многих случаях инструкция, применяющая подзапрос, может быть выполнена
+более эффективно, если Вы переписываете это как объединение.</p>
+
+<p>Исключительная ситуация происходит для случая, где подзапрос
+<code>IN</code> может быть переписан как объединение
+<code>SELECT DISTINCT</code>. Пример:</p>
+<pre>
+SELECT col FROM t1 WHERE id_col IN (SELECT id_col2 FROM t2 WHERE
+       <em><code>condition</code></em>);
+</pre>
+
+<p>Эта инструкция может быть переписана следующим образом:</p>
+<pre>
+SELECT DISTINCT col FROM t1, t2 WHERE t1.id_col = t2.id_col AND
+       <em><code>condition</code></em>;
+</pre>
+
+<p>Но в этом случае объединение требует операции <code>DISTINCT</code>, и не
+более эффективно, чем подзапрос.</p></li>
+<li><p>Возможная будущая оптимизация: MySQL не переписывает порядок
+объединения для оценки подзапроса. В некоторых случаях подзапрос мог бы быть
+выполнен более эффективно, если MySQL переписал это как объединение. Это дало
+бы оптимизатору возможность, чтобы выбрать между большим количеством планов
+выполнения. Например, это могло бы решать, читать ли одну таблицу
+или другую первой:</p>
+<pre>
+SELECT a FROM outer_table AS ot
+       WHERE a IN (SELECT a FROM inner_table AS
+       it WHERE ot.b = it.b);
+</pre>
+
+<p>Для этого запроса MySQL всегда просматривает сначала
+<code>outer_table</code>, а затем выполняет подзапрос на
+<code>inner_table</code> для каждой строки. Если <code>outer_table</code>
+имеет много строк, и <code>inner_table</code> имеет немного строк, запрос,
+вероятно, не будет работать с такой скоростью как могло бы быть.</p>
+
+<p>Предшествующий запрос мог бы быть переписан подобно этому:</p>
+<pre>
+SELECT a FROM outer_table AS ot, inner_table AS it
+       WHERE ot.a = it.a AND
+       ot.b = it.b;
+</pre>
+
+<p>В этом случае мы можем просматривать маленькую таблицу
+(<code>inner_table</code>) и искать строки в <code>outer_table</code>, что
+будет быстро, если имеется индекс на <code>(ot.a,ot.b)</code>.</p></li>
+
+<li><p>Возможная будущая оптимизация: соотнесенный подзапрос оценен для
+каждой строки внешнего запроса. Лучший подход: если внешние значения строки
+не изменяются с предыдущей строки, чтобы не оценивать подзапрос снова. Вместо
+этого, используется предыдущий результат.</p></li>
+
+<li><p>Возможная будущая оптимизация: подзапрос в предложении
+<code>FROM</code> оценен, осуществляя результат во временную таблицу, и эта
+таблица не использует индексы. Это не позволяет использование индексов по
+сравнению с другими таблицами в запросе, хотя это могло бы быть полезно.
+</p></li>
+
+<li><p>Возможная будущая оптимизация: если подзапрос в предложении
+<code>FROM</code> походит на просмотр, к которому может применяться
+объединяющийся алгоритм, переписать запрос и применить объединяющийся
+алгоритм так, чтобы индексы могли использоваться. Следующая инструкция
+содержит такой подзапрос:</p>
+<pre>
+SELECT * FROM (SELECT * FROM t1 WHERE t1.t1_col) AS _t1, t2 WHERE t2.t2_col;
+</pre>
+
+<p>Инструкция может быть переписана как объединение подобно этому:</p>
+<pre>
+SELECT * FROM t1, t2 WHERE t1.t1_col AND t2.t2_col;
+</pre>
+
+<p>Этот тип перезаписи обеспечил бы две выгоды:</p>
+<ul type="circle"><li><p>Это избегает использования временной таблицы, для
+которой никакие индексы не могут использоваться. В переписанном запросе
+оптимизатор может использовать индексы на <code>t1</code>.</p></li>
+
+<li><p>Это дает оптимизатору большее количество свободы выбрать между
+различными планами выполнения. Например, перезапись запроса как объединения
+позволяет оптимизатору использовать сначала
+<code>t1</code> или <code>t2</code>.</p></li></ul></li>
+
+<li><p>Возможная будущая оптимизация: для <code>IN</code>,
+<code>= ANY</code>, <code>&lt;&gt; ANY</code>, <code>= ALL</code> и
+<code>&lt;&gt; ALL</code> с не соотнесенными подзапросами использовать в
+оперативной памяти хэш для результата или временную таблицу с индексом для
+больших результатов. Пример:</p>
+
+<pre>
+SELECT a FROM big_table AS bt WHERE non_key_field IN
+       (SELECT non_key_field FROM <em><code>table</code></em> WHERE
+       <em><code>condition</code></em>)
+</pre>
+
+<p>В этом случае мы могли бы создавать временную таблицу:</p>
+<pre>
+CREATE TABLE t (key (non_key_field))
+       (SELECT non_key_field FROM <em><code>table</code></em> WHERE
+       <em><code>condition</code></em>)
+</pre>
+
+<p>Затем для каждой строки в <code>big_table</code> сделайте поисковую
+таблицу ключа в <code>t</code>, основываясь на <code>bt.non_key_field</code>.
+</p></li></ul>
+
+<h2><a name="view-restrictions">11.4. Ограничения на Views</h2>
+<p>Обработка View не оптимизирована:</p>
+<ul type="disc"><li><p>Невозможно создать индекс на view.</p></li>
+
+<li><p>Индексы могут использоваться для обработанных view, используя
+объединяющий алгоритм. Однако, view, который обработан алгоритмом temptable,
+не способен пользоваться преимуществом индексов на основных таблицах (хотя
+индексы могут использоваться в течение поколения временных таблиц).
+</p></li></ul>
+
+<p>Подзапросы не могут использоваться в предложении <code>FROM</code> view.
+Это ограничение будет сниматься в будущем.</p>
+<p>Имеется общий принцип, что Вы не можете изменять таблицу и выбирать из той
+же самой таблицы в подзапросе.</p>
+
+<p>Тот же самый принцип также применяется, если Вы выбираете из view, который
+выбирает из таблицы, если выбор view из таблицы в подзапросе и view оценены,
+используя объединяющий алгоритм. Пример:</p>
+
+<pre>
+CREATE VIEW v1 AS SELECT * FROM t2 WHERE EXISTS (SELECT 1 FROM t1 WHERE
+       t1.a = t2.a);
+UPDATE t1, v2 SET t1.a = 1 WHERE t1.b = v2.b;
+</pre>
+
+<p>Если view оценен, используя временную таблицу, Вы можете выбирать из
+таблицы в view подзапросом и менятт ту таблицу во внешнем запросе. В этом
+случае view будет сохранен во временной таблице, и таким образом Вы
+действительно не выбираете из таблицы в подзапросе и изменяете таблицу в то
+же самое время. Можно принудительно предписать MySQL использовать алгоритм
+temptable, определяя <code>ALGORITHM = TEMPTABLE</code> в определении view.
+</p>
+
+<p>Вы можете использовать <code>DROP TABLE</code> или <code>ALTER
+TABLE</code>, чтобы удалять или изменять таблицу, которая используется в
+определении view (это объявляет неверным view), и никакого предупреждения не
+последует. Ошибка происходит позже, когда view используется.</p>
+
+<p>Определение view заморожено некоторыми инструкциями:</p>
+<ul type="disc"><li><p>Если инструкция, подготовленная <code>PREPARE</code>,
+обращается к view, то содержание этого view какждый раз при выполнении
+инструкции будет точно соответствовать моменту ее подготовки. Это истинно,
+даже если определение view изменен после того, как инструкция подготовлена,
+но прежде, чем она выполнена. Пример:</p>
+
+<pre>
+CREATE VIEW v AS SELECT 1;
+PREPARE s FROM 'SELECT * FROM v';
+ALTER VIEW v AS SELECT 2;
+EXECUTE s;
+</pre>
+<p>Результат, возвращенный инструкцией <code>EXECUTE</code>, 1, а не 2.
+</p></li>
+
+<li><p>Если инструкция в сохраненной подпрограмме обращается к view,
+содержание view точно такое же, как в первый раз, когда инструкция выполнена.
+Например, это означает, что, если инструкция выполнена в цикле, дальнейшие
+итерации инструкции видят то же самое содержание view, даже если определение
+view изменено позже в цикле. Пример:</p>
+
+<pre>
+CREATE VIEW v AS SELECT 1;
+delimiter //
+CREATE PROCEDURE p ()
+BEGIN
+  DECLARE i INT DEFAULT 0;
+  WHILE i &lt; 5 DO
+    SELECT * FROM v;
+    SET i = i + 1;
+    ALTER VIEW v AS SELECT 2;
+  END WHILE;
+END;
+//
+delimiter ;
+CALL p();
+</pre>
+
+<p>Когда процедура <code>p()</code> вызвана, <code>SELECT</code> возвращает
+1 каждый раз в цикле, даже при том, что определение view
+изменено внутри цикла.</p></li></ul>
+
+<p>Относительно обновляемых view: полная цель для view состоит в том, что,
+если любой view является теоретически обновляемым, это должно быть
+обновляемым и практически. Это включает view, которые имеют
+<code>UNION</code> в их определении. В настоящее время не все просмотры,
+которые являются теоретически обновляемыми, таковы на деле (могут
+модифицироваться). Начальная реализация view была преднамеренно написана этим
+способом, чтобы стать пригодной для использования, обновляемые view в MySQL
+будут сделаны настолько быстро, насколько возможно. Многие теоретически
+обновляемые view могут модифицироваться теперь, но ограничения
+все еще существуют:</p>
+
+<ul type="disc"><li><p>Обновляемые view с подзапросами где-нибудь не в
+предложении <code>WHERE</code>. Некоторые view, которые имеют подзапросы в
+списке <code>SELECT</code>, могут быть обновляемыми.</p></li>
+
+<li><p>Вы не можете использовать <code>UPDATE</code>, чтобы модифицировать
+больше, чем одну основную таблицу view, который определен как объединение.
+</p></li>
+
+<li><p>Вы не можете использовать <code>DELETE</code>, чтобы модифицировать
+view, который определен как объединение.</p></li></ul>
+
+<p>Если пользователю предоставляют базисные привилегии, необходимые, чтобы
+создавать view (привилегии <code>CREATE VIEW</code> и <code>SELECT</code>),
+этот пользователь будут не способен вызвать <code>SHOW CREATE VIEW</code>
+на этом объекте, если пользователю не предоставляют
+также привилегию <code>SHOW VIEW</code>.</p>
+
+<p>Этот недостаток может привести к проблемам при копировании базы данных с
+помощью <span><strong class="command">mysqldump</strong></span>, которая
+может терпеть неудачу из-за недостаточных привилегий. Эта проблема описана в
+<a href="../../../bugs.mysql.com/22062" target="_top">Глюке #22062.</p>
+
+<p>Обход: чтобы администратор вручную предоставил привилегию <code>SHOW
+VIEW</code> пользователям, которым предоставляется <code>CREATE VIEW</code>,
+так как MySQL не предоставляет это неявно, когда создан view.</p>
+
+<h2><a name="joins-limits"></a>11.5. Ограничения на Join</h2>
+<p>Максимальное число таблиц, которые могут быть названы в одиночном
+объединении, составляет 61. Это также применяется к числу таблиц, которые
+могут быть названы в определении view.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</html>

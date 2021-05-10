@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\AbstractClass-master\cat.AbstractClass-master\dir.AbstractClass-master.md">AbstractClass-master</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\AbstractClass-master\README.md">README.md</a>
+        - *# AbstractClass

@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\3.ОСНОВЫ.dir\3.6.Зачем_нужен_индекс&.dir\cat.3.6.Зачем_нужен_индекс&.dir\dir.3.6.Зачем_нужен_индекс&.dir.md">3.6.Зачем_нужен_индекс&.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\3.ОСНОВЫ.dir\3.6.Зачем_нужен_индекс&.dir\3.6.Зачем_нужен_индекс&.md">3.6.Зачем_нужен_индекс&.md</a>
+        - *## Good index

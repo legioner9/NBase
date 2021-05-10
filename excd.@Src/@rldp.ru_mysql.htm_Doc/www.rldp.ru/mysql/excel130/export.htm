@@ -1,0 +1,402 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r" />
+  <title>Глава 7. Экспорт данных Excel в MySQL</title>
+  <meta name="generator" content="DocBook XSL Stylesheets + chunker.py v1.9.2" />
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="mysql-for-excel-export"></a>
+Глава 7. Экспорт данных Excel в MySQL</h1>
+<p>Данные из рабочего листа Microsoft Excel могут быть экспортированы в новую
+таблицу базы данных MySQL в рамках существующей схемы.
+Для получения инструкций относительно того, как добавить новую схему, см.
+<a href="config.htm#mysql-for-excel-create-schema">раздел 3.2</a>.</p>
+
+<p>Операция экспорта данных игнорирует колонки, содержащие двоичные данные
+(Varbinary или Blob). См.
+<a href="intro.htm#mysql-for-excel-intro-limitation">
+Известное ограничение для двоичных данных</a>.</p>
+
+<p><span class="bold"><strong>Чтобы экспортировать данные о рабочем листе
+Excel в таблицу MySQL</strong></span>:</p>
+<ol class="orderedlist" type="1"><li class="listitem"><p>
+Запустите Excel, выберите вкладку меню <span class="guimenu">Data</span> и
+затем нажмите <span class="guibutton">MySQL for Excel</span>, чтобы открыть
+панель задач MySQL for Excel.</p></li>
+
+<li class="listitem"><p>В этой панели в области
+<span class="guilabel">Open a MySQL Connection</span>
+дважды щелкните по существующей связи, чтобы показать доступные
+схемы базы данных.</p></li>
+
+<li class="listitem"><p>Выберите схему из списка и нажмите
+<span class="guibutton">Next</span>, чтобы показать все объекты
+базы данных в схеме.</p></li>
+
+<li class="listitem"><p>Выберите ячейки в рабочем листе Excel, чтобы
+экспортировать и затем нажмите
+<span class="guilabel">Export Excel Data to New Table</span>.
+Окно предварительного просмотра показывает отобранные данные и обеспечивает
+<span class="guilabel">Column Options</span> и
+<span class="guilabel">Advanced Options</span>, которые будут использоваться
+во время экспорта.</p></li>
+
+<li class="listitem"><p>В диалоге Export Data to MySQL сделайте следующее:
+</p>
+<ol class="orderedlist" type="a"><li class="listitem"><p>
+Определите, должна ли первая строка в предварительном просмотре
+использоваться в качестве имени столбца. Это включено по умолчанию.</p>
+
+<p>Опция <span class="guilabel">First Row Contains Column Names</span>
+управляет типом данных для столбцов, приводя тип к подходящему для строк
+2-<span class="emphasis"><em>n</em></span> (включена) или для строк
+1-<span class="emphasis"><em>n</em></span> (выключена).</p></li>
+
+<li class="listitem"><p>Введите уникальное имя таблицы и выберите
+сопоставление, чтобы использовать для новой таблицы.</p></li>
+<li class="listitem"><p>Выберите или создайте столбец первичного ключа
+для новой таблицы.</p></li>
+
+<li class="listitem"><p>Выберите каждый столбец и примените нужные опции.
+</p></li>
+<li class="listitem"><p>Нажмите <span class="guibutton">Export Data</span>,
+чтобы составить новую таблицу с данными.</p></li></ol></li></ol>
+
+<a name="mysql-for-excel-export-figure"></a>
+<p><b>Рис. 7.1. Экспорт данных Excel в MySQL</b></p>
+<img src="images/mysql-for-excel-export.png" width="762" height="700"
+alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h2><a name="mysql-for-excel-export-column-options"></a>7.1. Опции столбцов
+</h2>
+<p>Область <span class="guilabel">Column Options</span>
+расположена ниже сетки предварительного просмотра. Когда вы щелкаете по
+каждому заголовку столбца сетки предварительного просмотра, вы видите опции
+для выбранного столбца. Некоторые значения установлены по умолчанию:
+<span class="guilabel">Column Name</span>,
+<span class="guilabel">Data Type</span> и им подобные.
+Если опция столбца не относится к выбранному столбцу, или если опция не может
+быть изменена, выбор затемнен.</p>
+
+<p>Примените <span class="guibutton">Advanced Options</span>, чтобы изменить
+поведение по умолчанию опций, которые относятся ко всем колонкам,
+предназначенным на экспорт в таблицу MySQL.</p>
+
+<p>MySQL for Excel анализирует и обнаруживает тип данных каждой колонки по
+умолчанию, однако, можно отвергнуть обнаруженное значение, выбрав иной тип
+данных из выпадающего списка. Чтобы перезагрузить колонку назад к
+обнаруженному типу, щелкните правой кнопкой мыши в области
+<span class="guilabel">Data Type</span> и выберите
+<span class="guilabel">Reset to auto-detect</span>.</p>
+
+<a name="mysql-for-excel-export-reset-data-type"></a>
+<p><b>Рис. 7.2. Сброс типа данных</b></p>
+<img src="images/mysql-for-excel-export-reset-data-type.png" width="730"
+height="124" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h2><a name="mysql-for-excel-export-advanced-options"></a>7.2.
+Расширенные настройки экспорта</h2>
+<p>Расширенные настройки позволяют вам управлять способом, которым MySQL для
+Excel экспортирует данные из рабочих листов.
+Используйте <span class="guibutton">Reset to Defaults</span>, чтобы
+восстановить оригинальные опции.</p>
+<p>Ряд расширенных настроек затрагивает текущую операцию экспорта данных,
+как описано ниже.</p>
+
+<h3><a name="mysql-for-excel-export-advanced-options-column-datatype"></a>
+Вкладка Column</h3>
+<a name="mysql-for-excel-export-advanced-options-column-fig"></a>
+<p><b>Рис. 7.3. Опции столбца</b></p>
+<img src="images/mysql-for-excel-export-adv-option-columns.png" width="602"
+height="364" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<ul><li class="listitem"><p>
+<span class="guilabel">Use the first <em class="replaceable"><code>100</code>
+</em> (default) Excel data rows to preview and calculate data types</span>:
+Это определяет количество строк для предварительного просмотра и значения,
+которые затрагивают автоматическое отображение.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Analyze and try to detect correct data type based
+on column field contents</span>: Попытки проанализировать данные и определить
+тип данных для колонки. Тип столбца определяется как
+<code class="literal">VARCHAR</code>, если это содержит много типов.</p>
+
+<ul><li class="listitem"><p>
+<span class="guilabel">Add additional buffer to Varchar length (round
+up to 12, 25, 45, 125, 255)</span>: Когда тип данных автоматически обнаружен
+и установлен в <code class="literal">VARCHAR</code>, тогда это вычисляет
+максимальную длину для всех строк в рамках колонки и округляет максимальную
+длину к одной из определенных длин выше.</p>
+
+<p>Если выключено, длина <code class="literal">Varchar</code>
+установлена в длину самой большой записи в рабочем листе Excel.
+</p></li></ul></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Automatically check the Index checkbox for Integer
+columns</span>: Если выключено (по умолчанию), у колонок с
+целочисленным типом данных будет по умолчанию
+опция <span class="guilabel">Create Index</span>.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Automatically check the Allow Empty checkbox for
+columns without an index</span>: Если включено (по умолчанию), колонки без
+выбранной опции <span class="guilabel">Create Index</span> автоматически
+включают опцию <span class="guilabel">Allow Empty</span>.</p></li>
+
+<li class="listitem"><p>
+<span class="guilabel">Show all available MySQL data types in the Data
+Type drop-down list</span>: По умолчанию только обычно используемые типы
+данных показаны. Выберите (выключена по умолчанию) опцию, чтобы увидеть
+список всех типов данных MySQL.</p>
+<p>Этот выбор был добавлен в MySQL for Excel 1.3.0.</p></li></ul>
+
+<h3><a name="mysql-for-excel-export-advanced-options-field-data"></a>
+Вкладка Field Data</h3>
+<a name="mysql-for-excel-export-advanced-options-field-data-fig"></a>
+<p><b>Рис. 7.4. Опции полей данных</b></p>
+<img src="images/mysql-for-excel-export-adv-option-field-data.png"
+width="600" height="364" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Опции полей данных:</p>
+<ul><li class="listitem"><p>
+<span class="guilabel">Use formatted values</span>:
+Когда включена (по умолчанию), данные из Excel рассматривают как
+<code class="literal">Text</code>, <code class="literal">Double</code> или
+<code class="literal">Date</code>. Когда выключена, данные никогда не
+рассматривают как <code class="literal">Date</code>, например, это означает,
+что дата была бы представлена как число.</p></li></ul>
+
+<h3><a name="mysql-for-excel-export-advanced-options-other"></a>
+Вкладка SQL Queries</h3>
+<a name="mysql-for-excel-export-advanced-options-other-fig"></a>
+<p><b>Рис. 7.5. Опции запросов SQL</b></p>
+<img src="images/mysql-for-excel-export-adv-option-sql-queries.png"
+width="600" height="365" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+<p>Опции запросов SQL:</p>
+
+<ul><li class="listitem"><p>
+<span class="guilabel">Generate an INSERT statement for each data
+row</span>: Когда выбрана, запрос
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html" target="_top">
+<code class="literal">INSERT</code></a> для каждой экспортируемой строки
+данных произведен в получающемся SQL-запросе, посланном в сервер MySQL.
+Иначе будет произведен только один
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html" target="_top">
+<code class="literal">INSERT</code></a>
+как оптовая операция по данным, который работает лучше, чем многократные
+multiple <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/insert.html"
+target="_top"><code class="literal">INSERT</code></a>.
+Выключена по умолчанию.</p>
+
+<ul><li class="listitem"><p>
+<span class="guilabel">Create table's indexes after data has been
+exported to speed-up rows insertion</span>:
+Это экономит диск I/O для оптовых вставок (тысячи строк), потому что
+переиндексация произойдет не каждый раз, когда строка вставляется, а только
+однажды в конце вставки данных. Это включено по умолчанию.</p>
+<p>Этот выбор был добавлен в MySQL for Excel 1.2.1.</p></li></ul></li></ul>
+
+<p>Следующая опция была <code class="literal">удалена</code> в
+MySQL for Excel 1.2.1. Теперь поведение по умолчанию должно всегда удалять
+пустые столбцы из вычислений.</p>
+
+<p>Remove columns that contain no data, otherwise flag them as "Excluded":
+Если выбрано, колонки без данных в Excel удалены и не показаны в окне
+предварительного просмотра. Если отключена (по умолчанию), эти колонки будут
+существовать, но иметь включенную опцию <span class="guilabel">Exclude Column
+</span>.</p>
+
+<h2><a name="mysql-for-excel-additional-notes"></a>
+7.3. Дополнительные примечания</h2>
+<ul><li class="listitem"><p>Запись "0" в столбец даты.</p>
+
+<p>Запись "0" в столбец даты Excel преобразует значение в "12/30/1899" в
+MySQL. Это вызвано тем, что Excel сначала переводит значение к минимальной
+дате в Excel, а это "1/0/1900", потому что даты внутренне сохранены в Excel
+как числа (дни, которые прошли с "1/0/1900"). Однако, потому как
+"1/0/1900" не действительная дата, переданное MySQL значение изменится на
+"12/30/1899", так как .NET MySQL connector автоматически преобразует
+"1/0/1900" в "12/30/1899", что является самой близкой действительной датой.
+</p></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,881 @@
+<html>
+<head>
+<title>Beyond Linux From Scratch</title>
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS">
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+</head>
+
+<body>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+
+<h1 class="title"><a name="id2516317"></a>Beyond Linux From Scratch</h1>
+<h2 class="subtitle">Версия 6.0</h2>
+<h3 class="corpauthor">Команда разработчиков BLFS</h3>
+<p class="copyright"><a href="legalnotice.html">Copyright</a> 2001-2005.
+Команда разработчиков BLFS.</p>
+<p class="pubdate">2005-04-02.</p>
+
+<p>Перевод выполнен Алексеем Паутовым в рамках некоммерческого проекта
+RussianLDP (<a href="../../default.htm">http://www.rldp.ru/</a>). Именно на
+этом сайте надлежит искать обновления. Также Вы можете скачать архив скриптов
+<a href="../../pub/lfs/blfs-bootscripts-6.0.tgz">blfs-bootscripts-6.0</a>
+с этого же сайта.
+
+<table border="1" width="100%" summary="Revision history">
+<tr><th align="left" valign="top" colspan="2"><b>История версий</b></th></tr>
+<tr><td align="left">Версия 6.0</td><td align="left">2005-04-02</td></tr>
+<tr><td align="left" colspan="2">Четвертый релиз</td></tr>
+<tr><td align="left">Версия 5.1</td><td align="left">2004-06-05</td></tr>
+<tr><td align="left" colspan="2">Третий релиз</td></tr>
+<tr><td align="left">Версия 5.0</td><td align="left">2003-11-06</td></tr>
+<tr><td align="left" colspan="2">Второй релиз</td></tr>
+<tr><td align="left">Версия 1.0</td><td align="left">2003-04-25</td></tr>
+<tr><td align="left" colspan="2">Первый релиз</td></tr></table>
+
+<p class="title"><b>Абстракция</b></p>
+<p>Это книга, следующая за книгой Linux From Scratch. Она знакомит
+читателя с дополнениями к системе, включая сеть,
+графический интерфейс, поддержку звука, принтера и сканера.</p>
+
+<h2 class="dedication">Посвящение</h2>
+<p>Эта книга посвящена сообществу <span class="acronym">LFS</span>.</p>
+<h3>Содержание</h3>
+<ul><li class="preface"><h4><a href="preface/preface.html">Пролог</a></h4>
+<ul><li><a href="preface/preface.html#preface-foreword">
+Предисловие</a></li>
+<li><a href="preface/whoread.html">Кто хотел бы
+прочитать эту книгу</a></li>
+<li><a href="preface/organization.html">Организация</a></li></ul></li>
+<li class="part"><h3><a href="introduction/introduction.html">I. Введение</a>
+</h3>
+
+<ul><li class="chapter"><h4><a href="introduction/welcome.html">
+1. Добро пожаловать в <span class="acronym">BLFS</span></a></h4>
+<ul><li><a href="introduction/welcome.html#intro-welcome-acknowledgments">
+Соглашения</a></li>
+<li><a href="introduction/credits.html">Благодарности</a></li>
+<li><a href="introduction/which.html">Какой раздел книги
+мне нужен?</a></li>
+<li><a href="introduction/conventions.html">
+Соглашения, используемые в этой книге</a></li>
+<li><a href="introduction/version.html">Версия книги</a></li>
+<li><a href="introduction/mirrors.html">Сайты зеркал</a></li>
+<li><a href="introduction/packages.html">
+Получение исходников пакетов</a></li>
+<li><a href="introduction/changelog.html">Список изменений</a>
+</li>
+<li><a href="introduction/maillists.html">Списки рассылки</a>
+</li>
+<li><a href="introduction/newsserver.html">Сервер новостей</a>
+</li>
+<li><a href="introduction/askhelp.html">Просьба о помощи и
+<span class="acronym">FAQ</span></a></li>
+<li><a href="introduction/contactinfo.html">
+Контактная информация</a></li></ul></li>
+
+<li class="chapter"><h4><a href="introduction/important.html">
+2. Важная информация</a></h4>
+<ul><li><a href="introduction/important.html#intro-important-pkgmgt">
+Управление пакетами</a></li>
+<li><a href="introduction/unpacking.html">Замечания о сборке программ</a></li>
+<li><a href="introduction/position.html">Дебаты о /usr против /usr/local</a>
+</li>
+<li><a href="introduction/patches.html">Дополнительные патчи</a></li>
+<li><a href="introduction/bootscripts.html">Загрузочные скрипты
+<span class="acronym">BLFS</span></a></li>
+<li><a href="introduction/beyond.html">После <span class="acronym">BLFS
+</span></a></li></ul></li></ul></li>
+
+<li class="part"><h3><a href="postlfs/postlfs.html">
+II. Последующая конфигурация <span class="acronym">LFS</span>
+и дополнительные программы</a></h3>
+<ul><li class="chapter"><h4><a href="postlfs/config.html">
+3. Задачи последующей конфигурации <span class="acronym">LFS</span></a></h4>
+<ul><li><a href="postlfs/config.html#postlfs-config-bootdisk">
+Создание специального загрузочного устройства</a></li>
+<li><a href="postlfs/skel.html">Настройки для добавления пользователей</a>
+</li>
+<li><a href="postlfs/profile.html">Стартовые файлы оболочки Bash</a></li>
+<li><a href="postlfs/vimrc.html">Файлы /etc/vimrc и ~/.vimrc</a></li>
+<li><a href="postlfs/logon.html">Настройка Вашего Logon при
+помощи /etc/issue</a></li>
+<li><a href="postlfs/etcshells.html">Файл /etc/shells</a></li>
+<li><a href="postlfs/random.html">Генерация случайных чисел</a></li>
+<li><a href="postlfs/compressdoc.html">Сжатие страниц документации
+man и info</a></li>
+<li><a href="postlfs/autofs.html">Автоматизация монтирования файловых систем
+</a></li>
+<li><a href="postlfs/netfs.html">Настройка для работы с
+сетевыми файловыми системами</a></li></ul></li>
+
+<li class="chapter"><h4><a href="postlfs/security.html">4. Безопасность</a>
+</h4>
+<ul><li><a href="postlfs/security.html#openssl">OpenSSL-0.9.7e</a></li>
+<li><a href="postlfs/cracklib.html">cracklib-2.7</a></li>
+<li><a href="postlfs/linux_pam.html">Linux-PAM-0.78</a></li>
+<li><a href="postlfs/shadow.html">Shadow-4.0.4.1</a></li>
+<li><a href="postlfs/iptables.html">iptables-1.3.1</a></li>
+<li><a href="postlfs/firewall.html">Установка межсетевого экрана (firewall)
+</a></li>
+<li><a href="postlfs/gnupg.html">GnuPG-1.4.0</a></li>
+<li><a href="postlfs/tripwire.html">Tripwire-portable-0.9</a></li>
+<li><a href="postlfs/heimdal.html">Heimdal-0.6.3</a></li>
+<li><a href="postlfs/mitkrb.html"><span class="acronym">MIT</span> krb5-1.4
+</a></li>
+<li><a href="postlfs/cyrus-sasl.html">Cyrus <span class="acronym">
+SASL</span>-2.1.20</a></li>
+<li><a href="postlfs/stunnel.html">Stunnel-4.07</a></li></ul></li>
+
+<li class="chapter"><h4><a href="postlfs/filesystems.html">
+5. Файловые системы</a></h4>
+<ul><li><a href="postlfs/filesystems.html#postlfs-filesystems-ext3">Ext3</a>
+</li>
+<li><a href="postlfs/reiserfs.html">ReiserFS-3.6.19</a></li>
+<li><a href="postlfs/xfsfs.html">XFS-2.6.25</a></li></ul></li>
+
+<li class="chapter"><h4><a href="postlfs/editors.html">6. Текстовые редакторы
+</a></h4>
+<ul><li><a href="postlfs/editors.html#vim">Vim-6.3</a></li>
+<li><a href="postlfs/emacs.html">Emacs-21.4</a></li>
+<li><a href="postlfs/nano.html">nano-1.2.4</a></li>
+<li><a href="postlfs/joe.html">JOE-3.1</a></li>
+<li><a href="postlfs/pico.html">Pico</a></li>
+<li><a href="postlfs/ed.html">Ed-0.2</a></li></ul></li>
+
+<li class="chapter"><h4><a href="postlfs/shells.html">7. Оболочки</a></h4>
+<ul><li><a href="postlfs/shells.html#ash">ASH-0.4.0</a></li>
+<li><a href="postlfs/tcsh.html">Tcsh-6.13.00</a></li>
+<li><a href="postlfs/zsh.html">ZSH-4.2.4</a></li></ul></li></ul></li>
+
+<li class="part"><h3><a href="general/general.html">
+III. Общие библиотеки и утилиты</a></h3>
+<ul><li class="chapter"><h4><a href="general/genlib.html">8. Общие библиотеки
+</a></h4>
+<ul><li><a href="general/genlib.html#pcre">PCRE-5.0</a></li>
+<li><a href="general/popt.html"><span class="application">popt</span>-1.7-5
+</a></li>
+<li><a href="general/slang.html">slang-1.4.9</a></li>
+<li><a href="general/fam.html">FAM-2.7.0</a></li>
+<li><a href="general/libxml.html"><span class="application">
+libxml</span>-1.8.17</a></li>
+<li><a href="general/libxml2.html">libxml2-2.6.17</a></li>
+<li><a href="general/libxslt.html">libxslt-1.1.12</a></li>
+<li><a href="general/gmp.html">GMP-4.1.4</a></li>
+<li><a href="general/gdbm.html">GDBM-1.8.3</a></li>
+<li><a href="general/glib.html">GLib-1.2.10</a></li>
+<li><a href="general/glib2.html">GLib-2.6.3</a></li>
+<li><a href="general/libIDL.html">libIDL-0.8.4</a></li>
+<li><a href="general/libcroco.html">libcroco-0.6.0</a></li>
+<li><a href="general/libgsf.html">libgsf-1.10.1</a></li>
+<li><a href="general/libglade.html">libglade-2.4.1</a></li>
+<li><a href="general/expat.html">expat-1.95.8</a></li>
+<li><a href="general/libesmtp.html">libesmtp-1.0.3r1</a></li>
+<li><a href="general/aspell.html">Aspell-0.60</a></li>
+<li><a href="general/ispell.html">ispell-3.2.06.epa7</a></li>
+<li><a href="general/guile.html">Guile-1.6.6</a></li>
+<li><a href="general/slib.html">SLIB-3a1</a></li>
+<li><a href="general/gwrap.html">G-Wrap-1.3.4</a></li>
+<li><a href="general/LZO.html"><span class="acronym">LZO</span>-1.08</a></li>
+<li><a href="general/libpcap.html"><span class="application">
+libpcap</span>-0.8.3</a></li>
+<li><a href="general/libusb.html">libusb-0.1.8</a></li></ul></li>
+
+<li class="chapter"><h4><a href="general/graphlib.html">
+9. Графические и шрифтовые библиотеки</a></h4>
+<ul><li><a href="general/graphlib.html#libjpeg">libjpeg-6b</a></li>
+<li><a href="general/libpng.html">libpng-1.2.8</a></li>
+<li><a href="general/libtiff.html">libtiff-3.7.1</a></li>
+<li><a href="general/libungif.html">libungif-4.1.3</a></li>
+<li><a href="general/giflib.html">giflib-4.1.3</a></li>
+<li><a href="general/lcms.html">lcms-1.14</a></li>
+<li><a href="general/libmng.html">libmng-1.0.8</a></li>
+<li><a href="general/freetype2.html">FreeType-2.1.9</a></li>
+<li><a href="general/fontconfig.html">Fontconfig-2.2.3</a></li>
+<li><a href="general/libart_lgpl.html">libart_lgpl-2.3.16</a></li>
+<li><a href="general/librsvg.html">librsvg-2.8.1</a></li>
+<li><a href="general/imlib.html">Imlib-1.9.15</a></li>
+<li><a href="general/aalib.html">AAlib-1.4rc5</a></li>
+<li><a href="general/imlib2.html">Imlib2-1.1.2</a></li></ul></li>
+
+<li class="chapter"><h4><a href="general/genutils.html">10. Общие утилиты</a>
+</h4>
+<ul><li><a href="general/genutils.html#bc">bc-1.06</a></li>
+<li><a href="general/rep-gtk.html">rep-gtk-0.18</a></li>
+<li><a href="general/compface.html">Compface-1.4</a></li>
+<li><a href="general/imagemagick.html"><span class="application">
+ImageMagick</span>-6.2.0-7</a></li>
+<li><a href="general/hd2u.html">hd2u-0.9.2</a></li>
+<li><a href="general/gtk-doc.html">GTK-Doc-1.2</a></li>
+<li><a href="general/intltool.html">intltool-0.32.1</a></li>
+<li><a href="general/screen.html">Screen-4.0.2</a></li>
+<li><a href="general/tidy.html">HTML Tidy-050305</a></li>
+<li><a href="general/desktop-file-utils.html">desktop-file-utils-0.10</a></li>
+<li><a href="general/xscreensaver.html">XScreenSaver-4.19</a></li>
+<li><a href="general/pilot-link.html">pilot-link-0.11.8</a></li></ul></li>
+
+<li class="chapter"><h4>
+<a href="general/sysutils.html">11. Системные утилиты</a></h4>
+<ul><li><a href="general/sysutils.html#gpm"><span class="acronym">
+GPM</span>-1.20.1</a></li>
+<li><a href="general/fcron.html"><span class="application">
+Fcron</span>-2.9.5.1</a></li>
+<li><a href="general/hdparm.html">hdparm-5.8</a></li>
+<li><a href="general/which.html"><span class="application">which</span>-2.16
+и альтернативы</a></li>
+<li><a href="general/unzip.html">UnZip-5.51</a></li>
+<li><a href="general/zip.html">Zip-2.31</a></li>
+<li><a href="general/pciutils.html"><span class="application">
+<span class="acronym">PCI</span> Utilities</span>-2.1.11</a></li>
+<li><a href="general/pkgconfig.html"><span class="application">pkgconfig
+</span>-0.15.0</a></li>
+<li><a href="general/cpio.html">cpio-2.6</a></li>
+<li><a href="general/mc.html"><span class="acronym">MC</span>-4.6.0</a></li>
+<li><a href="general/sysstat.html">Sysstat-5.0.6</a></li>
+<li><a href="general/apache-ant.html">Apache Ant-1.6.2</a></li></ul></li>
+
+<li class="chapter"><h4><a href="general/prog.html">12. Программирование</a>
+</h4>
+<ul><li><a href="general/prog.html#python">Python-2.4</a></li>
+<li><a href="general/perl-modules.html">Модули <span class="application">Perl
+</span></a></li>
+<li><a href="general/pdl.html"><span class="application">
+<span class="acronym">PDL</span></span>-2.4.2</a></li>
+<li><a href="general/librep.html">librep-0.17</a></li>
+<li><a href="general/j2sdk.html"><span class="application">J2
+<span class="acronym">SDK</span></span>-1.4.2</a></li>
+<li><a href="general/ruby.html">Ruby-1.8.2</a></li>
+<li><a href="general/tcl.html">Tcl-8.4.9</a></li>
+<li><a href="general/tk.html">Tk-8.4.9</a></li>
+<li><a href="general/expect.html">Expect-5.42.1</a></li>
+<li><a href="general/dejagnu.html">DejaGnu-1.4.4</a></li>
+<li><a href="general/gcc.html">GCC-3.4.1</a></li>
+<li><a href="general/gcc3.html"><span class="application">
+<span class="acronym">GCC</span></span>-3.3.4</a></li>
+<li><a href="general/NASM.html">NASM-0.98.38</a></li>
+<li><a href="general/doxygen.html">Doxygen-1.4.1</a></li></ul></li></ul></li>
+
+<li class="part"><h3><a href="connect/connect.html">IV. Подключение к сети
+</a></h3>
+<ul><li class="chapter"><h4><a href="connect/dialup.html">13. Dial-up сеть
+</a></h4>
+<ul><li><a href="connect/dialup.html#ppp">PPP-2.4.3</a></li>
+<li><a href="connect/wvdial.html">WvDial-1.54.0</a></li></ul></li>
+
+<li class="chapter"><h4><a href="connect/dhcp.html">14. Клиенты
+<span class="acronym">DHCP</span></a></h4>
+<ul><li><a href="connect/dhcp.html#dhcp-client">DHCP-3.0.2 клиент</a></li>
+<li><a href="connect/dhcpcd.html">dhcpcd-1.3.22-pl4</a></li></ul></li>
+
+<li class="chapter"><h4><a href="connect/other.html">15. Другие соединения
+</a></h4>
+<ul><li><a href="connect/other.html#pppoe">RP-PPPoE-3.5</a></li>
+</ul></li></ul></li>
+
+<li><h3><a href="basicnet/basicnet.html">V. Базовая поддержка сети</a></h3>
+<ul><li class="chapter"><h4><a href="basicnet/netlibs.html">
+16. Сетевые библиотеки</a></h4>
+<ul><li><a href="basicnet/netlibs.html#curl">cURL-7.13.1</a></li>
+<li><a href="basicnet/wvstreams.html">WvStreams-4.0.1</a></li>
+<li><a href="basicnet/gnet.html">GNet-2.0.5</a></li>
+<li><a href="basicnet/libsoup.html">libsoup-2.2.1</a></li></ul></li>
+
+<li class="chapter"><h4><a href="basicnet/textweb.html">
+17. Текстовые WEB-браузеры</a></h4>
+<ul><li><a href="basicnet/textweb.html#Links">Links-2.1pre15</a></li>
+<li><a href="basicnet/lynx.html">Lynx-2.8.5</a></li>
+<li><a href="basicnet/w3m.html">w3m-0.5.1</a></li></ul></li>
+
+<li class="chapter"><h4><a href="basicnet/netprogs.html">
+18. Основные сетевые программы</a></h4>
+<ul><li><a href="basicnet/netprogs.html#ncftp">NcFTP-3.1.7</a></li>
+<li><a href="basicnet/openssh.html">OpenSSH-3.9p1 клиент</a></li>
+<li><a href="basicnet/rsync.html">rsync-2.6.3 клиент</a></li>
+<li><a href="basicnet/cvs.html">CVS-1.11.18</a></li>
+<li><a href="basicnet/subversion.html">Subversion-1.1.3</a></li>
+<li><a href="basicnet/wget.html"><span class="application">Wget</span>-1.9.1
+</a></li>
+<li><a href="basicnet/tcpwrappers.html">tcpwrappers-7.6</a></li>
+<li><a href="basicnet/portmap.html">portmap-5beta</a></li>
+<li><a href="basicnet/inetutils.html">Inetutils-1.4.2</a></li>
+<li><a href="basicnet/nfs-utils.html">NFS Utilities-1.0.6</a></li>
+<li><a href="basicnet/ncpfs.html">NCPFS-2.2.4</a></li>
+<li><a href="basicnet/ntp.html">NTP-4.2.0</a></li>
+<li><a href="basicnet/net-tools.html">Net-tools-1.60</a></li></ul></li>
+
+<li class="chapter"><h4>
+<a href="basicnet/netutils.html">19. Основные сетевые утилиты</a></h4>
+<ul><li><a href="basicnet/netutils.html#traceroute">Traceroute-1.4a12</a></li>
+<li><a href="basicnet/nmap.html"><span class="application">Nmap</span>-3.75
+</a></li>
+<li><a href="basicnet/whois.html">Whois-4.6.26</a></li>
+<li><a href="basicnet/bind-utils.html">BIND Utilities-9.3.0p1</a></li>
+<li><a href="basicnet/ethereal.html">Ethereal-0.10.9</a></li></ul></li>
+
+<li class="chapter"><h4><a href="basicnet/mailnews.html">
+20. Клиенты почты/новостей</a></h4>
+<ul><li><a href="basicnet/mailnews.html#nail">Nail-11.20</a></li>
+<li><a href="basicnet/procmail.html">Procmail-3.22</a></li>
+<li><a href="basicnet/fetchmail.html">Fetchmail-6.2.5</a></li>
+<li><a href="basicnet/mutt.html">Mutt-1.4.2.1i</a></li>
+<li><a href="basicnet/pine.html">Pine-4.60</a></li>
+<li><a href="basicnet/slrn.html">slrn-0.9.8.1</a></li>
+<li><a href="basicnet/othermn.html">Другие почтовые и новостные программы</a>
+</li></ul></li></ul></li>
+
+<li class="part"><h3>
+<a href="server/server.html">VI. Сетевой сервер</a></h3>
+<ul><li class="chapter"><h4>
+<a href="server/mail.html">21. Программы почтовых серверов</a></h4>
+<ul><li><a href="server/mail.html#postfix">Postfix-2.1.5</a></li>
+<li><a href="server/sendmail.html">Sendmail-8.13.3</a></li>
+<li><a href="server/exim.html"><span class="application">Exim</span>-4.43</a>
+</li>
+<li><a href="server/qpopper.html">Qpopper-4.0.5</a></li>
+<li><a href="server/courier.html">Courier-0.47</a></li></ul></li>
+
+<li class="chapter"><h4><a href="server/other.html">
+22. Другие серверные программы</a></h4>
+<ul><li><a href="server/other.html#bind"><span class="acronym">
+BIND</span>-9.3.0p1</a></li>
+<li><a href="server/cvsserver.html">Запуск сервера CVS</a></li>
+<li><a href="server/svnserver.html">Запуск сервера Subversion</a></li>
+<li><a href="server/dhcp.html"><span class="acronym">DHCP</span>-3.0.2</a>
+</li>
+<li><a href="server/leafnode.html">Leafnode-1.10.8</a></li>
+<li><a href="server/openssh.html">Open<span class="acronym">SSH</span>-3.9p1
+</a></li>
+<li><a href="server/rsync.html"><span class="application">rsync</span>-2.6.3
+</a>
+</li><li><a href="server/openldap.html"><span class="application">
+Open<span class="acronym">LDAP</span></span>-2.2.20</a></li>
+<li><a href="server/samba3.html">Samba-3.0.11</a></li>
+<li><a href="server/xinetd.html">xinetd-2.3.13</a></li></ul></li></ul></li>
+
+<li class="part"><h3><a href="content/content.html">VII. Сервисы</a></h3>
+<ul><li class="chapter"><h4><a href="content/databases.html">23. Базы данных
+</a></h4>
+<ul><li><a href="content/databases.html#db">Berkeley DB-4.3.27</a></li>
+<li><a href="content/mysql.html">MySQL-4.1.8a</a></li>
+<li><a href="content/postgresql.html">Postgre<span class="acronym">
+SQL</span>-7.4.6</a></li></ul></li>
+
+<li class="chapter"><h4><a href="content/web.html">24. WEB-сервисы</a></h4>
+<ul><li><a href="content/web.html#apache">Apache-2.0.53</a></li>
+<li><a href="content/php.html"><span class="acronym">PHP</span>-5.0.3</a>
+</li>
+<li><a href="content/proftpd.html"><span class="application">Pro
+<span class="acronym">FTP</span>D</span>-1.2.10</a></li>
+<li><a href="content/vsftpd.html"><span class="application">vs
+<span class="acronym">FTP</span>D</span>-2.0.1</a></li></ul></li></ul></li>
+
+<li class="part"><h3><a href="x/x.html">VIII. X + Менеджеры окон</a></h3>
+<ul><li class="chapter"><h4><a href="x/installing.html">25. Система X Window
+</a></h4>
+<ul><li><a href="x/installing.html#xorg">Xorg-6.8.2</a></li>
+<li><a href="x/xfree86.html">XFree86-4.4.0</a></li>
+<li><a href="x/xfree86-setup.html">Компоненты системы X Window
+</a></li></ul></li>
+
+<li class="chapter"><h4><a href="x/lib.html">26. Библиотеки X</a></h4>
+<ul><li><a href="x/lib.html#qt">Qt-3.3.3</a></li>
+<li><a href="x/gtk.html">GTK+-1.2.10</a></li>
+<li><a href="x/pango.html">Pango-1.8.1</a></li>
+<li><a href="x/atk.html">ATK-1.9.0</a></li>
+<li><a href="x/gtk2.html">GTK+-2.6.4</a></li>
+<li><a href="x/lesstif.html"><span class="application">LessTif</span>-0.94.0
+</a></li>
+<li><a href="x/startup-notification.html">startup-notification-0.8</a></li>
+<li><a href="x/shared-mime-info.html">shared-mime-info-0.15</a></li>
+<li><a href="x/hicolor-icon-theme.html">hicolor-icon-theme-0.5</a></li>
+<li><a href="x/libxklavier.html">libxklavier-1.11</a></li>
+<li><a href="x/freeglut.html">freeglut-2.2.0</a></li></ul></li>
+
+<li class="chapter"><h4><a href="x/wm.html">27. Менеджеры окон</a></h4>
+<ul><li><a href="x/wm.html#Introduction">Вступление</a></li>
+<li><a href="x/sawfish.html">sawfish-1.3</a></li>
+<li><a href="x/fluxbox.html">Fluxbox-0.9.12</a></li>
+<li><a href="x/metacity.html">Metacity-2.8.6</a></li>
+<li><a href="x/xfce.html">XFce-4.2.0</a></li></ul></li></ul></li>
+
+<li class="part"><h3><a href="kde/kde.html">IX. KDE</a></h3>
+<ul><li><h4><a href="kde/core.html">28. Базовые пакеты KDE</a></h4>
+<ul><li><a href="kde/core.html#kde-pre-install-config">
+Предустановочная конфигурация KDE</a></li>
+<li><a href="kde/arts.html"><span class="application"><span class="acronym">
+aRts</span></span>-1.3.2</a></li>
+<li><a href="kde/kdelibs.html"><span class="application">
+kdelibs</span>-3.3.2</a></li>
+<li><a href="kde/kdebase.html">kdebase-3.3.2</a></li>
+<li><a href="kde/config.html">Настройка основных пакетов
+<span class="acronym">KDE</span></a></li></ul></li>
+
+<li class="chapter"><h4><a href="kde/add.html">29. Дополнительные пакеты KDE
+</a></h4>
+<ul><li><a href="kde/add.html#kdeadmin"><span class="application">
+kdeadmin</span>-3.3.2</a></li>
+<li><a href="kde/kdenetwork.html">kdenetwork-3.3.2</a></li>
+<li><a href="kde/kdepim.html">kdepim-3.3.2</a></li>
+<li><a href="kde/kdemultimedia.html"><span class="application">kdemultimedia
+</span>-3.3.2</a></li>
+<li><a href="kde/kdegraphics.html"><span class="application">kdegraphics
+</span>-3.3.2</a></li>
+<li><a href="kde/kdeutils.html"><span class="application">
+kdeutils</span>-3.3.2</a></li>
+<li><a href="kde/kdeedu.html"><span class="application">kdeedu</span>-3.3.2
+</a></li>
+<li><a href="kde/kdesdk.html"><span class="application">kdesdk</span>-3.3.2
+</a></li>
+<li><a href="kde/kdevelop.html"><span class="application">
+kdevelop</span>-3.1.2</a></li>
+<li><a href="kde/kdewebdev.html"><span class="application">
+kdewebdev</span>-3.3.2</a></li>
+<li><a href="kde/kdebindings.html">kdebindings-3.3.2</a></li>
+<li><a href="kde/kdeaccessibility.html">kdeaccessibility-3.3.2</a></li>
+<li><a href="kde/kdetoys.html"><span class="application">kdetoys</span>-3.3.2
+</a></li>
+<li><a href="kde/kdegames.html"><span class="application">
+kdegames</span>-3.3.2</a></li>
+<li><a href="kde/kdeartwork.html"><span class="application">
+kdeartwork</span>-3.3.2</a></li>
+<li><a href="kde/kdeaddons.html"><span class="application">
+kdeaddons</span>-3.3.2</a></li>
+<li><a href="kde/kde-i18n.html"><span class="application">
+kde-i18n</span>-3.3.2</a></li></ul></li></ul></li>
+
+<li class="part"><h3><a href="gnome/gnome.html">X. GNOME</a></h3>
+<ul><li class="chapter"><h4>
+<a href="gnome/core.html">30. Базовые пакеты GNOME</a></h4>
+<ul><li><a href="gnome/core.html#gnome-pre-install-config">
+Предустановочная конфигурация</a></li>
+<li><a href="gnome/ORBit2.html">ORBit2-2.12.0</a></li>
+<li><a href="gnome/libbonobo.html">libbonobo-2.8.0</a></li>
+<li><a href="gnome/GConf.html">GConf-2.8.1</a></li>
+<li><a href="gnome/gnome-desktop-file-utils.html">desktop-file-utils-0.10</a>
+</li>
+<li><a href="gnome/gnome-mime-data.html">GNOME MIME Data-2.4.2</a></li>
+<li><a href="gnome/gnome-vfs.html">GNOME Virtual File System-2.8.3</a></li>
+<li><a href="gnome/libgnome.html">libgnome-2.8.0</a></li>
+<li><a href="gnome/libgnomecanvas.html">libgnomecanvas-2.8.0</a></li>
+<li><a href="gnome/libbonoboui.html">libbonoboui-2.8.0</a></li>
+<li><a href="gnome/gnome-icon-theme.html">GNOME Icon Theme-2.8.0</a></li>
+<li><a href="gnome/gnome-keyring.html">gnome-keyring-0.4.0</a></li>
+<li><a href="gnome/libgnomeui.html">libgnomeui-2.8.0</a></li>
+<li><a href="gnome/gtk-engines.html">GTK Engines-2.2.0</a></li>
+<li><a href="gnome/gnome-themes.html">GNOME Themes-2.8.1</a></li>
+<li><a href="gnome/scrollkeeper.html">ScrollKeeper-0.3.14</a></li>
+<li><a href="gnome/gnome-desktop.html">GNOME Desktop-2.8.1</a></li>
+<li><a href="gnome/libwnck.html">libwnck-2.8.1</a></li>
+<li><a href="gnome/gnome-panel.html">GNOME Panel-2.8.1</a></li>
+<li><a href="gnome/gnome-session.html">GNOME Session-2.8.1</a></li>
+<li><a href="gnome/vte.html">VTE-0.11.11</a></li>
+<li><a href="gnome/gnome-terminal.html">GNOME Terminal-2.8.0</a></li>
+<li><a href="gnome/libgtop.html">libgtop-2.8.1</a></li>
+<li><a href="gnome/gail.html">GAIL-1.8.0</a></li>
+<li><a href="gnome/gnome-applets.html">GNOME Applets-2.8.1</a></li>
+<li><a href="gnome/eel.html">EEL-2.8.2</a></li>
+<li><a href="gnome/nautilus.html">Nautilus-2.8.2</a></li>
+<li><a href="gnome/control-center.html">Control Center-2.8.1</a></li>
+<li><a href="gnome/gnome2-user-docs.html"><span class="application">
+<span class="acronym">GNOME</span></span>2 User Docs-2.8.1</a></li>
+<li><a href="gnome/libgtkhtml.html">libgtkhtml-2.6.2</a></li>
+<li><a href="gnome/gnome-doc-utils.html"><span class="application">
+<span class="acronym">GNOME</span> Doc Utils</span>-0.1</a></li>
+<li><a href="gnome/yelp.html">Yelp-2.6.4</a></li>
+<li><a href="gnome/config.html">Настройка основных пакетов GNOME
+</a></li></ul></li>
+
+<li><h4><a href="gnome/add.html">31. Дополнительные пакеты GNOME</a></h4>
+<ul><li><a href="gnome/add.html#libgnomecups">libgnomecups-0.1.13</a></li>
+<li><a href="gnome/libgnomeprint.html">libgnomeprint-2.8.0.1</a></li>
+<li><a href="gnome/libgnomeprintui.html">libgnomeprintui-2.8.0</a></li>
+<li><a href="gnome/gal.html">GAL-2.2.3</a></li>
+<li><a href="gnome/gtkhtml.html">GtkHTML-3.2.3</a></li>
+<li><a href="gnome/evolution-data-server.html">Evolution Data Server-1.0.2
+</a></li>
+<li><a href="gnome/bug-buddy.html">bug-buddy-2.8.0</a></li>
+<li><a href="gnome/gtksourceview.html">gtksourceview-1.1.1</a></li>
+<li><a href="gnome/gedit.html">gedit-2.8.1</a></li>
+<li><a href="gnome/eog.html">EOG-2.8.1</a></li>
+<li><a href="gnome/ggv.html"><span class="application"><span class="acronym">
+GGV</span></span>-2.8.0</a></li>
+<li><a href="gnome/file-roller.html">File Roller-2.8.3</a></li>
+<li><a href="gnome/gconf-editor.html">GConf Editor-2.8.2</a></li>
+<li><a href="gnome/gnome-utils.html">GNOME Utilities-2.8.1</a></li>
+<li><a href="gnome/gnome-system-monitor.html">GNOME System Monitor-2.8.0</a>
+</li>
+<li><a href="gnome/gnome-media.html">GNOME Media-2.8.0</a></li>
+<li><a href="gnome/nautilus-media.html">Nautilus Media-0.8.1</a></li>
+<li><a href="gnome/gnome-netstatus.html">GNOME Netstatus-2.8.0</a></li>
+<li><a href="gnome/gcalctool.html">gcalctool-4.4.20</a></li>
+<li><a href="gnome/gpdf.html">GPdf-2.8.0</a></li>
+<li><a href="gnome/gucharmap.html">gucharmap-1.4.2</a></li>
+<li><a href="gnome/nautilus-cd-burner.html"><span class="application">
+Nautilus <span class="acronym">CD</span> Burner</span>-2.8.5</a></li>
+<li><a href="gnome/zenity.html">Zenity-2.8.1</a></li>
+<li><a href="gnome/at-spi.html">AT SPI-1.6.0</a></li>
+<li><a href="gnome/libgail-gnome.html"><span class="application">
+libgail-gnome</span>-1.1.0</a></li>
+<li><a href="gnome/java-access-bridge.html"><span class="application">
+Java Access Bridge</span>-1.4.2</a></li>
+<li><a href="gnome/gnome-speech.html">GNOME Speech-0.3.5</a></li>
+<li><a href="gnome/gnome-mag.html">GNOME Magnifier-0.11.10</a></li>
+<li><a href="gnome/gnopernicus.html">Gnopernicus-0.9.18</a></li>
+<li><a href="gnome/gok.html">GOK-0.11.16</a></li>
+<li><a href="gnome/epiphany.html">Epiphany-1.4.5</a></li>
+<li><a href="gnome/gnomemeeting.html">GnomeMeeting-1.0.2</a></li>
+<li><a href="gnome/gnome-games.html">GNOME Games-2.8.1</a></li>
+<li><a href="gnome/gdm.html">GDM-2.6.0.6</a></li></ul></li>
+
+<li class="chapter"><h4><a href="gnome/otherlibs.html">
+32. Библиотеки <span class="application"><span class="acronym">GNOME</span>
+</span> 1.4</a></h4>
+<ul><li><a href="gnome/otherlibs.html#gnome-otherlib-config">
+Предустановочная конфигурация</a></li>
+<li><a href="gnome/ORBit.html"><span class="application">
+<span class="acronym">ORB</span>it</span>-0.5.17</a></li>
+<li><a href="gnome/oaf.html"><span class="application"><span class="acronym">
+OAF</span></span>-0.6.10</a></li>
+<li><a href="gnome/gnome-libs.html"><span class="application">
+<span class="acronym">GNOME</span> Libraries</span>-1.4.2</a></li>
+<li><a href="gnome/gdkpixbuf.html"><span class="application">GDK Pixel Buffer
+</span>-0.22.0</a></li>
+<li><a href="gnome/gnome-print.html"><span class="application">
+<span class="acronym">GNOME</span> Print</span>-0.37</a></li>
+<li><a href="gnome/bonobo14.html"><span class="application">
+Bonobo</span>-1.0.22</a></li>
+<li><a href="gnome/gconf1.html"><span class="application">
+GConf</span>-1.0.9</a></li>
+<li><a href="gnome/gnome-vfs1.html"><span class="application">
+<span class="acronym">GNOME</span> Virtual File System</span>-1.0.5</a></li>
+<li><a href="gnome/libglade14.html"><span class="application">
+libglade</span>-0.17</a></li>
+<li><a href="gnome/gal1.html"><span class="application">GAL</span>-0.24</a>
+</li>
+<li><a href="gnome/guppi.html"><span class="application">Guppi</span>-0.40.3
+</a></li>
+<li><a href="gnome/libcapplet.html"><span class="application">libcapplet
+</span>-1.5.11</a></li>
+<li><a href="gnome/soup.html"><span class="application">Soup</span>-0.7.11
+</a></li>
+<li><a href="gnome/libghttp.html"><span class="application">
+libghttp</span>-1.0.9</a></li>
+<li><a href="gnome/gtkhtml1.html"><span class="application">
+<span class="acronym">Gtk</span><span class="acronym">
+HTML</span></span>-1.1.7</a></li></ul></li></ul></li>
+
+<li class="part"><h3><a href="xsoft/xsoft.html">XI. Программы для X</a></h3>
+<ul><li class="chapter"><h4><a href="xsoft/office.html">33. Офисные программы
+</a></h4>
+<ul><li><a href="xsoft/office.html#abiword">AbiWord-2.2.3</a></li>
+<li><a href="xsoft/gnumeric.html"><span class="application">
+Gnumeric</span>-1.4.1</a></li>
+<li><a href="xsoft/gnucash.html">GnuCash-1.8.10</a></li>
+<li><a href="xsoft/gimp.html">GIMP-2.2.3</a></li>
+<li><a href="xsoft/evolution.html">Evolution-2.0.2</a></li></ul></li>
+
+<li><h4><a href="xsoft/suites.html">34. Офисные пакеты</a></h4>
+<ul><li><a href="xsoft/suites.html#koffice"><span class="application">KOffice
+</span>-1.3.5</a></li>
+<li><a href="xsoft/openoffice.html">OpenOffice-1.1.4</a></li></ul></li>
+
+<li class="chapter"><h4><a href="xsoft/graphweb.html">
+35. Графические WEB-браузеры</a></h4>
+<ul><li><a href="xsoft/graphweb.html#mozilla">Mozilla-1.7.5</a></li>
+<li><a href="xsoft/firefox.html">Firefox-1.0</a></li>
+<li><a href="xsoft/galeon.html">Galeon-1.3.18</a></li>
+<li><a href="xsoft/konq.html">Konqueror-3.3.2</a></li>
+<li><a href="xsoft/dillo.html"><span class="application">Dillo</span>-0.8.4
+</a></li></ul></li>
+
+<li class="chapter"><h4><a href="xsoft/other.html">
+36. Другие X-ориентированные интернет-программы</a></h4>
+<ul><li><a href="xsoft/other.html#thunderbird">Thunderbird-1.0</a></li>
+<li><a href="xsoft/pan.html">Pan-0.14.2</a></li>
+<li><a href="xsoft/balsa.html">Balsa-2.2.6</a></li></ul></li></ul></li>
+
+<li class="part"><h3><a href="multimedia/multimedia.html">XII. Мультимедия
+</a></h3>
+<ul><li class="chapter"><h4><a href="multimedia/libdriv.html">
+37. Мультимедиа библиотеки и драйверы</a></h4>
+<ul><li><a href="multimedia/libdriv.html#alsa">ALSA-1.0.7</a></li>
+<li><a href="multimedia/alsa-lib.html">ALSA Library-1.0.7</a></li>
+<li><a href="multimedia/alsa-utils.html">ALSA Utilities-1.0.7</a></li>
+<li><a href="multimedia/alsa-tools.html">ALSA Tools-1.0.7</a></li>
+<li><a href="multimedia/alsa-firmware.html">ALSA Firmware-1.0.7</a></li>
+<li><a href="multimedia/alsa-oss.html">ALSA OSS-1.0.7</a></li>
+<li><a href="multimedia/arts.html">aRts-1.3.2</a></li>
+<li><a href="multimedia/audiofile.html">Audio File-0.2.6</a></li>
+<li><a href="multimedia/esound.html">EsounD-0.2.35</a></li>
+<li><a href="multimedia/sdl.html">SDL-1.2.8</a></li>
+<li><a href="multimedia/libao.html">libao-0.8.5</a></li>
+<li><a href="multimedia/libogg.html">libogg-1.1.2</a></li>
+<li><a href="multimedia/libvorbis.html">libvorbis-1.1.0</a></li>
+<li><a href="multimedia/nas.html">NAS-1.6</a></li>
+<li><a href="multimedia/libmpeg3.html"><span class="application">
+libmpeg3</span>-1.5.4</a></li>
+<li><a href="multimedia/libmad.html">libmad-0.15.1b</a></li>
+<li><a href="multimedia/openquicktime.html">OpenQuicktime-1.0</a></li>
+<li><a href="multimedia/libfame.html">libFAME-0.9.1</a></li>
+<li><a href="multimedia/speex.html">Speex-1.0.4</a></li>
+<li><a href="multimedia/id3lib.html">id3lib-3.8.3</a></li>
+<li><a href="multimedia/flac.html">FLAC-1.1.1</a></li>
+<li><a href="multimedia/libdvdcss.html">libdvdcss-1.2.8</a></li>
+<li><a href="multimedia/libdvdread.html">libdvdread-0.9.4</a></li>
+<li><a href="multimedia/libdv.html">libdv-0.103</a></li>
+<li><a href="multimedia/liba52.html">liba52-0.7.4</a></li>
+<li><a href="multimedia/xvid.html">XviD-1.0.2</a></li>
+<li><a href="multimedia/xine-lib.html">xine Libraries-1.0</a></li>
+<li><a href="multimedia/libmikmod.html">libmikmod-3.1.11</a></li>
+<li><a href="multimedia/gstreamer.html">GStreamer-0.8.7</a></li>
+<li><a href="multimedia/gst-plugins.html">gst-plugins-0.8.5</a></li></ul></li>
+
+<li class="chapter"><h4><a href="multimedia/audioutils.html">38. Аудиоутилиты
+</a></h4>
+<ul><li><a href="multimedia/audioutils.html#mpg123">mpg123-0.59r</a></li>
+<li><a href="multimedia/vorbistools.html">Vorbis Tools-1.0.1</a></li>
+<li><a href="multimedia/xmms.html">XMMS-1.2.10</a></li>
+<li><a href="multimedia/lame.html">LAME-3.96.1</a></li>
+<li><a href="multimedia/cdparanoia.html">CDParanoia-III-9.8</a></li></ul></li>
+
+<li class="chapter"><h4><a href="multimedia/videoutils.html">39. Видеоутилиты
+</a></h4>
+<ul><li><a href="multimedia/videoutils.html#ffmpeg">FFmpeg-0.4.9-pre1</a></li>
+<li><a href="multimedia/avifile.html"><span class="application">Avifile
+</span>-0.7.41</a></li>
+<li><a href="multimedia/mplayer.html"><span class="application">MPlayer
+</span>-1.0pre6a</a></li>
+<li><a href="multimedia/xine-ui.html"><span class="application">
+xine User Interface</span>-0.99.3</a></li>
+<li><a href="multimedia/transcode.html"><span class="application">Transcode
+</span>-0.6.14</a></li></ul></li>
+
+<li class="chapter"><h4><a href="multimedia/cdwriteutils.html">
+40. Утилиты для записи CD</a></h4>
+<ul><li><a href="multimedia/cdwriteutils.html#cdrtools">Cdrtools-2.01</a></li>
+<li><a href="multimedia/cdrdao.html">Cdrdao-1.1.9</a></li>
+<li><a href="multimedia/udftools.html">UDFtools-1.0.0b3</a></li></ul>
+</li></ul></li>
+
+<li class="part"><h3><a href="pst/pst.html">
+XIII. Печать, сканирование и издательство</a></h3>
+<ul><li class="chapter"><h4><a href="pst/printing.html">41. Печать</a></h4>
+<ul><li><a href="pst/printing.html#cups">CUPS-1.1.23</a></li>
+<li><a href="pst/LPRng.html"><span class="application"><span class="acronym">
+LPR</span>ng</span>-3.8.28</a></li>
+<li><a href="pst/gs.html">AFPL Ghostscript-8.14</a></li>
+<li><a href="pst/espgs.html"><span class="application">
+<span class="acronym">ESP</span>Ghostscript</span>-7.07.1</a></li>
+<li><a href="pst/gimp-print.html">Gimp-Print-4.2.7</a></li></ul></li>
+
+<li class="chapter"><h4><a href="pst/scanning.html">42. Сканирование</a></h4>
+<ul><li><a href="pst/scanning.html#sane">SANE-1.0.15</a></li>
+<li><a href="pst/xsane.html">XSane-0.97</a></li></ul></li>
+
+<li class="chapter"><h4><a href="pst/sgml.html">
+43. Стандартный обобщенный язык разметки
+(<span class="acronym">SGML</span>)</a></h4>
+<ul><li><a href="pst/sgml.html#sgml-common">SGML Common-0.6.3</a></li>
+<li><a href="pst/sgml-dtd-3.html">DocBook SGML DTD-3.1</a></li>
+<li><a href="pst/sgml-dtd.html">DocBook SGML DTD-4.3</a></li>
+<li><a href="pst/opensp.html">OpenSP-1.5.1</a></li>
+<li><a href="pst/openjade.html">OpenJade-1.3.2</a></li>
+<li><a href="pst/docbook-dsssl.html">DocBook DSSSL Stylesheets-1.78</a></li>
+<li><a href="pst/docbook-utils.html">DocBook-utils-0.6.14</a></li></ul></li>
+
+<li class="chapter"><h4><a href="pst/xml.html">44. Расширяемый язык разметки
+(<span class="acronym">XML</span>)</a></h4>
+<ul><li><a href="pst/xml.html#DocBook">DocBook XML DTD-4.3</a></li>
+<li><a href="pst/docbook-xsl.html">DocBook XSL Stylesheets-1.67.2</a></li>
+</ul></li>
+
+<li class="chapter"><h4><a href="pst/ps.html">45. PostScript</a></h4>
+<ul><li><a href="pst/ps.html#a2ps">a2ps-4.13b</a></li>
+<li><a href="pst/enscript.html">Enscript-1.6.4</a></li>
+<li><a href="pst/psutils.html">PSUtils-p17</a></li>
+<li><a href="pst/gsview.html">GSview-4.6</a></li>
+<li><a href="pst/xpdf.html"><span class="application">Xpdf</span>-3.00pl3</a>
+</li>
+<li><a href="pst/fop.html"><span class="application"><span class="acronym">
+FOP</span></span>-0.20.5</a></li>
+<li><a href="pst/otherps.html">Другие программы PostScript</a></li></ul></li>
+
+<li><h4><a href="pst/typesetting.html">46. Издательство</a></h4>
+<ul><li><a href="pst/typesetting.html#tex">TeX-2.0.2</a></li>
+<li><a href="pst/jadetex.html">JadeTeX-3.13</a></li></ul></li></ul></li>
+
+<li class="appendix"><h3><a href="appendices/creat-comm.html">
+A. Creative Commons License</a></h3></li>
+<li class="appendix"><h3><a href="appendices/ac-free-lic.html">
+B. Academic Free License v. 2.1</a></h3></li>
+<li class="glossary"><h3><a href="appendices/glossary.html">Список сокращений
+</a></h3></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\enterprise_architecture\cat.enterprise_architecture\dir.enterprise_architecture.md">enterprise_architecture</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\enterprise_architecture\enterprise_architecture.md">enterprise_architecture.md</a>
+        - *# <a href="https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/enterprise_architecture.html" target="_blank">Architecture Frameworks</a> Архитектурные рамки

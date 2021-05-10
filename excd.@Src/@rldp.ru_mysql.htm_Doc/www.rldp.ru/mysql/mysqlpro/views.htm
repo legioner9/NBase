@@ -1,0 +1,750 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+   <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+   <META NAME="Author" CONTENT="Alexey V. Pautov">
+   <title>Глава 7. Views</title>
+</head>
+
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084"
+      alink="#0000FF">
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+
+<h2><a name="views"></a>Глава 7. Views</h2>
+<p>Views (включая обновляемые views) выполнены в MySQL Server 5.0. Views
+доступны в двоичных выпусках 5.0.1 и выше.</p>
+<p>Эта глава обсуждает следующие темы:</p>
+
+<ul type="disc"><li><p>Создание или изменение views через <code>CREATE
+VIEW</code> или <code>ALTER VIEW</code></p></li>
+<li><p>Удаление views командой <code>DROP VIEW</code></p></li></ul>
+
+<p>Обсуждение ограничений на использование views дано в разделе
+"<a href="restrict.htm#view-restrictions">
+11.4. Ограничения на Views</a>".</p>
+
+<p>Чтобы использовать views, если выполнен апгрейд до MySQL 5.0.1, Вы должны
+обновить таблицы предоставления привилегий, чтобы они содержали
+привилегии, связанные с view.</p>
+
+<p>Метаданные относительно views могут быть получены из таблицы
+<code>INFORMATION_SCHEMA.VIEWS</code> или используя инструкцию
+<code>SHOW CREATE VIEW</code>.</p>
+
+<h2><a name="alter-view"></a>7.1. Синтаксис <code>ALTER VIEW</code></h2>
+<pre>
+ALTER [ALGORITHM = {UNDEFINED | MERGE | TEMPTABLE}]
+      [DEFINER = {<em><code>user</code></em> | CURRENT_USER}]
+      [SQL SECURITY {DEFINER | INVOKER}]
+      VIEW <em><code>view_name</code></em> [(<em><code>column_list</code></em>)]
+      AS <em><code>select_statement</code></em>
+      [WITH [CASCADED | LOCAL] CHECK OPTION]
+</pre>
+
+<p>Эта инструкция изменяет определение существующего view. Синтаксис для
+<code>CREATE VIEW</code> подобен этому. Эта инструкция требует привилегий
+<code>CREATE VIEW</code> и <code>DROP</code> для этого view, а также
+некоторой привилегии для каждого столбца, упоминаемого в инструкции
+<code>SELECT</code>.</p>
+
+<p>Эта инструкция была добавлена в MySQL 5.0.1. Предложения
+<code>DEFINER</code> и <code>SQL SECURITY</code> могут использоваться с MySQL
+5.0.16, чтобы определить контекст защиты, который нужно использовать при
+проверке привилегий доступа при вызове view. Подробности изложены в разделе
+"<a href="#create-view">7.2. Синтаксис <code>CREATE VIEW</code>
+</a>".</p>
+
+<h2><a name="create-view"></a>7.2. Синтаксис <code>CREATE VIEW</code></h2>
+<pre>
+CREATE [OR REPLACE] [ALGORITHM = {UNDEFINED | MERGE | TEMPTABLE}]
+  [DEFINER = {<em><code>user</code></em> | CURRENT_USER}]
+  [SQL SECURITY {DEFINER | INVOKER}]
+  VIEW <em><code>view_name</code></em> [(<em><code>column_list</code></em>)]
+  AS <em><code>select_statement</code></em>
+  [WITH [CASCADED | LOCAL] CHECK OPTION]
+</pre>
+
+<p>Эта инструкция создает новый view или заменяет существующий, если дано
+предложение <code>OR REPLACE</code>. Инструкция <code>SELECT</code>
+<em><code>select_statement</code></em> обеспечивает определение view.
+Инструкция может выбирать из основных таблиц или других views.</p>
+
+<p>Эта инструкция требует привилегии <code>CREATE VIEW</code> для view и
+некоторой привилегии для каждого столбца, выбранного инструкцией
+<code>SELECT</code>. Для столбцов, используемых в другом месте в инструкции
+<code>SELECT</code>, Вы должны иметь привилегию <code>SELECT</code>.
+Если присутствует предложение <code>OR REPLACE</code>, Вы должны также иметь
+привилегию <code>DROP</code> для view.</p>
+
+<p>Каждый view принадлежит базе данных. По умолчанию, новый view создан в
+заданной по умолчанию базе данных. Чтобы явно создавать view в указанной базе
+данных, определите его имя как <em><code>db_name.view_name</code></em>.</p>
+<pre>
+mysql&gt; <strong><code>CREATE VIEW test.v AS SELECT * FROM t;</code></strong>
+</pre>
+
+<p>Основные таблицы и views совместно используют то же самое пространство
+имен внутри базы данных, так что база данных не может содержать основную
+таблицу и view, которые имеют то же самое имя.</p>
+
+<p>Views должны иметь уникальные имена столбца без дубликатов, точно так же,
+как основные таблицы. По умолчанию, имена столбцов, найденных инструкцией
+<code>SELECT</code> используются для имени столбца view. Чтобы определять
+явные имена для столбцов view, может быть задано факультативное предложение
+<em><code>column_list</code></em> как список разделяемых запятой
+идентификаторов. Число имен в <em><code>column_list</code></em> должно быть
+таким же, как число столбцов, найденных командой <code>SELECT</code>.</p>
+
+<p>Столбцы, найденные инструкцией <code>SELECT</code>, могут быть простыми
+ссылками к столбцам таблицы. Они также могут быть выражениями, которые
+используют функции, постоянные значения, операторы и т.д.</p>
+
+<p>Неквалифицированная таблица или имя view в операторе <code>SELECT</code>
+интерпретируется относительно заданной по умолчанию базы данных. view может
+обратиться к таблицам или view в других базах данных, квалифицируя имя
+таблицы или view с соответствующим именем базы данных.</p>
+
+<p>view может быть создан из многих видов инструкций <code>SELECT</code>.
+Он может обратиться к основным таблицам или другим view. Это может
+использовать объединения, <code>UNION</code> и подзапросы.
+<code>SELECT</code> не обязан обращаться к каким-либо таблицам. Следующий
+пример определяет view, который выбирает два столбца из другой таблицы, также
+как выражение, вычисленное из данных этих столбцов:</p>
+
+<pre>
+mysql&gt; CREATE TABLE t (qty INT, price INT);
+mysql&gt; INSERT INTO t VALUES(3, 50);
+mysql&gt; CREATE VIEW v AS SELECT qty, price, qty*price AS value FROM t;
+mysql&gt; SELECT * FROM v;
++------+-------+-------+
+| qty  | price | value |
++------+-------+-------+
+|    3 |    50 |   150 |
++------+-------+-------+
+</pre>
+
+<p>Определение view подчиненно следующим ограничениям:</p>
+<ul type="disc"><li><p>Инструкция <code>SELECT</code> не может содержать
+подзапрос в предложении <code>FROM</code>.</p></li>
+
+<li><p>Инструкция <code>SELECT</code> не может обратиться к переменным
+пользователя или системы.</p></li>
+<li><p>Инструкция <code>SELECT</code> не может обратиться к
+подготовленным операторным параметрам.</p></li>
+
+<li><p>Внутри сохраненной подпрограммы, определение не может обратиться
+к стандартным параметрам или локальным переменным.</p></li>
+<li><p>Любая таблица или view, упоминаемый в определении, должны
+существовать. Однако, после того, как view был создан, можно удалить таблицу
+или view, к которому определение обращается. В этом случае, использование
+view приводит к ошибке. Чтобы проверить определение view для выявления
+проблем этого вида, используйте инструкцию <code>CHECK TABLE</code>.</p></li>
+
+<li><p>Определение не может обратиться к таблице типа <code>TEMPORARY</code>,
+и Вы не можете создавать <code>TEMPORARY</code> view.</p></li>
+<li><p>Таблицы, поименованные в определении view, должны уже существовать.
+</p></li>
+<li><p>Вы не можете связывать триггер с view.</p></li></ul>
+
+<p><code>ORDER BY</code> позволяется в определении view, но это игнорируется,
+если Вы выбираете из view, используя инструкцию, которая имеет
+собственный <code>ORDER BY</code>.</p>
+
+<p>Для других параметров или предложений в определении, которые добавлены к
+параметрам или предложениям инструкции, которая ссылается на view, эффект не
+определен. Например, если определение view включает предложение
+<code>LIMIT</code>, и Вы выбираете из view, применяя инструкцию, которая
+имеет собственное предложение <code>LIMIT</code>, не определено, которое
+ограничение применяется. Тот же самый принцип применяется к параметрам типа
+<code>ALL</code>, <code>DISTINCT</code> или <code>SQL_SMALL_RESULT</code>,
+которые следуют за ключевым словом <code>SELECT</code>, к предложениям типа
+<code>INTO</code>, <code>FOR UPDATE</code>,
+<code>LOCK IN SHARE MODE</code> и <code>PROCEDURE</code>.</p>
+
+<p>Если Вы создаете view, а затем меняете среду, обрабатывающую запрос, меняя
+переменные системы, которые могут воздействовать на результаты,
+получаемые из view:</p>
+
+<pre>
+mysql&gt; CREATE VIEW v AS SELECT CHARSET(CHAR(65)), COLLATION(CHAR(65));
+Query OK, 0 rows affected (0.00 sec)
+mysql&gt; <strong><code>SET NAMES 'latin1';</code></strong>
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; <strong><code>SELECT * FROM v;</code></strong>
++-------------------+---------------------+
+| CHARSET(CHAR(65)) | COLLATION(CHAR(65)) |
++-------------------+---------------------+
+| latin1            | latin1_swedish_ci   |
++-------------------+---------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; <strong><code>SET NAMES 'utf8';</code></strong>
+Query OK, 0 rows affected (0.00 sec)
+mysql&gt; <strong><code>SELECT * FROM v;</code></strong>
++-------------------+---------------------+
+| CHARSET(CHAR(65)) | COLLATION(CHAR(65)) |
++-------------------+---------------------+
+| utf8              | utf8_general_ci     |
++-------------------+---------------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>Предложения <code>DEFINER</code> и <code>SQL SECURITY</code> определяют
+контекст защиты, который нужно использовать при проверке привилегий доступа
+при вызове view. Они были добавлены в MySQL 5.0.13, но реально работают с
+MySQL 5.0.16.</p>
+<p><code>CURRENT_USER</code> также известен как <code>CURRENT_USER()</code>.
+</p>
+
+<p>Внутри сохраненной подпрограммы, которая определена с характеристикой
+<code>SQL SECURITY DEFINER</code>, <code>CURRENT_USER</code> возвращает
+создателя подпрограммы. Это также воздействует на view, определенный внутри
+такой подпрограммы, если определение view содержит значение
+<code>DEFINER</code> для <code>CURRENT_USER</code>.</p>
+
+<p>Заданное по умолчанию значение <code>DEFINER</code>: пользователь, который
+выполняет инструкцию <code>CREATE VIEW</code> (поскольку
+<code>DEFINER = CURRENT_USER</code>). Если задано значение
+<em><code>user</code></em>, это должно быть логином MySQL в формате
+<code>'<em><code>user_name</code></em>'@'<em><code>host_name</code></em>'
+</code> (тот же самый формат, используется в инструкции <code>GRANT</code>).
+Требуются значения <em><code>user_name</code></em> и
+<em><code>host_name</code></em>.</p>
+
+<p>Если Вы определяете предложение <code>DEFINER</code>, Вы не можете
+устанавливать значение к любому пользователю, если не имеете привилегии
+<code>SUPER</code>. Эти правила определяют допустимые значения пользователя
+для предложения <code>DEFINER</code>:</p>
+
+<ul type="disc"><li><p>Если Вы не имеете привилегии <code>SUPER</code>,
+единственное допустимое значение <em><code>user</code></em>: Ваш собственный
+логин, определенный буквально или используя <code>CURRENT_USER</code>.
+Вы не можете устанавливать <code>DEFINER</code> к некоторому другому логину.
+</p></li>
+
+<li><p>Если Вы имеете привилегию <code>SUPER</code>, Вы можете определять
+любой синтаксически допустимый логин. Если он фактически не существует,
+будет сгенерировано предупреждение.</p></li></ul>
+
+<p>Характеристика <code>SQL SECURITY</code> определяет, который логин MySQL
+использовать при проверке привилегий доступа для view. Допустимые значения:
+<code>DEFINER</code> и <code>INVOKER</code>. Они указывают, что view
+должен быть выполним пользователем, который определил или вызвал его,
+соответственно. Заданное по умолчанию значение для
+<code>SQL SECURITY</code>: <code>DEFINER</code>.</p>
+
+<p>Начиная с MySQL 5.0.16 (когда были введены в строй <code>DEFINER</code> и
+<code>SQL SECURITY</code>), привилегии view проверяются следующим образом:
+</p>
+
+<ul type="disc"><li><p>При определении view создатель view должен иметь
+привилегии, необходимые, чтобы использовать объекты верхнего уровня, к
+которым обращается view. Например, если определение view обращается к
+сохраненной функции, могут быть проверены только привилегии, необходимые
+чтобы вызвать функцию. Привилегии, требуемые, когда функция выполняется,
+могут быть проверены только, когда это выполняется: для различных вызовов
+функции, могут приниматься различные пути выполнения внутри функции.</p></li>
+
+<li><p>Во время выполнения view, привилегии для объектов, к которым
+обращается view, проверены относительно привилегий создателя или исполнителя
+view, в зависимости от того, является ли характеристика <code>SQL
+SECURITY</code> равной <code>DEFINER</code> или <code>INVOKER</code>.</li>
+
+<li><p>Если выполнение view вызывает выполнение сохраненной функции,
+инструкции прверки привилегии, выполненные внутри функции, зависят от того,
+определена ли функция с характеристикой <code>SQL SECURITY</code>, равной
+<code>DEFINER</code> или <code>INVOKER</code>. Если характеристика защиты
+<code>DEFINER</code>, функция выполняется с привилегиями создателя. Если
+характеристика <code>INVOKER</code>, функция выполняется с привилегиями,
+определенными в соответствии с характеристикой <code>SQL
+SECURITY</code> для view.</p></li></ul>
+
+<p>До MySQL 5.0.16 привилегии, требуемые для объектов, используемых в view,
+проверялись при создании view.</p>
+
+<p>Пример: view мог бы зависеть от сохраненной функции, и та функция могла бы
+вызывать другие сохраненные подпрограммы. Например, следующий view
+вызывает сохраненную функцию <code>f()</code>:</p>
+<pre>
+CREATE VIEW v AS SELECT * FROM t WHERE t.id = f(t.name);
+</pre>
+
+<p>Предположим, что <code>f()</code> содержит инструкцию типа этого:</p>
+<pre>
+IF name IS NULL then CALL p1();
+   ELSE CALL p2();
+END IF;
+</pre>
+
+<p>Привилегии, требуемые для выполнения инструкций внутри <code>f()</code>,
+должны быть проверены, когда <code>f()</code> выполняется. Это могло бы
+означать, что привилегии необходимы для <code>p1()</code> или
+<code>p2()</code>, в зависимости от пути выполнения внутри <code>f()</code>.
+Те привилегии должны быть проверены во время выполнения, а пользователь,
+который должен обладать привилегиями, определен значениями <code>SQL
+SECURITY</code> функции <code>f()</code> и view <code>v</code>.</p>
+
+<p><code>DEFINER</code> и предложение <code>SQL SECURITY</code> для
+views представляют собой расширения к стандарту SQL. В обычном SQL views
+обработаны, используя правила для <code>SQL SECURITY INVOKER</code>.</p>
+
+<p>Если Вы вызываете view, который был создан до MySQL 5.0.13, это
+обрабатывается, как если бы это было создано с предложением <code>SQL
+SECURITY DEFINER</code> и со значением <code>DEFINER</code>, равным Вашему
+логину. Однако, потому что фактический definer неизвестен, MySQL выдает
+предупреждение. Чтобы обойти предупреждение, достаточно вновь создать view,
+так чтобы определение view включило предложение <code>DEFINER</code>.</p>
+
+<p>Факультативное предложение <code>ALGORITHM</code> задает расширение
+MySQL для стандартного SQL. <code>ALGORITHM</code> берет три значения:
+<code>MERGE</code>, <code>TEMPTABLE</code> или <code>UNDEFINED</code>.
+Заданный по умолчанию <code>UNDEFINED</code>, если никакое предложение
+<code>ALGORITHM</code> не присутствует. Алгоритм воздействует на то, как
+MySQL обрабатывает view.</p>
+
+<p>Для <code>MERGE</code> текст инструкции, которая обращается к view, и
+определение view объединены так, что части определения view заменяют
+соответствующие части инструкции.</p>
+
+<p>Для <code>TEMPTABLE</code> результаты из просмотра view помещаются во
+временную таблицу, которая затем используется, чтобы выполнить инструкцию.
+</p>
+
+<p>Для <code>UNDEFINED</code> MySQL выбирает, который алгоритм использовать.
+Это предпочитает <code>MERGE</code> варианту <code>TEMPTABLE</code>, если
+возможно, поскольку <code>MERGE</code> обычно более эффективен и потому, что
+view не может быть обновляемым, если временная таблица используется.</p>
+
+<p>Причина выбирать <code>TEMPTABLE</code> явно: блокировки на основных
+таблицах могут быть сняты после того, как временная таблица была создана, но
+прежде, чем это используется, чтобы закончить обрабатывать инструкцию. Это
+могло бы привести к более быстрому снятию блокировки, чем алгоритм
+<code>MERGE</code> так, чтобы другая клиентура, которая использует view,
+не была блокирована очень долго.</p>
+
+<p>Алгоритм view может быть <code>UNDEFINED</code> по трем причинам:</p>
+<ul type="disc"><li><p>Никакое предложение <code>ALGORITHM</code> не
+присутствует в инструкции <code>CREATE VIEW</code>.</p></li>
+
+<li><p>Инструкция <code>CREATE VIEW</code> имеет явное предложение
+<code>ALGORITHM = UNDEFINED</code>.</p></li>
+
+<li><p><code>ALGORITHM = MERGE</code> определен для view, который может быть
+обработан только с временной таблицей. В этом случае MySQL генерирует
+предупреждение и устанавливает алгоритм к <code>UNDEFINED</code>
+(не к <code>TEMPTABLE</code>!).</p></li></ul>
+
+<p>Как упомянуто ранее, <code>MERGE</code> обработан, объединяя
+соответствующие части определения view в инструкцию, которая обращается к
+view. Следующие примеры кратко иллюстрируют, как работает алгоритм
+<code>MERGE</code>. Примеры принимают, что имеется view <code>v_merge</code>,
+который имеет это определение:</p>
+
+<pre>
+CREATE ALGORITHM = MERGE VIEW v_merge (vc1, vc2) AS
+       SELECT c1, c2 FROM t WHERE c3 &gt; 100;
+</pre>
+
+<p>Пример 1: Предположим, что мы выдаем эту инструкцию:</p>
+<pre>
+SELECT * FROM v_merge;
+</pre>
+
+<p>MySQL обрабатывает инструкцию следующим образом:</p>
+<ul type="disc"><li><p><code>v_merge</code> становится <code>t</code>.
+</p></li>
+
+<li><p><code>*</code> становится <code>vc1, vc2</code>, которые соответствуют
+<code>c1, c2</code>.</p></li>
+<li><p>Предложение <code>WHERE</code> из view добавляется.</p></li></ul>
+
+<p>Возникающая в результате инструкция, которая будет выполнена:</p>
+<pre>
+SELECT c1, c2 FROM t WHERE c3 &gt; 100;
+</pre>
+
+<p>Пример 2: Предположим, что мы выдаем эту инструкцию:</p>
+<pre>
+SELECT * FROM v_merge WHERE vc1 &lt; 100;
+</pre>
+
+<p>Эта инструкция обработана аналогично предыдущей за исключением того, что
+<code>vc1 &lt; 100</code> становится <code>c1 &lt;100</code> и предложение
+<code>WHERE</code> из view добавлено к предложению <code>WHERE</code>
+инструкции, используя связку <code>AND</code> (круглые скобки добавлены,
+чтобы удостовериться, что части предложения выполнены с правильным
+старшинством). Возникающая в результате инструкция, которая будет выполнена:
+</p>
+<pre>
+SELECT c1, c2 FROM t WHERE (c3 &gt; 100) AND (c1 &lt; 100);
+</pre>
+
+<p>Действительно, инструкция, которая будет выполнена, имеет предложение
+<code>WHERE</code> этой формы:</p>
+<pre>
+WHERE (select WHERE) AND (view WHERE)
+</pre>
+
+<p>Алгоритм <code>MERGE</code> требует взаимно однозначной связи между
+строками в view и строках в основной таблице. Если эта связь не действует,
+временная таблица должна использоваться вместо этого. Недостаток взаимно
+однозначной связи происходит, если view содержит любую из этих конструкций:
+</p>
+
+<ul type="disc"><li><p>Агрегатные функции (<code>SUM()</code>,
+<code>MIN()</code>, <code>MAX()</code>, <code>COUNT()</code> и им подобные)
+</p></li>
+<li><p><code>DISTINCT</code></p></li>
+<li><p><code>GROUP BY</code></p></li>
+<li><p><code>HAVING</code></p></li>
+<li><p><code>UNION</code> или <code>UNION ALL</code></p></li>
+<li><p>Обращается только к литеральным значениям (в этом случае не имеется
+никакой основной таблицы).</p></li></ul>
+
+<p>Некоторые views обновляемые. То есть Вы можете использовать их в
+инструкциях типа <code>UPDATE</code>, <code>DELETE</code> или
+<code>INSERT</code>, чтобы модифицировать содержание основной таблицы. Чтобы
+view был обновляемым, должна иметься взаимно однозначная связь между строками
+в view и строками в основной таблице. Имеются также некоторые другие
+конструкции, которые делают view не обновляемым. А именно: view не
+обновляемый, если он содержит любое из следующего:</p>
+
+<ul type="disc"><li><p>Агрегатные функции (<code>SUM()</code>,
+<code>MIN()</code>, <code>MAX()</code>, <code>COUNT()</code> и им подобные)
+</p></li>
+<li><p><code>DISTINCT</code></p></li>
+<li><p><code>GROUP BY</code></p></li>
+<li><p><code>HAVING</code></p></li>
+<li><p><code>UNION</code> или <code>UNION ALL</code></p></li>
+<li><p>Подзапросы в списке select</p></li>
+<li><p>Join</p></li>
+
+<li><p>Необновляемые view в <code>FROM</code></p></li>
+<li><p>Подзапросы в <code>WHERE</code>, ссылающиеся
+на таблицы в <code>FROM</code></p></li>
+<li><p>Обращается только к литеральным значениям (в этом случае не имеется
+никакой основной таблицы, чтобы модифицировать)</p></li>
+<li><p><code>ALGORITHM = TEMPTABLE</code> (использование временной таблицы
+всегда делает view не обновляемым)</p></li></ul>
+
+<p>Относительно вставляемости (обновляемости с инструкциями
+<code>INSERT</code>): обновляемый view является вставляемым, если он
+удовлетворяет этим дополнительным требованиям для столбцов view:</p>
+
+<ul type="disc"><li><p>Не должно иметься никаких двойных имен столбца view.
+</p></li>
+<li><p>view должен содержать все столбцы в основной таблице, которые не имеют
+значения по умолчанию.</p></li>
+<li><p>Столбцы view должны быть простыми ссылками на столбец, но не
+полученными столбцами. Под полученными столбцами понимаются столбцы, которые
+получены из выражения. Вот примеры полученных столбцов:</p>
+
+<pre>
+3.14159
+col1 + 3
+UPPER(col2)
+col3 / col4
+(<em><code>подзапрос</code></em>)
+</pre></li></ul>
+
+<p>view, который имеет смесь простых ссылок столбца и полученных столбцов,
+не вставляемый, но он может быть обновляемым, если Вы модифицируете только те
+столбцы, которые не получены. Рассмотрите этот view:</p>
+<pre>
+CREATE VIEW v AS SELECT col1, 1 AS col2 FROM t;
+</pre>
+
+<p>Этот view не вставляемый, потому что <code>col2</code> получен из
+выражения. Но это обновляемый view, если модификация не пробует менять
+<code>col2</code>. Эта модификация допустима:</p>
+<pre>
+UPDATE v SET col1 = 0;
+</pre>
+
+<p>А вот эта модификация уже не допустима, потому что она пытается
+модифицировать полученный столбец:</p>
+<pre>
+UPDATE v SET col2 = 0;
+</pre>
+
+<p>Для мультитабличного view иногда есть возможность обновляться, если это
+обрабатывается через алгоритм <code>MERGE</code>. Для этого view должен
+использовать внутреннее объединение (не внешнее объединение или
+<code>UNION</code>). Также, только одиночная таблица в определении view может
+модифицироваться, так что предложение <code>SET</code> должно называть только
+столбцы одной из таблиц в view. Views, которые используют <code>UNION
+ALL</code> отвергнуты даже при том, что они могли бы быть теоретически
+обновляемыми, потому что реализация использует временные таблицы,
+чтобы обработать их.</p>
+
+<p>Для мультитабличного обновляемого view, <code>INSERT</code> может
+работать, если это вставляет в одиночную таблицу. <code>DELETE</code>
+не обеспечивается вообще.</p>
+
+<p>Предложение <code>WITH CHECK OPTION</code> может быть дано для
+обновляемого view, чтобы предотвратить вставки или модификации в строки за
+исключением тех, для которых предложение <code>WHERE</code> в
+<em><code>select_statement</code></em> истинно.</p>
+
+<p>В предложении <code>WITH CHECK OPTION</code> для обновляемого view
+ключевые слова <code>LOCAL</code> и <code>CASCADED</code> определяют
+контекст тестирования проверки, когда view определен в терминах другого
+view. Ключевое слово ограничивает <code>LOCAL</code>
+<code>CHECK OPTION</code> только определяемым view. <code>CASCADED</code>
+задает проверку для основных view, которые также будут оценены. Когда никакое
+ключевое слово не дано, значение по умолчанию: <code>CASCADED</code>.
+Рассмотрите определения для следующей таблицы и набора view:</p>
+
+<pre>
+mysql&gt; CREATE TABLE t1 (a INT);
+mysql&gt; CREATE VIEW v1 AS SELECT * FROM t1 WHERE a &lt; 2
+    -&gt;        WITH CHECK OPTION;
+mysql&gt; CREATE VIEW v2 AS SELECT * FROM v1 WHERE a &gt; 0
+    -&gt;        WITH LOCAL CHECK OPTION;
+mysql&gt; CREATE VIEW v3 AS SELECT * FROM v1 WHERE a &gt; 0
+    -&gt;        WITH CASCADED CHECK OPTION;
+</pre>
+
+<p>Здесь view <code>v2</code> и <code>v3</code> определены в терминах другого
+view, а именно <code>v1</code>. <code>v2</code> имеет опцию проверки
+<code>LOCAL</code>, так что вставки проверены только для <code>v2</code>.
+<code>v3</code> имеет опцию проверки <code>CASCADED</code>, так что вставки
+проверены не только по собственной проверки, но и для таковых основных view.
+Следующие инструкции иллюстрируют эти различия:</p>
+
+<pre>
+mysql&gt; <strong><code>INSERT INTO v2 VALUES (2);</code></strong>
+Query OK, 1 row affected (0.00 sec)
+mysql&gt; <strong><code>INSERT INTO v3 VALUES (2);</code></strong>
+ERROR 1369 (HY000): CHECK OPTION failed 'test.v3'
+</pre>
+
+<p>На обновляемость view можно воздействовать значением переменной системы
+<code>updatable_views_with_limit</code>. Команда <code>CREATE VIEW</code>
+была добавлена в MySQL 5.0.1. <code>WITH CHECK OPTION</code>
+было выполнено в MySQL 5.0.2.</p>
+
+<h2><a name="drop-view"></a>7.3. Синтаксис <code>DROP VIEW</code></h2>
+<pre>
+DROP VIEW [IF EXISTS]
+     <em><code>view_name</code></em> [, <em><code>view_name</code></em>] ...
+     [RESTRICT | CASCADE]
+</pre>
+
+<p><code>DROP VIEW</code> удаляет один или большее количество view. Вы должны
+иметь привилегию <code>DROP</code> для каждого view. Если любой из view,
+именованных в списке параметров не существует, MySQL возвращает индикацию
+ошибки с именем, которые не существует, но удаляет все view в
+списке, которые существуют.</p>
+
+<p>Предложение <code>IF EXISTS</code> предотвращает ошибку для просмотров,
+которые не существуют. Когда это предложение дано, <code>NOTE</code> будет
+сгенерировано для каждого несуществующего view.</p>
+
+<p><code>RESTRICT</code> и <code>CASCADE</code>,
+если заданы, анализируются и игнорируются.
+Эта инструкция была добавлена в MySQL 5.0.1.</p>
+
+<h2><a name="faqs-views"></a>7.4. MySQL 5.1 FAQ Views</h2>
+<p><a name="qandaitem-28-6-2"></a><span class="bold"><strong>7.4.1:
+</strong></span><span class="bold"><strong>Имеется ли форум для
+обсуждения MySQL Views?</strong></span></p>
+<p>Да. <a href="../../../forums.mysql.com/list.php@100">
+http://forums.mysql.com/list.php?100</a></p>
+
+<p><a name="qandaitem-28-6-3"></a><span class="bold"><strong>7.4.2:
+</strong></span><span class="bold"><strong>Что случается с view, если
+основная таблица удалена или переименована?</strong></span></p>
+
+<p>После создания view, возможно удалить или изменить таблицу (или view), к
+которому обращается определение. Чтобы проверять определение view для
+выявления проблем этого вида, используйте
+инструкцию <code>CHECK TABLE</code>.</p>
+
+<p><a name="qandaitem-28-6-4"></a><span class="bold"><strong>7.4.3:
+</strong></span><span class="bold"><strong>MySQL 5.1 имеет кадры таблицы?
+</strong></span></p>
+<p>Нет.</p>
+
+<p><a name="qandaitem-28-6-5"></a><span class="bold"><strong>7.4.4:
+</strong></span><span class="bold"><strong>
+MySQL 5.1 имеет осуществленные views?</strong></span></p>
+<p>Нет.</p>
+
+<p><a name="qandaitem-28-6-6"></a><span class="bold"><strong>7.4.5:
+</strong></span><span class="bold"><strong>Можно ли вставлять во views,
+которые основаны на объединениях?</strong></span></p>
+
+<p>Это возможно, если Ваша инструкция <code>INSERT</code> имеет список
+столбцов, который прояснит, что имеется только одна включаемая таблица. Вы не
+можете вставлять в много таблиц одиночной вставкой на view.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</html>

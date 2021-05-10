@@ -1,0 +1,11 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Summer\cat.KPI-2017-Summer\dir.KPI-2017-Summer.md">KPI-2017-Summer</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Summer\Lecture3.md">Lecture3.md</a>
+        - *# Лекция 3: JavaScript, как ассемблер нашего времени
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Summer\Lecture4.md">Lecture4.md</a>
+        - *# Лекция 4: Введение в Node.js и серверный JavaScript
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Summer\Lecture5.md">Lecture5.md</a>
+        - *# Лекция 5: Замыкания, примеси, обертки, функторы
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Summer\Lecture6.md">Lecture6.md</a>
+        - *# Лекция 6: Файлы, потоки и буферы, и фронтенд
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\KPI-2017-Summer\Meetings.md">Meetings.md</a>
+        - *## Расписание летней школы 2017 года

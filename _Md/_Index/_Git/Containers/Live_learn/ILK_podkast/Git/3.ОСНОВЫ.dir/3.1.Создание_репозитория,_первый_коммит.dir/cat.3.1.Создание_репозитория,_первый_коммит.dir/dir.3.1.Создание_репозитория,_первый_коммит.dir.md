@@ -1,0 +1,4 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\3.ОСНОВЫ.dir\3.1.Создание_репозитория,_первый_коммит.dir\cat.3.1.Создание_репозитория,_первый_коммит.dir\dir.3.1.Создание_репозитория,_первый_коммит.dir.md">3.1.Создание_репозитория,_первый_коммит.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\3.ОСНОВЫ.dir\3.1.Создание_репозитория,_первый_коммит.dir\3.1.Создание_репозитория,_первый_коммит.md">3.1.Создание_репозитория,_первый_коммит.md</a>
+        - *## first commit
+        - *### git update-index

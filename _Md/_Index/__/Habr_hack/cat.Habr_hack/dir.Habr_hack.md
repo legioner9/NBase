@@ -1,0 +1,4 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\__\Habr_hack\cat.Habr_hack\dir.Habr_hack.md">Habr_hack</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\__\Habr_hack\FileList_to_input.md">FileList_to_input.md</a>
+        - *# https://qna.habr.com/q/895163
+        - *## Как создать коллекцию файлов FileList?

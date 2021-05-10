@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\stereotypedlg\shape_editor_2\cat.shape_editor_2\dir.shape_editor_2.md">shape_editor_2</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\stereotypedlg\shape_editor_2\shape_editor_2.md">shape_editor_2.md</a>
+        - *### [Shape Scripts](https://sparxsystems.com/enterprise_architect_user_guide/15.1/modeling/shape_editor_2.html) Сценарии фигур

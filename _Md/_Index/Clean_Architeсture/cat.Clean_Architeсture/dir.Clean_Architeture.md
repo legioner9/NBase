@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\Clean_Architeture\cat.Clean_Architeture\dir.Clean_Architeture.md">Clean_Architeture</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\Clean_Architeture\ReadMe.md">ReadMe.md</a>
+        - *## Clean_Architeture

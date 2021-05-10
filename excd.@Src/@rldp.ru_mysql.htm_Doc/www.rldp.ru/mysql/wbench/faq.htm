@@ -1,0 +1,653 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Приложение A. MySQL Workbench Frequently Asked Questions</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="workbench-faq"></a>Приложение A. MySQL Workbench
+Frequently Asked Questions</h1>
+<p>Категории FAQ</p>
+<ul><li><a href="#workbench-faq-basic-usage"><span class="bold">
+<strong>Основное использование</strong></span></a></li>
+<li><a href="#workbench-faq-functionality">
+<span class="bold"><strong>Функциональность MySQL Workbench
+</strong></span></a></li>
+<li><a href="#workbench-faq-data-management">
+<span class="bold"><strong>Управление данными</strong></span></a></li>
+<li><a href="#workbench-faq-general">
+<span class="bold"><strong>Общие</strong></span></a></li></ul>
+
+<p><a name="workbench-faq-basic-usage"></a>
+<span class="bold"><strong>Основное использование</strong></span></p>
+<a name="idm140523188008640"></a><dl><dt>A.1.
+<a href="#faq-workbench-mysql-connection-meaning">
+Что такое подключение MySQL? Почему я, возможно, должен был бы создать
+больше, чем одно?</a></dt>
+
+<dt>A.2. <a href="#faq-workbench-tls-support">
+MySQL Workbench поддерживает протокол TLS v1.2?</a></dt>
+<dt>A.3. <a href="#faq-workbench-create-database">
+Как я создаю базу данных MySQL (схему) в MySQL Workbench?</a></dt>
+
+<dt>A.4. <a href="#faq-workbench-select-data">
+Есть ли легкий способ выбрать все данные из таблицы, а
+затем видеть результаты?</a></dt></dl>
+
+<table border="0" style="width: 100%;">
+<tbody><tr><td align="left" valign="top">
+<a name="faq-workbench-mysql-connection-meaning"></a>
+<a name="idm140523188007872"></a><p><b>A.1.</b></p></td>
+<td align="left" valign="top"><p>
+Что такое подключение MySQL? Почему я, возможно, должен был бы создать
+больше, чем одно?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Подключение MySQL соединяет Workbench с сервером MySQL. Большинство действий,
+выполненных в Workbench, тогда выполняется для подключенного сервера MySQL.
+Каждое подключение MySQL содержит свой собственный набор определений, таким
+образом, вы могли бы определить многократные подключения MySQL в Workbench.
+Например, связи могли бы соединиться с различными серверами MySQL или тем же
+самым сервером MySQL с различными именами пользователей, или позволить SSL
+для одного, или вы могли бы настроить связь с удаленным сервером MySQL (на
+вашем веб-хосте?) с использованием SSH и так далее.</p>
+
+<p>Что касается многократных связей с тем же самым
+сервером MySQL, у вас могла бы быть одна связь, используя "root", и другая с
+использованием менее привилегированного пользователя. В зависимости от того,
+как вы настраиваете пользователей, они могут иметь права видеть и
+использовать те же самые базы данных. Например, вы могли бы использовать
+Workbench, чтобы формировать и использовать менее привилегированного
+пользователя для своего веб-приложения.</p>
+
+<p>Таким образом, чтобы подвести итог, связи просто соединяются с сервером
+MySQL. Если две связи будут использовать ту же самую точную информацию, то
+результаты в Workbench будут идентичны. Однако это не случай общего
+использования. Для получения дополнительной информации о подключениях
+MySQL в MySQL Workbench см. <a href="connect.htm">главу 5</a>.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-workbench-tls-support"></a>
+<a name="idm140523188002928"></a><p><b>A.2.</b></p></td>
+<td align="left" valign="top"><p>
+MySQL Workbench поддерживает протокол TLS v1.2?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Поскольку TLS v1.2 требует OpenSSL, поддержка этого протокола доступна для
+MySQL Workbench Commercial Editions, но не для Community Edition
+(которая собрана, используя yaSSL и поддерживает только TLS v1.1).
+</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-workbench-create-database">
+</a><a name="idm140523188000672"></a><p><b>A.3.</b></p></td>
+<td align="left" valign="top"><p>
+Как я создаю базу данных MySQL (схему) в MySQL Workbench?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top">
+<ul><li><p>Откройте подключение MySQL, чтобы открыть редактор SQL.</li>
+<li>На левой панели есть Object Browser, который содержит вкладки
+<span class="guilabel">Management</span> и
+<span class="guilabel">Schemas</span>. Выберите вкладку Schemas.</li>
+
+<li>Щелкните правой кнопкой мыши где угодно в панели
+<span class="guilabel">Schemas</span> и выберите
+<span class="guimenuitem">Create Schema</span> из контекстного меню.</li>
+
+<li>Следуйте за мастером создания схемы, называя вашу новую схему и нажмите
+<span class="guibutton">Apply</span>, чтобы создать вашу новую схему.
+</p></li></ul>
+
+<p>Другие варианты включают нажатие на символ "Create Schema"
+на главной панели навигации или выполнение запроса
+"CREATE SCHEMA your_db_name" в редакторе SQL.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-workbench-select-data"></a>
+<a name="idm140523187990880"></a><p><b>A.4.</b></p></td>
+<td align="left" valign="top"><p>Есть ли легкий способ выбрать все данные из
+таблицы, а затем видеть результаты?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Из навигатора схемы выберите таблицу и щелкните значок
+<span class="inlinemediaobject"><img src="images/wb_item_overlay_result.png"
+align="middle" width="16" height="16"></span>.
+Это выполняет запрос "SELECT * FROM schema.table"
+и загружает результаты в сетку результата. Оттуда можно рассмотреть
+или отредактировать данные.</p>
+
+<p>Альтернативно, щелкните правой кнопкой мыши по таблице и выберите
+<span class="guimenuitem">Select Rows - Limit 1000</span>
+из контекстного меню.</p></td></tr></tbody></table>
+
+<p><a name="workbench-faq-functionality"></a>
+<span class="bold"><strong>Функциональность Workbench</strong></span></p>
+<a name="idm140523187984000"></a><dl><dt>
+A.1. <a href="#faq-workbench-ssl-certificate-wizard">
+Как я использую мастера SSL Certificate, чтобы позволить SSL для моего
+сервера MySQL и для клиента MySQL?</a></dt>
+
+<dt>A.2. <a href="#faq-workbench-save-connections">
+Как я копирую свои подключения MySQL в Workbench к иному компьютеру?</a></dt>
+<dt>A.3. <a href="#faq-workbench-view-history">
+Как я могу смотреть свою историю запросов в MySQL Workbench?</a></dt>
+
+<dt>A.4. <a href="#faq-workbench-save-results-tab">
+Я могу сохранить вкладку результатов, а не обновлять ее
+каждый раз, когда я выполняю запрос?</a></dt>
+
+<dt>A.5. <a href="#faq-workbench-embedded-web-browser">
+Как встроенная функциональность веб-браузера работает? Например, нажатие на
+Workbench Forum в Home screen открывает форум в своей собственной вложенной
+вкладке MySQL Workbench.</a></dt>
+<dt>A.6. <a href="#faq-workbench-increase-performance">
+Как MySQL Workbench увеличивает скорость импорта?</a></dt></dl>
+
+<table border="0" style="width: 100%;">
+<tbody><tr><td align="left" valign="top">
+<a name="faq-workbench-ssl-certificate-wizard"></a>
+<a name="idm140523187983232"></a><p><b>A.1.</b></p></td>
+<td align="left" valign="top"><p>
+Как я использую мастера SSL Certificate, чтобы позволить SSL для моего
+сервера MySQL и для клиента MySQL?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Выполните мастера, чтобы произвести сертификаты SSL, а затем изменить ваш
+конфигурационный файл сервера MySQL (<code class="filename">my.cnf</code> или
+<code class="filename">my.ini</code>) соответственно. Вы можете скопировать
+записи для опций SSL из произведенного файла примера
+<code class="filename">sample-my.cnf</code>. Затем подтвердите, что значения
+SSL <span class="guilabel">CA File</span>,
+<span class="guilabel">CERT File</span> и
+<span class="guilabel">Key File</span> правильно установлены на вкладке
+<span class="guilabel">SSL</span> для вашего подключения MySQL.
+Установите <span class="guilabel">Use SSL</span> в
+<span class="emphasis"><em>Require</em></span> или
+<span class="emphasis"><em>If available</em></span>, затем выполните
+<span class="guibutton">Test Connection</span>.
+Это должно сообщить, что SSL позволен.</p>
+
+<p>Неправильные связи SSL записаны в файл журнала MySQL Workbench.
+Для получения дополнительной информации о местоположении файла журнала
+посмотрите разделы <a href="conf.htm#wb-configuring-files">3.3</a> и
+<a href="connect.htm#wb-mysql-connections-ssl-wizard">5.3.4</a>.
+</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-workbench-save-connections">
+</a><a name="idm140523187971088"></a><p><b>A.2.</b></p></td>
+<td align="left" valign="top"><p>
+Как я копирую свои подключения MySQL в Workbench к иному компьютеру?
+</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Из основного меню навигации выберите <span class="guimenu">Tools</span>,
+<span class="guimenuitem">Configuration</span>,
+<span class="guimenuitem">Backup Connections</span>, чтобы создать zip-файл с
+вашими подключениями MySQL. Затем загрузите этот файл в свой новый
+экземпляр Workbench при помощи связанной опции
+<span class="guimenuitem">Restore Connections</span>.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-workbench-view-history"></a>
+<a name="idm140523187966016"></a><p><b>A.3.</b></p></td>
+<td align="left" valign="top"><p>
+Как я могу смотреть свою историю запросов в MySQL Workbench?</p></td></tr>
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+В нижней панели смените <span class="guilabel">Action Output</span> на
+<span class="guilabel">History</span>, затем выберите соответствующую дату.
+</p>
+
+<p>История SQL-операторов сохранена как простой текст в вашей системе в
+<a href="conf.htm#wb-configuring-file-paths">пути конфигурации
+MySQL Workbench</a> в подкаталоге
+<code class="filename">sql_history</code>. Эти файлы организованы по датам
+(например, 2014-01-15) и содержат вашу историю SQL-операторов MySQL Workbench
+для всех подключений MySQL.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-workbench-save-results-tab">
+</a><a name="idm140523187960224"></a><p><b>A.4.</b></p></td>
+<td align="left" valign="top"><p>
+Я могу сохранить вкладку результатов, а не обновлять ее
+каждый раз, когда я выполняю запрос?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да, можно прикрепить вкладку результатов, чтобы вынудить ее остаться и быть
+незатронутой UPDATE и другими запросами. Сделайте это, щелкнув правой кнопкой
+мыши по вкладке результата и выберите "Pin Tab" из контекстного меню или
+щелкните по небольшому символу булавки. Теперь выполните свои другие запросы
+и затем освежите прикрепленную вкладку (есть символ "refresh"
+в меню сетки результата).</p></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-workbench-embedded-web-browser"></a>
+<a name="idm140523187957744"></a><p><b>A.5.</b></p></td>
+<td align="left" valign="top"><p>
+Как встроенная функциональность веб-браузера работает? Например, нажатие на
+<span class="guilabel">Workbench Forum</span> в Home screen открывает форум в
+своей собственной вложенной вкладке MySQL Workbench.</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Системная библиотека WebKit используется в OS X, Internet Explorer
+используется в Windows, Linux открывает браузер по умолчанию внешне, а не
+вложенный браузер. Нажимая
+<span class="keycap"><strong>Modifier</strong></span> + <span class="keycap">
+<strong>Arrow</strong></span> можно двигаться по истории
+браузера вперед и назад.</p>
+
+<p>Кроме того, для получения информации о создании ваших собственных связей
+домашнего экрана, посмотрите
+<a href="conf.htm#wb-configuring-custom-home-link">раздел 3.4</a>.
+</p></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-workbench-increase-performance">
+</a><a name="idm140523187951968"></a><p><b>A.6.</b></p></td>
+<td align="left" valign="top"><p>
+Как MySQL Workbench увеличивает скорость импорта?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Когда модель экспортируется (<span class="guimenu">Database</span>,
+<span class="guisubmenu">Forward Engineer...</span>),
+некоторые серверные переменные MySQL временно настраиваются, чтобы
+позволить быстрый импорт SQL сервером. Запросы, добавленные в начале кода:
+<pre>
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+</pre>
+
+<p>Эти запросы функционируют следующим образом:</p>
+<ul><li><code class="literal">SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS,
+UNIQUE_CHECKS=0;</code>: Определяет, выполняет ли
+<code class="literal">InnoDB</code> проверки дублирования ключей.
+Импорт намного быстрее для больших наборов данных, если эта проверка не
+выполнена. Для получения дополнительной информации посмотрите
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_unique_checks"
+target="_top"><code class="literal">unique_checks</code></a>.</li>
+
+<li><code class="literal">SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS,
+FOREIGN_KEY_CHECKS=0;</code>: Определяет, должен ли сервер проверить, что
+таблица, на которую ссылаются, существует, определяя внешний ключ.
+Из-за потенциальных циклических ссылок, эта проверка должна быть выключена на
+время импорта, чтобы разрешить определять внешние ключи.
+Для получения дополнительной информации посмотрите
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_foreign_key_checks"
+target="_top"><code class="literal">foreign_key_checks</code></a>.</li>
+
+<li><code class="literal">SET @OLD_SQL_MODE=@@SQL_MODE,
+SQL_MODE='TRADITIONAL';</code>: Устанавливает
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/sql-mode.html" target="_top">
+SQL_MODE</a> в
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/sql-mode.html#sqlmode_traditional"
+target="_top"><code class="literal">TRADITIONAL</code></a>, чтобы заставить
+сервер работать в более строгом режиме и
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/sql-mode.html#sqlmode_allow_invalid_dates"
+target="_top"><code class="literal">ALLOW_INVALID_DATES</code></a>,
+чтобы заставить даты не быть полностью проверенными.</li></ul>
+
+<p>Эти серверные переменные перезагружаются в конце скрипта,
+используя следующие запросы:
+<pre>
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+</pre></td></tr></tbody></table>
+
+<p><a name="workbench-faq-behavior"></a>
+<span class="bold"><strong>Поведение Workbench</strong></span></p>
+<a name="idm140523187932416"></a><dl><dt>
+A.1. <a href="#faq-workbench-read-only">
+Почему мои результаты запроса иногда Read Only, но в другое время я могу
+отредактировать данные в сетке результатов?</a></dt>
+
+<dt>A.2. <a href="#faq-workbench-delete-safe">
+Я пытаюсь выполнить запрос на удаление, но он терпит неудачу с
+ошибкой "Error Code: 1175"?</a></dt>
+
+<dt>A.3. <a href="#faq-workbench-error-lost-connection">
+Моя связь с сервером MySQL вылетает с ошибкой
+"Error Code: 2013. Lost connection to MySQL server during query".
+Я могу отрегулировать тайм-аут?</a></dt>
+
+<dt>A.4. <a href="#faq-workbench-column-acronyms">
+Что означают флаги столбцов (PK, NN, UQ, BIN, UN, ZF, AI, G) в
+редакторе таблиц MySQL Workbench?</a></dt></dl>
+
+<table border="0" style="width: 100%;">
+<tbody><tr><td align="left" valign="top"><a name="faq-workbench-read-only">
+</a><a name="idm140523187931648"></a><p><b>A.1.</b></p></td>
+<td align="left" valign="top"><p>
+Почему мои результаты запроса иногда Read Only, но в другое время я могу
+отредактировать данные в сетке результатов?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Данные в сетке результатов запроса редактируемые только когда результаты
+запроса включают первичный ключ. Например, "SELECT type FROM
+food" read-only, если "type" не будет первичным ключом, но
+"SELECT id, type FROM food" будет редактируемым, когда "id"
+первичный ключ. Как правило, "SELECT *" используется в Workbench, который
+часто включает результаты запроса с первичным ключом.</p>
+
+<p>Для получения дополнительной информации, наведите мышь на символ
+"Read Only", чтобы показать подсказку, которая объясняет, почему ваш набор
+результатов находится в режиме только для чтения.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-workbench-delete-safe"></a>
+<a name="idm140523187927888"></a><p><b>A.2.</b></p></td>
+<td align="left" valign="top"><p>
+Я пытаюсь выполнить запрос на удаление, но он терпит неудачу с
+ошибкой "Error Code: 1175"?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+По умолчанию Workbench формируется, чтобы не выполнить запросы на удаление
+или обновление, которые не включают оператор WHERE в столбце ключа.
+Чтобы изменить это поведение, откройте
+<span class="guilabel">Preferences</span>, выберите
+<span class="guilabel">SQL Editor</span> и отключите следующую опцию:</p>
+
+<p>[ ] "Safe Updates". Forbid UPDATEs and DELETEs with no key
+in WHERE clause or no LIMIT clause.</p>
+<p>Изменение этого предпочтения требует, чтобы вы снова соединились с вашим
+сервером MySQL, прежде чем это изменение вступит в силу.</p></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-workbench-error-lost-connection"></a>
+<a name="idm140523187922992"></a><p><b>A.3.</b></p></td>
+<td align="left" valign="top"><p>
+Моя связь с сервером MySQL вылетает с ошибкой
+"Error Code: 2013. Lost connection to MySQL server during query".
+Я могу отрегулировать тайм-аут?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Да, пойдите в <span class="guilabel">Preferences</span>,
+<span class="guilabel">SQL Editor</span> и поправьте опцию
+<span class="guilabel">DBMS connection read time out</span>, которая
+по умолчанию 600 секунд. Это устанавливает максимальное количество времени
+(в секундах), которое может занять запрос, прежде чем MySQL Workbench
+отсоединяется от сервера MySQL.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-workbench-column-acronyms">
+</a><a name="idm140523187918576"></a><p><b>A.4.</b></p></td>
+<td align="left" valign="top"><p>
+Что означают флаги столбцов (PK, NN, UQ, BIN, UN, ZF, AI, G) в
+редакторе таблиц MySQL Workbench?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Установка этих флажок изменит столбец таблицы, назначая ограничения
+на определяемые столбцы.</p>
+
+<p>См. для дополнительных деталей
+<a href="dev.htm#wb-table-editor-columns-tab">раздел 8.1.10.2</a> и MySQL
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/create-table.html"
+target="_top">CREATE TABLE</a>.
+</p></td></tr></tbody></table>
+
+<p><a name="workbench-faq-data-management"></a>
+<span class="bold"><strong>Управление данными</strong></span></p>
+<a name="idm140523187912592"></a><dl><dt>
+A.1. <a href="#faq-workbench-import-csv">
+Как я импортирую данные в отделенном запятыми формате (CSV) в
+MySQL через Workbench?</a></dt>
+
+<dt>A.2. <a href="#faq-workbench-export-text">
+Как я экспортирую данные MySQL в файл простого текста с таким форматом, как
+CSV, JSON или XML?</a></dt>
+<dt>A.3. <a href="#faq-workbench-export-database-text">
+Как экспортировать базу данных MySQL в текстовый файл?</a></dt></dl>
+
+<table border="0" style="width: 100%;">
+<tbody><tr><td align="left" valign="top"><a name="faq-workbench-import-csv">
+</a><a name="idm140523187911824"></a><p><b>A.1.</b></p></td>
+<td align="left" valign="top"><p>
+Как я импортирую данные в отделенном запятыми формате (CSV) в
+MySQL через Workbench?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Импортирование данных CSV в новую или существующую
+<span class="emphasis"><em>таблицу</em></span>: мастер
+<span class="guilabel">Table Data Import</span>
+импортирует конфигурируемые данные CSV.
+Этот выбор был добавлен в MySQL Workbench 6.3.</p>
+
+<p>Импортирование данных CSV в <span class="emphasis"><em>набор результатов
+</em></span>: мастер <span class="guilabel">Import records from external file
+</span> импортирует данные CSV непосредственно в
+представление набора результатов.</p>
+
+<p>Альтернативно, мастер <span class="guilabel">Data Import</span>
+импортирует ваши сохраненные файлы MySQL в ваш сервер MySQL.
+Для получения дополнительной информации посмотрите
+<a href="admin.htm#wb-admin-export-import">раздел 6.5</a>.</p>
+
+<p>Если вы импортируете файлы Excel, то рассмотрите использование
+официального <a href="../../../dev.mysql.com/doc/mysql-for-excel/en/default.htm"
+target="_top">MySQL for Excel Add-on</a>.</p></td></tr>
+
+<tr><td align="left" valign="top"><a name="faq-workbench-export-text"></a>
+<a name="idm140523187903552"></a><p><b>A.2.</b></p></td>
+<td align="left" valign="top"><p>
+Как я экспортирую данные MySQL в файл простого текста с таким форматом, как
+CSV, JSON или XML?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+У панели представления результатов в Workbench есть опция
+"Export recordset to an external file", которая экспортирует ваш набор
+результатов в большое разнообразие форматов.
+Для получения дополнительной информации посмотрите
+<a href="admin.htm#wb-develop-sql-editor-export">Export a Result Set</a>.</p>
+
+<p>Это отличается от мастера <span class="guilabel">Data Export</span>,
+который экспортирует ваши данные MySQL в стандартные форматы MySQL.
+Для получения дополнительной информации об этом посмотрите
+<a href="admin.htm#wb-admin-export-import">раздел 6.5</a>.</p>
+
+<p>Если вы экспортируете в Excel, то рассмотрите использование официального
+<a href="../../../dev.mysql.com/doc/mysql-for-excel/en/default.htm" target="_top">
+MySQL for Excel Add-on</a>.</p></td></tr>
+
+<tr><td align="left" valign="top">
+<a name="faq-workbench-export-database-text"></a>
+<a name="idm140523187897040"></a><p><b>A.3.</b></p></td>
+<td align="left" valign="top"><p>
+Как экспортировать базу данных MySQL в текстовый файл?</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Откройте подключение MySQL и выберите <span class="guimenu">Server</span>
+из основного меню навигации и выберите <span class="guimenu">Data Export
+</span>, чтобы открыть мастер экспорта данных. Альтернативно, выберите
+<span class="guilabel">Data Export</span> из левой панели Management
+для желаемого выбора MySQL.</p>
+
+<p>Здесь можно выбрать, которые базы данных экспортировать, включать ли
+данные, сбросить дамп к единственному файлу или многим файлам (один на
+таблицу. Для дополнительных деталей посмотрите
+<a href="admin.htm#wb-admin-export-import">раздел 6.5</a>.
+</p></td></tr></tbody></table>
+
+<p><a name="workbench-faq-general"></a>
+<span class="bold"><strong>Общие</strong></span></p>
+<a name="idm140523187890448"></a><dl><dt>
+A.1. <a href="#faq-workbench-workbench-5-2">
+Я вынужден использовать MySQL Workbench 5.2.x, его документация доступна?
+</a></dt></dl>
+
+<table border="0" style="width: 100%;">
+<tbody><tr><td align="left" valign="top">
+<a name="faq-workbench-workbench-5-2"></a><a name="idm140523187889632"></a>
+<p><b>A.1.</b></p></td>
+<td align="left" valign="top"><p>
+Я вынужден использовать MySQL Workbench 5.2.x, его документация доступна?
+</p></td></tr>
+
+<tr><td align="left" valign="top"></td><td align="left" valign="top"><p>
+Хотя 5.2.x больше не поддерживается, его документация заархивирована на
+<a href="../../../dev.mysql.com/doc/index-archive.html" target="_top">
+http://dev.mysql.com/doc/index-archive.html</a>.
+</p></td></tr></tbody></table>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.4.1_.11.3._Разделы_документа.dir\cat.2.4.1_.11.3._Разделы_документа.dir\dir.2.4.1_.11.3._Разделы_документа.dir.md">2.4.1_.11.3._Разделы_документа.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.4.1_.11.3._Разделы_документа.dir\2.4.1_.11.3._Разделы_документа.md">2.4.1_.11.3._Разделы_документа.md</a>
+        - *## [1.11.3. Разделы документа](https://html5book.ru/razdely-dokumenta)
+        - *### АТРИБУТЫ ЭЛЕМЕНТА \<BODY>
+        - *### 2. Элемент \<article>
+        - *### 3. Элемент \<section>
+        - *### 4. Элемент \<nav>
+        - *### 5. Элемент \<aside>

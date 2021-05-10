@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\informationflow\cat.informationflow\dir.informationflow.md">informationflow</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\informationflow\informationflow.md">informationflow.md</a>
+        - *##### [Information Flow](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/informationflow.html)  Поток информации

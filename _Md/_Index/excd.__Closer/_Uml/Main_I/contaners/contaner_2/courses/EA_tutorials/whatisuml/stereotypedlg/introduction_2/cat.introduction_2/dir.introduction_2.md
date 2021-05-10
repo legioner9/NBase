@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\stereotypedlg\introduction_2\cat.introduction_2\dir.introduction_2.md">introduction_2</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\stereotypedlg\introduction_2\introduction_2.md">introduction_2.md</a>
+        - *### [MDG Technology SDK](https://sparxsystems.com/enterprise_architect_user_guide/15.1/modeling/introduction_2.html) SDK технологии ЦРТ

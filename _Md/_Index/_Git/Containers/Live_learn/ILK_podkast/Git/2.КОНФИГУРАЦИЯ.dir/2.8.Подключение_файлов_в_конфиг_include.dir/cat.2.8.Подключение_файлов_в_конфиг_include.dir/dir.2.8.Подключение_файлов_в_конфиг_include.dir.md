@@ -1,0 +1,4 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\2.КОНФИГУРАЦИЯ.dir\2.8.Подключение_файлов_в_конфиг_include.dir\cat.2.8.Подключение_файлов_в_конфиг_include.dir\dir.2.8.Подключение_файлов_в_конфиг_include.dir.md">2.8.Подключение_файлов_в_конфиг_include.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\2.КОНФИГУРАЦИЯ.dir\2.8.Подключение_файлов_в_конфиг_include.dir\2.8.Подключение_файлов_в_конфиг_include.md">2.8.Подключение_файлов_в_конфиг_include.md</a>
+        - *## include .gitconfig
+        - *### conditional include

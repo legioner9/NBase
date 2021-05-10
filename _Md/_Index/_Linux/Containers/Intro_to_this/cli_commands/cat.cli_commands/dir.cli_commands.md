@@ -1,0 +1,3 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Linux\Containers\Intro_to_this\cli_commands\cat.cli_commands\dir.cli_commands.md">cli_commands</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Linux\Containers\Intro_to_this\cli_commands\set_commands.md">set_commands.md</a>
+        - *## [42 КОМАНДЫ LINUX КОТОРЫЕ ВЫ ДОЛЖНЫ ЗНАТЬ](https://losst.ru/42-komandy-linux-kotorye-vy-dolzhny-znat)

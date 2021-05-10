@@ -1,0 +1,2840 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <title>Глава 17. Механизмы хранения</title>
+<meta name="generator" content="DocBook XSL Stylesheets + chunker.py v1.9.2" />
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="storage-engines"></a>Глава 17. Механизмы хранения</h1>
+<p>Механизмы хранения это компоненты MySQL, которые обрабатывают операции SQL
+для различных табличных типов. <a href="innodb.htm"><code>InnoDB</code></a>
+механизм хранения общего назначения по умолчанию, Oracle рекомендует
+использовать это для таблиц за исключением специализированных случаев
+использования. Запрос <a href="sql.htm#create-table"><code>CREATE TABLE
+</code></a> в MySQL 8.0 создает таблицы <code>InnoDB</code> по умолчанию.</p>
+
+<p>MySQL Server использует сменную архитектуру механизма хранения, которая
+позволяет механизмам хранения быть загруженными, не прерывая работу.</p>
+<p>Чтобы определить который механизмы хранения Ваш сервер поддерживает,
+используйте запрос <a href="sql.htm#show-engines"><code>SHOW ENGINES</code>
+</a>. Значение в столбце <code>Support</code> указывает, может ли механизм
+использоваться. Значения <code>YES</code>, <code>NO</code> или
+<code>DEFAULT</code> указывают, что механизм доступен, не доступен или
+доступен и в настоящее время установлен как механизм хранения по умолчанию.
+<pre>
+mysql&gt; SHOW ENGINES\G
+*************************** 1. row ***************************
+Engine: PERFORMANCE_SCHEMA
+ Support: YES
+ Comment: Performance Schema
+Транзакции: NO
+XA: NO
+  Savepoints: NO
+*************************** 2. row ***************************
+Engine: InnoDB
+ Support: DEFAULT
+ Comment: Supports Транзакции, row-level locking, and foreign keys
+Транзакции: YES
+XA: YES
+  Savepoints: YES
+*************************** 3. row ***************************
+Engine: MRG_MYISAM
+ Support: YES
+ Comment: Collection of identical MyISAM tables
+Транзакции: NO
+XA: NO
+  Savepoints: NO
+*************************** 4. row ***************************
+Engine: BLACKHOLE
+ Support: YES
+ Comment: /dev/null storage engine (anything you write to it disappears)
+Транзакции: NO
+XA: NO
+  Savepoints: NO
+*************************** 5. row ***************************
+Engine: MyISAM
+ Support: YES
+ Comment: MyISAM storage engine
+Транзакции: NO
+XA: NO
+  Savepoints: NO
+...
+</pre>
+
+Эта глава касается случаев использования для механизмов хранения MySQL
+специального назначения. Это не покрывает
+<a href="innodb.htm"><code>InnoDB</code></a> или
+<a href="../../../dev.mysql.com/doc/refman/5.7/en/mysql-cluster.html"
+target="_top"><code>NDB</code></a>, см. <a href="innodb.htm">главу 16</a> и
+<a href="../../../dev.mysql.com/doc/refman/5.7/en/mysql-cluster.html"
+target="_top">MySQL Cluster NDB 7.5</a>. Для продвинутых пользователей это
+также содержит описание архитектуры механизма хранения (см.
+<a href="#pluggable-storage-overview">раздел 17.11</a>).</p>
+
+<p>Для информации о поддержке механизма хранения, предлагаемых в коммерческих
+версиях MySQL Server, см.
+<a href="../../../www.mysql.com/products/enterprise/server.html" target="_top">
+<em>MySQL Enterprise Server 5.7</em></a> на Web-сайте MySQL.
+Доступные механизмы хранения могут зависеть от версии Enterprise Server.</p>
+<p>Для ответов на обычно задаваемые вопросы о механизмах хранения MySQL см.
+<a href="faqs.html#faqs-storage-engines">раздел A.2</a>.</p>
+
+<h2><a name="idm139965313958448"></a>Поддерживаемые механизмы хранения в
+MySQL 8.0</h2>
+<ul><li><p><a href="innodb.htm"><code>InnoDB</code></a>:
+Механизм хранения по умолчанию в MySQL 8.0.
+<code>InnoDB</code> транзакционно-безопасный (соответствует ACID)
+механизм хранения для MySQL, который имеет завершение и отмену транзакций,
+способности восстановления катастрофического отказа и защиту пользовательских
+данных. Блокировка <code>InnoDB</code> на уровне строки (без подъема к более
+грубым блокировкам степени детализации) и последовательные чтения без
+блокировки увеличивают многопользовательский параллелизм. <code>InnoDB</code>
+хранит пользовательские данные в кластеризируемых индексах, чтобы уменьшить
+ввод/вывод для общих запросов, основанных на первичных ключах. Чтобы
+поддержать целостность данных, <code>InnoDB</code> также реализует
+<code>FOREIGN KEY</code> ограничения справочной целостности. Для получения
+дополнительной информации о <code>InnoDB</code> см.
+<a href="innodb.htm">главу 16</a>.</li>
+
+<li><a href="#myisam-storage-engine"><code>MyISAM</code></a>:
+У этих таблиц есть маленький след.
+<a href="glossary.htm#glos_table_lock">Блокировка на уровне таблицы</a>
+ограничивает работу в рабочих нагрузках чтения-записи, таким образом, это
+часто используется только для чтения или в рабочих нагрузках чтения, главным
+образом, в Сети и конфигурациях складирования данных.</li>
+
+<li><a href="#memory-storage-engine"><code>Memory</code></a>:
+Хранит все данные в RAM для быстрого доступа в среде, которая требует быстрых
+поисков некритических данных. Этот механизм был прежде известен как
+<code>HEAP</code>. Его случаи использования уменьшаются.
+<code>InnoDB</code> с его буферным бассейном памяти обеспечивает длительный
+способ сохранить больше всего или все данные в памяти, а
+<code>NDBCLUSTER</code> обеспечивает быстрые поиски значения ключа для
+огромных распределенных наборов данных.</li>
+
+<li><a href="#csv-storage-engine"><code>CSV</code></a>:
+Эти таблицы действительно текстовые файлы с отделенными запятыми значениями.
+Таблицы CSV позволяют Вам импортировать или выводить данные в формате CSV,
+обмениваться информациями со скриптами и приложениями, которые читают и пишут
+тот же самый формат. Поскольку таблицы CSV не индексированы, Вы, как правило,
+храните данные в таблицах <code>InnoDB</code> во время нормального
+функционирования, а используете таблицы CSV только во время
+импорта или экспорта.</li>
+
+<li><a href="#archive-storage-engine"><code>Archive</code></a>:
+Эти компактные, неиндексированные таблицы предназначены для хранения и
+получения большого количества исторических редко ссылаемых, заархивированных
+данных или информации безопасности.</li>
+
+<li><a href="#blackhole-storage-engine"><code>Blackhole</code></a>:
+Механизм хранения Blackhole принимает, но не хранит данные, подобно
+Unix-устройству <code>/dev/null</code>. Запросы всегда возвращают пустой
+набор. Эти таблицы могут использоваться в конфигурациях репликации, когда
+запросы DML посылают в ведомые серверы, но главный сервер не сохраняет свою
+собственную копию данных.</li>
+
+<li><a href="#merge-storage-engine"><code>Merge</code></a>:
+Позволяет MySQL DBA или разработчикам логически сгруппировать серию
+идентичных таблиц <code>MyISAM</code> и ссылаться на них, как на один объект.
+Хорош для среды VLDB, такой как складирование данных.</li>
+
+<li><a href="#federated-storage-engine"><code>Federated</code></a>:
+Предлагает способность соединить отдельные серверы MySQL, чтобы создать одну
+логическую базу данных из многих физических серверов. Очень хорош для
+распределенной среды данных.</li>
+
+<li><a href="#example-storage-engine"><code>Example</code></a>:
+Этот механизм служит примером в исходном коде MySQL, который иллюстрирует,
+как начать писать новые механизмы хранения. Это имеет прежде всего интерес
+для разработчиков. Механизм хранения ничего не делает. Вы можете составить
+таблицы с этим механизмом, но никакие данные не могут храниться в них или
+получены от них.</p></li></ul>
+
+<p>Вы не ограничены использованием того же самого механизма хранения для
+всего сервера или схемы. Вы можете определить механизм хранения для любой
+таблицы. Например, приложение могло бы использовать главным образом
+<code>InnoDB</code> с одной <code>CSV</code> для того, чтобы экспортировать
+данные в электронную таблицу и нескольких таблиц <code>MEMORY</code>
+для временных рабочих пространств.</p>
+
+<p><span><strong>Выбор механизма хранения</strong></span></p>
+<p>Различные механизмы хранения, предоставленные MySQL, разработаны для
+различных случаев использования. Следующая таблица обеспечивает краткий обзор
+некоторых механизмов хранения, предоставленных MySQL:</p>
+
+<a name="idm139965313921360"></a><p><b>Таблица 17.1.
+Обзор особенностей механизмов хранения</b></p>
+<table border="1">
+<thead><tr><th scope="col">Особенность</th><th scope="col">MyISAM</th>
+<th scope="col">Memory</th><th scope="col">InnoDB</th>
+<th scope="col">Archive</th><th scope="col">NDB</th></tr></thead>
+<tbody><tr><td scope="row">Пределы хранения</td><td>256 TB</td><td>RAM</td>
+<td>64 TB</td><td>Нет</td><td>384 EB</td></tr>
+<tr><td scope="row">Транзакции</td><td>Нет</td><td>Нет</td><td>Да</td>
+<td>Нет</td><td>Да</td></tr>
+<tr><td scope="row">Степень детализации блокировки</td><td>Таблица</td>
+<td>Таблица</td><td>Строка</td><td>Строка</td><td>Строка</td></tr>
+<tr><td scope="row">MVCC</td><td>Нет</td><td>Нет</td><td>Да</td><td>Нет</td>
+<td>Нет</td></tr>
+<tr><td scope="row">Картографические типы данных</td><td>Да</td><td>Нет</td>
+<td>Да</td><td>Да</td><td>Да</td></tr>
+<tr><td scope="row">Картографические индексы</td><td>Да</td><td>Нет</td>
+<td>Да</a></td><td>Нет</td><td>Нет</td></tr>
+<tr><td scope="row">Индексы B-tree</td><td>Да</td><td>Да</td><td>Да</td>
+<td>Нет</td><td>Нет</td></tr>
+<tr><td scope="row">Индексы T-tree</td><td>Нет</td><td>Нет</td><td>Нет</td>
+<td>Нет</td><td>Да</td></tr>
+<tr><td scope="row">Индексы Hash</td><td>Нет</td><td>Да</td><td>Нет</a></td>
+<td>Нет</td><td>Да</td></tr>
+<tr><td scope="row">Индексы Full-text search</td><td>Да</td><td>Нет</td>
+<td>Да</td><td>Нет</td><td>Нет</td></tr>
+<tr><td scope="row">Индексы Clustered</td><td>Нет</td><td>Нет</td><td>Да</td>
+<td>Нет</td><td>Нет</td></tr>
+<tr><td scope="row">Кэш данных</td><td>Нет</td><td>N/A</td><td>Да</td>
+<td>Нет</td><td>Да</td></tr>
+<tr><td scope="row">Кэш индекса</td><td>Да</td><td>N/A</td><td>Да</td>
+<td>Нет</td><td>Да</td></tr>
+<tr><td scope="row">Сжатые данные</td><td>Да</td><td>Нет</td><td>Да</td>
+<td>Да</td><td>Нет</td></tr>
+<tr><td scope="row">Зашифрованные данные</td><td>Да</td><td>Да</td>
+<td>Да</td><td>Да</td><td>Да</td></tr>
+<tr><td scope="row">Поддержка базы данных кластера</td><td>Нет</td>
+<td>Нет</td><td>Нет</td><td>Нет</td><td>Да</td></tr>
+<tr><td scope="row">Поддержка репликации</td><td>Да</td><td>Да</td>
+<td>Да</td><td>Да</td><td>Да</td></tr>
+<tr><td scope="row">Поддержка внешнего ключа</td><td>Нет</td><td>Нет</td>
+<td>Да</td><td>Нет</td><td>Нет</td></tr>
+<tr><td scope="row">Резервное копирование/восстановление момента времени</td>
+<td>Да</td><td>Да</td><td>Да</td><td>Да</td><td>Да</td></tr>
+<tr><td scope="row">Поддержка кэша запроса</td><td>Да</td><td>Да</td>
+<td>Да</td><td>Да</td><td>Да</td></tr>
+<tr><td scope="row">Статистика обновления для словаря данных</td><td>Да</td>
+<td>Да</td><td>Да</td><td>Да</td><td>Да</td></tr></tbody></table>
+
+<p>Поддержка InnoDB индексации геоданных доступна в MySQL 5.7.5 и выше.
+<p>InnoDB использует хеш-индекс внутренне для своего адаптивного хеша.
+<p>InnoDB Поддержка InnoDB FULLTEXT индексов доступна в MySQL 5.6.4 и выше.
+<p>Сжатые таблицы MyISAM поддержаны только, используя сжатый формат строки.
+Таблицы, используя сжатый формат строки MyISAM, доступны только для чтения.
+<p>Сжатые таблицы InnoDB требуют формата файла InnoDB Barracuda.</p>
+<p>Шифрование табличного пространства данных доступно в MySQL 5.7 и выше.
+
+<h2><a name="storage-engine-setting"></a>17.1. Установка механизма хранения
+</h2>
+<p>Когда Вы составляете новую таблицу, Вы можете определить, который механизм
+хранения использовать, добавляя табличную опцию <code>ENGINE</code> в запрос
+<a href="sql.htm#create-table"><code>CREATE TABLE</code></a>:
+<pre>
+-- ENGINE=INNODB not needed unless you have set a different
+-- default storage engine.
+CREATE TABLE t1 (i INT) ENGINE = INNODB;
+
+-- Simple table definitions can be switched from one to another.
+CREATE TABLE t2 (i INT) ENGINE = CSV;
+CREATE TABLE t3 (i INT) ENGINE = MEMORY;
+</pre>
+
+Когда Вы опускаете опцию <code>ENGINE</code>, механизм хранения по
+умолчанию используется. Это <a href="innodb.htm"><code>InnoDB</code></a> в
+MySQL 8.0. Вы можете переопределить механизм по умолчанию при использовании
+опции <a href="server.htm#option_mysqld_default-storage-engine"><code>
+--default-storage-engine</code></a> при запуске сервера или задав опцию
+<a href="server.htm#option_mysqld_default-storage-engine"><code>
+default-storage-engine</code></a> в конфигурационном файле <code>my.cnf
+</code>.</p>
+
+<p>Вы можете установить механизм хранения по умолчанию для текущего сеанса,
+устанавливая переменную <a href="server.htm#sysvar_default_storage_engine">
+<code>default_storage_engine</code></a>:
+<pre>
+SET default_storage_engine=NDBCLUSTER;
+</pre>
+
+Механизм хранения для таблиц <code>TEMPORARY</code>, составленных с
+<a href="sql.htm#create-table"><code>CREATE TEMPORARY TABLE</code></a>,
+может быть установлен отдельно от механизма для постоянных таблиц,
+устанавливая переменную <a href="server.htm#sysvar_default_tmp_storage_engine">
+<code>default_tmp_storage_engine</code></a>.</p>
+
+<p>Чтобы преобразовать таблицу из одного механизма хранения в другой,
+используйте <a href="sql.htm#alter-table"><code>ALTER TABLE</code></a>,
+который указывает на новый механизм:
+<pre>
+ALTER TABLE t ENGINE = InnoDB;
+</pre>
+См. разделы <a href="sql.htm#create-table"> 14.1.15</a> и
+<a href="sql.htm#alter-table">14.1.7</a>.</p>
+
+<p>Если Вы пытаетесь использовать механизм хранения, который не собран в
+двоичный модуль или собран, но дезактивирован, MySQL вместо этого составляет
+таблицу, используя механизм хранения по умолчанию. Например, в установке
+релпикации Ваш главный сервер использует <code>InnoDB</code> для максимальной
+безопасности, но ведомые серверы используют другие механизмы хранения для
+скорости за счет длительности или параллелизма.</p>
+
+<p>По умолчанию предупреждение произведено всякий раз, когда
+<a href="sql.htm#create-table"><code>CREATE TABLE</code></a> или
+<a href="sql.htm#alter-table"><code>ALTER TABLE</code></a>
+не может использовать механизм хранения по умолчанию. Чтобы предотвратить
+запутывающее, непреднамеренное поведение, если желаемый механизм недоступен,
+включите режим SQL
+<a href="server.htm#sqlmode_no_engine_substitution"><code>
+NO_ENGINE_SUBSTITUTION</code></a>. Если желаемый механизм недоступен, эта
+установка производит ошибку вместо предупреждения, и таблица не будет
+составлена или изменена. См. <a href="server.htm#sql-mode">раздел 6.1.8</a>.
+</p>
+
+<p>MySQL может сохранить таблицу, индексы и данные в одном или более
+файлах, в зависимости от механизма хранения. Таблица и определения столбца
+сохранены в словаре данных MySQL. Отдельные механизмы хранения создают любые
+дополнительные файлы, требуемые для таблиц, которыми они управляют. Если имя
+таблицы содержит специальные символы, названия табличных файлов содержат
+закодированные версии тех символов, как описано в
+<a href="lang.htm#identifier-mapping">разделе 10.2.3</a>.</p>
+
+<h2><a name="myisam-storage-engine"></a>17.2. Механизм хранения MyISAM</h2>
+<p><code>MyISAM</code> основан на более старом (и больше недоступном)
+механизме хранения <code>ISAM</code>, но есть много полезных расширений.</p>
+
+<a name="idm139965313822848"></a><p><b>Таблица 17.2. Особенности механизма
+хранения <code>MyISAM</code></b></p>
+<table border="1">
+<tbody><tr><td scope="row"><span><strong>Пределы хранения</strong></span>
+</td><td>256 TB</td><td><span><strong>Транзакции</strong></span></td>
+<td>Нет</td><td><span><strong>Степень детализации блокировки</strong></span>
+</td><td>Таблица</td></tr>
+<tr><td scope="row"><span><strong>MVCC</strong></span></td><td>Нет</td>
+<td><span><strong>Картографические типы данных</strong></span></td>
+<td>Да</td>
+<td><span><strong>Индексирование геоданных</strong></span></td>
+<td>Да</td></tr>
+<tr><td scope="row"><span><strong>Индексы B-tree</strong></span></td>
+<td>Да</td><td><span><strong>Индексы T-tree</strong></span></td><td>Нет</td>
+<td><span><strong>Индексы Hash</strong></span></td><td>Нет</td></tr>
+<tr><td scope="row"><span><strong>Индексы Full-text search</strong></span>
+</td><td>Да</td><td><span><strong>Кластеризуемые индексы</strong></span></td>
+<td>Нет</td><td><span><strong>Кэш данных</strong></span></td><td>Нет</td></tr>
+<tr><td scope="row"><span><strong>Кэш индексов</strong></span></td>
+<td>Да</td><td><span><strong>Сжатые данные</strong></span></td><td>Да</td>
+<td><span><strong>Шифрование данных</td><td>Да</td></tr>
+<tr><td scope="row"><span><strong>Поддержка базы данных кластера</strong>
+</span></td><td>Нет</td><td><span><strong>Репликация</strong></span></td>
+<td>Да</td><td><span><strong>Поддержка внешнего ключа</strong></span></td>
+<td>Нет</td></tr>
+<tr><td scope="row"><span><strong>Резервное копирование/восстановление
+момента времени</strong></span></td><td>Да</td><td><span><strong>Кэш запросов
+</strong></span></td><td>Да</td><td><span><strong>Статистика обновления для
+словаря данных</strong></span></td><td>Да</td></tr></tbody></table>
+
+<p>Каждая таблица <code>MyISAM</code> сохранена на диске в двух файлах. У
+файлов есть имена, которые начинаются с имени таблицы и имеют расширение,
+чтобы указать на тип файла. Файл с данными имеет расширение
+<code>.MYD</code> (<code>MYData</code>). Индексный файл имеет расширение
+<code>.MYI</code> (<code>MYIndex</code>). Табличное определение сохранено в
+словаре данных MySQL.</p>
+
+<p>Чтобы определить явно, что Вы хотите получить таблицу <code>MyISAM</code>,
+укажите на это табличной опцией <code>ENGINE</code>:
+<pre>
+CREATE TABLE t (i INT) ENGINE = MYISAM;
+</pre>
+
+В MySQL 8.0 обычно необходимо использовать
+<code>ENGINE</code>, чтобы определить механизм хранения <code>MyISAM</code>,
+потому что <code>InnoDB</code> механизм по умолчанию.</p>
+
+<p>Вы можете проверить или восстановить таблицы <code>MyISAM</code> с помощью
+<a href="programs.htm#mysqlcheck"><span><strong>mysqlcheck</strong></span>
+</a> или <a href="programs.htm#myisamchk"><span><strong>myisamchk</strong>
+</span></a>. Вы можете также сжать таблицы <code>MyISAM</code> с
+<a href="programs.htm#myisampack"><span><strong>myisampack</strong></span>
+</a>, чтобы они занимали намного меньше пространства. См. разделы
+<a href="programs.htm#mysqlcheck">5.5.3</a>,
+<a href="programs.htm#myisamchk">5.6.4</a> и
+<a href="programs.htm#myisampack">5.6.6</a>.</p>
+
+<p>В MySQL 8.0 механизм хранения <code>MyISAM</code>
+не оказывает поддержки разделения. <span><em>Разделенные таблицы
+<code>MyISAM</code>, составленные в предыдущих версиях MySQL, не могут
+использоваться в MySQL 8.0</em></span>. Для получения дополнительной
+информации см. <a href="partit.htm#partitioning-limitations-storage-engines">
+раздел 20.6.2</a>. Для справки по обновлению таких таблиц так, чтобы они
+могли использоваться в MySQL 8.0, см.
+<a href="install.htm#upgrading-from-previous-series">раздел 2.10.1.1</a>.</p>
+
+<p>У таблиц <code>MyISAM</code> есть следующие характеристики:</p>
+<ul><li><p>Все значения данных сохранены с младшим байтом сначала. Это делает
+данные независимыми от операционной системы и машины. Единственные требования
+для двоичной мобильности: машина использует целые числа со знаком и формат
+IEEE floating-point. Эти требования широко используются среди господствующих
+машин. Совместимость на уровне двоичных кодов не может быть применимой к
+встроенным системам, у которых иногда есть специфические процессоры.</p>
+
+<p>Нет никакой существенной потери скорости за хранение младшего байта данных
+сначала: байты в строке таблицы обычно не выравниваются, и требуется немного
+больше обработки, чтобы считать не выровненный байт в прямом порядке, чем в
+обратном. Кроме того, код в сервере, который приносит значения столбцов, не
+срочен по сравнению с другим кодом.</li>
+
+<li>Все числовые значения ключа сохранены со старшим
+байтом сначала, чтобы разрешить, лучшее сжатие индекса.</li>
+<li>Большие файлы (до 63-битовой длины файла) поддержаны на файловых системах
+и операционных системах, которые поддерживают большие файлы.</li>
+
+<li>Есть предел (2<sup>32</sup>)<sup>2</sup>
+(1.844E+19) строк в таблице <code>MyISAM</code>.</li>
+<li>Максимальное количество индексов на таблицу <code>MyISAM</code> 64.</p>
+<p>Максимальное количество столбцов в индексе 16.</li>
+
+<li>Максимальная длина ключа составляет 1000 байтов. Это может также
+быть изменено, изменяя исходный текст. Для случая ключа больше 250 байтов
+используется больший ключевой размер блока, чем значение
+по умолчанию в 1024 байта.</li>
+
+<li>Когда строки вставлены в сортированный порядок (как тогда, когда Вы
+используете столбец <code>AUTO_INCREMENT</code>), индексное дерево разделено
+так, чтобы высокий узел только содержал один ключ. Это улучшает использование
+пространства в индексином дереве.</li>
+
+<li>Внутренняя обработка одного столбца <code>AUTO_INCREMENT</code> на
+таблицу реализована. <code>MyISAM</code> автоматически обновляет этот столбец
+для <a href="sql.htm#insert"><code>INSERT</code></a> и
+<a href="sql.htm#update"><code>UPDATE</code></a>. Это делает столбцы
+<code>AUTO_INCREMENT</code> быстрее (по крайней мере на 10%). Значения
+наверху последовательности не использованы снова, будучи удаленными. Когда
+столбец <code>AUTO_INCREMENT</code> определен как последний столбец индекса
+из нескольких столбцов, повторное использование значений, удаленных из
+вершины последовательности, действительно происходит. Значение
+<code>AUTO_INCREMENT</code> может быть сброшено с
+<a href="sql.htm#alter-table"><code>ALTER TABLE</code></a> или
+<a href="programs.htm#myisamchk"><span><strong>myisamchk</strong></span></a>.
+</li>
+
+<li>Строки динамического размера намного менее фрагментированы, когда
+смешивается удаление с обновлениями и вставками. Это сделано, автоматически
+комбинируя смежные удаленные блоки и расширяя блоки, если следующий удален.
+</li>
+
+<li><code>MyISAM</code> поддерживает параллельные вставки: Если у таблицы нет
+никаких свободных блоков в середине файла с данными, Вы можете
+<a href="sql.htm#insert"><code>INSERT</code></a> новые строки в то же самое
+время, когда другие потоки читают из таблицы. Свободный блок может произойти
+в результате удаления строк или обновления строки динамической длины с
+большим количеством данных, чем текущее содержание. Когда все свободные блоки
+израсходованы (заполнены), будущие вставки снова становятся параллельными.
+См. <a href="optimiz.htm#concurrent-inserts">раздел 9.11.3</a>.</li>
+
+<li>Вы можете поместить файл с данными и индексный файл в различных каталогах
+на различных физических устройствах, чтобы получить больше скорости с помощью
+опций <code>DATA DIRECTORY</code> и <code>INDEX DIRECTORY</code> в
+<a href="sql.htm#create-table"><code>CREATE TABLE</code></a>. См.
+<a href="sql.htm#create-table">раздел 14.1.15</a>.</li>
+
+<li>Столбцы <a href="types.htm#blob"><code>BLOB</code></a> и
+<a href="types.htm#blob"><code>TEXT</code></a> могут быть индексированы.</li>
+<li>Значения <code>NULL</code> разрешены в индексированных столбцах. Это
+берет от 0 до 1 байта на ключ.</li>
+
+<li>У каждого символьного столбца может быть различный набор символов. См.
+<a href="global.htm#charset">раздел 11.1</a>.</li>
+<li>Есть флаг в индексном файле <code>MyISAM</code>, который указывает, была
+ли таблица закрыта правильно. Если <a href="programs.htm#mysqld"><span>
+<strong>mysqld</strong></span></a> запущен с опцией
+<a href="server.htm#option_mysqld_myisam-recover-options"><code>
+--myisam-recover-options</code></a>, таблицы <code>MyISAM</code>
+автоматически проверены, когда открыты и восстановлены, если таблица не была
+закрыта должным образом.</li>
+
+<li><a href="programs.htm#myisamchk"><span><strong>myisamchk</strong></span>
+</a> отмечает таблицы как проверенные, если Вы выполняете его с опцией
+<a href="programs.htm#option_myisamchk_update-state"><code>--update-state
+</code></a>. <a href="programs.htm#myisamchk"><span><strong>myisamchk --fast
+</strong></span></a> проверяет только те таблицы, у которых нет этой метки.
+</li>
+
+<li><a href="programs.htm#myisamchk"><span><strong>myisamchk --analyze
+</strong></span></a> сохраняет статистику для частей ключей, так же как
+для целых ключей.</li>
+
+<li><a href="programs.htm#myisampack"><span><strong>myisampack</strong>
+</span></a> может упаковать столбцы
+<a href="types.htm#blob"><code>BLOB</code></a> и
+<a href="types.htm#char"><code>VARCHAR</code></a>.</p></li></ul>
+
+<p><code>MyISAM</code> также поддерживает следующие функции:</p>
+<ul><li><p>Поддержка настоящего типа <a href="types.htm#char"><code>VARCHAR
+</code></a>: столбцы <a href="types.htm#char"><code>VARCHAR</code></a>
+начинаются с длины, сохраненной в одном или двух байтах.</li>
+
+<li>Таблицы с <a href="types.htm#char"><code>VARCHAR</code></a> могут иметь
+фиксированную или динамическую длину строки.</li>
+<li>Сумма длин столбцов <a href="types.htm#char"><code>VARCHAR</code></a> и
+<a href="types.htm#char"><code>CHAR</code></a> в таблице может
+составить до 64 КБ.</li>
+<li>Произвольная длина ограничения <code>UNIQUE</code>.</p></li></ul>
+
+<h3><a name="idm139965313702992"></a>Дополнительные ресурсы</h3>
+<ul><li><p>Форум, посвященный механизму хранения <code>MyISAM</code> доступен
+на <a href="../../../forums.mysql.com/list.php@21"
+target="_top">http://forums.mysql.com/list.php?21</a>.</p></li></ul>
+
+<h3><a name="myisam-start"></a>17.2.1. Опции запуска MyISAM</h3>
+<p>Следующие опции <a href="programs.htm#mysqld"><span><strong>mysqld
+</strong></span></a> могут использоваться, чтобы изменить поведение таблиц
+<code>MyISAM</code>. Для дополнительной информации см.
+<a href="server.htm#server-options">раздел 6.1.4</a>.</p>
+
+<a name="idm139965313695552"></a><p><b>Таблица 17.3. Обзор опций и
+переменных <code>MyISAM</code></b></p>
+<table border="1">
+<thead><tr><th scope="col">Имя</th><th scope="col">Cmd-Line</th>
+<th scope="col">Файл опции</th><th scope="col">Системная переменная</th>
+<th scope="col">Статусная переменная</th><th scope="col">Контекст переменной
+</th><th scope="col">Динамическая</th></tr></thead>
+<tbody><tr><td scope="row">
+<a href="server.htm#sysvar_bulk_insert_buffer_size">bulk_insert_buffer_size
+</a></td><td>Да</td><td>Да</td><td>Да</td><td> </td><td>Оба</td><td>Да</td>
+</tr>
+<tr><td scope="row"><a href="server.htm#sysvar_concurrent_insert">
+concurrent_insert</a></td><td>Да</td><td>Да</td><td>Да</td><td> </td>
+<td>Глобальный</td><td>Да</td></tr>
+<tr><td scope="row"><a href="server.htm#option_mysqld_delay-key-write">
+delay-key-write</a></td><td>Да</td><td>Да</td><td> </td><td> </td>
+<td>Глобальный</td><td>Да</td></tr>
+<tr><td scope="row"> - <span><em>Переменная</em></span>:
+<a href="server.htm#sysvar_delay_key_write">delay_key_write</a></td>
+<td> </td><td> </td><td>Да</td><td> </td><td>Глобальный</td><td>Да</td></tr>
+<tr><td scope="row"><a href="server.htm#sysvar_have_rtree_keys">
+have_rtree_keys</a></td><td> </td><td> </td><td>Да</td><td> </td>
+<td>Глобальный</td><td>Нет</td></tr>
+<tr><td scope="row"><a href="server.htm#sysvar_key_buffer_size">
+key_buffer_size</a></td><td>Да</td><td>Да</td><td>Да</td><td> </td>
+<td>Глобальный</td><td>Да</td></tr>
+<tr><td scope="row"><a href="server.htm#option_mysqld_log-isam">log-isam</a>
+</td><td>Да</td><td>Да</td><td> </td><td> </td><td> </td><td> </td></tr>
+<tr><td scope="row"><a href="server.htm#option_mysqld_myisam-block-size">
+myisam-block-size</a></td><td>Да</td><td>Да</td><td> </td><td> </td>
+<td> </td><td> </td></tr>
+<tr><td scope="row"><a href="server.htm#sysvar_myisam_data_pointer_size">
+myisam_data_pointer_size</a></td><td>Да</td><td>Да</td><td>Да</td><td> </td>
+<td>Глобальный</td><td>Да</td></tr>
+<tr><td scope="row"><a href="server.htm#sysvar_myisam_max_sort_file_size">
+myisam_max_sort_file_size</a></td><td>Да</td><td>Да</td><td>Да</td><td> </td>
+<td>Глобальный</td><td>Да</td></tr>
+<tr><td scope="row"><a href="server.htm#sysvar_myisam_mmap_size">
+myisam_mmap_size</a></td><td>Да</td><td>Да</td><td>Да</td><td> </td>
+<td>Глобальный</td><td>Нет</td></tr>
+<tr><td scope="row"><a href="server.htm#option_mysqld_myisam-recover-options">
+myisam-recover-options</a></td><td>Да</td><td>Да</td><td> </td><td> </td>
+<td> </td><td> </td></tr>
+<tr><td scope="row"> - <span><em>Переменная</em></span>:
+<a href="server.htm#sysvar_myisam_recover_options">myisam_recover_options</a>
+</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+<tr><td scope="row"><a href="server.htm#sysvar_myisam_recover_options">
+myisam_recover_options</a></td><td> </td><td> </td><td>Да</td><td> </td>
+<td>Глобальный</td><td>Нет</td></tr>
+<tr><td scope="row"><a href="server.htm#sysvar_myisam_repair_threads">
+myisam_repair_threads</a></td><td>Да</td><td>Да</td><td>Да</td><td> </td>
+<td>Оба</td><td>Да</td></tr>
+<tr><td scope="row"><a href="server.htm#sysvar_myisam_sort_buffer_size">
+myisam_sort_buffer_size</a></td><td>Да</td><td>Да</td><td>Да</td><td> </td>
+<td>Оба</td><td>Да</td></tr>
+<tr><td scope="row"><a href="server.htm#sysvar_myisam_stats_method">
+myisam_stats_method</a></td><td>Да</td><td>Да</td><td>Да</td><td> </td>
+<td>Оба</td><td>Да</td></tr>
+<tr><td scope="row"><a href="server.htm#sysvar_myisam_use_mmap">
+myisam_use_mmap</a></td><td>Да</td><td>Да</td><td>Да</td><td> </td>
+<td>Глобальный</td><td>Да</td></tr>
+<tr><td scope="row"><a href="server.htm#option_mysqld_skip-concurrent-insert">
+skip-concurrent-insert</a></td><td>Да</td><td>Да</td><td> </td><td> </td>
+<td> </td><td> </td></tr>
+<tr><td scope="row"> - <span><em>Переменная</em></span>:
+<a href="server.htm#sysvar_concurrent_insert">concurrent_insert</a></td>
+<td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+<tr><td scope="row"><a href="server.htm#sysvar_tmp_table_size">tmp_table_size
+</a></td><td>Да</td><td>Да</td><td>Да</td><td> </td><td>Оба</td><td>Да</td>
+</tr></tbody></table>
+
+<ul><li><p><a href="server.htm#option_mysqld_myisam-recover-options">
+<code>--myisam-recover-options=<em><code>mode</code></em></code></a></p>
+<p>Установить режим автоматического восстановления разрушенных таблиц
+<code>MyISAM</code>.</li>
+
+<li><a href="server.htm#option_mysqld_delay-key-write"><code>
+--delay-key-write=ALL</code></a></p>
+<p>Не сбрасывать ключевые буферы между записями для любой таблицы
+<code>MyISAM</code>.</p>
+
+<p>Если Вы делаете это, Вы не должны получить доступ к таблицам
+<code>MyISAM</code> из другой программы (от другого сервера MySQL или с
+<a href="programs.htm#myisamchk"><span><strong>myisamchk</strong></span></a>),
+когда таблицы используются. Это несет риски повреждения индекса.
+Использование <a href="server.htm#option_mysqld_external-locking"><code>
+--external-locking</code></a> не устраняет этот риск.</p></li></ul>
+
+<p>Следующие системные переменные затрагивают поведение таблиц
+<code>MyISAM</code>. Для дополнительной информации см.
+<a href="server.htm#server-system-variables">раздел 6.1.5</a>.</p>
+
+<ul><li><p><a href="server.htm#sysvar_bulk_insert_buffer_size"><code>
+bulk_insert_buffer_size</code></a></p>
+<p>Размер кэша, используемого в оптимизации вставок оптом.</p>
+<p>Это предел <span><em>на поток</em></span>!</p></li>
+
+<li><p><a href="server.htm#sysvar_myisam_max_sort_file_size"><code>
+myisam_max_sort_file_size</code></a></p>
+<p>Максимальный размер временного файла, который MySQL разрешают
+использовать, обновляя индекс <code>MyISAM</code> (во время
+<a href="sql.htm#repair-table"><code>REPAIR TABLE</code></a>,
+<a href="sql.htm#alter-table"><code>ALTER TABLE</code></a> или
+<a href="sql.htm#load-data"><code>LOAD DATA INFILE</code></a>).
+Если размер файла больше, чем это значение, индекс создается, используя
+вместо этого ключевой кэш, который медленнее. Значение дано в байтах.</li>
+
+<li><a href="server.htm#sysvar_myisam_sort_buffer_size"><code>
+myisam_sort_buffer_size</code></a></p>
+<p>Установить размер буфера, используемого для восстановления таблиц.
+</p></li></ul>
+
+<p>Автоматическое восстановление активировано, если Вы запускаете
+<a href="programs.htm#mysqld"><span><strong>mysqld</strong></span></a> с
+опцией <a href="server.htm#option_mysqld_myisam-recover-options"><code>
+--myisam-recover-options</code></a>. В этом случае когда сервер открывает
+таблицу <code>MyISAM</code>, он проверяет, отмечена ли таблица как
+"разрушено" или не является ли переменная количества открытий для таблицы 0,
+и Вы выполняете сервер с внешней отключенной блокировкой. Если любое из этих
+условий истина, происходит следующее:</p>
+
+<ul><li><p>Сервер проверяет таблицу на ошибки.</li>
+<li>Если сервер находит ошибку, он пытается сделать быстрый ремонт таблицы
+(с сортировкой и не обновляя файл с данными).</li>
+
+<li>Если ремонт терпит неудачу из-за ошибки в файле с данными (например,
+дубликат ключа), сервер попробует еще раз, на сей раз
+обновляя файл с данными.</li>
+
+<li>Если ремонт все еще терпит неудачу, сервер попытается еще раз со старым
+методом опции ремонта (запишет построчно не сортируя). Этот метод должен быть
+в состоянии восстановить любой тип ошибки и имеет низкие
+требования к дисковому пространству.</p></li></ul>
+
+<p>Если восстановление не в состоянии возвратить все строки ранее завершенных
+запросов, и Вы не определяли <code>FORCE</code> в значении опции
+<a href="server.htm#option_mysqld_myisam-recover-options"><code>
+--myisam-recover-options</code></a>, автоматический ремонт прерывается с
+сообщением об ошибке в журнале ошибок:
+<pre>
+Error: Couldn't repair table: test.g00pages
+</pre>
+
+Если Вы определяете <code>FORCE</code>, вместо этого будет предупреждение:
+<pre>
+Warning: Found 344 of 354 rows when repairing ./test/g00pages
+</pre>
+
+Если автоматическое значение восстановления включает <code>BACKUP</code>,
+процесс восстановления создает файлы с названиями вида
+<code><em><code>tbl_name-datetime</code></em>.BAK</code>.
+У Вас должен быть скрипт <span><strong>cron</strong></span>, который
+автоматически перемещает эти файлы из каталогов базы данных,
+чтобы сделать копию.</p>
+
+<h3><a name="key-space"></a>17.2.2. Необходимое пространство для ключей</h3>
+<p>Таблицы <code>MyISAM</code> используют индексы B-tree.
+Вы можете примерно вычислить размер для индексного файла как
+<code>(key_length+4)/0.67</code>, суммированный по всем ключам. Это для
+худшего случая, когда все ключи вставлены в сортированном порядке, и у
+таблицы нет никаких сжатых ключей.</p>
+
+<p>Строковые индексы сжимают пробелы. Если первая часть индекса строка,
+префикс также сжат. Сжатие пространства делает индексный файл меньшим, чем
+число худшего случая, если строковый столбец имеет большой конечный пробел
+или есть столбец <a href="types.htm#char"><code>VARCHAR</code></a>, который
+не всегда используется на всю длину. Сжатие приставки используется на ключах,
+которые начинаются со строки. Сжатие приставки помогает, если есть много
+строк с идентичной приставкой.</p>
+
+<p>В таблицах <code>MyISAM</code> Вы можете также сжать числовые префиксы,
+определяя опцию <code>PACK_KEYS=1</code>, когда Вы составляете таблицу. Числа
+сохранены со старшим байтом сначала, таким образом, это помогает, когда у Вас
+есть много ключей целого числа, у которых есть идентичный префикс.</p>
+
+<h3><a name="myisam-table-formats"></a>17.2.3.
+Табличные форматы хранения MyISAM</h3>
+<p><code>MyISAM</code> поддерживает три различных формата хранения. Два из
+них, фиксрованный и динамический, выбраны автоматически в зависимости от типа
+столбцов, которые Вы используете. Третий, сжатый, формат может быть создан
+только с помощью <a href="programs.htm#myisampack"><span><strong>myisampack
+</strong></span></a> (см. <a href="programs.htm#myisampack">раздел 5.6.6
+</a>).</p>
+
+<p>Когда Вы используете <a href="sql.htm#create-table"><code>CREATE TABLE
+</code></a> или <a href="sql.htm#alter-table"><code>ALTER TABLE</code></a>
+для таблицы, которая не имеет столбцов
+<a href="types.htm#blob"><code>BLOB</code></a> или
+<a href="types.htm#blob"><code>TEXT</code></a>, Вы можете привести формат
+таблицы к <code>FIXED</code> или <code>DYNAMIC</code> с опцией
+<code>ROW_FORMAT</code>.</p>
+
+<p>См. <a href="sql.htm#create-table">раздел 14.1.15</a> для информации о
+<code>ROW_FORMAT</code>.</p>
+<p>Вы можете распаковать сжатые таблицы <code>MyISAM</code>, используя
+<a href="programs.htm#myisamchk">myisamchk<code>--unpack</code></a>, см.
+<a href="programs.htm#myisamchk">раздел 5.6.4</a>.</p>
+
+<h4><a name="static-format"></a>17.2.3.1. Табличные характеристики
+(фиксированная длина)</h4>
+<p>Статический формат значение по умолчанию для таблицы <code>MyISAM</code>.
+Это используется, когда таблица не содержит столбцов переменной длины
+(<a href="types.htm#char"><code>VARCHAR</code></a>,
+<a href="types.htm#binary-varbinary"><code>VARBINARY</code></a>,
+<a href="types.htm#blob"><code>BLOB</code></a> или
+<a href="types.htm#blob"><code>TEXT</code></a>).
+Каждая строка сохранена, используя постоянное число байтов.</p>
+
+<p>Из трех форматов хранения <code>MyISAM</code> статический формат является
+самым простым и самым безопасным (наименьшее количество объектов). Это
+является также самым быстрым из форматов на диске из-за легкости, с которой
+строки в файле с данными могут быть найдены на диске: чтобы искать строку,
+основываясь на номере строки в индексе, умножьте номер строки на длину
+строки, чтобы вычислить позицию строки. Кроме того, просматривая таблицу,
+очень легко считать постоянное число строк каждым дисковым запросом.</p>
+
+<p>Формат строки фиксированной длины доступен только для таблиц без столбцов
+<a href="types.htm#blob"><code>BLOB</code></a> или
+<a href="types.htm#blob"><code>TEXT</code></a>. Составление таблицы с этими
+столбцами с явным указанием <code>ROW_FORMAT</code> не будет создавать
+ошибку или предупреждение, спецификация формата будет проигнорирована.</p>
+
+<p>У таблиц статического формата есть эти характеристики:</p>
+<ul><li><p>Столбцы <a href="types.htm#char"><code>CHAR</code></a> и
+<a href="types.htm#char"><code>VARCHAR</code></a> дополнены пробелами до
+указанной ширины столбца, хотя тип столбца не изменен. Столбцы
+<a href="types.htm#binary-varbinary"><code>BINARY</code></a> и
+<a href="types.htm#binary-varbinary"><code>VARBINARY</code></a>
+дополнены байтами <code>0x00</code>.</li>
+
+<li>Столбцы <code>NULL</code> требуют дополнительное пространство в строке,
+чтобы сделать запись, являются ли их значения <code>NULL</code>. Каждый
+столбец <code>NULL</code> берет один дополнительный бит, округленный к
+самому близкому байту.</li>
+
+<li>Очень быстрый.</li>
+<li>Легко кэшировать.</li>
+<li>Легко восстановить после катастрофического отказа, потому что строки
+расположены в фиксированных позициях.</li>
+
+<li>Перестройка является ненужной, если Вы не удаляете огромное число строк и
+хотите возвратить свободное дисковое пространство операционной системе.
+Чтобы сделать это, надо использовать
+<a href="sql.htm#optimize-table"><code>OPTIMIZE TABLE</code></a> или
+<a href="programs.htm#myisamchk"><span><strong>myisamchk -r</strong>
+</span></a>.</li>
+
+<li>Обычно требует большего количества дискового пространства, чем
+таблицы динамического формата.</li>
+<li>Ожидаемая длина строки в байтах для строк статического размера вычислена,
+используя следующее выражение:
+<pre>
+Длина строки = 1 + (<em><code>Сумма длин столбцов</code></em>) +
+(<em><code>Число столбцов NULL</code></em> +
+<em><code>delete_flag</code></em> + 7)/8 +
+(<em><code>Число столбцов переменной длины</code></em>)
+</pre>
+
+<em><code>delete_flag</code></em> = 1 для таблиц со статическим форматом
+строки. Статические таблицы используют немного места в отчете строки для
+флага, который указывает, была ли строка удалена. <em><code>delete_flag
+</code></em> = 0 для динамических таблиц, потому что флаг сохранен в
+динамическом заголовке строки.</p></li></ul>
+
+<h4><a name="dynamic-format"></a>17.2.3.2.
+Динамические табличные характеристики</h4>
+<p>Динамический формат хранения используется, если таблица
+<code>MyISAM</code> содержит любые столбцы переменной длины
+(<a href="types.htm#char"><code>VARCHAR</code></a>,
+<a href="types.htm#binary-varbinary"><code>VARBINARY</code></a>,
+<a href="types.htm#blob"><code>BLOB</code></a> или
+<a href="types.htm#blob"><code>TEXT</code></a>) или если таблица была
+составлена с опцией <code>ROW_FORMAT=DYNAMIC</code>.</p>
+
+<p>Динамический формат немного более сложен, чем статический формат, потому
+что у каждой строки есть заголовок, который указывает, какой она длины.
+Строка может стать фрагментированной (сохраненной в частях, состоящих из
+нескольких несмежных участков), когда она сделана более
+длинной в результате обновления.</p>
+
+<p>Вы можете использовать <a href="sql.htm#optimize-table"><code>OPTIMIZE
+TABLE</code></a> или <a href="programs.htm#myisamchk"><span><strong>myisamchk
+-r</strong></span></a> для дефрагментации таблицы. Если у Вас есть столбцы
+фиксированной длины, к которым Вы получаете доступ или часто изменяете в
+таблице, которая также содержит некоторые столбцы переменной длины, может
+быть хорошей идеей переместить столбцы переменной длины в другие таблицы,
+чтобы избежать фрагментации.</p>
+
+<p>У таблиц динамического формата есть эти характеристики:</p>
+<ul><li><p>Все строковые столбцы являются динамическими кроме тех, чья
+длина меньше четырех.</li>
+
+<li>Каждой строке предшествует битовый массив, который указывает, какие
+столбцы содержат пустую строку (для строковых столбцов) или ноль (для
+числовых столбцов). Это не включает столбцы, которые содержат значения
+<code>NULL</code>. Если у строкового столбца есть длина 0 после удаления
+конечного пробела или у числового столбца есть значение 0, это отмечено в
+битовом массиве и не сохранено на диске. Непустые строки сохранены как байт
+длины плюс строковое содержание.</li>
+
+<li>Столбцы <code>NULL</code> требуют дополнительного пространства в строке,
+чтобы сделать запись, являются ли их значения <code>NULL</code>. Каждый
+столбец <code>NULL</code> берет один дополнительный бит, округленный
+к самому близкому байту.</li>
+
+<li>Намного меньше дискового пространства обычно требуется, чем для
+таблиц фиксированной длины.</li>
+<li>Каждая строка использует только столько места, как требуется. Однако,
+если строка становится более крупной, она разделена на так много частей, как
+требуются, приводя к фрагментации строки. Например, если Вы обновляете строку
+с информацией, которая расширяет длину строки, строка становится
+фрагментированной. В этом случае Вам, вероятно, придется запустить
+<a href="sql.htm#optimize-table"><code>OPTIMIZE TABLE</code></a> или
+<a href="programs.htm#myisamchk"><span><strong>myisamchk -r</strong></span>
+</a> время от времени, чтобы улучшить работу. Используйте
+<a href="programs.htm#myisamchk"><span><strong>myisamchk -ei</strong></span>
+</a>, чтобы получить табличную статистику.</li>
+
+<li>Более трудны, чем таблицы статического формата, чтобы восстановить
+после катастрофического отказа, потому что строки могут быть фрагментированы
+на многие части, а ссылки (фрагменты) могут отсутствовать.</li>
+
+<li>Ожидаемая длина строки для строк динамического размера вычислена,
+используя следующее выражение:
+<pre>
+3 + (<em><code>Число столбцов</code></em> + 7)/8 +
+(<em><code>Число столбцов char</code></em>) +
+(<em><code>Упакованный размер числовых столбцов</code></em>) +
+(<em><code>Длина строк</code></em>) +
+(<em><code>Число столбцов NULL</code></em> + 7)/8
+</pre>
+
+Есть затраты в 6 байтов для каждой ссылки. Динамическая строка получает
+ссылку всякий раз, когда обновление вызывает расширение строки. Каждая новая
+ссылка составляет по крайней мере 20 байтов, таким образом, следующее
+расширение, вероятно, входит в ту же самую ссылку. В противном случае другая
+ссылка создается. Вы можете найти число ссылок, используя
+<a href="programs.htm#myisamchk"><span><strong>myisamchk -ed</strong></span>
+</a>. Все ссылки могут быть удалены с <a href="sql.htm#optimize-table"><code>
+OPTIMIZE TABLE</code></a> или <a href="programs.htm#myisamchk"><span><strong>
+myisamchk -r</strong></span></a>.</p></li></ul>
+
+<h4><a name="compressed-format"></a>17.2.3.3. Сжатые табличные характеристики
+</h4>
+<p>Сжатый формат хранения это формат только для чтения, который произведен с
+помощью <a href="programs.htm#myisampack"><span><strong>myisampack</strong>
+</span></a>. Сжатые таблицы могут быть рассжаты с помощью
+<a href="programs.htm#myisamchk"><span><strong>myisamchk</strong></span></a>.
+</p>
+
+<p>У сжатых таблиц есть следующие характеристики:</p>
+<ul><li><p>Сжатые таблицы берут очень немного дискового пространства. Это
+минимизирует дисковое использование, что полезно, используя медленные диски
+(такие как CD-ROM).</li>
+
+<li>Каждая строка сжата отдельно, таким образом есть очень небольшой
+заголовок. Заголовок для строки занимает 1-3 байта в зависимости от самой
+большой строки в таблице. Каждый столбец сжат по-другому. обычно есть
+различное дерево Хафмана для каждого столбца. Некоторые из типов сжатия:</p>
+
+<ul><li><p>Сжатие пространства суффикса.</li>
+<li>Сжатие пространства префикса.</li>
+<li>Числа со значением 0 сохранены, используя один бит.</li>
+
+<li>Если у значений в столбце целого числа есть маленький диапазон, столбец
+сохранен, используя самый маленький тип. Например, столбец
+<a href="types.htm#integer-types"><code>BIGINT</code></a> (восемь байтов)
+может быть сохранен как столбец <a href="types.htm#integer-types"><code>
+TINYINT</code></a> (один байт), если все его значения находятся в диапазоне
+от <code>-128</code> до <code>127</code>.</li>
+
+<li>Если у столбца есть только маленький набор возможных значений, тип данных
+преобразован в <a href="types.htm#enum"><code>ENUM</code></a>.</li>
+<li>Столбец может использовать любую комбинацию предыдущих типов сжатия.
+</p></li></ul></li>
+<li><p>Может использоваться для строк фиксированной или динамической длины.
+</p></li></ul>
+
+<p>В то время как сжатая таблица только для чтения, и Вы не можете поэтому
+обновить или добавить строки в таблице, операции DDL (язык определения
+данных) все еще допустимы. Например, Вы все еще можете использовать
+<code>DROP</code> для удаления и <a href="sql.htm#truncate-table"><code>
+TRUNCATE TABLE</code></a>, чтобы освободить таблицу.</p>
+
+<h3><a name="myisam-table-problems"></a>17.2.4. Проблемы таблиц MyISAM</h3>
+<p>Формат файла, применяемый MySQL, чтобы хранить данные был экстенсивно
+проверено, но всегда есть обстоятельства, которые могут заставить таблицы
+базы данных становиться поврежденными. Следующее обсуждение описывает, как
+это может произойти и как обработать ситуацию.</p>
+
+<h4><a name="corrupted-myisam-tables"></a>17.2.4.1. Поврежденные таблицы
+MyISAM</h4>
+<p>Даже при том, что формат таблицы <code>MyISAM</code> очень надежен (все
+изменения таблицы, сделанные запросом SQL, записаны перед его возвратом), Вы
+можете все еще получить поврежденные таблицы, если какое-либо из следующих
+событий имеет место:</p>
+
+<ul><li><p>Процесс <a href="programs.htm#mysqld"><span><strong>mysqld
+</strong></span></a> грохнулся в середине записи.</li>
+<li>Неожиданное завершение работы происходит (например, компьютер выключен).
+</li>
+
+<li>Отказы аппаратных средств.</li>
+<li>Вы используете внешнюю программу (такую, как
+<a href="programs.htm#myisamchk"><span><strong>myisamchk</strong></span>
+</a>), чтобы изменить таблицу, которая изменяется сервером в то
+же самое время.</li>
+<li>Ошибка программного обеспечения в MySQL или <code>MyISAM</code>.
+</p></li></ul>
+
+<p>Типичные признаки поврежденной таблицы:</p>
+<ul><li><p>Вы получаете следующую ошибку, выбирая данные из таблицы:
+<pre>
+Incorrect key file for table: '...'. Try to repair it
+</pre></li>
+<li><p>Запросы не находят строки в таблице или
+возвращают неполные результаты.</p></li></ul>
+
+<p>Вы можете проверить здоровье таблицы <code>MyISAM</code>, используя запрос
+<a href="sql.htm#check-table"><code>CHECK TABLE</code></a> и провести ремонт
+поврежденной таблицы <code>MyISAM</code> с
+<a href="sql.htm#repair-table"><code>REPAIR TABLE</code></a>. Когда
+<a href="programs.htm#mysqld"><span><strong>mysqld</strong></span></a>
+не работает, Вы можете также проверить или восстановить таблицу с помощью
+<a href="programs.htm#myisamchk"><span><strong>myisamchk</strong></span></a>.
+См. разделы <a href="sql.htm#check-table">14.7.2.2</a>,
+<a href="sql.htm#repair-table">14.7.2.5</a> и
+<a href="programs.htm#myisamchk">5.6.4</a>.</p>
+
+<p>Если Ваши таблицы становятся поврежденными часто, Вы должны попытаться
+определить, почему это происходит. Самая важная вещь состоит в том, стала ли
+таблица поврежденной в результате катастрофического отказа сервера. Вы можете
+проверить это легко, ища недавнее сообщение <code>restarted mysqld</code>
+в журнале ошибок. Если есть такое сообщение, вероятно, что табличное
+повреждение результат сбоя сервера. Иначе повреждение, возможно, произошло во
+время нормального функционирования. Это ошибка. Вы должны попытаться создать
+восстанавливаемый прецедент, который демонстрирует проблему. См. разделы
+<a href="error.htm#crashing">B.5.3.3</a> и
+<a href="extend.htm#porting">26.5</a>.</p>
+
+<h4><a name="myisam-table-close"></a>17.2.4.2. Проблемы от таблиц, не
+закрываемых должным образом</h4>
+<p>Каждый индексный файл <code>MyISAM</code> (<code>.MYI</code>)
+имеет счетчик в заголовке, который может использоваться, чтобы проверить,
+была ли таблица закрыта должным образом. Если Вы получаете следующее
+предупреждение от <a href="sql.htm#check-table"><code>CHECK TABLE</code></a>
+или <a href="programs.htm#myisamchk"><span><strong>myisamchk</strong></span>
+</a>, это означает, что этот счетчик вышел из синхронизации:
+<pre>
+clients are using or haven't closed the table properly
+</pre>
+Это предупреждение не обязательно означает, что таблица повреждена, но Вы
+должны, по крайней мере, проверить таблицу.</p>
+
+<p>Счетчик работает следующим образом:</p>
+<ul><li><p>В первый раз, когда таблица обновлена в MySQL, счетчик в заголовке
+индексных файлов постепенно увеличен.</li>
+
+<li>Счетчик не изменен во время дальнейших обновлений.</li>
+<li>Когда последний экземпляр таблицы закрыт (потому что
+<a href="sql.htm#flush"><code>FLUSH TABLES</code></a>
+была выполнена или потому что нет места в табличном кэше), счетчик
+уменьшен, если таблица была обновлена в каком-либо пункте.</li>
+
+<li>Когда Вы восстанавливаете таблицу или проверяете таблицу и все хорошо,
+счетчик сброшен к нолю.</li>
+<li>Чтобы избежать проблем со взаимодействием с другими процессами, которые
+могли бы проверить таблицу, счетчик не уменьшен на завершении, если
+это был ноль.</p></li></ul>
+
+<p>Другими словами, счетчик может стать неправильным только
+при этих условиях:</p>
+<ul><li><p>Таблица <code>MyISAM</code> скопирована без применения
+<a href="sql.htm#lock-tables"><code>LOCK TABLES</code></a> и
+<a href="sql.htm#flush"><code>FLUSH TABLES</code></a>.</li>
+
+<li>MySQL навернулся между обновлением и финалом. Таблица может все еще быть
+в порядке, потому что MySQL всегда записывает все между запросами.</li>
+<li>Таблица была изменена <a href="programs.htm#myisamchk"><span><strong>
+myisamchk --recover</strong></span></a> или <a href="programs.htm#myisamchk">
+<span><strong>myisamchk --update-state</strong></span></a> в то же самое
+время, когда это использовалось <a href="programs.htm#mysqld"><span><strong>
+mysqld</strong></span></a>.</li>
+
+<li>Несколько серверов <a href="programs.htm#mysqld"><span><strong>mysqld
+</strong></span></a> используют таблицу, и один сервер выполнил
+<a href="sql.htm#repair-table"><code>REPAIR TABLE</code></a> или
+<a href="sql.htm#check-table"><code>CHECK TABLE</code></a> на таблице, в то
+время как это использовалось другим сервером. В этой установке безопасно
+использовать <a href="sql.htm#check-table"><code>CHECK TABLE</code></a>,
+хотя Вы могли бы получить предупреждение от других серверов. Однако,
+<a href="sql.htm#repair-table"><code>REPAIR TABLE</code></a>
+применяться не должен потому, что когда один сервер заменяет файл с данными
+новым, это неизвестно другим серверам.</p>
+
+<p>Вообще, плохая идея совместно использовать каталог данных несколькими
+серверами. См. <a href="server.htm#multiple-servers">раздел 6.7</a>.
+</p></li></ul>
+
+<h2><a name="memory-storage-engine"></a>17.3. Механизм хранения MEMORY</h2>
+<p>Механизм хранения <code>MEMORY</code> (прежде известный как
+<code>HEAP</code>) составляет таблицы специального назначения с содержанием,
+которое сохранено в памяти. Поскольку данные уязвимы для катастрофических
+отказов, проблемы аппаратных средств или отключения электричества, эти
+таблицы используют в качестве временных рабочих областей или кэшей только для
+чтения для данных, которые вытягивают из других таблиц.other tables.
+</p>
+
+<a name="idm139965313369344"></a><p><b>Таблица 17.4. Особенности механизма
+хранения <code>MEMORY</code></b></p>
+<table border="1">
+<tbody><tr><td scope="row"><span><strong>Пределы хранения</strong></span>
+</td><td>RAM</td><td><span><strong>Транзакции</strong></span></td>
+<td>Нет</td><td><span><strong>Степень детализации блокировки</strong></span>
+</td><td>Таблица</td></tr>
+<tr><td scope="row"><span><strong>MVCC</strong></span></td><td>Нет</td><td>
+<span><strong>Картографические типы данных</strong></span></td><td>Нет</td>
+<td><span><strong>Индексирование геоданных</strong></span></td>
+<td>Нет</td></tr>
+<tr><td scope="row"><span><strong>Индексы B-tree</strong></span></td>
+<td>Да</td><td><span><strong>Индексы T-tree</strong></span></td><td>Нет</td>
+<td><span><strong>Индексы Hash</strong></span></td><td>Да</td></tr>
+<tr><td scope="row"><span><strong>Индексы Full-text search</strong></span>
+</td><td>Нет</td><td><span><strong>Кластеризуемые индексы</strong></span>
+</td><td>Нет</td><td><span><strong>Кэш данных</strong></span></td><td>N/A
+</td></tr>
+<tr><td scope="row"><span><strong>Кэш индексов</strong></span></td><td>N/A
+</td><td><span><strong>Сжатые данные</strong></span></td><td>Нет</td><td>
+<span><strong>Шифрование данных</strong></span></td><td>Да</td></tr>
+<tr><td scope="row"><span><strong>Поддержка базы данных кластера</strong>
+</span></td><td>Нет</td><td><span><strong>Репликация</strong></span></td>
+<td>Да</td><td><span><strong>Поддержка внешнего ключа</strong></span></td>
+<td>Нет</td></tr>
+<tr><td scope="row"><span><strong>Резервное копирование/восстановление
+момента времени</strong></span></td><td>Да</td><td><span><strong>Кэш запросов
+</strong></span></td><td>Да</td><td><span><strong>Статистика обновления для
+словаря данных</strong></span></td><td>Да</td></tr></tbody></table>
+
+<p><a name="memory-compared-cluster"></a><b>Когда использовать MEMORY
+или MySQL Cluster. </b>Разработчики приложений, которые используют механизм
+хранения <code>MEMORY</code> для важных, высоконадежных или часто обновляемых
+данных должны рассмотреть, является ли MySQL Cluster лучшим выбором. Типичный
+случай использования для механизма <code>MEMORY</code>
+имеет эти характеристики:</p>
+
+<ul><li><p>Операции, вовлекающие переходные, некритические данные, такие как
+управление сеансом или кэширование. Когда сервер MySQL перезапускается,
+данные в таблицах <code>MEMORY</code> потеряны.</li>
+
+<li>Хранение в памяти для быстрого доступа и низкого времени ожидания. Объем
+данных может разместиться полностью в памяти, не заставляя операционную
+систему подкачивать страницы виртуальной памяти.</li>
+
+<li>Только для чтения или доступ к данным главным образом для
+чтения (ограниченные обновления).</p></li></ul>
+<p>MySQL Cluster предлагает те же самые особенности как механизм
+<code>MEMORY</code> с более высокими исполнительными уровнями и обеспечивает
+дополнительные функции, недоступные с <code>MEMORY</code>:</p>
+
+<ul><li><p>Блокировка на уровне строки и работа многих потоков.</li>
+<li>Масштабируемость даже со смесями запросов, которые включают запись.</li>
+<li>Дополнительная поддержанная диском работа для длительного хранения данных.
+</li>
+
+<li>Работа многих узлов без единственного пункта отказа, включая доступность
+99.999%.</li>
+<li>Автоматическое распределение данных по узлам, разработчики приложений не
+должны обработать пользовательскую раздачу или решения для разделения.</li>
+
+<li>Поддержка типов данных переменной длины (включая
+<a href="types.htm#blob"><code>BLOB</code></a> и
+<a href="types.htm#blob"><code>TEXT</code></a>), не поддержанные <code>MEMORY
+</code>.</p></li></ul>
+
+<p>Для отчета с более подробным сравнением механизмов хранения
+<code>MEMORY</code> и MySQL Cluster см.
+<a href="../../../www.mysql.com/why-mysql/white-papers/mysql-wp_cluster-7.0_Cluster_MEMORY.php"
+target="_top">Scaling Web Services with MySQL Cluster: An Alternative to the
+MySQL Memory Storage Engine</a>. Этот отчет включает исследование качества
+работы этих двух технологий и руководство, описывающее, как существующие
+пользователи <code>MEMORY</code> могут мигрировать на MySQL Cluster.</p>
+<p>Таблицы <code>MEMORY</code> не могут быть разделены.</p>
+
+<h3><a name="idm139965313313856"></a>Технические характеристики</h3>
+<p>Работа <code>MEMORY</code> ограничена утверждением, следующим из
+выполнения единственного потока, и таблица блокируется, обрабатывая
+обновления. Это ограничивает масштабируемость, когда загрузка увеличивается,
+особенно для смесей запросов, которые включают запись.</p>
+
+<p>Несмотря на обработку в памяти для таблиц <code>MEMORY</code>,
+они не обязательно быстрее <a href="innodb.htm"><code>InnoDB</code></a>
+на занятом сервере для запросов общего назначения или при рабочей нагрузке
+чтения-записи. В частности таблица, заблокированная в связи с выполнением
+обновлений, может замедлить параллельное использование таблиц
+<code>MEMORY</code> из нескольких сеансов.</p>
+
+<p>В зависимости от видов запросов, выполненных на таблицах
+<code>MEMORY</code>, Вы могли бы создать индексы как структуру данных хеша по
+умолчанию (для того, чтобы искать единственные значения, основанные на
+уникальном ключе) или структуру данных B-tree общего назначения
+(для всех видов запросов, вовлекающих равенство, неравенство или операторы
+диапазона, такие как "меньше чем" или "больше чем"). Следующие разделы
+иллюстрируют синтаксис для того, чтобы создать оба вида индексов.</p>
+
+<h3><a name="idm139965313306272"></a>Характеристики таблиц MEMORY</h3>
+<p>Механизм хранения <code>MEMORY</code> не создает файлов на диске.
+Табличное определение сохранено в словаре данных MySQL.</p>
+
+<p>У <code>MEMORY</code> таблиц есть следующие характеристики:</p>
+<ul><li><p>Место для таблиц <code>MEMORY</code> выделено маленькими блоками.
+Таблицы используют 100% динамическое хеширование для вставок. Никакая область
+переполнения или дополнительное ключевое пространство не нужны. Никакое
+дополнительное пространство не необходимо для свободных списков. Удаленные
+строки помещены в связанный список и снова использованы, когда Вы вставляете
+новые данные в таблицу. Таблицы <code>MEMORY</code>также не имеют ни одной из
+проблем обычно связываемых с удалением плюс вставкой в хешированных таблицах.
+</li>
+
+<li>Таблицы <code>MEMORY</code> используют формат хранения строки
+фиксированной длины. Типы переменной длины, например,
+<a href="types.htm#char"><code>VARCHAR</code></a>
+сохранены, используя фиксированную длину.</li>
+
+<li>Таблицы <code>MEMORY</code> не могут содержать столбцы
+<a href="types.htm#blob"><code>BLOB</code></a> или
+<a href="types.htm#blob"><code>TEXT</code></a>.</li>
+
+<li><code>MEMORY</code> включает поддержку столбцов
+<code>AUTO_INCREMENT</code>.</li>
+<li>Таблицы не-<code>TEMPORARY</code> <code>MEMORY</code> совместно
+использованы всеми клиентами, точно так же как любые другие
+не-<code>TEMPORARY</code> таблицы.</p></li></ul>
+
+<h3><a name="idm139965313288144"></a>DDL-операции для таблиц MEMORY</h3>
+<p>Чтобы создать таблицу <code>MEMORY</code>, определите пункт
+<code>ENGINE=MEMORY</code> в <a href="sql.htm#create-table">
+<code>CREATE TABLE</code></a>.
+<pre>
+CREATE TABLE t (i INT) ENGINE = MEMORY;
+</pre>
+
+Как обозначено именем механизма, таблицы <code>MEMORY</code>
+сохранены в памяти. Они используют хеш-индексы по умолчанию, которые делают
+их очень быстрыми для поисков единственного значения и очень полезными для
+того, чтобы составить временные таблицы. Однако, когда сервер закрывается,
+все строки, сохраненные в таблицах <code>MEMORY</code>, потеряны. Сами
+таблицы продолжают существовать, потому что их определения сохранены в
+словаре данных MySQL, но они пусты, когда сервер перезапускается.</p>
+
+<p>Этот пример показывает, как Вы могли бы создать, использовать и
+удалить таблицу <code>MEMORY</code>:
+<pre>
+mysql&gt; CREATE TABLE test ENGINE=MEMORY
+    -&gt; SELECT ip, SUM(downloads) AS down
+    -&gt;        FROM log_table GROUP BY ip;
+mysql&gt; SELECT COUNT(ip),AVG(down) FROM test;
+mysql&gt; DROP TABLE test;
+</pre>
+
+Максимальный размер таблиц <code>MEMORY</code> ограничен системной переменной
+<a href="server.htm#sysvar_max_heap_table_size"><code>max_heap_table_size
+</code></a>, у которой есть значение по умолчанию 16 МБ. Провести в жизнь
+различные пределы размера для таблиц <code>MEMORY</code> можно, изменив
+значение этой переменной. Значение в действительности для
+<a href="sql.htm#create-table"><code>CREATE TABLE</code></a>, последующего
+<a href="sql.htm#alter-table"><code>ALTER TABLE</code></a> или
+<a href="sql.htm#truncate-table"><code>TRUNCATE TABLE</code></a>, это
+значение, используемое для жизни таблицы. Перезапуск сервера также
+устанавливает максимальный размер существующих таблиц <code>MEMORY</code>
+к глобальной <a href="server.htm#sysvar_max_heap_table_size"><code>
+max_heap_table_size</code></a>. Вы можете установить размер для отдельных
+таблиц как описано позже в этом разделе.</p>
+
+<h3><a name="idm139965313266624"></a>Индексы</h3>
+<p>Механизм хранения <code>MEMORY</code> поддерживает оба индекса:
+<code>HASH</code> и <code>BTREE</code>. Вы можете определить один или другой
+для данного индекса, добавляя <code>USING</code>:
+<pre>
+CREATE TABLE lookup (id INT, INDEX USING HASH (id)) ENGINE = MEMORY;
+CREATE TABLE lookup (id INT, INDEX USING BTREE (id)) ENGINE = MEMORY;
+</pre>
+
+<p>Таблицы <code>MEMORY</code> могут иметь до 64 индексов на таблицу, 16
+столбцов на индексов и максимальную длину ключа 3072 байтов.</p>
+<p>Если табличный хеш индекс имеет высокую степень ключевого дублирования
+(многие индексные записи содержат то же самое значение), обновления таблицы,
+которые затрагивают значения ключа и все удаления значительно медленнее.
+Степень этого замедления пропорциональна степени дублирования (или обратно
+пропорциональна количеству элементов). Вы можете использовать индекс
+<code>BTREE</code>, чтобы избежать этой проблемы.</p>
+
+<p>У таблиц <code>MEMORY</code> могут быть групповые ключи.
+Это необычная особенность выполнения хеш-индекса.</p>
+<p>Столбцы, которые индексированы, могут содержать значения <code>NULL
+</code>.</p>
+
+<h3><a name="idm139965313254848"></a>
+Создаваемые пользователем и временные таблицы</h3>
+<p>Табличное содержание <code>MEMORY</code> сохранено в памяти, которую
+совместно используют с внутренними временными таблицами, которые сервер
+составляет на лету, обрабатывая запросы. Однако, два типа таблиц отличаются:
+таблицы <code>MEMORY</code> не подвергаются преобразованию хранения, тогда
+как внутренние временные таблицы:</p>
+
+<ul><li><p>Если внутренняя временная таблица становится слишком большой,
+сервер автоматически преобразовывает ее в хранение на диске, как описано в
+<a href="optimiz.htm#internal-temporary-tables">разделе 9.4.4</a>.</li>
+<li>Создаваемые пользователем таблицы <code>MEMORY</code> никогда не
+преобразовываются в дисковые таблицы.</p></li></ul>
+
+<h3><a name="idm139965313247680"></a>Загрузка данных</h3>
+<p>Чтобы заполнить таблицу <code>MEMORY</code>, когда сервер MySQL
+запускается, Вы можете использовать опцию
+<a href="server.htm#option_mysqld_init-file"><code>--init-file</code></a>.
+Например, Вы можете поместить запросы
+<a href="sql.htm#insert-select"><code>INSERT INTO ... SELECT</code></a> или
+<a href="sql.htm#load-data"><code>LOAD DATA INFILE</code></a>
+в этот файл, чтобы загрузить таблицу из постоянного хранилища данных. См.
+разделы <a href="server.htm#server-options">6.1.4</a> и
+<a href="sql.htm#load-data">14.2.6</a>.</p>
+
+<h3><a name="idm139965313240960"></a>Таблицы MEMORY и репликация</h3>
+<p>Таблицы <code>MEMORY</code> становятся пустыми, когда сервер закрыт и
+перезапущен. Если сервер ведущее устройство, его ведомые устройства не знают,
+что эти таблицы стали пустыми, таким образом, Вы видите устаревший контент,
+если Вы выбираете данные из таблиц на ведомых устройствах. Синхронизировать
+таблицы <code>MEMORY</code> ведущего и ведомого устройств, когда таблица
+<code>MEMORY</code> используется на ведущем устройстве, можно, добавив в
+двоичный журнал ведущего устройства запрос <a href="sql.htm#delete"><code>
+DELETE</code></a>, чтобы освободить таблицу на ведомых устройствах также.
+У ведомого устройства все еще есть устаревшие данные в таблице во время
+интервала между перезапуском ведущего устройства и его первым использованием
+таблицы. Чтобы избежать этого интервала, когда прямой запрос к ведомому
+устройству мог возвратить устаревшие данные, используйте опцию
+<a href="server.htm#option_mysqld_init-file"><code>--init-file</code></a>,
+чтобы заполнить таблицу <code>MEMORY</code> на ведущем
+устройстве при запуске.</p>
+
+<h3><a name="idm139965313234080"></a>Управление использованием памяти</h3>
+<p>Сервер нуждается в достаточной памяти, чтобы поддержать все таблицы
+<code>MEMORY</code>, которые используются в то же самое время.</p>
+
+<p>Память не восстановлена, если Вы удаляете отдельные строки из таблицы.
+Память восстановлена только, когда вся таблица удалена. Память, которая ранее
+использовалась для удаленных строк, снова будет использована для новых строк
+в пределах той же самой таблицы. Чтобы освободить всю память, используемую
+таблицей, когда Вы больше не требуете ее содержания, выполните
+<a href="sql.htm#delete"><code>DELETE</code></a> или
+<a href="sql.htm#truncate-table"><code>TRUNCATE TABLE</code></a>, чтобы
+удалить все строки или удалить таблицу в целом, используя
+<a href="sql.htm#drop-table"><code>DROP TABLE</code></a>. Чтобы освободить
+память, используемую удаленными строками, надо использовать
+<code>ALTER TABLE ENGINE=MEMORY</code>.</p>
+
+<p>Память, необходимая для одной строки в таблице <code>MEMORY</code>,
+вычислена, используя следующее выражение:
+<pre>
+SUM_OVER_ALL_BTREE_KEYS(<em><code>max_length_of_key</code></em> +
+                        sizeof(char*) * 4) +
+SUM_OVER_ALL_HASH_KEYS(sizeof(char*) * 2) +
+ALIGN(<em><code>length_of_row</code></em> + 1, sizeof(char*))
+</pre>
+
+<code>ALIGN()</code> представляет фактор округления, чтобы заставить длину
+строки быть точно кратной размеру указателя <code>char</code>
+<code>sizeof(char*)</code> = 4 на 32-bit системах и 8 на 64-bit машинах.</p>
+
+<p>Как упомянуто ранее, переменная
+<a href="server.htm#sysvar_max_heap_table_size"><code>max_heap_table_size
+</code></a> устанавливает предел для максимального размера таблиц
+<code>MEMORY</code>. Чтобы управлять максимальным размером для отдельных
+таблиц, установите сеансовое значение этой переменной прежде, чем составить
+каждую таблицу. Не изменяйте глобальное значение
+<a href="server.htm#sysvar_max_heap_table_size"><code>max_heap_table_size
+</code></a>, если Вы не предназначаете значение, которое будет использоваться
+для таблиц <code>MEMORY</code>, составленных всеми клиентами. Следующий
+пример создает две таблицы <code>MEMORY</code>
+с максимальным размером 1 МБ и 2 МБ, соответственно:
+<pre>
+mysql&gt; SET max_heap_table_size = 1024*1024;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; CREATE TABLE t1 (id INT, UNIQUE(id)) ENGINE = MEMORY;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql&gt; SET max_heap_table_size = 1024*1024*2;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; CREATE TABLE t2 (id INT, UNIQUE(id)) ENGINE = MEMORY;
+Query OK, 0 rows affected (0.00 sec)
+</pre>
+
+Обе таблицы возвращаются к глобальному значению
+<a href="server.htm#sysvar_max_heap_table_size"><code>max_heap_table_size
+</code></a>, если сервер перезапускается.</p>
+
+<p>Вы можете также определить табличную опцию <code>MAX_ROWS</code> в
+<a href="sql.htm#create-table"><code>CREATE TABLE</code></a> для таблиц
+<code>MEMORY</code>, чтобы обеспечить подсказку о числе строк, которое Вы
+планируете сохранить в них. Это не позволяет таблице вырасти вне
+<a href="server.htm#sysvar_max_heap_table_size"><code>max_heap_table_size
+</code></a>, которое все еще действует как ограничение на максимальный
+табличный размер. Для максимальной гибкости в возможности использования
+<code>MAX_ROWS</code>, установите
+<a href="server.htm#sysvar_max_heap_table_size"><code>max_heap_table_size
+</code></a> по крайней мере, столь же высоко как значение, к которому Вы
+хотите вырастить каждую таблицу <code>MEMORY</code>.</p>
+
+<h3><a name="idm139965313201456"></a>Дополнительные ресурсы</h3>
+<p>Форум, посвященный механизму хранения <code>MEMORY</code>,
+доступен на <a href="../../../forums.mysql.com/list.php@92" target="_top">
+http://forums.mysql.com/list.php?92</a>.</p>
+
+<h2><a name="csv-storage-engine"></a>17.4. Механизм хранения CSV</h2>
+<p>Механизм хранения <code>CSV</code> хранит данные в текстовых файлах,
+используя отделенный запятыми формат значений.</p>
+
+<p>Механизм хранения <code>CSV</code> всегда собирается в сервер MySQL.</p>
+<p>Чтобы исследовать механизм <code>CSV</code>, см. каталог
+<code>storage/csv</code> дистрибутива исходных текстов MySQL.</p>
+
+<p>Когда Вы создаете таблицу <code>CSV</code>, сервер создает файл с данными.
+Имя файла с данными начинается с имени таблицы и имеет расширение
+<code>.CSV</code>. Файл с данными это файл простого текста. Когда Вы
+сохраняете данные в таблицу, механизм хранения сохраняет это в файл с данными
+в отделенном запятыми формате значений.
+<pre>
+mysql&gt; CREATE TABLE test (i INT NOT NULL, c CHAR(10) NOT NULL)
+    -&gt;        ENGINE = CSV;
+Query OK, 0 rows affected (0.12 sec)
+
+mysql&gt; INSERT INTO test VALUES(1,'record one'),(2,'record two');
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql&gt; SELECT * FROM test;
++---+------------+
+| i | c          |
++---+------------+
+| 1 | record one |
+| 2 | record two |
++---+------------+
+2 rows in set (0.00 sec)
+</pre>
+
+Составление таблицы CSV также создает соответствующий метафайл, который
+хранит статус таблицы и число строк, которые существуют в таблице. Название
+этого файла то же самое, как название таблицы с расширением <code>CSM</code>.
+</p>
+
+<p>Если Вы исследуете файл <code>test.CSV</code> в каталоге базы данных,
+создаваемый, выполняя предыдущие запросы, его содержание должно быть
+похожим на это:
+<pre>
+"1","record one"
+"2","record two"
+</pre>
+Этот формат может быть считан и даже записан приложениями для обработки
+электронных таблиц, такими как Microsoft Excel или StarOffice Calc.</p>
+
+<h3><a name="se-csv-repair"></a>17.4.1. Восстановление и проверка
+таблиц CSV</h3>
+<p>Механизм хранения CSV поддерживает <code>CHECK</code> и
+<code>REPAIR</code>, чтобы проверить и если возможно отремонтировать
+поврежденную таблицу CSV.</p>
+
+<p>Запрос <code>CHECK</code> проверяет файл CSV на законность, ища правильные
+полевые разделители, экранированные области, правильное число областей по
+сравнению с табличным определением и существование соответствующего
+метафайла. Первая недопустимая обнаруженная строка сообщит об ошибке.
+Проверка допустимой таблицы производит вывод как показано ниже:
+<pre>
+mysql&gt; check table csvtest;
++--------------+-------+----------+----------+
+| Table        | Op    | Msg_type | Msg_text |
++--------------+-------+----------+----------+
+| test.csvtest | check | status   | OK       |
++--------------+-------+----------+----------+
+1 row in set (0.00 sec)
+</pre>
+
+Проверка на поврежденной таблице возвращает ошибку:
+<pre>
+mysql&gt; check table csvtest;
++--------------+-------+----------+----------+
+| Table        | Op    | Msg_type | Msg_text |
++--------------+-------+----------+----------+
+| test.csvtest | check | error    | Corrupt  |
++--------------+-------+----------+----------+
+1 row in set (0.01 sec)
+</pre>
+
+Если проверка терпит неудачу, таблица отмечена как разрушенная.
+Как только таблица была отмечена как поврежденная, она автоматически
+восстановлена, когда Вы в следующий раз запустите <code>CHECK</code> или
+выполните <a href="sql.htm#select"><code>SELECT</code></a>.
+Соответствующее поврежденное состояние и новое состояние будут выведены на
+экран из <code>CHECK</code>:
+<pre>
+mysql&gt; check table csvtest;
++--------------+-------+----------+----------------------------+
+| Table        | Op    | Msg_type | Msg_text                   |
++--------------+-------+----------+----------------------------+
+| test.csvtest | check | warning  | Table is marked as crashed |
+| test.csvtest | check | status   | OK                         |
++--------------+-------+----------+----------------------------+
+2 rows in set (0.08 sec)
+</pre>
+
+Чтобы восстановить таблицу, Вы можете использовать <code>REPAIR</code>,
+это копирует так много допустимых строк существующих данных CSV, насколько
+возможно, а затем заменяет существующий файл CSV восстановленными строками.
+Любые строки вне поврежденных данных потеряны.
+<pre>
+mysql&gt; repair table csvtest;
++--------------+--------+----------+----------+
+| Table        | Op     | Msg_type | Msg_text |
++--------------+--------+----------+----------+
+| test.csvtest | repair | status   | OK       |
++--------------+--------+----------+----------+
+1 row in set (0.02 sec)
+</pre>
+
+<p>Во время ремонта только строки из файла CSV до первой поврежденной строки
+скопированы к новой таблице. Все другие строки от первой поврежденной строки
+до конца таблицы удалены, даже допустимые строки.</p>
+
+<h3><a name="se-csv-limitations"></a>17.4.2. Ограничения CSV</h3>
+<p>Механизм хранения <code>CSV</code> не поддерживает индексацию.</p>
+<p>Механизм хранения <code>CSV</code> не поддерживает разделение.</p>
+
+890
+<p>Все таблицы, которые Вы создаете с использованием механизма хранения
+<code>CSV</code> должны иметь признак <code>NOT NULL</code> на всех столбцах.
+Однако, для обратной совместимости, Вы можете продолжить использовать таблицы
+со столбцами, допускающими null, которые создавались в предыдущих выпусках
+MySQL (Bug #32050).</p>
+
+<h2><a name="archive-storage-engine"></a>17.5. Механизм хранения ARCHIVE</h2>
+<p>Механизм хранения <code>ARCHIVE</code> производит таблицы специального
+назначения, которые хранят большое количество неиндексированных данных в
+очень маленьком виде.</p>
+
+<a name="idm139965313152752"></a><p><b>Таблица 17.5. Особенности механизма
+хранения <code>ARCHIVE</code></b></p>
+<table border="1">
+<tbody><tr><td scope="row"><span><strong>Пределы хранения</strong></span>
+</td><td>Нет</td><td><span><strong>Транзакции</strong></span></td><td>Нет
+</td><td><span><strong>Степень детализации блокировки</strong></span></td>
+<td>Строка</td></tr>
+<tr><td scope="row"><span><strong>MVCC</strong></span></td><td>Нет</td><td>
+<span><strong>Картографические типы данных</strong></span></td><td>Да</td>
+<td><span><strong>Индексирование геоданных</strong></span></td>
+<td>Нет</td></tr>
+<tr><td scope="row"><span><strong>Индексы B-tree</strong></span></td>
+<td>Нет</td><td><span><strong>Индексы T-tree</strong></span></td><td>Нет</td>
+<td><span><strong>Индексы Hash</strong></span></td><td>Нет</td></tr>
+<tr><td scope="row"><span><strong>Индексы Full-text search</strong></span>
+</td><td>Нет</td><td><span><strong>Кластеризуемые индексы</strong></span>
+</td><td>Нет</td><td><span><strong>Кэш данных</strong></span></td>
+<td>Нет</td></tr>
+<tr><td scope="row"><span><strong>Кэш индексов</strong></span></td>
+<td>Нет</td><td><span><strong>Сжатые данные</strong></span></td><td>Да</td>
+<td><span><strong>Шифрование данных</strong></span></td><td>Да</td></tr>
+<tr><td scope="row"><span><strong>Поддержка базы данных кластера</strong>
+</span></td><td>Нет</td><td><span><strong>Репликация</strong></span></td>
+<td>Да</td><td><span><strong>Поддержка внешнего ключа</strong></span></td>
+<td>Нет</td></tr>
+<tr><td scope="row"><span><strong>Резервное копирование/восстановление
+момента времени</strong></span></td><td>Да</td><td><span><strong>Кэш запросов
+</strong></span></td><td>Да</td><td><span><strong>Статистика обновления для
+словаря данных</strong></span></td><td>Да</td></tr></tbody></table>
+
+<p>Механизм хранения <code>ARCHIVE</code> включен в двоичные дистрибутивы
+MySQL. Чтобы включить этот механизму хранения, если Вы создаете MySQL из
+исходных текстов, вызовите <span><strong>CMake</strong></span> с опцией
+<a href="install.htm#option_cmake_storage_engine_options">
+<code>-DWITH_ARCHIVE_STORAGE_ENGINE</code></a>.</p>
+
+<p>Исходные тексты механизма <code>ARCHIVE</code> находятся
+в каталоге <code>storage/archive</code> исходных текстов MySQL.</p>
+<p>Когда Вы создаете таблицу <code>ARCHIVE</code>, механизм хранения создает
+файлы с именами, которые начинаются с имени таблицы. У файла с данными есть
+расширение <code>.ARZ</code>. Файл <code>.ARN</code> может появиться во время
+операций оптимизации. Вы можете проверить, доступен ли механизм хранения
+<code>ARCHIVE</code> с помощью запроса <a href="sql.htm#show-engines">
+<code>SHOW ENGINES</code></a>.</p>
+
+<p>Механизм <code>ARCHIVE</code>  поддерживает
+<a href="sql.htm#insert"><code>INSERT</code></a>,
+<a href="sql.htm#replace"><code>REPLACE</code></a> и
+<a href="sql.htm#select"><code>SELECT</code></a>, но не
+<a href="sql.htm#delete"><code>DELETE</code></a> или
+<a href="sql.htm#update"><code>UPDATE</code></a>. Это действительно
+поддерживает <code>ORDER BY</code>, столбцы <a href="types.htm#blob"><code>
+BLOB</code></a>. Механизм <code>ARCHIVE</code> использует блокировку
+на уровне строки.</p>
+
+<p>Механизм <code>ARCHIVE</code> поддерживает признак столбца
+<code>AUTO_INCREMENT</code>. У столбца <code>AUTO_INCREMENT</code> может быть
+уникальный или групповой индекс. Попытка создать индексирование на любом
+другом столбце приводит к ошибке. Механизм <code>ARCHIVE</code> также
+поддерживает табличную опцию <code>AUTO_INCREMENT</code> в
+<a href="sql.htm#create-table"><code>CREATE TABLE</code></a>, чтобы
+определить начальное значение последовательности для новой таблицы.</p>
+
+<p><code>ARCHIVE</code> не поддерживает вставку значения в столбец
+<code>AUTO_INCREMENT</code> меньше, чем текущее максимальное значение
+столбца. Попытки сделать так приводят к ошибке
+<a href="error.htm#error_er_dup_key"><code>ER_DUP_KEY</code></a>.</p>
+
+<p>Механизм <code>ARCHIVE</code> игнорирует столбцы
+<a href="types.htm#blob"><code>BLOB</code></a>, если их не требуют.</p>
+<p>Механизм <code>ARCHIVE</code> не поддерживает разделение.</p>
+
+<p><span><strong>Хранение:</strong></span> Строки сжаты, когда они вставлены.
+<code>ARCHIVE</code> использует <code>zlib</code> сжатие данных без потерь
+(см. <a href="../../../www.zlib.net/default.htm" target="_top">http://www.zlib.net/</a>).
+Вы можете использовать <a href="sql.htm#optimize-table"><code>OPTIMIZE TABLE
+</code></a>, чтобы проанализировать таблицу и упаковать ее в меньший формат
+(о причинах использования <a href="sql.htm#optimize-table"><code>OPTIMIZE
+TABLE</code></a> см. позже в этом разделе). Механизм также поддерживает
+<a href="sql.htm#check-table"><code>CHECK TABLE</code></a>.
+Есть несколько типов вставок, которые используются:</p>
+
+<ul><li><p><a href="sql.htm#insert"><code>INSERT</code></a>
+только продвигает строки в буфер сжатия. Вставка в буфер защищена
+блокировкой. <a href="sql.htm#select"><code>SELECT</code></a>
+сбрасывает буфер явно.</li>
+
+<li>Оптовая вставка видима только после того, как она завершается, если
+другие вставки не происходят в то же самое время, когда она может быть
+замечена частично. <a href="sql.htm#select"><code>SELECT</code></a>
+никогда не вызывает сброс оптовой вставки, если нормальная вставка не
+происходит, в то время как она загружается.</p></li></ul>
+
+<p><span><strong>Извлечение:</strong></span> при извлечении строки рассжаты
+по требованию, нет никакого кэша строки. <a href="sql.htm#select"><code>
+SELECT</code></a> выполняет полное сканирование таблицы: когда
+<a href="sql.htm#select"><code>SELECT</code></a> происходит, это узнает,
+сколько строк в настоящее время доступно и читает это число строк.
+<a href="sql.htm#select"><code>SELECT</code></a> выполнен как
+последовательное чтение. Отметьте, что многие запросы
+<a href="sql.htm#select"><code>SELECT</code></a> во время вставки могут
+ухудшить сжатие, если только не используются оптовые вставки. Чтобы
+достигнуть лучшего сжатия, Вы можете использовать
+<a href="sql.htm#optimize-table"><code>OPTIMIZE TABLE</code></a> или
+<a href="sql.htm#repair-table"><code>REPAIR TABLE</code></a>. Число строк в
+таблицах <code>ARCHIVE</code>, о которых сообщает
+<a href="sql.htm#show-table-status"><code>SHOW TABLE STATUS</code></a>,
+всегда точно. См. разделы <a href="sql.htm#optimize-table">14.7.2.4</a>,
+<a href="sql.htm#repair-table">14.7.2.5</a> и
+<a href="sql.htm#show-table-status">14.7.5.36</a>.</p>
+
+<h3><a name="idm139965313060416"></a>Дополнительные ресурсы</h3>
+<ul><li><p>Форум, посвященный механизму хранения <code>ARCHIVE</code>,
+доступен на <a href="../../../forums.mysql.com/list.php@112" target="_top">
+http://forums.mysql.com/list.php?112</a>.</p></li></ul>
+
+<h2><a name="blackhole-storage-engine"></a>17.6. Механизм хранения BLACKHOLE
+</h2>
+<p>Механизм хранения <code>BLACKHOLE</code> действует как
+<span><span>дыра памяти</span></span>, который принимает данные, но не хранит
+их. Извлечения всегда возвращают пустой результат:
+<pre>
+mysql&gt; CREATE TABLE test(i INT, c CHAR(10)) ENGINE = BLACKHOLE;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql&gt; INSERT INTO test VALUES(1,'record one'),(2,'record two');
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql&gt; SELECT * FROM test;
+Empty set (0.00 sec)
+</pre>
+
+Чтобы включить механизм хранения <code>BLACKHOLE</code>, если Вы создаете
+MySQL из исходных текстов, вызовите <span><strong>CMake</strong></span> с
+опцией <a href="install.htm#option_cmake_storage_engine_options">
+<code>-DWITH_BLACKHOLE_STORAGE_ENGINE</code></a>.</p>
+
+<p>Механизм <code>BLACKHOLE</code> находится в каталоге
+<code>sql</code> исходных текстов MySQL.</p>
+<p>Когда Вы создаете таблицу <code>BLACKHOLE</code>, сервер создает табличное
+определение в глобальном словаре данных.
+Нет никаких файлов, связанных с таблицей.</p>
+
+<p>Механизм хранения <code>BLACKHOLE</code> поддерживает все виды индексов.
+Таким образом, Вы можете включать индексные
+декларации в табличном определении.</p>
+
+<p>Механизм хранения <code>BLACKHOLE</code> не поддерживает разделение.</p>
+<p>Вы можете проверить доступен ли механизм хранения <code>BLACKHOLE</code>
+с помощью <a href="sql.htm#show-engines"><code>SHOW ENGINES</code></a>.</p>
+
+<p>Вставки в таблицу <code>BLACKHOLE</code> не хранят данных, но если
+двоичное журналирование, основанное на запросе, включено, запросы SQL
+зарегистрированы и копируются к ведомым серверам. Это может быть полезно как
+повторитель или фильтр.</p>
+
+<p>Используя основанное на строке двоичное журналирование, обновления и
+удаления пропущены, но не зарегистрированы и не применены. Поэтому Вы должны
+использовать STATEMENT для формата двоичного журналирования, а не
+ROW или MIXED.</p>
+
+<p>Предположите, что Ваше приложение требует, чтобы ведомая сторона
+применяла правила фильтрации, но передача всех двоичных данные журнала
+ведомому устройству привела к слишком большому количеству трафика. В таком
+случае возможно настроить на ведущем узле <span><span>пустой</span></span>
+ведомый процесс, механизм хранения по умолчанию которого
+<code>BLACKHOLE</code> примерно так:</p>
+
+<img src="blackh.png" width="520" height="245">
+<p>Ведущее устройство пишет двоичный журнал. <span><span>Пустой</span></span>
+процесс <a href="programs.htm#mysqld"><span><strong>mysqld</strong></span>
+</a> обрабатывает действия как ведомое устройство, применяя желаемую
+комбинацию правил <code>replicate-do-*</code> и
+<code>replicate-ignore-*</code>, и пишет отфильтрованный результат
+в собственный двоичный журнал. См. <a href="replica.htm#replication-options">
+раздел 19.1.6</a>. Этот фильтруемый журнал обеспечен ведомому устройству.</p>
+
+<p>Фиктивный процесс фактически не хранит данных, таким образом есть
+небольшая обработка, выполняя дополнительный процесс
+<a href="programs.htm#mysqld"><span><strong>mysqld</strong></span></a> на
+ведущем узле. Этот тип установки может быть повторен с дополнительными
+ведомыми устройствами репликации.</p>
+
+<p>Триггеры <a href="sql.htm#insert"><code>INSERT</code></a> для таблиц
+<code>BLACKHOLE</code> работают как ожидалось. Однако, потому что
+<code>BLACKHOLE</code> фактически не хранит данных, триггеры
+<a href="sql.htm#update"><code>UPDATE</code></a> и
+<a href="sql.htm#delete"><code>DELETE</code></a> не активированы: предложение
+<code>FOR EACH ROW</code> в определении не применяется, потому что
+нет никаких строк.</p>
+
+<p>Другие возможные применения для механизма
+хранения <code>BLACKHOLE</code> включают:</p>
+<ul><li><p>Проверка синтаксиса файла дампа.</li>
+
+<li>Измерение потерь от двоичного журналирования, сравнивая исполнительное
+использование <code>BLACKHOLE</code> с и без журналирования.</li>
+<li><code>BLACKHOLE</code> по существу пустой механизм хранения, таким
+образом, это может использоваться для того, чтобы учесть исполнительные узкие
+места, не связанные с механизмом хранения непосредственно.</p></li></ul>
+<p>Механизм <code>BLACKHOLE</code> осведомлен о транзакции, в том смысле, что
+переданные транзакции записаны в двоичный журнал, а отмененные нет.</p>
+
+<p><span><strong>Механизм Blackhole и столбцы Auto Increment:</strong></span>
+</p>
+<p>Механизм Blackhole пустой. Любые операции, выполненные на табличном
+использовании Blackhole не будут иметь никакого эффекта. Это должно быть в
+памяти, рассматривая поведение столбцов первичного ключа, имеющих auto
+increment. Механизм не будет автоматически постепенно увеличивать значения
+полей и не сохраняет статус полей auto increment.
+У этого есть важные значения в репликации.</p>
+
+<p>Рассмотрите следующий сценарий, где все три из
+следующих условий применяются:</p>
+<ol type="1"><li><p>На главном сервере есть blackhole таблица с полем auto
+increment, которое является первичным ключом.</li>
+<li>На ведомом устройстве та же самая таблица существует, но с
+использованием механизма MyISAM.</li>
+
+<li>Вставки выполнены в таблицу ведущего устройства, явно не устанавливая
+значение auto increment в запросе <code>INSERT</code> непосредственно или
+посредством использования <code>SET INSERT_ID</code>.</p></li></ol>
+
+<p>В этом сценарии репликация потерпит неудачу с ошибкой дублирования записи
+на столбце первичного ключа.</p>
+<p>При репликации на основе запроса значение <code>INSERT_ID</code>
+в контексте всегда будет то же самое. Репликация поэтому потерпит неудачу
+из-за попытки вставки строки с двойным значением столбца первичного ключа.</p>
+
+<p>При репликации на основе строки значение, которое механизм возвращает для
+строки, всегда будет тем же самым для каждой вставкт. Это приведет к ведомому
+устройству, пытающемуся переигрывать две записи журнала о вставке, используя
+то же самое значение для столбца первичного ключа, таким образом,
+репликация потерпит неудачу.</p>
+
+<p><span><strong>Фильтрация столбца</strong></span></p>
+<p>При репликации на основе строки
+(<a href="replica.htm#sysvar_binlog_format"><code>binlog_format=ROW</code>
+</a>), ведомое устройство, где последние столбцы отсутствуют в таблице,
+поддержано, как описано в
+<a href="replica.htm#replication-features-differing-tables">разделе 19.4.1.10
+</a>.</p>
+
+<p>Эта фильтрация работает на ведомой стороне, то есть, столбцы скопированы
+ведомому устройству прежде, чем они будут отфильтрованы. Есть по крайней мере
+два случая, где нежелательно скопировать столбцы к ведомому устройству:</p>
+
+<ol type="1"><li><p>Если данные являются конфиденциальными, таким образом, у
+ведомого сервера не должно быть доступа к ним.</li>
+<li>Если у ведущего устройства есть много ведомых устройств, фильтрование
+прежде, чем послать в ведомые устройства, может уменьшить сетевой трафик.
+</p></li></ol>
+
+<p>Основная фильтрация столбца может быть достигнута, используя
+<code>BLACKHOLE</code>. Это выполнено подобном тому, как основная табличная
+фильтрация достигнута: при использовании <code>BLACKHOLE</code> и опций
+<a href="replica.htm#option_mysqld_replicate-do-table"><code>
+--replicate-do-table</code></a> или
+<a href="replica.htm#option_mysqld_replicate-ignore-table"><code>
+--replicate-ignore-table</code></a>.</p>
+
+<p>Установка для ведущего устройства:
+<pre>
+CREATE TABLE t1 (public_col_1, ..., public_col_N,
+                 secret_col_1, ..., secret_col_M) ENGINE=MyISAM;
+</pre>
+
+Установка для ведомого устройства, которому доверяют:
+<pre>
+CREATE TABLE t1 (public_col_1, ..., public_col_N) ENGINE=BLACKHOLE;
+</pre>
+
+Установка для ведомого устройства, которому не доверяют:
+<pre>
+CREATE TABLE t1 (public_col_1, ..., public_col_N) ENGINE=MyISAM;
+</pre>
+
+<h2><a name="merge-storage-engine"></a>17.7. Механизм хранения MERGE</h2>
+<p>Механизм хранения <code>MERGE</code>, также известный как
+<code>MRG_MyISAM</code>, это набор идентичных таблиц <code>MyISAM</code>,
+которые могут использоваться в качестве одной. <span><span>"Идентичные"
+</span></span> означает, что все таблицы имеют идентичные столбцы и индексную
+информацию. Вы не можете слить таблицы <code>MyISAM</code>, в которых столбцы
+перечислены в различном порядке, не имеют точно тех же самых столбцов или
+имеют индексы в различном порядке. Однако, любая из таблиц <code>MyISAM
+</code> может быть сжата с <a href="programs.htm#myisampack"><span><strong>
+myisampack</strong></span></a>. См. <a href="programs.htm#myisampack">раздел
+5.6.6</a>. Различия в таких табличных опциях, как <code>AVG_ROW_LENGTH
+</code>, <code>MAX_ROWS</code> или <code>PACK_KEYS</code> не имеют значения.
+</p>
+
+<p>Альтернатива таблице <code>MERGE</code> это разделенная таблица, которая
+хранит разделение единственной таблицы в отдельных файлах и позволяет
+некоторым операциям быть выполненными более эффективно. Для получения
+дополнительной информации см. <a href="partit.htm">главу 20</a>.</p>
+
+<p>Когда Вы создаете таблицу <code>MERGE</code>, MySQL создает файл
+<code>.MRG</code> на диске, который содержит названия основных таблиц
+<code>MyISAM</code>, которые должны использоваться в качестве одной. Формат
+таблицы <code>MERGE</code> сохранен в словаре данных MySQL. Основные таблицы
+не должны быть в той же самой базе данных, что и <code>MERGE</code>.</p>
+
+<p>Вы можете использовать <a href="sql.htm#select"><code>SELECT</code></a>,
+<a href="sql.htm#delete"><code>DELETE</code></a>,
+<a href="sql.htm#update"><code>UPDATE</code></a> и
+<a href="sql.htm#insert"><code>INSERT</code></a> на таблицах
+<code>MERGE</code>. Вы должны иметь привилегии
+<a href="security.html#priv_select"><code>SELECT</code></a>,
+<a href="security.html#priv_delete"><code>DELETE</code></a> и
+<a href="security.html#priv_update"><code>UPDATE</code></a> на таблицах
+<code>MyISAM</code>, которые Вы отображаете на таблицу <code>MERGE</code>.
+</p>
+
+<p>Использование таблицы <code>MERGE</code> влечет за собой следующий вопрос
+безопасности: если у пользователя есть доступ к <code>MyISAM</code>-таблице
+<em><code>t</code></em>, этот пользователь может создать
+<code>MERGE</code>-таблицу <em><code>m</code></em>, которая получает доступ
+к <em><code>t</code></em>. Однако, если привилегии пользователя на
+<em><code>t</code></em> впоследствии отменяются, пользователь может
+продолжить получать доступ к <em><code>t</code></em> через
+<em><code>m</code></em>.</p>
+
+<p>Использование <a href="sql.htm#drop-table"><code>DROP TABLE</code></a> с
+таблицей <code>MERGE</code> удалит только спецификацию <code>MERGE</code>.
+Основные таблицы не затронуты.</p>
+
+<p>Чтобы создать таблицу <code>MERGE</code>, Вы должны определить опцию
+<code>UNION=(<em><code>list-of-tables</code></em>)</code>, которая указывает,
+которые таблицы <code>MyISAM</code> использовать. Вы можете произвольно
+определить опцию <code>INSERT_METHOD</code>, чтобы управлять, как вставлять в
+таблицу <code>MERGE</code>. Используйте значение <code>FIRST</code> или
+<code>LAST</code>, чтобы вставки юыли сделаны в первой или последней основной
+таблице, соответственно. Если Вы не определяете <code>INSERT_METHOD</code>
+или если Вы определяете это со значением <code>NO</code>, вставка в таблицу
+<code>MERGE</code> не разрешена, и попытка ее сделать вернет ошибку.</p>
+
+<p>Следующий пример показывает, как создать таблицу <code>MERGE</code>:
+<pre>
+mysql&gt; CREATE TABLE t1 (a INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    -&gt;                  message CHAR(20)) ENGINE=MyISAM;
+mysql&gt; CREATE TABLE t2 (a INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    -&gt;                  message CHAR(20)) ENGINE=MyISAM;
+mysql&gt; INSERT INTO t1 (message) VALUES ('Testing'),('table'),('t1');
+mysql&gt; INSERT INTO t2 (message) VALUES ('Testing'),('table'),('t2');
+mysql&gt; CREATE TABLE total (a INT NOT NULL AUTO_INCREMENT,
+    -&gt;        message CHAR(20), INDEX(a))
+    -&gt;        ENGINE=MERGE UNION=(t1,t2) INSERT_METHOD=LAST;
+</pre>
+
+Столбец <code>a</code> индексирован как <code>PRIMARY KEY</code> в основной
+таблице <code>MyISAM</code>, но не в таблице <code>MERGE</code>.
+Там это индексировано, но не как <code>PRIMARY KEY</code>, так как таблица
+<code>MERGE</code> не может провести в жизнь уникальность по набору основных
+таблиц. Точно так же столбец с  индексом <code>UNIQUE</code> в основных
+таблицах, должен быть индексирован в <code>MERGE</code>, но
+не как <code>UNIQUE</code>.</p>
+
+<p>После создания таблицы <code>MERGE</code> Вы можете использовать ее, чтобы
+создать запросы, которые воздействуют на группу таблиц в целом:
+<pre>
+mysql&gt; SELECT * FROM total;
++---+---------+
+| a | message |
++---+---------+
+| 1 | Testing |
+| 2 | table   |
+| 3 | t1      |
+| 1 | Testing |
+| 2 | table   |
+| 3 | t2      |
++---+---------+
+</pre>
+
+Чтобы переопределить таблицу <code>MERGE</code> к иному набору таблиц
+<code>MyISAM</code>, Вы можете использовать один из следующих методов:</p>
+<ul><li><p><code>DROP</code> таблицу <code>MERGE</code> и пересоздайте ее.
+</li>
+
+<li>Примените <code>ALTER TABLE <em><code>tbl_name</code></em>
+UNION=(...)</code>, чтобы изменить список основных таблиц.</p>
+<p>Также возможно использовать <code>ALTER TABLE ... UNION=()</code>
+(то есть, с пустым предложением <a href="sql.htm#union"><code>UNION</code>
+</a>), чтобы удалить все основные таблицы. Однако, в этом случае, таблица
+эффективно пуста и вставки терпят неудачу, потому что нет никакой основной
+таблицы, чтобы взять новые строки. Такая таблица могла бы быть полезной как
+шаблон для создания новой таблицы <code>MERGE</code> с помощью
+<a href="sql.htm#create-table-like"><code>CREATE TABLE ... LIKE</code></a>.
+</p></li></ul>
+
+<p>Основные табличные определения и индексы должны соответствовать близко
+определению <code>MERGE</code>. Соответствие проверено, когда таблица,
+которая является частью <code>MERGE</code>, открыта, а не когда
+<code>MERGE</code>-таблица составлена. Если какая-либо таблица не проходит
+проверку соответствия, работа, которая вызвала открытие таблицы, терпит
+неудачу. Это означает, что изменения определений таблиц в пределах
+<code>MERGE</code> может вызвать отказ при доступе к <code>MERGE</code>.
+Проверка соответствия относится к каждой таблице:</p>
+
+<ul><li><p>У таблицы должно быть то же самое число столбцов.</li>
+<li>Порядок следования столбцов в основной таблице и
+<code>MERGE</code> должен соответствовать.</li>
+
+<li>Дополнительно, спецификация для каждого соответствующего столбца в
+<code>MERGE</code> и основных таблицах сравнены и должны
+удовлетворить этим проверкам:</p>
+
+<ul><li><p>Тип столбца в основной таблице и <code>MERGE</code>
+должен быть равным.</li>
+<li>Длина столбца в основной таблице и <code>MERGE</code> должна быть равной.
+</li>
+<li>Столбец основной таблицы и <code>MERGE</code> может быть
+<code>NULL</code>.</p></li></ul></li>
+
+<li><p>Основная таблица должна иметь, по крайней мере, столько индексов,
+сколько <code>MERGE</code>. Основная таблица может иметь больше индексов, чем
+<code>MERGE</code>, но не может иметь меньше.</p>
+
+<p>Известная проблема существует: индексы на тех же самых столбцах должны
+быть в идентичном порядке в таблицах <code>MERGE</code> и
+<code>MyISAM</code>. См. Bug #33653.</p>
+
+<p>Каждый индекс должен удовлетворить эти проверки:</p>
+<ul><li><p>Тип индекса основной таблицы и <code>MERGE</code>
+должен быть тем же самым.</li>
+
+<li>Число частей индекса в определении для основной таблицы и
+<code>MERGE</code> должно быть тем же самым.</li>
+<li>Для каждой части индекса:</p>
+<ul><li><p>Длины частей индекса должны быть равны.</li>
+<li>Типы частей индекса должны быть равны.</li>
+<li>Языки частей индекса должны быть равны.</li>
+<li>Проверьте, могут ли части индекса быть <code>NULL</code>.
+</p></li></ul></li></ul></li></ul>
+
+<p>Если таблица <code>MERGE</code> не может быть открыта или использоваться
+из-за проблемы с основной таблицей, <a href="sql.htm#check-table"><code>CHECK
+TABLE</code></a> покажет информацию о том, которая таблица вызвала проблему.
+
+<h3><a name="idm139965312863968"></a>Дополнительные ресурсы</h3>
+<ul><li><p>Форум, посвященный механизму хранения <code>MERGE</code>,
+доступен на <a href="../../../forums.mysql.com/list.php@93" target="_top">
+http://forums.mysql.com/list.php?93</a>.</p></li></ul>
+
+<h3><a name="merge-table-advantages"></a>17.7.1.
+Табличные преимущества и недостатки MERGE</h3>
+<p>Таблицы <code>MERGE</code> могут помочь Вам решить следующие проблемы:</p>
+
+<ul><li><p>Легко управлять рядом таблиц журнала. Например, Вы можете
+поместить данные с различных месяцев в отдельные таблицы, сжать некоторых из
+них <a href="programs.htm#myisampack"><span><strong>myisampack</strong>
+</span></a>, а затем создать таблицу <code>MERGE</code>,
+чтобы использовать их в качестве одной.</li>
+
+<li>Получите больше скорости. Вы можете разделить большую таблицу только для
+чтения, основываясь на некоторых критериях, а затем помещать отдельные
+таблицы на различные диски. Таблица <code>MERGE</code> структурировала этот
+путь, что может быть намного быстрее, чем использование
+единственной большой таблицы.</li>
+
+<li>Выполните более эффективные поиски. Если Вы знаете точно, что Вы ищете,
+Вы можете искать только в одной из основных таблиц для некоторых запросов и
+использовать <code>MERGE</code> для других. У Вас даже может быть много
+отличающихся <code>MERGE</code>, которые используют
+накладывающиеся наборы таблиц.</li>
+
+<li>Выполните более эффективный ремонт. Легче восстановить отдельные меньшие
+таблицы, которые отображены на <code>MERGE</code>,
+чем восстановить единственную большую таблицу.</li>
+
+<li>Немедленно отобразите много таблиц как одну. <code>MERGE</code>
+не должна поддерживать собственное индексирование, потому что она использует
+индексирование отдельных таблиц. В результате <code>MERGE</code>
+<span><em>очень быстры</em></span>, чтобы создать или повторно отобразить.
+Вы должны все еще определить индекс, когда Вы создаете
+<code>MERGE</code>, даже при том, что индексы не создаются.</li>
+
+<li>Если у Вас есть ряд таблиц, из которых Вы составляете большую таблицу по
+требованию, Вы можете вместо этого создать <code>MERGE</code>. Это намного
+быстрее и сохраняет много дискового пространства.</li>
+
+<li>Превысьте предел размера файла для операционной системы. Каждая таблица
+<code>MyISAM</code> связана этим пределом, но не
+набор таблиц <code>MyISAM</code>.</li>
+
+<li>Вы можете создать псевдоним или синоним для таблицы
+<code>MyISAM</code>, определяя <code>MERGE</code>, которая отображается на
+эту единственную таблицу. Не должно быть никакого действительно известного
+исполнительного воздействия от выполнения этого (только несколько косвенных
+требований и вызовов <code>memcpy()</code> к каждому чтению).</p></li></ul>
+
+<p>Недостатки <code>MERGE</code>-таблицы:</p>
+<ul><li><p>Вы можете использовать только идентичные
+<code>MyISAM</code>-таблицы для <code>MERGE</code>.</li>
+
+<li>Некоторые особенности <code>MyISAM</code> недоступны в <code>MERGE</code>.
+Например, Вы не можете создать <code>FULLTEXT</code> индекс на
+<code>MERGE</code>. Вы можете создать индекс <code>FULLTEXT</code> на
+основных таблицах <code>MyISAM</code>, но Вы не можете искать в
+<code>MERGE</code> по нему.</li>
+
+<li>Если <code>MERGE</code>-таблица является невременной, все основные
+<code>MyISAM</code>-таблицы должны быть невременными. Если <code>MERGE</code>
+является временной, <code>MyISAM</code>-таблицы могут быть любым
+соединением временных и невременных.</li>
+
+<li><code>MERGE</code> используют больше описателей файла, чем
+<code>MyISAM</code>. Если 10 клиентов используют таблицу <code>MERGE</code>,
+которая отображается на 10 таблиц, сервер использует (10 * 10) + 10
+описателей файла. (10 описателей файла с данными для каждого из этих 10
+клиентов, и 10 описателей индексного файла совместно использованы
+среди всех клиентов.</li>
+
+<li>Индекс читается медленнее. Когда Вы читаете индекс, механизм хранения
+<code>MERGE</code> должен запустить чтение на всех основных таблицах, чтобы
+проверить, какой наиболее близко соответствует. Чтобы считать следующее
+индексное значение, <code>MERGE</code> должен искать буферы чтения, чтобы
+найти следующее значение. Только когда каждый индексный буфер израсходован,
+механизм хранения должен читать следующий индексный блок. Это делает
+индексы <code>MERGE</code> намного медленнее на запросах
+<a href="optimiz.htm#jointype_eq_ref"><code>eq_ref</code></a>,
+но не намного медленнее на поисках
+<a href="optimiz.htm#jointype_ref"><code>ref</code></a>.</p></li></ul>
+
+<h3><a name="merge-table-problems"></a>17.7.2. Табличные проблемы MERGE</h3>
+<p>Следующее известные проблемы с таблицами <code>MERGE</code>:</p>
+<ul><li><p>В версиях сервера MySQL до 5.1.23 было возможно составить
+временные таблицы <code>MERGE</code> с невременными таблицами MyISAM.</p>
+
+<p>С версии 5.1.23 MERGE заблокированы через родительскую таблицу. Если
+родитель был временным, это не было заблокировано и таким образом, дочерние
+элементы не были заблокированы также. Параллельное использование таблиц
+MyISAM повреждает их.</li>
+
+<li>Если Вы используете <a href="sql.htm#alter-table"><code>ALTER TABLE
+</code></a>, чтобы изменить <code>MERGE</code> к другому механизму хранения,
+отображение на основные таблицы потеряно. Вместо этого строки основных
+таблиц <code>MyISAM</code> скопированы в измененную таблицу, которая
+использует указанный механизм хранения.</li>
+
+<li>Опция таблицы <code>INSERT_METHOD</code> для <code>MERGE</code>
+показывает, какую из основных таблиц <code>MyISAM</code>
+использовать для вставок в <code>MERGE</code>. Однако, использование опции
+<code>AUTO_INCREMENT</code> для этой таблицы <code>MyISAM</code> не имеет
+никакого эффекта для вставок в <code>MERGE</code>, пока по крайней мере одна
+строка не была вставлена непосредственно в <code>MyISAM</code>.</li>
+
+<li>Таблица <code>MERGE</code> не может поддержать ограничения уникальности
+по всей таблице. Когда Вы выполняете
+<a href="sql.htm#insert"><code>INSERT</code></a>, данные входят в первую или
+последнюю таблицу <code>MyISAM</code> table (как определено
+<code>INSERT_METHOD</code>). MySQL гарантирует, что уникальные значения ключа
+остаются уникальными в пределах этой таблицы <code>MyISAM</code>,
+но не по всем основным таблицам в наборе.</li>
+
+<li>Поскольку механизм <code>MERGE</code> не может провести в жизнь
+уникальность по набору основных таблиц,
+<a href="sql.htm#replace"><code>REPLACE</code></a>
+не работает как ожидалось. Два ключевых факта:</p>
+
+<ul><li><p><a href="sql.htm#replace"><code>REPLACE</code></a>
+может обнаружить уникальные ключевые нарушения только в основной таблице, в
+которую собирается записать (которая определена <code>INSERT_METHOD</code>).
+Это отличается от нарушений в таблице <code>MERGE</code> непосредственно.
+</li>
+
+<li>Если <a href="sql.htm#replace"><code>REPLACE</code></a> обнаруживает
+уникальное ключевое нарушение, это изменит только соответствующую строку в
+основной таблице, которую пишет, то есть, первую или последнюю таблицу, как
+определено <code>INSERT_METHOD</code>.</p></li></ul>
+
+<p>Подобные соображения применимы к
+<a href="sql.htm#insert-on-duplicate"><code>INSERT
+... ON DUPLICATE KEY UPDATE</code></a>.</li>
+<li><code>MERGE</code> не поддерживают разделение. Таким образом, Вы не
+можете разделить <code>MERGE</code> или любую из основных таблиц.</li>
+
+<li>Вы не должны использовать <a href="sql.htm#analyze-table"><code>ANALYZE
+TABLE</code></a>, <a href="sql.htm#repair-table"><code>REPAIR TABLE</code>
+</a>, <a href="sql.htm#optimize-table"><code>OPTIMIZE TABLE</code></a>,
+<a href="sql.htm#alter-table"><code>ALTER TABLE</code></a>,
+<a href="sql.htm#drop-table"><code>DROP TABLE</code></a>,
+<a href="sql.htm#delete"><code>DELETE</code></a> без предложения
+<code>WHERE</code> или <a href="sql.htm#truncate-table"><code>TRUNCATE TABLE
+</code></a> на любой из таблиц, которые отображены в открытую таблицу
+<code>MERGE</code>. Если Вы делаете так, <code>MERGE</code> может все еще
+обратиться к оригинальной таблице и привести к неожиданным результатам. Чтобы
+обойти эту проблему, гарантируйте, что нет открытых таблиц <code>MERGE</code>
+с помощью <a href="sql.htm#flush"><code>FLUSH TABLES</code></a>
+до выполнения любой из названных операций.</p>
+
+<p>Неожиданные результаты включают возможность того, что работа на таблице
+<code>MERGE</code> сообщит о табличном повреждении. Если это происходит после
+одной из названных операций на основной <code>MyISAM</code>-таблице,
+сообщение повреждения является поддельным. Выполните запрос
+<a href="sql.htm#flush"><code>FLUSH TABLES</code></a>
+после изменения <code>MyISAM</code>.</li>
+
+<li><a href="sql.htm#drop-table"><code>DROP TABLE</code></a>на таблице,
+которая используется <code>MERGE</code> не работает в Windows потому, что
+табличное отображение механизма хранения <code>MERGE</code> скрыто от
+верхнего уровня MySQL. Windows не разрешает открытым файлам быть удаленными,
+таким образом, Вы сначала должны сбросить все таблицы <code>MERGE</code> (с
+<a href="sql.htm#flush"><code>FLUSH TABLES</code></a>) или удалить
+<code>MERGE</code> прежде, чем удалить основную таблицу.</li>
+
+<li>Определение <code>MyISAM</code> таблицы и <code>MERGE</code>
+проверено, когда к таблицам получают доступ (например, как часть
+<a href="sql.htm#select"><code>SELECT</code></a> или
+<a href="sql.htm#insert"><code>INSERT</code></a>). Проверки гарантируют что
+определения таблиц соответствуют определению, сравнивая порядок следования
+столбцов, типы, размеры и связанные индексы. Если есть различие между
+таблицами, ошибка возвращена, и запрос терпит неудачу. Поскольку эти проверки
+имеют место, когда таблицы открыты, любые изменения определения единственной
+таблицы, включая изменения столбца, упорядочивания столбцов и изменения
+механизма хранения заставят запрос терпеть неудачу.</li>
+
+<li>Порядок индексов в <code>MERGE</code> и основных таблицах
+должен быть тем же самым. Если Вы используете
+<a href="sql.htm#alter-table"><code>ALTER TABLE</code></a>, чтобы добавить
+индекс <code>UNIQUE</code> к таблице, используемой в <code>MERGE</code>,
+и затем используете <a href="sql.htm#alter-table"><code>ALTER TABLE</code>,
+чтобы добавить групповой индекс на <code>MERGE</code>, порядок индексов
+отличается для таблиц, если уже был групповой индекс в основной таблице. Это
+происходит потому, что <a href="sql.htm#alter-table"><code>ALTER TABLE</code>
+</a> помещает индексы <code>UNIQUE</code> перед групповыми, чтобы облегчить
+быстрое обнаружение дубликатов ключей. Следовательно, запросы на таблицах с
+таким индексом могут возвратить неожиданные результаты.</li>
+
+<li>Если Вы сталкиваетесь с сообщением об ошибке, подобным <span>ERROR 1017
+(HY000): Can't find file: '<em><code>tbl_name</code></em>.MRG' (errno: 2)
+</span>, это вообще указывает, что некоторые из основных таблиц не используют
+механизм хранения <code>MyISAM</code>. Подтвердите, что все
+эти таблицы <code>MyISAM</code>.</li>
+
+<li>Максимальное количество строк в <code>MERGE</code> 2<sup>64</sup>
+(~1.844E+19: то же самое касается <code>MyISAM</code>). Невозможно слить
+много таблиц <code>MyISAM</code> в одну <code>MERGE</code>, у которой было бы
+больше, чем это число строк.</li>
+
+<li>Использование основных таблиц <code>MyISAM</code>, отличающихся форматом
+строк, как в настоящее время известно, терпит неудачу. См. Bug #32364.</li>
+<li>Вы не можете изменить список union невременной таблицы
+<code>MERGE</code>, когда активна <a href="sql.htm#lock-tables"><code>LOCK
+TABLES</code></a>. Следующее <span><em>НЕ</em></span> работает:
+<pre>
+CREATE TABLE m1 ... ENGINE=MRG_MYISAM ...;
+LOCK TABLES t1 WRITE, t2 WRITE, m1 WRITE;
+ALTER TABLE m1 ... UNION=(t1,t2) ...;
+</pre>
+Однако, Вы можете сделать это с временной таблицей <code>MERGE</code>.</li>
+
+<li>Вы не можете создать таблицу <code>MERGE</code> с
+<code>CREATE ... SELECT</code> как временную таблицу
+<code>MERGE</code> или невременную <code>MERGE</code>. Например:
+<pre>
+CREATE TABLE m1 ... ENGINE=MRG_MYISAM ... SELECT ...;
+</pre>
+Попытки сделать это приведут к ошибке:
+<em><code>tbl_name</code></em> is not <code>BASE TABLE</code>.</li>
+
+<li>В некоторых случаях отличие табличной опции <code>PACK_KEYS</code>
+вызывает неожиданные результаты, если основные таблицы содержат столбцы
+<code>CHAR</code> или <code>BINARY</code>. Как обходное решение, можно
+использовать <code>ALTER TABLE</code>, чтобы гарантировать, что у всех
+вовлеченных таблиц есть то же самое значение <code>PACK_KEYS</code> (Bug
+#50646).</p></li></ul>
+
+<h2><a name="federated-storage-engine"></a>17.8.
+Механизм хранения FEDERATED</h2>
+<p>Механизм хранения <code>FEDERATED</code> позволяет Вам доступ к данным
+от удаленной базы данных MySQL, не используя технологию кластера или
+репликации. Запросы к локальной таблице <code>FEDERATED</code> автоматически
+вытягивают данные из удаленных (объединенных) таблиц. Никакие данные не
+хранятся в местных таблицах.</p>
+
+<p>Чтобы включить механизм хранения <code>FEDERATED</code>, если Вы создаете
+MySQL из исходных текстов, вызовите <span><strong>CMake</strong></span> с
+опцией <a href="install.htm#option_cmake_storage_engine_options"><code>
+-DWITH_FEDERATED_STORAGE_ENGINE</code></a>.</p>
+
+<p>Механизм хранения <code>FEDERATED</code> не включен по умолчанию в рабочем
+сервере, чтобы его включить, Вы должны запустить сервер
+MySQL с опцией <code>--federated</code>.</p>
+<p>Исходный текст механизма <code>FEDERATED</code> находится в каталоге
+<code>storage/federated</code> исходных текстов MySQL.</p>
+
+<h3><a name="federated-description"></a>17.8.1. Краткий обзор механизма
+хранения FEDERATED</h3>
+<p>Когда Вы составляете таблицу, используя один из стандартных механизмов
+хранения (такой как <code>MyISAM</code>, <code>CSV или <code>InnoDB</code>),
+таблица состоит из табличного определения и связанных данных. Когда Вы
+создаете таблицу <code>FEDERATED</code>, табличное определение то же самое,
+но физическое хранение данных обработано на удаленном сервере.</p>
+
+<p>Таблица <code>FEDERATED</code> состоит из двух элементов:</p>
+<ul><li><p><span><em>Удаленный сервер</em></span> с таблицей базы данных,
+которая в свою очередь состоит из табличного определения (сохраненного в
+словаре данных MySQL) и связанной таблицы. Табличный тип отдаленной таблицы
+может быть любым типом, поддержанным отдаленным сервером <code>mysqld</code>,
+включая <code>MyISAM</code> или <code>InnoDB</code>.</li>
+
+<li><span><em>Локальный сервер</em></span> с таблицей базы данных, где
+табличное определение соответствует таблице на удаленном сервере. Табличное
+определение сохранено в словаре данных. На локальном сервере нет никакого
+файла с данными. Вместо этого табличное определение включает строку
+подключения, которая указывает на отдаленную таблицу.</p></li></ul>
+
+<p>Выполняя запросы к таблице <code>FEDERATED</code> на локальном сервере,
+операции, которые обычно вставляли бы, обновляли или удаляли информацию из
+местного файла с данными вместо этого посланы в удаленный сервер для
+выполнения, где они обновляют файл с данными на удаленном сервере.</p>
+
+<p>Базовая структура таблицы <code>FEDERATED</code> показана на
+<a href="#figure-se-federated-structure">рис. 17.1</a>.</p>
+<img src="feder.png" width="475" height="269">
+<a name="figure-se-federated-structure"></a><p><b>Рис. 17.1. Структура
+таблицы FEDERATED</b></p>
+
+<p>Когда клиент делает запрос SQL, который обращается к таблице
+<code>FEDERATED</code>, потоки информации между локальным сервером (где
+запрос SQL выполнен) и удаленным сервером (где данные
+физически хранятся) следующие:</p>
+
+<ol type="1"><li><p>Механизм хранения просматривает каждый столбец таблицы
+<code>FEDERATED</code> и создает соответствующий запрос SQL, который
+относится к отдаленной таблице.</li>
+
+<li>Запрос посылают в удаленный сервер, используя MySQL client API.</li>
+<li>Удаленный сервер обрабатывает запрос, и локальный сервер получает любой
+результат, к которому запрос приводит (количество затронутых строк
+или набор результатов).</li>
+
+<li>Если запрос производит набор результатов, каждый столбец преобразован во
+внутренний формат механизма хранения, который может использоваться, чтобы
+вывести результат клиенту, который сделал оригинальное запрос.</p></li></ol>
+
+<p>Локальный сервер сообщает с использованием удаленного сервера MySQL C API.
+Это вызывает <a href="connect.htm#mysql-real-query"><code>mysql_real_query()
+</code></a>, чтобы послать запрос. Чтобы считать набор результатов, это
+использует <a href="connect.htm#mysql-store-result">
+<code>mysql_store_result()</code></a> и передает строки по одной, используя
+<a href="connect.htm#mysql-fetch-row"><code>mysql_fetch_row()</code></a>.</p>
+
+<h3><a name="federated-create"></a>17.8.2. Как составить таблицу FEDERATED
+</h3>
+<p>Чтобы создать таблицу <code>FEDERATED</code>,
+Вы должны следовать за этими шагами:</p>
+
+<ol type="1"><li><p>Составьте таблицу на удаленном сервере. Альтернативно,
+обратите внимание на табличное определение существующей таблицы, возможно,
+используя <a href="sql.htm#show-create-table">
+<code>SHOW CREATE TABLE</code></a>.</li>
+
+<li>Составьте таблицу на локальном сервере с идентичным табличным
+определением, но с добавлением информации о соединении, которая соединяет
+местную таблицу с отдаленной.</p></li></ol>
+
+<p>Например, Вы могли бы составить следующую таблицу на удаленном сервере:
+<pre>
+CREATE TABLE test_table (id INT(20) NOT NULL AUTO_INCREMENT,
+                         name VARCHAR(32) NOT NULL DEFAULT '',
+                         other INT(20) NOT NULL DEFAULT '0',
+                         PRIMARY KEY (id), INDEX name (name),
+                         INDEX other_key (other)) ENGINE=MyISAM
+                         DEFAULT CHARSET=latin1;
+</pre>
+
+Чтобы составить местную таблицу, которая будет объединенной с
+отдаленной таблицей, есть две доступные опции. Вы можете или составить
+местную таблицу и определить строку подключения (содержащую имя сервера, вход
+в систему и пароль), чтобы соединиться с отдаленной таблицей, используя
+<code>CONNECTION</code>, или Вы можете использовать существующее соединение,
+которое Вы ранее создали с использованием
+<a href="sql.htm#create-server"><code>CREATE SERVER</code></a>.</p>
+
+<p>Когда Вы составляете местную таблицу, у нее <span><em>должно</em></span>
+быть определение, идентичное отдаленной таблице.</p>
+<p>Вы можете улучшить исполнение таблицы <code>FEDERATED</code> добавлением
+индекса к таблице на узле. Оптимизация произойдет, потому что запрос,
+посланный в удаленный сервер, будет включать содержание предложения
+<code>WHERE</code>, посланного в удаленный сервер, и впоследствии выполнен в
+местном масштабе. Это уменьшает сетевой трафик, который иначе запросил бы всю
+таблицу от сервера для местной обработки.</p>
+
+<h4><a name="federated-create-connection"></a>17.8.2.1. Создание таблицы
+FEDERATED, используя CONNECTION</h4>
+<p>Чтобы использовать первый метод, Вы должны определить строку
+<code>CONNECTION</code> после типа механизма в
+<a href="sql.htm#create-table"><code>CREATE TABLE</code></a>. Например:
+<pre>
+CREATE TABLE federated_table (id INT(20) NOT NULL AUTO_INCREMENT,
+                              name VARCHAR(32) NOT NULL DEFAULT '',
+                              other INT(20) NOT NULL DEFAULT '0',
+                              PRIMARY KEY (id), INDEX name (name),
+                              INDEX other_key (other)) ENGINE=FEDERATED
+                              DEFAULT CHARSET=latin1
+       CONNECTION='mysql://fed_user@remote_host:9306/federated/test_table';
+</pre>
+
+<p><code>CONNECTION</code> заменяет <code>COMMENT</code>, используемый в
+некоторых предыдущих версиях MySQL.</p>
+<p>Строка <code>CONNECTION</code> содержит информацию, запрошенную, чтобы
+соединиться с удаленным сервером, содержащим таблицу, которая будет
+использоваться, чтобы физически хранить данные. Строка подключения определяет
+имя сервера, параметры входа в систему, номер порта и информацию о базе
+данных/таблице. В примере отдаленная таблица находится на сервере
+<code>remote_host</code>, порт 9306. Имя и номер порта должны соответствовать
+имени хоста (или IP-адресу) и номеру порта отдаленного сервера MySQL, который
+Вы хотите использовать в качестве Вашей отдаленной таблицы.</p>
+
+<p>Формат строки подключения:
+<pre>
+<em><code>scheme</code></em>://<em><code>user_name</code></em>[:<em><code>password</code></em>]@
+<em><code>host_name</code></em>[:<em><code>port_num</code></em>]/<em><code>db_name</code></em>/<em><code>tbl_name</code></em>
+</pre>
+Здесь:</p>
+
+<ul><li><p><em><code>scheme</code></em>: Признанный протокол соединения.
+Только <code>mysql</code> поддержан как <em><code>scheme</code></em>.</li>
+<li><em><code>user_name</code></em>: Имя пользователя для соединения. Это
+пользователь, который должен быть создан на удаленном сервере, и должен иметь
+подходящие привилегии, чтобы выполнить необходимые действия.
+(<a href="sql.htm#select"><code>SELECT</code></a>,
+<a href="sql.htm#insert"><code>INSERT</code></a>,
+<a href="sql.htm#update"><code>UPDATE</code></a> и т.д.)
+на отдаленной таблице.</li>
+
+<li><em><code>password</code></em>: (дополнительно) соответствующий пароль
+для <em><code>user_name</code></em>.</li>
+<li><em><code>host_name</code></em>: Имя хоста или
+IP-адрес удаленного сервера.</li>
+
+<li><em><code>port_num</code></em>: (дополнительно) номер порта для
+удаленного сервера. Значение по умолчанию 3306.</li>
+<li><em><code>db_name</code></em>: Название базы данных,
+содержащей отдаленную таблицу.</li>
+
+<li><em><code>tbl_name</code></em>: Название отдаленной таблицы. Имя местной
+и отдаленной таблиц не должны совпадать.</p></li></ul>
+<p>Типовые строки подключения:
+<pre>
+CONNECTION='mysql://username:password@hostname:port/database/tablename'
+CONNECTION='mysql://username@hostname/database/tablename'
+CONNECTION='mysql://username:password@hostname/database/tablename'
+</pre>
+
+<h4><a name="federated-create-server"></a>17.8.2.2. Создание таблицы
+FEDERATED, используя CREATE SERVER</h4>
+<p>Если Вы создаете много таблиц <code>FEDERATED</code> на том же самом
+сервере, или если Вы хотите упростить процесс создания таблиц
+<code>FEDERATED</code>, Вы можете использовать
+<a href="sql.htm#create-server"><code>CREATE SERVER</code></a>, чтобы
+определить параметры соединения сервера, как Вы задали
+бы строку <code>CONNECTION</code>.</p>
+
+<p>Формат <a href="sql.htm#create-server"><code>CREATE SERVER</code></a>:
+<pre>
+CREATE SERVER <em><code>server_name</code></em>
+       FOREIGN DATA WRAPPER <em><code>wrapper_name</code></em>
+       OPTIONS (<em><code>option</code></em> [, <em><code>option</code></em>] ...)
+</pre>
+<em><code>server_name</code></em> используется в строке подключения, создавая
+новую таблицу <code>FEDERATED</code>.</p>
+
+<p>Например, чтобы создать соединение сервера, идентичное строке
+<code>CONNECTION</code>:
+<pre>
+CONNECTION='mysql://fed_user@remote_host:9306/federated/test_table';
+</pre>
+
+Вы использовали бы следующий запрос:
+<pre>
+CREATE SERVER fedlink FOREIGN DATA WRAPPER mysql
+       OPTIONS (USER 'fed_user', HOST 'remote_host', PORT 9306,
+                DATABASE 'federated');
+</pre>
+
+Чтобы создать таблицу <code>FEDERATED</code>, которая использует это
+соединение, Вы все еще используете ключевое слово <code>CONNECTION</code>, но
+определяете имя, которое Вы использовали в
+<a href="sql.htm#create-server"><code>CREATE SERVER</code></a>.
+<pre>
+CREATE TABLE test_table (id INT(20) NOT NULL AUTO_INCREMENT,
+                         name VARCHAR(32) NOT NULL DEFAULT '',
+                         other INT(20) NOT NULL DEFAULT '0',
+                         PRIMARY KEY (id), INDEX name (name),
+                         INDEX other_key (other)) ENGINE=FEDERATED
+                         DEFAULT CHARSET=latin1
+                         CONNECTION='fedlink/test_table';
+</pre>
+
+Имя соединения в этом примере содержит название соединения
+(<code>fedlink</code>) и название таблицы (<code>test_table</code>),
+отделенное наклонной чертой. Если Вы определяете только имя соединения без
+имени таблицы, имя местной таблицы используется вместо этого.</p>
+
+<p>The <a href="sql.htm#create-server"><code>CREATE SERVER</code></a>
+принимает те же самые параметры, как строка <code>CONNECTION</code>.
+<a href="sql.htm#create-server"><code>CREATE SERVER</code></a> обновляет
+строки в таблице <code>mysql.servers</code>. См. следующую таблицу для
+информации о связи между параметрами в строке подключения, опциями в
+<a href="sql.htm#create-server"><code>CREATE SERVER</code></a> и
+и столбцами в таблице <code>mysql.servers</code>. Для ссылки формат строки
+<code>CONNECTION</code> следующий:
+<pre>
+<em><code>scheme</code></em>://<em><code>user_name</code></em>[:<em><code>password</code></em>]@
+<em><code>host_name</code></em>[:<em><code>port_num</code></em>]/<em><code>db_name</code></em>/<em><code>tbl_name</code></em>
+</pre>
+
+<table border="1">
+<thead><tr><th scope="col">Описание</th><th scope="col">Строка
+<code>CONNECTION</code></th><th scope="col">Опция
+<a href="sql.htm#create-server"><code>CREATE SERVER</code></a></th>
+<th scope="col">Столбец <code>mysql.servers</code></th></tr></thead>
+<tbody><tr><td scope="row">Схема соединения</td><td><em><code>scheme</code>
+</em></td><td><code>wrapper_name</code></td><td><code>Wrapper</code></td></tr>
+<tr><td scope="row">Отдаленный пользователь</td><td><em><code>user_name
+</code></em></td><td><code>USER</code></td><td><code>Username</code></td></tr>
+<tr><td scope="row">Отдаленный пароль</td><td><em><code>password</code></em>
+</td><td><code>PASSWORD</code></td><td><code>Password</code></td></tr>
+<tr><td scope="row">Отдаленный узел</td><td><em><code>host_name</code></em>
+</td><td><code>HOST</code></td><td><code>Host</code></td></tr>
+<tr><td scope="row">Отдаленный порт</td><td><em><code>port_num</code></em>
+</td><td><code>PORT</code></td><td><code>Port</code></td></tr>
+<tr><td scope="row">Отдаленная база данных</td><td><em><code>db_name</code>
+</em></td><td><code>DATABASE</code></td><td><code>Db</code></td>
+</tr></tbody></table>
+
+<h3><a name="federated-usagenotes"></a>17.8.3. Примечания и подсказки о
+механизме хранения FEDERATED</h3>
+<p>Вы должны знать о следующих моментах, используя
+механизм хранения <code>FEDERATED</code>:</p>
+
+<ul><li><p>Таблицы <code>FEDERATED</code> могут копироваться к другим ведомым
+устройствам, но Вы должны гарантировать, что ведомые серверы в состоянии
+использовать комбинацию пользователя/пароля, которая определена в строке
+<code>CONNECTION</code> (или строке в таблице <code>mysql.servers</code>),
+чтобы соединиться с удаленным сервером.</p></li></ul>
+
+<p>Следующие элементы указывают на особенности
+механизма хранения <code>FEDERATED</code>:</p>
+<ul><li><p>Удаленный сервер должен быть сервером MySQL.</li>
+
+<li>Отдаленная таблица, на которую ссылается таблица <code>FEDERATED</code>,
+<span><em>должна</em></span> существовать прежде, чем Вы попытаетесь получить
+доступ к таблице через <code>FEDERATED</code>.</li>
+
+<li>Возможно для одной таблицы <code>FEDERATED</code>
+указать на другую, но Вы должны бояться создать петлю.</li>
+<li>Таблица <code>FEDERATED</code> не поддерживает индексы в обычном смысле,
+потому как доступ к табличным данным обработан отдаленно, это фактически
+отдаленная таблица, которая использует индексы. Это означает, что для
+запроса, который не может использовать любой индекс и требует полного
+сканирования таблицы, сервер приносит все строки от отдаленной таблицы и
+фильтрует их в местном масштабе. Это происходит независимо от любых
+<code>WHERE</code> или <code>LIMIT</code>, используемых с этим
+<a href="sql.htm#select"><code>SELECT</code></a>:
+эти пункты применены в местном масштабе к возвращенным строкам.</p>
+
+<p>Запросы, которые не в состоянии использовать индексы, могут таким образом
+вызвать низкую производительность и сетевую перегрузку. Кроме того, так как
+возвращенные строки должны быть сохранены в памяти, такой запрос может также
+привести к свопингу или даже зависанию локального сервера.</li>
+
+<li>Забота должна быть проявлена, создавая определение индекса таблицы
+<code>FEDERATED</code>. Например, создание таблицы <code>FEDERATED</code>
+с индексной приставкой на столбцах <a href="types.htm#char"><code>VARCHAR
+</code></a>, <a href="types.htm#blob"><code>TEXT</code></a> или
+<a href="types.htm#blob"><code>BLOB</code></a> потерпит неудачу. Следующее
+определение в <code>MyISAM</code> допустимо:
+<pre>
+CREATE TABLE `T1`(`A` VARCHAR(100),UNIQUE KEY(`A`(30))) ENGINE=MYISAM;
+</pre>
+
+Ключевая приставка в этом примере является несовместимой с
+<code>FEDERATED</code>, а эквивалентный запрос потерпит неудачу:
+<pre>
+CREATE TABLE `T1`(`A` VARCHAR(100),UNIQUE KEY(`A`(30))) ENGINE=FEDERATED
+                  CONNECTION='MYSQL://127.0.0.1:3306/TEST/T1';
+</pre>
+
+Если возможно, Вы должны попытаться отделить столбец и индексировать
+определение, составляя таблицы на удаленном сервере и на локальном сервере,
+чтобы избежать, чтобы они индексировали проблемы.</li>
+
+<li>Внутренне реализовано выполнение
+<a href="sql.htm#select"><code>SELECT</code></a>,
+<a href="sql.htm#insert"><code>INSERT</code></a>,
+<a href="sql.htm#update"><code>UPDATE</code></a> и
+<a href="sql.htm#delete"><code>DELETE</code></a>, но не
+<a href="sql.htm#handler"><code>HANDLER</code></a>.</li>
+
+<li>Механизма хранения <code>FEDERATED</code> понимает
+<a href="sql.htm#select"><code>SELECT</code></a>,
+<a href="sql.htm#insert"><code>INSERT</code></a>,
+<a href="sql.htm#update"><code>UPDATE</code></a>,
+<a href="sql.htm#delete"><code>DELETE</code></a>,
+<a href="sql.htm#truncate-table"><code>TRUNCATE TABLE</code></a> и индексы.
+Это не поддерживает <a href="sql.htm#alter-table"><code>ALTER TABLE</code>
+</a> или любые запросы языка определения данных, которые непосредственно
+затрагивают структуру таблицы, кроме <a href="sql.htm#drop-table"><code>DROP
+TABLE</code></a>. Текущее выполнение не использует подготовленные запросы.
+</li>
+
+<li><code>FEDERATED</code> принимает <a href="sql.htm#insert-on-duplicate">
+<code>INSERT ... ON DUPLICATE KEY UPDATE</code></a>, но если происходит
+ошибка дубликата ключа, запрос терпит неудачу с ошибкой.</li>
+
+<li>Работа на <code>FEDERATED</code>, выполняя большую вставку (например, на
+<a href="sql.htm#insert-select"><code>INSERT INTO ... SELECT ...</code></a>)
+медленнее чем с другими табличными типами, потому что каждая выбранная строка
+обработана как отдельный запрос <a href="sql.htm#insert"><code>INSERT</code>
+</a> на таблице <code>FEDERATED</code>.</li>
+<li>Транзакции не поддержаны.</li>
+
+<li><code>FEDERATED</code> выполняет обработку больших вставок
+таким образом, что много строк посылаются в отдаленную таблицу в пакете.
+Это обеспечивает исполнительное усовершенствование и позволяет отдаленной
+таблице выполнить усовершенствование. Кроме того, если отдаленная таблица
+является транзакционной, она позволяет отдаленному механизму хранения
+выполнить отмену транзакции должным образом в случае ошибки. У этой
+способности есть следующие ограничения:</p>
+
+<ul><li><p>Размер вставки не может превысить максимальный пакетный размер
+обмена между серверами. Если вставка превышает этот размер, она поделена на
+много пакетов, и проблема с отменой транзакции может произойти.</li>
+
+<li>Обработка большой вставки не происходит для
+<a href="sql.htm#insert-on-duplicate"><code>INSERT ... ON
+DUPLICATE KEY UPDATE</code></a>.</p></li></ul></li>
+
+<li><p>Нет никакого пути у механизма <code>FEDERATED</code> узнать,
+изменилась ли отдаленная таблица. Причина этого состоит в том, что эта
+таблица должна работать как файл с данными, который никогда не писался бы
+ничем кроме системы базы данных. Целостность данных в местной таблице могла
+быть нарушена, если бы было какое-либо изменение отдаленной базы данных.</li>
+
+<li>Используя <code>CONNECTION</code>,  Вы не можете использовать символ '@'
+в пароле. Вы можете обойти это ограничение при использовании
+<a href="sql.htm#create-server"><code>CREATE SERVER</code></a>,
+чтобы создать соединение.</li>
+
+<li>Опции <a href="server.htm#sysvar_insert_id"><code>insert_id</code></a> и
+<a href="server.htm#sysvar_timestamp"><code>timestamp</code></a>
+не размножены к источнику данных.</li>
+
+<li>Любой <a href="sql.htm#drop-table"><code>DROP TABLE</code></a> для
+<code>FEDERATED</code> удаляет только местную таблицу, но не отдаленную.</li>
+<li>Таблицы <code>FEDERATED</code> не работают с кэшем запроса.</li>
+<li>Определяемое пользователем разделение не поддержано для
+<code>FEDERATED</code>.</p></li></ul>
+
+<h3><a name="federated-storage-engine-resources"></a>17.8.4.
+Ресурсы механизма хранения FEDERATED</h3>
+<p>Дополнительные ресурсы доступны для <code>FEDERATED</code>:</p>
+
+<ul><li><p>Форум, посвященный механизму хранения <code>FEDERATED</code>
+доступен на <a href="../../../forums.mysql.com/list.php@105" target="_top">
+http://forums.mysql.com/list.php?105</a>.</p></li></ul>
+
+<h2><a name="example-storage-engine"></a>17.9. Механизм хранения EXAMPLE</h2>
+<p>Механизм хранения <code>EXAMPLE</code> это механизм, который ничего не
+делает. Его цель состоит в том, чтобы служить примером в исходном коде MySQL,
+который иллюстрирует, как начать писать новые механизмы хранения. Это имеет
+прежде всего интерес для разработчиков.</p>
+
+<p>Чтобы включить механизм хранения <code>EXAMPLE</code>, если Вы создаете
+MySQL из исходных текстов, вызовите <span><strong>CMake</strong></span> с
+опцией <a href="install.htm#option_cmake_storage_engine_options">
+<code>-DWITH_EXAMPLE_STORAGE_ENGINE</code></a>.</p>
+
+<p>Исходные тексты механизма хранения <code>EXAMPLE</code> находятся в
+каталоге <code>storage/example</code> дистрибутива исходных текстов MySQL.
+</p>
+<p>Когда Вы создаете <code>EXAMPLE</code>, никакие файлы не создаются.
+Никакие данные не могут храниться в таблицу.
+Извлечения возвращают пустой результат.
+<pre>
+mysql&gt; CREATE TABLE test (i INT) ENGINE = EXAMPLE;
+Query OK, 0 rows affected (0.78 sec)
+
+mysql&gt; INSERT INTO test VALUES(1),(2),(3);
+ERROR 1031 (HY000): Table storage engine for 'test' doesn't have this option
+
+mysql&gt; SELECT * FROM test;
+Empty set (0.31 sec)
+</pre>
+Механизм хранения <code>EXAMPLE</code>
+не поддерживает индексацию и разделение.</p>
+
+<h2><a name="storage-engines-other"></a>17.10.
+Другие механизмы хранения</h2>
+<p>Другие механизмы хранения могут быть доступными от третьих сторон и членов
+сообщества, которые использовали интерфейс Custom Storage Engine.</p>
+
+<p>Сторонние механизмы не поддержаны MySQL. Для дополнительной информации,
+документации, инструкций по установке, сообщений об ошибках или для любой
+справки или помощи с этими механизмами, пожалуйста, свяжитесь с
+разработчиком механизма непосредственно.</p>
+
+<p>Для получения дополнительной информации о развитии потребительского
+механизма хранения, который может использоваться с Pluggable Storage
+Engine Architecture, см.
+<a href="../../../dev.mysql.com/doc/internals/en/custom-engine.html"
+target="_top">MySQL Internals: Writing a Custom Storage Engine</a>.</p>
+
+<h2><a name="pluggable-storage-overview"></a>17.11.
+Краткий обзор MySQL Storage Engine Architecture</h2>
+<p>Архитектура подключаемого механизма хранения MySQL позволяет профессионалу
+базы данных выбрать специализированный механизм хранения для особой
+потребности приложения, будучи полностью свободным от того, чтобы управлять
+любым определенным приложением, кодирующим требования. Архитектура сервера
+MySQL изолирует программиста приложения и DBA от всех низкоуровневых деталей
+выполнения на уровне хранения, обеспечивая последовательную и легкую модель
+приложения и API. Таким образом, хотя есть различные способности у разных
+механизмов хранения, приложение экранировано от этих различий.</p>
+
+<p>Подключаемыя архитектура механизма хранения обеспечивает стандартный набор
+методов управления и поддержки, который распространен среди всех основных
+механизмов хранения. Механизмы самого хранения это компоненты сервера базы
+данных, которые фактически выполняют действия на основных данных, которые
+поддержаны на уровне физического сервера.</p>
+
+<p>Эта эффективная и модульная архитектура обеспечивает огромные возможности
+для тех приложений, которые определенно предназначаются для особых задач.
+Таких, как складирование данных, обработка транзакций или высокая
+доступность, обладая преимуществом использования ряда интерфейсов и служб,
+которые независимы от любого механизма хранения.</p>
+
+<p>Программист приложения и DBA взаимодействуют с базой данных MySQL через
+Connector API и уровни служб, которые выше механизмов хранения. Если
+изменения приложения вызывают требования изменений механизма хранения, или
+чтобы один или более механизмов хранения были добавлены, чтобы поддержать
+новые потребности, никакие существенные изменения кодирования или
+процесса не нужны. Архитектура сервера MySQL экранирует приложение от
+основной сложности механизма хранения, представляя последовательный и удобный
+в работе API, который применяется через механизмы хранения.</p>
+
+<h3><a name="pluggable-storage"></a>17.11.1.
+Архитектура подключаемого механизма хранения</h3>
+<p>MySQL Server использует подключаемую архитектуру механизма хранения,
+которая позволяет механизмам хранения быть загруженными в сервер.</p>
+
+<p><span><strong>Включение механизма хранения</strong></span></p>
+<p>Прежде, чем механизм хранения сможет использоваться, совместно
+использованная библиотека плагина механизма хранения должна быть загружена в
+MySQL, используя <a href="sql.htm#install-plugin"><code>INSTALL PLUGIN</code>
+</a>. Например, если плагин механизма <code>EXAMPLE</code> называется
+<code>example</code> и совместно используемую библиотеку называют
+<code>ha_example.so</code>, Вы загружаете это следующим запросм:
+<pre>
+mysql&gt; INSTALL PLUGIN example SONAME 'ha_example.so';
+</pre>
+
+Чтобы установить подключаемый механизм хранения, файл должен быть расположен
+в каталоге плагинов MySQL, а пользователь, вызывающий
+<a href="sql.htm#install-plugin"><code>INSTALL PLUGIN</code></a> должен иметь
+привилегию <a href="security.html#priv_insert"><code>INSERT</code></a> для
+таблицы <code>mysql.plugin</code>.</p>
+
+<p>Совместно используемая библиотека должна быть расположена в каталоге
+плагинов сервера MySQL, местоположение которого дано переменной
+<a href="server.htm#sysvar_plugin_dir"><code>plugin_dir</code></a>.</p>
+
+<p><span><strong>Отключение механизма хранения</strong></span></p>
+<p>Чтобы отключить механизм хранения, используйте
+<a href="sql.htm#uninstall-plugin"><code>UNINSTALL PLUGIN</code></a>:
+<pre>
+mysql&gt; UNINSTALL PLUGIN example;
+</pre>
+
+Если Вы отключаете механизм хранения, который необходим существующим
+таблицам, те таблицы становятся недоступными, но будут все еще присутствовать
+на диске (где применимо). Гарантируйте, что нет никаких таблиц, использующих
+этот механизм хранения прежде, чем Вы отключите механизм хранения.</p>
+
+<h3><a name="pluggable-storage-common-layer"></a>17.11.2.
+Общий уровень базы данных сервера</h3>
+<p>Подключаемый механизм хранения MySQL является компонентом в сервере базы
+данных MySQL, который ответственен за то, что выполняет фактические операции
+ввода/вывода для базы данных так же, как реализует определенные наборы
+функций, которые предназначаются для определенной потребности приложения.
+Главная выгода использования механизмов хранения: Вам поставляют только
+особенности, необходимые для особого приложения, поэтому у Вас есть меньше
+затрат с более эффективным конечным результатом</p>
+
+<p>С технической точки зрения, каковы некоторые из уникальных компонентов
+инфраструктуры поддержки, которые находятся в механизме хранения? Некоторые
+из особенностей включают:</p>
+
+<ul><li><p><span><em>Параллелизм</em></span>: У некоторых приложений есть
+больше гранулированных требований блокировки (таких, как блокировки на уровне
+строки), чем у других. Выбор правильной стратегии блокировки может уменьшить
+издержки и поэтому улучшить эффективность работы. Эта область также включает
+поддержку таких способностей, как управление параллелизмом мультивариантов
+или чтение снимков.</li>
+
+<li><span><em>Операционная поддержка</em></span>: Не каждое приложение
+нуждается в транзакциях, но для тех, которым это надо, есть очень хорошо
+определенные требования, такие как ACID-соответствие и подобные.</li>
+
+<li><span><em>Справочная целостность</em></span>: сервер поддерживает
+реляционную базу данных и целостность через DDL-определенные внешние ключи.
+</li>
+
+<li><span><em>Физическое хранение</em></span>: Это вовлекает все от полного
+размера страницы для таблиц и индексов до формата, используемого, чтобы
+хранить данные на физическом диске.</li>
+
+<li><span><em>Поддержка индексов</em></span>: Различные сценарии приложения
+имеют тенденцию извлекать выгоду из различной логики индексов. У каждого
+механизма хранения вообще есть свои собственные методы индексации, хотя
+некоторые (такие, как индексы B-tree) характерны для почти всех механизмов.
+</li>
+
+<li><span><em>Кэш-память</em></span>: Различные приложения лучше отвечают на
+некоторые стратегии кэширования памяти, чем другие, так что, хотя некоторая
+кэш-память характерна для всех механизмов хранения (используется для
+пользовательских соединений или высокоскоростного кэша запросов MySQL),
+многие уникально определены именно особым механизмом хранения.</li>
+
+<li><span><em>Производительность</em></span>: Это включает многократные
+потоки ввода/вывода для параллельных операций, параллелизма потока, установки
+контрольных точек базы данных, обработку оптовых вставок и многое другое.
+</li>
+
+<li><span><em>Разные целевые особенности</em></span>: Это может включать
+поддержку географических операций, ограничения безопасности для определенных
+операций манипуляции данными и другие подобные особенности.</p></li></ul>
+
+<p>Каждый набор подключаемых компонентов инфраструктуры механизма хранения
+разработан, чтобы предложить набор выгод для особого приложения. Наоборот,
+уход от ряда составляющих особенностей помогает уменьшить ненужные затраты.
+Надо понимать, что понимание набора требований приложения и выбор надлежащего
+механизма хранения MySQL могут оказать драматическое влияние на
+полную системную эффективность.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

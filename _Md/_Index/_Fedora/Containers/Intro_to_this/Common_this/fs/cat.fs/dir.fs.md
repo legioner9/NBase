@@ -1,0 +1,4 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Fedora\Containers\Intro_to_this\Common_this\fs\cat.fs\dir.fs.md">fs</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Fedora\Containers\Intro_to_this\Common_this\fs\fs_fishes.md">fs_fishes.md</a>
+        - *## [Gnome, Показ скрытых файлов](https://www.linux.org.ru/forum/desktop/3540878)
+        - *## in CLi

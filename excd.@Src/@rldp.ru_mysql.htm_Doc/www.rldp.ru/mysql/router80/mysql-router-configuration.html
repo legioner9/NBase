@@ -1,0 +1,3656 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 4. Конфигурация</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="mysql-router-configuration"></a>Глава 4. Конфигурация</h1>
+<p>MySQL Router настраивается, используя необходимый конфигурационный файл,
+дополнительные дополнительные конфигурационные файлы и некоторые опции также
+доступны из командной строки.</p>
+
+<p>Самонастройка это предпочтительный и общий подход к созданию
+конфигурационного файла MySQL Router. См. опцию
+<a href="#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap</code></a>. Самонастройка производит
+полностью функциональный файл <code class="filename">mysqlrouter.conf</code>.
+</p>
+
+<h2><a name="mysql-router-configuration-file-syntax"></a>
+4.1. Синтаксис конфигурационного файла</h2>
+<p>Формат файла настройки напоминает традиционный формат файла INI с секциями
+и параметрами, но с несколькими дополнительными расширениями.
+<p>Наклонные черты вправо и влево поддерживаются. Наклонные черты влево
+безоговорочно копируются, поскольку они не символы ESC.</p>
+
+<h3><a name="mysql-router-configuration-comments"></a>Комментарии</h3>
+<p>Конфигурационный файл может содержать строки комментария. Они начинаются с
+решетки (<code class="literal">#</code>) или точки с запятой
+(<code class="literal">;</code>) и продолжаются до конца строки.</p>
+
+<h3><a name="mysql-router-configuration-sections"></a>Секции</h3>
+<p>Каждый конфигурационный файл состоит из списка
+<span class="emphasis"><em>секций</em></span>, где каждая секция содержит
+последовательность <span class="emphasis"><em>опций</em></span>.
+У каждого параметра конфигурации есть имя и значение. Например:
+<pre>
+[<em class="replaceable"><code>section name</code></em>]
+<em class="replaceable"><code>option</code></em> = <em class="replaceable"><code>value</code></em>
+<em class="replaceable"><code>option</code></em> = <em class="replaceable"><code>value</code></em>
+<em class="replaceable"><code>option</code></em> = <em class="replaceable"><code>value</code></em>
+[<em class="replaceable"><code>section name</code></em>:<em class="replaceable"><code>optional section key</code></em>]
+<em class="replaceable"><code>option</code></em> = <em class="replaceable"><code>value</code></em>
+<em class="replaceable"><code>option</code></em> = <em class="replaceable"><code>value</code></em>
+<em class="replaceable"><code>option</code></em> = <em class="replaceable"><code>value</code></em>
+</pre>
+
+<p>Заголовок секции конфигурационного файла начинается с открывающей скобки
+(<code class="literal">[</code>) и завершается закрывающей скобкой
+(<code class="literal">]</code>). Допустимы знаки начального и конечного
+пробелов в строке, которые проигнорированы, но никаких пробелов в скобках
+секции быть не должно.</p>
+
+<p>Заголовок секции в скобках состоит из
+<span class="emphasis"><em>имени</em></span> и дополнительного
+<span class="emphasis"><em>ключа</em></span>, который отделен от заголовка
+секции двоеточием (<code class="literal">:</code>). Комбинация имени секции и
+ключа уникальна для конфигурации.</p>
+
+<p>Имена секции и ключи из последовательности из одной или более букв, цифр
+или подчеркивания (<code class="literal">_</code>). Никакие другие знаки не
+разрешены в имени секции или ключа.</p>
+
+<p>Секция подобна пространству имен. Например, значение
+<code class="literal">user</code> зависит от своей связанной секции.
+<span class="emphasis"><em>user</em></span> секции
+<span class="emphasis"><em>[DEFAULT]</em></span>
+отсылает к пользователю системы, от мени коего запущен MySQL Router,
+которым также управляет опция командной строки
+<a href="#option_mysqlrouter_user_cli">
+<code class="option">--user</code></a>. Не связанный с этим
+<span class="emphasis"><em>user</em></span> в секции
+<span class="emphasis"><em>[metadata_cache]</em></span> относится к
+пользователю MySQL, который получает доступ к метаданным сервера MySQL.</p>
+
+<h3><a name="mysql-router-configuration-default-section"></a>Секция Default
+</h3>
+<p>Специальное имя секции <code class="literal">DEFAULT</code> (любой
+регистр) используется для значений по умолчанию для опций. Опции, не
+найденные в секции, ищутся в секции по умолчанию. Секция по умолчанию не
+принимает ключ секции.</p>
+
+<h3><a name="mysql-router-configuration-options"></a>Опции</h3>
+<p>После заголовка начала секции может быть последовательность из ноля
+или большего количества <span class="emphasis"><em>опций</em></span>,
+где каждая строка имеет форму:
+<pre>
+<em class="replaceable"><code>name</code></em> = <em class="replaceable"><code>value</code></em>
+</pre>
+
+<p>Любые знаки начального или конечного пробела в имени или значении опции
+удалены прежде, чем опция обработана. Имена нечувствительны к регистру.
+Концевые комментарии не поддерживаются, таким образом, в этом примере опция
+<code class="literal">mode</code> получает значение
+"read-only # Read only mode" и поэтому произведет ошибку.
+<pre>
+[routing:round-robin]
+# Trailing comments are not supported so the following is incorrect
+routing_strategy = round-robin   # Circles back to first server
+</pre>
+
+<h3><a name="mysql-router-configuration-interpolation"></a>
+Интерполяция переменной</h3>
+<p>Значения опций понимают <span class="emphasis"><em>интерполяцию
+переменной</em></span>, используя имя опции, данное в скобах
+<code class="literal">{</code> и <code class="literal">}</code>.
+Интерполяция сделана на поиске значения опции, когда это прочитано из
+конфигурационного файла. Если переменная не определяется тогда, никакие
+замены не сделаны, и значение опции прочитано буквально.</p>
+
+<p>Рассмотрите этот типовой конфигурационный файл:
+<pre>
+[DEFAULT]
+prefix = /usr/
+
+[sample]
+bin = {prefix}bin/{name}
+lib = {prefix}lib/{name}
+name = magic
+directory = C:\foo\bar\{3a339172-6898-11e6-8540-9f7b235afb23}
+</pre>
+
+<p>Здесь значение <code class="literal">bin</code> = "/usr/bin/magic",
+значение <code class="literal">lib</code> = "/usr/lib/magic" и
+значение <code class="literal">directory</code> =
+"C:\foo\bar\{3a339172-6898-11e6-8540-9f7b235afb23}", так как переменная,
+названная "{3a339172-6898-11e6-8540-9f7b235afb23}" не определяется.</p>
+
+<h3><a name="mysql-router-configuration-predefined"></a>
+Предварительно определенные переменные</h3>
+<p>MySQL Router определяет предварительно определенные переменные, которые
+доступны конфигурационному файлу. Переменные используют скобки, например,
+<code class="literal">{program}</code> для предварительно
+определенно переменной <code class="literal">program</code>.</p>
+
+<a name="mysql-router-configuration-predefined-table"></a>
+<p><b>Таблица 4.1. Предварительно определенные переменные</b></p>
+<table><thead><tr><th scope="col">Имя</th>
+<th scope="col">Описание</th></tr></thead>
+<tbody><tr><td scope="row"><code class="literal">program</code></td>
+<td>Название программы, обычно <code class="literal">mysqlrouter
+</code></td></tr>
+<tr><td scope="row"><code class="literal">origin</code></td>
+<td>Путь к каталогу, где расположен двоичный модуль</td></tr>
+<tr><td scope="row"><code class="literal">logging_folder</code></td>
+<td>Путь к папке для файлов журнала</td></tr>
+<tr><td scope="row"><code class="literal">plugin_folder</code></td>
+<td>Путь к папке для плагинов</td></tr>
+<tr><td scope="row"><code class="literal">runtime_folder</code></td>
+<td>Путь к папке для данных во время выполнения</td></tr>
+<tr><td scope="row"><code class="literal">config_folder</code></td>
+<td>Путь к папке для конфигурационных файлов</td></tr></tbody></table>
+
+<h2><a name="mysql-router-configuration-file-locations"></a>
+4.2. Местоположения конфигурационного файла</h2>
+<p>MySQL Router ищет конфигурационный файл по умолчанию при запуске и
+произвольно загружает определенные пользователем конфигурационные файлы во
+времени выполнения из командной строки.</p>
+
+<h3><a name="mysql-router-configuration-default"></a>
+Местоположения конфигурационного файла по умолчанию</h3>
+<p>По умолчанию MySQL Router просматривает определенные местоположения для
+своих конфигурационных файлов, которые зависят от платформы и того, как MySQL
+Router был установлен.</p>
+
+<p>Можно изменить местоположения по умолчанию во время компиляции при помощи
+опции <code class="literal"> -DROUTER_CONFIGDIR=&lt;path&gt;</code>.
+Вы могли также отредактировать
+<code class="filename">cmake/settings.cmake</code>, чтобы
+изменить местоположения по умолчанию прежде, чем собрать MySQL Router,
+таким образом добавляя новые местоположения или исключения
+для определенных платформ.</p>
+
+<p>Выполните <code class="literal">mysqlrouter --help</code>, чтобы
+увидеть местоположения конфигурационного файла по умолчанию (и их
+доступность) на вашей системе. Например:
+<pre>
+shell&gt; <strong class="userinput"><code>mysqlrouter --help</code></strong>
+
+MySQL Router v8.0.14 on macOS v10.12 (64-bit) (GPL community edition)
+Copyright (c) 2015, 2017, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of
+their respective owners.
+
+Start MySQL Router.
+
+Configuration read from the following files in the given order (enclosed
+in parentheses means not available for reading):
+(<em class="replaceable"><code>/usr/local/mysql-router/mysqlrouter.conf</code></em>)
+<em class="replaceable"><code>/Users/philip/.mysqlrouter.conf</code></em>
+Plugins Path:
+/usr/local/lib/mysqlrouter
+Default Log Directory:
+/usr/local/mysql-router
+Default Persistent Data Directory:
+/usr/local/mysql-router/data
+Default Runtime State Directory:
+/usr/local/mysql-router/run
+
+Usage: mysqlrouter [-v|--version] [-h|--help]
+
+...
+</pre>
+
+<p>Конфигурационный файл по умолчанию не загружается,
+если определенный пользователями конфигурационный файл передается опцией
+<a href="#option_mysqlrouter_config">
+<code class="option">--config</code></a>.</p>
+
+<p>В Linux MySQL Router просматривает следующие местоположения по умолчанию,
+хотя эти местоположения системно-зависимы:</p>
+<ol type="1"><li><p>
+<code class="filename">/etc/mysqlrouter/mysqlrouter.conf</code>
+<p>В отличие от сервера MySQL, обратно совместимый путь
+"<code class="filename">/etc/mysqlrouter.conf</code>" не поддерживается.</li>
+<li><code class="filename">$HOME/.mysqlrouter.conf</code></p></li></ol>
+
+<p>Для обратной совместимости MySQL Router также ищет вариант
+<span class="emphasis"><em>.ini</em></span> в каждом каталоге. При этом
+Router смотрит первоначальный каталог для варианта
+<span class="emphasis"><em>.conf</em></span>, затем вариант
+<span class="emphasis"><em>.ini</em></span>, затем повторяет процесс в
+следующем каталоге, который, как правило, является корневым
+каталогом пользователя в системе.</p>
+
+<h3><a name="mysql-router-configuration-user-defined"></a>
+Определенные пользователями и дополнительные конфигурационные файлы</h3>
+<p>Две опции параметров командной строки управляет этими
+местоположениями конфигурационного файла:</p>
+
+<ul><li><p>
+<a href="#option_mysqlrouter_config">
+<code class="option">--config</code></a> (или
+<code class="literal">-c</code>): Прочитайте основную конфигурацию из этого
+файла и не используйте пути к файлам по умолчанию.</p>
+
+<p>Использование в качестве примера: производя автономную установку MySQL
+Router с опцией <a href="#option_mysqlrouter_directory">
+<code class="option">--directory</code></a>, произведенный файл
+<code class="filename">start.sh</code> передает этот выбор произведенному
+<code class="filename">mysqlrouter.conf</code> в этом каталоге.</p></li></ul>
+
+<ul><li><p>
+<a href="#option_mysqlrouter_extra-config">
+<code class="option">--extra-config</code></a> (или
+<code class="literal">-a</code>): Прочитайте этот дополнительный
+конфигурационный файл после того, как конфигурационные файлы будут прочитаны
+из местоположений по умолчанию или из файлов, определенных, используя опцию
+<a href="#option_mysqlrouter_config">
+<code class="option">--config</code></a>.</p></li></ul>
+
+<p>Например:
+<pre>
+shell&gt; mysqlrouter --config /custom/path/to/router.conf \
+                      --extra-config /another/config.conf
+</pre>
+
+<p>Многократные дополнительные параметры конфигурации могут быть переданы,
+и файлы загружаются в порядке, в которым они введены опцией
+<code class="option">--config</code>, загружаемые перед
+<code class="option">--extra-config</code>:
+<pre>
+shell&gt; mysqlrouter --extra-config a.conf --config b.conf \
+                      --extra-config c.conf
+</pre>
+
+<p>В вышеупомянутом примере <code class="filename">b.conf</code>
+загружается сначала, затем <code class="filename">a.conf</code> и
+<code class="filename">c.conf</code>, именно в этом порядке.
+Кроме того, конфигурационный файл по умолчанию, такой как
+<code class="filename">/etc/mysqlrouter/mysqlrouter.conf</code>, не
+загружается потому, что используется <code class="option">--config</code>.</p>
+<p>Каждый загруженный конфигурационный файл отвергает параметры конфигурации
+от ранее прочитанных конфигурационных файлов.</p>
+
+<h3><a name="mysql-router-configuration-location-linux"></a>
+Местоположения конфигурационного файла по умолчанию (Linux)</h3>
+<p>Ниже перечислено расположение файла по умолчанию, чтобы прочитать
+конфигурационные файлы на популярных платформах Linux.
+
+<p>Выполните <code class="literal">mysqlrouter --help</code>, чтобы
+увидеть местоположения конфигурационного файла по умолчанию
+(и доступность) в вашей системе.</p>
+
+<ul><li><p>По умолчанию установка в масштабе всей системы под
+<code class="literal">/usr/local</code>:
+<code class="literal">/usr/local/etc/mysqlrouter.conf</code></li>
+
+<li>RPM и Debian: <code class="literal">/etc/mysqlrouter/mysqlrouter.conf
+</code></li>
+<li>На всех системах применение при установке опции
+<a href="#option_mysqlrouter_directory">
+<code class="option">--directory</code></a> добавляет
+<code class="filename">mysqlrouter.conf</code> в каталог, определенный
+<span class="emphasis"><em>--directory</em></span>.</p></li></ul>
+
+<h3><a name="mysql-router-configuration-location-windows"></a>
+Местоположения конфигурационного файла по умолчанию (Windows)</h3>
+<p>Выполните <code class="literal">mysqlrouter --help</code>, чтобы
+увидеть местоположения конфигурационного файла по умолчанию
+(и доступность) в вашей системе.</p>
+
+<ul><li><p>По умолчанию установка в масштабе всей системы под
+<code class="filename">C:\ProgramData\MySQL\MySQL Router</code>:
+<code class="filename">C:\ProgramData\MySQL\MySQL
+Router\mysqlrouter.conf</code></li>
+
+<li>Кроме того: <code class="filename">C:\Users\<em class="replaceable">
+<code>username</code></em>\AppData\Roaming\mysqlrouter.conf</code>, где
+<em class="replaceable"><code>username</code></em> заменяется именем
+пользователя вашей системы.</li>
+
+<li>В дополнение к <span class="emphasis"><em>mysqlrouter.conf</em></span>,
+для обратной совместимости система также ищет
+<span class="emphasis"><em>mysqlrouter.ini</em></span></li>
+
+<li>С опцией <a href="#option_mysqlrouter_directory">
+<code class="option">--directory</code></a>: добавляет
+<code class="filename">mysqlrouter.conf</code> в каталог, указанный в
+<span class="emphasis"><em>--directory</em></span>.</p></li></ul>
+
+<h2><a name="mysql-router-configuration-setup"></a>4.3. Опции настройки</h2>
+<p>Опции конфигурационного файла и параметры командной строки служат
+различным целям и описаны в отдельных местах.</p>
+
+<p>При <a href="#option_mysqlrouter_bootstrap">
+<code class="option">bootstrapping</code></a> параметры настройки
+произведенного конфигурационного файла зависят от опций, переданых
+<a href="#mysqlrouter"><span class="command">
+<strong>mysqlrouter</strong></span></a>. Например, передача
+<a href="#option_mysqlrouter_conf-use-sockets">
+<code class="option">--conf-use-sockets</code></a> позволяет
+сокетные соединения, определяя
+<a href="#option_mysqlrouter_socket">
+<code class="option">socket</code></a> для каждого маршрута в произведенном
+конфигурационном файле. Или
+<a href="#option_mysqlrouter_directory">
+<code class="option">--directory</code></a> добавляет все произведенные файлы
+и подкаталоги к единственному каталогу и регулирует произведенные значения
+конфигурационного файла соответственно.</p>
+
+<h3><a name="mysql-router-command-options"></a>
+4.3.1. Командная строка MySQL Router</h3>
+<p>Эта секция описывает команды MySQL Router. Команда
+<a href="#mysqlrouter">
+<span class="command"><strong>mysqlrouter</strong></span></a>
+используется для большинства задач, включая самонастройку и управление
+MySQL Router, <span class="command"><strong>mysqlrouter_plugin_info</strong>
+</span> это дополнительное средство отладки.</p>
+
+<h4><a name="mysqlrouter"></a>4.3.1.1. Параметры командной строки
+<span class="command"><strong>mysqlrouter</strong></span></h4>
+<ul><li><p><a href="#mysqlrouter-option-summary">
+Обзор опций mysqlrouter</a></li>
+<li><a href="#mysqlrouter-options">
+Описание опций mysqlrouter</a></p></li></ul>
+
+<p>MySQL Router принимает параметры командной строки, которые передаются в
+<a href="#mysqlrouter"><span class="command">
+<strong>mysqlrouter</strong></span></a>, чтобы затронуть его поведение или
+изменить маршрутизатор на основе кластера InnoDB.</p>
+
+<p>Запуская Router, можно произвольно использовать
+<a href="#option_mysqlrouter_config">
+<code class="option">--config</code></a>, чтобы перейти в местоположение
+главного конфигурационного файла (иначе местоположение по умолчанию
+используется), и <a href="#option_mysqlrouter_extra-config">
+<code class="option">--extra-config</code></a>
+для дополнительного конфигурационного файла.</p>
+
+<p>Самонастройка параметров командной строки затрагивает произведенные файлы
+и каталоги, которые используются, запуская MySQL Router.</p>
+<h5><a name="mysqlrouter-option-summary"></a>Обзор опций mysqlrouter</h5>
+<a name="mysql-router-command-options-general"></a>
+<p><b>Таблица 4.2. Основные опции</b></p>
+<table frame="box" rules="all">
+<thead><tr><th scope="col">Формат</th>
+<th scope="col">Описание</th></tr></thead>
+<tbody><tr><td scope="row">
+<a href="#option_mysqlrouter_config">
+--config</a></td>
+<td>Прочитайте параметры конфигурации из обеспеченного файла.</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_extra-config">
+--extra-config</a></td>
+<td>Прочитайте этот файл после того, как конфигурационные файлы будут
+прочитаны из местоположений по умолчанию или из файлов,
+определенных опцией --config.</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_help">
+--help</a></td>
+<td>Вывод справочной информации.</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_user_cli">
+--user</a></td>
+<td>Запустить mysqlrouter как пользователь, имеющий указанное имя
+или числовой идентификатор пользователя.</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_version">
+--version</a></td>
+<td>Вывод информации о версии.</td></tr></tbody></table>
+
+<a name="mysql-router-command-options-bootstrap"></a>
+<p><b>Таблица 4.3. Опции самонастройки</b></p>
+<table frame="box" rules="all">
+<thead><tr><th scope="col">Формат</th><th scope="col">Описание</th>
+<th scope="col">Введено</th></tr></thead>
+<tbody><tr><td scope="row">
+<a href="#option_mysqlrouter_account-host">
+--account-host</a></td>
+<td>Образец хоста для настройки учетных записей.</td>
+<td>8.0.12</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_bootstrap">
+--bootstrap</a></td>
+<td>Настроить Router для работы с кластером MySQL InnoDB.</td><td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_bootstrap-socket">
+--bootstrap-socket</a></td>
+<td>Соединитесь с сервером метаданных MySQL через сокет Unix,
+используется вместе с --bootstrap.</td><td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_conf-base-port">
+--conf-base-port</a></td>
+<td>Основной порт, чтобы использовать для портов Router.</td><td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_conf-bind-address">
+--conf-bind-address</a></td>
+<td>IP-адрес интерфейса, с которым надо связать роутер.</td><td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_conf-skip-tcp">
+--conf-skip-tcp</a></td>
+<td>Отключить ли закрепление порта TCP для поступающих связей.</td>
+<td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_conf-use-sockets">
+--conf-use-sockets</a></td>
+<td>Использовать ли сокеты Unix.</td><td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_connect_timeout_metadata_cli">
+--connect-timeout</a></td>
+<td>Число секунд перед попытками подключения к серверу метаданных.</td>
+<td>8.0.4</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_directory">
+--directory</a></td>
+<td>Создает отдельный каталог для нового роутера.</td><td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_force">
+--force</a></td>
+<td>Реконфигурация возможно существующего маршрутизатора.</td><td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_force-password-validation">
+--force-password-validation</a></td>
+<td>Создавая учетную запись пользователя автоматически, не пропускайте
+стадию validate_password.</td><td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_master-key-reader">
+--master-key-reader</a></td>
+<td>Скрипт, который возвращает главный ключ в STDOUT.</td>
+<td>8.0.12</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_master-key-writer">
+--master-key-writer</a></td>
+<td>Скрипт, который читает главный ключ из STDIN.</td>
+<td>8.0.12</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_name">
+--name</a></td>
+<td>Дает символьное имя для роутера.</td><td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_password-retries">
+--password-retries</a></td>
+<td>Количество повторений, чтобы использовать для
+создания пароля пользователя.</td><td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_read_timeout_metadata_cli">
+--read-timeout</a></td>
+<td>Число секунд перед операциями чтения метаданных сервера.</td>
+<td>8.0.4</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_report-host">
+--report-host</a></td>
+<td>Имя хоста роутера, отвергает автообнаружение.</td>
+<td>8.0.12</td></tr></tbody></table>
+
+<a name="mysql-router-command-options-ssl"></a><p><b>Таблица 4.4. Опции SSL
+</b></p>
+<table frame="box" rules="all">
+<thead><tr><th scope="col">Формат</th><th scope="col">Описание</th>
+<th scope="col">Введено</th></tr></thead>
+<tbody><tr><td scope="row"><a href="#option_mysqlrouter_ssl-ca">
+--ssl-ca</a></td>
+<td>Путь к файлу сертификата SSL, чтобы проверить сертификат сервера.</td>
+<td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_ssl-capath">
+--ssl-capath</a></td>
+<td>Каталог, который содержит файлы доверенных сертификатов
+SSL Certificate Authority</td><td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_ssl-cert">
+--ssl-cert</a></td>
+<td>Клиентский сертификат SSL, чтобы облегчить клиентскую идентификацию
+во время bootstrap</td>
+<td>8.0.4</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_ssl-cipher">
+--ssl-cipher</a></td>
+<td>Отделенный двоеточиями список шифров SSL, если SSL позволен.</td>
+<td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_ssl-crl">
+--ssl-crl</a></td>
+<td>Путь к файлу SSL CRL, чтобы использовать, проверяя сертификат сервера.
+</td><td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_ssl-crlpath">
+--ssl-crlpath</a></td>
+<td>Путь к каталогу, содержащему файлы SSL CRL, чтобы использовать,
+проверяя сертификат сервера.</td><td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_ssl-key">
+--ssl-key</a></td>
+<td>Частный ключ SSL, чтобы облегчить клиентскую идентификацию
+во время bootstrap</td><td>8.0.4</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_ssl-mode_cli">
+--ssl-mode</a></td>
+<td>Способ связи SSL для использования во время bootstrap и нормального
+функционирования, соединяясь с сервером метаданных.
+Аналогично --ssl-mode в клиенте mysql.</td><td></td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_tls-version">
+--tls-version</a></td>
+<td>Список разделенных запятой значений версий TLS, если SSL позволен.</td>
+<td></td></tr></tbody></table>
+
+<a name="mysql-router-command-options-windows"></a>
+<p><b>Таблица 4.5. Опции сервисов Windows</b></p>
+<table frame="box" rules="all">
+<thead><tr><th scope="col">Формат</th>
+<th scope="col">Описание</th></tr></thead>
+<tbody><tr><td scope="row"><a href="#option_mysqlrouter_clear-all-credentials">
+--clear-all-credentials</a></td>
+<td>Удаляет все сохраненные данные авторизации</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_install-service">
+--install-service</a></td>
+<td>В Windows установить MySQL Router как сервис MySQLRouter
+и установить его автоматически запускаться, когда Windows перезапустится.
+</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_install-service-manual">
+--install-service-manual</a></td>
+<td>В Windows установить MySQL Router как сервис MySQLRouter,
+который может быть вручную запущен.</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_remove-credentials-section">
+--remove-credentials-section</a></td>
+<td>Удалите параметры авторизации.</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_remove-service">
+--remove-service</a></td>
+<td>Удалить MySQL Router как сервис Windows.</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_service">
+--service</a></td>
+<td>Запустить MySQL Router как сервис Windows.</td></tr>
+<tr><td scope="row"><a href="#option_mysqlrouter_update-credentials-section">
+--update-credentials-section</a></td>
+<td>Обновите данные авторизации.</td></tr></tbody></table>
+
+<h5><a name="mysqlrouter-options"></a>Описание опций mysqlrouter</h5>
+<ul><li><p><a name="option_mysqlrouter_version"></a>
+<a href="#option_mysqlrouter_version">
+<code class="option">--version</code></a>,
+<code class="option">-V</code></p>
+
+<table frame="box" rules="all" summary="Properties for version">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--version , -V</code></td></tr></tbody></table>
+
+<p>Показывает номер версии и соответствующую информацию:
+<pre>
+shell&gt; <strong class="userinput"><code>mysqlrouter --version</code></strong>
+
+MySQL Router v8.0.14 on Linux (64-bit) (GPL community edition)
+</pre></li>
+
+<li><p><a name="option_mysqlrouter_help"></a>
+<a href="#option_mysqlrouter_help">
+<code class="option">--help</code></a>, <code class="option">-?</code></p>
+
+<table frame="box" rules="all" summary="Properties for help">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--help , -?</code></td></tr></tbody></table>
+
+<p>Показывает справочное сообщение.</p>
+<p>Опция <a href="#option_mysqlrouter_help">
+<code class="option">--help</code></a> обладает дополнительным преимуществом.
+Наряду с объяснением каждой из опций,
+<a href="#option_mysqlrouter_help">
+<code class="option">--help</code></a> также показывает пути, используемые,
+чтобы найти конфигурационный файл, и несколько путей по умолчанию. Следующая
+выдержка из вывода <a href="#option_mysqlrouter_help">
+<code class="option">--help</code></a> показывает пример
+с машины под Ubuntu 16.04:
+<pre>
+shell&gt; <strong class="userinput"><code>mysqlrouter --help</code></strong>
+
+MySQL Router v8.0.14 on Linux (64-bit) (GPL community edition)
+Copyright (c) 2015, 2017, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of
+their respective owners.
+
+Start MySQL Router.
+
+Configuration read from the following files in the given order (enclosed
+in parentheses means not available for reading):
+(/etc/mysqlrouter/mysqlrouter.conf)
+/home/philip/.mysqlrouter.conf
+Plugin Path:
+/usr/lib/x86_64-linux-gnu/mysqlrouter
+Default Log Directory:
+/var/log/mysqlrouter
+Default Persistent Data Directory:
+/var/lib/mysqlrouter
+Default Runtime State Directory:
+/run/mysqlrouter
+
+Usage: mysqlrouter [-V|--version] [-?|--help]
+...
+</pre>
+
+<p>Секция конфигурации показывает порядок путей, которые могут использоваться
+для чтения конфигурационного файла.
+В этом случае только второй файл доступен.</li>
+
+<li><a name="option_mysqlrouter_bootstrap"></a>
+<a href="#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap
+<em class="replaceable"><code>URI</code></em></code></a>,
+<code class="option">-B <em class="replaceable"><code>URI
+</code></em></code></p>
+
+<table frame="box" rules="all" summary="Properties for bootstrap">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--bootstrap URI, -B URI</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+
+<p>Основная опция для автонастройки MySQL Router, соединяясь с сервером
+метаданных кластера InnoDB в обеспеченном URI. Маршрутизатор MySQL формирует
+себя на основе информации от сервера метаданных кластера InnoDB.
+Пароль в случае необходимости запрашивается. Если имя пользователя не введено
+как часть URI тогда, имя пользователя по умолчанию "root", см.
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/connecting-using-uri-or-key-value-pairs.html#connecting-using-uri"
+target="_top">Connecting using a URI String</a>.
+
+<p>В то время как
+<a href="#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap</code></a> принимает URI для связей TCP/IP,
+используя <a href="#option_mysqlrouter_bootstrap-socket">
+<code class="option">--bootstrap-socket</code></a>, имя локального сокета
+Unix заменяет часть "host:port" в URI, переданного опции
+<a href="#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap</code></a> на той же самой машине.</p>
+
+<p>По умолчанию процесс начальной загрузки выполняет конфигурацию в масштабе
+всей системы MySQL Router. Только один экземпляр MySQL Router
+может формироваться для работы в масштабе всей системы. Его
+<code class="literal">router_name</code> = "default".
+Если дополнительные экземпляры нужны, используйте опцию
+<a href="#option_mysqlrouter_directory">
+<code class="option">--directory</code></a>, чтобы создать отдельные
+установки MySQL Router.</p>
+
+<p><em class="replaceable"><code>URI</code></em>: экземпляр сервера из
+кластера InnoDB, чтобы получить информацию о метаданных. Если обеспеченный
+<em class="replaceable"><code>URI</code></em> только для чтения, MySQL Router
+автоматически снова соединяется с экземпляром чтения-записи в кластере
+InnoDB, таким образом, это может зарегистрировать MySQL Router.</p>
+
+<p>Если конфигурационный файл уже существует, когда вы запускаете MySQL
+Router с опцией <a href="#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap</code></a>, существующий
+<code class="literal">router_id</code> в том файле снова используется, и
+процесс реконфигурации происходит. Конфигурационный файл восстановлен с нуля,
+и учетная запись сервера метаданных MySQL Router воссоздается, хотя и с тем
+же самым именем.</p>
+
+<p>Во время процесса реконфигурации отменены все изменения, сделанные в
+существующем конфигурационном файле. Чтобы настроить конфигурационный файл и
+все еще сохранить способность автоматической реконфигурации (самонастройки),
+можно использовать параметр командной строки
+<a href="#option_mysqlrouter_extra-config">
+<code class="option">--extra-config</code></a>, чтобы
+определить дополнительный конфигурационный файл, который прочитан после
+главного конфигурационного файла. Эти параметры конфигурации используются,
+потому что этот дополнительный конфигурационный файл загружается после
+главного конфигурационного файла.</p>
+
+<p>Процесс начальной загрузки создает новую учетную запись пользователя MySQL
+со случайно произведенным паролем, чтобы использовать указанный MySQL Router.
+Эта учетная запись применяется MySQL Router, соединяясь с сервером метаданных
+и кластером InnoDB, чтобы получить информацию о текущем состоянии. Для
+получения дальнейшей информации об этом пользователе, включая то, как пароль
+сохранен и привилегии MySQL, которые это требует, см. документацию для
+<a href="#option_mysqlrouter_user_metadata">
+<code class="option">MySQL user option</code></a>.</p>
+
+<p>Произведенный конфигурационный файл называют
+<code class="filename">mysqlrouter.conf</code>, его
+местоположение зависит от типа формируемого экземпляра, системы и пакета.
+Для установок в масштабе всей системы произведенный конфигурационный файл
+добавляется к каталогу конфигурации системы, такому как
+<code class="literal">/etc</code> или
+<code class="literal">%PROGRAMDATA%\MySQL\MySQL Router\</code>.
+Вызов Executing <code class="literal">mysqlrouter --help</code>
+покажет это местоположение.</p>
+
+<p>Опция <code class="option">--user</code> нужна, выполняя самонастройку
+с суперпользователем (uid=0). Хотя это не рекомендуется, возможна передача
+его имени как аргумента, такой как <span class="emphasis"><em>--user=root
+</em></span>.</p>
+
+<p>Применение <a href="#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap</code></a> добавляет значения по умолчанию к
+произведенному конфигурационному файлу MySQL Router, и некоторые из этих
+значений по умолчанию зависят от других условий. Упомянутые ниже некоторые
+условия, которые затрагивают произведенные значения по умолчанию, где
+умолчание определяется передачей параметра
+<a href="#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap</code></a>.</p>
+
+<a name="mysql-router-configuration-bootstrap-default-changes"></a>
+<p><b>Таблица 4.6. Условия, которые затрагивают умолчания для --bootstrap
+</b></p>
+<table><thead><tr>
+<th scope="col">Условие</th>
+<th scope="col">Описание</th></tr></thead>
+<tbody><tr><td scope="row">
+<a href="#option_mysqlrouter_conf-base-port">
+<code class="option">--conf-base-port</code></a></td>
+<td><p>Изменяет произведенный <a href="#option_mysqlrouter_bind_port">
+<code class="option">bind_port</code></a> для каждого типа подключения.</p>
+
+<p>По умолчанию произведенное значение <code class="option">bind_port</code>
+следующее: для классического протокола Read-Write = 6446 и Read-Only = 6447,
+для X protocol Read-Write = 64460 и Read-Only = 64470.</p></td></tr>
+
+<tr><td scope="row">
+<a href="#option_mysqlrouter_conf-use-sockets">
+<code class="option">--conf-use-sockets</code></a></td>
+<td>Вставляет определения <code class="option">socket</code>
+для каждого типа подключения.</td></tr>
+
+<tr><td scope="row">
+<a href="#option_mysqlrouter_conf-skip-tcp">
+<code class="option">--conf-skip-tcp</code></a></td>
+<td>Определения связи TCP/IP не определяются.</td></tr>
+
+<tr><td scope="row">
+<a href="#option_mysqlrouter_directory">
+<code class="option">--directory</code></a></td>
+<td>Влияет на все пути к файлам, а также производит дополнительные файлы.
+</td></tr>
+<tr><td scope="row"><span class="bold"><strong>
+Режим единственного основного выключен</strong></span></td>
+<td>Если <a href="../../../dev.mysql.com/doc/refman/8.0/en/group-replication-options.html#sysvar_group_replication_single_primary_mode"
+target="_top"><code class="literal">group_replication_single_primary_mode
+</code></a> отключена (по умолчанию включена), только связи Read-Write (но не
+Read-Only) определяются. Для получения дополнительной информации посмотрите
+<a href="mysql-router-general.html#mysql-router-innodb-cluster-single-primary">
+здесь</a>.</td></tr>
+<tr><td scope="row">Другое</td>
+<td>Этот список не исчерпывающий, другие варианты и условия также
+затрагивают произведенные значения.</td></tr></tbody></table></li>
+
+<li><p><a name="option_mysqlrouter_bootstrap-socket"></a>
+<a href="#option_mysqlrouter_bootstrap-socket">
+<code class="option">--bootstrap-socket
+<em class="replaceable"><code>socket_name</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for bootstrap-socket">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--bootstrap-socket socket_name</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Для платформы</strong></span>
+</td><td>Linux</td></tr></tbody></table>
+
+<p>Используется с <a href="#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap</code></a> для применения местного сокета
+Unix вместо TCP/IP. Значение
+<a href="#option_mysqlrouter_bootstrap-socket">
+<code class="option">--bootstrap-socket</code></a> заменяет часть "host:port"
+в <a href="#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap</code></a> назначенным именем сокета
+для соединения с сервером метаданных MySQL, используя сокеты Unix.
+Это экземпляр MySQL, который настраивается, и он должен быть на той же самой
+машине, если сокеты используются. Для дополнительных деталей о том, как
+самонастройка работает, посмотрите
+<a href="#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap</code></a>.</p>
+
+<p>Эта опция отличается от параметра командной строки
+<a href="#option_mysqlrouter_conf-use-sockets">
+<code class="option">--conf-use-sockets</code></a>, который устанавливает
+опцию конфигурационного файла
+<a href="#option_mysqlrouter_socket">
+<code class="option">socket</code></a> во время процесса начальной загрузки.
+</p>
+<p>Этот выбор не доступен в Windows.</li>
+
+<li><a name="option_mysqlrouter_directory"></a>
+<a href="#option_mysqlrouter_directory">
+<code class="option">--directory
+<em class="replaceable"><code>dir_path</code></em></code></a>,
+<code class="option">-d <em class="replaceable">
+<code>dir_path</code></em></code></p>
+
+<table frame="box" rules="all" summary="Properties for directory">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--directory dir_path, -d dir_path</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+
+<p>Определяет, что отдельная установка MySQL Router будет создана в
+определенном каталоге вместо того, чтобы формировать экземпляр маршрутизатора
+в масштабе всей системы. Это также позволяет многократным копиям
+маршрутизатора быть созданными в той же самой системе.</p>
+
+<p>Отдельная структура каталогов для Router:
+<pre>
+$path/start.sh
+$path/stop.sh
+$path/mysqlrouter.pid
+$path/mysqlrouter.conf
+$path/mysqlrouter.key
+$path/run
+$path/run/keyring
+$path/data
+$path/log
+$path/log/mysqlrouter.log
+</pre>
+
+<p>Если этот выбор определяется, файл брелка хранится в соответствии с
+каталогом времени выполнения того экземпляра, под
+<code class="filename">run/</code> в указанном каталоге,
+в противоположность каталогу времени выполнения в масштабе всей системы.</p>
+
+<p>Если также включен
+<a href="#option_mysqlrouter_conf-use-sockets">
+<code class="option">--conf-use-sockets</code></a>, произведенные файлы
+сокета также добавляются к этому каталогу.</li>
+
+<li><a name="option_mysqlrouter_master-key-writer"></a>
+<a href="#option_mysqlrouter_master-key-writer">
+<code class="option">--master-key-writer</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for master-key-writer">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--master-key-writer file_path</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Введено</strong></span></td>
+<td>8.0.12</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+
+<p>Этот дополнительный выбор самонастройки принимает скрипт,
+который читает главный ключ из <span class="emphasis"><em>STDIN</em></span>.
+Это также использует переменную окружения
+<span class="emphasis"><em>ROUTER_ID</em></span>, установленную MySQL Router
+перед вызовом скрипта <code class="option">master-key-writer</code>.</p>
+
+<p>Опции <code class="option">master-key-writer</code> и
+<code class="option">master-key-reader</code> должны использоваться вместе, и
+использование их означает, что опция
+<code class="option">master_key_file</code> не должна быть определена в
+<code class="filename">mysqlrouter.conf</code>, поскольку главный ключ не
+написан в файл главного ключа <code class="filename">mysqlrouter.key</code>.
+</p>
+
+<p>Это также написано в произведенный конфигурационный файл MySQL Router
+как опция <code class="option">master-key-writer</code> [DEFAULT].</p>
+<p>Содержание в качестве примера скрипта bash
+<code class="filename">writer.sh</code>:
+<pre>
+#!/bin/bash
+
+KID_=$(keyctl padd user ${ROUTER_ID} @us &lt;&amp;0)
+</pre>
+
+<p>Пример использования этого:
+<pre>
+shell&gt; mysqlrouter --bootstrap=127.0.0.1:3310 \
+                      --master-key-reader=./reader.sh \
+                      --master-key-writer=./writer.sh
+</pre>
+
+<p>Это также затрагивает произведенный
+<code class="filename">mysqlrouter.conf</code>:
+<pre>
+[DEFAULT]
+...
+master-key-reader=reader.sh
+master-key-writer=writer.sh
+</pre></li>
+
+<li><p><a name="option_mysqlrouter_master-key-reader"></a>
+<a href="#option_mysqlrouter_master-key-reader">
+<code class="option">--master-key-reader</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for master-key-reader">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--master-key-reader file_path</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Введено</strong></span></td>
+<td>8.0.12</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+
+<p>Этот дополнительный параметр автонастройки принимает скрипт, который
+пишет главный ключ на <span class="emphasis"><em>STDOUT</em></span>.
+Это также использует переменную окружения
+<span class="emphasis"><em>ROUTER_ID</em></span>, установленную
+MySQL Router перед вызовом скрипта
+<code class="option">master-key-reader</code>.</p>
+
+<p>Опции <code class="option">master-key-reader</code> и
+<code class="option">master-key-writer</code>
+должны использоваться вместе, и использование их означает, что опция
+<code class="option">master_key_file</code> не должна быть определена в
+<code class="filename">mysqlrouter.conf</code>, поскольку главный ключ не
+написан в файл главного ключа <code class="filename">mysqlrouter.key</code>,
+а вместо этого использует значение, предоставленную скриптом этой опции.</p>
+
+<p>Это также написано в произведенный конфигурационный файл MySQL Router
+как опция <code class="option">master-key-reader</code> [DEFAULT].</p>
+<p>Пример скрипта bash <code class="filename">reader.sh</code>:
+<pre>
+#!/bin/bash
+
+KID_=$(keyctl search @us user ${ROUTER_ID} 2&gt;/dev/null)
+if [ ! -z $KID_ ]; then
+keyctl pipe $KID_
+fi
+</pre>
+
+<p>Пример использования этого:
+<pre>
+shell&gt; mysqlrouter --bootstrap=127.0.0.1:3310 \
+                      --master-key-reader=./reader.sh \
+                      --master-key-writer=./writer.sh
+</pre>
+
+<p>Это также затрагивает произведенный
+<code class="filename">mysqlrouter.conf</code>:
+<pre>
+[DEFAULT]
+...
+master-key-reader=reader.sh
+master-key-writer=writer.sh
+</pre></li>
+
+<li><p><a name="option_mysqlrouter_account-host"></a>
+<a href="#option_mysqlrouter_account-host">
+<code class="option">--account-host</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for account-host">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--account-host host_pattern</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Введено</strong></span></td>
+<td>8.0.12</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">%</code></td></tr></tbody></table>
+
+<p>Образец хоста, используемый для учетных записей, создаваемых MySQL Router
+во время процесса начальной загрузки. Это дополнительно и по умолчанию '%'.
+</p>
+
+<p>Используйте эту опцию несколько раз, чтобы определить многократные
+образцы, в этом случае созданные аккаунты MySQL используют тот
+же самый пароль.
+
+<p>Маршрутизатор не выполняет проверку работоспособности параметров и не
+гарантирует, что образец позволяет соединяться.
+<p>Самонастройка повторно использует существующие учетные записи, удаляя
+и воссоздавая пользователя, этот процесс относится к каждому хосту.</p>
+
+<p>Примеры:
+<pre>
+# Если один хост
+shell&gt; mysqlrouter --bootstrap localhost:3310 --account-host host1
+
+# Или много хостов
+shell&gt; mysqlrouter --bootstrap localhost:3310 --account-host host1 \
+                      --account-host host2 --account-host host3
+</pre></li>
+
+<li><p><a name="option_mysqlrouter_conf-use-sockets"></a>
+<a href="#option_mysqlrouter_conf-use-sockets">
+<code class="option">--conf-use-sockets</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for conf-use-sockets">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--conf-use-sockets</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Для платформы</strong></span>
+</td><td>Linux</td></tr></tbody></table>
+<p>Позволяет местные сокеты Unix.</p>
+
+<p>Этот выбор используется во время самонастройки и добавляет опцию
+<a href="#option_mysqlrouter_socket">
+<code class="option">socket</code></a> к
+произведенному конфигурационному файлу.</p>
+
+<p>Название произведенного файла сокета зависит от опций
+<code class="option">mode</code> и <code class="option">protocol</code>.
+С классическим протоколом файл называется
+<code class="filename">mysql.sock</code> в режиме read-write и
+<code class="filename">mysqlro.sock</code> в режиме read-only.
+С протоколом X Protocol файл называется
+<code class="filename">mysqlx.sock</code> в режиме read-write и
+<code class="filename">mysqlxro.sock</code> в режиме read-only.</p>
+<p>Опция отсутствует в Windows.</li>
+
+<li><a name="option_mysqlrouter_report-host"></a>
+<a href="#option_mysqlrouter_report-host">
+<code class="option">--report-host</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for report-host">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--report-host hostname</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Введено</strong></span></td>
+<td>8.0.12</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+
+<p>Произвольно определяет имя хоста маршрутизатора вместо того, чтобы
+полагаться на автообнаружение, чтобы определить внешне видимое имя хоста,
+зарегистрированное в метаданных во время процесса начальной загрузки.</p>
+
+<p>Маршрутизатор не проверяет или подтверждает, что поставляемое имя хоста
+достижимо, а только проверяет последовательность имени хоста на запрещенные
+символы. Только алфавитно-цифровые '-', '.' и '_' допустимы.</p>
+<p>Поставляемое имя хоста написано в поле host_name таблицы
+mysql_innodb_cluster_metadata.hosts в хранилище метаданных MySQL InnoDB.</li>
+
+<li><a name="option_mysqlrouter_conf-skip-tcp"></a>
+<a href="#option_mysqlrouter_conf-skip-tcp">
+<code class="option">--conf-skip-tcp</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for conf-skip-tcp">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--conf-skip-tcp</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Для платформы</strong></span>
+</td><td>Linux</td></tr></tbody></table>
+
+<p>Пропустить конфигурацию порта TCP для слушания поступающих связей.
+См. также <a href="#option_mysqlrouter_conf-use-sockets">
+<code class="option">--conf-use-sockets</code></a>.</p>
+<p>Недоступна под Windows.</li>
+
+<li><a name="option_mysqlrouter_conf-base-port"></a>
+<a href="#option_mysqlrouter_conf-base-port">
+<code class="option">--conf-base-port <em class="replaceable"><code>port_num
+</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for conf-base-port">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--conf-base-port port_num</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>Integer</td></tr></tbody></table>
+
+<p>Основное значение используется при слушании портов TCP, устанавливая
+<a href="#option_mysqlrouter_bind_port">
+<code class="option">bind_port</code></a> для каждого запускаемого роутера.
+</p>
+
+<p>Это используется для классических маршрутов read-write, и каждый
+дополнительный назначенный порт увеличивает значение.
+Порядок назначения портов classic read-write/read-only, затем
+x read-write/read-only. Например:
+<pre>
+<span class="bold"><strong># Example without --conf-base-port</strong></span>
+shell&gt; mysqlrouter --bootstrap root@localhost:3310
+...
+Classic MySQL protocol connections to cluster 'devCluster':
+- Read/Write Connections: localhost:6446
+- Read/Only Connections: localhost:6447
+
+X protocol connections to cluster 'devCluster':
+- Read/Write Connections: localhost:64460
+- Read/Only Connections: localhost:64470
+
+<span class="bold"><strong># Example demonstrating --conf-base-port behavior</strong></span>
+shell&gt; mysqlrouter --bootstrap root@localhost:3310 --conf-base-port 6446
+...
+Classic MySQL protocol connections to cluster 'devCluster':
+- Read/Write Connections: localhost:6446
+- Read/Only Connections: localhost:6447
+
+X protocol connections to cluster 'devCluster':
+- Read/Write Connections: localhost:6448
+- Read/Only Connections: localhost:6449
+</pre></li>
+
+<li><p><a name="option_mysqlrouter_conf-bind-address"></a>
+<a href="#option_mysqlrouter_conf-bind-address">
+<code class="option">--conf-bind-address
+<em class="replaceable"><code>address</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for conf-bind-address">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--conf-bind-address address</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">0.0.0.0</code></td></tr></tbody></table>
+
+<p>Изменяет <a href="#option_mysqlrouter_bind_address">
+<code class="option">bind_address</code></a>, установленное
+<a href="#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap</code></a> в произведенном конфигурационном
+файле. По умолчанию самонастройка устанавливает <code class="option">
+bind_address=0.0.0.0</code> для каждого маршрута, эта опция
+изменяет это значение.
+
+<p>По умолчанию <code class="option">bind_address</code> =
+<span class="emphasis"><em>127.0.0.1</em></span>, если
+<code class="option">bind_address</code> не определяется.</li>
+
+<li><a name="option_mysqlrouter_read_timeout_metadata_cli"></a>
+<a href="#option_mysqlrouter_read_timeout_metadata_cli">
+<code class="option">--read-timeout
+<em class="replaceable"><code>num_seconds</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for read_timeout_metadata_cli">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>
+Командная строка</strong></span></td>
+<td><code class="literal">--read-timeout num_seconds</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Введено</strong></span></td>
+<td>8.0.4</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>Integer</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">30</code></td></tr></tbody></table>
+
+<p>Число секунд тайм-аута операций чтения сервера метаданных.</p>
+<p>Это затрагивает операции чтения во время процесса начальной загрузки, а
+также затрагивает нормальные операции MySQL Router, устанавливая связанную
+опцию <a href="#option_mysqlrouter_read_timeout_metadata">
+<code class="option">read_timeout</code></a> в произведенном
+файле <code class="filename">mysqlrouter.conf</code>.</p>
+<p>Эта опция установлена в пространстве имен
+<code class="literal">[DEFAULT]</code>.</li>
+
+<li><a name="option_mysqlrouter_connect_timeout_metadata_cli"></a>
+<a href="#option_mysqlrouter_connect_timeout_metadata_cli">
+<code class="option">--connect-timeout
+<em class="replaceable"><code>num_seconds</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for connect_timeout_metadata_cli">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--connect-timeout num_seconds</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Введено</strong></span></td>
+<td>8.0.4</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>Integer</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">30</code></td></tr></tbody></table>
+<p>Число секунд тайм-аута при подключении к серверу метаданных.</p>
+
+<p>Это затрагивает связи во время процесса начальной загрузки, а
+также затрагивает нормальные операции MySQL Router, устанавливая связанную
+опцию <a href="#option_mysqlrouter_connect_timeout_metadata">
+<code class="option">connect_timeout</code></a> в произведенном
+файле <code class="filename">mysqlrouter.conf</code>.</p>
+
+<p>Есть два варианта <span class="emphasis"><em>connect_timeout</em></span>.
+Вариант сервера метаданных определяется под пространством имен
+<code class="literal">[DEFAULT]</code>, в то время как вариант сервера MySQL
+определяется под пространством имен <code class="literal">[routing]</code>.
+</li>
+
+<li><a name="option_mysqlrouter_user_cli"></a>
+<a href="#option_mysqlrouter_user_cli">
+<code class="option">--user {<em class="replaceable"><code>user_name</code>
+</em>|<em class="replaceable"><code>user_id</code></em>}</code></a>,
+<code class="option">-u {<em class="replaceable"><code>user_name</code>
+</em>|<em class="replaceable"><code>user_id</code></em>}</code></p>
+
+<table frame="box" rules="all" summary="Properties for user_cli">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--user {user_name|user_id}, -u {user_name|user_id}
+</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Для платформы</strong></span>
+</td><td>Linux</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+
+<p>Выполнить <a href="#mysqlrouter">
+<span class="command"><strong>mysqlrouter</strong></span></a> от имени
+пользователя <em class="replaceable"><code>user_name</code></em>
+или числовой идентификатор пользователя
+<em class="replaceable"><code>user_id</code></em>.
+<span class="quote">"<span class="quote">User</span>"</span>
+в этом контексте обращается к системной учетной записи, а не пользователю
+MySQL, перечисленному в таблицах привилегий. При автонастройке все
+произведенные файлы принадлежат этому пользователю, и это также устанавливает
+связанную опцию <code class="option">user</code>.</p>
+
+<p>Этот системный <a href="#option_mysqlrouter_user_default">
+<code class="option">user</code></a> определяется в конфигурационном файле
+под пространством имен <code class="literal">[DEFAULT]</code>.
+Для получения дополнительной информации посмотрите документацию опции
+<a href="#option_mysqlrouter_user_default">
+<code class="option">user</code></a>, которая определяет
+<code class="option">--user</code>.</p>
+
+<p>Опция <code class="option">--user</code> требуется, выполняя
+автонастройку как суперпользователь (uid=0). Хотя это не рекомендуется,
+возможно, передавая имя как аргумент, такой как
+<span class="emphasis"><em>--user=root</em></span>.</p>
+<p>Не работает в Windows.</li>
+
+<li><a name="option_mysqlrouter_name"></a>
+<a href="#option_mysqlrouter_name">
+<code class="option">--name
+<em class="replaceable"><code>router_name</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for name">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--name router_name</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+
+<p>На начальном шаге автонастройки определяет символьное имя для отдельного
+экземпляра роутера. Этот выбор дополнительный и используется с
+<a href="#option_mysqlrouter_directory">
+<code class="option">--directory</code></a>. Создавая многократные экземпляры
+имена должны быть уникальными.</li>
+
+<li><a name="option_mysqlrouter_force-password-validation"></a>
+<a href="#option_mysqlrouter_force-password-validation">
+<code class="option">--force-password-validation</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for force-password-validation">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--force-password-validation</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Для платформы</strong></span>
+</td><td>Linux</td></tr></tbody></table>
+
+<p>По умолчанию MySQL Router пропускает механизм MySQL Server
+validate_password, вместо этого производит и использует СТРОГИЙ пароль
+на основе известных настроек validate_password по умолчанию.
+Это вызвано тем, что validate_password может формироваться пользователем, и
+маршрутизатор не может принять во внимание необычные параметры настройки.</p>
+<p>Эта опция гарантирует, что проверка пароля (validate_password) не
+пропускается для произведенных паролей, это отключено по умолчанию.</li>
+
+<li><a name="option_mysqlrouter_password-retries"></a>
+<a href="#option_mysqlrouter_password-retries">
+<code class="option">--password-retries
+<em class="replaceable"><code>num_retries</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for password-retries">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--password-retries num_retries</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>Integer</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">20</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Минимум</strong></span></td>
+<td><code class="literal">1</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Максимум</strong></span></td>
+<td><code class="literal">10000</code></td>
+</tr></tbody></table>
+
+<p>Определяет сколько раз MySQL Router должен попытаться произвести пароль,
+создавая учетную запись пользователя с правилами проверки пароля.
+Значение по умолчанию равняется 20. Действительный диапазон от 1 до 10000.
+</p>
+
+<p>Наиболее вероятная причина неудачи происходит из-за validate_password с
+необычными требованиями, такими как минимум 50 символов.
+В этой ситуации также
+<a href="#option_mysqlrouter_force-password-validation">
+<code class="option">--force-password-validation</code></a> установлена в
+true и/или плагин <code class="literal">mysql_native_password</code> MySQL
+Server отключен (этот плагин позволяет обходить проверку).</li>
+
+<li><a name="option_mysqlrouter_force"></a>
+<a href="#option_mysqlrouter_force">
+<code class="option">--force</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for force">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th>
+</tr></thead><tbody><tr><td scope="row"><span class="bold"><strong>
+Командная строка</strong></span></td>
+<td><code class="literal">--force</code></td></tr></tbody></table>
+<p>Вызовите реконфигурацию по ранее настроенному экземпляру роутера.</li>
+
+<li><a name="option_mysqlrouter_ssl-mode_cli"></a>
+<a href="#option_mysqlrouter_ssl-mode_cli">
+<code class="option">--ssl-mode
+<em class="replaceable"><code>mode</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for ssl-mode_cli">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--ssl-mode mode</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">PREFERRED</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Допустимые значения</strong>
+</span></td>
+<td><p><code class="literal">PREFERRED</code></p>
+<p><code class="literal">DISABLED</code></p>
+<p><code class="literal">REQUIRED</code></p>
+<p><code class="literal">VERIFY_CA</code></p>
+<p><code class="literal">VERIFY_IDENTITY</code></p></td></tr></tbody></table>
+
+<p>Способ связи SSL для использования во время самонастройки и нормального
+функционирования, соединяясь с сервером метаданных. Аналогично
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/encrypted-connection-options.html#option_general_ssl-mode"
+target="_top"><code class="option">--ssl-mode</code></a> в клиенте
+<span class="command"><strong>mysql</strong></span>.</p>
+
+<p>Во время самонастройки все связи с серверами метаданных, сделанные
+роутером, будут использовать определенные варианты SSL. Если
+<code class="option">ssl_mode</code> не определяется в конфигурации, она
+по умолчанию PREFERRED. Во время нормального функционирования, после того,
+как запускается роутер, его плагин Metadata Cache будет читать и соблюдать
+все параметры настройки SSL.</p>
+
+<p>Когда установлено в значение не по умолчанию (PREFERRED), запись
+<code class="option">ssl_mode</code> вставляется под секцию
+<code class="literal">[metadata_cache]</code> в
+произведенном конфигурационном файле.</p>
+
+<p>Доступные значения: DISABLED, PREFERRED, REQUIRED, VERIFY_CA,
+and VERIFY_IDENTITY. PREFERRED значение по умолчанию. Как с клиентом
+<span class="command"><strong>mysql</strong></span>,
+значение нечувствительно к регистру.</p>
+
+<p>Эквивалентный конфигурационный файл указан отдельно в
+<a href="#option_mysqlrouter_ssl_mode">
+<code class="option">ssl_mode</code></a>.</li>
+
+<li><a name="option_mysqlrouter_ssl-cert"></a>
+<a href="#option_mysqlrouter_ssl-cert">
+<code class="option">--ssl-cert
+<em class="replaceable"><code>file_path</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for ssl-key">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--ssl-key file_path</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Введено</strong></span></td>
+<td>8.0.4</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+
+<p>Путь файла сертификата с открытым ключом SSL в формате PEM. Это
+используется, чтобы облегчить клиентскую идентификацию во время процесса
+начальной загрузки. Это непосредственно соответствует и использует
+функциональность клиентской опции MySQL
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/encrypted-connection-options.html#option_general_ssl-cert"
+target="_top"><code class="option">--ssl-cert</code></a>.</p>
+
+<p>Аналогично <code class="option">--ssl-key</code>,
+этот выбор используется только во время автонастройки, которая использует
+учетную запись root. Полезно, когда учетная запись root была создана с
+REQUIRE X509, и поэтому требует, чтобы клиент подтвердил подлинность себя.
+</li>
+
+<li><a name="option_mysqlrouter_ssl-key"></a>
+<a href="#option_mysqlrouter_ssl-key">
+<code class="option">--ssl-key
+<em class="replaceable"><code>file_path</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for ssl-key">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--ssl-key file_path</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Введено</strong></span></td>
+<td>8.0.4</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+
+<p>Путь к файлу с закрытым ключом SSL в формате PEM. Это используется, чтобы
+облегчить клиентскую идентификацию во время процесса начальной загрузки.
+Это непосредственно соответствует и использует функциональность
+клиентской опции MySQL
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/encrypted-connection-options.html#option_general_ssl-key"
+target="_top"><code class="option">--ssl-key</code></a>.</p>
+
+<p>Аналогично <code class="option">--ssl-key</code>,
+этот выбор используется только во время автонастройки, которая использует
+учетную запись root. Полезно, когда учетная запись root была создана с
+REQUIRE X509, и поэтому требует, чтобы клиент подтвердил подлинность себя.
+</li>
+
+<li><a name="option_mysqlrouter_ssl-cipher"></a>
+<a href="#option_mysqlrouter_ssl-cipher">
+<code class="option">--ssl-cipher
+<em class="replaceable"><code>ciphers</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for ssl-cipher">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--ssl-cipher ciphers</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal"></code></td></tr></tbody></table>
+<p>Разделенный двоеточиями (":") список шифров SSL, если SSL позволен.</li>
+
+<li><a name="option_mysqlrouter_tls-version"></a>
+<a href="#option_mysqlrouter_tls-version">
+<code class="option">--tls-version
+<em class="replaceable"><code>versions</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for tls-version">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--tls-version versions</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal"></code></td></tr></tbody></table>
+<p>Разделенный запятыми (",") список версий TLS, чтобы запросить,
+если SSL позволен.</li>
+
+<li><a name="option_mysqlrouter_ssl-ca"></a>
+<a href="#option_mysqlrouter_ssl-ca">
+<code class="option">--ssl-ca
+<em class="replaceable"><code>file_path</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for ssl-ca">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--ssl-ca file_path</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal"></code></td></tr></tbody></table>
+<p>Путь к файлу SSL CA, чтобы проверить сертификат сервера.</li>
+
+<li><a name="option_mysqlrouter_ssl-capath"></a>
+<a href="#option_mysqlrouter_ssl-capath">
+<code class="option">--ssl-capath
+<em class="replaceable"><code>dir_path</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for ssl-capath">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--ssl-capath dir_path</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal"></code></td></tr></tbody></table>
+<p>Путь к каталогу, содержащему файлы CA SSL, чтобы
+проверить сертификат сервера.</li>
+
+<li><a name="option_mysqlrouter_ssl-crl"></a>
+<a href="#option_mysqlrouter_ssl-crl">
+<code class="option">--ssl-crl
+<em class="replaceable"><code>file_path</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for ssl-crl">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--ssl-crl file_path</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal"></code></td></tr></tbody></table>
+<p>Путь к файлу SSL CRL, чтобы использовать, проверяя сертификат сервера.
+</li>
+
+<li><a name="option_mysqlrouter_ssl-crlpath"></a>
+<a href="#option_mysqlrouter_ssl-crlpath">
+<code class="option">--ssl-crlpath
+<em class="replaceable"><code>dir_path</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for ssl-crlpath">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--ssl-crlpath dir_path</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal"></code></td></tr></tbody></table>
+<p>Путь к каталогу, содержащему файлы SSL CRL, чтобы использовать,
+проверяя сертификат сервера.</li>
+
+<li><a name="option_mysqlrouter_config"></a>
+<a href="#option_mysqlrouter_config">
+<code class="option">--config <em class="replaceable"><code>file_path</code>
+</em></code></a>, <code class="option">-c <em class="replaceable"><code>
+file_path</code></em></code></p>
+
+<table frame="box" rules="all" summary="Properties for config">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--config file_path, -c file_path</code></td>
+</tr></tbody></table>
+
+<p>Используется, чтобы обеспечить путь и имя файла для конфигурационного
+файла. Используйте этот выбор, если вы хотите использовать конфигурационный
+файл, расположенный в папке кроме местоположений по умолчанию.</p>
+
+<p>Когда используется вместе с
+<a href="#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap</code></a>, и если конфигурационный файл уже
+существует, копия текущего файла сохраняется с расширением
+<span class="emphasis"><em>.bak</em></span>, если произведенное содержание
+конфигурационного файла отличается.
+Существующие файлы <span><em>.bak</em></span> переписаны.</li>
+
+<li><a name="option_mysqlrouter_extra-config"></a>
+<a href="#option_mysqlrouter_extra-config">
+<code class="option">--extra-config <em class="replaceable"><code>file_path
+</code></em></code></a>, <code class="option">-a
+<em class="replaceable"><code>file_path</code></em></code></p>
+
+<table frame="box" rules="all" summary="Properties for extra-config">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--extra-config file_path, -a file_path</code></td>
+</tr></tbody></table>
+
+<p>Используется, чтобы обеспечить дополнительный конфигурационный файл.
+Используйте этот выбор, если вы хотите разделить конфигурационный файл на две
+части для тестирования, многократных случаев применения,
+на той же самой машине и т.д.</p>
+
+<p>Этот конфигурационный файл прочитан после главного конфигурационного
+файла. Если есть конфликты (опция установлена в многократных конфигурационных
+файлах), используются значения из файла, который загружается последниим.</li>
+
+<li><a name="option_mysqlrouter_install-service"></a>
+<a href="#option_mysqlrouter_install-service">
+<code class="option">--install-service</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for install-service">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--install-service</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Для платформы</strong></span>
+</td><td>Windows</td></tr></tbody></table>
+
+<p>Установить роутер как сервис Windows, который автоматически запускается,
+когда загружается Windows. Имя сервиса <span class="emphasis"><em>MySQLRouter
+</em></span>.</p>
+
+<p>Этот процесс установки не проверяет конфигурационные файлы, переданные в
+<a href="#option_mysqlrouter_config">
+<code class="option">--config</code></a>.</p>
+<p>Доступно только в Windows.</li>
+
+<li><a name="option_mysqlrouter_install-service-manual"></a>
+<a href="#option_mysqlrouter_install-service-manual">
+<code class="option">--install-service-manual</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for install-service-manual">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--install-service-manual</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Для платформы</strong></span></td>
+<td>Windows</td></tr></tbody></table>
+
+<p>Установить роутер как сервис Windows, который может быть запущен вручную.
+Имя сервиса <span class="emphasis"><em>MySQLRouter</em></span>.</p>
+<p>Доступно только в Windows.</li>
+
+<li><a name="option_mysqlrouter_remove-service"></a>
+<a href="#option_mysqlrouter_remove-service">
+<code class="option">--remove-service</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for remove-service">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--remove-service</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Для платформы</strong></span>
+</td><td>Windows</td></tr></tbody></table>
+<p>Удалить сервис роутера в Windows.</p>
+<p>Доступно только в Windows.</li>
+
+<li><a name="option_mysqlrouter_service"></a>
+<a href="#option_mysqlrouter_service">
+<code class="option">--service</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for service">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка</strong></span></td>
+<td><code class="literal">--service</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Для платформы</strong></span></td>
+<td>Windows</td></tr></tbody></table>
+<p>Запустить роутер как сервис Windows.</p>
+<p>Доступно только в Windows.</li>
+
+<li><a name="option_mysqlrouter_update-credentials-section"></a>
+<a href="#option_mysqlrouter_update-credentials-section">
+<code class="option">--update-credentials-section</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for update-credentials-section">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка</strong></span></td>
+<td><code class="literal">--update-credentials-section section_name
+</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Для платформы</strong></span></td>
+<td>Windows</td></tr></tbody></table>
+<p>Доступно только в Windows и относится к хранилищу паролей.</li>
+
+<li><a name="option_mysqlrouter_remove-credentials-section"></a>
+<a href="#option_mysqlrouter_remove-credentials-section">
+<code class="option">--remove-credentials-section
+<em class="replaceable"><code>section_name</code></em></code></a></p>
+
+<table frame="box" rules="all" summary="Properties for remove-credentials-section">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка</strong></span></td>
+<td><code class="literal">--remove-credentials-section section_name</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Для платформы</strong></span></td>
+<td>Windows</td></tr></tbody></table>
+<p>Удалить данные авторизации для данной секции.</p>
+<p>Доступно только в Windows и относится к хранилищу паролей.</li>
+
+<li><a name="option_mysqlrouter_clear-all-credentials"></a>
+<a href="#option_mysqlrouter_clear-all-credentials">
+<code class="option">--clear-all-credentials</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for clear-all-credentials">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка</strong></span></td>
+<td><code class="literal">--clear-all-credentials</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Для платформы</strong></span>
+</td><td>Windows</td></tr></tbody></table>
+<p>Очистите хранилище пароля, удалив все данные
+авторизации, сохраненные в нем.</p>
+<p>Доступно только в Windows и относится к хранилищу паролей.</p></li></ul>
+
+<h4><a name="mysqlrouter_plugin_info"></a>4.3.1.2.
+Параметры командной строки
+<span class="command"><strong>mysqlrouter_plugin_info</strong></span></h4>
+<a class="indexterm" name="idm139674074814128"></a>
+<a class="indexterm" name="idm139674074813248"></a>
+<p><span class="command"><strong>mysqlrouter_plugin_info</strong></span>
+это средство отладки, которое осматривает плагин MySQL Router для
+поиска потенциальных конфликтов и общих проблем.</p>
+
+<p>Примеры как использовать:
+<pre>
+shell&gt; ./mysqlrouter_plugin_info --help
+
+Usage:
+./mysqlrouter_plugin_info &lt;mysqlrouter_plugin_file&gt; &lt;mysql_plugin_name&gt;
+
+Example:
+./mysqlrouter_plugin_info /usr/lib/mysqlrouter/routing.so routing
+
+To print help information:
+./mysqlrouter_plugin_info --help
+To print application version:
+./mysqlrouter_plugin_info --version
+
+shell&gt; ./bin/mysqlrouter_plugin_info --version
+
+MySQLRouter Plugin Info App 8.0.3
+</pre>
+
+<pre>
+shell&gt; ./bin/mysqlrouter_plugin_info lib/mysqlrouter/routing.so routing
+{
+"abi-version": "2.0",
+"arch-descriptor": "i386/darwin//",
+"brief": "Routing MySQL connections between MySQL clients/connectors and servers",
+"plugin-version": "0.0.1",
+"requires": [],
+"conflicts": []
+}
+</pre>
+
+<h3><a name="mysql-router-conf-options"></a>
+4.3.2. Варианты конфигурационного файла</h3>
+<p>Когда запущен, MySQL Router читает список
+<span class="emphasis"><em>конфигурационных файлов</em></span>,
+которые вместе составляют конфигурацию маршрутизатора. По крайней мере один
+конфигурационный файл требуется.</p>
+
+<p>MySQL Router читает опции из конфигурационных файлов, которые напоминают
+традиционный формат файла INI с секциями и вариантами. Они определяют набор
+вариантов, когда MySQL Router запускается.
+Для получения информации о синтаксисе файла посмотрите
+<a href="#mysql-router-configuration-file-syntax">раздел 4.1</a>.</p>
+
+<p>Варианты определяются согласно
+<a href="#mysql-router-configuration-sections">
+секциям</a>, которые диктуют значение выбора. Например,
+<code class="option">user</code> в секции <span class="emphasis"><em>
+[DEFAULT]</em></span> отсылает к пользователю системы, запустившему роутер,
+в то время как <code class="option">user</code> в секции
+<span class="emphasis"><em>[metadata_cache]</em></span> отсылает к
+пользователю MySQL для доступа к метаданным.</p>
+
+<p>Следующие таблицы разделены по секциям и суммируют опции
+MySQL Router, определенные в конфигурационном файле MySQL Router.
+Подробная информация о каждом из этих вариантов, таких как описания и
+позволенные значения, есть ниже этих таблиц.</p>
+
+<h4><a name="mysql-router-conf-options-default"></a>Основные опции</h4>
+<a name="idm139674074798880"></a><p><b>Таблица 4.7. Секция [DEFAULT]</b></p>
+<table frame="box" rules="all">
+<thead><tr><th scope="col">Опция</th>
+<th scope="col">Описание</th>
+<th scope="col">Тип</th></tr></thead>
+<tbody><tr><td scope="row">
+<a href="#option_mysqlrouter_config_folder">
+<code class="literal">config_folder</code></a></td>
+<td>Путь к конфигурационным файлам</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_connect_timeout_metadata">
+<code class="literal">connect_timeout</code></a></td>
+<td>Число секунд тайм-аута при попытках подключения к серверу метаданных</td>
+<td>Integer</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_keyring_path">
+<code class="literal">keyring_path</code></a></td>
+<td>Путь к файлу брелока</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_logging_folder">
+<code class="literal">logging_folder</code></a></td>
+<td>Путь к журналам регистрации</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_master_key_path">
+<code class="literal">master_key_path</code></a></td>
+<td>Путь к основному файлу брелока</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_master-key-reader-default">
+<code class="literal">master-key-reader</code></a></td>
+<td>Скрипт, который возвращает главный ключ на STDOUT</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_master-key-writer-default">
+<code class="literal">master-key-writer</code></a></td>
+<td>Скрипт, который читает главный ключ из STDIN</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_plugin_folder">
+<code class="literal">plugin_folder</code></a></td>
+<td>Путь к плагинам роутера</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_runtime_folder">
+<code class="literal">runtime_folder</code></a></td>
+<td>Путь к файлам времени выполнения</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_sinks">
+<code class="literal">sinks</code></a></td>
+<td>Метод(ы) журналирования, чтобы получить данные</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_thread_stack_size">
+<code class="literal">thread_stack_size</code></a></td>
+<td>Размер в KB памяти, выделенной каждому стеку потока</td>
+<td>Integer</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_user_default">
+<code class="literal">user</code></a></td>
+<td>Пользователь системы, который запустил роутер</td>
+<td>String</td></tr></tbody></table><br class="table-break">
+
+<h4><a name="mysql-router-conf-options-routing"></a>Опции маршрутизации</h4>
+<a name="idm139674074743264"></a><p><b>Таблица 4.8. Секция [routing]</b></p>
+<table frame="box" rules="all">
+<thead><tr><th scope="col">Опция</th>
+<th scope="col">Описание</th>
+<th scope="col">Тип</th></tr></thead>
+<tbody><tr><td scope="row">
+<a href="#option_mysqlrouter_bind_address">
+<code class="literal">bind_address</code></a></td>
+<td>Адрес роутера, также используется bind_port, если порт не определяется
+</td><td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_bind_port">
+<code class="literal">bind_port</code></a></td>
+<td>Порт по умолчанию, используется bind_address</td>
+<td>Integer</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_client_connect_timeout">
+<code class="literal">client_connect_timeout</code></a></td>
+<td>Максимальное количество секунд, чтобы получить пакеты от сервера MySQL
+</td><td>Integer</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_connect_timeout">
+<code class="literal">connect_timeout</code></a></td>
+<td>Число секунд тайми-аута при подключении к серверу MySQL</td>
+<td>Integer</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_destinations">
+<code class="literal">destinations</code></a></td>
+<td>Места назначения маршрутов как список разделенных запятой значений
+серверов MySQL или как определение кэша метаданных</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_dynamic_config">
+<code class="literal">dynamic_config</code></a></td>
+<td>Путь к произведенному файлу JSON, используемому для отслеживания и
+хранения активных адресов сервера метаданных кластера MySQL InnoDB</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_max_connect_errors">
+<code class="literal">max_connect_errors</code></a></td>
+<td>Максимальное количество неудавшихся связей сервера MySQL перед отказом
+</td><td>Integer</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_max_connections">
+<code class="literal">max_connections</code></a></td>
+<td>Максимальное количество связей, назначенных на
+сервер MySQL назначения</td>
+<td>Integer</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_mode">
+<code class="literal">mode</code></a></td>
+<td>Как маршрутизатор выбирает серверы назначения MySQL</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_protocol">
+<code class="literal">protocol</code></a></td>
+<td>Протокол для соединения с MySQL Server</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_read_timeout_metadata">
+<code class="literal">read_timeout</code></a></td>
+<td>Число секунд тайм-аута операций чтения сервера метаданных</td>
+<td>Integer</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_routing_strategy">
+<code class="literal">routing_strategy</code></a></td>
+<td>(Дополнительная) стратегия маршрутизации, как роутер выбирает
+серверы назначения MySQL</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_socket">
+<code class="literal">socket</code></a></td>
+<td>Путь к файлу сокета unix</td><td>String</td></tr></tbody></table>
+
+<h4><a name="mysql-router-conf-options-metadata"></a>Опции кэша метаданных
+</h4>
+<a name="idm139674074682976"></a><p><b>Таблица 4.9. Секция [metadata_cache]
+</b></p>
+<table frame="box" rules="all">
+<thead><tr><th scope="col">Опция</th>
+<th scope="col">Описание</th>
+<th scope="col">Тип</th></tr></thead>
+<tbody><tr><td scope="row">
+<a href="#option_mysqlrouter_bootstrap_server_addresses">
+<code class="literal">bootstrap_server_addresses</code></a></td>
+<td>Серверы MySQL с метаданными, как список разделенных запятой значений</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_metadata_cluster">
+<code class="literal">metadata_cluster</code></a></td>
+<td>Имя кластера InnoDB</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_router_id">
+<code class="literal">router_id</code></a></td>
+<td>Router ID</td><td>Integer</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_ssl_mode">
+<code class="literal">ssl_mode</code></a></td>
+<td>Способ связи SSL для соединения с сервером метаданных, по умолчанию
+PREFERRED, если не задан</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_ttl">
+<code class="literal">ttl</code></a></td>
+<td>Time To Live в секундах</td>
+<td>Integer</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_user_metadata">
+<code class="literal">user</code></a></td>
+<td>Пользователь MySQL, который получает доступ к схеме
+метаданных MySQL Server</td>
+<td>String</td></tr></tbody></table><br class="table-break">
+
+<h4><a name="mysql-router-conf-options-logger"></a>Опции журналирования</h4>
+<a name="idm139674074650144"></a><p><b>Таблица 4.10. Секция [logger]</b></p>
+<table frame="box" rules="all">
+<thead><tr><th scope="col">Опция</th>
+<th scope="col">Описание</th>
+<th scope="col">Тип</th></tr></thead>
+<tbody><tr><td scope="row">
+<a href="#option_mysqlrouter_level">
+<code class="literal">level</code></a></td>
+<td>Уровень журналирования</td><td>String</td></tr></tbody></table>
+
+<br class="table-break"><a name="idm139674074637568"></a>
+<p><b>Таблица 4.11. Секция [http_server]</b></p>
+<table frame="box" rules="all">
+<thead><tr><th scope="col">Опция</th>
+<th scope="col">Описание</th>
+<th scope="col">Тип</th></tr></thead>
+<tbody><tr><td scope="row">
+<a href="#option_mysqlrouter_bind_address_http">
+<code class="literal">bind_address</code></a></td>
+<td>Адрес IPv4, который связан с портом HTTP</td>
+<td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_port_http">
+<code class="literal">port</code></a></td>
+<td>Порт TCP сервера HTTP</td><td>Integer</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_require_realm_http">
+<code class="literal">require_realm</code></a></td>
+<td>Имя [http_auth_realm]</td><td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_ssl_cert_http">
+<code class="literal">ssl_cert</code></a></td>
+<td>Имя файла сертификата SSL</td><td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_ssl_cipher_http">
+<code class="literal">ssl_cipher</code></a></td>
+<td>Одобренные шифры SSL</td><td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_ssl_dh_param_http">
+<code class="literal">ssl_dh_param</code></a></td>
+<td>Имя файла параметра DH</td><td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_ssl_http">
+<code class="literal">ssl</code></a></td>
+<td>Позволяет поддержку TLSv1.2 или более позднего</td><td>Integer</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_ssl_key_http">
+<code class="literal">ssl_key</code></a></td>
+<td>Имя файла ключа SSL</td><td>String</td></tr>
+<tr><td scope="row">
+<a href="#option_mysqlrouter_static_folder_http">
+<code class="literal">static_folder</code></a></td>
+<td>Каталог для статических файлов сервера HTTP</td>
+<td>String</td></tr></tbody></table><br class="table-break">
+
+<h4><a name="idm139674074594400"></a>Описания опций конфигурационного
+файла MySQL Router</h4>
+<ul><li><p><a name="option_mysqlrouter_logging_folder"></a>
+<a href="#option_mysqlrouter_logging_folder">
+<code class="option">logging_folder</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for logging_folder">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">$router_basepath</code></td>
+</tr></tbody></table>
+
+<p>Путь к каталогу файла журнала MySQL Router. Файл журнала называют
+<code class="filename">mysqlrouter.log</code>, он создается по мере
+надобности, но журнал добавлен к нему, если этот файл уже существует.</p>
+
+<p>Установка <code class="option">logging_folder</code> к пустому значению
+посылает сообщения на консоль (<span class="bold"><strong>
+stdout</strong></span>).
+
+<p>По умолчанию <code class="option">logging_folder</code> установлена
+к основному пути в MySQL Router с версии 2.1.</p>
+<p>Пример, который посылает записи в
+<code class="filename">/var/log/mysqlrouter/mysqlrouter.log</code>:
+<pre>
+[DEFAULT]
+logging_folder = /var/log/mysqlrouter
+</pre>
+
+<p>Когда <a href="#option_mysqlrouter_directory">
+<code class="option">--directory</code></a> используется, произведенный
+конфигурационный файл устанавливает его в $directory/log/.</li>
+
+<li><a name="option_mysqlrouter_plugin_folder"></a>
+<a href="#option_mysqlrouter_plugin_folder">
+<code class="option">plugin_folder</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for plugin_folder">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+(Other)</td>
+<td><code class="literal">/usr/local/lib/mysqlrouter</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+(Windows)</td>
+<td><code class="literal"></code></td></tr></tbody></table>
+
+<p>Путь к плагинам MySQL Router. Этот каталог должен соответствовать
+инсталляционному каталогу MySQL Router. Необходимо установить это, только
+если у вас есть пользовательская установка, где плагины не находятся в
+стандартном инсталляционном местоположении.</p>
+<p><span class="emphasis"><em>По умолчанию</em></span>:
+<code class="filename">/usr/local/lib/mysqlrouter</code></li>
+
+<li><a name="option_mysqlrouter_runtime_folder"></a>
+<a href="#option_mysqlrouter_runtime_folder">
+<code class="option">runtime_folder</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for runtime_folder">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+(Other)</td>
+<td><code class="literal">/run/mysqlrouter</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+(Windows)</td>
+<td><code class="literal"></code></td></tr></tbody></table>
+<p>Путь к файлам времени выполнения MySQL Router.</p>
+<p><span class="emphasis"><em>По умолчанию</em></span>:
+<code class="filename">/run/mysqlrouter</code></li>
+
+<li><a name="option_mysqlrouter_master-key-writer-default"></a>
+<a href="#option_mysqlrouter_master-key-writer-default">
+<code class="option">master-key-writer</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for master-key-writer-default">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--master-key-writer file_path</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Введено</strong></span></td>
+<td>8.0.12</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+
+<p>Скрипт, который читает главный ключ из STDIN. Установите, применяя опцию
+<a href="#option_mysqlrouter_master-key-writer">
+<code class="option">--master-key-writer</code></a> самонастройки.</li>
+
+<li><a name="option_mysqlrouter_master-key-reader-default"></a>
+<a href="#option_mysqlrouter_master-key-reader-default">
+<code class="option">master-key-reader</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for master-key-reader-default">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Командная строка
+</strong></span></td>
+<td><code class="literal">--master-key-reader file_path</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Введено</strong></span></td>
+<td>8.0.12</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+
+<p>Скрипт, который возвращает главный ключ к STDOUT.
+Установите, применяя опцию самонастройки
+<a href="#option_mysqlrouter_master-key-reader">
+<code class="option">--master-key-reader</code></a>.</li>
+
+<li><a name="option_mysqlrouter_config_folder"></a>
+<a href="#option_mysqlrouter_config_folder">
+<code class="option">config_folder</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for config_folder">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+(Other)</td>
+<td><code class="literal">/usr/local/etc/mysqlrouter</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+(Windows)</td>
+<td><code class="literal"></code></td></tr></tbody></table>
+<p>Путь к конфигурационным файлам MySQL Router.
+
+<p><code class="literal">config_folder</code> в настоящее время
+устанавливается во время компиляции. Выбор может использоваться будущими
+плагинами, когда у них есть свои собственные конфигурационные файлы.</p>
+<p><span class="emphasis"><em>По умолчанию</em></span>:
+<code class="filename">/usr/local/etc/mysqlrouter</code></li>
+
+<li><a name="option_mysqlrouter_sinks"></a>
+<a href="#option_mysqlrouter_sinks">
+<code class="option">sinks</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for sinks">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Введено</strong></span>
+</td><td>8.0.16</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Допустимые значения</strong>
+</span> (Other)</td>
+<td><p><code class="literal">consolelog</code></p>
+<p><code class="literal">filelog</code></p><p>
+<code class="literal">syslog</code></p></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Допустимые значения</strong>
+</span> (Windows)</td>
+<td><p><code class="literal">consolelog</code></p>
+<p><code class="literal">filelog</code></p>
+<p><code class="literal">eventlog</code></p></td></tr></tbody></table>
+
+<p>Различные методы регистрации, в которые посылают
+определенный уровень регистрации.</p>
+<p>Поддержанные значения такие: <code class="literal">consolelog</code>,
+<code class="literal">filelog</code>, <code class="literal">eventlog</code>
+(в Windows) и <code class="literal">syslog</code> (в Unix).
+Используйте список разделенных запятой значений, чтобы
+определить много вариантов.</p>
+
+<p><span class="emphasis"><em>Значение по умолчанию</em></span>:
+<code class="literal">filelog</code>, если опция
+<code class="option">logging_folder</code> не пустая в секции
+"[DEFAULT]", иначе <code class="literal">consolelog</code>.</p>
+
+<p>Например, чтобы использовать файл, консоль и журнал событий каждое
+использование уровня отладки, надо написать в секции
+<span class="emphasis"><em>[logger]</em></span>:
+<pre>
+[logger]
+level=debug
+sinks=consolelog,eventlog,filelog
+</pre></li>
+
+<li><p><a name="option_mysqlrouter_keyring_path"></a>
+<a href="#option_mysqlrouter_keyring_path">
+<code class="option">keyring_path</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for keyring_path">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+(Other)</td>
+<td><code class="literal">/run/mysql-router/keyring-data</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+(Windows)</td>
+<td><code class="literal">%PROGRAMDATA%\MySQL\MySQL Router\keyring-data
+</code></td></tr></tbody></table>
+<p>Указывает местоположение файла брелка.</p>
+
+<p>Автонастройка в масштабе всей системы не добавляет этот выбор к
+произведенному конфигурационному файлу и предполагает, что файл брелка
+расположен в каталоге времени выполнения в масштабе всей системы. Если
+<a href="#option_mysqlrouter_directory">
+<code class="option">--directory</code></a> также используется,
+тогда файл брелка хранится в соответствии с каталогом времени выполнения
+соответствующего экземпляра, в подкаталоге
+<code class="filename">run/</code> в указанном каталоге.</p>
+
+<p>Пути по умолчанию в масштабе всей системы используются, если этот
+выбор не определяется.</p>
+<p>Пример использования настройки:
+<pre>
+keyring_path = /opt/myrouter/data/keyring
+master_key_path = /opt/myrouter/mysqlrouter.key
+</pre></li>
+
+<li><p><a name="option_mysqlrouter_master_key_path"></a>
+<a href="#option_mysqlrouter_master_key_path">
+<code class="option">master_key_path</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for master_key_path">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+(Other)</td>
+<td><code class="literal">/run/mysql-router/mysqlrouter.key</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+(Windows)</td>
+<td><code class="literal">%PROGRAMDATA%\MySQL\MySQL Router\mysqlrouter.key
+</code></td></tr></tbody></table>
+
+<p>Местоположение файла главного ключа. Этот выбор позволяет
+декодирование, поскольку иначе его местоположение требуют при запуске.</p>
+<p>Пути по умолчанию в масштабе всей системы используются, если этот
+выбор не определяется.</p>
+
+<pre>
+keyring_path = /opt/myrouter/data/keyring
+master_key_path = /opt/myrouter/mysqlrouter.key
+</pre></li>
+
+<li><p><a name="option_mysqlrouter_user_default"></a>
+<a href="#option_mysqlrouter_user_default">
+<code class="option">user (system)</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for user_default">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>String</td></tr></tbody></table>
+
+<p>Выполнить <a href="#mysqlrouter">
+<span class="command"><strong>mysqlrouter</strong></span></a>
+как пользователь, имеющий имя
+<em class="replaceable"><code>user_name</code></em>
+или числовой идентификатор пользователя
+<em class="replaceable"><code>user_id</code></em>.
+<span class="quote">"<span class="quote">User</span>"</span>
+в этом контексте обращается к системной учетной записи, а не к пользователю
+MySQL, перечисленному в таблицах привилегий. Это может также быть назначено
+во время выполнения, используя опцию командной строки
+<a href="#option_mysqlrouter_user_cli">
+<code class="option">--user</code></a>.</p>
+
+<p>В Linux устанавливая роутер с официальными пакетами DEB или RPM, система
+создает местного пользователя системы и группу, названную "mysqlrouter"
+на хосте и запускает MySQL Router как этот пользователь по умолчанию.
+У этого пользователя нет доступа оболочки, и его корневой каталог указывает
+на каталог, где сохранен конфигурационный файл по умолчанию.</p>
+
+<p>Цель этого выбора состоит в том, чтобы управлять MySQL Router
+как пользователем с ограниченными системными привилегиями.
+Если пользователь не существует в системе, или если предпринята попытка
+запуска роутера как root, происходит ошибка.</p>
+
+<p>MySQL Router может быть настроен и запущен при любом пользователе
+операционной системы и не требует специальных привилегий, кроме
+доступа для чтения и записи к его собственным файлам. Файлы, к которым это
+получает доступ, включают плагины (read/execute), конфигурационный файл,
+журналы, файлы сокета UNIX (если используются) и другие.</p>
+
+<p>По умолчанию конфигурационные файлы и файлы журнала написаны в масштабе
+всей системы в такие каталоги, как <code class="filename">/etc</code> и
+<code class="filename">/var/log</code>. Альтернативно, роутер может быть
+настроен к отдельному собственному каталогу при помощи опции
+<a href="#option_mysqlrouter_directory">
+<code class="option">--directory</code></a>:
+<pre>
+shell&gt; sudo mysqlrouter --bootstrap localhost:3310 \
+                           --directory /a/path/myrouter --user snoopy
+</pre>
+
+<p>В этом примере роутер создает
+<em class="replaceable"><code>/a/path/myrouter</code></em>
+и добавляет все произведенные файлы и каталоги сюда, они перезаписываемы
+только пользователем системы <code class="literal">snoopy</code>.
+Кроме того, <code class="option">user</code>
+определяется в произведенном конфигурационном файле
+<code class="filename">/a/path/myrouter/mysqlrouter.conf</code>:
+<pre>
+[DEFAULT]
+user=snoopy
+</pre>
+
+<p>Это отличается от
+<a href="#option_mysqlrouter_user_metadata">
+<code class="option">user</code></a>, определенного в секции
+<code class="literal">[metadata_cache]</code>, который
+является пользователем MySQL.</li>
+
+<li><a name="option_mysqlrouter_bind_address"></a>
+<a href="#option_mysqlrouter_bind_address">
+<code class="option">bind_address</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for bind_address">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">127.0.0.1</code></td></tr></tbody></table>
+
+<p>Информация связана с дополнительной опцией
+<a href="#option_mysqlrouter_bind_address">
+<code class="option">bind_address</code></a>:</p>
+
+<ul><li><p>Записи направления могут быть связаны с сетевым интерфейсом (NIC).
+По умолчанию <a href="#option_mysqlrouter_bind_address">
+<code class="option">bind_address</code></a> =
+<span class="emphasis"><em>127.0.0.1</em></span>.
+Если порт не определяется здесь, то требуется определение
+<a href="#option_mysqlrouter_bind_port">
+<code class="option">bind_port</code></a>.</li>
+
+<li>По умолчанию <a href="#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap</code></a> устанавливает
+<code class="literal">bind_address=0.0.0.0</code> для каждого маршрута в
+произведенном конфигурационном файле, это может быть изменено, используя
+<a href="#option_mysqlrouter_conf-bind-address">
+<code class="option">--conf-bind-address</code></a>.</li>
+
+<li>Связь с определенным IPv4 или адресом IPv6 позволяет и гарантирует, что
+MySQL Router не запускается, а маршрут указывает на NIC, на котором ничему
+не позволяют выполняться.</li>
+
+<li>Невозможно определить больше, чем один обязательный адрес на
+группу конфигурации направления. Однако использование
+0.0.0.0:<em class="replaceable"><code>$port</code></em> (где вы определяете
+$port) связывает все сетевые интерфейсы (IP) на хосте.
+Адреса IPv6 могут также использоваться.</p></li></ul>
+<pre>
+bind_address = 127.0.0.1:7001
+</pre>
+
+<p><code class="literal">bind_address</code> не может быть перечислен в
+списке <a href="#option_mysqlrouter_destinations">
+<code class="option">destinations</code></a>.</li>
+
+<li><a name="option_mysqlrouter_bind_port"></a>
+<a href="#option_mysqlrouter_bind_port">
+<code class="option">bind_port</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for bind_port">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>Integer</td></tr></tbody></table>
+
+<p>Произвольно можно определить порт по умолчанию для
+<a href="#option_mysqlrouter_bind_address">
+<code class="option">bind_address</code></a>, применяя
+<a href="#option_mysqlrouter_bind_port">
+<code class="option">bind_port</code></a>. Если порт не формируется в
+<a href="#option_mysqlrouter_bind_address">
+<code class="option">bind_address</code></a>,
+<a href="#option_mysqlrouter_bind_port">
+<code class="option">bind_port</code></a> требуется и используется.</p>
+
+<p>Эти три примера ниже показывают все результаты при
+<span class="emphasis"><em>bind_address = 127.0.0.1:7001</em></span>
+<pre>
+[routing:example_1]
+bind_port = 7001
+</pre>
+
+<pre>
+[routing:example_2]
+bind_port = 7001
+bind_address = 127.0.0.1
+</pre>
+
+<pre>
+[routing:example_3]
+bind_address = 127.0.0.1:7001
+</pre></li>
+
+<li><p><a name="option_mysqlrouter_socket"></a>
+<a href="#option_mysqlrouter_socket">
+<code class="option">socket</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for socket">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Для платформы
+</strong></span></td><td>Linux</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+
+<p>Сокеты позволены, используя
+<a href="#option_mysqlrouter_socket">
+<code class="option">socket</code></a>, которая может быть определена с
+или без опций TCP
+<a href="#option_mysqlrouter_bind_port">
+<code class="option">bind_port</code></a> и
+<a href="#option_mysqlrouter_bind_address">
+<code class="option">bind_address</code></a>:
+<pre>
+[routing]
+socket = /tmp/mysqlrouter.sock
+destinations = a.example.com:3306,b.example.com:3307
+</pre>
+
+<p>При запуске MySQL Router откажется работать, если файл гнезда уже будет
+существовать или это не может быть записано.</p>
+<p>Относительные пути приемлемы и на основе текущего рабочего каталога,
+где запускается роутер.</p>
+
+<p>Маршрутизатор может слушать порты TCP и сокеты Unix
+одновременно. Например, следующий пример
+<span class="emphasis"><em>[routing]</em></span>
+действителен и формирует роутер, чтобы слушать связи на
+<span class="bold"><strong>localhost:1234</strong></span> и
+<code class="filename">/tmp/mysqlrouter.sock</code>:
+<pre>
+[routing:my_redirect]
+bind_address = localhost:1234
+socket = /tmp/mysqlrouter.sock
+mode = read-write
+destinations = localhost:57121, localhost:57122, localhost:57123
+</pre>
+<p>Предел длины сокета Unix определен для платформы и не должен превышать
+позволенную длину системы.</li>
+
+<li><a name="option_mysqlrouter_protocol"></a>
+<a href="#option_mysqlrouter_protocol">
+<code class="option">protocol</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for protocol">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">classic</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Допустимые значения</strong>
+</span></td>
+<td><p><code class="literal">classic</code></p>
+<p><code class="literal">x</code></p></td></tr></tbody></table>
+
+<p>Используется плагином направления, соединяя с сервером назначения MySQL,
+может быть установлен в "classic" (по умолчанию) или в "x" (X Protocol).</p>
+<pre>
+[routing:basic_failover]
+bind_port = 7001
+mode = read-write
+destinations = 10.20.200.1:33060, 10.20.200.2:33060
+protocol = x
+</pre>
+
+<p>Опция <a href="#option_mysqlrouter_protocol">
+<code class="option">protocol</code></a> также затрагивает порт по умолчанию,
+используемый каждым местом назначения. Если целевой порт не формируется, то
+порт по умолчанию 3306 для "classic" (по
+умолчанию) и 33060 для "x" (X Protocol).</li>
+
+<li><a name="option_mysqlrouter_connect_timeout"></a>
+<a href="#option_mysqlrouter_connect_timeout">
+<code class="option">connect_timeout</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for connect_timeout">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>Integer</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">1</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Минимум</strong></span></td>
+<td><code class="literal">1</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Максимум</strong></span></td>
+<td><code class="literal">65536</code></td></tr></tbody></table>
+
+<p>Тайм-аут, используемый MySQL Router, соединяясь с местом назначения.
+Значение по умолчанию составляет 1 секунду. Значение не может быть
+неограниченным, недействительное значение приводит к ошибке конфигурации.
+Действительный диапазон между 1 и 65536. Необходимо поддерживать эту
+величину на низком уровне.</p>
+
+<p>Например, используя режим <code class="literal">read-write</code>,
+значение может быть немного выше, чтобы ждать PRIMARY. Используя режим
+<code class="literal">read-only</code> для вторичных связей, низкое значение
+имеет больше смысла, потому что роутер
+выбирает новый сервер во время направления связи.</p>
+
+<pre>
+[routing]
+connect_timeout = 1
+</pre></li>
+
+<li><p><a name="option_mysqlrouter_connect_timeout_metadata"></a>
+<a href="#option_mysqlrouter_connect_timeout_metadata">
+<code class="option">connect_timeout</code></a></p>
+
+<table frame="box" rules="all">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип
+</strong></span></td><td>Integer</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+(&gt;= 8.0.14)</td>
+<td><code class="literal">15</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+(&lt;= 8.0.13)</td>
+<td><code class="literal">30</code></td>
+</tr></tbody></table>
+
+<p>Тайм-аут, используемый MySQL Router, соединяясь с сервером метаданных
+MySQL. Значение по умолчанию составляет 30 секунд.
+<pre>
+[DEFAULT]
+connect_timeout = 30
+</pre></li>
+
+<li><p><a name="option_mysqlrouter_read_timeout_metadata"></a>
+<a href="#option_mysqlrouter_read_timeout_metadata">
+<code class="option">read_timeout</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for read_timeout_metadata">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>Integer</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">30</code></td></tr></tbody></table>
+
+<p>Тайм-аут, используемый MySQL Router, читая с сервера метаданных MySQL.
+Значение по умолчанию составляет 30 секунд.
+<pre>
+[DEFAULT]
+read_timeout = 30
+</pre></li>
+
+<li><p><a name="option_mysqlrouter_destinations"></a>
+<a href="#option_mysqlrouter_destinations">
+<code class="option">destinations</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for destinations">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>String</td></tr></tbody></table>
+
+<p>Предоставляет информацию о хосте для установления связей. Это признает
+список разделенных запятой значений адресов получателя или ссылку на кэш
+метаданных кластера InnoDB.</p>
+
+<p>Использование в качестве примера с определенными
+хостами (статическая маршрутизация):
+<pre>
+destinations = a.example.com,b.example.com,c.example.com
+</pre>
+
+<p>Если порт места назначения явно не установлен, то порт по умолчанию 3306,
+если <a href="#option_mysqlrouter_protocol">
+<code class="option">protocol</code></a> = "classic" или не установлен
+(по умолчанию), или 33060, если
+<a href="#option_mysqlrouter_protocol">
+<code class="option">protocol</code></a> установлен в "x".</p>
+
+<p>Использование в качестве примера с кэшем метаданных кластера InnoDB:
+<pre>
+destinations=metadata-cache://mycluster/default?role=PRIMARY
+</pre>
+
+<p>Варианты <code class="literal">metadata-cache</code> URI:</p>
+<ul><li><p><code class="literal">role</code>: Определяет тип экземпляров,
+доступных для связи. Приемлемые: PRIMARY, SECONDARY
+или PRIMARY_AND_SECONDARY.</p>
+
+<p>Опция <a href="#option_mysqlrouter_routing_strategy">
+<code class="option">routing_strategy</code></a> в
+<code class="filename">mysqlrouter.conf</code> определяет стратегию,
+по умолчанию стратегия направления кэша метаданных <span class="emphasis">
+<em>round-robin</em></span>.</li>
+
+<li><code class="literal">disconnect_on_promoted_to_primary</code>:
+Управляет, закрываются ли существующие связи клиента с вторичным, когда
+вторичный становится primary. Значение по умолчанию "no" означает,
+что существующие связи клиента с продвинутым вторичным не закрываются после
+продвижения. Установите в URI
+<span class="emphasis"><em>disconnect_on_promoted_to_primary=yes</em></span>,
+чтобы закрыть эти существующие связи.
+<p>Эта опция добавлена в MySQL Router 8.0.12.</li>
+
+<li><code class="literal">disconnect_on_metadata_unavailable</code>:
+Управляет, закрываются ли существующие связи клиента,
+когда группа перегружена. Значение по умолчанию "no" значит, что существующие
+связи клиента не закрываются, когда группа перегружена. Установите в URI
+<span class="emphasis"><em>disconnect_on_metadata_unavailable=yes</em>
+</span>, чтобы закрыть эти существующие связи.</p>
+<p>Эта опция добавлена в MySQL Router 8.0.12.</p></li></ul>
+
+<p>Эти условия вызывают разъединения: связи с primary после
+того, как primary понижен до вторичного, и связи с узлом, который больше не
+является частью кастера.</li>
+
+<li><a name="option_mysqlrouter_dynamic_config"></a>
+<a href="#option_mysqlrouter_dynamic_config">
+<code class="option">dynamic_config</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for dynamic_config">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Введено</strong></span>
+</td><td>8.0.14</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+
+<p>Это отслеживает и хранит активные адреса сервера метаданных кластера MySQL
+InnoDB и загружает их, если роутер перезапущен.
+Эта функциональность активируется
+<a href="#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap</code></a> и предпочтена статической опции
+<a href="#option_mysqlrouter_bootstrap_server_addresses">
+<code class="option">bootstrap_server_addresses</code></a>.</p>
+
+<p>Самонастройка определяет <code class="option">dynamic_config</code> в
+файле <code class="filename">mysqlrouter.conf</code> в секции [DEFAULT].
+Это путь к произведенному файлу JSON
+<code class="filename">state.json</code>, который инициализируется адресами
+сервера метаданных кластера InnoDB и репликацией ID группы,
+дополнительная информация добавляется и обновляется, в то время
+как роутер работает.</p>
+
+<p>Пример записи в <code class="filename">mysqlrouter.conf</code>:
+<pre>
+[DEFAULT]
+dynamic_config=/opt/myrouter/data/state.json
+</pre>
+
+<p>Пример <code class="filename">state.json</code>, произведенного
+<code class="option">--bootstrap</code>:
+<pre>
+{
+"metadata-cache": {
+"group-replication-id": "4b9e817a-0254-11e9-9cc0-080027bb5030",
+"cluster-metadata-servers": [
+"mysql://localhost:3310",
+"mysql://localhost:3320",
+"mysql://localhost:3330"
+]
+},
+"version": "1.0.0"
+}
+</pre>
+
+<p>Опции <code class="option">dynamic_config</code> и устаревшая
+<code class="option">bootstrap_server_addresses</code>
+не могут быть установлены в одно и то же время. Для обратной совместимости,
+если только <code class="option">bootstrap_server_addresses</code>
+установлена, это функционирует, как в предыдущих версиях, и эта динамическая
+функциональность конфигурации не используется.</p>
+<p>Эта опция добавлена в MySQL Router 8.0.14.</li>
+
+<li><a name="option_mysqlrouter_mode"></a>
+<a href="#option_mysqlrouter_mode">
+<code class="option">mode</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for mode">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Допустимые значения</strong>
+</span></td><td><p><code class="literal">read-write</code></p>
+<p><code class="literal">read-only</code></p></td></tr></tbody></table>
+
+<p>Устаревшая опция режима устанавливает планирование роутера
+и два поддержанных режима:</p>
+<p>MySQL Router 8.0.4 добавил опцию
+<a href="#option_mysqlrouter_routing_strategy">
+<code class="option">routing_strategy</code></a> как более гибкий способ
+формировать <span class="bold"><strong>график режима</strong></span>.</p>
+
+<p>Опции <code class="option">mode</code> и
+<code class="option">routing_strategy</code>
+не могут быть установлены в одно и то же время.</p>
+
+<ul><li><p><span class="bold"><strong>read-write</strong></span>:
+Как правило, для направления к master или primary экземпляру MySQL.</p>
+<p><span class="bold"><strong>Mode Schedule</strong></span>: в режиме
+<span class="emphasis"><em>read-write</em></span> весь трафик направлен к
+начальному адресу в списке. Если это потерпит неудачу, то MySQL Router
+попробует следующий элемент в списке, и продолжит пробовать каждый сервер
+MySQL в списке. Если больше серверов MySQL недоступно в
+списке, направление прерывается.
+
+<p>С <a href="#option_mysqlrouter_routing_strategy">
+<code class="option">routing_strategy</code></a> то же самое поведение может
+быть определено, используя
+<code class="literal">routing_strategy=next-available</code> вместо
+<code class="option">mode=read-write</code>.</p>
+
+<p>Первый успешный сервер MySQL, с которым связываются, сохраняется в памяти
+как первый, чтобы опробовать будущие поступающие связи.
+Это временное состояние означает, что об этом забывают после того, как
+MySQL Router перезапущен.
+<pre>
+[routing:example_strategy_mode]
+bind_port = 7001
+destinations = primary1.example.com,primary2.example.com,primary3.example.com
+mode = <code class="literal">read-write</code>
+</pre>
+
+<p>Так как опция <code class="option">mode</code> устарела,
+предыдущий пример должен использовать
+<code class="option">routing_strategy</code>:
+<pre>
+[routing:example_strategy]
+bind_port = 7001
+destinations = primary1.example.com,primary2.example.com,primary3.example.com
+routing_strategy = next-available
+</pre></li>
+
+<li><p><span class="bold"><strong>read-only</strong></span>:
+Как правило, для направления к вторичному или ведомому экземпляру MySQL.</p>
+<p><span class="bold"><strong>Mode Schedule</strong></span>: режим
+<span class="emphasis"><em>read-only</em></span> использует простой метод
+<span class="bold"><strong>round-robin</strong></span>, чтобы пройти список
+MySQL Server. Это посылает первую связь первому адресу в списке, следующую
+связь второму адресу и так далее, и вернется к первому адресу после того, как
+список будет исчерпан.
+
+<p>С <a href="#option_mysqlrouter_routing_strategy">
+<code class="option">routing_strategy</code></a>
+то же самое поведение может быть определено, используя
+<code class="literal">routing_strategy=round-robin</code> вместо
+<code class="option">mode=read-only</code>.</p>
+
+<p>Если сервер MySQL недоступен, то следующий сервер пробуют.
+Когда ни один из серверов MySQL в списке недоступен, направление прерывается.
+</p>
+
+<p>Изолированы недоступные серверы MySQL. Их доступность перепроверяется и
+когда доступны они отложены в конец списка
+<a href="#option_mysqlrouter_destinations">
+<code class="option">destinations</code></a>. Порядок назначения поддержан.
+<pre>
+[routing:ro_route_mode]
+bind_port = 7002
+destinations = secondary1.example.com,secondary2.example.com,secondary3.example.com
+mode = <code class="literal">read-only</code>
+</pre>
+
+<p>Так как опция <code class="option">mode</code> устарела, предыдущий пример
+должен использовать <code class="option">routing_strategy</code>:
+<pre>
+[routing:ro_route]
+bind_port = 7002
+destinations = secondary1.example.com,secondary2.example.com,secondary3.example.com
+routing_strategy=round-robin
+</pre></li></ul>
+
+<p>Альтернативно, предыдущий пример
+<a href="#option_mysqlrouter_destinations">
+<code class="option">destinations</code></a> мог использовать
+<span class="emphasis"><em>metadata-cache</em></span>, чтобы применить кэш
+метаданных кластера InnoDB, который динамично формирует информацию о хосте:
+
+<pre>
+[routing:ro_route]
+bind_port = 7002
+destinations=metadata-cache://myCluster/default?role=SECONDARY
+routing_strategy=round-robin
+</pre></li>
+
+<li><p><a name="option_mysqlrouter_routing_strategy"></a>
+<a href="#option_mysqlrouter_routing_strategy">
+<code class="option">routing_strategy</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for routing_strategy">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Введено</strong></span>
+</td><td>8.0.4</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Допустимые значения</strong>
+</span></td><td><p><code class="literal">first-available</code></p>
+<p><code class="literal">next-available</code></p>
+<p><code class="literal">round-robin</code></p>
+<p><code class="literal">round-robin-with-fallback</code></p></td>
+</tr></tbody></table>
+
+<p>Стратегия направления определяет, как MySQL Router выбирает серверы
+MySQL, с которыми соединиться.
+<p>MySQL Router 8.0.4 добавил опцию
+<a href="#option_mysqlrouter_routing_strategy">
+<code class="option">routing_strategy</code></a> как более гибкий способ
+определить стратегию. Ранее это поведение было определено, используя
+устаревшую теперь <a href="#option_mysqlrouter_mode">
+<code class="option">mode</code></a>.</p>
+
+<p><code class="option">routing_strategy</code> и
+<code class="option">mode</code> не могут быть установлены в
+одно и то же время.</p>
+
+<p>Доступные стратегии:</p>
+<ul><li><p><code class="literal">first-available</code>:
+новая связь направлена к первому доступному серверу из списка назначения.
+В случае неудачи используется следующий доступный сервер.
+Этот цикл продолжается, пока все серверы не недоступны.</li>
+
+<li><code class="literal">next-available</code>: аналогично
+<code class="option">first-available</code>, но новая связь направлена
+первому доступному серверу из списка назначения. В отличие от этого,
+<code class="option">first-available</code>, если сервер отмечен как
+недостижимый, от него отказывается и никогда не использует снова в
+качестве места назначения.</p>
+
+<p>Эта стратегия обратно совместима с MySQL Router 2.x
+<code class="option">mode</code>
+<span class="emphasis"><em>read-write</em></span>.
+Ее ограничения включают:</p>
+
+<ul><li><p>После того, как от всех узлов отказываются, нет никакого
+способа добавить серверы назад в список.</li>
+<li>После перезапуска MySQL Router, потеряно все знание о том, от каких
+серверов отказываются, все серверы доступны снова.</p></li></ul></li>
+
+<li><p><code class="literal">round-robin</code>: для выравнивания нагрузки
+каждая новая связь установлена со следующим доступным
+сервером циклическим способом.</li>
+
+<li><code class="literal">round-robin-with-fallback</code>:
+для выравнивания нагрузки каждая новая связь установлена со следующим
+доступным вторичным сервером циклическим способом. Если вторичный сервер
+недоступен, серверы из основного списка используются циклическим способом.
+</p></li></ul>
+
+<ul><li><p>Если режим <span class="emphasis"><em>read-write</em></span>,
+стратегия по умолчанию <span class="emphasis"><em>first-available</em></span>
+с MySQL Router 8.0, но работает как <span class="emphasis"><em>next-available
+</em></span> в MySQL Router 2.1.</li>
+
+<li>Если режим <span class="emphasis"><em>read-only</em></span>,
+стратегия по умолчанию <code class="option">round-robin</code>.</li>
+<li>Если роль кластера InnoDB <span class="emphasis"><em>PRIMARY</em></span>,
+стратегия по умолчанию <code class="option">round-robin</code>, доступные
+стратегии <span class="emphasis"><em>first-available</em></span> и
+<span class="emphasis"><em>round-robin</em></span>.</li>
+
+<li>Если роль кластера InnoDB <span class="emphasis"><em>SECONDARY</em>
+</span>, стратегия по умолчанию <code class="option">round-robin</code> и
+<span class="emphasis"><em>first-available</em></span>, доступные стратегии
+<span class="emphasis"><em>round-robin</em></span> и
+<span class="emphasis"><em>round-robin-with-fallback</em></span>.</li>
+
+<li>Если роль кластера InnoDB
+<span class="emphasis"><em>PRIMARY_AND_SECONDARY</em></span>,
+стратегия по умолчанию <code class="option">round-robin</code>, доступные
+стратегии <span class="emphasis"><em>first-available</em></span> и
+<span class="emphasis"><em>round-robin</em></span>.</p></li></ul></li>
+
+<li><p><a name="option_mysqlrouter_max_connections"></a>
+<a href="#option_mysqlrouter_max_connections">
+<code class="option">max_connections</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for max_connections">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>Integer</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">512</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Минимум</strong></span></td>
+<td><code class="literal">1</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Максимум</strong></span></td>
+<td><code class="literal">65536</code></td></tr></tbody></table>
+
+<p>Каждое направление может ограничить количество маршрутов или связей.
+Одно возможное применение должно помочь предотвратить возможные нападения
+Denial-Of-Service (DOS). Значение по умолчанию 512,
+действительный диапазон между 1 и 65536.</p>
+
+<p>Это подобно переменной MySQL Server
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_max_connections"
+target="_top">max_connections</a>.
+<pre>
+max_connections = 512
+</pre>
+
+<p>MySQL Router 2.1.5 и 8.0.4 добавили функциональности, которые увеличивают
+параллельный предел связи приблизительно с 500 до 5000.
+Это зависимое от операционной системы ограничение было изменено, чтобы
+использовать poll() вместо select().</li>
+
+<li><a name="option_mysqlrouter_thread_stack_size"></a>
+<a href="#option_mysqlrouter_thread_stack_size">
+<code class="option">thread_stack_size</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for thread_stack_size">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Введено</strong>
+</span></td><td>8.0.12</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>Integer</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">64</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Минимум</strong></span></td>
+<td><code class="literal">1</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Максимум</strong></span></td>
+<td><code class="literal">65535</code></td></tr></tbody></table>
+
+<p>Размер стека для каждого потока.
+Это измерено в килобайтах и по умолчанию 64.
+<pre>
+[DEFAULT]
+thread_stack_size=128
+</pre></li>
+
+<li><p><a name="option_mysqlrouter_max_connect_errors"></a>
+<a href="#option_mysqlrouter_max_connect_errors">
+<code class="option">max_connect_errors</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for max_connect_errors">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>Integer</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">100</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Минимум</strong></span></td>
+<td><code class="literal">1</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Максимум</strong></span></td>
+<td><code class="literal">4294967295</code></td></tr></tbody></table>
+
+<p>Значение по умолчанию 100, действительный диапазон между 1 и
+2^32 (4294967295, unsigned int).</p>
+<p>Это подобно переменной сервера MySQL
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_max_connect_errors"
+target="_top">max_connect_errors</a>.</p>
+
+<p>Это может вызвать небольшую потерю производительности, если применение
+выполняет частые повторные соединения, потому что MySQL Router
+пытается обнаружить, присутствуют ли связанные со связью ошибки.</p>
+
+<p>Успешная связь сбрасывает счетчик ошибок (с 8.0.14).</p>
+<p>У каждого направления есть свой собственный список заблокированных
+хостов. Заблокированные клиенты получают ошибочный код MySQL Server error
+1129 с немного отличающимся сообщением об ошибке:
+"1129: Too many connection errors from fail.example.com".
+Журналы роутера содержат дополнительную информацию для заблокированных
+клиентов, например: INFO [...] 1 authentication errors for
+fail.example.com (max 100) WARNING [...] blocking client host
+fail.example.com
+<pre>
+max_connect_errors = 100
+</pre></li>
+
+<li><p><a name="option_mysqlrouter_client_connect_timeout"></a>
+<a href="#option_mysqlrouter_client_connect_timeout">
+<code class="option">client_connect_timeout</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for client_connect_timeout">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>Integer</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">9</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Минимум</strong></span></td>
+<td><code class="literal">2</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Максимум</strong></span></td>
+<td><code class="literal">31536000</code></td></tr></tbody></table>
+
+<p>Аналог переменной сервера MySQL
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_connect_timeout"
+target="_top">connect_timeout</a>.</p>
+
+<p>Значение по умолчанию 9, это меньше, чем умолчание в MySQL 5.7.
+Действительный диапазон между 2 и 31536000.
+<pre>
+client_connect_timeout = 9
+</pre></li>
+
+<li><p><a name="option_mysqlrouter_router_id"></a>
+<a href="#option_mysqlrouter_router_id">
+<code class="option">router_id</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for router_id">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>Integer</td></tr></tbody></table>
+<p>MySQL Router ID.</li>
+
+<li><a name="option_mysqlrouter_ssl_mode"></a>
+<a href="#option_mysqlrouter_ssl_mode">
+<code class="option">ssl_mode</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for ssl_mode">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">PREFERRED</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Допустимые значения</strong>
+</span></td>
+<td><p><code class="literal">PREFERRED</code></p>
+<p><code class="literal">DISABLED</code></p>
+<p><code class="literal">REQUIRED</code></p>
+<p><code class="literal">VERIFY_CA</code></p>
+<p><code class="literal">VERIFY_IDENTITY</code></p></td></tr></tbody></table>
+
+<p>Режим SSL для соединения с сервером метаданных MySQL. По умолчанию
+<code class="literal">PREFERRED</code>, если не задано.</p>
+<p>Когда установлено в PREFERRED, самонастройка предупредит, когда SSL не
+будет использоваться, и связь с сервером метаданных не зашифрована.</p>
+
+<p>Доступные значения: DISABLED, PREFERRED, REQUIRED, VERIFY_CA и
+VERIFY_IDENTITY. Как с <span class="command"><strong>mysql</strong></span>,
+значение нечувствительно к регистру.</p>
+
+<p>Есть также возможность для самонастройки, посмотрите
+<a href="#option_mysqlrouter_ssl-mode_cli">
+<code class="option">--ssl-mode</code></a>.</li>
+
+<li><a name="option_mysqlrouter_bootstrap_server_addresses"></a>
+<a href="#option_mysqlrouter_bootstrap_server_addresses">
+<code class="option">bootstrap_server_addresses</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for bootstrap_server_addresses">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Deprecated</strong>
+</span></td><td>8.0.14</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+
+<p>Список серверов MySQL с метаданными, которые могут быть применены.
+После того, как к метаданным получили доступ, кэш метаданных переключается на
+серверы, которые присутствуют в основном ReplicaSet, чтобы получить
+метаданные. Они также известны как bootstrap-серверы.</p>
+
+<p>Эта опция устарела в MySQL Router 8.0.14 и больше не производится
+процессом начальной загрузки. Вместо этого добавлена как замена
+<a href="#option_mysqlrouter_dynamic_config">
+<code class="option">dynamic_config</code></a>.</li>
+
+<li><a name="option_mysqlrouter_user_metadata"></a>
+<a href="#option_mysqlrouter_user_metadata">
+<code class="option">user (MySQL)</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for user_metadata">
+<thead><tr><th scope="col">Свойство</th><th scope="col">Значение</th>
+</tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>String</td></tr></tbody></table>
+
+<p>Произведенный пользователь MySQL с привилегиями получить доступ к схеме
+метаданных сервера MySQL. Пароль этого пользователя сгенерирован и
+сохранен в зашифрованном виде в
+<a href="#option_mysqlrouter_keyring_path">
+keyring</a>. По умолчанию ключ шифрования для этого брелока сохранен в
+защищенном файле хранилища
+<a href="#option_mysqlrouter_master_key_path">
+master key</a>, который определяется в конфигурационном файле.
+Обычно эти пользователь и связанный пароль автоматически произведены во время
+самонастройки. Связанные параметры командной строки
+<a href="#option_mysqlrouter_force-password-validation">
+<code class="option">--force-password-validation</code></a> и
+<a href="#option_mysqlrouter_password-retries">
+<code class="option">--password-retries</code></a>.
+По умолчанию произведенный пароль проверяется validate_password.</p>
+
+<p>Паролем полностью управляет роутер и сохраняет в местной системе брелока,
+используя учетную запись операционной системы, от которой работает
+MySQL Router. Это может использоваться роутером, чтобы соединиться с
+кластером InnoDB и получить текущую информацию о топологии. Сессии между
+роутером и сервером метаданных зашифрованы SSL по умолчанию.</p>
+
+<p>То, где произведенные файлы брелока хранятся, зависит от того, как
+работает самонастройка. Для отдельных установок (когда используется
+<a href="#option_mysqlrouter_directory">
+<code class="option">--directory</code></a>), это сохранено под
+<code class="filename">run/</code> в отдельном каталоге.
+Для установок в масштабе всей системы это сохранено в каталоге
+времени выполнения в масштабе всей системы, и тот путь определен платформой.
+Для получения дополнительной информации посмотрите
+<a href="#option_mysqlrouter_master_key_path">
+<code class="option">master_key_path</code></a> и
+<a href="#option_mysqlrouter_keyring_path">
+<code class="option">keyring_path</code></a>.</p>
+
+<p>Этому пользователю назначают следующие привилегии:
+<pre>
+Privileges needed by the Router account:
+
+On Metadata Server:
+
+SELECT ON mysql_innodb_cluster_metadata.*
+
+On Target Replica Sets:
+
+SELECT ON performance_schema.replication_group_members
+SELECT ON performance_schema.replication_group_member_stats
+</pre>
+
+<p>Произведенное имя пользователя следует этому шаблону:
+<span class="emphasis"><em>mysql_router_</em></span><em class="replaceable">
+<code>[0-9]{1,6}</code></em>_<em class="replaceable"><code>[0-9a-z]{12}
+</code></em>, где <span class="emphasis"><em>[0-9]{1,6}</em></span>
+числовой id роутера и <span class="emphasis"><em>[0-9a-z]{12}</em></span>
+случайных строчных алфавитно-цифровых символов. Id маршрутизатора снова
+используется, если существует в <code class="filename">mysqlrouter.conf
+</code>, и его длина не может превысить 6 цифр.
+
+<p>Этот пользователь отличается от
+<a href="#option_mysqlrouter_user_default">
+<code class="option">user</code></a>, определенного в секции
+<code class="literal">[DEFAULT]</code>, который
+является пользователем системы.</li>
+
+<li><a name="option_mysqlrouter_metadata_cluster"></a>
+<a href="#option_mysqlrouter_metadata_cluster">
+<code class="option">metadata_cluster</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for metadata_cluster">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>String</td></tr></tbody></table>
+<p>Имя кластера InnoDB.
+
+<p>SQL-запрос, чтобы перечислить имена кластеров InnoDB:
+<span class="emphasis"><em>SELECT * FROM
+mysql_innodb_cluster_metadata.clusters;</em></span></li>
+
+<li><a name="option_mysqlrouter_ttl"></a>
+<a href="#option_mysqlrouter_ttl">
+<code class="option">ttl</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for ttl">
+<thead><tr><th scope="col">Свойство</th><th scope="col">Значение</th>
+</tr></thead><tbody><tr><td scope="row"><span class="bold"><strong>Тип
+</strong></span> (&gt;= 8.0.12)</td><td>Numeric</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+(&lt;= 8.0.11)</td><td>Integer</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+(&gt;= 8.0.12)</td>
+<td><code class="literal">0.5</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+(&gt;= 8.0.4, &lt;= 8.0.11)</td>
+<td><code class="literal">5</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+(&lt;= 8.0.3)</td>
+<td><code class="literal">300</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Минимум</strong></span></td>
+<td><code class="literal">0</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Максимум</strong></span>
+(&gt;= 8.0.12)</td>
+<td><code class="literal">3600</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Максимум</strong></span>
+(&lt;= 8.0.11)</td>
+<td><code class="literal">4294967295</code></td></tr></tbody></table>
+
+<p>Время жизни (в секундах) информации в кэше метаданных.</p>
+<p>Принимает целое число или значение с плавающей точкой.
+Степень детализации ограничивается миллисекундами, где 0.001 равняется одной
+миллисекунде. Точность усечена к поддержанному диапазону, например,
+<span class="emphasis"><em>ttl=0.0119</em></span> рассматривают как 11
+миллисекунд. Значение <span class="emphasis"><em>0</em></span> значит, что
+модуль кэша метаданных запрашивает метаданные непрерывно в жестком цикле.</p>
+
+<p>Единственный поддержанный десятичный сепаратор '.' (точка)
+независимо от места действия, и экспоненциальное представление, например,
+<span class="emphasis"><em>ttl=1.6E-2</em></span> допустимо.</p>
+<p>Поддержка чисел с плавающей точкой была добавлена в MySQL Router 8.0.12.
+</li>
+
+<li><a name="option_mysqlrouter_level"></a>
+<a href="#option_mysqlrouter_level">
+<code class="option">level</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for level">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Тип</strong></span>
+</td><td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">INFO</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Допустимые значения</strong>
+</span></td>
+<td><p><code class="literal">INFO</code></p><p><code class="literal">DEBUG
+</code></p><p><code class="literal">WARNING</code></p>
+<p><code class="literal">ERROR</code></p>
+<p><code class="literal">FATAL</code></p></td></tr></tbody></table>
+
+<p>Используйте плагин <span class="emphasis"><em>logger</em></span>,
+чтобы зарегистрировать уведомления, ошибки и отладочную информацию.
+Доступные уровни регистрации:
+<span class="emphasis"><em>INFO</em></span> (по умолчанию),
+<span class="emphasis"><em>DEBUG</em></span>,
+<span class="emphasis"><em>WARNING</em></span>,
+<span class="emphasis"><em>ERROR</em></span> и
+<span class="emphasis"><em>FATAL</em></span>.
+Эти значения нечувствительны к регистру.</p>
+
+<p><span class="emphasis"><em>INFO</em></span> показывает все информационные
+сообщения, предупреждения и сообщения об ошибках.
+<span class="emphasis"><em>DEBUG</em></span> показывает дополнительную
+диагностическую информацию из кода роутера, включая успешные маршруты.
+<pre>
+[logger]
+level = DEBUG
+</pre>
+
+<p>Поведение вывода зависит от опции
+<a href="#option_mysqlrouter_logging_folder">
+<code class="option">logging_folder</code></a>.
+Установка <a href="#option_mysqlrouter_logging_folder">
+<code class="option">logging_folder</code></a> к каталогу сохраняет в нем
+файл журнала, названный <code class="filename">mysqlrouter.log</code>.
+Установка <a href="#option_mysqlrouter_logging_folder">
+<code class="option">logging_folder</code></a> к пустому значению или
+отсутствие установки производит регистрацию на консоль. Это установлено в
+секции <span class="emphasis"><em>[DEFAULT]</em></span>.</p>
+
+<p>С MySQL Router 8.0.4 самонастройка принимает использование
+конфигурационного файла <code class="option">--config</code>
+и использует определение уровня журналирования.</li>
+
+<li><a name="option_mysqlrouter_port_http"></a>
+<a href="#option_mysqlrouter_port_http">
+<code class="option">port</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for port_http">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th>
+</tr></thead><tbody><tr><td scope="row"><span class="bold"><strong>Введено
+</strong></span></td><td>8.0.16</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>Integer</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">8011</code></td></tr></tbody></table>
+<p>Порт TCP для запросов HTTP, по умолчанию 8011.</li>
+
+<li><a name="option_mysqlrouter_bind_address_http"></a>
+<a href="#option_mysqlrouter_bind_address_http">
+<code class="option">bind_address</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for bind_address_http">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Введено</strong>
+</span></td><td>8.0.16</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">0.0.0.0</code></td></tr></tbody></table>
+
+<p>Адрес IPv4 для HTTP <code class="option">port</code>, по умолчанию
+0.0.0.0.</li>
+
+<li><a name="option_mysqlrouter_static_folder_http"></a>
+<a href="#option_mysqlrouter_static_folder_http">
+<code class="option">static_folder</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for static_folder_http">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th>
+</tr></thead><tbody><tr><td scope="row"><span class="bold"><strong>Введено
+</strong></span></td>
+<td>8.0.16</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+<p>Основной каталог для статических запросов файла, это пусто по умолчанию.
+Пустая стоимость означает, что никакие статические файлы не используются.
+</li>
+
+<li><a name="option_mysqlrouter_require_realm_http"></a>
+<a href="#option_mysqlrouter_require_realm_http">
+<code class="option">require_realm</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for require_realm_http">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th>
+</tr></thead><tbody><tr><td scope="row"><span class="bold"><strong>Введено
+</strong></span></td><td>8.0.16</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+<p>Имя экземпляра [http_auth_realm].</li>
+
+<li><a name="option_mysqlrouter_ssl_http"></a>
+<a href="#option_mysqlrouter_ssl_http">
+<code class="option">ssl</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for ssl_http">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th></tr></thead>
+<tbody><tr><td scope="row"><span class="bold"><strong>Введено</strong></span>
+</td><td>8.0.16</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>Integer</td></tr>
+<tr><td scope="row"><span class="bold"><strong>По умолчанию</strong></span>
+</td><td><code class="literal">1</code></td></tr>
+<tr><td scope="row"><span class="bold"><strong>Допустимые значения</strong>
+</span></td><td><p><code class="literal">1</code></p>
+<p><code class="literal">0</code></p></td>
+</tr></tbody></table>
+<p>Значение 1 позволяет SSL, 0 отключает его. Клиенты TLS, поддерживающие
+TLSv1.2 или позже, требуются. Это определяется в секции [http_server].</li>
+
+<li><a name="option_mysqlrouter_ssl_cert_http"></a>
+<a href="#option_mysqlrouter_ssl_cert_http">
+<code class="option">ssl_cert</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for ssl_cert_http">
+<thead><tr><th scope="col">Свойство</th><th scope="col">Значение</th>
+</tr></thead><tbody><tr><td scope="row">
+<span class="bold"><strong>Введено</strong></span></td>
+<td>8.0.16</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+<p>Имя файла сертификата и сертификатов цепочки в формате PEM, требуется,
+если ssl=1. Это определяется в секции [http_server].</li>
+
+<li><a name="option_mysqlrouter_ssl_key_http"></a>
+<a href="#option_mysqlrouter_ssl_key_http">
+<code class="option">ssl_key</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for ssl_key_http">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th>
+</tr></thead><tbody><tr><td scope="row"><span class="bold">
+<strong>Введено</strong></span></td><td>8.0.16</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+<p>Имя файла ключа в формате PEM, требуется, если ssl=1.
+Это определяется в секции [http_server].</li>
+
+<li><a name="option_mysqlrouter_ssl_cipher_http"></a>
+<a href="#option_mysqlrouter_ssl_cipher_http">
+<code class="option">ssl_cipher</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for ssl_cipher_http">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th>
+</tr></thead><tbody><tr><td scope="row"><span class="bold">
+<strong>Введено</strong></span></td><td>8.0.16</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+
+<p>Спецификация шифра (см. список openssl 'ciphers'). По умолчанию это
+список разделенных запятой значений всех одобренных шифров. Неизвестные шифры
+тихо проигнорированы. Терпит неудачу, если список шифров пуст и ssl=1.
+Это определяется в секции [http_server].</li>
+
+<li><a name="option_mysqlrouter_ssl_dh_param_http"></a>
+<a href="#option_mysqlrouter_ssl_dh_param_http">
+<code class="option">ssl_dh_param</code></a></p>
+
+<table frame="box" rules="all" summary="Properties for ssl_dh_param_http">
+<thead><tr><th scope="col">Свойство</th>
+<th scope="col">Значение</th>
+</tr></thead><tbody><tr><td scope="row"><span class="bold">
+<strong>Введено</strong></span></td>
+<td>8.0.16</td></tr>
+<tr><td scope="row"><span class="bold"><strong>Тип</strong></span></td>
+<td>String</td></tr></tbody></table>
+
+<p>Прочитайте параметр DH от этого файла в формате PEM. Использует dh-param
+из RFC 5114 по умолчанию, если ssl=1.
+Это определяется в секции [http_server].</p></li></ul>
+
+<h3><a name="mysql-router-configuration-file-example"></a>
+4.3.3. Пример конфигурационного файла</h3>
+<p>Вот основной пример направления связи к кластеру MySQL InnoDB
+<code class="literal">mycluster</code>. Включены протоколы
+classic и X protocol, это использует связи TCP/IP вместо сокетов Unix
+и это было произведено, используя
+<a href="#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap</code></a> как автономная конфигурация с
+<a href="#option_mysqlrouter_directory">
+<code class="option">--directory</code></a>, установелнной в
+<code class="filename">/opt/routers/myrouter</code>.</p>
+
+<p>В этом примере трафик чтения-записи (primary) посылают по портам
+6446 (classic) или 64460 (x), трафик только чтения (secondaries) использует
+порты 6447 (classic) или 64470 (x).</p>
+
+<p>Ключи секции направления (такие как
+<span class="emphasis"><em>mycluster_default_rw</em></span>)
+дополнительные, но использовать эти описательные ключи секции полезно для
+отладки, а также позволяет многократные секции конфигурации для того
+же самого плагина.</p>
+
+<p><a href="#option_mysqlrouter_destinations">
+<code class="option">destinations</code></a> ссылается на
+<span class="emphasis"><em>metadata-cache</em></span>, чтобы использовать
+кэш метаданных кластера InnoDB, который динамично формирует информацию о
+хосте. Альтернативно <code class="option">destinations</code> мог быть
+списком разделенных запятой значений хостов, чтобы задать основное
+направление связи без кластера InnoDB.
+
+<pre>
+# File automatically generated during MySQL Router bootstrap
+[DEFAULT]
+logging_folder=/opt/routers/myrouter/log
+runtime_folder=/opt/routers/myrouter/run
+data_folder=/opt/routers/myrouter/data
+keyring_path=/opt/routers/router/data/keyring
+master_key_path=/opt/routers/myrouter/mysqlrouter.key
+connect_timeout=30
+read_timeout=30
+
+[logger]
+level = INFO
+
+[metadata_cache:mycluster]
+router_id=5
+bootstrap_server_addresses=mysql://localhost:3310,mysql://localhost:3320,mysql://localhost:3330
+user=mysql_router5_6owf3spq1c6n
+metadata_cluster=mycluster
+ttl=5
+
+[routing:mycluster_default_rw]
+bind_address=0.0.0.0
+bind_port=6446
+destinations=metadata-cache://mycluster/default?role=PRIMARY
+routing_strategy=round-robin
+protocol=classic
+
+[routing:mycluster_default_ro]
+bind_address=0.0.0.0
+bind_port=6447
+destinations=metadata-cache://mycluster/default?role=SECONDARY
+routing_strategy=round-robin
+protocol=classic
+
+[routing:mycluster_default_x_rw]
+bind_address=0.0.0.0
+bind_port=64460
+destinations=metadata-cache://mycluster/default?role=PRIMARY
+routing_strategy=round-robin
+protocol=x
+
+[routing:mycluster_default_x_ro]
+bind_address=0.0.0.0
+bind_port=64470
+destinations=metadata-cache://mycluster/default?role=SECONDARY
+routing_strategy=round-robin
+protocol=x
+</pre>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

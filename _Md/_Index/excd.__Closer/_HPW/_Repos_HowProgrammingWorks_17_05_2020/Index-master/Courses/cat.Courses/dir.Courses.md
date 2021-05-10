@@ -1,0 +1,76 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\cat.Courses\dir.Courses.md">Courses</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Advanced.md">Advanced.md</a>
+        - *# Второй год обучения
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\AlgAndData.md">AlgAndData.md</a>
+        - *# Алгоритмы и структуры данных
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Architecture.md">Architecture.md</a>
+        - *# Архитектура информационных систем
+        - *## Структура курса
+        - *## Видео-лекции
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Asynchronous.md">Asynchronous.md</a>
+        - *# Асинхронное программирование
+        - *## Видео-лекции
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Databases.md">Databases.md</a>
+        - *# Проектирования баз данных
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Functional.md">Functional.md</a>
+        - *# Функциональное программирование
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Fundamentals.md">Fundamentals.md</a>
+        - *# Основы программирования
+        - *## Ссылки
+        - *## 1 семестр 1 курса
+        - *## 2 семестр 1 курса (материалы готовятся)
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Highload.md">Highload.md</a>
+        - *# Высоконагруженные и масштабируемые системы
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Introduction.md">Introduction.md</a>
+        - *# Введение и обзор знаний
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Metaprogramming.md">Metaprogramming.md</a>
+        - *# Метапрограммирование и мультипарадигменное программирование
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Network.md">Network.md</a>
+        - *# Проектирование сетевых протоколов и сервисов
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\NodeJS.md">NodeJS.md</a>
+        - *# Технологический стек Node.js
+        - *## Вебинары Node.js: Выйди и зайди нормально
+        - *## Введение и основы
+        - *## Структура и архитектура приложений на Node.js
+        - *## Разработка серверов приложений и API на Node.js
+        - *## Работа с базами данных на Node.js
+        - *## Лекции по CQRS и Event Sourcing
+        - *## Управление памятью и параллельное программирование
+        - *## Безопасность, надежность, развертывание и управление инфраструктурой
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\OOP.md">OOP.md</a>
+        - *# Объектно-ориентированное программирование
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\OS.md">OS.md</a>
+        - *# Операционные системы
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Paradigms.md">Paradigms.md</a>
+        - *# Парадигмы программирования
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Parallel.md">Parallel.md</a>
+        - *# Параллельное программирование
+        - *## Структура курса
+        - *## Видео-лекции
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Patterns.md">Patterns.md</a>
+        - *# Шаблоны проектирования
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Quality.md">Quality.md</a>
+        - *# Качество, тестирование и надежность ПО
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Security.md">Security.md</a>
+        - *# Безопасность информационных систем
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Short.md">Short.md</a>
+        - *# Программная инженерия
+        - *## Основы программирования: 1 семестр 1 курса
+        - *## Основы программирования: 2 семестр 1 курса
+        - *## 1 семестр 2 курса
+        - *## Асинхронное программирование: 2 семестр 2 курса
+        - *## Технологический стек Node.js: 1 семестр 3 курса
+        - *## Технологический стек Node.js: 2 семестр 3 курса
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Special.md">Special.md</a>
+        - *# Special Course for Information System Security
+        - *## Web programming and technologies
+        - *## Creating server-side application
+        - *## Final contest
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\System.md">System.md</a>
+        - *# Системное программирование
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Tools.md">Tools.md</a>
+        - *# Инструменты разработки и жизненного цикла ПО
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\UI-UX.md">UI-UX.md</a>
+        - *# Проектирование пользовательских интерфейсов
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Index-master\Courses\Web.md">Web.md</a>
+        - *# Веб-технологии

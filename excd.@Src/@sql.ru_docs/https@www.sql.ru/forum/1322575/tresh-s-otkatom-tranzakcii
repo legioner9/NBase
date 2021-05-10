@@ -1,0 +1,916 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">
+<head>
+  <title>Трэш с откатом транзакции / Informix / Sql.ru</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+  <link title="Sql.ru Forum search" type="application/opensearchdescription+xml"  rel="search" href="../provider.xml"/>
+  <link rel="stylesheet" type="text/css" href="../../css/actualforum2.min.css@v=10" media="screen" />
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="../../css/ie.css" media="screen" />
+    <![endif]-->
+  <meta name="Description" content="Трэш с откатом транзакции / Informix / Начиная с 12.10.FC12/w64 и по нынешний 14.10FC3/w64 периодически разрушаются таблицы, после чего приходится создавать новую таблицу, селектить * из старой-поврежденной в новую, затем старую удалять, новую переименовывать на место старой, после чего кропот..." /><link rel="canonical" href="tresh-s-otkatom-tranzakcii"/>
+  <script type="text/javascript">jQuery = false;</script>
+  <!--afhead-->
+<!--  <script type="text/javascript" src="/js/utils.js"></script> -->
+
+  <meta property="og:image" content="https://www.sql.ru/images/logofb.jpg"/>
+
+ <!-- Google Analytics -->
+ <script>
+ window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ ga('create', 'UA-265508-1', 'sql.ru');
+ ga('send', 'pageview');
+ </script>
+ <script async src='../../../https@www.google-analytics.com/analytics.js'></script>
+ <!-- End Google Analytics -->
+</head>
+
+<body>
+  <div id="page-container">
+    <div id="header">
+      <div class="header-wrap">
+        <div id="title">
+          <a href="../../default.htm" title="На главную страницу">SQL.ru</a>
+        </div>
+        <!--begin case_isguest-->
+<!--        <div id="login">
+          <form action="{url.login}" method="post">
+            <span class="close" onclick="hideLoginWindow(); return false;">x</span>
+
+            <div class="username">
+              <label for="login-input">Логин:</label> <input type="text" name="login" id=
+              "login-input" />
+            </div>
+
+            <div class="password">
+              <label for="pass-input">Пароль:</label> <input type="password" name="password" id=
+              "pass-input" />
+            </div>
+			
+			<div style="text-align:left;">
+				<label style="width:auto" for="cbremember">Запомнить меня</label>
+				<input type="checkbox" name="cbremember" id="cbremember" checked="checked" />
+			</div>
+
+            <div class="submit">
+              <input type="submit" value="Войти" />
+            </div>
+
+            <div class="links">
+              <a href="{url.register}">Регистрация</a> <a href="{url.remindpass}">Забыли пароль?</a>
+            </div>
+          </form>
+        </div>
+		<span id="login-link" onclick="showLoginWindow(); return false">Вход на сайт</span> -->
+		<!--end case_isguest-->
+		<!--begin case_ismember-->
+<!--		<span id="ismember">
+			<div onclick="document.location='{url.logout}'" id="logout-link"></div>
+			<a href="{url.profile}">{member.nick}</a>
+		</span> -->
+		<!--end case_ismember-->
+<!--        <form action="afsearch.aspx" method="get" id="top-search" name="top-search">
+          <div>
+            <input type="text" name="s" id="search-query" value="поиск" class="inactive"
+            onfocus="tffocus(this)" onblur="tfblur(this)" /> <input type="submit" value="найти" />
+          </div> 
+        </form> 
+-->
+     <ul id="top-menu">
+          <li><a href="../../default.htm">Главная</a></li>
+
+          <li><a href="../../articles">Статьи</a></li>
+
+          <li class="selected"><a href="../../forum">Форум</a></li>
+
+          <li><a href="../../blogs">Блоги</a></li>
+
+          <li><a href="../../books">Книги</a></li>
+
+          <li><a href="../../subscribe">Рассылка</a></li>
+
+          <li><a href="../job">Работа</a></li>
+
+          <li><a href="../../search">Поиск</a></li>
+
+          <li><a href="../../faq">FAQ</a></li>
+        </ul><div id="top-advert"><!-- 468x60 top forum guests -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:468px;height:60px"
+     data-ad-client="ca-pub-2802880694650536"
+     data-ad-slot="7499453909"></ins>
+<!--ipt>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</scri--></div>
+      </div>
+    </div>
+
+    <div id="content-wrapper-forum">
+
+  <table class="forummenu">
+    <tr>
+      <td colspan="3">Добро пожаловать в форум, <b>Guest</b>  &gt;&gt;  
+      
+       <!--begin case_isguest-->
+       <a href="../login.aspx@action=login">Войти</a> | <a href="../register.aspx">Регистрация</a> |<!--end case_isguest-->
+       <a href="../actualsearch.aspx@bid=29">Поиск</a> | <a href="../rules.aspx">Правила</a> |
+      
+      </td> <!--  allowtransparency="true" -->
+
+      <td style="text-align:right;"><a style="font : 11px verdana" href="#" onclick=
+      "javascript:void(window.open('../actualutils.aspx@action=favtopic&tid=1322575&h=1143082641','ActualForum','height=200,width=500,resizable=1,scrollbars=yes,menubar=no,status=yes'));">
+      В избранное</a> | <a style="font : 11px verdana" href="#" onclick=
+      "javascript:void(window.open('../actualutils.aspx@action=subscribe&tid=1322575&h=1143082641','ActualForum','height=200,width=500,resizable=1,scrollbars=yes,menubar=no,status=yes'));">
+      Подписаться</a></td>
+    </tr>
+
+    <tr style="font:bold 13px; background-color:#fff">
+      <td colspan="2"><a class="forumLink" href="../../forum">Все форумы</a> / <a class=
+      "forumLink" href="../informix">Informix</a></td>
+
+      <td style="text-align:center;"></td>
+
+      <td style="text-align:right">
+	<a href="../actualpost.aspx@bid=29"><img class="button_img_new" src="../../images/post.gif" alt=
+      "Новый топик" /></a>    <a href="../actualpost.aspx@bid=29&tid=1322575&mid=0&p=1" rel="nofollow"><img class="button_img_reply" src="../../images/reply.gif" alt=
+      "Ответить" /></a></td>
+    </tr>
+  </table>
+
+<!--  <h1 class="topic_subject">
+    Трэш с откатом транзакции
+  </h1>
+<div class="smallInfo">Ответов: 12&nbsp;&nbsp;&nbsp;Последнее сообщение: сегодня, 15:55</div>
+-->
+  
+  <!--afinfo-->
+  
+  <!--begin threadtable-->
+
+
+  
+  <a name="22084618"></a>
+
+  <table class="msgTable">
+    <tr>
+        <td id="id22084618" class="messageHeader" colspan="2"><img src="../images/message.gif" alt="">&nbsp;Трэш с откатом транзакции&nbsp;
+                
+        </td>
+    </tr>
+    <tr style="vertical-align:top">
+      <td style="width:15%" class="msgBody">
+       
+       <a href="../memberinfo.aspx@mid=36214">
+       falcon111 </a><br />
+      <font style="color:#888;">Member</font><br />
+      <br />
+      <span class="smallInfo">Откуда: <br />
+	Сообщений: 133<br/></span>
+      
+       </td>
+
+        <td class="msgBody">
+            Начиная с 12.10.FC12/w64 и по нынешний 14.10FC3/w64 периодически разрушаются таблицы, после чего приходится создавать новую таблицу, селектить * из старой-поврежденной в новую, затем старую удалять, новую переименовывать на место старой, после чего кропотливо восстанавливать все реферальные констрейнты.<br /><br />Причина такого сбоя - обычно откат транзакции по причине ошибки после alter table либо после вставки, не прошедшей из-за невыполнившихся условий какого-либо констрейнта.<br /><br />После этого oncheck находит ошибку в используемом числе страниц в поврежденной таблице и вылетает. Только что в очередной раз восстанавливал таблицу Clients, не сохранил что пишет oncheck. Исправить им ничего не получается. У меня уже целый список скриптов для восстановления разных поврежденных таблиц, это жесть.<br /><br />alter-ы редко и теперь всегда с бэкапом перед этим - это не так напрягает.<br />А вот откатившиеся insert-ы - достали. Воркэраунд, стараемся все инсерты делать черед процедуры, где до инсерта проверяем все поля на то, чтобы они не вызвали откат по констрейнту.<br /><br />Что это за напасть, и как с ней бороться?<br /><br />11:30:54  Error encountered during rollback.<br />11:30:54  Assert Failed: Rollback error 126<br />11:30:54  IBM Informix Dynamic Server Version 14.10.FC3<br />11:30:54   Who: Session(74727, informix@cz929, 29248, 0000000124059F60)<br />		Thread(77721, sqlexec, 1240165d8, 9)<br />		File: rsextlog.c Line: 1756<br />11:30:54   Results: Log record (OLDRSAM:ADDITEM) in log 76650, offset 0x4c4240 was not rolled back<br />11:30:54   Action: Use 'onlog' to view the transaction and repair manually.<br />11:30:54  stack trace for pid 4168 written to C:\PROGRA~1\IBM\Informix\tmp\af.33819490<br />11:30:56   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.33819490<br />11:33:26  Rollback error 126<br />11:33:27  Rollback error 126<br />11:33:27  Checkpoint Completed:  duration was 58 seconds.<br />11:33:27  Fri Feb 21 - loguniq 76650, logpos 0x92a018, timestamp: 0x341eb5f1 Interval: 952508<br />11:33:28  Assert Warning: Error encountered during rollback.<br />11:33:28  IBM Informix Dynamic Server Version 14.10.FC3<br />11:33:28   Who: Session(74727, informix@cz929, 29248, 0000000124059F60)<br />		Thread(77721, sqlexec, 1240165d8, 9)<br />		File: rskey.c Line: 1325<br />11:33:28   Results: Index 'billing:&quot;informix&quot;.clients#i_clients_checkrequisites' is now unusable<br />11:33:28   Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_checkrequisites'<br />11:33:28  stack trace for pid 4168 written to C:\PROGRA~1\IBM\Informix\tmp\af.33819490<br />11:33:30   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.33819490<br />11:37:23  Assert Warning: Error encountered during rollback.<br />11:37:23  IBM Informix Dynamic Server Version 14.10.FC3<br />11:37:23   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rskey.c Line: 1325<br />11:37:23   Results: Index 'billing:&quot;informix&quot;.clients#i_clients_checkrequisites' is now unusable<br />11:37:23   Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_checkrequisites'<br />11:37:23  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:37:25   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:37:25  Error encountered during rollback.<br />11:37:25  Error encountered during rollback.<br />11:37:25  Assert Failed: Rollback error 126<br />11:37:25  IBM Informix Dynamic Server Version 14.10.FC3<br />11:37:25   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rsextlog.c Line: 1756<br />11:37:25   Results: Log record (OLDRSAM:ADDITEM) in log 76650, offset 0x4c40c0 was not rolled back<br />11:37:25   Action: Use 'onlog' to view the transaction and repair manually.<br />11:37:25  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:37:27   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:39:57  Rollback error 126<br />11:39:57  Rollback error 126<br />11:39:57  Assert Warning: Error encountered during rollback.<br />11:39:57  IBM Informix Dynamic Server Version 14.10.FC3<br />11:39:57   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rskey.c Line: 1325<br />11:39:57   Results: Index 'billing:&quot;informix&quot;.clients#i_clients_addressonly' is now unusable<br />11:39:57   Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_addressonly'<br />11:39:57  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:39:59   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:39:59  Error encountered during rollback.<br />11:40:00  Error encountered during rollback.<br />11:40:00  Assert Failed: Rollback error 126<br />11:40:00  IBM Informix Dynamic Server Version 14.10.FC3<br />11:40:00   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rsextlog.c Line: 1756<br />11:40:00   Results: Log record (OLDRSAM:ADDITEM) in log 76650, offset 0x4c4040 was not rolled back<br />11:40:00   Action: Use 'onlog' to view the transaction and repair manually.<br />11:40:00  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:40:02   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:42:30  Rollback error 126<br />11:42:31  Rollback error 126<br />11:42:31  Assert Warning: Error encountered during rollback.<br />11:42:31  IBM Informix Dynamic Server Version 14.10.FC3<br />11:42:31   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rskey.c Line: 1325<br />11:42:31   Results: Index 'billing:&quot;informix&quot;.clients#i_clients_validatestatutorydocuments' is now unusable<br />11:42:31   Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_validatestatutorydocuments'<br />11:42:31  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:42:33   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:42:33  Error encountered during rollback.<br />11:42:34  Error encountered during rollback.<br />11:42:34  Assert Failed: Rollback error 126<br />11:42:34  IBM Informix Dynamic Server Version 14.10.FC3<br />11:42:34   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rsextlog.c Line: 1756<br />11:42:34   Results: Log record (OLDRSAM:ADDITEM) in log 76650, offset 0x4c3fa4 was not rolled back<br />11:42:34   Action: Use 'onlog' to view the transaction and repair manually.<br />11:42:34  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:42:36   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:43:28  Rollback error 126<br />11:43:29  Rollback error 126<br />11:43:29  Assert Warning: Error encountered during rollback.<br />11:43:29  IBM Informix Dynamic Server Version 14.10.FC3<br />11:43:29   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rskey.c Line: 1325<br />11:43:29   Results: Index 'billing:&quot;informix&quot;.clients#i_clients_ignorerequisitescheck' is now unusable<br />11:43:29   Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_ignorerequisitescheck'<br />11:43:29  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:43:31   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:43:32  Error encountered during rollback.<br />11:43:32  Error encountered during rollback.<br />11:43:32  Assert Failed: Rollback error 126<br />11:43:32  IBM Informix Dynamic Server Version 14.10.FC3<br />11:43:32   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rsextlog.c Line: 1756<br />11:43:32   Results: Log record (OLDRSAM:ADDITEM) in log 76650, offset 0x4c3f24 was not rolled back<br />11:43:32   Action: Use 'onlog' to view the transaction and repair manually.<br />11:43:32  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:43:34   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:46:02  Rollback error 126<br />11:46:02  Rollback error 126<br />11:46:03  Assert Warning: Error encountered during rollback.<br />11:46:03  IBM Informix Dynamic Server Version 14.10.FC3<br />11:46:03   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rskey.c Line: 1325<br />11:46:03   Results: Index 'billing:&quot;informix&quot;.clients#i_clients_mfanotifylogon' is now unusable<br />11:46:03   Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_mfanotifylogon'<br />11:46:03  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:46:05   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:46:05  Error encountered during rollback.<br />11:46:05  Error encountered during rollback.<br />11:46:05  Assert Failed: Rollback error 126<br />11:46:05  IBM Informix Dynamic Server Version 14.10.FC3<br />11:46:05   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rsextlog.c Line: 1756<br />11:46:05   Results: Log record (OLDRSAM:ADDITEM) in log 76650, offset 0x4c3ea4 was not rolled back<br />11:46:05   Action: Use 'onlog' to view the transaction and repair manually.<br />11:46:05  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:46:07   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:48:35  Rollback error 126<br />11:48:36  Rollback error 126<br />11:48:36  Assert Warning: Error encountered during rollback.<br />11:48:36  IBM Informix Dynamic Server Version 14.10.FC3<br />11:48:36   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rskey.c Line: 1325<br />11:48:36   Results: Index 'billing:&quot;informix&quot;.clients#i_clients_multifactorauthentication' is now unusable<br />11:48:36   Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_multifactorauthentication'<br />11:48:36  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:48:38   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:48:38  Error encountered during rollback.<br />11:48:39  Error encountered during rollback.<br />11:48:39  Assert Failed: Rollback error 126<br />11:48:39  IBM Informix Dynamic Server Version 14.10.FC3<br />11:48:39   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rsextlog.c Line: 1756<br />11:48:39   Results: Log record (OLDRSAM:ADDITEM) in log 76650, offset 0x4c3e24 was not rolled back<br />11:48:39   Action: Use 'onlog' to view the transaction and repair manually.<br />11:48:39  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:48:41   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:48:43  Releasing server from system block<br />11:51:08  Rollback error 126<br />11:51:08  Rollback error 126<br />11:51:08  Assert Warning: Error encountered during rollback.<br />11:51:08  IBM Informix Dynamic Server Version 14.10.FC3<br />11:51:08   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rskey.c Line: 1325<br />11:51:08   Results: Index 'billing:&quot;informix&quot;.clients#i_clients_showhwitemsinlk' is now unusable<br />11:51:08   Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_showhwitemsinlk'<br />11:51:08  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:51:10   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:51:11  Error encountered during rollback.<br />11:51:11  Error encountered during rollback.<br />11:51:11  Assert Failed: Rollback error 126<br />11:51:11  IBM Informix Dynamic Server Version 14.10.FC3<br />11:51:11   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rsextlog.c Line: 1756<br />11:51:11   Results: Log record (OLDRSAM:ADDITEM) in log 76650, offset 0x4c3da4 was not rolled back<br />11:51:11   Action: Use 'onlog' to view the transaction and repair manually.<br />11:51:11  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:51:13   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:53:41  Rollback error 126<br />11:53:42  Rollback error 126<br />11:53:42  Assert Warning: Error encountered during rollback.<br />11:53:42  IBM Informix Dynamic Server Version 14.10.FC3<br />11:53:42   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rskey.c Line: 1325<br />11:53:42   Results: Index 'billing:&quot;informix&quot;.clients#i_clients_showserverlocationlk' is now unusable<br />11:53:42   Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_showserverlocationlk'<br />11:53:42  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:53:44   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:53:44  Error encountered during rollback.<br />11:53:45  Error encountered during rollback.<br />11:53:45  Assert Failed: Rollback error 126<br />11:53:45  IBM Informix Dynamic Server Version 14.10.FC3<br />11:53:45   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rsextlog.c Line: 1756<br />11:53:45   Results: Log record (OLDRSAM:ADDITEM) in log 76650, offset 0x4c3d24 was not rolled back<br />11:53:45   Action: Use 'onlog' to view the transaction and repair manually.<br />11:53:45  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:53:47   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:53:49  Releasing server from system block<br />11:56:15  Rollback error 126<br />11:56:16  Rollback error 126<br />11:56:16  Assert Warning: Error encountered during rollback.<br />11:56:16  IBM Informix Dynamic Server Version 14.10.FC3<br />11:56:16   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rskey.c Line: 1325<br />11:56:16   Results: Index 'billing:&quot;informix&quot;.clients#i_clients_showindebitorslist' is now unusable<br />11:56:16   Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_showindebitorslist'<br />11:56:16  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:56:18   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:56:18  Error encountered during rollback.<br />11:56:19  Error encountered during rollback.<br />11:56:19  Assert Failed: Rollback error 126<br />11:56:19  IBM Informix Dynamic Server Version 14.10.FC3<br />11:56:19   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rsextlog.c Line: 1756<br />11:56:19   Results: Log record (OLDRSAM:ADDITEM) in log 76650, offset 0x4c3ca4 was not rolled back<br />11:56:19   Action: Use 'onlog' to view the transaction and repair manually.<br />11:56:19  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:56:21   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:56:23  Releasing server from system block<br />11:58:49  Rollback error 126<br />11:58:50  Rollback error 126<br />11:58:50  Assert Warning: Error encountered during rollback.<br />11:58:50  IBM Informix Dynamic Server Version 14.10.FC3<br />11:58:50   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rskey.c Line: 1325<br />11:58:50   Results: Index 'billing:&quot;informix&quot;.clients#i_clients_midvisibility' is now unusable<br />11:58:50   Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_midvisibility'<br />11:58:50  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:58:53   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:58:53  Error encountered during rollback.<br />11:58:53  Error encountered during rollback.<br />11:58:53  Assert Failed: Rollback error 126<br />11:58:53  IBM Informix Dynamic Server Version 14.10.FC3<br />11:58:53   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rsextlog.c Line: 1756<br />11:58:53   Results: Log record (OLDRSAM:ADDITEM) in log 76650, offset 0x4c3c24 was not rolled back<br />11:58:53   Action: Use 'onlog' to view the transaction and repair manually.<br />11:58:53  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />11:58:55   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:01:23  Rollback error 126<br />12:01:25  Rollback error 126<br />12:01:25  Assert Warning: Error encountered during rollback.<br />12:01:25  IBM Informix Dynamic Server Version 14.10.FC3<br />12:01:25   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rskey.c Line: 1325<br />12:01:25   Results: Index 'billing:&quot;informix&quot;.clients#i_clients_blockservice is now unusable<br />12:01:25   Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_blockservice'<br />12:01:25  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:01:27   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:01:27  Error encountered during rollback.<br />12:01:28  Error encountered during rollback.<br />12:01:28  Assert Failed: Rollback error 126<br />12:01:28  IBM Informix Dynamic Server Version 14.10.FC3<br />12:01:28   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rsextlog.c Line: 1756<br />12:01:28   Results: Log record (OLDRSAM:ADDITEM) in log 76650, offset 0x4c3ba4 was not rolled back<br />12:01:28   Action: Use 'onlog' to view the transaction and repair manually.<br />12:01:28  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:01:30   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:01:32  Releasing server from system block<br />12:03:58  Rollback error 126<br />12:03:59  Rollback error 126<br />12:03:59  Assert Warning: Error encountered during rollback.<br />12:03:59  IBM Informix Dynamic Server Version 14.10.FC3<br />12:03:59   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rskey.c Line: 1325<br />12:03:59   Results: Index 'billing:&quot;informix&quot;.clients#i_clients_block1cexport' is now unusable<br />12:03:59   Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_block1cexport'<br />12:03:59  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:04:01   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:04:01  Error encountered during rollback.<br />12:04:02  Error encountered during rollback.<br />12:04:02  Assert Failed: Rollback error 126<br />12:04:02  IBM Informix Dynamic Server Version 14.10.FC3<br />12:04:02   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rsextlog.c Line: 1756<br />12:04:02   Results: Log record (OLDRSAM:ADDITEM) in log 76650, offset 0x4c3344 was not rolled back<br />12:04:02   Action: Use 'onlog' to view the transaction and repair manually.<br />12:04:02  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:04:04   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:06:30  Rollback error 126<br />12:06:31  Rollback error 126<br />12:06:32  Assert Warning: Error encountered during rollback.<br />12:06:32  IBM Informix Dynamic Server Version 14.10.FC3<br />12:06:32   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rskey.c Line: 1325<br />12:06:32   Results: Index 'billing:&quot;informix&quot;.clients#i_clients_budgetary' is now unusable<br />12:06:32   Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_budgetary'<br />12:06:32  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:06:34   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:06:34  Error encountered during rollback.<br />12:06:34  Error encountered during rollback.<br />12:06:34  Assert Failed: Rollback error 126<br />12:06:34  IBM Informix Dynamic Server Version 14.10.FC3<br />12:06:34   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rsextlog.c Line: 1756<br />12:06:34   Results: Log record (OLDRSAM:ADDITEM) in log 76650, offset 0x4c32c4 was not rolled back<br />12:06:34   Action: Use 'onlog' to view the transaction and repair manually.<br />12:06:34  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:06:37   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:09:05  Rollback error 126<br />12:09:06  Rollback error 126<br />12:09:06  Assert Warning: Error encountered during rollback.<br />12:09:06  IBM Informix Dynamic Server Version 14.10.FC3<br />12:09:06   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rskey.c Line: 1325<br />12:09:06   Results: Index 'billing:&quot;informix&quot;.clients#i_clients_archived' is now unusable<br />12:09:06   Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_archived'<br />12:09:06  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:09:08   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:09:08  Error encountered during rollback.<br />12:09:09  Error encountered during rollback.<br />12:09:09  Assert Failed: Rollback error 126<br />12:09:09  IBM Informix Dynamic Server Version 14.10.FC3<br />12:09:09   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rsextlog.c Line: 1756<br />12:09:09   Results: Log record (OLDRSAM:ADDITEM) in log 76650, offset 0x4c313c was not rolled back<br />12:09:09   Action: Use 'onlog' to view the transaction and repair manually.<br />12:09:09  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:09:11   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:09:11  Rollback error 126<br />12:09:12  Rollback error 126<br />12:09:12  Assert Warning: Error encountered during rollback.<br />12:09:12  IBM Informix Dynamic Server Version 14.10.FC3<br />12:09:12   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rskey.c Line: 1325<br />12:09:12   Results: Index 'billing:&quot;informix&quot;.clients#i_clients_fastregister' is now unusable<br />12:09:12   Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_fastregister'<br />12:09:12  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:09:14   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:09:14  Error encountered during rollback.<br />12:09:15  Error encountered during rollback.<br />12:09:15  Assert Failed: Rollback error 126<br />12:09:15  IBM Informix Dynamic Server Version 14.10.FC3<br />12:09:15   Who: Session(13, informix@cz929, 0, 0000000124055050)<br />		Thread(28, fast_rec, 124013188, 11)<br />		File: rsextlog.c Line: 1756<br />12:09:15   Results: Log record (OLDRSAM:ADDITEM) in log 76650, offset 0x4c2f18 was not rolled back<br />12:09:15   Action: Use 'onlog' to view the transaction and repair manually.<br />12:09:15  stack trace for pid 352 written to C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:09:17   See Also: C:\PROGRA~1\IBM\Informix\tmp\af.40496c2<br />12:09:17  Rollback error 126<br />12:09:18  Rollback error 126 
+	    
+
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" class="msgFooter">
+            21 фев 20, 14:41    [<a onclick="showCopyLinks(this, '22084618')" style="text-decoration:underline; cursor:pointer; position:relative">22084618</a>] &nbsp;&nbsp;&nbsp;&nbsp;<a href="../actualpost.aspx@bid=29&tid=1322575&mid=22084618&p=1" rel="nofollow">Ответить</a>
+            | <a href="../actualpost.aspx@bid=29&tid=1322575&mid=22084618&p=1&act=quot" rel="nofollow">Цитировать</a> 
+		
+            <a href="../actualutils.aspx@action=notifymod&msg=22084618" rel="nofollow">Сообщить модератору</a>
+        </td>
+    </tr>
+  </table>
+  
+  <a name="22084910"></a>
+
+  <table class="msgTable">
+    <tr>
+        <td id="id22084910" class="messageHeader" colspan="2"><img src="../images/message.gif" alt="">&nbsp;Re: Трэш с откатом транзакции&nbsp;
+                
+        </td>
+    </tr>
+    <tr style="vertical-align:top">
+      <td style="width:15%" class="msgBody">
+       
+       <a href="../memberinfo.aspx@mid=6169">
+       cpr </a><br />
+      <font style="color:#888;">Member</font><br />
+      <br />
+      <span class="smallInfo">Откуда: Rostov-on-Don<br />
+	Сообщений: 750<br/></span>
+      
+       </td>
+
+        <td class="msgBody">
+            Жуть какая то.<br />А смотрели онлогом логи со сбойными транзакциями?<br />Мне когда то в аналогичном случае когда энджайн спотыкался все время удалось найти закономерность и придумать воркэраунд.<br />А вообще сапорт что говорит? 
+	    
+
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" class="msgFooter">
+            21 фев 20, 21:05    [<a onclick="showCopyLinks(this, '22084910')" style="text-decoration:underline; cursor:pointer; position:relative">22084910</a>] &nbsp;&nbsp;&nbsp;&nbsp;<a href="../actualpost.aspx@bid=29&tid=1322575&mid=22084910&p=1" rel="nofollow">Ответить</a>
+            | <a href="../actualpost.aspx@bid=29&tid=1322575&mid=22084910&p=1&act=quot" rel="nofollow">Цитировать</a> 
+		
+            <a href="../actualutils.aspx@action=notifymod&msg=22084910" rel="nofollow">Сообщить модератору</a>
+        </td>
+    </tr>
+  </table>
+  
+  <a name="22084935"></a>
+
+  <table class="msgTable">
+    <tr>
+        <td id="id22084935" class="messageHeader" colspan="2"><img src="../images/message.gif" alt="">&nbsp;Re: Трэш с откатом транзакции&nbsp;
+                
+        </td>
+    </tr>
+    <tr style="vertical-align:top">
+      <td style="width:15%" class="msgBody">
+       
+       <a href="../memberinfo.aspx@mid=36214">
+       falcon111 </a><br />
+      <font style="color:#888;">Member</font><br />
+      <br />
+      <span class="smallInfo">Откуда: <br />
+	Сообщений: 133<br/></span>
+      
+       </td>
+
+        <td class="msgBody">
+            <table class='quote'><tr><th>cpr</th><th><a href="../actualutils.aspx@action=gotomsg&msg=22084910" rel="nofollow">&uarr;<a/></th></tr><tr><td colspan='2'>Жуть какая то.<br />А смотрели онлогом логи со сбойными транзакциями?<br />Мне когда то в аналогичном случае когда энджайн спотыкался все время удалось найти закономерность и придумать воркэраунд.<br />А вообще сапорт что говорит?</td></tr></table><br />Именно, что жуть. онлогом смотрел, но ничего не нашел подозрительного. А саппорт у нас закончился, начальство хочет менять БД. 
+	    
+
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" class="msgFooter">
+            21 фев 20, 21:41    [<a onclick="showCopyLinks(this, '22084935')" style="text-decoration:underline; cursor:pointer; position:relative">22084935</a>] &nbsp;&nbsp;&nbsp;&nbsp;<a href="../actualpost.aspx@bid=29&tid=1322575&mid=22084935&p=1" rel="nofollow">Ответить</a>
+            | <a href="../actualpost.aspx@bid=29&tid=1322575&mid=22084935&p=1&act=quot" rel="nofollow">Цитировать</a> 
+		
+            <a href="../actualutils.aspx@action=notifymod&msg=22084935" rel="nofollow">Сообщить модератору</a>
+        </td>
+    </tr>
+  </table>
+  
+  <a name="22084938"></a>
+
+  <table class="msgTable">
+    <tr>
+        <td id="id22084938" class="messageHeader" colspan="2"><img src="../images/message.gif" alt="">&nbsp;Re: Трэш с откатом транзакции&nbsp;
+                
+        </td>
+    </tr>
+    <tr style="vertical-align:top">
+      <td style="width:15%" class="msgBody">
+       
+       <a href="../memberinfo.aspx@mid=36214">
+       falcon111 </a><br />
+      <font style="color:#888;">Member</font><br />
+      <br />
+      <span class="smallInfo">Откуда: <br />
+	Сообщений: 133<br/></span>
+      
+       </td>
+
+        <td class="msgBody">
+            В дополнение, с той версии, где начался этот глюк, совместно с ним появился другой глюк - при вызове любого бинарника сервера с большой вероятностью выскакивает ошибка:<br />C:\Program Files\IBM\Informix&gt;onstat -<br />MapViewOfFileEx: w32ec=487 at nt_shm.c:735<br />21:48:54  shmat: [22]: operating system error<br />21:48:54  Client could not attach server shared memory segment, use IFX_XFER_SHMBASE.<br />onstat: Cannot attach to shared memory. errno = 22<br /><br />И что-то мне подсказывает, что эти глюки связаны. Поиск по Cannot attach to shared memory находит какие-то воркэраунды еще с 32битных систем, где там больше чем 2 гига (или сколько там - уже не помню), сервер нормально адресовать не мог, но в моем случае система 64битная, и проблемы недоступности части адресов выглядят... надуманно.<br /><br />Однако, возможно, что это имеет какую-то объективную причину, и глюк с откатом транзакции связан с этим. Тем более что af файл начинается с<br /><pre class="src lang-sql">
+21:48:09  doitem <span style='color: #000000;'>failed</span><span style='color: #808080;'>(</span>iserrno=126<span style='color: #808080;'>)</span>: could <span style='color: #808080;'>not</span> <span style='color: #0000ff;'>delete</span> item
+21:48:09  Node
+Node 10 Leaf Prev 13 <span style='color: #0000ff;'>Next</span> 6
+page 5:87404 sz 4096 flags 890 nslots 1 frcnt 3182 frptr 906 <span style='color: #0000ff;'>next</span> 6 prev 13
+Slot 1 sl_ptr 24 sl_len 882 sl_flags 0
+:unknown type:
+	4000b6   76b03    
+	4000b6   76c01    
+	4000b6   76c02    
+	4000b6   76c03    
+	4000b6   76d01    
+</pre>
+<br />Тут толи косяк обработчика индекса, не могущего удалить узел, толи наоборот, обработчик индекса перекашивает из-за каких-то проблем с памятью.<br /><br />Самое забавное, что до 12.70FC12 этого ничего не было. 
+	    
+
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" class="msgFooter">
+            21 фев 20, 21:57    [<a onclick="showCopyLinks(this, '22084938')" style="text-decoration:underline; cursor:pointer; position:relative">22084938</a>] &nbsp;&nbsp;&nbsp;&nbsp;<a href="../actualpost.aspx@bid=29&tid=1322575&mid=22084938&p=1" rel="nofollow">Ответить</a>
+            | <a href="../actualpost.aspx@bid=29&tid=1322575&mid=22084938&p=1&act=quot" rel="nofollow">Цитировать</a> 
+		
+            <a href="../actualutils.aspx@action=notifymod&msg=22084938" rel="nofollow">Сообщить модератору</a>
+        </td>
+    </tr>
+  </table>
+  
+  <a name="22085664"></a>
+
+  <table class="msgTable">
+    <tr>
+        <td id="id22085664" class="messageHeader" colspan="2"><img src="../images/message.gif" alt="">&nbsp;Re: Трэш с откатом транзакции&nbsp;
+                
+        </td>
+    </tr>
+    <tr style="vertical-align:top">
+      <td style="width:15%" class="msgBody">
+       
+       <a href="../memberinfo.aspx@mid=6169">
+       cpr </a><br />
+      <font style="color:#888;">Member</font><br />
+      <br />
+      <span class="smallInfo">Откуда: Rostov-on-Don<br />
+	Сообщений: 750<br/></span>
+      
+       </td>
+
+        <td class="msgBody">
+            falcon111,<br /><br />А зачем тогда версию поднимали?<br /><br />Вернуться есть возможность? 
+	    
+
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" class="msgFooter">
+            23 фев 20, 23:55    [<a onclick="showCopyLinks(this, '22085664')" style="text-decoration:underline; cursor:pointer; position:relative">22085664</a>] &nbsp;&nbsp;&nbsp;&nbsp;<a href="../actualpost.aspx@bid=29&tid=1322575&mid=22085664&p=1" rel="nofollow">Ответить</a>
+            | <a href="../actualpost.aspx@bid=29&tid=1322575&mid=22085664&p=1&act=quot" rel="nofollow">Цитировать</a> 
+		
+            <a href="../actualutils.aspx@action=notifymod&msg=22085664" rel="nofollow">Сообщить модератору</a>
+        </td>
+    </tr>
+  </table>
+  
+  <a name="22085893"></a>
+
+  <table class="msgTable">
+    <tr>
+        <td id="id22085893" class="messageHeader" colspan="2"><img src="../images/message.gif" alt="">&nbsp;Re: Трэш с откатом транзакции&nbsp;
+                
+        </td>
+    </tr>
+    <tr style="vertical-align:top">
+      <td style="width:15%" class="msgBody">
+       
+       <a href="../memberinfo.aspx@mid=37605">
+       Igor Zaiets </a><br />
+      <font style="color:#888;">Member</font><br />
+      <br />
+      <span class="smallInfo">Откуда: <br />
+	Сообщений: 74<br/></span>
+      
+       </td>
+
+        <td class="msgBody">
+            Отключение Btree scaner не помогает? 
+	    
+
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" class="msgFooter">
+            24 фев 20, 15:58    [<a onclick="showCopyLinks(this, '22085893')" style="text-decoration:underline; cursor:pointer; position:relative">22085893</a>] &nbsp;&nbsp;&nbsp;&nbsp;<a href="../actualpost.aspx@bid=29&tid=1322575&mid=22085893&p=1" rel="nofollow">Ответить</a>
+            | <a href="../actualpost.aspx@bid=29&tid=1322575&mid=22085893&p=1&act=quot" rel="nofollow">Цитировать</a> 
+		
+            <a href="../actualutils.aspx@action=notifymod&msg=22085893" rel="nofollow">Сообщить модератору</a>
+        </td>
+    </tr>
+  </table>
+  
+  <a name="22086023"></a>
+
+  <table class="msgTable">
+    <tr>
+        <td id="id22086023" class="messageHeader" colspan="2"><img src="../images/message.gif" alt="">&nbsp;Re: Трэш с откатом транзакции&nbsp;
+                
+        </td>
+    </tr>
+    <tr style="vertical-align:top">
+      <td style="width:15%" class="msgBody">
+       
+       <a href="../memberinfo.aspx@mid=36214">
+       falcon111 </a><br />
+      <font style="color:#888;">Member</font><br />
+      <br />
+      <span class="smallInfo">Откуда: <br />
+	Сообщений: 133<br/></span>
+      
+       </td>
+
+        <td class="msgBody">
+            <table class='quote'><tr><th>cpr</th><th><a href="../actualutils.aspx@action=gotomsg&msg=22085664" rel="nofollow">&uarr;<a/></th></tr><tr><td colspan='2'>falcon111,<br />А зачем тогда версию поднимали?<br />Вернуться есть возможность?</td></tr></table><br />В 14 есть некоторые нововведения, которые перевесили осторожность. А неприятности начались позже.<br />Вернуться проблематично, там уже понаписана куча всякого по типу with и т.п.<br /><br /><table class='quote'><tr><th>Igor Zaiets</th><th><a href="../actualutils.aspx@action=gotomsg&msg=22085893" rel="nofollow">&uarr;<a/></th></tr><tr><td colspan='2'>Отключение Btree scaner не помогает?</td></tr></table><br />Не пробовал. Попробую. 
+	    
+
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" class="msgFooter">
+            24 фев 20, 20:08    [<a onclick="showCopyLinks(this, '22086023')" style="text-decoration:underline; cursor:pointer; position:relative">22086023</a>] &nbsp;&nbsp;&nbsp;&nbsp;<a href="../actualpost.aspx@bid=29&tid=1322575&mid=22086023&p=1" rel="nofollow">Ответить</a>
+            | <a href="../actualpost.aspx@bid=29&tid=1322575&mid=22086023&p=1&act=quot" rel="nofollow">Цитировать</a> 
+		
+            <a href="../actualutils.aspx@action=notifymod&msg=22086023" rel="nofollow">Сообщить модератору</a>
+        </td>
+    </tr>
+  </table>
+  
+  <a name="22090237"></a>
+
+  <table class="msgTable">
+    <tr>
+        <td id="id22090237" class="messageHeader" colspan="2"><img src="../images/message.gif" alt="">&nbsp;Re: Трэш с откатом транзакции&nbsp;
+                
+        </td>
+    </tr>
+    <tr style="vertical-align:top">
+      <td style="width:15%" class="msgBody">
+       
+       <a href="../memberinfo.aspx@mid=6169">
+       cpr </a><br />
+      <font style="color:#888;">Member</font><br />
+      <br />
+      <span class="smallInfo">Откуда: Rostov-on-Don<br />
+	Сообщений: 750<br/></span>
+      
+       </td>
+
+        <td class="msgBody">
+            falcon111,<br /><br />Отключайте все что в фоне работает, там не только бэтрисканер 
+	    
+
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" class="msgFooter">
+            1 мар 20, 22:03    [<a onclick="showCopyLinks(this, '22090237')" style="text-decoration:underline; cursor:pointer; position:relative">22090237</a>] &nbsp;&nbsp;&nbsp;&nbsp;<a href="../actualpost.aspx@bid=29&tid=1322575&mid=22090237&p=1" rel="nofollow">Ответить</a>
+            | <a href="../actualpost.aspx@bid=29&tid=1322575&mid=22090237&p=1&act=quot" rel="nofollow">Цитировать</a> 
+		
+            <a href="../actualutils.aspx@action=notifymod&msg=22090237" rel="nofollow">Сообщить модератору</a>
+        </td>
+    </tr>
+  </table>
+  
+  <a name="22106551"></a>
+
+  <table class="msgTable">
+    <tr>
+        <td id="id22106551" class="messageHeader" colspan="2"><img src="../images/message.gif" alt="">&nbsp;Re: Трэш с откатом транзакции&nbsp;
+                
+        </td>
+    </tr>
+    <tr style="vertical-align:top">
+      <td style="width:15%" class="msgBody">
+       
+       <a href="../memberinfo.aspx@mid=36214">
+       falcon111 </a><br />
+      <font style="color:#888;">Member</font><br />
+      <br />
+      <span class="smallInfo">Откуда: <br />
+	Сообщений: 133<br/></span>
+      
+       </td>
+
+        <td class="msgBody">
+            После указанного глюка таблица становится неюзабельной, либо ошибки при выборках, либо левые результаты.<br />oncheck говорит следующее:<br /><pre class="src lang-sql">
+Validating <span style='color: #0000ff;'>database</span> billing
+
+    Validating systables <span style='color: #0000ff;'>for</span> <span style='color: #0000ff;'>database</span> billing
+ISAM error:  illegal <span style='color: #0000ff;'>key</span> <span style='color: #000000;'>descriptor</span> <span style='color: #808080;'>(</span>too many parts <span style='color: #808080;'>or</span> too long<span style='color: #808080;'>).</span>
+
+    TBLspace <span style='color: #0000ff;'>name</span>                  newidents
+    Owner                          informix
+    TBLspace number                4000b6
+    Tabid                          2448
+    Row <span style='color: #0000ff;'>size</span>                       9987
+    Number <span style='color: #0000ff;'>of</span> <span style='color: #0000ff;'>columns</span>              73
+    Number <span style='color: #0000ff;'>of</span> indexes              45
+    Number <span style='color: #0000ff;'>of</span> <span style='color: #0000ff;'>rows</span>                 0
+    <span style='color: #0000ff;'>Date</span> created                   04<span style='color: #808080;'>.</span>03<span style='color: #808080;'>.</span>2020
+    TBLspace major version number  459
+    TBLspace minor version number  4862
+    TBLspace type                  T
+    Locking <span style='color: #0000ff;'>level</span>                  R
+    Number <span style='color: #0000ff;'>of</span> pages used           0
+    <span style='color: #0000ff;'>First</span> extent <span style='color: #0000ff;'>size</span>              512
+    <span style='color: #0000ff;'>Next</span> extent <span style='color: #0000ff;'>size</span>               512
+    Flags                          0
+    Site
+    <span style='color: #0000ff;'>Database</span> <span style='color: #0000ff;'>name</span>
+ERROR:  <span style='color: #0000ff;'>Database</span> billing  sysfragments has 1507 records<span style='color: #808080;'>,</span>
+        but systables <span style='color: #808080;'>and</span> sysindices refer <span style='color: #0000ff;'>to</span> 1464<span style='color: #808080;'>.</span>
+
+    Validating <span style='color: #008000;'>syscolumns</span> <span style='color: #0000ff;'>for</span> <span style='color: #0000ff;'>database</span> billing
+
+    Validating sysindices <span style='color: #0000ff;'>for</span> <span style='color: #0000ff;'>database</span> billing
+ISAM error:  illegal <span style='color: #0000ff;'>key</span> <span style='color: #000000;'>descriptor</span> <span style='color: #808080;'>(</span>too many parts <span style='color: #808080;'>or</span> too long<span style='color: #808080;'>).</span>
+</pre>
+<br /><br />Больше ничего выжать нельзя.<br />Зато в логе, во время такого косяка пишет такие строки:<br />11:48:36 Results: Index 'billing:&quot;informix&quot;.clients#i_clients_multifactorauthentication' is now unusable<br />11:48:36 Action: Run 'oncheck -cI billing:&quot;informix&quot;.clients#i_clients_multifactorauthentication'<br /><br />&quot;oncheck -cI индекс&quot; выдает нехитрый результат: удалите и создайте индекс заново. Если все упомянутые в логе индексы дропнуть и пересоздать - все ошибки уходят, и все, вроде бы работает дальше. Хотя бы не надо пересоздавать всю таблицу целиком, как это делали раньше. Попытки повлиять как-то на появление косяка руля бэтрисканер видимого результата не дали. Как по мне - явный косяк БД. Поддержки нет, отрепортить не можем :( 
+	    
+
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" class="msgFooter">
+            вчера, 20:11    [<a onclick="showCopyLinks(this, '22106551')" style="text-decoration:underline; cursor:pointer; position:relative">22106551</a>] &nbsp;&nbsp;&nbsp;&nbsp;<a href="../actualpost.aspx@bid=29&tid=1322575&mid=22106551&p=1" rel="nofollow">Ответить</a>
+            | <a href="../actualpost.aspx@bid=29&tid=1322575&mid=22106551&p=1&act=quot" rel="nofollow">Цитировать</a> 
+		
+            <a href="../actualutils.aspx@action=notifymod&msg=22106551" rel="nofollow">Сообщить модератору</a>
+        </td>
+    </tr>
+  </table>
+  
+  <a name="22106706"></a>
+
+  <table class="msgTable">
+    <tr>
+        <td id="id22106706" class="messageHeader" colspan="2"><img src="../images/message.gif" alt="">&nbsp;Re: Трэш с откатом транзакции&nbsp;
+                
+        </td>
+    </tr>
+    <tr style="vertical-align:top">
+      <td style="width:15%" class="msgBody">
+       
+       <a href="../memberinfo.aspx@mid=6169">
+       cpr </a><br />
+      <font style="color:#888;">Member</font><br />
+      <br />
+      <span class="smallInfo">Откуда: Rostov-on-Don<br />
+	Сообщений: 750<br/></span>
+      
+       </td>
+
+        <td class="msgBody">
+            falcon111,<br /><br />А сервер случайно не на виртуалке развернут?<br />А виртуалка случайно не мигрировала по узлам кластера ВМ? 
+	    
+
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" class="msgFooter">
+            сегодня, 09:39    [<a onclick="showCopyLinks(this, '22106706')" style="text-decoration:underline; cursor:pointer; position:relative">22106706</a>] &nbsp;&nbsp;&nbsp;&nbsp;<a href="../actualpost.aspx@bid=29&tid=1322575&mid=22106706&p=1" rel="nofollow">Ответить</a>
+            | <a href="../actualpost.aspx@bid=29&tid=1322575&mid=22106706&p=1&act=quot" rel="nofollow">Цитировать</a> 
+		
+            <a href="../actualutils.aspx@action=notifymod&msg=22106706" rel="nofollow">Сообщить модератору</a>
+        </td>
+    </tr>
+  </table>
+  
+  <a name="22106885"></a>
+
+  <table class="msgTable">
+    <tr>
+        <td id="id22106885" class="messageHeader" colspan="2"><img src="../images/message.gif" alt="">&nbsp;Re: Трэш с откатом транзакции&nbsp;
+                
+        </td>
+    </tr>
+    <tr style="vertical-align:top">
+      <td style="width:15%" class="msgBody">
+       
+       <a href="../memberinfo.aspx@mid=36214">
+       falcon111 </a><br />
+      <font style="color:#888;">Member</font><br />
+      <br />
+      <span class="smallInfo">Откуда: <br />
+	Сообщений: 133<br/></span>
+      
+       </td>
+
+        <td class="msgBody">
+            <table class='quote'><tr><th>cpr</th><th><a href="../actualutils.aspx@action=gotomsg&msg=22106706" rel="nofollow">&uarr;<a/></th></tr><tr><td colspan='2'>falcon111,<br /><br />А сервер случайно не на виртуалке развернут?<br />А виртуалка случайно не мигрировала по узлам кластера ВМ?</td></tr></table><br /><br />Нет, серверы стоят на реальном железе, никто никуда не мигрирует и пр. 
+	    
+
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" class="msgFooter">
+            сегодня, 13:28    [<a onclick="showCopyLinks(this, '22106885')" style="text-decoration:underline; cursor:pointer; position:relative">22106885</a>] &nbsp;&nbsp;&nbsp;&nbsp;<a href="../actualpost.aspx@bid=29&tid=1322575&mid=22106885&p=1" rel="nofollow">Ответить</a>
+            | <a href="../actualpost.aspx@bid=29&tid=1322575&mid=22106885&p=1&act=quot" rel="nofollow">Цитировать</a> 
+		
+            <a href="../actualutils.aspx@action=notifymod&msg=22106885" rel="nofollow">Сообщить модератору</a>
+        </td>
+    </tr>
+  </table>
+  
+  <a name="22107004"></a>
+
+  <table class="msgTable">
+    <tr>
+        <td id="id22107004" class="messageHeader" colspan="2"><img src="../images/message.gif" alt="">&nbsp;Re: Трэш с откатом транзакции&nbsp;
+                
+        </td>
+    </tr>
+    <tr style="vertical-align:top">
+      <td style="width:15%" class="msgBody">
+       
+       <a href="../memberinfo.aspx@mid=6169">
+       cpr </a><br />
+      <font style="color:#888;">Member</font><br />
+      <br />
+      <span class="smallInfo">Откуда: Rostov-on-Don<br />
+	Сообщений: 750<br/></span>
+      
+       </td>
+
+        <td class="msgBody">
+            falcon111,<br /><br />На уровне оси чекали файловую систему? логи ОС смотрели на предмет ошибок на лисковой подсистеме? 
+	    
+
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" class="msgFooter">
+            сегодня, 15:55    [<a onclick="showCopyLinks(this, '22107004')" style="text-decoration:underline; cursor:pointer; position:relative">22107004</a>] &nbsp;&nbsp;&nbsp;&nbsp;<a href="../actualpost.aspx@bid=29&tid=1322575&mid=22107004&p=1" rel="nofollow">Ответить</a>
+            | <a href="../actualpost.aspx@bid=29&tid=1322575&mid=22107004&p=1&act=quot" rel="nofollow">Цитировать</a> 
+		
+            <a href="../actualutils.aspx@action=notifymod&msg=22107004" rel="nofollow">Сообщить модератору</a>
+        </td>
+    </tr>
+  </table>
+  
+  <!--end threadtable-->
+   
+
+  <table class="forummenu">
+    <tr style="font:bold 13px; background-color:#fff">
+      <td colspan="2"><a class="forumLink" href="../../forum">Все форумы</a> / <a class="forumLink" href=
+      "../informix">Informix</a>
+      </td>
+      <td style="text-align:right"><a href="../actualpost.aspx@bid=29&tid=1322575&mid=0&p=1"><img class="button_img_reply" src="../../images/reply.gif" alt=
+      "Ответить" /></a></td>
+    </tr>
+  </table><select id="forumSelector" name="bid" class="flatbutton" onchange="forumSelectorChanged()" > <option class="optiongroup" value="-7">Виртуальные форумы</option><option value="sqlru-3-days"><!--sel40_-->&nbsp;&nbsp;Темы из всех форумов за 3 дня</option><option value="myforums"><!--sel-6_-->&nbsp;&nbsp;Мои избранные форумы</option><option class="optiongroup" value="-1">Использование СУБД</option><option value="microsoft-sql-server"><!--sel1_-->&nbsp;&nbsp;Microsoft SQL Server</option><option value="interbase"><!--sel2_-->&nbsp;&nbsp;Firebird, InterBase</option><option value="oracle"><!--sel3_-->&nbsp;&nbsp;Oracle</option><option value="access"><!--sel4_-->&nbsp;&nbsp;Microsoft Access</option><option value="db2"><!--sel5_-->&nbsp;&nbsp;IBM DB2, WebSphere, IMS, U2, etc</option><option value="mysql"><!--sel6_-->&nbsp;&nbsp;MySQL</option><option value="postgresql"><!--sel7_-->&nbsp;&nbsp;PostgreSQL</option><option value="olap-dwh"><!--sel26_-->&nbsp;&nbsp;OLAP и DWH</option><option value="sybase"><!--sel30_-->&nbsp;&nbsp;Sybase ASA, ASE, IQ</option><option value="informix" selected="selected">&nbsp;&nbsp;Informix</option><option value="db-other"><!--sel23_-->&nbsp;&nbsp;Другие СУБД</option><option value="foxpro"><!--sel37_-->&nbsp;&nbsp;FoxPro, Visual FoxPro</option><option value="cache"><!--sel56_-->&nbsp;&nbsp;Cach&#233;, Ensemble, DeepSee, MiniM, IRIS, GT.M</option><option value="sqlite"><!--sel69_-->&nbsp;&nbsp;SQLite</option><option value="nosql-bigdata"><!--sel73_-->&nbsp;&nbsp;NoSQL, Big Data</option><option class="optiongroup" value="-2">Дискуcсии</option><option value="db-comparison"><!--sel10_-->&nbsp;&nbsp;Сравнение СУБД</option><option value="db-design"><!--sel36_-->&nbsp;&nbsp;Проектирование БД</option><option value="job"><!--sel9_-->&nbsp;&nbsp;Работа</option><option value="erp-crm"><!--sel53_-->&nbsp;&nbsp;ERP и учетные системы</option><option value="systems-architecture"><!--sel58_-->&nbsp;&nbsp;Разработка информационных систем</option><option value="testing-qa"><!--sel52_-->&nbsp;&nbsp;Тестирование и QA</option><option value="reporting"><!--sel57_-->&nbsp;&nbsp;Отчетные системы</option><option value="za-rubezhom"><!--sel33_-->&nbsp;&nbsp;Наши за рубежом</option><option value="certification"><!--sel8_-->&nbsp;&nbsp;Сертификация и обучение</option><option value="hardware"><!--sel62_-->&nbsp;&nbsp;Hardware</option><option value="dev-management"><!--sel64_-->&nbsp;&nbsp;Управление процессом разработки ИС</option><option value="legal"><!--sel72_-->&nbsp;&nbsp;Юридические вопросы в ИТ</option><option class="optiongroup" value="-3">Microsoft.NET</option><option value="dotnet"><!--sel34_-->&nbsp;&nbsp;WinForms, .Net Framework</option><option value="asp-net"><!--sel19_-->&nbsp;&nbsp;ASP.NET</option><option value="ado-linq-ef-orm"><!--sel12_-->&nbsp;&nbsp;ADO.NET, LINQ, Entity Framework, NHibernate, DAL, ORM</option><option value="wpf-silverlight"><!--sel35_-->&nbsp;&nbsp;WPF, Silverlight</option><option value="wcf-ws-remoting"><!--sel71_-->&nbsp;&nbsp;WCF, Web Services, Remoting</option><option class="optiongroup" value="-4">Программирование</option><option value="delphi"><!--sel20_-->&nbsp;&nbsp;Delphi</option><option value="cpp"><!--sel21_-->&nbsp;&nbsp;C++</option><option value="visual-basic"><!--sel22_-->&nbsp;&nbsp;Visual Basic</option><option value="programming"><!--sel24_-->&nbsp;&nbsp;Программирование</option><option value="java"><!--sel38_-->&nbsp;&nbsp;Java</option><option value="mobile-dev"><!--sel78_-->&nbsp;&nbsp;Разработка под мобильные платформы</option><option value="powerbuilder"><!--sel39_-->&nbsp;&nbsp;PowerBuilder</option><option value="ms-office"><!--sel46_-->&nbsp;&nbsp;Microsoft Office</option><option value="sharepoint"><!--sel74_-->&nbsp;&nbsp;SharePoint</option><option value="xml"><!--sel59_-->&nbsp;&nbsp;XML, XSL, XPath, XQuery</option><option class="optiongroup" value="-9">Web Технологии</option><option value="php-perl"><!--sel18_-->&nbsp;&nbsp;PHP, Perl, Python</option><option value="html-javascript-css"><!--sel61_-->&nbsp;&nbsp;HTML, JavaScript, VBScript, CSS</option><option class="optiongroup" value="-6">Администрирование ОС</option><option value="windows"><!--sel27_-->&nbsp;&nbsp;Windows</option><option value="linux"><!--sel28_-->&nbsp;&nbsp;Unix-системы</option><option value="other-os"><!--sel41_-->&nbsp;&nbsp;Другие: Mac OS, PalmOS, BeOS, PocketPC</option><option class="optiongroup" value="-5">SQL.RU</option><option value="sqlru"><!--sel11_-->&nbsp;&nbsp;Обсуждение нашего сайта</option><option value="question-answer"><!--sel17_-->&nbsp;&nbsp;Вопрос-Ответ</option><option value="test"><!--sel15_-->&nbsp;&nbsp;Test</option></select><script language="javascript">function forumSelectorChanged()  { if (document.getElementById("forumSelector").value.indexOf("-")==0) return;window.location.href = '../'+document.getElementById("forumSelector").value; } </script>
+
+  <form>
+    <input type="hidden" name="tt" id="tt" />
+    <script language="Javascript" type="text/javascript">
+
+        var http = null;
+        var nextClicked = false;
+        var af_ForumId = "29";
+        var af_TopicId = "1322575";
+        var af_TopicUserId = "36214";
+        var af_TopicUserName = "falcon111";
+
+
+        function HlMsg() {
+
+            if (location.hash.length>1) {
+                var sHash = location.hash.substring(1,location.hash.length);
+                var obj = document.getElementById("id"+sHash);
+                //if (obj!=null) obj.style.backgroundColor=sClr;
+                if (obj!=null) obj.style.backgroundImage = "url('../../css/images/top-bg_green.gif')";
+            } }
+        HlMsg();
+
+        document.onkeydown = function(e) { handleKeys(e); };
+        document.onkeyup = function(e) { handleKeysUp(e); };
+        var ctrlDown=false;
+        function handleKeys(e) {
+
+            var evt = (e) ? e : window.event;
+            if (evt.keyCode==17) ctrlDown=true;
+
+            if ((window.AFEditor) && (window.AFEditor.loaded!=undefined) && (window.AFEditor.IsVisible())) return ;// && (window.AFEditor.IsVisible()) return;
+
+            if (evt.keyCode==27)  { var links_mid = document.getElementById('links_mid'); links_mid.style.display="none";}
+            if ((ctrlDown)&&((evt.keyCode==39)||(evt.keyCode==37))) { navigateNextPrev(evt.keyCode);
+                evt.returnValue = false;
+            }
+        }
+        function handleKeysUp(e) {
+            var evt = (e) ? e : window.event;
+            if (evt.keyCode==17) ctrlDown=false;}
+
+        function navigateNextPrev(key) {
+            var lnk="";
+            if (key==37) { lnk="urlForumPrev";}
+            if (key==39) { lnk="urlForumNext";}
+            if (document.getElementById(lnk)!=null) window.location=document.getElementById(lnk).href;
+        }
+
+        function doVote() {
+            var rads = document.getElementsByName("pollOption");
+            var rado = "";
+            for (var i = 0; i < rads.length; i++) {
+                if (rads[i].checked) { rado += ","+rads[i].value;  }
+            }
+            if (rado == "") {
+                document.getElementById("pollMsg").innerHTML = "Пожалуйста укажите вариант опроса.";
+                return;
+            }
+
+            document.getElementById("voteBtn").disabled = true;
+            document.getElementById("voteBtn").value = "подождите...";
+
+            http = getHTTPObject();
+            if (http != null) {
+                http.open("GET", '../afpoll.aspx@action=vote&tid=1322575&oid=' + rado + '&hash=1143082641', true);
+                http.onreadystatechange = handleHttpResponseVote;
+                http.send(null);
+            }
+        }
+        function handleHttpResponseVote() {
+            if (http.readyState == 4) {
+                var res = http.responseText;
+                if (res != '-1')
+                    var old = document.getElementById('poll'), div1 = document.createElement('div');
+                div1.innerHTML = res;
+                old.parentNode.replaceChild(div1.firstChild, old);
+            }
+        }
+    function gotoNextFound(msgId, topicId, search, searchId) {
+            if (nextClicked) return;
+            nextClicked = true;
+            var div = document.getElementById('nextSearch');
+            div.style.backgroundRepeat = 'no-repeat';
+            div.style.backgroundPosition = '4px 50%';
+            div.style.backgroundImage = "url('../../../https@cdn.sql.ru/images/wait1.gif')";
+            msgId = div.msgId || msgId;
+            http = getHTTPObject();
+            if (http != null) {
+                http.open("GET", '../actualutils.aspx@action=nextfoundurl&tid=' + topicId + '&msg=' + msgId + '&search=' + search + '&sid='+searchId, true);
+                http.onreadystatechange = handleNextFound1;
+                http.send(null);
+            }
+        }
+
+        function handleNextFound1() {
+            if (http.readyState == 4) {
+                res = http.responseText;
+                nextClicked = false;
+                var div = document.getElementById('nextSearch');
+                div.style.backgroundImage = 'none';
+                if (res != '-1') {
+                    if (getParameter("pg") == getParameter("pg", res)) {
+                        var ms = res.substring(res.indexOf('#') + 1);
+                        div.msgId = ms;
+                        var td = document.getElementById('id' + ms);
+                        if (!td) { window.location.href = res; return; }
+                        td = td.parentNode.parentNode.rows[1].cells[1];
+                        for (var i = 0; i < 2; ++i) { td.appendChild(div.parentNode.previousSibling); }
+                        td.appendChild(div.parentNode);
+                        //alert(ms);
+                        window.location.hash = ms;
+			HlMsg();
+                        return;
+                    }
+                    //alert("222");
+                    window.location.href = res;
+                } else { alert("Больше сообщений не найдено"); }
+            }
+        }
+
+    </script>
+    <script src="../actualjs.js@v=2" type="text/javascript">
+    </script> 
+    <script>
+        function showCopyLinks(el, mid) {
+            var d = document;
+            var links_mid = d.getElementById('links_mid');
+            var urlbb = "[url=https://www.sql.ru/forum/actualutils.aspx?action=gotomsg&tid=1322575&msg="+mid+"]Трэш с откатом транзакции[/url]";
+            var url = "../actualutils.aspx@action=gotomsg&tid=1322575&msg="+mid;
+            var msg = "[msg="+mid+"]";
+
+            el.parentNode.appendChild(links_mid);
+            links_mid.setAttribute("style", "top:"+getElementPosition(el)+"px;");
+            links_mid.style.display = "block";
+            var input = links_mid.getElementsByTagName('input');
+            input[0].value = msg;
+            input[1].value = urlbb;
+            input[2].value = url;
+            input[0].select();
+
+        }
+
+        function hideCopyLinks(el) {
+            el.style.display = "none";
+        }
+
+
+        function getElementPosition(elem)
+        {
+
+            var l = 0;
+            var t = 15;
+
+            while (elem)
+            {
+                l += elem.offsetLeft;
+                t += elem.offsetTop;
+                elem = elem.offsetParent;
+            }
+
+            return {"left":l, "top":t};
+        }
+
+
+        function load_lightbox(el) {
+            if(!document.getElementById('lightbox')) {
+                var head= document.getElementsByTagName('head')[0];
+                var script= document.createElement('script');
+                var styles= document.createElement('link');
+
+                styles.type= 'text/css';
+                styles.rel= 'stylesheet';
+                styles.href= "../../css/lightbox.css";
+                styles.media= "screen";
+
+                script.type= 'text/javascript';
+                script.src= '../../js/lightbox.js';
+
+                window.lbImageShow = el;
+                head.appendChild(script);
+                head.appendChild(styles);
+            }
+        }
+
+        function Cpy(val) {
+            document.getElementById("tt").value = val;
+            if (document.selection) {
+                rng = document.getElementById("tt").createTextRange(); rng.execCommand("Copy");
+            } else {
+                try { netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect"); } catch (e) { }
+                var clipboard = Components.classes["_40mozilla.org/widget/clipboard;1"].getService();
+                if (clipboard) {
+                    clipboard = clipboard.QueryInterface(Components.interfaces.nsIClipboard);
+                }
+                var transferable = Components.classes["_40mozilla.org/widget/transferable;1"].createInstance();
+                if (transferable) {
+                    transferable = transferable.QueryInterface(Components.interfaces.nsITransferable);
+                }
+                if (clipboard && transferable) {
+                    transferable.addDataFlavor("text/unicode");
+                    var textObj = new Object();
+                    var textObj = Components.classes["_40mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
+                    if (textObj) {
+                        textObj.data = document.getElementById("tt").value;
+                        transferable.setTransferData("text/unicode", textObj, textObj.data.length * 2);
+                        var clipid = Components.interfaces.nsIClipboard;
+                        clipboard.setData(transferable, null, clipid.kGlobalClipboard);
+                    }
+                }
+
+            }
+        }
+    </script>
+</form>
+<!--begin case_isguest-->
+<center>
+<br/><br/>
+<!--ipt async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></scri-->
+<!-- ads for guests (forum bottom) -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-2802880694650536"
+     data-ad-slot="5556542488"></ins>
+<!--ipt>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</scri-->
+
+<!--end case_isguest-->
+<div class="links_mid" id="links_mid">
+    <label onclick="Cpy(document.getElementById('links_e1').value);">Ссылка на сообщение</label><br />
+    <input id="links_e1" onclick="this.select()" /><br />
+    <label onclick="Cpy(document.getElementById('links_e2').value);">Ссылка (включая название темы)</label><br />
+    <input id="links_e2" onclick="this.select()" /><br />
+    <label onclick="Cpy(document.getElementById('links_e3').value);">Ссылка (URL)</label><br />
+    <input id="links_e3" onclick="this.select()" />
+    <div class="hideCopyLinks" onclick="hideCopyLinks(this.parentNode)">x</div>
+</div>
+
+
+			<div id="footer">
+				<div class="copyright">2000-2020 &copy; Alex Sibilev, SQL.ru<br/>
+					<a style="font: 11px Verdana;color:#88C" href="../../feedback.aspx">Свяжитесь&nbsp;с&nbsp;нами</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a style="font: 11px Verdana;color:#88C" href="../agreement.aspx">Пользовательское&nbsp;соглашение</a></div>
+				<div class="copyright" style="font: 10px verdana">Generated in 17ms. [1ms]</div>
+				<div class="counters">
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+		  	//initScripts();
+		 	if (window.AF_Begin) { AF_Begin(); }
+		</script>
+<!-- Yandex.Metrika counter -->
+<!--ipt type="text/javascript" > (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}; m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(9237463, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true });</scri-->
+<noscript><div><img src="../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+	</div> <!--page containter-->
+	</body>
+</html>

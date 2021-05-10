@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\communication_path\cat.communication_path\dir.communication_path.md">communication_path</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\communication_path\communication_path.md">communication_path.md</a>
+        - *##### [Communication Path](https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/communication_path.html)  Путь коммуникации

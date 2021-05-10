@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\profilegroup\cat.profilegroup\dir.profilegroup.md">profilegroup</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\umlconnections\profilegroup\profilegroup.md">profilegroup.md</a>
+        - *##### [Profile Toolbox](https://sparxsystems.com/enterprise_architect_user_guide/15.1/modeling/profilegroup.html) Панель инструментов профиля

@@ -1,0 +1,5 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\1.HTML.dir\1.6.1_.6._HTML-изображения.dir\cat.1.6.1_.6._HTML-изображения.dir\dir.1.6.1_.6._HTML-изображения.dir.md">1.6.1_.6._HTML-изображения.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\1.HTML.dir\1.6.1_.6._HTML-изображения.dir\1.6.1_.6._HTML-изображения.md">1.6.1_.6._HTML-изображения.md</a>
+        - *## 1.6. HTML-изображения
+        - *### АТРИБУТЫ ЭЛЕМЕНТА \<IMG>
+        - *### АТРИБУТЫ ЭЛЕМЕНТА \<AREA>

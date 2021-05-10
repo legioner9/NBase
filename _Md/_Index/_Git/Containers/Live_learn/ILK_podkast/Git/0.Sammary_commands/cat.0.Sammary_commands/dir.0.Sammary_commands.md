@@ -1,0 +1,6 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\0.Sammary_commands\cat.0.Sammary_commands\dir.0.Sammary_commands.md">0.Sammary_commands</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\0.Sammary_commands\all.md">all.md</a>
+        - *## all awesome command from podcast
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git\Containers\Live_learn\ILK_podkast\Git\0.Sammary_commands\ancors_for_trane.md">ancors_for_trane.md</a>
+        - *## [i am not a genius](https://imnotgenius.com/git/)
+        - *## [TRANE BRANCH](https://learngitbranching.js.org/?locale=ru_RU)

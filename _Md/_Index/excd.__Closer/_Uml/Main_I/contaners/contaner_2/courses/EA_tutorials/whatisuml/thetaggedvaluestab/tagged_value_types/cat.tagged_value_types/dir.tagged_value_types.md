@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\thetaggedvaluestab\tagged_value_types\cat.tagged_value_types\dir.tagged_value_types.md">tagged_value_types</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\thetaggedvaluestab\tagged_value_types\tagged_value_types.md">tagged_value_types.md</a>
+        - *### [Tagged Value Types](https://sparxsystems.com/enterprise_architect_user_guide/15.1/modeling/tagged_value_types.html) Типы помеченных значений

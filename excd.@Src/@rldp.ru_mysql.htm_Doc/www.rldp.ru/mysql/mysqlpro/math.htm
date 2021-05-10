@@ -1,0 +1,755 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+   <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+   <META NAME="Author" CONTENT="Alexey V. Pautov">
+   <title>Глава 1. Точная математика</title>
+</head>
+
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084"
+      alink="#0000FF">
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+
+<h2><a name="precision-math"></a>Глава 1. Точная математика</h2>
+<p>MySQL 5.1 обеспечивает поддержку для точной математики: числовая обработка
+значения, которая приводит к чрезвычайно точным результатам, и высокой
+степени контроль над недопустимыми значениями. Точность основана на
+этих двух свойствах:</p>
+
+<ul type="disc"><li><p>SQL-режимы, которые управляют тем, как строг сервер
+относительно принятия или отклонения недопустимых данных.</p></li>
+<li><p>MySQL-библиотека для арифметики с фиксированной запятой.</p></li></ul>
+
+<p>Эти свойства имеют несколько импликаций для числовых операций:</p>
+<ul type="disc"><li><p><span class="bold"><strong>Точные вычисления
+</strong></span>: для получения точного значения вычисления не представляют
+ошибки с плавающей запятой. Вместо этого, используется высокая точность.
+Например, число типа <code>.0001</code> обрабатывается как точное значение,
+а не как приближенное, и суммирование этого 10000 раз производит результат
+точно 1, а не значение, близкое к 1.</p></li>
+
+<li><p><span class="bold"><strong>Четкое поведение округления</strong>
+</span>: для чисел высокой точности результат <code>ROUND()</code> зависит
+только от параметра, а не от относящихся к окружению факторах типа того, как
+основная библиотека C работает.</p></li>
+
+<li><p><span class="bold"><strong>Независимость от платформы</strong></span>:
+операции на точных числовых значениях дают тот же самый результат на
+различных платформах, типа Windows и Unix.</p></li>
+
+<li><p><span class="bold"><strong>Контроль над обработкой недопустимых
+значений</strong></span>: переполнение и деление на нуль обнаруживаются и
+могут обрабатываться как ошибки. Например, Вы можете обрабатывать значение,
+которое является слишком большим для столбца, как ошибку, а не как наличие
+значения, усеченного так, чтобы попасть внутрь диапазона типа данных столбца.
+Точно так же Вы можете обрабатывать деление на нуль как ошибку, а не как
+операцию, которая производит результат <code>NULL</code>. Выбор подхода
+определен установкой переменной системы <code>sql_mode</code>.</p></li></ul>
+
+<p>Важный результат этих свойств: MySQL 5.1 обеспечивает высокую степень
+согласия со стандартом SQL.</p>
+
+<p>Следующее обсуждение покрывает несколько аспектов того, как работает
+высокая точность (включая возможные несовместимости со старыми прикладными
+программами). В конце есть некоторые примеры.</p>
+
+<h2><a name="precision-math-numbers"></a>1.1. Типы числовых значений</h2>
+<p>Контекст математической точности для операций с точным значением включает
+типы данных с точным значением (<code>DECIMAL</code> и целочисленные типы) и
+числовые литералы с точным значением. Типы данных с приблизительным значением
+и числовые литералы все еще обработаны как числа с плавающей запятой.</p>
+
+<p>Числовые литералы с точным значением имеют целочисленную, дробную части
+или обе. Они могут быть со знаком или без него. Примеры: <code>1</code>,
+<code>.2</code>, <code>3.4</code>, <code>-5</code>, <code>-6.78</code>,
+<code>+9.10</code>.</p>
+
+<p>Числовые литералы с приблизительным значением представляются в
+экспоненциальном формате с мантиссой и экспонентой. Любая из частей или обе
+могут иметь знак. Примеры: <code>1.2E3</code>, <code>1.2E-3</code>,
+<code>-1.2E3</code>, <code>-1.2E-3</code>.</p>
+
+<p>Два числа, которые выглядят одинаково, могут не быть оба точными или
+приблизительными. Например, <code>2.34</code> представляет собой число с
+точным значением (с фиксированной запятой), в то время как
+<code>2.34E0</code> задает число с приблизительным
+значением (с плавающей запятой).</p>
+
+<p>Тип данных <code>DECIMAL</code> является типом с фиксированной запятой, и
+вычисления точны. В MySQL тип <code>DECIMAL</code> имеет несколько синонимов:
+<code>NUMERIC</code>, <code>DEC</code>, <code>FIXED</code>. Целочисленные
+типы также типы с точным значением.</p>
+
+<p>Типы данных <code>FLOAT</code> и <code>DOUBLE</code> являются типами с
+плавающей запятой, и вычисления приблизительны. В MySQL типы, которые
+являются синонимичными с <code>FLOAT</code> или <code>DOUBLE</code>, это
+<code>DOUBLE PRECISION</code> и <code>REAL</code>.</p>
+
+<h2><a name="precision-math-decimal-changes"></a>1.2. Изменения типа данных
+<code>DECIMAL</code></h2>
+<p>Этот раздел обсуждает характеристики типа данных <code>DECIMAL</code> (и
+синонимов) в MySQL 5.1, со специфическим отношением к следующим темам</p>
+
+<ul type="disc"><li><p>Максимальное число цифр</p></li>
+<li><p>Формат хранения</p></li>
+<li><p>Требования к памяти</p></li>
+<li><p>Ненормативное MySQL расширение к верхнему диапазону столбцов
+<code>DECIMAL</code></p></li></ul>
+
+<p>Возможные несовместимости с прикладными программами, которые написаны для
+старых версий MySQL, отмечены в этом разделе.</p>
+
+<p>Синтаксис объявления для столбца <code>DECIMAL</code>:
+<code>DECIMAL(<em><code>M</code></em>,<em><code>D</code></em>)</code>.
+Диапазоны значений для параметров в MySQL 5.1 следующие:</p>
+
+<ul type="disc"><li><p><em><code>M</code></em>: максимальное число цифр
+(точность). Это имеет диапазон от 1 до 65. Старые версии MySQL позволяли
+диапазон от 1 до 254.</p></li>
+
+<li><p><em><code>D</code></em>: число цифр направо от десятичной точки
+(масштаб). Это имеет диапазон от 0 до 30 и должно быть не больше, чем
+<em><code>M</code></em>.</p></li></ul>
+
+<p>Максимальное значение 65 для <em><code>M</code></em> означает, что
+вычисления на значениях <code>DECIMAL</code> точны до 65 цифр. Это
+ограничение точности в 65 цифр также применяется к числовым литералам с
+точным значением, так что оно задает максимальный диапазон таких литералов.
+В старых версиях MySQL десятичные значения могли иметь до 254 цифр. Однако,
+вычисления были выполнены, используя числа с плавающей запятой и таким
+образом были приблизительны, не точны.</p>
+
+<p>Значения для столбцов <code>DECIMAL</code> в MySQL 5.1 сохранены,
+используя двоичный формат, который упаковывает девять десятичных цифр в
+четыре байта. Требования к памяти для целочисленных и дробных частей каждого
+значения определены отдельно. Каждые девять цифр требуют четырех байт, и
+любые цифры сверх этого требуют некоторой доли четырех байтов. Например,
+<code>DECIMAL(18,9)</code> имеет девять цифр с обеих сторон десятичной точки,
+так что целочисленная и дробная части требуют четырех байтов каждая. Столбец
+<code>DECIMAL(20,10)</code> имеет по десять цифр с обеих сторон десятичной
+точки. Каждая часть требует четырех байтов для девяти из цифр и одного байта
+для остающейся цифры.</p>
+
+<p>Память, требуемая для остающихся цифр, показана в следующей таблице:</p>
+<table border="1"><tbody><tr><td><span class="bold"><strong>Остающиеся цифры
+</strong></span></td>
+<td><span class="bold"><strong>Число байтов</strong></span></td></tr>
+<tr><td>0</td><td>0</td></tr><tr><td>1</td><td>1</td></tr>
+<tr><td>2</td><td>1</td></tr><tr><td>3</td><td>2</td></tr>
+<tr><td>4</td><td>2</td></tr><tr><td>5</td><td>3</td></tr>
+<tr><td>6</td><td>3</td></tr><tr><td>7</td><td>4</td></tr>
+<tr><td>8</td><td>4</td></tr><tr><td>9</td><td>4</td></tr></tbody></table>
+
+<p>В отличие от старых версий MySQL (до 5.0.3), столбцы <code>DECIMAL</code>
+в MySQL 5.1 не сохраняют символ <code>+</code> или цифры <code>0</code> в
+начале значения. Если Вы вставляете <code>+0003.1</code> в столбец
+<code>DECIMAL(5,1)</code>, это сохранено как <code>3.1</code>. Прикладные
+программы, которые полагаются на старое поведение, должны измениться, чтобы
+обработать это изменение.</p>
+
+<p>Столбцы <code>DECIMAL</code> в MySQL 5.1 не позволяют значения больше, чем
+диапазон, подразумеваемый по определению столбца. Например, столбец
+<code>DECIMAL(3,0)</code> поддерживает диапазон от <code>-999</code> до
+<code>999</code>. А столбец
+<code>DECIMAL(<em><code>M</code></em>,<em><code>D</code></em>)</code>
+позволяет <em><code>M</code></em> цифр налево от десятичной точки. Это не
+совместимо с прикладными программами, полагающимися на старые версии MySQL,
+которые разрешали сохранять дополнительную цифру вместо знака <code>+</code>.
+</p>
+
+<p>SQL-стандарт требует, чтобы точность
+<code>NUMERIC(<em><code>M</code></em>,<em><code>D</code></em>)</code>
+была <span class="emphasis"><em>точно</em></span> <em><code>M</code></em>
+цифр. Для <code>DECIMAL(<em><code>M</code></em>,<em><code>D</code></em>)
+</code> стандарт требует точности по крайней мере
+<em><code>M</code></em> цифр, но позволяет больше. В MySQL
+<code>DECIMAL(<em><code>M</code></em>,<em><code>D</code></em>)</code> и
+<code>NUMERIC(<em><code>M</code></em>,<em><code>D</code></em>)</code>
+то же самое, и оба типа имеют точность ровно <em><code>M</code></em> цифр.
+</p>
+
+<h2><a name="precision-math-expressions"></a>1.3. Обработка выражений</h2>
+<p>Числа с точным значением используются как даны всякий раз, когда возможно.
+Например, числа в сравнениях используются точно как даны, без изменения в
+значении. В строгом SQL-режиме для <code>INSERT</code> в столбец с точным
+типом данных (<code>DECIMAL</code> или целое число), значение вставлено с
+точным значением, если оно внутри диапазона столбца. Когда значение получено,
+оно должно быть таким же как то, что было вставлено. Без строгого режима
+допустимо усечение для <code>INSERT</code>.</p>
+
+<p>Обработка числового выражения зависит от значений,
+которое выражение содержит:</p>
+<ul type="disc"><li><p>Если любые приблизительные значения присутствуют,
+выражение оценено приблизительно, используя арифметику с плавающей запятой.
+</p></li>
+
+<li><p>Если никакие приблизительные значения не присутствуют, выражение
+содержит только точные значения. Если любое точное значение содержит дробную
+часть (значение после десятичной точки), выражение оценено, используя
+точную арифметику <code>DECIMAL</code> и имеет точность 65 цифр.</p></li>
+
+<li><p>Иначе, выражение содержит только целочисленные значения. Выражение
+точно и оценено, используя целочисленную арифметику и имеет точность
+<code>BIGINT</code> (64 бита).</p></li></ul>
+
+<p>Если числовое выражение содержит любые строки, они преобразованы в
+значения с плавающей запятой двойной точности, и выражения приблизительны.
+</p>
+
+<p>На вставки в числовые столбцы воздействует SQL-режим, который управляется
+переменной системы <code>sql_mode</code>. Следующее обсуждение упоминает
+строгий режим (выбранный значениями режима <code>STRICT_ALL_TABLES</code> или
+<code>STRICT_TRANS_TABLES</code>) и <code>ERROR_FOR_DIVISION_BY_ZERO</code>.
+Чтобы включить все ограничения, Вы можете просто использовать режим
+<code>TRADITIONAL</code>, который включает строгие значения режима и
+<code>ERROR_FOR_DIVISION_BY_ZERO</code>:</p>
+<pre>
+mysql&gt; <strong><code>SET sql_mode='TRADITIONAL';</code></strong>
+</pre>
+
+<p>Если число вставлено в столбец точного типа (<code>DECIMAL</code> или
+целое число), оно вставлено с точным значением, если находится
+внутри диапазона столбца.</p>
+
+<p>Если значение имеет слишком много цифр в дробной части, происходит
+округление, и будет сгенерировано предупреждение. Округление выполнено как
+описано в разделе "<a href="#precision-math-rounding">
+1.4. Поведение округления</a>".</p>
+
+<p>Если значение имеет слишком много цифр в целочисленной части, оно слишком
+большое и обработано следующим образом:</p>
+
+<ul type="disc"><li><p>Если строгий режим не допускается, значение усечено к
+самому близкому допустимому значению, и сгенерировано предупреждение.
+</p></li>
+
+<li><p>Если строгий режим допускается, происходит ошибка переполнения.
+</p></li></ul>
+
+<p>По умолчанию, деление на нуль производит результат <code>NULL</code> и
+никакого предупреждения. С включенным режимом SQL
+<code>ERROR_FOR_DIVISION_BY_ZERO</code> MySQL обрабатывает деление на
+нуль по-другому:</p>
+
+<ul type="disc"><li><p>Если строгий режим
+не допускается, происходит предупреждение.</p></li>
+<li><p>Если строгий режим допускается, вставки и модификации, включающие
+деление на нуль, запрещены, и происходит ошибка.</p></li></ul>
+
+<p>Другими словами, вставки и модификации, включающие выражения, которые
+выполняют деление на нуль, могут обрабатываться как ошибки, но это требует
+<code>ERROR_FOR_DIVISION_BY_ZERO</code> в дополнение к строгому режиму.</p>
+
+<p>Предположим, что мы имеем эту инструкцию:</p>
+<pre>
+INSERT INTO t SET i = 1/0;
+</pre>
+
+<p>Это что случается для комбинации строгого режима и
+<code>ERROR_FOR_DIVISION_BY_ZERO</code>:</p>
+<table border="1"><tbody><tr><td><span class="bold"><strong>Значение
+<code>sql_mode</code></strong></span></td><td><span class="bold">
+<strong>Результат</strong></span></td></tr>
+<tr><td><code>''</code> (значение по умолчанию)</td><td>Никаких
+предупреждений и ошибок: <code>i</code> установлен в
+<code>NULL</code>.</td></tr>
+
+<tr><td>strict</td><td>Никаких предупреждений и ошибок: <code>i</code>
+установлен в <code>NULL</code>.</td></tr>
+<tr><td><code>ERROR_FOR_DIVISION_BY_ZERO</code></td><td>Никаких ошибок, но
+есть предупреждение: <code>i</code> установлен в <code>NULL</code>.</td></tr>
+<tr><td>strict,<code>ERROR_FOR_DIVISION_BY_ZERO</code></td><td>Ошибка:
+никакая строка не вставлена.</td></tr></tbody></table>
+
+<p>Для вставок строк в числовые столбцы, преобразование из строки в число
+обработано следующим образом, если строка имеет нечисловое содержание:</p>
+<ul type="disc"><li><p>Строка, которая не начинается с числа, не может
+использоваться как число, и производит ошибку в строгом режиме или
+предупреждение в любом другом. Это включает пустую строку.</p></li>
+
+<li><p>Строка, которая начинается с числа, может быть преобразована, но
+конечная нечисловая часть усечена. Если усеченная часть содержит что-нибудь
+другое, чем пробелы, это производит ошибку в строгом режиме или
+предупреждение в любом другом.</p></li></ul>
+
+<h2><a name="precision-math-rounding"></a>1.4. Поведение округления</h2>
+<p>Этот раздел обсуждает точность математического округления для функции
+<code>ROUND()</code> и для вставок в столбцы с типами с точным значением.</p>
+
+<p>Функция <code>ROUND()</code> работает по-разному в зависимости от того,
+является ли параметр точным или приблизительным числом:</p>
+<ul type="disc"><li><p>Для числа точного значения <code>ROUND()</code>
+использует метод "округления половины": значение с дробной частью .5 или
+больше округлено до следующего целого числа, если положительное, или до
+предыдущего целого числа, если отрицательное. Значения с дробной частью
+меньше, чем .5, округлены до предыдущего целого числа, если положительные,
+или до следующего, если отрицательные.</p></li>
+
+<li><p>Для числа приблизительного значения результат зависит от библиотеки C.
+На многих системах это означает, что значение с любой дробной частью
+округлено <code>ROUND()</code> к самому близкому четному целому числу.
+</p></li></ul>
+
+<p>Следующий пример показывает, как округление отличается для
+точных и приблизительных значений:</p>
+<pre>
+mysql&gt; <strong><code>SELECT ROUND(2.5), ROUND(25E-1);</code></strong>
++------------+--------------+
+| ROUND(2.5) | ROUND(25E-1) |
++------------+--------------+
+| 3          | 2            |
++------------+--------------+
+</pre>
+
+<p>Для вставок в <code>DECIMAL</code> или целочисленный столбец, если адресат
+представляет собой точный тип данных, используется метод "округления
+половины" независимо от того, является ли значение, которое будет вставлено,
+точным или приблизительным:</p>
+
+<pre>
+mysql&gt; <strong><code>CREATE TABLE t (d DECIMAL(10,0));</code></strong>
+Query OK, 0 rows affected (0.00 sec)
+mysql&gt; <strong><code>INSERT INTO t VALUES(2.5),(2.5E0);</code></strong>
+Query OK, 2 rows affected, 2 warnings (0.00 sec)
+Records: 2 Duplicates: 0 Warnings: 2
+
+mysql&gt; <strong><code>SELECT d FROM t;</code></strong>
++------+
+| d    |
++------+
+| 3    |
+| 3    |
++------+
+</pre>
+
+<h2><a name="precision-math-examples"></a>1.5.
+Примеры математической точности</h2>
+<p>Этот раздел обеспечивает некоторые примеры, которые показывают запросы с
+математической точностью в MySQL 5.1.</p>
+
+<p><span class="bold"><strong>Пример 1</strong></span>. Числа используются с
+их точным значением, как даны, когда возможно:</p>
+<pre>
+mysql&gt; <strong><code>SELECT .1 + .2 = .3;</code></strong>
++--------------+
+| .1 + .2 = .3 |
++--------------+
+| 1            |
++--------------+
+</pre>
+
+<p>Для значений с плавающей запятой, результаты неточны:</p>
+<pre>
+mysql&gt; <strong><code>SELECT .1E0 + .2E0 = .3E0;</code></strong>
++--------------------+
+| .1E0 + .2E0 = .3E0 |
++--------------------+
+| 0                  |
++--------------------+
+</pre>
+
+<p>Другой способ увидеть различие в точной и приблизительной обработке
+значения состоит в том, чтобы добавить маленькое число к сумме много раз.
+Рассмотрите следующую сохраненную процедуру, которая добавляет
+<code>.0001</code> к переменной 1000 раз:</p>
+
+<pre>
+CREATE PROCEDURE p ()
+BEGIN
+  DECLARE i INT DEFAULT 0;
+  DECLARE d DECIMAL(10,4) DEFAULT 0;
+  DECLARE f FLOAT DEFAULT 0;
+  WHILE i &lt; 10000 DO
+    SET d = d + .0001;
+    SET f = f + .0001E0;
+    SET i = i + 1;
+  END WHILE;
+  SELECT d, f;
+END;
+</pre>
+
+<p>Сумма для <code>d</code> и <code>f</code> логически должна быть 1, но это
+истинно только для десятичного вычисления. Вычисление с плавающей запятой
+представляет маленькие ошибки:</p>
+
+<pre>
++--------+------------------+
+|      d |                f |
++--------+------------------+
+| 1.0000 | 0.99999999999991 |
++--------+------------------+
+</pre>
+
+<p><span class="bold"><strong>Пример 2</strong></span>. Умножение выполняется
+с масштабом, требуемым стандартом SQL. То есть, для двух чисел
+<em><code>X1</code></em> и <em><code>X2</code></em>, которые имеют масштаб
+<em><code>S1</code></em> и <em><code>S2</code></em>, масштаб результата:
+<code><em><code>S1</code></em>+<em><code>S2</code></em></code>:</p>
+
+<pre>
+mysql&gt; <strong><code>SELECT .01 * .01;</code></strong>
++-----------+
+| .01 * .01 |
++-----------+
+|    0.0001 |
++-----------+
+</pre>
+
+<p><span class="bold"><strong>Пример 3</strong></span>.
+Поведение округления четко:</p>
+<p>Поведение округления (например, с функцией <code>ROUND()</code>)
+независимо от реализации основной библиотеки C, что означает, что результаты
+непротиворечивы на разных платформах.</p>
+
+<p>Округление для столбцов с точным значением использует округление половины,
+как показано здесь:</p>
+<pre>
+mysql&gt; <strong><code>SELECT ROUND(2.5), ROUND(-2.5);</code></strong>
++------------+-------------+
+| ROUND(2.5) | ROUND(-2.5) |
++------------+-------------+
+|          3 |          -3 |
++------------+-------------+
+</pre>
+
+<p>Однако, округление для значений с плавающей запятой использует библиотеку
+C, которая на многих системах использует другую логику работы:</p>
+<pre>
+mysql&gt; <strong><code>SELECT ROUND(2.5E0), ROUND(-2.5E0);</code></strong>
++--------------+---------------+
+| ROUND(2.5E0) | ROUND(-2.5E0) |
++--------------+---------------+
+|            2 |            -2 |
++--------------+---------------+
+</pre>
+
+<p><span class="bold"><strong>Пример 4</strong></span>. В строгом режиме
+вставка значения, которое является слишком большим, приводит к переполнению и
+ошибке, а не к усечению до допустимого значения. Когда MySQL не выполняется в
+строгом режиме, происходит усечение к допустимому значению:</p>
+
+<pre>
+mysql&gt; <strong><code>SET sql_mode='';</code></strong>
+Query OK, 0 rows affected (0.00 sec)
+mysql&gt; <strong><code>CREATE TABLE t (i TINYINT);</code></strong>
+Query OK, 0 rows affected (0.01 sec)
+mysql&gt; <strong><code>INSERT INTO t SET i = 128;</code></strong>
+Query OK, 1 row affected, 1 warning (0.00 sec)
+
+mysql&gt; <strong><code>SELECT i FROM t;</code></strong>
++------+
+|    i |
++------+
+|  127 |
++------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>Однако, условие переполнения происходит, если включен строгий режим:</p>
+<pre>
+mysql&gt; <strong><code>SET sql_mode='STRICT_ALL_TABLES';</code></strong>
+Query OK, 0 rows affected (0.00 sec)
+mysql&gt; <strong><code>CREATE TABLE t (i TINYINT);</code></strong>
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; <strong><code>INSERT INTO t SET i = 128;</code></strong>
+ERROR 1264 (22003): Out of range value adjusted for column 'i' at row 1
+mysql&gt; <strong><code>SELECT i FROM t;</code></strong>
+Empty set (0.00 sec)
+</pre>
+
+<p><span class="bold"><strong>Пример 5</strong></span>: В строгом режиме и с
+настройкой <code>ERROR_FOR_DIVISION_BY_ZERO</code> деление на нуль вызывает
+ошибку, а не результат <code>NULL</code>.</p>
+
+<p>В нестрогом режиме деление на нуль имеет результат <code>NULL</code>:</p>
+<pre>
+mysql&gt; <strong><code>SET sql_mode='';</code></strong>
+Query OK, 0 rows affected (0.01 sec)
+mysql&gt; <strong><code>CREATE TABLE t (i TINYINT);</code></strong>
+Query OK, 0 rows affected (0.00 sec)
+mysql&gt; <strong><code>INSERT INTO t SET i = 1 / 0;</code></strong>
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; <strong><code>SELECT i FROM t;</code></strong>
++------+
+|    i |
++------+
+| NULL |
++------+
+1 row in set (0.03 sec)
+</pre>
+
+<p>Однако, деление на нуль выдает ошибку, если соответствующие
+SQL-режимы активны:</p>
+<pre>
+mysql&gt; SET sql_mode='STRICT_ALL_TABLES,ERROR_FOR_DIVISION_BY_ZERO';
+Query OK, 0 rows affected (0.00 sec)
+mysql&gt; <strong><code>CREATE TABLE t (i TINYINT);</code></strong>
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; <strong><code>INSERT INTO t SET i = 1 / 0;</code></strong>
+ERROR 1365 (22012): Division by 0
+mysql&gt; <strong><code>SELECT i FROM t;</code></strong>
+Empty set (0.01 sec)
+</pre>
+
+<p><span class="bold"><strong>Пример 6</strong></span>. До MySQL 5.0.3
+литералы с точным значением и с приблизительным значением преобразованы в
+значения с плавающей запятой двойной точности:</p>
+
+<pre>
+mysql&gt; <strong><code>SELECT VERSION();</code></strong>
++------------+
+|  VERSION() |
++------------+
+| 4.1.18-log |
++------------+
+1 row in set (0.01 sec)
+
+mysql&gt; CREATE TABLE t SELECT 2.5 AS a, 25E-1 AS b;
+Query OK, 1 row affected (0.07 sec)
+Records: 1 Duplicates: 0 Warnings: 0
+
+mysql&gt; <strong><code>DESCRIBE t;</code></strong>
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+|     a | double(3,1) |      |     |     0.0 |       |
+|     b | double      |      |     |       0 |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.04 sec)
+</pre>
+
+<p>Начиная с MySQL 5.0.3, литерал с приблизительным значением все еще
+преобразован в значение с плавающей запятой, но литерал с точным значением
+обработан как <code>DECIMAL</code>:</p>
+
+<pre>
+mysql&gt; <strong><code>SELECT VERSION();</code></strong>
++-----------------+
+|       VERSION() |
++-----------------+
+| 5.1.6-alpha-log |
++-----------------+
+1 row in set (0.11 sec)
+
+mysql&gt; CREATE TABLE t SELECT 2.5 AS a, 25E-1 AS b;
+Query OK, 1 row affected (0.01 sec)
+Records: 1 Duplicates: 0 Warnings: 0
+
+mysql&gt; <strong><code>DESCRIBE t;</code></strong>
++-------+-----------------------+------+-----+---------+-------+
+| Field |                  Type | Null | Key | Default | Extra |
++-------+-----------------------+------+-----+---------+-------+
+|     a | decimal(2,1) unsigned |   NO |     |     0.0 |       |
+|     b |                double |   NO |     |       0 |       |
++-------+-----------------------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+</pre>
+
+<p><span class="bold"><strong>Пример 7</strong></span>. Если параметр функции
+точный числовой тип, результат также точный числовой тип, с масштабом по
+крайней мере, как у параметра. Рассмотрите эти инструкции:</p>
+
+<pre>
+mysql&gt; CREATE TABLE t (i INT, d DECIMAL, f FLOAT);
+mysql&gt; INSERT INTO t VALUES(1,1,1);
+mysql&gt; CREATE TABLE y SELECT AVG(i), AVG(d), AVG(f) FROM t;
+</pre>
+
+<p>Результаты до MySQL 5.0.3:</p>
+<pre>
+mysql&gt; <strong><code>DESCRIBE y;</code></strong>
++--------+--------------+------+-----+---------+-------+
+| Field  | Type         | Null | Key | Default | Extra |
++--------+--------------+------+-----+---------+-------+
+| AVG(i) | double(17,4) | YES  |     |    NULL |       |
+| AVG(d) | double(17,4) | YES  |     |    NULL |       |
+| AVG(f) | double       | YES  |     |    NULL |       |
++--------+--------------+------+-----+---------+-------+
+</pre>
+
+<p>Результат двойной точности, независимо от типа параметра. А вот
+результаты в MySQL 5.0.3 и выше:</p>
+<pre>
+mysql&gt; <strong><code>DESCRIBE y;</code></strong>
++--------+---------------+------+-----+---------+-------+
+| Field  | Type          | Null | Key | Default | Extra |
++--------+---------------+------+-----+---------+-------+
+| AVG(i) | decimal(14,4) | YES  |     |    NULL |       |
+| AVG(d) | decimal(14,4) | YES  |     |    NULL |       |
+| AVG(f) | double        | YES  |     |    NULL |       |
++--------+---------------+------+-----+---------+-------+
+</pre>
+<p>Результат двойной точности только для параметра с плавающей запятой. Для
+параметров точных типов, результатом будет также точный тип.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</html>

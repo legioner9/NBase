@@ -1,0 +1,6 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.7.1_.11.6._Правки_документа.dir\cat.2.7.1_.11.6._Правки_документа.dir\dir.2.7.1_.11.6._Правки_документа.dir.md">2.7.1_.11.6._Правки_документа.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.7.1_.11.6._Правки_документа.dir\2.7.1_.11.6._Правки_документа.md">2.7.1_.11.6._Правки_документа.md</a>
+        - *## [HTML-элементы для редактирования документа](https://html5book.ru/pravki-dokumenta/)
+        - *### 1. Элемент \<ins>
+        - *### 2. Элемент \<del>
+        - *### 3. Атрибуты, общие для элементов \<ins> и \<del 

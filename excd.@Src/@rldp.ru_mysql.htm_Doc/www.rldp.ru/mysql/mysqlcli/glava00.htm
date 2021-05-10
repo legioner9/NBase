@@ -1,0 +1,596 @@
+<HTML>
+<HEAD>
+  <TITLE>MySQL: руководство пользователя</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H1>MySQL: руководство пользователя</H1>
+<H2>Введение</H2>
+<P>За последнее время MySQL сильно продвинулась вперед. Уже сейчас эта СУБД
+стала фактическим стандартом для интернет-приложений (веб-магазины, сложные
+сайты, информационные порталы). Под открытыми системами (Linux, FreeBSD) и
+даже под закрытыми, где нет продукции Microsoft (Sun Solaris, разные
+коммерческие версии Unix), эта СУБД лидирует уже сейчас. Да оно и понятно:
+она обладает очень высоким быстродействием и надежностью (по некоторым
+параметрам поспорит даже с монстром от Oracle!).
+
+<P>Сейчас в крупных организациях все больше разворачивается война с
+пиратскими копиями программ. По крайней мере с практикой создания базы данных
+масштаба предприятия на основе ворованной СУБД явно стараются покончить.
+MySQL бесплатна (правда, за поддержку надо платить, но ведь поддержка не всем
+нужна), что еще больше повышает к ней интерес. К тому же, открытые системы
+ведут сейчас наступление широким фронтом, никуда тут не денешься, а под ними
+эта СУБД является безусловным лидером, оставив далеко позади все проекты
+свободных СУБД. Какой смысл покупать и ставить MS SQL под эмулятором в Linux,
+когда там уже есть СУБД, ничуть не уступающая MS SQL? Следует также отметить
+бурный рост числа баз данных масштаба предприятия, который уже начался.
+
+<P>Тут и возникает серьезная проблема: в России с литературой по открытым
+системам дело обстоит из рук вон плохо. То есть, хуже некуда. Представим
+такую ситуацию: на предприятии успешно идет внедрение корпоративной БД под
+MySQL (возможности этой СУБД легко позволяют управиться с потребностями
+довольно крупной компании, проверено лично). Есть много далеких от
+компьютерной техники людей (но все же не чайников), которые более-менее
+разбираются во всяких MS Windows и MS Office, но им теперь придется работать
+с клиентской частью MySQL (кстати, MySQL есть чуть ли не под любой ОС).
+Понятно, что необходимы знания о том, как это делается, особенно если учесть,
+что диалект языка SQL, реализованный в MySQL, имеет немало отличий от версии
+ANSI SQL93. Что делать администратору, на которого в ближайшее время
+обрушится шквал вопросов?
+
+<P>Вообще документация по MySQL на рынке есть, но направлена она несколько не
+в ту сторону, куда надо бы. Есть огромные тома (свыше 800 страниц), которые
+пытаются в одной книге описать все аспекты СУБД, что все равно невозможно
+сделать качественно ввиду огромных объемов информации. Есть компактные книжки,
+ориентированные на программистов, но нет почти ничего для администраторов и
+уже совсем ничего для пользователей. Именно по этой причине и возникла в свое
+время надобность написать книжку для пользователя. Почему-то молча считается,
+что эта СУБД нужна даже не администраторам, а программистам. Это далеко не
+так! Но это убеждение сильно мешает нормальной работе с этой системой.
+
+<P>По меньшей мере странным выглядит то, что никто до сих пор не подумал о
+том, что литература по MySQL нужна и тем, кто с этой СУБД будет работать на
+уровне пользователя. Сложно поверить в то, что здесь все считается интуитивно
+понятным. Все же это очень сложный пакет, даже на пользовательском уровне
+нельзя просто взять и начать с ним работать, надо учиться. Почему-то принято
+считать, что всякий, кто работает с MySQL, является администратором системы,
+ему нужны подробные сведения по настройкам пакета, и ему совсем не к чему
+описывать простые понятия, вроде языка этого пакета. Такое мнение глубоко
+ошибочно! Язык у этого пакета изобилует всякими скрытыми возможностями,
+хитростями и неожиданностями. Далеко не всем нужно и администрироваине.
+
+<P>Не следует также забывать о том, что пользователю могут быть поручены
+ограниченные функции администратора (например, координатору рабочей группы
+может быть предоставлено право управлять базами данных своей группы). MySQL
+имеет отличную систему привилегий и прав доступа, что делает эту СУБД
+поистине универсальным инструментом подобного рода. В этой книге я
+рассматриваю введение в администрирование пакета, предназначенное для
+пользователей с ограниченными администраторскими функциями.
+
+<P>Нельзя не учесть и то, что любая база данных работает значительно лучше
+при оптимальной обработке запросов. Разумеется, чтобы запрос обрабатывался
+оптимально, он должен быть правильно составлен. В этой книге я даю
+специальную главу по оптимизации запросов на уровне пользователя (без
+вмешательства администратора), что позволяет повысить эффективность работы
+пакета примерно в 3-5 раз.
+
+<P>Предполагаемый круг читателей: различные пользователи (но не чайники!):
+клерки, секретари и операторы, использующие в своей работе клиентскую часть
+данной СУБД, и нуждающиеся в руководстве по практическому (без лишних теорий)
+использованию пакета. Книга расчитана на подготовленных читателей, имеющих
+общее представление о базах данных. Книга не ориентирована на администраторов,
+им адресована следующая книга серии: MYSQL: руководство администратора.
+
+<P>Знание языка запросов SQL необязательно, поскольку в MySQL применен весьма
+специфический его диалект, который подробно рассмотрен в книге. Именно это
+описание языка SQL (а также главы по оптимизации запросов и администрированию
+пакета) может также пригодиться студентам, изучающим предмет "Базы данных" и
+программистам, которым приходится писать приложения для взаимодействия с
+данной СУБД. Книга представляет практическую ценность для очень широкого
+круга читателей, особенно для тех, кто стремится сам повысить
+свой профессиональный уровень.
+
+<P>В этой книге рассмотрены следующие вопросы:
+<UL><LI>Соответствие MySQL отраслевым стандартам.
+<LI>Структура языка SQL (вернее, его диалекта, принятого в MySQL), его
+основные понятия, примеры синтаксиса.
+<LI>Введение в администрирование пакета (ограниченный обзор).
+<LI>Язык SQL, реализованный в MySQL. Он рассмотрен в виде нескольких глав,
+каждая из которых охватывает свою часть языка, а именно:
+<UL><LI>Типы столбцов в таблицах.
+<LI>Функции для использования в операторе SELECT.
+<LI>Определение данных, создание, удаление и модификация таблиц.
+<LI>Манипуляции с данными в таблицах.
+<LI>Секреты и тонкости этой версии SQL.</UL>
+<LI>Проблемы защиты и система привилегий пакета.
+<LI>Рассмотрение общих ошибок при работе с пакетом и путей их обхода.
+<LI>Взаимодействие с другими программами по протоколу ODBC.
+<LI>Оптимизация запросов и работы с пакетом.</UL>
+
+<P>Безусловно, многого в этой книге нет. В частности, она не охватывает
+проблемы компиляции и установки пакета на конкретную систему, его отладку,
+особенности различных типов таблиц, локализацию под разные языки,
+протоколирование событий, репликацию и многое другое. Но все это уже
+выходит за рамки пользовательского уровня работы с клиентской частью СУБД.
+Если интерес к этой работе будет достаточно сильным, автор рассмотрит
+возможность написания продолжения данной книги, но уже ориентируясь на
+администратора, где и рассмотрит перечисленные проблемы.
+
+<P>Это справочное описание, оно не обеспечивает основные инструкции по SQL
+или концепциям баз данных. Если Вы хотите получить общую информацию
+относительно SQL, обратитесь к заключению, там есть ссылки по этим вопросам.
+
+<H1><A NAME="thankyou">Благодарности</A></H1>
+<P>В заключение хочу поблагодарить всех, кто помогал мне в работе
+над книгой, а особенно:
+
+<UL><LI>Паутову Надежду Константиновну за корректуру текста и помощь в
+работе над стилем изложения и терпение к моим ошибкам.</LI>
+
+<LI>Филатову Августу Александровну за неоценимые консультации
+по русскому языку.</LI>
+
+<LI>Дуванова Александра Александровича за техническую помощь в изготовлении
+сопроводительного CD-ROM.</LI>
+
+<LI>Паутова Валентина Павловича за предоставленную техническую помощь.</LI>
+</UL>
+
+А также всех тех, без чьей ценной помощи и поддержки создание этой работы
+было бы невозможным. СПАСИБО ВАМ!</P></DIV>
+
+<H1><A NAME="MySQL_customer_usage">Некоторые пользователи MySQL</A></H1>
+<P>Это приложение вносит в список некоторых пользователей MySQL, которые дали
+разрешение внести их в список в документации. Это далеко не полный список, но
+он должен дать Вам общее представление относительно того, кто использует
+MySQL, и для чего этот пакет может использоваться. Этот раздел должен дать
+Вам идею относительно того, как другие MySQL пользователи применяют MySQL,
+чтобы решить свои проблемы. Кроме того, он должен дать Вам общее
+представление относительно того, кто использует MySQL, и для чего
+это может применяться.</P>
+
+<P>Если Вы используете MySQL в уникальной среде или имеете память об успехе
+относительно того, как Вы применяли MySQL, Вы можете написать на
+<CODE>docs@mysql.com</CODE> с темой <CODE>Success:</CODE>.</P>
+
+<UL><LI><STRONG>Peter Zaitsev с Spylog.ru</STRONG> пишет:
+Я думаю, что Вы будете заинтересованы размером моей базы данных. Целая база
+данных в настоящее время хранится на 15 серверах, и я думаю, что это
+приблизительно 60000 таблиц, содержащих около 5000000000 строк. Мой обычно
+загруженный сервер в настоящее время хранит приблизительно 10000 таблиц с
+1000000000 строк в них. Большие таблицы имеют приблизительно 50000000 строк,
+и это значение поднимется, как только я перейду на ядро 2.4 с большими
+файлами. В настоящее время я должен удалить многое из файлов регистрации для
+больших сайтов, чтобы размеры таблиц попали в 2Gb.
+
+<LI><STRONG>Texas Instruments</STRONG> использует MySQL для обработки ряда
+таблиц, которые содержат до 2000 миллионов строк в базе данных
+регрессов проверок правильности.</UL>
+
+<H2><A NAME="SEC606">Сайты новостей</A></H2>
+<UL><LI><a HREF="../../../www.yahoo.com/default.htm">Yahoo!</a>
+<LI><a HREF="../../../slashdot.org/default.htm">Slashdot: Новости и обсуждения по Linux и
+технике, разные дискуссии</a>
+<LI><a HREF="../../../www.linux.com/default.htm">Все про Linux</a>
+<LI><a HREF="../../../www.linuxtoday.com/default.htm">Linuxtoday</a>
+<LI><a HREF="../../../www.32bitsonline.com/default.htm">32Bits Online: все о вычислениях</a>
+<LI><a HREF="../../../www.freshmeat.net/default.htm">Freshmeat: новости относительно новых
+версий программ и аппаратуры</a></UL>
+
+<H2><A NAME="SEC607">Web-поисковики</A></H2>
+<UL><LI><a HREF="../../../www.aaa.com.au/default.htm">AAA Matilda Web Search</a>
+<LI><a HREF="../../../www.whatsnu.com/default.htm">What's New</a>
+<LI><a HREF="../../../www.aladin.de/default.htm">Aladin</a>
+<LI><a HREF="../../../www.columbus-finder.de/default.htm">Columbus Finder</a>
+<LI><a HREF="../../../www.spider.de/default.htm">Spider</a>
+<LI><a HREF="../../../www.blitzsuche.de/default.htm">Blitzsuche</a>
+<LI><a HREF="../../../www.indoseek.co.id/default.htm">Indoseek Indonesia</a>
+<LI><a HREF="../../../www.yaboo.dk/default.htm">Yaboo BOOkmarker</a>
+<LI><a HREF="../../../www.ozsearch.com.au/default.htm">OzSearch Internet Guide</a>
+<LI><a HREF="../../../www.splatsearch.com/default.htm">Splat! Search</a>
+<LI><a HREF="../../../osdls.library.arizona.edu/default.htm">The Open Source Digital
+Library System Project</a></UL>
+
+<H2><A NAME="SEC608">Некоторые специализированные поисковики</A></H2>
+<UL><LI><a HREF="../../../www.spylog.ru/default.htm">SpyLOG: очень популярное место
+счетчиков для Web</a>
+<LI><a HREF="../../../www.tucows.com/default.htm">TuCows Network; Архив Free Software</a>
+<LI><a HREF="../../../www.jobvertise.com/default.htm">Jobvertise: Поиск работы</a>
+<LI><a HREF="../../../www.musicdatabase.com/default.htm">База данных музыки</a>
+<LI><a HREF="../../../www.soccersearch.com/default.htm">Футбольный поисковик</a>
+<LI><a HREF="../../../www.headrush.net/takedown">TAKEDOWN: реслинг</a>
+<LI><a HREF="../../../www.lyrics.net/default.htm">Международная сеть лирики</a>
+<LI><a HREF="../../../thematrix.com/~matrix/band_search.phtml">Музыканты,
+ищущие других музыкантов (свободный сервис)</a>
+<LI><a HREF="../../../www.addall.com/AddBooks/Stores.html">AddALL поиск книг и
+сравнение их цен</a>
+<LI><a HREF="../../../www.herbaria.harvard.edu/Data/Gray/gray.html">Оглавление
+Harvard's Gray Herbarium</a>
+<LI><a HREF="../../../www.game-developer.com/default.htm">Поисковик для авторов игр</a>
+<LI><a HREF="www.theinnkeeper.com">Энциклопедия каникул и отпусков</a>
+<LI><a HREF="../../../www.macgamedatabase.com/default.htm">База данных игр для Mac
+(применяет PHP и MySQL)</a>
+<LI><a HREF="../../../www.csse.monash.edu.au/publications">Публикации
+Monash University в Australia</a>
+<LI><a HREF="../../../www.ipielle.emr.it/bts/index.html">Профессиональное
+здоровье и база данных по сайтам (проект ECC)</a>
+<LI><a HREF="../../../data.mch.mcgill.ca/default.htm">Биоинформационная база данных главной
+детской больницы в Монреале</a></UL>
+
+<H2><A NAME="SEC609">Онлайновые магазины</A></H2>
+<UL><LI><a HREF="../../../www.spoiler.com/default.htm">Spoiler Webzine</a>.Интерактивный
+журнал, охватывающий музыку, литературу, разные виды искусства.
+<LI><a HREF="../../../www.linux-magazin.de/newsflash">Ежедневные новости
+относительно Linux на немецком языке</a>
+<LI><a HREF="../../../www.betazine.com/default.htm">Betazine: интерактивный журнал
+испытателей бета-версий</a>
+<LI><a HREF="../../../www.currents.net/ccinfo/aboutcc.html">Computer Currents
+</a></UL>
+
+<P>Если Вам понравилась эта работа, <A href="mailto:ilyao@knowledge.ru">
+напишите</a>: считаете ли Вы ее качественной или нет? Стоит ли издавать?
+Хорошо ли изложен материал?
+
+<H2><A NAME="SEC610">Web-сайты, использующие MySQL для своей работы</A></H2>
+<UL><LI><a HREF="../../../liftoff.msfc.nasa.gov/default.htm">NASA</a>
+<LI><a HREF="../../../kids.msfc.nasa.gov/default.htm">NASA KIDS</a>
+<LI><a HREF="../../../science.nasa.gov/default.htm">Sience@NASA</a>
+<LI><a HREF="../../../www.handy.de/default.htm">handy.de</a>
+<LI><a HREF="../../../lindev.jmc.tju.edu/qwor">Репозитарий Qt Widget и Object
+</a>
+<LI><a HREF="../../../www.samba-choro.com.br/default.htm">Бразильский сайт проекта samba
+</a>
+<LI><a HREF="../../../pgss.iss.uw.edu.pl/en_index.ISS">Польский общий
+социальный обзор</a>
+<LI><a HREF="../../../www.expo2000.com/default.htm">Expo2000</a> Международное
+распределение билетов для Expo2000 было выполнено, используя MySQL и tcl/tk.
+Более 5000 транспортных агентств во всем мире имеют доступ к этому.
+<LI><a HREF="../../../www.freevote.com/default.htm">FreeVote.com: свободное обслуживание
+голосований с миллионами пользователей.</a>
+<LI><a HREF="../../../f1.tauzero.se/default.htm">Forza Motorsport</a>
+<LI><a HREF="../../../www.dreamhost.com/default.htm">DreamHost Web-хостинг</a></UL>
+
+<H2><A NAME="SEC611">Некоторые сервисы Domain/Internet/Web</A></H2>
+<UL><LI><a HREF="../../../www.wix.com/mysql-hosting">Перечень Web-провайдеров,
+которые поддерживают MySQL</a>
+<LI><a HREF="../../../www.yi.org/default.htm">Динамические сервисы DNS</a>
+<LI><a HREF="../../../www.dynodns.net/default.htm">Динамические сервисы имен доменов</a>
+<LI><a HREF="../../../www.ods.org/default.htm">Open DNS Project; динамический сервис DNS</a>
+<LI><a HREF="../../../www.hn.org/default.htm">Hammernode; Публичные серверы DNS</a>
+<LI><a HREF="../../../www.fdns.net/default.htm">Бесплатные домены третьего уровня</a>
+<LI><a HREF="../../../worldcommunity.com/default.htm">Online Database</a>
+<LI><a HREF="../../../www.bigbiz.com/default.htm">Сервисы BigBiz Internet</a>
+<LI><a HREF="../../../virt.circle.net/default.htm">Виртуальная газета</a>
+<LI><a HREF="../../../www.california.com/default.htm">Global InfoNet Inc</a>
+<LI><a HREF="../../../www.webhosters.com/default.htm">WebHosters: энциклопедия
+WWW-провайдеров</a>
+<LI><a HREF="../../../online.dn.ru/default.htm">Информационные сервер</a>
+<LI><a HREF="../../../www.stopbit.com/default.htm">Новостной сайт по технологиям</a>
+<LI><a HREF="../../../www.worldnetla.net/default.htm">WorldNet Communications:
+интернет-провайдер</a>
+<LI><a HREF="../../../www.netizen.com.au/default.htm">Netizen: Web в Австралии</a>
+<LI><a HREF="../../../www.trainingpages.co.uk/default.htm">Поисковый сайт по учебным курсам
+в Англии (UK)</a>
+<LI><a HREF="../../../chat.nitco.com/default.htm">Чат Gannon (лицензия GPL). Написан на
+языках Perl и Javascript</a>
+<LI><a HREF="../../../www.addurls.com/default.htm">Справочник интернет-ссылок</a>
+<LI><a HREF="../../../www.bookmarktracker.com/default.htm">Web-ориентированный сервис
+закладок с удобным управлением</a>
+<LI><a HREF="../../../www.cdrom.com/default.htm">Walnut Creek CDROM</a>
+<LI><a HREF="../../../www.wwwthreads.org/default.htm">WWWThreads: интерактивные
+дискуссионные форумы по разным вопросам</a>
+<LI><a HREF="../../../pvmon.portici.enea.it/Meteo">Итальянское хранилище данных
+по местной погоде</a>
+<LI><a HREF="../../../www.buysell.net/default.htm">Аукцион "Person To Person"</a>
+<LI><a HREF="../../../tips.pair.com/default.htm">Советы Web-разработчику</a>
+<LI><a HREF="../../../www.mailfriends.com/default.htm">Mailfriends.com: свободный сервис
+для каждого, кто хочет найти друзей через internet.</a>
+<LI><a HREF="../../../www.uninova.com/cgi-bin/wctelnets@list">Web-страница
+списка Telnet BBS</a>
+<LI><a HREF="../../../www.uninova.com/cnc.html">Цифровые открытки UniNova</a>
+<LI><a HREF="../../../www.dslreports.com/default.htm">Поисковик с комментариями по
+DSL-провайдерам в разных странах</a>. Сделан на MySQL и Modperl, все страницы
+будут сгенерированы динамически из базы данных на MySQL</UL>
+
+<H2><A NAME="SEC612">Web-сайты, применяющие в работе <CODE>PHP</CODE> и MySQL
+</A></H2>
+<UL><LI><a HREF="../../../support.jgaa.com/default.htm">Jgaa's Internet: официальный сайт
+поддержки</a>
+<LI><a HREF="../../../io.incluso.com/default.htm">Ionline:</a> публикации про MySQL, PHP,
+Java, Web-программирование, разработку DB
+<LI><a HREF="../../../www.baboo.com/default.htm">BaBoo (Browse and bookmark). Свободный
+Web-менеджер закладок с календарем</a>
+<LI><a HREF="../../../www.courses.pjc.cc.fl.us/Schedule/index.php">Система
+планирования курсов в Pensacola Junior College</a>
+<LI><a HREF="../../../www.fccj.org/default.htm">Florida Community College в Jacksonville</a>
+<LI><a HREF="../../../www.32bit.com/default.htm">32bit.com: архив по shareware/freeware</a>
+<LI><a HREF="../../../www.jokes2000.com/default.htm">Шутки 2000</a>
+<LI><a HREF="../../../www.burken.nu/default.htm">Burken.NU</a> Burken предлагает много
+скриптов для удаленных пользователей, подобно счетчикам, гостевым книгам,
+системам показа баннеров и прочему.
+<LI><a HREF="../../../tips.pair.com/default.htm">tips.pair.com</a> Советы по html,
+javascript, 2d/3d-графике и PHP3/MySQL. Все страницы строятся из базы данных.
+<LI><a HREF="../../../www.softwarezrus.com/default.htm">Softwarezrus.com</a>Сайт, который
+продает готовые компьютеры.</UL>
+
+<H2><A NAME="SEC613">Консультанты по MySQL</A></H2>
+<UL><LI><a HREF="../../../www.ayni.com/default.htm">Ayni AG</a>
+<LI><a HREF="../../../worldcommunity.com/default.htm">Online Database</a>
+<LI><a HREF="../../../www2.dataguard.no/default.htm">DataGuard (использует MySQL и PHP)</a>
+<LI><a HREF="../../../wwits.net/programs/mysql.phtml">WWITS (использует MySQL и
+PHP)</a>
+<LI><a HREF="../../../www.chipcastle.com/default.htm">Чиповый замок Inc</a>
+<LI><a HREF="../../../www.cyber.com.au/default.htm">Cybersource Pty. Ltd</a>
+<LI><a HREF="../../../www.spring.de/default.htm">Spring infotainment gmbh &#38; co. kg</a>
+<LI><a HREF="../../../www.wamdesign.com/default.htm">Разработка Web-сайтов с MySQL</a>
+<LI><a HREF="../../../www.berkeleyconsultants.com/default.htm">Группа консультантов
+Berkeley</a>
+<LI><a HREF="../../../www.jammconsulting.com/default.htm">JAMM Consulting Inc.</a></UL>
+
+<H2><A NAME="SEC615">Прочие страницы</A></H2>
+<UL><LI><a HREF="../../../www.feature-showcase.com/htmls/demo_mysql.sql">
+Демонстрашки AZC.COM</a>
+<LI><a HREF="../../../www.teach.org.uk/subjects/trainingcourse/g.html">Поиск
+учебных курсов</a>
+<LI><a HREF="../../../www.northerbys.com/default.htm">Онлайновый аукцион Northerbys</a>
+<LI><a HREF="../../../www.schiphol.nl/flights/home.htm">Амстердамский аэропорт
+</a>
+<LI><a HREF="../../../thematrix.com/seventhsin/query.phtml">База данных по CD
+</a>
+<LI><a HREF="../../../thematrix.com/~flmm/GEAR.html">Звуковая база данных</a>
+<LI><a HREF="../../../www.kiss.de/musik-mueller">Музыкальные записи в нотах</a>
+<LI><a HREF="../../../www.bagism.com/default.htm">Bagism: фаны Джона Леннона</a>
+<LI><a HREF="../../../www.selftaught.com/default.htm">US Folk брокер</a>
+<LI><a HREF="../../../organizer.net/default.htm">Чтение почты через Web</a>
+<LI><a HREF="../../../www.mypage.org/default.htm">Бесплатные домашние странички на
+www.somecoolname.mypage.org</a>
+<LI><a HREF="../../../www.schulweb.de/default.htm">Der Server f@"ur Schulen im Web (сайт
+на немецком языке)</a>
+<LI><a HREF="../../../www.ald.net/default.htm">Онлайновые сервисы Auldhaefen</a>
+<LI><a HREF="../../../www.cary.net/default.htm">Информационный центр CaryNET</a>
+<LI><a HREF="../../../www.dataden.com/default.htm">Dataden Computer Systems</a>
+<LI><a HREF="../../../andree.grm.se/default.htm">Andr'emuseet (на шведском языке)</a>
+<LI><a HREF="../../../www.him.net/default.htm">HOMESITE Internet Marketing</a>
+<LI><a HREF="../../../www.jade-v.com/techinfo.html">Сетевые сервисы Jade-V</a>
+<LI><a HREF="../../../ww2010.atmos.uiuc.edu/(Gl)/abt/aknw/tech.rxml">
+Weather World 2010 Technical Credits</a>
+<LI><a HREF="../../../gimp.foebud.org/registry/doc">Реестр присосок к Gimp</a>
+<LI><a HREF="../../../www.fast-inc.com/Products/Archiver/database.html">Архив
+технической информации и инструментов для Java (совместим с MySQL ANSI-92)
+</a>
+<LI><a HREF="../../../www.gamesdomain.com/cheats/usrcheat.phtml">База данных
+по кодам к играм</a>
+<LI><a HREF="../../../www.kcilink.com/poweredby">Страничка "Powered By"
+(Kcilink)</a>
+<LI><a HREF="../../../www.netcasting.net/index.whtml">Netcasting</a>
+<LI><a HREF="../../../homepages.tig.com.au/~mjj/nbltips">NBL (Австралийская
+национальная баскетбольная лига)</a>
+<LI><a HREF="../../../www.cgishop.com/default.htm">Много CGI-скриптов</a>
+<LI><a HREF="../../../www.whirlycott.com/default.htm">Whirlycott: дизайн Web-сайтов</a>
+<LI><a HREF="../../../www.mtp.dk/default.htm">Музей Tusculanum Press</a>
+<LI><a HREF="../../../csdgi.historie.ku.dk/biblio">Centro Siciliano di
+Documentazione</a>
+<LI><a HREF="../../../caribou.dyn.ml.org_3A8000/default.htm">Статистика по Quake</a>
+<LI><a HREF="../../../www.astroforum.ch/default.htm">Astroforum: все про астрологию (сайт
+только на немецком языке)</a>
+<LI><a HREF="../../../www.opendebate.com/default.htm">OpenDebate: интерактивные опросы и
+открытое обсуждение проблем</a>
+<LI><a HREF="../../../vermeer.organik.uni-erlangen.de/dissertationen">Дискуссии
+по химии (открытый сервер)</a>
+<LI><a HREF="../../../www.freschinfo.com/default.htm">FreSch! Свободный сервис поиска
+учащихся и перспективных выпускников</a>
+<LI><a HREF="../../../www.nada.kth.se/~staffanu/pinball">Стокгольмский пинбол
+</a>
+<LI><a HREF="../../../www.hek.com/default.htm">HEK: конструкторская компания</a>
+<LI><a HREF="../../../www.nbi.nl/default.htm">Elsevier: бизнес-информация</a>
+<LI><a HREF="../../../vaccination.medicallink.se/default.htm">Медицинские ссылки (применяет
+ColdFusion и MySQL)</a>
+<LI><a HREF="../../../www.joblink-usa.com/default.htm">Поиск работ и людей в JobLink-USA
+</a>
+<LI><a HREF="../../../www.skydive.net/competfs">Ассоциация по Skydiving</a>
+<LI><a HREF="../../../www.galaxy-net.net/Galaxy-NET Telecommunications">
+E-коммерция и внутренний учет</a>
+<LI><a HREF="../../../www.borsen.dk/default.htm">Ведущая деловая ежедневная газета Дании
+</a>
+<LI><a HREF="../../../tmmm.simplenet.com/indb">База данных Internet NES</a>
+<LI><a HREF="../../../www.russia.cz/default.htm">Транспортное агентство в Праге на 3 языках
+</a>
+<LI><a HREF="../../../www.linkstation.de/default.htm">Проект Linkstation</a>
+<LI><a HREF="../../../www.peoplestaff.com/default.htm">Интерактивная база данных с поиском
+по разным людям</a>
+<LI><a HREF="../../../www.dreamhorse.com/default.htm">Интерактивная база данных с поиском
+по классифицированным лошадям</a>
+<LI><a HREF="../../../pootpoot.com/default.htm">Сайт Poot</a>
+<LI><a HREF="../../../grateful.net/hw_html">"Playin' in the LAN": набор для
+контроля за сетью</a>
+<LI><a HREF="../../../www.usapa.army.mil/default.htm">Агентство для связи с
+общественностью армии США</a>
+<LI><a HREF="../../../www.nekretnine.co.yu/default.htm">Realestate handling in Yugoslavia
+</a>
+<LI><a HREF="../../../demo.cpsoft.com/pims/devFAQ.html">PIMS: Информационная
+система управления патентами</a>
+<LI><a HREF="../../../cpsoft.com/default.htm">Pilkington Software Inc</a>
+<LI><a HREF="../../../www.no-quarter.org/default.htm">Мемориал ветеранов Вьетнама</a>
+<LI><a HREF="../../../www.gamers-union.com/default.htm">Объединение игроков,
+специализируется на работе с аукционами и скрытыми материалами</a>
+<LI><a HREF="../../../www.montereyhigh.com/office/dbul.php3">Ежедневный
+бюллетень института в Монтерее</a>
+<LI><a HREF="../../../www.myeastside.com/default.htm">Сайт, обслуживающий бизнесы и жителей
+Lake Washington's Eastside</a>
+<LI><a HREF="../../../bowling-france.net/default.htm">Сайт французского боулинга</a></UL>
+
+<P>Посылайте обновления на <a HREF="mailto:webmaster@mysql.com">
+webmaster@mysql.com</a>.</P>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

@@ -1,0 +1,7 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Fedora\Containers\Intro_to_this\Common_this\bash\cat.bash\dir.bash.md">bash</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Fedora\Containers\Intro_to_this\Common_this\bash\4 ввод и вывод.md">4 ввод и вывод.md</a>
+        - *## [Bash-скрипты, часть 4: ввод и вывод](https://habr.com/ru/company/ruvds/blog/326594/)
+        - *@@ intro Bash Scripts
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Fedora\Containers\Intro_to_this\Common_this\bash\to_root.md">to_root.md</a>
+        - *## [Права суперпользователя root в Linux: полный обзор](https://timeweb.com/ru/community/articles/root-v-linux)
+        - *### Переключение на суперпользователя

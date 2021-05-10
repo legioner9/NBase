@@ -1,0 +1,1407 @@
+<html>
+<head>
+   <META NAME="Author" CONTENT="Alexey V. Pautov">
+   <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+   <title>Глава 4. Работа с коллекциями</title>
+   <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="devapi-users-working-with-collections"></a>
+Глава 4. Работа с коллекциями</h1>
+<p>Следующий раздел объясняет, как работать с коллекциями, как использовать
+операции CRUD на коллекциях и возвратить документы.</p>
+
+<h2><a name="working-with-collections-basic-crud"></a>
+4.1. Основные операции CRUD на коллекциях</h2>
+<p>Работа с коллекциями документов прямая, используя X DevAPI.
+Следующие примеры показывают основное использование операций
+CRUD, работая с документами.</p>
+
+<p>После установления связи с сервером MySQL, создается новая коллекция,
+которая может содержать документы JSON, и вставляются несколько документов.
+Затем операция поиска выполняется, чтобы искать определенный документ из
+коллекции. Наконец, коллекция удалена из базы данных.
+Пример предполагает, что испытательная схема существует, а коллекция
+<code class="literal">my_collection</code> нет.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+// Connecting to MySQL Server and working with a Collection
+var mysqlx = require('mysqlx');
+
+// Connect to server
+var mySession = mysqlx.getSession( {
+  host: 'localhost', port: 33060,
+  user: 'user', password: '<em class="replaceable"><code>password</code></em>'} );
+
+var myDb = mySession.getSchema('test');
+// Create a new collection 'my_collection'
+var myColl = myDb.createCollection('my_collection');
+
+// Insert documents
+myColl.add({_id: '1', name: 'Laurie', age: 19}).execute();
+myColl.add({_id: '2', name: 'Nadya', age: 54}).execute();
+myColl.add({_id: '3', name: 'Lukas', age: 32}).execute();
+
+// Find a document
+var docs = myColl.find('name like :param1 AND age &lt; :param2').limit(1).
+bind('param1','L%').bind('param2',20).execute();
+
+// Print document
+print(docs.fetchOne());
+// Drop the collection
+myDb.dropCollection('my_collection');
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+# Connecting to MySQL Server and working with a Collection
+from mysqlsh import mysqlx
+
+# Connect to server
+mySession = mysqlx.get_session( {
+  'host': 'localhost', 'port': 33060,
+  'user': 'user', 'password': '<em class="replaceable"><code>password</code></em>'} )
+myDb = mySession.get_schema('test')
+
+# Create a new collection 'my_collection'
+myColl = myDb.create_collection('my_collection')
+# Insert documents
+myColl.add({'_id': '1', 'name': 'Laurie', 'age': 19}).execute()
+myColl.add({'_id': '2', 'name': 'Nadya', 'age': 54}).execute()
+myColl.add({'_id': '3', 'name': 'Lukas', 'age': 32}).execute()
+
+# Find a document
+docs = myColl.find('name like :param1 AND age &lt; :param2') \
+                   .limit(1) \
+                   .bind('param1','L%') \
+                   .bind('param2',20) \
+                   .execute()
+
+# Print document
+doc = docs.fetch_one()
+print(doc)
+# Drop the collection
+myDb.drop_collection('my_collection')
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+// --------------------------------------------------
+// Connecting to MySQL Server and working with a Collection
+var mysqlx = require('@mysql/xdevapi');
+var db;
+
+// Connect to server
+mysqlx
+.getSession({
+  user: 'user',
+  password: 'password',
+  host: 'localhost',
+  port: '33060',
+})
+.then(function (session) {
+  db = session.getSchema('test');
+  // Create a new collection 'my_collection'
+  return db.createCollection('my_collection');
+})
+.then(function (myColl) {
+  // Insert documents
+  return Promise
+  .all([
+    myColl.add({ name: 'Laurie', age: 19 }).execute(),
+    myColl.add({ name: 'Nadya', age: 54 }).execute(),
+    myColl.add({ name: 'Lukas', age: 32 }).execute()
+  ])
+  .then(function () {
+    // Find a document
+    return myColl
+    .find('name like :name &amp;&amp; age &lt; :age')
+    .bind({ name: 'L%', age: 20 })
+    .limit(1)
+    .execute(function (doc) {
+      // Print document
+      console.log(doc);
+    });
+  });
+})
+.then(function(docs) {
+  // Drop the collection
+  return db.dropCollection('my_collection');
+})
+.catch(function(err) {
+  // Handle error
+});
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+// Connecting to MySQL Server and working with a Collection
+// Connect to server
+var mySession = MySQLX.GetSession("server=localhost;port=33060;user=user;password=<em class="replaceable"><code>password</code></em>;");
+var myDb = mySession.GetSchema("test");
+
+// Create a new collection "my_collection"
+var myColl = myDb.CreateCollection("my_collection");
+// Insert documents
+myColl.Add(new { name = "Laurie", age = 19}).Execute();
+myColl.Add(new { name = "Nadya", age = 54}).Execute();
+myColl.Add(new { name = "Lukas", age = 32}).Execute();
+
+// Find a document
+var docs = myColl.Find("name like :param1 AND age &lt; :param2").Limit(1)
+                 .Bind("param1", "L%").Bind("param2", 20).Execute();
+
+// Print document
+Console.WriteLine(docs.FetchOne());
+// Drop the collection
+myDb.DropCollection("my_collection");
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+# Connecting to MySQL Server and working with a Collection
+
+import mysqlx
+# Connect to server
+my_session = mysqlx.get_session({
+  'host': 'localhost', 'port': 33060,
+  'user': 'user', 'password': 'password'
+})
+
+my_schema = my_session.get_schema('test')
+# Create a new collection 'my_collection'
+my_coll = my_schema.create_collection('my_collection')
+
+# Insert documents
+my_coll.add({'name': 'Laurie', 'age': 19}).execute()
+my_coll.add({'name': 'Nadya', 'age': 54}).execute()
+my_coll.add({'name': 'Lukas', 'age': 32}).execute()
+
+# Find a document
+docs = my_coll.find('name like :param1 AND age &lt; :param2') \
+              .limit(1) \
+              .bind('param1', 'L%') \
+              .bind('param2', 20) \
+              .execute()
+
+# Print document
+doc = docs.fetch_one()
+print("Name: {0}".format(doc['name']))
+print("Age: {0}".format(doc['age]))
+# Drop the collection
+my_session.drop_collection('test', 'my_collection')
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+// Connect to server
+Session mySession = new SessionFactory().getSession("mysqlx://localhost:33060/test?user=user&amp;password=password");
+Schema myDb = mySession.getSchema("test");
+
+// Create a new collection 'my_collection'
+Collection myColl = myDb.createCollection("my_collection");
+// Insert documents
+myColl.add("{\"name\":\"Laurie\", \"age\":19}").execute();
+myColl.add("{\"name\":\"Nadya\", \"age\":54}").execute();
+myColl.add("{\"name\":\"Lukas\", \"age\":32}").execute();
+
+// Find a document
+DocResult docs = myColl.find("name like :name AND age &lt; :age")
+                       .bind("name", "L%").bind("age", 20).execute();
+// Print document
+DbDoc doc = docs.fetchOne();
+System.out.println(doc);
+// Drop the collection
+myDB.dropCollection("my_collection");
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+// Connecting to MySQL Server and working with a Collection
+#include &lt;mysqlx/xdevapi.h&gt;
+
+// Connect to server
+Session session(33060, "user", "password");
+Schema db = session.getSchema("test");
+
+// Create a new collection 'my_collection'
+Collection myColl = db.createCollection("my_collection");
+// Insert documents
+myColl.add(R"({"name": "Laurie", "age": 19})").execute();
+myColl.add(R"({"name": "Nadya", "age": 54})").execute();
+myColl.add(R"({"name": "Lukas", "age": 32})").execute();
+
+// Find a document
+DocResult docs = myColl.find("name like :param1 AND age &lt; :param2").limit(1)
+                       .bind("param1","L%").bind("param2",20).execute();
+
+// Print document
+cout &lt;&lt; docs.fetchOne();
+// Drop the collection
+db.dropCollection("my_collection");
+</pre>
+
+<h2><a name="collection-objects"></a>4.2. Объекты коллекции</h2>
+<p>Документы того же самого типа группируются и хранятся в базе данных как
+коллекции. X DevAPI использует объекты коллекции, чтобы сохранить документы.
+</p>
+
+<h3><a name="creating-a-collection"></a>4.2.1. Создание коллекции</h3>
+<p>Чтобы создать новую коллекцию, вызовите функцию
+<code class="literal">createCollection()</code> от объекта схемы.
+Это возвращает Объект коллекции, который может использоваться сразу же,
+например чтобы вставить документы в коллекцию.</p>
+
+<p>Произвольно, поле <code class="literal">reuseExistingObject</code>
+может быть установлено в true и передаваться как второй параметр, чтобы
+предотвратить ошибку, если коллекция с тем же самым именем уже существует.
+</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+// Create a new collection called 'my_collection'
+var myColl = db.createCollection('my_collection');
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+# Create a new collection called 'my_collection'
+myColl = db.create_collection('my_collection')
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+// Create a new collection called 'my_collection'
+var promise = db.createCollection('my_collection');
+
+// Create a new collection or reuse existing one
+var promise = db.createCollection('my_collection',
+                                  { ReuseExistingObject: true } );
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+// Create a new collection called "my_collection"
+var myColl = db.CreateCollection("my_collection");
+// Create a new collection or reuse existing one
+var myExistingColl = db.CreateCollection("my_collection",
+                                         ReuseExistingObject: true);
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+# Create a new collection called 'my_collection'
+my_coll = my_schema.create_collection('my_collection')
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+// Create a new collection called 'my_collection'
+Collection myColl = db.createCollection("my_collection");
+// Create a new collection or reuse existing one
+// second parameter is: boolean reuseExistingObject
+Collection myExistingColl = db.createCollection("my_collection", true);
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+// Create a new collection called 'my_collection'
+Collection myColl = db.createCollection("my_collection");
+
+// Create a new collection or reuse existing one
+Collection myExistingColl = db.createCollection("my_collection", true);
+</pre>
+
+<h3><a name="working-with-existing-collections"></a>4.2.2.
+Работа с существующими коллекциями</h3>
+<p>Чтобы получить объект коллекции для существующей коллекции, сохраненной в
+базе данных, вызовите функцию <code class="literal">getCollection()</code>
+от объекта схемы.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+// Get a collection object for 'my_collection'
+var myColl = db.getCollection('my_collection');
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+# Get a collection object for 'my_collection'
+myColl = db.get_collection('my_collection')
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+// Get a collection object for 'my_collection'
+var collection = db.getCollection('my_collection');
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+// Get a collection object for "my_collection"
+var myColl = db.GetCollection("my_collection");
+// Get a collection object but also ensure it exists in the database
+var myColl2 = db.GetCollection("my_collection", ValidateExistence: true);
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+# Get a collection object for 'my_collection'
+my_coll = my_schema.get_collection('my_collection')
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+// Get a collection object for 'my_collection'
+Collection myColl = db.getCollection("my_collection");
+
+// Get a collection object but also ensure it exists in the database
+// second parameter is: boolean requireExists
+Collection myColl = db.getCollection("my_collection", true);
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+// Get a collection object for 'my_collection'
+Collection myColl = db.getCollection("my_collection");
+
+// Get a collection object but also ensure it exists in the database
+Collection myColl = db.getCollection("my_collection", true);
+</pre>
+
+<p>Если коллекция еще не существует в базе данных, любой последующий вызов
+функции объекта коллекции выдаст ошибку. Чтобы предотвратить это и
+зафиксировать ошибку сразу же, установите поле
+<code class="literal">validateExistence</code> = true и передайте его
+как второй параметр <code class="literal">db.getCollection()</code>.</p>
+
+<p>Поля <code class="literal">createCollection()</code> и
+<code class="literal">ReuseExistingObject</code>, установленные в true,
+могут использоваться, чтобы создать новую или снова использовать
+существующую коллекцию с именем.</p>
+
+<p>В большинстве случаев хорошая практика это создать объекты базы данных в
+течение времени разработки и воздержаться от создания их на лету во время
+производственной стадии проекта базы данных. Поэтому лучше отделять код,
+который создает коллекции в базе данных, от
+кода пользовательского приложения.</p>
+
+<h3><a name="collection-indexing"></a>4.2.3. Индексация коллекций</h3>
+<p>Чтобы сделать большое количество документов более эффективным, может
+помочь создание индекса на основе одного или более полей, найденных в
+документах в коллекции. Этот раздел описывает, как внести индекс в коллекцию.
+</p>
+
+<h4><a name="collection-creating-index"></a>Создание индекса</h4>
+<p>Индексы коллекции это обычные индексы MySQL на виртуальных столбцах,
+которые извлекают данные из документов в коллекции. В настоящее время MySQL
+не может внести значения JSON в указатель непосредственно, поэтому чтобы
+позволить индексировать коллекции с документами JSON, надо предоставить
+документ JSON, который указывает поля документа, используемые индексом.
+Вы передаете документ JSON, определяющий индекс как параметр
+<em class="replaceable"><code>IndexDefinition</code></em>)</code> метода
+<code class="literal">Collection.createIndex(<em class="replaceable"><code>
+name</code></em></code>. Например, чтобы создать обязательный индекс целого типа на
+основе поля <code class="literal">count</code>:</p>
+
+<pre class="programlisting">
+myCollection.createIndex("count", {fields:[{"field": "$.count", "
+                         type":"INT", required:true}]});
+</pre>
+
+<p>Создать индекс на основе такого поля, как почтовый индекс,
+урезая результат 10 знаками:</p>
+<pre class="programlisting">
+myCollection.createIndex("zip", {fields: [{field: "$.zip",
+                         type: "TEXT(10)"}]})
+</pre>
+
+<p>См. <a href="#collection-index-definitions">здесь</a>
+для получения информации о формате документа JSON для определения полей
+как типы MySQL и в настоящее время поддержанные типы MySQL.</p>
+
+<p>Метод <code class="literal">Collection.createIndex()</code>
+терпит неудачу с ошибкой, если индекс с тем же самым именем уже существует
+или если определение индекса правильно не сформировано.
+Параметр имени требуется и должен быть действительным именем индекса, как
+принято командой SQL
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/create-index.html"
+target="_top"><code class="literal">CREATE INDEX</code></a>.</p>
+
+<p>Чтобы удалить существующий индекс, примените метод
+<code class="literal">collection.dropIndex(string name)</code>.
+Это удалит индекс с переданным именем, операция тихо успешна, даже
+если названный индекс не существует.</p>
+
+<p>Поскольку индексы коллекции сохранены как виртуальные столбцы, чтобы
+проверить созданный индекс, используется
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/show-index.html"
+target="_top"><code class="literal">SHOW INDEX</code></a>.
+Например, можно использовать этот SQL в MySQL Shell:</p>
+
+<pre class="programlisting">
+session.runSql('SHOW INDEX FROM mySchema.myCollection');
+</pre>
+
+<h4><a name="collection-index-definitions"></a>Определение индекса</h4>
+<p>Чтобы создать индекс на основе документов в коллекции, необходимо создать
+документ <code class="literal">IndexDefinition</code> JSON.
+Эта секция объясняет действительные поля, которые можно использовать в таком
+документе JSON, чтобы определить индекс.</p>
+
+<p>Чтобы определить область документа для индексирования, тип поля
+должен быть однородным для всей коллекции. Другими словами, тип должен быть
+последовательным. Документ JSON, используемый для определения индекса, такой
+как <code class="literal">{fields: [{field:
+'$.username', type: 'TEXT'}]}</code>, может содержать следующее:</p>
+
+<ul><li class="listitem"><p><code class="literal">fields</code>:
+множество по крайней мере из одного объекта
+<code class="literal">IndexField</code>, каждый из которых описывает область
+документа JSON, которая будет включена в индекс.</p>
+
+<p>Одно описание <code class="literal">IndexField</code>
+состоит из следующих областей:</p>
+<ul><li class="listitem"><p><code class="literal">field</code>:
+последовательность со всем путем документа к члену
+документа или полем, которое будет внесено в индекс.</p></li>
+
+<li class="listitem"><p><code class="literal">type</code>:
+последовательность с одним из поддержанных типов столбца, чтобы отобразить
+поле (см. <a href="#collection-indexing-field-data-types">
+здесь</a>). Для числовых типов, дополнительное ключевое слово
+<code class="literal">UNSIGNED</code> может следовать. Для типа
+<code class="literal">TEXT</code> может определить длину для индексации.
+</p></li>
+
+<li class="listitem"><p><code class="literal">required</code>:
+дополнительное булево значение, <code class="literal">true</code> если поле
+обязано существовать в документе. По умолчанию
+<code class="literal">false</code> для всех типов, кроме
+<code class="literal">GEOJSON</code>, там по умолчанию
+<code class="literal">true</code>.</p></li>
+
+<li class="listitem"><p><code class="literal">options</code>:
+дополнительное целое число, используемое в качестве специальных флагов
+выбора, чтобы использовать, расшифровывая данные
+<code class="literal">GEOJSON</code> data.</p></li>
+
+<li class="listitem"><p><code class="literal">srid</code>:
+дополнительное целое число, значение srid, чтобы использовать,
+расшифровывая данные <code class="literal">GEOJSON</code>.</p></li>
+
+<li class="listitem"><p><code class="literal">array</code>: (MySQL 8.0.17 и
+выше) дополнительное булево значение, <code class="literal">true</code> если
+поле содержит множества. Значение по умолчанию
+<code class="literal">false</code>. См.
+<a href="#collection-indexing-array">здесь</a>.</p>
+
+<p>В MySQL 8.0.16 и ранее области, которые являются множествами JSON, не
+поддерживаются в индексе, определение области, которая содержит данные
+массива, не производит ошибку сервера, но индекс не функционирует правильно.
+</p></li></ul></li>
+
+<li class="listitem"><p><code class="literal">type</code>:
+дополнительная последовательность, которая определяет тип индекса. Одно из
+<code class="literal">INDEX</code> или <code class="literal">SPATIAL</code>.
+По умолчанию <code class="literal">INDEX</code> и может быть опущен.
+</p></li></ul>
+
+<p>Например, чтобы создать индекс на основе нескольких полей:</p>
+<pre class="programlisting">
+myCollection.createIndex('myIndex', {fields: [{field: '$.myField',
+                         type: 'TEXT'}, //
+                         {field: '$.myField2', type: 'TEXT(10)'},
+                         {field: '$.myField3', type: 'INT'}]})
+</pre>
+
+<p>Включая любые другие поля в
+<code class="literal">IndexDefinition</code> или
+<code class="literal">IndexField</code> в документ JSON, которые здесь не
+упомянуты, вызов <code class="literal">collection.createIndex()</code>
+потерпит неудачу с ошибкой.</p>
+
+<p>Если тип индекса не определяется или установлен в
+<code class="literal">INDEX</code>, тогда получающийся индекс создается таким
+же образом, как был бы создан после команды
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/create-index.html"
+target="_top"><code class="literal">CREATE INDEX</code></a>. Если тип индекса
+<code class="literal">SPATIAL</code> тогда созданный индекс совпадает с тем,
+какой был бы создан после команды
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/create-index.html"
+target="_top"><code class="literal">CREATE INDEX</code></a> с ключевым словом
+<code class="literal">SPATIAL</code>, см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/spatial-index-optimization.html"
+target="_top">SPATIAL Index Optimization</a> и
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/creating-spatial-indexes.html"
+target="_top">Creating Spatial Indexes</a>. Например:</p>
+
+<pre class="programlisting">
+myCollection.createIndex('myIndex', //
+                         {fields: [{field: '$.myGeoJsonField',
+                         type: 'GEOJSON', required: true}], type:'SPATIAL'})
+</pre>
+
+<p>Используя тип индекса <code class="literal">SPATIAL</code>,
+поле <code class="literal">required</code> не может быть установлено в
+<code class="literal">false</code> в записях
+<code class="literal">IndexField</code>.</p>
+
+<p>Значения индексируемых областей преобразовываются от JSON до типа,
+определенного в <code class="literal">IndexField</code>,
+используя стандартные преобразования типов MySQL (см.
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/type-conversion.html"
+target="_top">Type Conversion in Expression Evaluation</a>), за исключением
+<code class="literal">GEOJSON</code>, который использует функцию
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/spatial-geojson-functions.html#function_st-geomfromgeojson"
+target="_top"><code class="literal">ST_GeomFromGeoJSON()</code></a> для
+конвертации. Это означает что, используя числовой тип в
+<code class="literal">IndexField</code>, фактическое нечисловое
+значение поля преобразовывается в 0.</p>
+
+<p>Поля <code class="literal">options</code> и
+<code class="literal">srid</code> в <code class="literal">IndexField</code>
+могут присутствовать только, если
+<code class="literal">type</code> = <code class="literal">GEOJSON</code>.
+Если существуют, они используются в качестве параметров для
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/spatial-geojson-functions.html#function_st-geomfromgeojson"
+target="_top"><code class="literal">ST_GeomFromGeoJSON()</code></a>,
+преобразовывая <code class="literal">GEOJSON</code> в значения MySQL
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/spatial-type-overview.html"
+target="_top"><code class="literal">GEOMETRY</code></a>.</p>
+
+<h4><a name="collection-indexing-field-data-types">Типы данных полей</a></h4>
+<p>Следующие типы данных поддерживаются для областей документа.
+Описания типа нечувствительны к регистру.</p>
+
+<ul><li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/integer-types.html"
+target="_top"><code class="literal">INT</code></a> [UNSIGNED]</p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/integer-types.html"
+target="_top"><code class="literal">TINYINT</code></a> [UNSIGNED]</p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/integer-types.html"
+target="_top"><code class="literal">SMALLINT</code></a> [UNSIGNED]</p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/integer-types.html"
+target="_top"><code class="literal">MEDIUMINT</code></a> [UNSIGNED]</p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/integer-types.html"
+target="_top"><code class="literal">INTEGER</code></a> [UNSIGNED]</p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/integer-types.html"
+target="_top"><code class="literal">BIGINT</code></a> [UNSIGNED]</p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/floating-point-types.html"
+target="_top"><code class="literal">REAL</code></a> [UNSIGNED]</p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/floating-point-types.html"
+target="_top"><code class="literal">FLOAT</code></a> [UNSIGNED]</p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/floating-point-types.html"
+target="_top"><code class="literal">DOUBLE</code></a> [UNSIGNED]</p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/fixed-point-types.html"
+target="_top"><code class="literal">DECIMAL</code></a> [UNSIGNED]</p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/fixed-point-types.html"
+target="_top"><code class="literal">NUMERIC</code></a> [UNSIGNED]</p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/datetime.html"
+target="_top"><code class="literal">DATE</code></a></p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/time.html" target="_top">
+<code class="literal">TIME</code></a></p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/datetime.html"
+target="_top"><code class="literal">TIMESTAMP</code></a></p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/datetime.html"
+target="_top"><code class="literal">DATETIME</code></a></p></li>
+
+<li class="listitem"><p>
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/blob.html" target="_top">
+<code class="literal">TEXT[(length)]</code></a></p></li>
+
+<li class="listitem"><p>
+<code class="literal">GEOJSON</code> (extra options: options, srid)
+</p></li></ul>
+
+<h4><a name="collection-indexing-array"></a>Индексация областей множества</h4>
+<p>Для MySQL 8.0.17 и выше X DevAPI поддерживает индексы на основе областей
+множества, устанавливая поле
+<code class="literal">array</code> = <code class="literal">true</code> в
+<code class="literal">IndexField</code>. Например, чтобы создать индекс на
+области множества <code class="literal">emails</code>:</p>
+
+<pre class="programlisting">
+collection.createIndex("emails_idx", //
+                       {fields: [{"field": "$.emails",
+                       "type":"CHAR(128)", "array": true}]});
+</pre>
+
+<p>Следующие ограничения относятся к созданию индексов на основе множеств:
+</p><ul><li class="listitem"><p>Для каждого индекса только одна индексируемая
+область может быть <code class="literal">array</code>.</p></li>
+
+<li class="listitem"><p>Типы данных, для которых может быть создан
+индекс на множествах:</p>
+<ul><li class="listitem"><p>
+Числовые: <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/integer-types.html"
+target="_top"><code class="literal">INTEGER</code></a>
+<code class="literal">[UNSIGNED]</code>
+(<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/integer-types.html"
+target="_top"><code class="literal">INT</code></a> не поддерживается).
+</p></li>
+
+<li class="listitem"><p>Типы с фиксированной точкой:
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/fixed-point-types.html"
+target="_top"><code class="literal">DECIMAL(m, n)</code></a>
+(точность и масштаб обязательны).</p></li>
+
+<li class="listitem"><p>Типы даты и времени:
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/datetime.html"
+target="_top"><code class="literal">DATE</code></a>,
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/time.html" target="_top">
+<code class="literal">TIME</code></a> и
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/datetime.html"
+target="_top"><code class="literal">DATETIME</code></a>.</p></li>
+
+<li class="listitem"><p>
+Строковые типы: <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/char.html"
+target="_top"><code class="literal">CHAR(n)</code></a> и
+<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/binary-varbinary.html"
+target="_top"><code class="literal">BINARY(n)</code></a>, символ или байт
+длины <code class="literal">n</code> обязательны
+(<a href="../../../https@dev.mysql.com/doc/refman/8.0/en/blob.html"
+target="_top"><code class="literal">TEXT</code></a> не поддерживается).
+</p></li></ul></li></ul>
+
+<h2><a name="collection-crud-function-overview"></a>
+4.3. Обзор функций CRUD для коллекций</h2>
+<p>Следующий раздел объясняет отдельные функции объекта коллекции.</p>
+
+<p>Наиболее распространенные операции, которые будут выполнены на коллекции,
+являются Create, Read, Update, Delete (CRUD). Чтобы ускорить операции поиска,
+рекомендуется сделать надлежащее использование индексов.</p>
+
+<h3><a name="collection-add"></a>Collection.add()</h3>
+<p><code class="literal">Collection.add()</code> используется, чтобы хранить
+документы в базе данных. Это берет единый документ или список документов и
+выполняет функцию <code class="literal">run()</code>.</p>
+
+<p>Коллекция должна быть создана функцией
+<code class="literal">Schema.createCollection()</code> перед вставкой
+документов. Чтобы вставить документы в существующую коллекцию используют
+<code class="literal">Schema.getCollection()</code>.</p>
+
+<p>Следующий пример показывает, как использовать
+<code class="literal">Collection.add()</code>. Пример предполагает, что
+испытательная схема существует, а коллекция
+<code class="literal">my_collection</code> нет.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+// Create a new collection
+var myColl = db.createCollection('my_collection');
+
+// Insert a document
+myColl.add( {_id: '1', name: 'Laurie', age: 19 } ).execute();
+// Insert several documents at once
+myColl.add( [
+  {_id: '5', name: 'Nadya', age: 54 },
+  {_id: '6', name: 'Lukas', age: 32 } ] ).execute();
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+# Create a new collection
+myColl = db.create_collection('my_collection')
+
+# Insert a document
+myColl.add( {'_id': '1', 'name': 'Laurie', 'age': 19 } ).execute()
+# Insert several documents at once
+myColl.add( [
+  {'_id': '5', 'name': 'Nadya', 'age': 54 },
+  {'_id': '6', 'name': 'Lukas', 'age': 32 } ] ).execute()
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+// Create a new collection
+db.createCollection('myCollection').then(function (myColl) {
+  return Promise.all([
+    // Insert a document
+    myColl
+    .add({ name: 'Laurie', age: 19 })
+    .execute(),
+    // Insert several documents at once
+    myColl
+    .add([
+      { name: 'Nadya', age: 54 },
+      { name: 'Lukas', age: 32 }
+    ])
+    .execute()
+  ])
+});
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+// Assumptions: test schema assigned to db, my_collection collection not exists
+// Create a new collection
+var myColl = db.CreateCollection("my_collection");
+
+// Insert a document
+myColl.Add(new { name = "Laurie", age = 19 }).Execute();
+// Insert several documents at once
+myColl.Add(new[] {
+  new { name = "Nadya", age = 54 },
+  new { name = "Lukas", age = 32 } }).Execute();
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+# Create a new collection
+my_coll = my_schema.create_collection('my_collection')
+
+# Insert a document
+my_coll.add({'name': 'Laurie', 'age': 19}).execute()
+# Insert several documents at once
+my_coll.add([
+  {'name': 'Nadya', 'age': 54},
+  {'name': 'Lukas', 'age': 32}
+]).execute()
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+// Create a new collection
+Collection coll = db.createCollection("payments");
+
+// Insert a document
+coll.add("{\"name\":\"Laurie\", \"age\":19}");
+// Insert several documents at once
+coll.add("{\"name\":\"Nadya\", \"age\":54}",
+         "{\"name\":\"Lukas\", \"age\":32}");
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+// Create a new collection
+Collection coll = db.createCollection("payments");
+
+// Insert a document
+coll.add(R"({"name":"Laurie", "age":19})").execute();
+// Insert several documents at once
+std::list&lt;DbDoc&gt; docs = {
+     DbDoc(R"({"name":"Nadya", "age":54})"),
+     DbDoc(R"({"name":"Lukas", "age":32})")};
+coll.add(docs).execute();
+</pre>
+
+<h3><a name="document-identity"></a>Идентичность документа</h3>
+<p>У каждого документа есть уникальный идентификатор, названный document ID.
+Этот document ID хранится в поле <code class="literal">_id</code> документа.
+Это <a href="../../../https@dev.mysql.com/doc/refman/8.0/en/binary-varbinary.html"
+target="_top"><code class="literal">VARBINARY()</code></a> с максимальной
+длиной 32 знаков. Этот раздел описывает, как document ID могут
+использоваться, см. детали в
+<a href="docum.htm#working-with-document-ids">раздлеле 5.1</a>.</p>
+
+<p>Следующий пример предполагает, что испытательная схема существует и
+назначена на переменную db, что коллекция
+<code class="literal">my_collection</code> существует и что
+custom_id уникален.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+// If the _id is provided, it will be honored
+var result = myColl.add( { _id: 'custom_id', a : 1 } ).execute();
+var document = myColl.find("a = 1").execute().fetchOne();
+print("User Provided Id:", document._id);
+
+// If the _id is not provided, one will be automatically assigned
+result = myColl.add( { b: 2 } ).execute();
+print("Autogenerated Id:", result.getGeneratedIds()[0]);
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+# If the _id is provided, it will be honored
+result = myColl.add( { '_id': 'custom_id', 'a' : 1 } ).execute()
+document = myColl.find('a = 1').execute().fetch_one()
+print("User Provided Id: %s" % document._id)
+
+# If the _id is not provided, one will be automatically assigned
+result = myColl.add( { 'b': 2 } ).execute()
+print("Autogenerated Id: %s" % result.get_generated_ids()[0])
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+// If the _id is provided, it will be honored
+myColl.add({ _id: 'custom_id', a : 1 }).execute().then(function () {
+  myColl.getOne('custom_id').then(function (doc) {
+    console.log('User Provided Id:', doc._id);
+  });
+});
+
+// If the _id is not provided, one will be automatically assigned
+myColl.add({ b: 2 }).execute().then(function (result) {
+  console.log('Autogenerated Id:', result.getGeneratedIds()[0]);
+});
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+// If the _id is provided, it will be honored
+var result = myColl.Add(new { _id = "custom_id", a = 1 }).Execute();
+Console.WriteLine("User Provided Id:", result.AutoIncrementValue);
+
+// If the _id is not provided, one will be automatically assigned
+result = myColl.Add(new { b = 2 }).Execute();
+Console.WriteLine("Autogenerated Id:", result.AutoIncrementValue);
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+# If the _id is provided, it will be honored
+result = my_coll.add({'_id': 'custom_id', 'a': 1}).execute()
+print("User Provided Id: {0}".format(result.get_last_document_id()))
+
+# If the _id is not provided, one will be automatically assigned
+result = my_coll.add({'b': 2}).execute()
+print("Autogenerated Id: {0}".format(result.get_last_document_id()))
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+// If the _id is provided, it will be honored
+AddResult result = coll.add("{\"_id\":\"custom_id\",\"a\":1}").execute();
+System.out.println("User Provided Id:" + ((JsonString) coll.
+                   getOne("custom_id").get("_id")).getString());
+
+// If the _id is not provided, one will be automatically assigned
+result = coll.add("{\"b\":2}").execute();
+System.out.println("Autogenerated Id:" + result.getGeneratedIds().get(0));
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+// If the _id is provided, it will be honored
+Result result = myColl.add(R"({ "_id": "custom_id", "a" : 1 })").execute();
+std::vector&lt;string&gt; ids = result.getGeneratedIds();
+if (ids.empty()) cout &lt;&lt; "No Autogenerated Ids" &lt;&lt; endl;
+
+// If the _id is not provided, one will be automatically assigned
+result = myColl.add(R"({ "b": 2 })").execute();
+ids = result.getGeneratedIds();
+cout &lt;&lt; "Autogenerated Id:" &lt;&lt; ids[0] &lt;&lt; endl;
+</pre>
+
+<p>У некоторых документов есть естественный уникальный ключ.
+Например, коллекция, которая содержит список книг, вероятно, будет включать
+ISBN (International Standard Book Number) для каждого документа, который
+представляет книгу. ISBN это последовательность длиной в 13 знаков, которая
+в пределах длины поля <code class="literal">_id</code>.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+// using a book's unique ISBN as the object ID
+myColl.add( {_id: "978-1449374020",
+             title: "MySQL Cookbook: Solutions for Database Developers and Administrators"
+             }).execute();
+</pre>
+
+<p>Используйте <code class="literal">find()</code>, чтобы получить
+недавно вставленную книгу из коллекции по ее document ID:</p>
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+var book = myColl.find('_id = "978-1449374020"').execute();
+</pre>
+
+<p>В настоящее время X DevAPI не поддерживает использование никакой области
+документа кроме неявного <code class="literal">_id</code> как document ID.
+Нет никакого способа определить другой document ID (первичный ключ).</p>
+
+<h3><a name="collection-find"></a>Collection.find()</h3>
+<p><code class="literal">find()</code> используется, чтобы получить документы
+от базы данных. Это берет
+<a href="ebnf.htm#crud-ebnf-searchconditionstr">SearchConditionStr</a>
+в качестве параметра, чтобы определить документы, которые должны быть
+возвращены из базы данных. Несколько методов, например,
+<code class="literal">fields()</code>,
+<code class="literal">sort()</code>, <code class="literal">skip()</code> и
+<code class="literal">limit()</code> могут быть применены в функции
+<code class="literal">find()</code>, чтобы далее уточнить результат.</p>
+
+<p><code class="literal">fetch()</code> на самом деле вызывает выполнение
+операции. Пример предполагает, что существует испытательная схема и
+коллекция <code class="literal">my_collection</code>.</p>
+
+<p><span class="strong"><strong>MySQL Shell JavaScript Code</strong></span>
+</p>
+<pre class="programlisting">
+// Use the collection 'my_collection'
+var myColl = db.getCollection('my_collection');
+
+// Find a single document that has a field 'name' starts with an 'L'
+var docs = myColl.find('name like :param').
+                  limit(1).bind('param', 'L%').execute();
+print(docs.fetchOne());
+
+// Get all documents with a field 'name' that starts with an 'L'
+docs = myColl.find('name like :param').
+              bind('param','L%').execute();
+var myDoc;
+while (myDoc = docs.fetchOne()) {
+  print(myDoc);
+}
+</pre>
+
+<p><span class="strong"><strong>MySQL Shell Python Code</strong></span></p>
+<pre class="programlisting">
+# Use the collection 'my_collection'
+myColl = db.get_collection('my_collection')
+
+# Find a single document that has a field 'name' starts with an 'L'
+docs = myColl.find('name like :param').limit(1).bind('param', 'L%').execute()
+print(docs.fetch_one())
+
+# Get all documents with a field 'name' that starts with an 'L'
+docs = myColl.find('name like :param').bind('param','L%').execute()
+myDoc = docs.fetch_one()
+while myDoc:
+  print(myDoc)
+myDoc = docs.fetch_one()
+</pre>
+
+<p><span class="strong"><strong>Node.js JavaScript Code</strong></span></p>
+<pre class="programlisting">
+// Use the collection 'my_collection'
+var myColl = db.getCollection('my_collection');
+
+// Find a single document that has a field 'name' that starts with an 'L'
+myColl
+.find('name like :name')
+.bind('name', 'L%')
+.limit(1)
+.execute(function (doc) {
+  console.log(doc);
+})
+.then(function () {
+  // handle details
+});
+
+// Get all documents with a field 'name' that starts with an 'L'
+myColl
+.find('name like :name')
+.bind('name', 'L%')
+.execute(function (doc) {
+  console.log(doc);
+})
+.then(function () {
+  // handle details
+});
+</pre>
+
+<p><span class="strong"><strong>C# Code</strong></span></p>
+<pre class="programlisting">
+// Use the collection "my_collection"
+var myColl = db.GetCollection("my_collection");
+
+// Find a single document that has a field "name" starts with an "S"
+var docs = myColl.Find("name like :param").Limit(1).
+                  Bind("param", "L%").Execute();
+
+Console.WriteLine(docs.FetchOne());
+// Get all documents with a field "name" that starts with an "S"
+docs = myColl.Find("name like :param").Bind("param", "L%").Execute();
+while (docs.Next())
+{
+  Console.WriteLine(docs.Current);
+}
+</pre>
+
+<p><span class="strong"><strong>Python Code</strong></span></p>
+<pre class="programlisting">
+# Use the collection 'my_collection'
+my_coll = my_schema.get_collection('my_collection')
+
+# Find a single document that has a field 'name' starts with an 'L'
+docs = my_coll.find('name like :param').limit(1).bind('param', 'L%').execute()
+print(docs.fetch_one())
+
+# Get all documents with a field 'name' that starts with an 'L'
+docs = my_coll.find('name like :param').bind('param', 'L%').execute()
+doc = docs.fetch_one()
+print(doc)
+</pre>
+
+<p><span class="strong"><strong>Java Code</strong></span></p>
+<pre class="programlisting">
+// Use the collection 'my_collection'
+Collection myColl = db.getCollection("my_collection");
+
+// Find a single document that has a field 'name' starts with an 'L'
+DocResult docs = myColl.find("name like :name").bind("name", "L%").execute();
+System.out.println(docs.fetchOne());
+
+// Get all documents with a field 'name' that starts with an 'L'
+docs = myColl.find("name like :name").bind("name", "L%").execute();
+while (docs.hasNext()) {
+  DbDoc myDoc = docs.next();
+  System.out.println(myDoc);
+}
+</pre>
+
+<p><span class="strong"><strong>C++ Code</strong></span></p>
+<pre class="programlisting">
+// Use the collection 'my_collection'
+Collection myColl = db.getCollection("my_collection");
+
+// Find a single document that has a field 'name' starts with an 'L'
+DocResult docs = myColl.find("name like :param").
+                        limit(1).bind("param", "L%").execute();
+cout &lt;&lt; docs.fetchOne() &lt;&lt; endl;
+
+// Get all documents with a field 'name' that starts with an 'L'
+docs = myColl.find("name like :param").bind("param","L%").execute();
+DbDoc myDoc;
+while ((myDoc = docs.fetchOne()))
+{
+  cout &lt;&lt; myDoc &lt;&lt; endl;
+}
+</pre>
+
+<h3><a name="collection-modify"></a>Collection.modify()</h3>
+<a name="fig-collection-modify-syntax-diagram"></a>
+<p><b>Рис. 4.1. Collection.modify()</b></p>
+<img src="images/collectionmodifyfunction.png" width="966" height="472"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h3><a name="collection-remove"></a>Collection.remove()</h3>
+<a name="fig-collection-remove-syntax-diagram"></a>
+<p><b>Рис. 4.2. Collection.remove()</b></p>
+<img src="images/collectionremovefunction.png" width="922" height="182"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h2><a name="collection-single-document-operations"></a>
+4.4. Операции по единому документу</h2>
+<p>Команды CRUD, рассмотренные в
+<a href="#collection-crud-function-overview">разделе 4.3</a>,
+работают над группой документов в коллекции, которые соответствуют фильтру.
+X DevAPI также обеспечивает следующие операции, которые работают над едиными
+документами, которые определяются их document ID:</p>
+
+<ul><li class="listitem"><p>
+<code class="literal">Collection.replaceOne(string id, Document doc)</code>
+обновляет или заменяет документ, определенный id, если это существует.
+</p></li>
+
+<li class="listitem"><p>
+<code class="literal">Collection.addOrReplaceOne(string id,
+Document doc)</code> добавляет данный документ. Если id или какая-либо другая
+область, у которой есть уникальный индекс, уже существует в коллекции,
+операция вместо этого обновляет соответствующий документ.</p></li>
+
+<li class="listitem"><p>
+<code class="literal">Collection.getOne(string id)</code>
+возвращает документ с данным id. Это короткий путь для
+<code class="literal">Collection.find("_id = :id").bind("id",
+id).execute().fetchOne()</code>.</p></li>
+
+<li class="listitem"><p>
+<code class="literal">Collection.removeOne(string id)</code>
+удаляет документ с данным id. Это короткий путь для
+<code class="literal">Collection.remove("_id = :id").bind("id", id).execute()
+</code>.</p></li></ul>
+
+<p>Используя эти операции вы можете ссылаться на документы по ID,
+делая операции на единых документах более простыми примерно так:</p>
+<pre class="programlisting">
+doc = collection.getOne(id);
+doc["address"] = "123 Long Street";
+collection.replaceOne(id, doc);
+</pre>
+
+<h3><a name="single-document-operation-syntax"></a>
+Синтаксис операций по единому документу</h3>
+<p>Синтаксис операций по единому документу следующий:</p>
+
+<ul><li class="listitem"><p>
+<code class="literal">Document getOne(string
+<em class="replaceable"><code>id</code></em>)</code>, где
+<code class="literal">id</code> это document ID документа, который будет
+получен. Эта операция возвращает документ или
+<code class="literal">NULL</code>, если никакое соответствие не найдено.
+Ищут документ, у которого есть данный
+<em class="replaceable"><code>id</code></em>.</p></li>
+
+<li class="listitem"><p><code class="literal">Result removeOne(string
+<em class="replaceable"><code>id</code></em>)</code>, где
+<em class="replaceable"><code>id</code></em> это document ID удаляемого
+документа. Эта операция возвращает <code class="literal">Result</code>,
+который указывает на количество удаленных документов (1 или 0, если ни
+один не удален).</p></li>
+
+<li class="listitem"><p><code class="literal">Result replaceOne(string
+<em class="replaceable"><code>id</code></em>, Document
+<em class="replaceable"><code>doc</code></em>)</code>, где
+<em class="replaceable"><code>id</code></em> это document ID
+документа, который будет заменен,
+<em class="replaceable"><code>doc</code></em> это новый документ, который
+может содержать выражения. Если <em class="replaceable"><code>doc</code></em>
+содержит значение <code class="literal">_id</code>,
+это проигнорировано. Операция возвращает <code class="literal">Result</code>,
+который указывает на количество затронутых документов (1 или 0, если ни
+одного). Берет объект документа, который заменяет соответствующий документ.
+Если никакие соответствия не найдены, функция завершается
+без внесенных изменений.</p></li>
+
+<li class="listitem"><p>
+<code class="literal">Result addOrReplaceOne(string id, Document doc)</code>,
+где <code class="literal">id</code> это document ID документа, который будет
+заменен, а <em class="replaceable"><code>doc</code></em> это
+новый документ, который может содержать выражения. Если
+<em class="replaceable"><code>doc</code></em> содержит значение
+<code class="literal">_id</code>, это проигнорировано.
+Эта операция возвращает <code class="literal">Result</code>,
+который указывает на количество затронутых документов (1 или 0,
+если ни одного).</p></li></ul>
+
+<p>Эти операции принимают явное значение <code class="literal">id</code>,
+чтобы гарантировать, что любые изменения, сделанные операцией, применяются к
+намеченному документу. Во многих скриптах документ
+<em class="replaceable"><code>doc</code></em>
+мог прибыть от пользователя, которому не доверяют, который мог потенциально
+изменить данные <code class="literal">id</code>
+в документе и таким образом заменить другие документы.
+Чтобы снизить этот риск, необходимо передать явный document
+<code class="literal">id</code> через безопасный канал.</p>
+
+<p>Если <em class="replaceable"><code>doc</code></em> имеет значение для
+<code class="literal">_id</code> и это не соответствует данному
+<em class="replaceable"><code>id</code></em>, тогда ошибка произведена.
+Если в коллекции есть документ с данным document ID, коллекция проверяется на
+любой документ, который находится в противоречии с уникальными ключами
+<em class="replaceable"><code>doc</code></em> и где document ID
+противоречивых документов не <em class="replaceable"><code>id</code></em>,
+тогда ошибка произведена. Иначе существующий документ в коллекции заменяется
+на <em class="replaceable"><code>doc</code></em>.
+Если у коллекции есть какой-либо документ, который находится в противоречии с
+уникальными ключами от <em class="replaceable"><code>doc</code></em>,
+тогда ошибка произведена. Иначе <em class="replaceable"><code>doc</code></em>
+успешно добавляется к коллекции.</p>
+
+<p><code class="literal">Document getOne(string
+<em class="replaceable"><code>id</code></em>)</code>, где
+<code class="literal">id</code> это document ID документа, который будет
+получен. Эта операция возвращает документ или
+<code class="literal">NULL</code>, если ничего не нашлось.
+Ищут документ, у которого есть данный
+<em class="replaceable"><code>id</code></em>.</p>
+
+<p><code class="literal">Result removeOne(string
+<em class="replaceable"><code>id</code></em>)</code>, где
+<em class="replaceable"><code>id</code></em> это document ID
+удаляемого документа. Эта операция возвращает
+<code class="literal">Result</code>, который указывает на количество
+удаленных документов (1 или 0, если ни одного).</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

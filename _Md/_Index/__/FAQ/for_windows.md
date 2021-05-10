@@ -1,0 +1,1 @@
+- [Microsoft убрала лимит на 260 символов в пути к файлам NTFS-систем](https://wp-seven.ru/stat-i/novosti/microsoft-ubrala-limit-na-260-simvolov-v-puti-k-fajlam-ntfs-sistem.html)

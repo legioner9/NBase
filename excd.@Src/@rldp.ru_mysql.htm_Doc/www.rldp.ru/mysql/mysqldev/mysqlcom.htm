@@ -1,0 +1,1704 @@
+<HTML>
+<HEAD>
+  <TITLE>Модуль MySQLServer</TITLE>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+</HEAD>
+
+<BODY>
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<H2>6.6 Модуль MySQLServer</H2>
+<P>Этот модуль включает объект TMySQLServer, полученный из стандартного
+класса Delphi 5 TCustomConnection.</P>
+
+<B><P>Компонент: TMySQLServer</P>
+<P>Типы: TMySQLServerLoginEvent</P>
+<P>Подпрограммы: MYSQLError</P></B>
+
+<B><P>Описание</P></B>
+<P>TMySQLServer представляет собой основной компонент в наборе
+TMySQLComponent. TMySQLServer используется, чтобы обработать фактические
+подключения к серверу MySQL, используя стандартные функции из libmysql.dll.
+Большую часть времени Вы будете использовать только один компонент сервера,
+зато много компонентов TMySQLDatasets.</P>
+
+<P>Важно обратить внимание на то, что есть только одно физическое подключение
+к серверу MySQL. Все наборы данных, приложенные к этому TMySQLServer,
+используют это подключение или породят собственные подключения, использующие
+те же самые параметры настройки TMySQLServer.</P>
+
+<P>Помимо этих функций, этот компонент имеет много полезных свойств и
+функций, чтобы создавать, удалять, использовать базы данных, получать
+информацию о версии, собирать списки баз данных, таблиц, полей и т. д.</P>
+
+<P><B>Свойства</B></P>
+<PRE>
+AfterConnect!AL("AfterConnect_Property")
+AfterDisconnect!AL("AfterDisconnect_Property")
+BeforeConnect!AL("BeforeConnect_Property")
+BeforeDisconnect!AL("BeforeDisconnect_Property")
+Build
+ClientVersion
+Compression
+Connected!AL("Connected_Property")
+DatabaseName
+Host
+IdleTimer
+Info
+IntVer
+LoginPrompt
+Major
+Minor
+Params
+Password
+Port
+Protocol
+ServerVersion
+UserName
+</PRE>
+
+<P><B>Методы</P></B>
+<PRE>
+Create!AL("Create_Method")
+Destroy!AL("Destroy_Method")
+AllocConnection
+ExecSQL
+FormatIdentifier
+FormatIdentifiers
+SelectDatabase
+Server
+CreateDatabase
+DropDatabase
+FreeConnection
+GetDatabaseNames
+GetFieldNames
+GetTableNames
+RegisterClient!AL("RegisterClient_Method")
+Reload
+SendEvent
+UnRegisterClient!AL("UnRegisterClient_Method")
+</PRE>
+
+<P><B>События</P></B>
+<PRE>
+Key events
+OnIdleTimer
+OnLogin
+</PRE>
+
+<B><P>Цель</P></B>
+<P>Обеспечить все приложенные наборы данных физическими подключениями к
+серверу MySQL, используя стандартную библиотеку libmysql.dll. Это основной
+компонент в наборе TMySQLComponent.</P>
+
+<P><B>Свойство Build</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property Build : word;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Сервер формирует версию как слово, например, 32</P>
+<P>Read-only</P>
+
+<P><B>Свойство ClientVersion</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property ClientVersion : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Используемая версия клиентской разделяемой библиотеки libmysql.dll.</P>
+<P>Read-only</P>
+
+<P><B>Свойство Compression</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property Compression : boolean;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Определяет протокол сжатия, используемый при связи с сервером MySQL.</P>
+
+<P><B>Свойство DatabaseName</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property DatabaseName : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Получает или определяет текущую (актуальную) базу данных
+для этого подключения.</P>
+
+<P><B>Свойство Host</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property Host : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Получает или определяет имя хоста, используемое при
+создании новых подключений.</P>
+
+<P><B>Свойство IdleTimer</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property IdleTimer : longword;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Получает или определяет актуальное время неактивности (тайм-аут),
+позволенное для этого подключения. Подключение автоматически будет
+пересоздано после того, как это время закончится, а связь еще нужна.</P>
+
+<P><B>Свойство Info</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property Info : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Более подробная информация о сервере.</P>
+<P>Read-only</P>
+
+<P><B>Свойство IntVer</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property IntVer : longword;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Версия сервера как слово, например, 32306.</P>
+<P>Read-only</P>
+
+<P><B>Свойство LoginPrompt</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property LoginPrompt;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Если установлено в True, это учитывает настроенный диалог подсказки MySQL
+входа в систему, который будет появляться каждый раз, когда устанавливается
+связь с этим сервером.</P>
+
+<P><B>Свойство Major</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property Major : word;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Старшая часть версии сервера как слово, например, 3</P>
+<P>Read-only</P>
+
+<P><B>Свойство Minor</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property Minor : word;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Младшая часть версии сервера как слово, например, 22</P>
+<P>Read-only</P>
+
+<P><B>Свойство Params</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property Params : TStrings;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Стандартные параметры, используемые для сервера событием OnLogin. Могут
+быть изменены во время выполнения.</P>
+
+<P><B>Свойство Password</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property Password : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Получает или определяет текущий пароль, используемый при
+создании нового подключения.</P>
+
+<P><B>Свойство Port</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property Port : word;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Получает или определяет текущий порт, используемый при связи с сервером.
+</P>
+
+<P><B>Свойство Protocol</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property Protocol : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Используемый протокол связи: TCP/IP, Pipes и т.д.</P>
+<P>Read-only</P>
+
+<P><B>Свойство ServerVersion</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property ServerVersion : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Версия сервера MySQL в виде строки.</P>
+<P>Read-only</P>
+
+<P><B>Свойство UserName</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property UserName : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Получает или определяет текущее имя пользователя, используемое при
+создании нового подключения.</P>
+
+<P><B>Метод AllocConnection</P></B>
+<P>Применим к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+function AllocConnection : PMYSQL;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Распределяет новое подключение для TMySQLServer и TMySQLDatasets,
+используя текущие параметры настройки Username, Password, Port и прочие.</P>
+
+<P>Это внутренне используемый метод, обычно он используется только
+порожденными классами TMySQLServer.</P>
+
+<P><B>Метод ExecSQL</P></B>
+<P>Применим к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+function ExecSQL(SQL : string) : boolean;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Используя подключение, выполнит любую инструкцию SQL на сервере.</P>
+
+<P><B>Метод FormatIdentifier</P></B>
+<P>Применим к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+function FormatIdentifier(Value : string) : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Форматирует идентификатор Value, используя информацию о версии сервера.
+Например, "Table 1" превратится в "`Table 1`".</P>
+
+<P><B>Метод FormatIdentifiers</P></B>
+<P>Применим к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+function FormatIdentifiers(const Value : string) : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Форматирует идентификаторы, полученные в строке Value, используя
+информацию о версии сервера. Например, "Table 1#10#13Table2#10#13Table 3"
+превратится в "`Table 1`,Table 2,`Table 3`".</P>
+
+<P><B>Метод SelectDatabase</P></B>
+<P>Применим к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+function SelectDatabase(Conn : PMYSQL; DB : string) : boolean;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Для данного подключения выбирает текущую (актуальную) базу данных, то есть
+действует аналогично команде "<B>USE Database;</B>". Это внутренне
+используемый метод. Обычно он применяется только классами, порожденными
+от TMySQLServer.</P>
+
+<P><B>Метод Server</P></B>
+<P>Применим к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+function Server : PMYSQL;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Представляет собой указатель на текущее потоковое подключение к серверу.
+Это может использоваться со всеми стандартными функциями mysql_, найденными в
+библиотеке libmysql.dll. Это внутренне используемый метод. Обычно он
+применяется только классами, порожденными от TMySQLServer.</P>
+
+<P><B>Метод CreateDatabase</P></B>
+<P>Применим к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+procedure CreateDatabase(Value : string);
+</PRE>
+
+<B><P>Описание</P></B>
+<P>При использовании подключения к серверу создает новую базу данных, то есть
+работает аналогично инструкции "CREATE Database;".</P>
+
+<P><B>Метод DropDatabase</P></B>
+<P>Применим к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+procedure DropDatabase(Value : string);
+</PRE>
+
+<B><P>Описание</P></B>
+<P>При использовании текущего подключения к серверу удаляет указанную базу
+данных, то есть работает аналогично инструкции "DROP Database;".</P>
+
+<P><B>Метод FreeConnection</P></B>
+<P>Применим к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+procedure FreeConnection(var Value : PMYSQL);
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Освобождает активное подключение.</P>
+
+<P><B>Метод GetDatabaseNames</P></B>
+<P>Применим к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+procedure GetDatabaseNames(List : TStrings);
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Заполняет список со всеми именами баз данных, найденными на сервере.
+Замечание: в этом списке не будут перечислены те базы данных, на которых Вы
+не имеете никаких привилегий.</P>
+
+<P><B>Метод GetFieldNames</P></B>
+<P>Применим к TMySQLServer</P>
+
+<B><P>Определение</P>
+<PRE>
+procedure GetFieldNames(const DatabaseName, TableName : string;
+                        List : TStrings);
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Заполняет cписок всеми именами полей для таблицы TableName из базы данных
+DatabaseName с сервера.</P>
+
+<P><B>Метод GetTableNames</P></B>
+<P>Применим к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+procedure GetTableNames(const DatabaseName : string; List : TStrings);
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Заполняет cписок всеми именами таблиц из базы данных DatabaseName.</P>
+
+<P><B>Метод Reload</P></B>
+<P>Применим к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+procedure Reload;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Перезагружает права доступа на сервере, то есть работает
+как команда "RELOAD;"</P>
+
+<P><B>Метод SendEvent</P></B>
+<P>Применим к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+procedure SendEvent(Connecting : Boolean);
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Используется, чтобы разъединить все наборы данных, если сервер
+завершается. Это внутренне используемый метод. Обычно он применяется только
+классами, порожденными от TMySQLServer.</P>
+
+<P><B>Событие OnIdleTimer</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property OnIdleTimer : TNotifyEvent;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Это событие происходит, когда заканчивается время ожидания подключения.
+</P>
+
+<P><B>Событие OnLogin</P></B>
+<P>Применимо к TMySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+property OnLogin : TMySQLServerLoginEvent;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Это событие происходит прежде, чем подключение будет сделано, чтобы
+позволить Вам изменять свойства Params.</P>
+
+<P><B>Тип TMySQLServerLoginEvent</P></B>
+<P>Модуль MySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+type
+  TMySQLServerLoginEvent = procedure(Server : TMySQLServer;
+                                     LoginParams : TStrings); of object;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Это событие происходит до установки связи с сервером MySQL. Список строк
+LoginParams в настоящее время поддерживает только два ключевых слова в форме:
+<B>USERNAME=root, PASSWORD=</B>.</P>
+
+<P><B>Процедура MYSQLError</P></B>
+<P>Модуль MySQLServer</P>
+
+<P>Определение</P>
+<PRE>
+procedure MYSQLError(MySQLHandle : PMySQL=nil; ErrNo : integer=-1;
+                     Msg : string=''; IntVer : longword=32100);
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Универсальная функция создания исключительной ситуации, предоставляет
+зависящую от версии информацию относительно последней ошибки MySQL.</P>
+
+<H2>6.7 Модуль MySQLDataset</H2>
+<P>Этот модуль содержит все классы необходимые, чтобы поддерживать
+основной класс TMySQLDataset.</P>
+
+<B><P>Компонент:</B> TMySQLDataset.</P>
+<B><P>Типы:</B> TMySQLEvent, TMySQLLocateOptions.</P>
+<B><P>Константы:</B> DefaultMacroChar='|', DefaultTermChar=';'.</P>
+
+<P><B>TMySQLDataset</P></B>
+<B><P>Модуль:</B> MySQLDataset.</P>
+<B><P>Описание</P></B>
+<P>Это основной класс, используемый в Вашей прикладной программе. Он был
+назван именно Dataset, а не Query или Table потому, что он может легко
+использоваться как стандартный TTable или TQuery. Поскольку этот класс
+связывается и работает с сервером MySQL, он делает доступными для
+использования все инструкции SQL. По умолчанию используется концепция
+макросов (Macros) в командах SQL. Эти макрокоманды очень легко могут быть
+заблокированы или удалены из значения по умолчанию SQL.</P>
+
+<P>Кроме того, являясь прямым поточным подключением к серверу MySQL, класс
+был получен непосредственно из TDataset и таким образом поддержан всеми
+компонентами для работы с базами данных, включая TDatasource. Этот компонент
+имеет все стандартные свойства и методы.</P>
+
+<P>Из-за отсутствия поддержки курсоров на стороне сервера в MySQL, этот
+компонент полагается на хорошо разработанные таблицы по умолчанию, то есть
+Ваши таблицы должны по крайней мере иметь первичный ключ. Если Вы отменяете
+заданные по умолчанию инструкции SQL, Вы можете сами определять, когда, что и
+над чем будет выполнено.</P>
+
+<P><B>Компонент TMySQLDataset</P></B>
+<P><B>Свойства</P></B>
+<PRE>
+Active!AL("Active_Property")
+AffectedRows
+AfterCancel!AL("AfterCancel_Property")
+AfterClose!AL("AfterClose_Property")
+AfterDelete!AL("AfterDelete_Property")
+AfterEdit!AL("AfterEdit_Property")
+AfterInsert!AL("AfterInsert_Property")
+AfterOpen!AL("AfterOpen_Property")
+AfterPost!AL("AfterPost_Property")
+AfterRefresh!AL("AfterRefresh_Property")
+AfterScroll!AL("AfterScroll_Property")
+BeforeCancel!AL("BeforeCancel_Property")
+BeforeClose!AL("BeforeClose_Property")
+BeforeDelete!AL("BeforeDelete_Property")
+BeforeEdit!AL("BeforeEdit_Property")
+BeforeInsert!AL("BeforeInsert_Property")
+BeforeOpen!AL("BeforeOpen_Property")
+BeforePost!AL("BeforePost_Property")
+BeforeRefresh!AL("BeforeRefresh_Property")
+BeforeScroll!AL("BeforeScroll_Property")
+AllFieldValues
+CachedUpdates
+DatabaseName
+FieldName
+Filter
+Filtered
+MacroChar
+MacroCount
+Macros
+MacrosEnabled
+MasterFields
+MasterSource
+MultiKeyFields
+MySQLFields
+MySQLRecords
+MySQLTables
+PrimaryKeyFields
+ReadOnly
+RealSQL
+Records
+Server
+ShareConnection
+SQL
+SQLBatch
+SQLDelete
+SQLInsert
+SQLUpdate
+TableName
+UniqueKeyFields
+</PRE>
+
+<P><B>Методы</P></B>
+<PRE>
+Create!AL("Create_Method")
+Destroy!AL("Destroy_Method")
+BookmarkValid!AL("BookmarkValid_Method")
+CompareBookmarks!AL("CompareBookmarks_Method")
+CreateBlobStream!AL("CreateBlobStream_Method")
+EscapeStr
+ExecBatch
+ExecSQL
+ExecSQLBatch
+GetFieldData!AL("GetFieldData_Method")
+GetMacroValue
+HexStr
+Locate!AL("Locate_Method")
+LocateRecord
+LocateRecordOption
+Lookup!AL("Lookup_Method")
+MacroByName
+ParseSQL
+QuoteStr
+ClearMacros
+ConnectEvent
+</PRE>
+
+<P><B>События</P></B>
+<PRE>
+OnCalcFields!AL("OnCalcFields_Event")
+OnDeleteError!AL("OnDeleteError_Event")
+OnEditError!AL("OnEditError_Event")
+OnExecSQL
+OnNewRecord!AL("OnNewRecord_Event")
+OnPostError!AL("OnPostError_Event")
+</PRE>
+
+<P><B>Свойство AffectedRows</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property AffectedRows : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Число строк, на которые воздействует последняя инструкция SQL,
+которая будет выполнена. Только для Run-time. Read-only.</P>
+
+<P><B>Свойство CachedUpdates</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property CachedUpdates : boolean;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Установка этого свойства в True заставит все инструкции SQL, SQLUpdate,
+SQLInsert, SQLDelete и SQLBatch кэшироваться на локальной системе и реально
+выполняться только тогда, когда методы Close или Refresh в очередной раз
+обращаются к этому набору данных.</P>
+
+<P><B>Свойство DatabaseName</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property DatabaseName : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>В настоящее время выбранная база данных, устанавливая это свойство вызовет
+"USE Database" на активной поточной связи этого набора данных с сервером
+MySQL. Это значение заменит все макросы $DATABASENAME в Ваших запросах SQL.
+</P>
+
+<P><B>Свойство FieldName</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property FieldName : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>В настоящее время выбранное имя поля (возможно, нескольких полей). Это
+может содержать список полей, разделенных запятыми, и необязательный
+первичный ключ для текущей (актуальной) таблицы. Это заменит все макросы
+$FIELDNAME в Ваших запросах SQL.</P>
+
+<P><B>Свойство AllFieldValues</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property AllFieldValues : boolean;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Установите это свойство в True, если Вы хотите, чтобы набор данных
+использовал "show columns from table", чтобы получить расширенную информацию
+относительно каждого поля, например, значения по умолчанию, перечни
+допустимых значений для полей типов ENUM и SET и так далее.</P>
+
+<P><B>Свойство MacroChar</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property MacroChar : Char;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Текущий (актуальный) символ, используемый для определенных макрокоманд в
+Ваших инструкциях SQL.</P>
+
+<P><B>Свойство Filter</P></B>
+<P>Применимо к MySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property Filter : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Установите это свойство к любому имеющему силу определению MySQL WHERE,
+например, AccountName like "J%". Это значение будет автоматически включено в
+макрокоманду $WHERE, если Filtered установлено в значение True.</P>
+
+<P><B>Свойство MacroCount</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property MacroCount : Word;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Число существующих макрокоманд. Только Run-time. Read-only.</P>
+
+<P><B>Свойство Filtered</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property Filtered : boolean;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Установите это свойство в True, если Вы хотите, чтобы текущий (актуальный)
+Filter применялся со следующей командой Open к набору данных.</P>
+
+<P><B>Свойство MasterFields</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property MasterFields : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Установите это свойство к любой имеющей силу комбинации Name=Value так,
+чтобы получилась пара DetailField=MasterField, например,
+MasterFields:='AccountID=AccountID,AccountName=FirstName', или используйте
+компоновку, чтобы связать Ваш набор данных с полями MasterSource.</P>
+
+<P>AccountID и AccountName берутся из текущего детального набора данных, а
+AccountID и Firstname берутся из главного набора данных, определенного
+свойством MasterSource.</P>
+
+<P>Поля, определенные свойством MasterFields, автоматически анализируются и
+будут вставлены в предложение $WHERE, набор данных будет закрыт и вновь
+открыт, уже используя новую инструкцию SQL, которая отразит изменения в
+наборе данных MasterSource.</P>
+
+<P><B>Свойство Macros</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property Macros : TMySQLMacros;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>TParams представляет собой совокупность макрокоманд,
+найденных в инструкциях SQL.</P>
+
+<P><B>Свойство MasterSource</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property MasterSource : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Установите это свойство к любому имеющему силу доступному источнику
+данных. Если это свойство установлено, оно автоматически модифицирует
+подробный набор данных для макроса $WHERE, когда происходят
+изменения в наборе данных.</P>
+
+<P><B>Свойство MacrosEnabled</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property MacrosEnabled : boolean;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Если установлено в True, допускает использование макрокоманд в
+Ваших инструкциях SQL.</P>
+
+<P><B>Свойство MultiKeyFields</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property MultiKeyFields : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Список строк всех полей, которые являются частью ключа, доступного в
+текущем (актуальном) наборе результатов. Только Run-time. Read-only.</P>
+
+<P><B>Свойство MySQLFields</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property MySQLFields : TStringList;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Список строк всех полей, используемых в текущем наборе результатов.
+Только Run-time. Read-only.</P>
+
+<P><B>Свойство MySQLRecords</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property MySQLRecords : TList;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Необработанные записи из текущего (актуального) набора результатов. Только
+Run-time. Read-only.</P>
+
+<P><B>Свойство MySQLTables</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property MySQLTables : TStringList;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Список всех таблиц, используемых в текущем наборе результатов. Только
+Run-time. Read-only.</P>
+
+<P><B>Свойство PrimaryKeyFields</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property PrimaryKeyFields : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Строковый список всех полей первичных ключей, доступных в текущем
+наборе результатов. Только Run-time. Read-only.</P>
+
+<P><B>Свойство ReadOnly</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property ReadOnly : boolean;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Изменение этого свойства включит или отключит редактирование
+текущего наборе результатов.</P>
+
+<P><B>Свойство RealSQL</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property RealSQL : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Последняя полная инструкция SQL, которая будет послана серверу MySQL.
+Только Run-time. Read-only.</P>
+
+<P><B>Свойство Records</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property Records[Index : Integer] : PRecInfo;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Необработанные записи текущего набора результатов.
+Только Run-time. Read-only.</P>
+
+<P><B>Свойство Server</P></B>
+<P>Применимо к MySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property Server : TMySQLServer;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>TMySQLServer, используемый этим набором данных.</P>
+
+<P><B>Свойство ShareConnection</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property ShareConnection : boolean;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Если True, этот набор данных совместно использует поточное подключение,
+обеспеченное TMySQLServer с TMySQLServer.</P>
+
+<P>Обратите внимание: Соблюдайте осторожность при использовании этого, так
+как каждый набор данных может использовать любую базу данных, но разделяемое
+подключение может использовать в один момент времени только единственную базу
+данных. Если выставить значение в False, этот набор данных будет иметь
+собственное поточное подключение к серверу MySQL, организованное
+TMySQLServer. Все операции будут локальными и не смогут влиять на другой
+экземпляр TMySQLDataset или TMySQLServer.</P>
+
+<P><B>Свойство SQL</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property SQL : TStrings;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Тип SELECT SQL-запроса. Эти инструкции будут выполнены, каждый раз, когда
+Вы выполняете операцию Open или Active на наборе данных. Этот набор строк
+может содержать несколько инструкций, разделеных точкой с запятой (;).
+Последняя инструкция должна будет произвести набор результатов.</P>
+
+<P><B>Свойство SQLBatch</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property SQLBatch : TStrings;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Общая команда SQL. Эти инструкции будут выполнены каждый раз, когда Вы
+выполняете ExecBatch на наборе данных. Этот список строк может содержать
+несколько инструкций, разделеных точкой с запятой (;).</P>
+
+<P><B>Свойство SQLDelete</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property SQLDelete : TStrings;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>DELETE-тип SQL-команды. Эти инструкции будут выполнены каждый раз, когда
+Вы выполняете Delete на наборе данных. Этот список строк может содержать
+несколько инструкций, разделеных точкой с запятой (;).</P>
+
+<P><B>Свойство SQLInsert</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property SQLInsert : TStrings;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>INSERT-тип SQL-команды. Эти инструкции будут выполнены каждый раз, когда
+Вы выполняете Insert или Append на наборе данных. Этот список строк может
+содержать несколько инструкций, разделеных точкой с запятой (;).</P>
+
+<P><B>Свойство SQLUpdate</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property SQLUpdate : TStrings;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>UPDATE-тип SQL-команды. Эти инструкции будут выполнены каждый раз, когда
+Вы выполняете Edit и Post на наборе данных. Этот список строк может содержать
+несколько инструкций, разделеных точкой с запятой (;).</P>
+
+<P><B>Свойство TableName</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property TableName : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Имя в настоящее время выбранной таблицы. Это заменит макросы $TABLENAME
+в Ваших инструкциях SQL.</P>
+
+<P><B>Свойство UniqueKeyFields</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property UniqueKeyFields : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Список всех уникальных полей, используемых в текущем наборе результатов.
+Только Run-time. Read-only.</P>
+
+<P><B>Метод EscapeStr</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+function EscapeStr(const Value : string) : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Создает экранированную строку для сервера MySQL, используя функцию
+mysql_escape_string.</P>
+
+<P><B>Метод ExecBatch</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<B><P>Определение</P>
+<PRE>
+function ExecBatch : boolean;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Выполняет инструкции SQLBatch, использующие подключение набора данных и
+текущие параметры настройки.</P>
+
+<P><B>Метод ExecSQL</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+function ExecSQL(SQL : string; EnableMacros, Cached : boolean) : boolean;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Выполнит любую инструкцию SQL, использующую подключение набора данных.
+Если EnableMacros равно True, SQL будет анализироваться, используя
+макрокоманды. Если Cached равно True, SQL-запрос будет послан серверу со
+следующим обращением к методу Close или Refresh.</P>
+
+<P><B>Метод ExecSQLBatch</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+function ExecSQLBatch(SQL : TStrings; EnableMacros, Cached,
+                      AutoRefresh : boolean): boolean;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Выполнит любую инструкцию SQL, использующую подключение набора данных.
+Если EnableMacros равно True, SQL будет анализироваться, используя
+макрокоманды. Если Cached равно True, SQL-запрос будет послан серверу со
+следующим обращением к методу Close или Refresh. AutoRefresh не используется.
+</P>
+
+<P><B>Метод GetMacroValue</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+function GetMacroValue(Name : string) : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Возвратит текущее значение макрокоманды Name как строку.</P>
+
+<P><B>Метод HexStr</P></B>
+<P>Применимо к TMySQLDatasetCVYCG0</P>
+
+<P>Определение</P>
+<PRE>
+function HexStr(S : PChar; L : longint) : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Применяется для полей типов BLOB и MEMO. Двоичные данные, указанные в S с
+длиной L возвратятся как строка, наподобие "0x623E63F...".</P>
+
+<P><B>Метод LocateRecord</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+function LocateRecord(const KeyFields : string; const KeyValues : Variant;
+                      Options : TLocateOptions;
+                      SyncCursor : Boolean): Boolean;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Стандартный метод реализации Locate.</P>
+
+<P><B>Метод LocateRecordOption</P></B>
+<P>Применимо к TMySQLDatasetCVYCG0</P>
+
+<P>Определение</P>
+<PRE>
+function LocateRecordOption(const KeyFields : string;
+                            const KeyValues : Variant;
+                            Options : TLocateOptions; SyncCursor : Boolean;
+                            MySQLOptions : TMySQLLocateOptions;
+                            var MatchedField : TField) : Boolean;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Расширенная версия Locate. Это учитывает полный текстовый поиск на всех
+полях текущего набора результатов. Параметры KeyFields, KeyValues и Options
+работают так же, как и со стандартным методом Delphi Locate. Если SyncCursor
+равно True, набор данных будет установлен в первую согласованную запись.
+MySQLOptions определяет направление и тип поиска. MatchedField возвращает
+компонент TField, который соответствует критериям. Эта функция вернет True,
+если соответствие было найдено.</P>
+
+<P><B>Метод MacroByName</P></B>
+<P>Применим к TMySQLDataset.</P>
+
+<P>Определение</P>
+<PRE>
+function MacroByName(const Value : string) : TParam;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Дает Вам доступ во время выполнения ко всем макрокомандам, используемым в
+любых инструкциях SQL. TMySQLDataset может применяться без того, чтобы
+использовать любую макрокоманду.</P>
+
+<B><P>Макросы</P></B>
+<P>Макросы дают возможность Вам что-то задать в Вашем SQL-запросе однажды, а
+затем факультативно устанавливать части инструкций SQL позже.</P>
+
+<P>Рассмотрим такую SQL-команду:</P>
+<I><P>"select * from |$TABLENAME |JOIN |WHERE |GROUPBY |ORDER |LIMIT;"</P>
+</I>
+<P>Эта инструкция имеет 6 определенных макрокоманд, первая специальна, но
+посмотрим на макрос |WHERE.</P>
+
+<P>По умолчанию это будет пустая строка, если не задано иное. Но если Вы
+факультативно хотите устанавливать это, Вы можете:</P>
+
+<P>A) Используя Object Inspector:</P>
+<P>Выбрать макрос, нажать на WHERE и ввести значение, подобно
+"WHERE AccountID=1".</P>
+
+<P>Теперь закройте и снова откройте набор данных, текст будет помещен в Вашу
+инструкцию SQL и послан на сервер без того, чтобы заменить SQL-свойство.</P>
+
+<P>B) В коде указать:</P>
+<P>MySQLDataset1.MacroByName('WHERE').AsString := 'WHERE AccountID=1';</P>
+<P>MySQLDataset1.Open;</P>
+
+<P>В обоих случаях заключительная инструкция SQL, посланная серверу, будет
+выглядеть следующим образом:</P>
+<I><P>"select * from Accounts WHERE AccountID=1;"</P></I>
+
+<P>Вы можете устанавливать макрокоманды, даже если Ваш набор данных открыт.
+Они будут использоваться только, если инструкция SQL должна
+анализироваться и выполняться снова.</P>
+
+<P>ОБРАТИТЕ ВНИМАНИЕ: Макрокоманды чувствительны к регистру!</P>
+<P>Имеются несколько специальных макрокоманд, которые являются доступными для
+использования, но если Вы устанавливаете значение для них, это не будет иметь
+эффекта для результата заключительной инструкции SQL, поскольку все эти
+макрокоманды автоматически модифицируются и устанавливаются во время
+выполнения. Все они начинаются со знака $:</P>
+
+<P>$RELOAD</P>
+<P>Вызовет перезагрузку набора данных MySQLServer, результат этой
+макрокоманды: пустая строка.</P>
+
+<P>$DATABASENAME</P>
+<P>Будет заменен свойством DatabaseName Вашего MySQLDataset.</P>
+
+<P>$TABLENAME</P>
+<P>Будет заменен свойством TableName Вашего MySQLDatasset.</P>
+
+<P>$FIELDNAME</P>
+<P>Будет заменен первым полем в свойстве FieldName Вашего MySQLDataset.
+Разделитель ";" или ",".</P>
+
+<P>$FIELDS</P>
+<P>Будет заменен постоянными полями набора данных (поля, которые Вы
+определили двойным нажатием на Ваш набор данных). Если таких полей нет,
+макрос будет заменен на * (звездочку).</P>
+
+<P>$WHERE</P>
+<P>Будет заменен комбинацией свойств MasterFields и Filter. Например, если
+MasterFields установлен в "AccountID=AccountID" и Filter равен "AccountName
+like "J%", то результатом будет WHERE (AccountID=1) and (AccountName like
+"J%").</P>
+
+<P>$MODIFIED$FIELDS&amp;VALUES</P>
+<P>Будет заменен изменяемыми полями текущей записи, результат примерно таков:
+</P>
+<P><I>FieldName1="Value1",FieldName2="Value2",...</P></I>
+
+<P>Обратите внимание: значения экранируются, пустые поля будут равны NULL,
+типы BLOB будут равняться 0x874365837546.</P>
+
+<P>$UNMODIFIED$FIELDS&amp;VALUES</P>
+<P>Будет заменен неизменяемыми полями текущей записи, результат примерно
+таков: <I>FieldName1="Value1",FieldName2="Value2",...</I>.</P>
+
+<P>$MODIFIED$FIELD$NAMES</P>
+<P>Будет заменен именами изменяемых полей текущей записи, результат примерно
+таков: <I>FieldName1,FieldName2,...</I>.</P>
+
+<P>$UNMODIFIED$FIELD$NAMES</P>
+<P>Будет заменен именами неизменяемых полей текущей записи, результат
+примерно таков: <I>FieldName1,FieldName2,...</I>.</P>
+
+<P>$MODIFIED$FIELD$VALUES</P>
+<P>Будет заменен значениями изменяемых полей текущей записи, результат
+примерно таков: <I>"FieldValue1","FieldValue2",...</I>.</P>
+
+<P>$UNMODIFIED$FIELD$VALUES</P>
+<P>Будет заменен значениями неизменяемых полей текущей записи, результат
+примерно таков: <I>"FieldValue1","FieldValue2",...</I>.</P>
+
+<P>$OLD$FIELDS&amp;VALUES</P>
+<P>Будет заменен всеми полями в текущем наборе результатов и значениями для
+предыдущих значений текущей записи, результат напомнит:
+<I>(FieldName1="Value1") and (FieldName2="Value2") and ...</I>.</P>
+
+<P>$FIELDNAMES&amp;VALUES</P>
+<P>Будет заменен всеми свойствами FieldName (разделенными ";" или ","),
+именами полей и значениями для текущей записи, результат напомнит:
+<I>(FieldName1="Value1") and (FieldName2="Value2") and ...</I>.</P>
+
+<P>$PRIMARYFIELDS&amp;VALUES</P>
+<P>Будет заменен всеми полями первичного ключа в текущем наборе результатов и
+значениями для текущей записи, результат примерно такой:
+<I>(FieldName1="Value1") and (FieldName2="Value2") and ...</I>.</P>
+
+<P>ОБРАТИТЕ ВНИМАНИЕ: Если не имеется никаких полей первичного ключа в
+текущем результате, эта макрокоманда возвратит поля и значения для макроса
+$OLD$FIELDS&amp;VALUES.</P>
+
+<P>$UNIQUEFIELDS&amp;VALUES</P>
+<P>Будет заменен всеми уникальными полями в текущем наборе результатов и
+значениями для текущей записи, результат примерно такой:
+<I>(FieldName1="Value1") and (FieldName2="Value2") and ...</I>.</P>
+
+<P>$MULTIFIELDS&amp;VALUES</P>
+<P>Будет заменен всеми полями, которые являются частями составного ключа в
+текущем наборе результатов и значениями для текущей записи, результат будет
+примерно таким: <I>(FieldName1="Value1") and (FieldName2="Value2") and ...
+</I>.</P>
+
+<P>$FIELDNAMES&amp;VALUES$COMMA</P>
+<P>Будет заменен всеми именами полей из свойства FieldName (разделенными ;
+или ,) и значениями для текущей записи:
+<I>FieldName1="Value1",FieldName2="Value2",...</I>.</P>
+
+<P>$FIELDNAME$VALUE</P>
+<P>Будет заменен первым полем в свойстве FieldName текущей записи
+MySQLDataset: <I>"FieldValue1"</I>.</P>
+
+<P>YourFieldNameHere</P>
+<P>Будет заменен полем, имя которого определено значением текущей записи.
+Регистр не имеет значения: <I>"FieldValue1"</I>.</P>
+
+<P>$OLD$YourFieldNameHere</P>
+<P>Будет заменен полем, имя которого определено предыдущим значением текущей
+записи. Регистр не имеет значения: <I>"FieldOldValue1"</I>.</P>
+
+<P>Например, если Вы должны модифицировать запись в наборе результатов:
+<I>update mytable set AccountName="abc" where AccountName="cba"</I>, Вы
+изменяете свойство SQL на <I>update mytable set AccountName=|AccountName
+where AccountName=|$OLD$AccountName</I>.</P>
+
+<P>$PROMPT$Caption$PromptName$DefaultValue$PasswordChar</P>
+<P>Запросит Вашего конечного пользователя на предмет значения, которое
+будет вставлено в sql-запрос. Параметры:
+<P>Caption: факультативный заголовок для диалога</P>
+<P>PromptName: факультативное имя запрашиваемого значения</P>
+<P>DefaultValue: факультативное значение по умолчанию</P>
+<P>PasswordChar: факультативный парольный символ, например, *</P>
+
+<P>Если макрокоманды не соответствуют никакому из этих специальных имен, то
+Macro.AsString используется, чтобы заменить макрокоманду в SQL, например:
+<PRE>
+MySQLDataset1.MacroByName('WHERE').AsString := 'WHERE AccountID=1';
+MySQLDataset1.Open;
+</PRE>
+
+<P>Следующее предстваляет собой пример инструкций SQL из фактических программ:
+<B><P>SQL Property: Select</P></B>
+<PRE>
+select * from |$TABLENAME WHERE AccountType LIKE "%Employee%"
+</PRE>
+
+<B><P>SQLInsert Property: Insert</P></B>
+<PRE>
+use MYSQL;
+insert into USER set host="%",user=|ACCOUNTNAME,
+       password=PASSWORD(|$PROMPT$Password$$*),
+       select_priv="Y",insert_priv="Y",update_priv="Y", delete_priv="Y",
+       reload_priv="Y";
+use |$DATABASENAME;
+insert into |$TABLENAME set |$MODIFIED$FIELDS&amp;VALUES;
+|$RELOAD;
+</PRE>
+
+<B><P>SQLUpdate Property: Update</P></B>
+<PRE>
+use MYSQL;
+update user set user=|ACCOUNTNAME where user=|$OLD$ACCOUNTNAME;
+use |$DATABASENAME;
+update |$TABLENAME set |$MODIFIED$FIELDS&amp;VALUES where
+       |$FIELDNAME=|$FIELDNAME$VALUE;
+|$RELOAD;
+</PRE>
+
+<B><P>SQLDelete Property: Delete</P></B>
+<PRE>
+use MYSQL;
+delete from user where user=|ACCOUNTNAME;
+use |$DATABASENAME;
+delete from |$TABLENAME where |$FIELDNAME=|$FIELDNAME$VALUE;
+|$RELOAD;
+</PRE>
+
+<B><P>Cascading deletes made easy:</P></B>
+<PRE>
+delete from |$TABLENAME where |$FIELDNAMES&amp;VALUES;  //Master table</P>
+delete from devices where |$FIELDNAMES&amp;VALUES;     // Detail table</P>
+</PRE>
+
+<P><B>Метод ParseSQL</P></B>
+<P>Применим к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+function ParseSQL(SQL : string) : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Анализирует строку SQL, извлекает и добавлет все найденные макрокоманды.
+</P>
+
+<P><B>Метод QuoteStr</P></B>
+<P>Применим к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+function QuoteStr(const S : string) : string;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Создает цитированную строку, например, "string" превратится в "`string`".
+</P>
+
+<P><B>Метод ClearMacros</P></B>
+<P>Применим к TMySQLDataset</P>
+
+<B><P>Определение</P>
+<PRE>
+procedure ClearMacros;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Очищает все установленные значения для существующих макрокоманд.</P>
+
+<P><B>Метод ConnectEvent</P></B>
+<P>Применим к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+procedure ConnectEvent(Sender : TObject; Connecting : Boolean);
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Позволяет набору данных знать то, что делает TMySQLServer. Это обычно
+используется только внутреннее между набором данных и TMySQLServer.</P>
+
+<P><B>Событие OnExecSQL</P></B>
+<P>Применимо к TMySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+property OnExecSQL : TMySQLEvent;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Это событие происходит только прежде, чем инструкция SQL будет послана
+серверу MySQL. SQL содержит полный SQL-запрос, который, возможно, изменен или
+продолжен, в зависимости от того, была ли эта инструкция выполнена или нет.
+Удобно для отладки.</P>
+
+<P><B>Тип TMySQLEvent</P></B>
+<P>Модуль MySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+type
+  TMySQLEvent = procedure(Server: TMySQLDataset; var SQL: string;
+                          var Continue: boolean); of object;
+</PRE>
+
+<B><P>Описание</P></B>
+<P>Это событие происходит только прежде, чем инструкция SQL будет послана
+серверу MySQL. SQL содержит полный SQL-запрос, который, возможно, изменен или
+продолжен, в зависимости от того, была ли эта инструкция выполнена или нет.
+Удобно для отладки.</P>
+
+<P><B>Тип TMySQLLocateOptions</P></B>
+<P>Модуль MySQLDataset</P>
+
+<P>Определение</P>
+<PRE>
+type
+  TMySQLLocateOptions = set of (loFirst, loNext, loPrior,
+                                loLast, loTextSearch, loMatchAll);
+</PRE>
+
+<B><P>Описание</P></B>
+<P>loFirst: вызывает First на наборе данных перед стартом поиска.</P>
+<P>loNext: использует Next на наборе данных, чтобы искать вперед.</P>
+<P>loPrior: использует Prior на наборе данных, чтобы искать назад.</P>
+<P>loLast: вызывает Last на наборе данных перед стартом поиска.</P>
+<P>loTextSearch: выполняет текстовый поиск на полях, включенных в search,
+таким образом, KeyValues должен содержать строку.</P>
+<P>loMatchAll: все поля записи должны содержать значение, определенное
+для поиска в KeyValues.</P>
+
+<P><B>Пример: свойства сервера</P></B>
+<PRE>
+ShowMessage('MySQL server''s properties are:'#13#10+
+  'Server version:'+MySQLServer1.ServerVersion+#13#10+
+  'Client version:'+MySQLServer1.ClientVersion+#13#10+
+  'Protocol:'+MySQLServer1.Protocol+#13#10+
+  'Information:'+MySQLServer1.Info+#13#10+
+  'Major:'+IntToStr(MySQLServer1.Major)+#13#10+
+  'Minor:'+IntToStr(MySQLServer1.Minor)+#13#10+
+  'Build:'+IntToStr(MySQLServer1.Build)+#13#10+
+  'Complete:'+IntToStr(MySQLServer1.IntVer)+#13#10);
+</PRE>
+
+<P><B>Пример: создание сервера</P></B>
+<PRE>
+with TMySQLServer.Create(nil) do try
+  Host := 'localhost';
+  Username := 'root';
+  Password := '';
+  DatabaseName := 'mysql';
+  LoginPrompt := False;
+  Connected := True;
+  ExecSQL('GRANT SELECT, INSERT, UPDATE, DELETE, RELOAD ON *.* TO
+          'Admin'@'%'');
+  Reload;
+  CreateDatabase('Test');
+  DropDatabase('Test');
+  GetDatabaseNames(List);
+  GetTableNames('mysql',List);
+  GetFieldNames('mysql','user',List);
+finally
+  Free;
+end;
+</PRE>
+
+<P><B>Пример: использование MySQLDataset</P></B>
+<PRE>
+with TMySQLDataset.Create(nil) do try
+  Server := MySQLServer1;
+  DatabaseName := 'mysql';
+  TableName := 'user';
+  Active := True;
+  ExecSQL('GRANT SELECT, INSERT, UPDATE, DELETE, RELOAD ON *.* TO
+          ''Admin''@''%''', True, False);
+  Server.Reload;
+  MacroByName('WHERE').AsString := 'where user=''root''';
+  Close;
+  Open;
+  ShareConnection := False;
+  Open;
+  // Now the dataset has it's own threaded connection
+  ShareConnection := True;
+  Open;
+  // Now we are back on the TMySQLServer connection
+  ClearMacros;
+  MacroByName('ORDER').AsString := 'order by user';
+  MacroByName('LIMIT').AsString := 'limit 0,10';
+  Close;
+  Open;
+  CahcedUpdates := True;
+  // All edits, insert, deletes, updates are now cached
+  Edit;
+  FieldByName('user').AsString := 'test';
+  Post;
+  Close;
+  // Cached statements flushed
+  CachedUpdates := False;
+  // Statements not cached, sent real-time to server
+finally
+  Free;
+end;
+</PRE>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>

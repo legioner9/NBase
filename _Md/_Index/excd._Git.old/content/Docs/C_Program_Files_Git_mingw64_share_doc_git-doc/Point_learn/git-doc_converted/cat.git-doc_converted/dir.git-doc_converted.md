@@ -1,0 +1,116 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\cat.git-doc_converted\dir.git-doc_converted.md">git-doc_converted</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\.git-add.html.dir\cat..git-add.html.dir\dir..git-add.html.dir.md">.git-add.html.dir</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\.git-add.html.dir\git-add.html.consp.md">git-add.html.consp.md</a>
+            - *# [git-add(1) Manual Page](file:///E:/Node_projects/Node_Way/NBase/_Md/_Index/_Git/content/Docs/C_Program_Files_Git_mingw64_share_doc_git-doc/Point_learn/git-doc_converted/git-add.html)
+            - *##  NAME
+            - *## SYNOPSIS
+            - *## DESCRIPTION
+            - *## OPTIONS
+            - *### \<pathspec\> …​
+            - *### -n
+            - *### -v
+            - *### -f
+            - *### -i
+            - *### -p
+            - *### -e
+            - *### -u
+            - *### -A
+            - *### -N
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\.git-add.html.dir\_blobs_to_traine\cat._blobs_to_traine\dir._blobs_to_traine.md">_blobs_to_traine</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\.git-add.html.dir\_blobs_to_traine\Git_what_trane{add-i}@1\cat.Git_what_trane{add-i}@1\dir.Git_what_trane{add-i}@1.md">Git_what_trane{add-i}@1</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\.git-add.html.dir\_blobs_to_traine\Git_what_trane{add-i}@1\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\.git-add.html.dir\_blobs_to_traine\Git_what_trane{add}@1\cat.Git_what_trane{add}@1\dir.Git_what_trane{add}@1.md">Git_what_trane{add}@1</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\.git-add.html.dir\_blobs_to_traine\Git_what_trane{add}@1\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\.git-add.html.dir\_src\cat._src\dir._src.md">_src</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\.git-add.html.dir\_src\Git_store{}@1_1\cat.Git_store{}@1_1\dir.Git_store{}@1_1.md">Git_store{}@1_1</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\.git-add.html.dir\_src\Git_store{}@1_1\Git_what_trane{}@1\cat.Git_what_trane{}@1\dir.Git_what_trane{}@1.md">Git_what_trane{}@1</a>
+                    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\.git-add.html.dir\_src\Git_store{}@1_1\Git_what_trane{}@1\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                        - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                        - *## {fs} - (file) area :file:
+                        - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                        - *## {in} - (ident) area :in::file: - label on stage file
+                        - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                        - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                        - *## git init
+                        - *## create mas1
+                        - *##  add mas1
+                        - *## commit mas1
+                        - *## touch mas2
+                        - *## sta1 go to {stash}
+                        - *### atten! {stash} add modif {ws}
+                        - *## bring inside mas3   
+                        - *## bring clear_workspaced (cl_ws)
+                        - *## bring clear_indexed (cl_in)
+                        - *## bring modifi_indexed (mo_in)
+                
+            
+        
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\.git-diff.html.dir\cat..git-diff.html.dir\dir..git-diff.html.dir.md">.git-diff.html.dir</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\.git-diff.html.dir\git-diff.html.consp.md">git-diff.html.consp.md</a>
+            - *# git-diff(1) Manual Page
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\ReadMe.md">ReadMe.md</a>
+        - *# in current learn:
+        - *## git add
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\_src\cat._src\dir._src.md">_src</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\_src\Git_store{}@1\cat.Git_store{}@1\dir.Git_store{}@1.md">Git_store{}@1</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\_src\Git_store{}@1\Git_what_trane{}@1\cat.Git_what_trane{}@1\dir.Git_what_trane{}@1.md">Git_what_trane{}@1</a>
+                - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_Git.old\content\Docs\C_Program_Files_Git_mingw64_share_doc_git-doc\Point_learn\git-doc_converted\_src\Git_store{}@1\Git_what_trane{}@1\create_start_blob_1@1.1.md">create_start_blob_1@1.1.md</a>
+                    - *## {st} - (blob|ident) area :ident{stash}::blob: + :blob:
+                    - *## {fs} - (file) area :file:
+                    - *## {ws} - (ident) area :wd::file: - label on unstage file 
+                    - *## {in} - (ident) area :in::file: - label on stage file
+                    - *## {lr} - (blob|ident) area :ident{local repo}::blob: + :blob:
+                    - *## {ur} - (blob|ident) area :ident{upstr repo}::blob: + :blob:
+                    - *## git init
+                    - *## create mas1
+                    - *##  add mas1
+                    - *## commit mas1
+                    - *## touch mas2
+                    - *## sta1 go to {stash}
+                    - *### atten! {stash} add modif {ws}
+                    - *## bring inside mas3   
+                    - *## bring clear_workspaced (cl_ws)
+                    - *## bring clear_indexed (cl_in)
+                    - *## bring modifi_indexed (mo_in)
+            
+        
+    

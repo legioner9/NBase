@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--SQLComment-->
+<html>
+<head>
+<TITLE>Доступ к данным средствами ASP.NET
+</TITLE>
+<META CONTENT="text/html; charset=windows-1251" http-equiv=Content-Type>
+<META NAME="Description" CONTENT="2. Связывание (Binding) SQL данных с Repeater Control">
+<META NAME="Keywords" CONTENT="SQL, Microsoft, Server">
+<META HTTP-EQUIV="Set-Cookie" CONTENT="cookie=set; path=/">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+
+<TABLE BORDER="0" WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top  bgcolor=#DDDDDD>
+<!--/SQLComment-->
+<TD ALIGN=LEFT><B>
+<a href="../../index.shtml">Доступ к данным</a> | <A HREF="index.shtml">Доступ к БД из ASP.NET</A> | <b>Связывание БД с Repeater</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="3.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+</TD>
+</TR>
+</TABLE>
+
+<TABLE border="0" cellpadding="2" cellspacing="2" >
+<TR>
+<TD>
+<div align=justify>
+<p>
+<b>2. Связывание (Binding) SQL данных с Repeater Control</b></p>
+<p>
+Repeater control полезен только для показа данных, не взаимодействуя с ними. Его преимущество 
+состоит в том, что могут быть установлены шаблоны, позволяющие отображать данные различными 
+способами.<br>
+Следующий пример демонстрирует связывание Repeater control с DataView (возвращённого из SQL 
+запроса) который содержит информацию о размещении книг. В примере также присутствуют 
+HeaderTemplate и FooterTemplate, которые включаются вначале и конце листинга, соответственно.<br>
+Repeater control выполняет только итерации по связанным данным, предоставляя itemtemplate один раз 
+для каждого элемента в коллекции DataSource. Он не предоставляет ничего, кроме элементов, 
+содержащихся в его шаблонах.</p>
+<p>
+<b>Доступ к SQL базе данных</b></p> 
+<p>
+1. Импортируйте необходимые для вашей страницы пространства имён. Это позволит обеспечить ваш 
+код доступом к необходимым классам.</p>
+<p><pre><tt>
+&lt;%@ Import Namespace="System.Data" %&gt;
+&lt;%@ Import Namespace="System.Data.SQL" %&gt;
+&lt;html&gt;</p></pre></tt>
+<p>
+2. В пределах тэга &lt;script language="C#" runat="server"&gt;, используйте функцию Page_Load, 
+которая обеспечит подключение к базе данных, создаст и заполнит новый Dataset информацией из 
+базы и затем свяжет Repeater control с Dataset. Это показывается в следующем примере кода:</p>
+<p><pre><tt>
+&lt;script language="C#" runat="server"&gt;
+    void Page_Load(Object semder, EventArgs e) {
+    {</p></pre></tt>
+<p>
+а) Обеспечьте подключение к базе данных "pubs", расположенной на локальном компьютере.</p>
+<p><pre><tt>
+        SQLConnection myConnection = new SQLConnection( 
+                     "server=localhost;uid=sa;pwd=;database=pubs");</p></pre></tt>
+<p>
+б) Соединитесь с SQL базой данных, используя запрос "select *", чтобы получить все данные из таблицы "Titles". </p>
+<p><pre><tt>
+        SQLDataSetCommand myCommand = new SQLDataSetCommand(
+                             "select * from Titles", myConnection);</p></pre></tt>
+<p>
+в) Создайте и заполните Dataset. </p>
+<p><pre><tt>
+        DataSet ds = new DataSet();
+        myCommand.FillDataSet(ds, "Titles");</p></pre></tt>
+<p>
+г) Свяжите MyDataList с таблицей "Titles", используя заданное по умолчанию представление. Заметьте, 
+что MyDataList - это "id" установленный для Repeater control в &lt;body&gt; страницы. </p>
+<p><pre><tt>
+        MyDataList.DataSource = ds.Tables["Titles"].DefaultView;
+        MyDataList.DataBind();
+    }
+
+&lt;/script&gt;</p></pre></tt>
+<p>
+3. В тэге страницы &lt;body&gt;, отобразите данные. </p>
+<p><pre><tt>
+&lt;body topmargin="0" leftmargin="0" marginwidth="0" marginheight="0"&gt;</p></pre></tt>
+<p>
+4. Откройте Repeater control</p>
+<p><pre><tt>
+    &lt;ASP:Repeater id="MyDataList" runat="server"&gt;</p></pre></tt>
+<p>
+5. Установите шаблоны для Repeater control.</p>
+<p>
+а) Установите шаблон для открытия таблицы и отображения заголовков столбцов.</p>
+<p><pre><tt>
+      &lt;template name="headertemplate"&gt;
+        &lt;table width="100%" style="font: 8pt verdana"&gt;
+          &lt;tr style="background-color:DFA894"&gt;
+            &lt;th&gt;
+              Заголовок
+            &lt;/th&gt;
+            &lt;th&gt;
+              ID заголовока
+            &lt;/th&gt;
+            &lt;th&gt;
+              Тип
+            &lt;/th&gt;
+            &lt;th&gt;
+              ID издателя
+            &lt;/th&gt;
+            &lt;th&gt;
+              Цена
+            &lt;/th&gt;
+          &lt;/tr&gt;
+      &lt;/template&gt;</p></pre></tt>
+<p>
+б) Установите шаблон отображающий реальные данные.</p>
+<p><pre><tt>
+      &lt;template name="itemtemplate"&gt;
+        &lt;tr style="background-color:FFECD8"&gt;
+          &lt;td&gt;
+            &lt;%# DataBinder.Eval(Container.DataItem, "title") %&gt;
+          &lt;/td&gt;
+          &lt;td&gt;
+            &lt;%# DataBinder.Eval(Container.DataItem, "title_id") %&gt;
+          &lt;/td&gt;
+          &lt;td&gt;
+            &lt;%# DataBinder.Eval(Container.DataItem, "type") %&gt;
+          &lt;/td&gt;
+          &lt;td&gt;
+            &lt;%# DataBinder.Eval(Container.DataItem, "pub_id") %&gt;
+          &lt;/td&gt;
+          &lt;td&gt;
+            &lt;%# DataBinder.Eval(Container.DataItem, "price", "$ {0}") %&gt;
+          &lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/template&gt;</p></pre></tt>
+<p>
+в) Установите шаблон для закрытия таблицы.</p>
+<p><pre><tt>
+      &lt;template name="footertemplate"&gt;
+        &lt;/table&gt;
+      &lt;/template&gt;</p></pre></tt>
+<p>
+6. Закройте Repeater control</p>
+<p><pre><tt>
+  &lt;/ASP:Repeater&gt;</p></pre></tt>
+<p>
+7. Закройте страницу. </p>
+<p><pre><tt>
+&lt;/body&gt;
+&lt;/html&gt;</p></pre></tt>
+</DIV>
+<TD>
+<TR>
+</TABLE>
+<TABLE BORDER="0" WIDTH=100% bgcolor=#DDDDDD><TR VALIGN=top  bgcolor=#DDDDDD>
+<!--/SQLComment-->
+<TD ALIGN=LEFT><B>
+<a href="../../index.shtml">Доступ к данным</a> | <A HREF="index.shtml">Доступ к БД из ASP.NET</A> | <b>Связывание БД с Repeater</B>
+</TD>
+<TD ALIGN=RIGHT><B>
+<A HREF="3.shtml" CLASS="lblue"><b>Дальше &raquo;</B></A>
+</TD>
+</TR>
+</TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>

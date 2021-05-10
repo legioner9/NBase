@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Discussions\cat.Discussions\dir.Discussions.md">Discussions</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_HPW\_Repos_HowProgrammingWorks_17_05_2020\Letters-master\Discussions\method-2017-04-10.md">method-2017-04-10.md</a>
+        - *# Методсеминар по программной инженерии

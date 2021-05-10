@@ -1,0 +1,5 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\+Учебная практика (ознакомительная практика) 1\_examples\cat._examples\dir._examples.md">_examples</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\+Учебная практика (ознакомительная практика) 1\_examples\set_main\cat.set_main\dir.set_main.md">set_main</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\+Учебная практика (ознакомительная практика) 1\_examples\set_main\pr_4_html.md">pr_4_html.md</a>
+            - *## Р[абочая программа учебной и производственной практик по специальности 09.02.05 "Прикладная информатика (по отраслям)](https://multiurok.ru/files/rabochaia-programma-uchebnoi-i-proizvodstvennoi-2.html)
+    

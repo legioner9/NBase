@@ -1,0 +1,2084 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+   <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+   <META NAME="Author" CONTENT="Alexey V. Pautov">
+   <title>Глава 4. Пространственные расширения</title>
+</head>
+
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084"
+      alink="#0000FF">
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+
+<h2><a name="spatial-extensions"></a>Глава 4. Пространственные расширения
+</h2>
+<p>MySQL поддерживает пространственные расширения, чтобы позволить хранение и
+анализ географических свойств. Эти свойства доступны для таблиц типов
+<code>MyISAM</code>, <code>InnoDB</code>, <code>NDB</code> и
+<code>ARCHIVE</code>. Однако, тип <code>ARCHIVE</code> не поддерживает
+индексацию, так что пространственные столбцы в столбцах <code>ARCHIVE</code>
+не могут быть индексированы. MySQL Cluster также не поддерживает
+индексацию пространственных столбцов.</p>
+
+<p>Хотя пространственные расширения обеспечиваются в таблицах
+<code>InnoDB</code>, использование пространственных индексов может
+вызывать аварийный отказ (<a href="../../../bugs.mysql.com/15860"
+target="_top">Глюк #15860</a>).</p>
+
+<p>Эта глава покрывает следующие темы:</p>
+<ul type="disc"><li><p>Основание этих пространственных расширений в
+модели геометрии OpenGIS.</p></li>
+
+<li><p>Форматы для представления пространственных данных.</p></li>
+<li><p>Как использовать пространственные данные в MySQL.</p></li>
+<li><p>Использование индексации для пространственных данных.</p></li>
+<li><p>Отличия MySQL от спецификации OpenGIS.</p></li></ul>
+
+<p><span class="bold"><strong>Дополнительные ресурсы</strong></span></p>
+<ul type="disc"><li><p>Open Geospatial Consortium издает
+<em class="citetitle">OpenGIS Simple Features Specifications For SQL</em>,
+документ, который предлагает несколько концептуальных способов для
+распространения SQL RDBMS, чтобы поддерживать пространственные данные. Эта
+спецификация доступна на
+<a href="../../../www.opengis.org/docs/99-049.pdf" target="_top">
+http://www.opengis.org/docs/99-049.pdf</a>.</p></li>
+
+<li><p>Если Вы имеете вопросы или интересы относительно использования
+пространственных расширений MySQL, Вы можете обсуждать их на форуме GIS:
+<a href="../../../forums.mysql.com/list.php@23" target="_top">
+http://forums.mysql.com/list.php?23</a>.</p></li></ul>
+
+<h2><a name="gis-introduction"></a>4.1. Введение в пространственную
+поддержку MySQL</h2>
+<p>MySQL осуществляет пространственные расширения по спецификации Open
+Geospatial Consortium (OGC). Это международный консорциум более, чем 250
+компаний, агентств и университетов, участвующих в разработке публично
+доступных концептуальных решений, которые могут быть полезны со всеми видами
+прикладных программ, которые управляют пространственными данными. OGC
+поддерживает Web-сайт
+<a href="../../../www.opengis.org/default.htm" target="_top">http://www.opengis.org/</a>.
+</p>
+
+<p>В 1997 Open Geospatial Consortium опубликовал
+<em class="citetitle">OpenGIS Simple Features Specifications For SQL</em>.
+Эта спецификация доступна на
+<a href="../../../www.opengis.org/docs/99-049.pdf" target="_top">
+http://www.opengis.org/docs/99-049.pdf</a>.</p>
+
+<p>MySQL осуществляет подмножество типов <span class="bold"><strong>SQL with
+Geometry Types</strong></span>, среду, предложенную OGC. Этот термин
+относится к SQL-среде, которая была расширена с набором типов геометрии.
+Оцененный геометрией SQL столбец выполнен как столбец, который имеет тип
+геометрии. Спецификация описывает набор SQL-типов геометрии также, как
+функций на этих типах, чтобы создавать и анализировать значения геометрии.
+</p>
+
+<p><span class="bold"><strong>Географическее свойство</strong></span>
+состоит в том, что есть что-нибудь в мире, имеющее расположение.
+Свойство может быть:</p>
+
+<ul type="disc"><li><p>Объект. Например, гора, водоем, город.</p></li>
+<li><p>Пустота. Например, область почтового индекса, тропики.</p></li>
+<li><p>Определимое расположение. Например, дорога, как специфическое
+место, где два прохода пересекаются.</p></li></ul>
+
+<p>Некоторые документы используют термин
+<span class="bold"><strong>geospatial feature</strong></span>, чтобы
+обратиться к географическим свойствам.</p>
+
+<p><span class="bold"><strong>Geometry</strong></span> другое слово, которое
+обозначает географическее свойство. Первоначально геометрия означала
+измерение земли. Другое значение исходит от картографии, оно касается
+геометрических свойств, которые картографы используют, чтобы отобразить мир.
+</p>
+
+<p>Эта глава использует все эти условия синонимично:
+<span class="bold"><strong>geographic feature</strong></span>,
+<span class="bold"><strong>geospatial feature</strong></span>,
+<span class="bold"><strong>feature</strong></span> или
+<span class="bold"><strong>geometry</strong></span>.  Обычно используется
+геометрия, определенная как отметка или набор пунктов (точек),
+представляющих что-нибудь в мире, что имеет расположение.</p>
+
+<h2><a name="opengis-geometry-model"></a>4.2. Модель геометрии OpenGIS</h2>
+<p>Набор типов геометрии, предложенных окружением OGC
+<span class="bold"><strong>SQL with Geometry Types</strong></span> основан на
+<span class="bold"><strong>OpenGIS Geometry Model</strong></span>. В этой
+модели каждый геометрический объект имеет следующие общие реквизиты:</p>
+
+<ul type="disc"><li><p>Это связано с пространственной системой ссылки,
+которая описывает координаты места, в котором объект определен.</p></li>
+<li><p>Это принадлежит некоторому классу геометрии.</p></li></ul>
+
+<h3><a name="gis-geometry-class-hierarchy"></a>4.2.1.
+Иерархия класса геометрии</h3>
+<p>Классы геометрии определяют свою иерархию следующим образом:</p>
+
+<ul type="disc"><li><p><code>Geometry</code> (non-instantiable)</p>
+<ul type="circle"><li><p><code>Point</code> (instantiable)</p></li>
+<li><p><code>Curve</code> (non-instantiable)</p>
+
+<ul type="square"><li><p><code>LineString</code> (instantiable)</p>
+<ul type="disc"><li><p><code>Line</code></p></li>
+<li><p><code>LinearRing</code></p></li></ul></li></ul></li>
+
+<li><p><code>Surface</code> (non-instantiable)</p>
+<ul type="square"><li><p><code>Polygon</code> (instantiable)
+</p></li></ul></li>
+
+<li><p><code>GeometryCollection</code> (instantiable)</p>
+<ul type="square"><li><p>
+<code>MultiPoint</code> (instantiable)</p></li>
+
+<li><p><code>MultiCurve</code> (non-instantiable)</p>
+<ul type="disc"><li><p>
+<code>MultiLineString</code> (instantiable)</p></li></ul></li>
+
+<li><p><code>MultiSurface</code> (non-instantiable)</p>
+<ul type="disc"><li><p><code>MultiPolygon</code> (instantiable)
+</p></li></ul></li></ul></li></ul></li></ul>
+
+<p>Невозможно создать объекты в non-instantiable классах. Возможно создать
+объекты в классах instantiable. Все классы имеют реквизиты, и классы
+instantiable могут также иметь утверждения (правила, которые определяют
+допустимые образцы класса).</p>
+
+<p><code>Geometry</code> базовый класс. Это абстрактный класс. Подклассы
+<code>Geometry</code> ограничены нуль-, одно- и двумерными геометрическими
+объектами, которые существуют в двумерном координатном пространстве. Все
+instantiable классы геометрии определены так, чтобы допустимые образцы класса
+были закрытой топологии (то есть, все определенные конфигурации
+включают их границу).</p>
+
+<p>Основной класс <code>Geometry</code> имеет подклассы для
+<code>Point</code>, <code>Curve</code>,
+<code>Surface</code> и <code>GeometryCollection</code>:</p>
+
+<ul type="disc"><li><p><code>Point</code> представляет нуль-мерные объекты.
+</p></li>
+<li><p><code>Curve</code> представляет одномерные объекты и имеет подкласс
+<code>LineString</code> с под-подклассами
+<code>Line</code> и <code>LinearRing</code>.</p></li>
+
+<li><p><code>Surface</code> разработан для двумерных объектов и
+имеет подкласс <code>Polygon</code>.</p></li>
+<li><p><code>GeometryCollection</code> имеет специальные коллекции для
+нуль-, одно- и двумерных объектов, известные как
+<code>MultiPoint</code>, <code>MultiLineString</code> и
+<code>MultiPolygon</code> для конфигураций моделирования, соответствующих
+совокупностям <code>Points</code>, <code>LineStrings</code> и
+<code>Polygons</code>, соответственно. <code>MultiCurve</code> и
+<code>MultiSurface</code> представляются как абстрактные суперклассы, которые
+обобщают интерфейсы совокупности, чтобы
+обработать <code>Curves</code> и <code>Surfaces</code>.</p></li></ul>
+
+<p><code>Geometry</code>, <code>Curve</code>, <code>Surface</code>,
+<code>MultiCurve</code> и <code>MultiSurface</code> определены как
+non-instantiable классы. Они определяют общий набор методов для их подклассов
+и включены для расширяемости.</p>
+
+<p><code>Point</code>, <code>LineString</code>, <code>Polygon</code>,
+<code>GeometryCollection</code>, <code>MultiPoint</code>,
+<code>MultiLineString</code> и <code>MultiPolygon</code> instantiable классы.
+</p>
+
+<h3><a name="gis-class-geometry"></a>4.2.2. Класс <code>Geometry</code></h3>
+<p><code>Geometry</code> представляет собой корневой класс иерархии. Это
+non-instantiable класс, но имеет ряд реквизитов, которые являются общими для
+всех значении геометрии, созданных любым из подклассов <code>Geometry</code>.
+Эти реквизиты описаны в следующем списке. Специфические подклассы имеют их
+собственные специфические реквизиты, описанные позже.</p>
+
+<p><span class="bold"><strong>Реквизиты геометрии</strong></span></p>
+<p>Значение геометрии имеет следующие реквизиты:</p>
+<ul type="disc"><li><p><span class="bold"><strong>type</strong></span>.
+Каждая геометрия принадлежит одному из instantiable классов в иерархии.
+</p></li>
+
+<li><p><span class="bold"><strong>SRID</strong></span> или Spatial
+Reference Identifier (пространственный идентификатор ссылки). Это значение
+идентифицирует связанную пространственную систему ссылки геометрии, которая
+описывает координатное пространство, в котором объект геометрии определен.
+В MySQL значение SRID только целое число, связанное со значением геометрии.
+Все вычисления выполнены, принимая Евклидову (плоскую) геометрию.</p></li>
+
+<li><p><span class="bold"><strong>Координата</strong></span> в
+пространственной системе ссылки, представляемая как числа двойной точности (с
+восьмью байтами). Все не пустые конфигурации включают по крайней мере одну
+пару координат (X,Y). Пустые конфигурации не содержат никаких координат.</p>
+
+<p>Координаты связаны со SRID. Например, в различных системах координат
+расстояние между двумя объектами может отличаться даже, когда объекты имеют
+те же самые координаты потому, что расстояние на плоской системе координат и
+расстояния на геоцентрической системе (на поверхности Земли) разные вещи.
+</p></li>
+
+<li><p>Внутренний, граничный и внешний.</p>
+<p>Каждая геометрия занимает некоторую позицию. Внешнее, с точки зрения
+геометрии, это все место, не занятое геометрией. Внутреннее, соответственно,
+место, занятое геометрией. Граница находится между внутренним и внешним.
+</p></li>
+
+<li><p><span class="bold"><strong>MBR</strong></span> (Minimum Bounding
+Rectangle) или Envelope (минимальный ограничительный прямоугольник, конверт).
+Это геометрия ограничения, сформированная минимумом и максимумом (X,Y):</p>
+<pre>
+((MINX MINY, MAXX MINY, MAXX MAXY, MINX MAXY, MINX MINY))
+</pre></li>
+
+<li><p>Является ли значение простым или нет. Значения геометрии типов
+(<code>LineString</code>, <code>MultiPoint</code>,
+<code>MultiLineString</code>) являются простыми или не простыми. Каждый тип
+определяет собственные утверждения, будучи простым или не простым.</p></li>
+
+<li><p>Закрыто ли значение или нет. Значения геометрии типов
+(<code>LineString</code>, <code>MultiString</code>) закрыты или не закрыты.
+Каждый тип определяет собственные утверждения.</p></li>
+
+<li><p>Является ли значение пустым или не пустым: геометрия пуста, если не
+имеет никаких точек. Внешний, внутренний и граница пустой геометрии не
+определены (то есть они представляются значением <code>NULL</code>). Пустая
+геометрия определена, чтобы быть всегда простой и имеет область 0.</p></li>
+
+<li><p>Размерность. Геометрия может иметь размерность 0, 1 или 2:</p>
+<ul type="circle"><li><p>0 для геометрии без длины и никакой области.</p></li>
+<li><p>1 для геометрии с ненулевой длиной и нулевой областью, а также
+для пустой геометрии.</p></li>
+<li><p>2 для геометрии с ненулевой областью.</p></li></ul>
+
+<p>Объекты <code>Point</code> имеют размерность 0. Объекты
+<code>LineString</code> имеют размерность 1. Объекты <code>Polygon</code>
+имеют размерность 2. Размерности объектов <code>MultiPoint</code>,
+<code>MultiLineString</code> и <code>MultiPolygon</code> такие же, как
+размерности тех элементов, из которых они состоят.</p></li></ul>
+
+<h3><a name="gis-class-point"></a>4.2.3. Класс <code>Point</code></h3>
+<p><code>Point</code> геометрия, которая представляет одиночное
+расположение в координатном пространстве.</p>
+
+<p>Примеры <span class="bold">Point</span></p>
+<ul type="disc"><li><p>Вообразите крупномасштабную карту мира с многими
+городами. Объект <code>Point</code> мог бы представлять каждый город.
+</p></li>
+
+<li><p>На городской карте объект <code>Point</code> мог бы представлять
+автобусную остановку (Stylus советует "bus stop" писать как "останов шины",
+зараза с русскими программистами).</p></li></ul>
+
+<p>Свойства <span class="bold">Point</span></p>
+<ul type="disc"><li><p>Значение X.</p></li>
+<li><p>Значение Y.</p></li>
+<li><p><code>Point</code> определена как нуль-мерная геометрия.</p></li>
+<li><p>Границей <code>Point</code> является пустой набор.</p></li></ul>
+
+<h3><a name="gis-class-curve"></a>4.2.4. Класс <code>Curve</code></h3>
+<p><code>Curve</code> одномерная геометрия, обычно представляемая
+последовательностью точек. Специфические подклассы <code>Curve</code>
+определяют тип интерполяции между пунктами (точками).
+<code>Curve</code> non-instantiable.</p>
+
+<p>Свойства <span class="bold">Curve</span></p>
+<ul type="disc"><li><p><code>Curve</code> имеет координаты пунктов.</p></li>
+<li><p><code>Curve</code> определена как одномерная геометрия.</p></li>
+
+<li><p><code>Curve</code> проста, если не проходит через ту же
+самую отметку дважды.</p></li>
+<li><p><code>Curve</code> закрыта, если отметка начала равна оконечной точке.
+</p></li>
+
+<li><p>Граница закрытой <code>Curve</code> пуста.</p></li>
+<li><p>Граница не закрытой <code>Curve</code> состоит из
+двух оконечных точек.</p></li>
+<li><p><code>Curve</code>, которая является простой и закрытой,
+<code>LinearRing</code>.</p></li></ul>
+
+<h3><a name="gis-class-linestring"></a>4.2.5. Класс
+<code>LineString</code></h3>
+<p><code>LineString</code> это <code>Curve</code> с линейной интерполяцией
+между пунктами (точками).</p>
+
+<p>Примеры <span class="bold">LineString</span>:</p>
+<ul type="disc"><li><p>На всемирной карте объекты
+<code>LineString</code> могли бы представлять реки.</p></li>
+<li><p>В городской карте объекты <code>LineString</code> могли бы
+представлять любые проходы.</p></li></ul>
+
+<p>Свойства <span class="bold">LineString</code>
+</strong></span></p>
+<ul type="disc"><li><p><code>LineString</code> имеет координаты сегментов,
+определенных каждой последовательной парой пунктов.</p></li>
+
+<li><p><code>LineString</code> является <code>Line</code>, если это состоит
+из точно двух пунктов.</p></li>
+<li><p><code>LineString</code> является <code>LinearRing</code>,
+если закрыта и проста.</p></li></ul>
+
+<h3><a name="gis-class-surface"></a>4.2.6. Класс <code>Surface</code></h3>
+<p><code>Surface</code> двумерная геометрия. Это non-instantiable класс. Есть
+instantiable подкласс: <code>Polygon</code>.</p>
+
+<p>Свойства <span class="bold">Surface</code>
+</strong></span></p>
+<ul type="disc"><li><p><code>Surface</code> определен как двумерная геометрия.
+</p></li>
+
+<li><p>OpenGIS определяет простой <code>Surface</code> как геометрию, которая
+состоит из одиночной заплаты, связанной с одной внешней границей и нулем или
+более внутренними границами.</p></li>
+<li><p>Граница простого <code>Surface</code> представляет собой набор
+закрытых кривых, соответствующих внешним и внутренним границам.</p></li></ul>
+
+<h3><a name="gis-class-polygon"></a>4.2.7. Класс <code>Polygon</code></h3>
+<p><code>Polygon</code> плоский вариант <code>Surface</code>, представляющий
+многостороннюю геометрию. Это определено одиночной внешней границей и нулем
+или более внутренними границами, где каждая внутренняя граница
+определяет отверстие в <code>Polygon</code>.</p>
+
+<p>Пример <span class="bold">Polygon</span>.</p>
+<ul type="disc"><li><p>На карте области объекты <code>Polygon</code> могли бы
+представлять леса, районы и так далее.</p></li></ul>
+
+<p>Утверждения <span class="bold">Polygon</code>.
+</strong></span></p>
+<ul type="disc"><li><p>Граница <code>Polygon</code> состоит из набора
+объектов <code>LinearRing</code> (то есть, объектов <code>LineString</code>,
+которые являются простыми и закрытыми), которые составляют
+внешние и внутренние границы.</p></li>
+
+<li><p><code>Polygon</code> не имеет никаких пересечений. Кольца в границе
+<code>Polygon</code> могут пересекаться в <code>Point</code>, но
+только как тангенс.</p></li>
+
+<li><p><code>Polygon</code> не имеет никаких строк, выбросов или проколов.
+</p></li>
+<li><p><code>Polygon</code> имеет внутреннюю структуру, которая является
+связанным набором отметок.</p></li>
+
+<li><p><code>Polygon</code> может иметь отверстия. Внешний
+<code>Polygon</code> с отверстиями не связан. Каждое отверстие определяет
+связанный компонент внешних.</p></li></ul>
+<p>Предшествующие утверждения делают <code>Polygon</code> простой геометрией.
+</p>
+
+<h3><a name="gis-class-geometrycollection"></a>4.2.8. Класс
+<code>GeometryCollection</code></h3>
+<p><code>GeometryCollection</code> геометрия, которая является совокупностью
+одной или большего количества конфигураций любого класса.</p>
+
+<p>Все элементы в <code>GeometryCollection</code> должны быть в той же самой
+пространственной системе ссылки (то есть, в той же самой системе координат).
+Не имеется никаких других ограничений на элементы
+<code>GeometryCollection</code>, хотя подклассы
+<code>GeometryCollection</code>, описанных в следующих разделах могут
+ограничивать членство. Ограничения могут быть основаны на:</p>
+
+<ul type="disc"><li><p>Тип элемента (например, <code>MultiPoint</code>
+может содержать только элементы <code>Point</code>).</p></li>
+<li><p>Размерность.</p></li>
+<li><p>Ограничения на степень пространственного перекрытия между элементами.
+</p></li></ul>
+
+<h3><a name="gis-class-multipoint"></a>4.2.9. Класс <code>MultiPoint</code>
+</h3>
+<p><code>MultiPoint</code> совокупность геометрии, составленная из элементов
+<code>Point</code>. Пункты (точки) всегда не связаны или упорядочены.</p>
+
+<p>Примеры <span class="bold">MultiPoint</span>:</p>
+<ul type="disc"><li><p>На всемирной карте <code>MultiPoint</code> мог бы
+представлять цепочку маленьких изолированных островов.</p></li>
+<li><p>На городской карте <code>MultiPoint</code> мог бы представлять выходы.
+</p></li></ul>
+
+<p>Свойства <span class="bold">MultiPoint</code>
+</strong></span></p>
+<ul type="disc"><li><p><code>MultiPoint</code> нульмерная геометрия.</p></li>
+
+<li><p><code>MultiPoint</code> прост, если никакие два из значений
+<code>Point</code> не равны (имеют идентичные координатные значения).
+</p></li>
+<li><p>Граница <code>MultiPoint</code> пустой набор.</p></li></ul>
+
+<h3><a name="gis-class-multicurve"></a>4.2.10. Класс <code>MultiCurve</code>
+</h3>
+<p><code>MultiCurve</code> совокупность геометрии, составленная из элементов
+<code>Curve</code>. <code>MultiCurve</code> non-instantiable класс.</p>
+
+<p>Свойства <span class="bold">MultiCurve</code>
+</strong></span></p>
+<ul type="disc"><li><p><code>MultiCurve</code> одномерная геометрия.</p></li>
+
+<li><p><code>MultiCurve</code> проста, если (и только если) все элементы
+просты. Единственные пересечения между любыми двумя элементами происходят в
+пунктах (точках), которые находятся на границах обоих элементов.</p></li>
+
+<li><p>Граница <code>MultiCurve</code> получена, применяя правило
+<span class="quote">mod 2 union</span> (также известно как правило
+<span class="quote">odd-even</span>): точка находится в границе
+<code>MultiCurve</code>, если она находится в границах нечетного
+числа элементов <code>MultiCurve</code>.</p></li>
+
+<li><p><code>MultiCurve</code> закрыта, если все элементы закрыты.</p></li>
+<li><p>Граница закрытой <code>MultiCurve</code> всегда пуста.
+</p></li></ul>
+
+<h3><a name="gis-class-multilinestring"></a>4.2.11. Класс
+<code>MultiLineString</code></h3>
+<p><code>MultiLineString</code> совокупность геометрии
+<code>MultiCurve</code>, составленная из элементов <code>LineString</code>.
+</p>
+
+<p>Примеры <span class="bold">MultiLineString</code>
+</strong></span></p>
+<ul type="disc"><li><p>На карте области <code>MultiLineString</code> мог бы
+представлять систему рек или систему дорог.</p></li></ul>
+
+<h3><a name="gis-class-multisurface"></a>4.2.12. Класс
+<code>MultiSurface</code></h3>
+<p><code>MultiSurface</code> совокупность геометрии, составленная из
+поверхностных элементов. <code>MultiSurface</code> non-instantiable класс.
+Есть только instantiable подкласс <code>MultiPolygon</code>.</p>
+
+<p>Утверждения <span class="bold">MultiSurface</code>
+</strong></span></p>
+<ul type="disc"><li><p>Две поверхности <code>MultiSurface</code> не имеют
+никаких внутренностей, которые пересекаются.</p></li>
+
+<li><p>Два элемента <code>MultiSurface</code> имеют границы, которые
+пересекаются в конечном числе пунктов (точек).
+</p></li></ul>
+
+<h3><a name="gis-class-multipolygon"></a>4.2.13. Класс
+<code>MultiPolygon</code></h3>
+<p><code>MultiPolygon</code> объект <code>MultiSurface</code>, составленный
+из элементов <code>Polygon</code>.</p>
+
+<p>Примеры <span class="bold">MultiPolygon</code>
+</strong></span></p>
+<ul type="disc"><li><p>На карте области <code>MultiPolygon</code> мог
+бы представлять систему озер.</p></li></ul>
+
+<p>Утверждения <span class="bold">MultiPolygon</code>
+</strong></span></p>
+<ul type="disc"><li><p><code>MultiPolygon</code> не имеет никаких двух
+элементов <code>Polygon</code> с внутренностями, которые пересекаются.
+</p></li>
+
+<li><p><code>MultiPolygon</code> не имеет никаких двух элементов
+<code>Polygon</code>, которые пересекаются (пересечение также запрещается
+предыдущим утверждением), или же касаются в бесконечном числе (точек).
+</p></li>
+
+<li><p><code>MultiPolygon</code>, возможно, имеет вырезы, выбросы или
+проколы. <code>MultiPolygon</code> регулярен, закрытый набор отметок.
+</p></li>
+
+<li><p><code>MultiPolygon</code>, который имеет больше чем один
+<code>Polygon</code>, имеет внутренности, которые не связаны. Число связанных
+внутренних компонентов <code>MultiPolygon</code> равно числу значений
+<code>Polygon</code> в <code>MultiPolygon</code>.</p></li></ul>
+
+<p>Свойства <span class="bold">MultiPolygon</code>
+</strong></span></p>
+<ul type="disc"><li><p><code>MultiPolygon</code> двумерная геометрия.
+</p></li>
+
+<li><p>Граница <code>MultiPolygon</code> набор закрытых кривых (значения
+<code>LineString</code>), соответствующих
+границам элементов <code>Polygon</code>.</p></li>
+
+<li><p>Каждая <code>Curve</code> в границе <code>MultiPolygon</code>
+находится в границе точно одного элемента <code>Polygon</code>.</p></li>
+<li><p>Каждая <code>Curve</code> в границе элемента <code>Polygon</code>
+находится в границе <code>MultiPolygon</code>.</p></li></ul>
+
+<h2><a name="supported-spatial-data-formats"></a>4.3.
+Обеспечиваемые пространственные форматы данных</h2>
+<p>Этот раздел описывает стандартные пространственные форматы данных, которые
+используются, чтобы представить объекты геометрии в запросах. Это:</p>
+
+<ul type="disc"><li><p>Well-Known Text (WKT).</p></li>
+<li><p>Well-Known Binary (WKB).</p></li></ul>
+<p>Внутренне MySQL сохраняет значения геометрии в формате, который не
+идентичен любому формату WKT или WKB.</p>
+
+<h3><a name="gis-wkt-format"></a>4.3.1. Well-Known Text (WKT)</h3>
+<p>Представление геометрии Well-Known Text (WKT) разработано, чтобы
+обмениваться данными геометрии в форме ASCII.</p>
+
+<p>Примеры WKT представлений объектов геометрии:</p>
+<ul type="disc"><li><p><code>Point</code>:</p>
+<pre>
+POINT(15 20)
+</pre>
+<p>Обратите внимание, что отметка определена без отделения запятой.</p></li>
+
+<li><p><code>LineString</code> с четырьмя пунктами:</p>
+<pre>
+LINESTRING(0 0, 10 10, 20 25, 50 60)
+</pre>
+<p>Обратите внимание, что пары координат отделяются запятыми.</p></li>
+
+<li><p><code>Polygon</code> с одним внешним кольцом и
+одним внутренним кольцом:</p>
+<pre>
+POLYGON((0 0,10 0,10 10,0 10,0 0),(5 5,7 5,7 7,5 7, 5 5))
+</pre></li>
+
+<li><p><code>MultiPoint</code> с тремя значениями <code>Point</code>:</p>
+<pre>
+MULTIPOINT(0 0, 20 20, 60 60)
+</pre></li>
+
+<li><p><code>MultiLineString</code> с двумя значениями
+<code>LineString</code>:</p>
+<pre>
+MULTILINESTRING((10 10, 20 20), (15 15, 30 15))
+</pre></li>
+
+<li><p><code>MultiPolygon</code> с двумя значениями <code>Polygon</code>:</p>
+<pre>
+MULTIPOLYGON(((0 0,10 0,10 10,0 10,0 0)),((5 5,7 5,7 7,5 7, 5 5)))
+</pre></li>
+
+<li><p><code>GeometryCollection</code>, состоящий из двух значений
+<code>Point</code> и одного <code>LineString</code>:</p>
+<pre>
+GEOMETRYCOLLECTION(POINT(10 10), POINT(30 30), LINESTRING(15 15, 20 20))
+</pre></li></ul>
+<p>Грамматика Backus-Naur, которая определяет формальные правила вывода для
+записи значений WKT, может быть найдена в спецификации OpenGIS.</p>
+
+<h3><a name="gis-wkb-format"></a>4.3.2. Well-Known Binary (WKB)</h3>
+<p>Представление геометрии Well-Known Binary (WKB) определено спецификацией
+OpenGIS. Это также определено в ISO <em class="citetitle">SQL/MM
+Part 3: Spatial</em> standard.</p>
+
+<p>WKB используется, чтобы обмениваться данными геометрии как двоичными
+потоками, представляемыми значениями <code>BLOB</code>, содержащими
+геометрическую информацию WKB.</p>
+
+<p>WKB использует однобайтовые целые числа без знака, целые числа без знака с
+четырьмя байтами и числа двойной точности с восемью байтами (IEEE 754). Байт
+равен восьми битам.</p>
+
+<p>Например, значение WKB, которое соответствует <code>POINT(1 1)</code>
+состоит из этой последовательности 21 байтов (каждый представляется здесь
+двумя шестнадцатеричными цифрами):</p>
+<pre>
+0101000000000000000000F03F000000000000F03F
+</pre>
+
+<p>Последовательность может быть разделена на эти компоненты:</p>
+<pre>
+Byte order : 01
+WKB type : 01000000
+X: 000000000000F03F
+Y: 000000000000F03F
+</pre>
+
+<p>Представление компонента следующее:</p>
+<ul type="disc"><li><p>Byte order может быть 0 или 1, чтобы указать
+little-endian или big-endian формат хранения. little-endian и big-endian
+также известны как Network Data Representation (NDR) и External Data
+Representation (XDR), соответственно.</p></li>
+
+<li><p>WKB type задает код, который указывает тип геометрии. Значения от 1 до
+7 указывают <code>Point</code>, <code>LineString</code>,
+<code>Polygon</code>, <code>MultiPoint</code>, <code>MultiLineString</code>,
+<code>MultiPolygon</code> и <code>GeometryCollection</code>.</p></li>
+
+<li><p>Значение <code>Point</code> имеет координаты X и Y, каждпя
+представляемая как значение двойной точности.</p></li></ul>
+<p>WKB-значения для более сложных значений геометрии представляются более
+сложными структурами данных, как детализировано в спецификации OpenGIS.</p>
+
+<h2><a name="creating-a-spatially-enabled-mysql-database"></a>4.4.
+Создание пространственной базы данных MySQL</h2>
+<p>Этот раздел описывает типы данных, которые Вы можете использовать для
+представления пространственных данных в MySQL и функции, доступные для
+создания и поиска пространственных значений.</p>
+
+<h3><a name="mysql-spatial-datatypes"></a>4.4.1.
+Пространственные типы данных в MySQL</h3>
+<p>MySQL имеет типы данных, которые соответствуют классам OpenGIS.
+Часть этих типов хранит одиночные значения геометрии:</p>
+
+<ul type="disc"><li><p><code>GEOMETRY</code></p></li>
+<li><p><code>POINT</code></p></li><li><p><code>LINESTRING</code></p></li>
+<li><p><code>POLYGON</code></p></li></ul>
+
+<p><code>GEOMETRY</code> может сохранять значения геометрии любого типа.
+Другие типы с одиночным значением (<code>POINT</code>,
+<code>LINESTRING</code> и <code>POLYGON</code>) ограничивают их значения
+специфическим типом геометрии.</p>
+
+<p>Другие типы данных хранят совокупности значений:</p>
+<ul type="disc"><li><p><code>MULTIPOINT</code></p></li>
+<li><p><code>MULTILINESTRING</code></p></li>
+<li><p><code>MULTIPOLYGON</code></p></li>
+<li><p><code>GEOMETRYCOLLECTION</code></p></li></ul>
+
+<p><code>GEOMETRYCOLLECTION</code> может сохранять совокупность объектов
+любого типа. Другие типы совокупности (<code>MULTIPOINT</code>,
+<code>MULTILINESTRING</code>, <code>MULTIPOLYGON</code> и
+<code>GEOMETRYCOLLECTION</code>) ограничивают элементы совокупности
+имеющими специфический тип геометрии.</p>
+
+<h3><a name="creating-spatial-values"></a>4.4.2.
+Создание пространственных значений</h3>
+<p>Этот раздел описывает, как создать пространственные значения, использующие
+функции Well-Known Text и Well-Known Binary, которые определены в стандарте
+OpenGIS, и применить MySQL-функции.</p>
+
+<h4><a name="gis-wkt-functions"></a>4.4.2.1. Создание значений геометрии
+через функции WKT</h4>
+<p>MySQL обеспечивает ряд функций, которые берут как входные параметры
+представление Well-Known Text и, факультативно, пространственный
+идентификатор системы ссылки (SRID).
+Они возвращают соответствующую геометрию.</p>
+
+<p><code>GeomFromText()</code> принимает WKT любого типа геометрии как первый
+параметр. Реализация также обеспечивает специфические для типа функции для
+конструкции значений геометрии каждого типа.</p>
+
+<ul type="disc"><li><p>
+<code>GeomCollFromText(<em><code>wkt</code></em>[,<em><code>srid</code></em>])</code>,
+<code>GeometryCollectionFromText(<em><code>wkt</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+<p>Создает значение <code>GEOMETRYCOLLECTION</code>, использующее
+WKT представление и SRID.
+</p></li>
+
+<li><p>
+<code>GeomFromText(<em><code>wkt</code></em>[,<em><code>srid</code></em>])</code>,
+<code>GeometryFromText(<em><code>wkt</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+<p>Создает значение геометрии из любого типа, использующего
+WKT представление и SRID.</p></li>
+
+<li><p>
+<code>LineFromText(<em><code>wkt</code></em>[,<em><code>srid</code></em>])</code>,
+<code>LineStringFromText(<em><code>wkt</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+<p>Создает значение <code>LINESTRING</code>, использующее
+WKT представление и SRID.</p></li>
+
+<li><p>
+<code>MLineFromText(<em><code>wkt</code></em>[,<em><code>srid</code></em>])</code>,
+<code>MultiLineStringFromText(<em><code>wkt</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+<p>Создает значение <code>MULTILINESTRING</code>, использующее
+WKT представление и SRID.</p></li>
+
+<li><p>
+<code>MPointFromText(<em><code>wkt</code></em>[,<em><code>srid</code></em>])</code>,
+<code>MultiPointFromText(<em><code>wkt</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+<p>Создает значение <code>MULTIPOINT</code>, использующее
+WKT представление и SRID.</p></li>
+
+<li><p>
+<code>MPolyFromText(<em><code>wkt</code></em>[,<em><code>srid</code></em>])</code>,
+<code>MultiPolygonFromText(<em><code>wkt</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+
+<p>Создает значение <code>MULTIPOLYGON</code>, использующее
+WKT представление и SRID.</p></li>
+<li><p>
+<code>PointFromText(<em><code>wkt</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+
+<p>Создает значение <code>POINT</code>, использующее
+WKT представление и SRID.</p></li>
+
+<li><p>
+<code>PolyFromText(<em><code>wkt</code></em>[,<em><code>srid</code></em>])</code>,
+<code>PolygonFromText(<em><code>wkt</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+
+<p>Создает значение <code>POLYGON</code>, использующее
+WKT представление и SRID.</p></li></ul>
+
+<p>Спецификация OpenGIS также определяет следующие факультативные функции,
+которые MySQL не выполняет. Эти функции создают значения <code>Polygon</code>
+или <code>MultiPolygon</code>, основанные на WKT представлении совокупности
+колец или закрытых значений <code>LineString</code>.
+Эти значения могут пересекаться.</p>
+
+<ul type="disc"><li><p>
+<code>BdMPolyFromText(<em><code>wkt</code></em>,<em><code>srid</code></em>)</code>
+</p>
+<p>Создает значение <code>MultiPolygon</code> из <code>MultiLineString</code>
+в формате WKT, содержащем произвольную совокупность закрытых
+значений <code>LineString</code>.</p></li>
+
+<li><p>
+<code>BdPolyFromText(<em><code>wkt</code></em>,<em><code>srid</code></em>)</code>
+</p>
+<p>Создает значение <code>Polygon</code> из <code>MultiLineString</code>
+в формате WKT, содержащем произвольную совокупность закрытых
+значений<code>LineString</code>.</p></li></ul>
+
+<h4><a name="gis-wkb-functions"></a>4.4.2.2. Создание значенией геометрии с
+помощью функций WKB</h4>
+<p>MySQL обеспечивает ряд функций, которые берут как входные параметры
+<code>BLOB</code>, содержащий представление Well-Known Binary и,
+факультативно, пространственный идентификатор системы ссылки (SRID). Они
+возвращают соответствующую геометрию.</p>
+
+<p><code>GeomFromWKB()</code> принимает WKB любого типа геометрии как первый
+параметр. Реализация также обеспечивает специфические для типа функции
+для конструкции значений геометрии каждого типа геометрии.</p>
+
+<ul type="disc"><li><p>
+<code>GeomCollFromWKB(<em><code>wkb</code></em>[,<em><code>srid</code></em>])</code>,
+<code>GeometryCollectionFromWKB(<em><code>wkb</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+<p>Создает значение <code>GEOMETRYCOLLECTION</code>, использующее
+WKB представление и SRID.</p></li>
+
+<li><p>
+<code>GeomFromWKB(<em><code>wkb</code></em>[,<em><code>srid</code></em>])</code>,
+<code>GeometryFromWKB(<em><code>wkb</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+<p>Создает значение геометрии из любого типа, использующего
+WKB представление и SRID.</p></li>
+
+<li><p>
+<code>LineFromWKB(<em><code>wkb</code></em>[,<em><code>srid</code></em>])</code>,
+<code>LineStringFromWKB(<em><code>wkb</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+<p>Создает значение <code>LINESTRING</code>, использующее
+WKB представление и SRID.</p></li>
+
+<li><p>
+<code>MLineFromWKB(<em><code>wkb</code></em>[,<em><code>srid</code></em>])</code>,
+<code>MultiLineStringFromWKB(<em><code>wkb</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+<p>Создает значение <code>MULTILINESTRING</code>, использующее
+WKB представление и SRID.</p></li>
+
+<li><p>
+<code>MPointFromWKB(<em><code>wkb</code></em>[,<em><code>srid</code></em>])</code>,
+<code>MultiPointFromWKB(<em><code>wkb</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+<p>Создает значение <code>MULTIPOINT</code>, использующее
+WKB представление и SRID.</p></li>
+
+<li><p>
+<code>MPolyFromWKB(<em><code>wkb</code></em>[,<em><code>srid</code></em>])</code>,
+<code>MultiPolygonFromWKB(<em><code>wkb</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+<p>Создает значение <code>MULTIPOLYGON</code>, использующее
+WKB представление и SRID.</p></li>
+
+<li><p>
+<code>PointFromWKB(<em><code>wkb</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+<p>Создает значение <code>POINT</code>, использующее
+WKB представление и SRID.</p></li>
+
+<li><p>
+<code>PolyFromWKB(<em><code>wkb</code></em>[,<em><code>srid</code></em>])</code>,
+<code>PolygonFromWKB(<em><code>wkb</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+<p>Создает значение <code>POLYGON</code>, использующее
+WKB представление и SRID.</p></li></ul>
+
+<p>Спецификация OpenGIS также описывает факультативные функции для построения
+значений <code>Polygon</code> или <code>MultiPolygon</code>, основанных на
+WKB представлении совокупности колец или закрытых значений
+<code>LineString</code>. Эти значения могут пересекаться.
+MySQL не выполняет эти функции:</p>
+
+<ul type="disc"><li><p>
+<code>BdMPolyFromWKB(<em><code>wkb</code></em>,<em><code>srid</code></em>)</code>
+</p>
+<p>Создает значение <code>MultiPolygon</code> из значения
+<code>MultiLineString</code> в формате WKB, содержащем произвольную
+совокупность закрытых значений <code>LineString</code>.</p></li>
+
+<li><p>
+<code>BdPolyFromWKB(<em><code>wkb</code></em>,<em><code>srid</code></em>)</code>
+</p>
+<p>Создает значение <code>Polygon</code> из значения
+<code>MultiLineString</code> в формате WKB, содержащем произвольную
+совокупность закрытых значений <code>LineString</code>.</p></li></ul>
+
+<h4><a name="gis-mysql-specific-functions"></a>4.4.2.3. Создание геометрии с
+использованием MySQL-специфических функций</h4>
+<p>MySQL обеспечивает набор полезных ненормативных функций для создания
+геометрии с WKB представлениями. Функции, описанные в этом разделе,
+MySQL-расширения спецификации OpenGIS. Результатами этих функций будут
+значения <code>BLOB</code>, содержащие WKB-представления значений геометрии
+без SRID. Результаты этих функций могут заменяться как первый параметр любой
+функции в функциональном семействе <code>GeomFromWKB()</code>.</p>
+
+<ul type="disc"><li><p>
+<code>GeometryCollection(<em><code>g1</code></em>,<em><code>g2</code></em>,...)</code>
+</p>
+<p>Создает значение WKB <code>GeometryCollection</code>. Если параметры не
+задают правильно построенное WKB представление геометрии,
+возвращаемое значение <code>NULL</code>.</p></li>
+
+<li><p>
+<code>LineString(<em><code>pt1</code></em>,<em><code>pt2</code></em>,...)</code>
+</p>
+<p>Создает значение WKB <code>LineString</code> из ряда WKB параметров
+<code>Point</code>. Если любой аргумент не задает правильный
+WKB <code>Point</code>, вернется <code>NULL</code>. Если число параметров
+<code>Point</code> меньше чем два, возвращаемое значение <code>NULL</code>.
+</p></li>
+
+<li><p>
+<code>MultiLineString(<em><code>ls1</code></em>,<em><code>ls2</code></em>,...)</code>
+</p>
+<p>Создает значение WKB <code>MultiLineString</code>, использующее WKB
+параметры <code>LineString</code>. Если любой параметр не WKB
+<code>LineString</code>, возвращаемое значение <code>NULL</code>.</p></li>
+
+<li><p>
+<code>MultiPoint(<em><code>pt1</code></em>,<em><code>pt2</code></em>,...)</code>
+</p>
+<p>Создает значение WKB <code>MultiPoint</code>, использующее WKB параметры
+<code>Point</code>. Если любой параметр не WKB <code>Point</code>,
+возвращаемое значение <code>NULL</code>.</p></li>
+
+<li><p>
+<code>MultiPolygon(<em><code>poly1</code></em>,<em><code>poly2</code></em>,...)</code>
+</p>
+<p>Создает значение WKB <code>MultiPolygon</code> из набора WKB параметров
+<code>Polygon</code>. Если любой параметр не WKB <code>Polygon</code>,
+возвращаемое значение <code>NULL</code>.</p></li>
+
+<li><p>
+<code>Point(<em><code>x</code></em>,<em><code>y</code></em>)</code>
+</p>
+<p>Создает значение WKB <code>Point</code>, используя координаты.</p></li>
+
+<li><p>
+<code>Polygon(<em><code>ls1</code></em>,<em><code>ls2</code></em>,...)</code>
+</p>
+<p>Создает значение WKB <code>Polygon</code> из ряда WKB параметров
+<code>LineString</code>. Если любой параметр не представляет WKB
+<code>LinearRing</code> (то есть не закрытый и простой
+<code>LineString</code>), возвращаемое значение <code>NULL</code>.
+</p></li></ul>
+
+<h3><a name="creating-spatial-columns"></a>4.4.3.
+Создание пространственных столбцов</h3>
+<p>MySQL обеспечивает стандартный способ создания пространственных столбцов
+для типов геометрии, например, через <code>CREATE TABLE</code> или
+<code>ALTER TABLE</code>. В настоящее время пространственные столбцы
+обеспечиваются для таблиц типов <code>MyISAM</code>,
+<code>InnoDB</code>, <code>NDB</code> и <code>ARCHIVE</code>.</p>
+
+<ul type="disc"><li><p>Используйте инструкцию <code>CREATE TABLE</code>,
+чтобы создать таблицу с пространственным столбцом:</p>
+<pre>
+CREATE TABLE geom (g GEOMETRY);
+</pre></li>
+
+<li><p>Используйте инструкцию <code>ALTER TABLE</code>, чтобы добавлять или
+удалять пространственный столбец в существующей таблице:</p>
+<pre>
+ALTER TABLE geom ADD pt POINT;
+ALTER TABLE geom DROP pt;
+</pre></li></ul>
+
+<h3><a name="populating-spatial-columns"></a>4.4.4.
+Начальная загрузка пространственных столбцов</h3>
+<p>После того, как Вы создали пространственные столбцы, Вы можете заполнять
+их пространственными данными.</p>
+
+<p>Значения должны быть сохранены во внутреннем формате геометрии, но Вы
+можете преобразовывать их в этот формат из Well-Known Text (WKT) или из
+Well-Known Binary (WKB). Следующие примеры показывают, как вставить значения
+геометрии в таблицу, преобразуя значения WKT во внутренний формат геометрии:
+</p>
+
+<ul type="disc"><li><p>Выполните преобразование непосредственно в инструкции
+<code>INSERT</code>:</p>
+<pre>
+INSERT INTO geom VALUES (GeomFromText('POINT(1 1)'));
+SET @g = 'POINT(1 1)';
+INSERT INTO geom VALUES (GeomFromText(@g));
+</pre></li>
+
+<li><p>Выполните преобразование до <code>INSERT</code>:</p>
+<pre>
+SET @g = GeomFromText('POINT(1 1)');
+INSERT INTO geom VALUES (@g);
+</pre></li></ul>
+
+<p>Следующие примеры вставляют более сложные конфигурации в таблицу:</p>
+<pre>
+SET @g = 'LINESTRING(0 0,1 1,2 2)';
+INSERT INTO geom VALUES (GeomFromText(@g));
+SET @g = 'POLYGON((0 0,10 0,10 10,0 10,0 0),(5 5,7 5,7 7,5 7, 5 5))';
+INSERT INTO geom VALUES (GeomFromText(@g));
+SET @g = 'GEOMETRYCOLLECTION(POINT(1 1),LINESTRING(0 0,1 1,2 2,3 3,4 4))';
+INSERT INTO geom VALUES (GeomFromText(@g));
+</pre>
+
+<p>Предшествующие примеры применяют <code>GeomFromText()</code>, чтобы
+создать значения геометрии. Вы можете также использовать специфические
+для типа функции:</p>
+
+<pre>
+SET @g = 'POINT(1 1)';
+INSERT INTO geom VALUES (PointFromText(@g));
+SET @g = 'LINESTRING(0 0,1 1,2 2)';
+INSERT INTO geom VALUES (LineStringFromText(@g));
+SET @g = 'POLYGON((0 0,10 0,10 10,0 10,0 0),(5 5,7 5,7 7,5 7, 5 5))';
+INSERT INTO geom VALUES (PolygonFromText(@g));
+SET @g = 'GEOMETRYCOLLECTION(POINT(1 1),LINESTRING(0 0,1 1,2 2,3 3,4 4))';
+INSERT INTO geom VALUES (GeomCollFromText(@g));
+</pre>
+
+<p>Обратите внимание, что, если прикладная программа пользователя хочет
+использовать WKB-представления значений геометрии, она ответственна за
+посылку правильно сформированных WKB в запросах на сервер. Однако, имеются
+несколько способов удовлетворения этого требования. Например:</p>
+
+<ul type="disc"><li><p>Вставка значения <code>POINT(1 1)</code> с
+шестнадцатеричным литеральным синтаксисом:</p>
+<pre>
+mysql&gt; INSERT INTO geom VALUES
+    -&gt; (GeomFromWKB(0x0101000000000000000000F03F000000000000F03F));
+</pre></li>
+
+<li><p>ODBC-прикладная программа может посылать WKB-представление, привязывая
+его к метке-заполнителю, использующей параметр типа <code>BLOB</code>:</p>
+<pre>
+INSERT INTO geom VALUES (GeomFromWKB(?))
+</pre>
+<p>Другие интерфейсы программирования могут поддерживать подобный
+механизм метки-заполнителя.</p></li>
+
+<li><p>В программе на C Вы можете выходить из двоичного значения, используя
+<code>mysql_real_escape_string()</code> и включать результат в строку
+запроса, которая послана серверу.</p></li></ul>
+
+<h3><a name="fetching-spatial-data"></a>4.4.5.
+Выборка пространственных данных</h3>
+<p>Значения геометрии, сохраненные в таблице, могут быть выбраны во
+внутреннем формате. Вы можете также преобразовывать их в формат
+WKT или WKB.</p>
+
+<ul type="disc"><li><p>Выборка пространственных данных во внутреннем формате:
+</p>
+<p>Выборка геометрии с использованием внутреннего формата, может быть полезна
+в передачах из таблицы в таблицу:</p>
+<pre>
+CREATE TABLE geom2 (g GEOMETRY) SELECT g FROM geom;
+</pre></li>
+
+<li><p>Выборка пространственных данных в формате WKT:</p>
+<p>Функция <code>AsText()</code> преобразовывает геометрию из внутреннего
+формата в строку WKT.</p>
+<pre>
+SELECT AsText(g) FROM geom;
+</pre></li>
+
+<li><p>Выборка пространственных данных в формате WKB:</p>
+<p>Функция <code>AsBinary()</code> преобразовывает геометрию из внутреннего
+формата в <code>BLOB</code> WKB.</p>
+<pre>
+SELECT AsBinary(g) FROM geom;
+</pre></li></ul>
+
+<h2><a name="analysing-spatial-information"></a>4.5.
+Анализ пространственной информации</h2>
+<p>После начальной загрузки пространственных столбцов со значениями, Вы
+готовы сделать запрос и анализировать их. MySQL обеспечивает набор функций,
+чтобы выполнить различные операции на пространственных данных. Эти функции
+могут быть сгруппированы в четыре главных категории согласно типу операции,
+которую они выполняют:</p>
+
+<ul type="disc"><li><p>Функции, которые преобразовывают конфигурации
+между различными форматами.</p></li>
+<li><p>Функции, которые обеспечивают доступ к качественным
+или количественным реквизитам геометрии.</p></li>
+<li><p>Функции, которые описывают отношения между двумя конфигурациями.
+</p></li>
+<li><p>Функции, которые создают новые конфигурации из существующих.
+</p></li></ul>
+
+<p>Пространственные функции анализа могут использоваться во
+многих контекстах, типа:</p>
+<ul type="disc"><li><p>Любая интерактивная программа SQL, типа
+<span><strong>mysql</strong></span> или MySQL Query Browser.</p></li>
+<li><p>Прикладные программы, написанные на любом языке, который поддерживает
+клиентский MySQL API.</p></li></ul>
+
+<h3><a name="functions-to-convert-geometries-between-formats"></a>
+4.5.1. Функции преобразования формата геометрии</h3>
+<p>MySQL поддерживает следующие функции для преобразования значений геометрии
+между внутренним форматом и форматом WKT или WKB:</p>
+
+<ul type="disc"><li><p>
+<code>AsBinary(<em><code>g</code></em>)</code></p>
+<p>Преобразовывает значение во внутреннем формате геометрии к представлению
+WKB и возвращает двоичный результат.</p>
+<pre>
+SELECT AsBinary(g) FROM geom;
+</pre></li>
+
+<li><p><code>AsText(<em><code>g</code></em>)</code></p>
+<p>Преобразовывает значение во внутреннем формате геометрии к представлению
+WKT и возвращает строковый результат.</p>
+
+<pre>
+mysql&gt; SET @g = 'LineString(1 1,2 2,3 3)';
+mysql&gt; SELECT AsText(GeomFromText(@g));
++--------------------------+
+| AsText(GeomFromText(@g)) |
++--------------------------+
+| LINESTRING(1 1,2 2,3 3)  |
++--------------------------+
+</pre></li>
+
+<li><p>
+<code>GeomFromText(<em><code>wkt</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+<p>Преобразовывает строковое значение из WKT-представления во внутренний
+формат геометрии и возвращает результат. Ряд специфических для типа функций
+также обеспечивается, типа <code>PointFromText()</code> и
+<code>LineFromText()</code>.</p></li>
+
+<li><p>
+<code>GeomFromWKB(<em><code>wkb</code></em>[,<em><code>srid</code></em>])</code>
+</p>
+<p>Преобразовывает двоичное значение из WKB-представления во внутренний
+формат геометрии и возвращает результат. Ряд специфических для типа функций
+также обеспечивается, типа <code>PointFromWKB()</code> и
+<code>LineFromWKB()</code>.</p></li></ul>
+
+<h3><a name="geometry-property-functions"></a>Функции
+4.5.2. <code>Geometry</code></h3>
+<p>Каждая функция, которая принадлежит к этой группе, берет значение
+геометрии как параметр и возвращает некоторое количественное или качественное
+свойство геометрии. Некоторые функции ограничивают их тип параметра. Такие
+функции возвращают <code>NULL</code>, если параметр имеет неправильный тип
+геометрии. Например, <code>Area()</code> возвращает <code>NULL</code>, если
+тип объекта не является ни <code>Polygon</code>, ни <code>MultiPolygon</code>.
+</p>
+
+<h4><a name="general-geometry-property-functions"></a>
+4.5.2.1. Общие функции геометрии</h4>
+<p>Функции, перечисленные в этом разделе, не ограничивают их параметр и
+принимают значение геометрии любого типа.</p>
+
+<ul type="disc"><li><p><code>Dimension(<em><code>g</code></em>)</code></p>
+<p>Возвращается свойственная размерность геометрии <em><code>g</code></em>.
+Результат может быть 0, 1 или 2. Смысл этих значений дан в разделе
+"<a href="#gis-class-geometry">
+4.2.2. Класс <code>Geometry</code></a>".</p>
+
+<pre>
+mysql&gt; SELECT Dimension(GeomFromText('LineString(1 1,2 2)'));
++------------------------------------------------+
+| Dimension(GeomFromText('LineString(1 1,2 2)')) |
++------------------------------------------------+
+| 1                                              |
++------------------------------------------------+
+</pre></li>
+
+<li><p><code>Envelope(<em><code>g</code></em>)</code></p>
+<p>Возвращается минимальный ограничительный прямоугольник (MBR) для геометрии
+<em><code>g</code></em>. Результат возвращен как значение
+<code>Polygon</code>.</p>
+
+<p>Многоугольник определен пунктами (точками) угла блока ограничения:</p>
+<pre>
+POLYGON((MINX MINY, MAXX MINY, MAXX MAXY, MINX MAXY, MINX MINY))
+mysql&gt; SELECT AsText(Envelope(GeomFromText('LineString(1 1,2 2)')));
++-------------------------------------------------------+
+| AsText(Envelope(GeomFromText('LineString(1 1,2 2)'))) |
++-------------------------------------------------------+
+| POLYGON((1 1,2 1,2 2,1 2,1 1))                        |
++-------------------------------------------------------+
+</pre></li>
+
+<li><p><code>GeometryType(<em><code>g</code></em>)</code></p>
+<p>Возвращает как строку имя типа геометрии, образец которой является членом
+<em><code>g</code></em>. Имя соответствует одному из
+instantiable подклассов <code>Geometry</code>.</p>
+
+<pre>
+mysql&gt; SELECT GeometryType(GeomFromText('POINT(1 1)'));
++------------------------------------------+
+| GeometryType(GeomFromText('POINT(1 1)')) |
++------------------------------------------+
+| POINT                                    |
++------------------------------------------+
+</pre></li>
+
+<li><p><code>SRID(<em><code>g</code></em>)</code></p>
+<p>Возвращается целое число, указывающее пространственный ID системы
+ссылки для геометрии <em><code>g</code></em>.</p>
+
+<p>В MySQL значение SRID только целое число, связанное со значением
+геометрии. Все вычисления выполнены, принимая евклидову (плоскую) геометрию.
+</p>
+<pre>
+mysql&gt; SELECT SRID(GeomFromText('LineString(1 1,2 2)',101));
++-----------------------------------------------+
+| SRID(GeomFromText('LineString(1 1,2 2)',101)) |
++-----------------------------------------------+
+| 101                                           |
++-----------------------------------------------+
+</pre></li></ul>
+
+<p>Спецификация OpenGIS также определяет следующие функции, которые
+MySQL не выполняет:</p>
+<ul type="disc"><li><p><code>Boundary(<em><code>g</code></em>)</code></p>
+<p>Возвращает геометрию, которая является замкнутым выражением
+комбинаторной границы геометрии <em><code>g</code></em>.</p></li>
+
+<li><p><code>IsEmpty(<em><code>g</code></em>)</code></p>
+<p>Возвращается 1, если геометрия <em><code>g</code></em> пустая геометрия,
+0, если это не пусто, и 1, если параметр <code>NULL</code>. Если геометрия
+пуста, это представляет пустой набор точек.</p></li>
+
+<li><p><code>IsSimple(<em><code>g</code></em>)</code></p>
+<p>В настоящее время эта функция не должна использоваться. Если выполнено,
+поведение будет как описано в следующем параграфе.</p>
+
+<p>Возвращается 1, если геометрия <em><code>g</code></em> не имеет никаких
+аномальных геометрических пунктов (точек), типа самопересечения или
+самокасания. <code>IsSimple()</code> возвращает 0, если параметр не прост, и
+1, если он <code>NULL</code>.</p>
+
+<p>Описание каждого instantiable геометрического класса, данного ранее в
+главе включает специфические условия, которые заставляют образец того класса
+быть классифицированными как не простой.</p></li></ul>
+
+<h4><a name="point-property-functions"></a>4.5.2.2. Функции
+<code>Point</code></h4>
+<p><code>Point</code> состоит из координат X и Y, которые могут быть
+получены, используя следующие функции:</p>
+
+<ul type="disc"><li><p><code>X(<em><code>p</code></em>)</code></p>
+<p>Возвращает значение X-координаты для <em><code>p</code></em> как
+число двойной точности.</p>
+
+<pre>
+mysql&gt; SET @pt = 'Point(56.7 53.34)';
+mysql&gt; SELECT X(GeomFromText(@pt));
++----------------------+
+| X(GeomFromText(@pt)) |
++----------------------+
+| 56.7                 |
++----------------------+
+</pre></li>
+
+<li><p><code>Y(<em><code>p</code></em>)</code></p>
+<p>Возвращает значение Y-координаты для <em><code>p</code></em> как
+число двойной точности.</p>
+
+<pre>
+mysql&gt; SET @pt = 'Point(56.7 53.34)';
+mysql&gt; SELECT Y(GeomFromText(@pt));
++----------------------+
+| Y(GeomFromText(@pt)) |
++----------------------+
+| 53.34                |
++----------------------+
+</pre></li></ul>
+
+<h4><a name="linestring-property-functions"></a>4.5.2.3. Функции
+<code>LineString</code></h4>
+<p><code>LineString</code> состоит из значений <code>Point</code>.
+Вы можете извлекать специфические пункты (точки) <code>LineString</code>,
+считать число точек объекта или получать длину.</p>
+
+<ul type="disc"><li><p><code>EndPoint(<em><code>ls</code></em>)</code></p>
+<p>Возвращает <code>Point</code>, которая является оконечной точкой
+значения <code>LineString</code> <em><code>ls</code></em>.</p>
+
+<pre>
+mysql&gt; SET @ls = 'LineString(1 1,2 2,3 3)';
+mysql&gt; SELECT AsText(EndPoint(GeomFromText(@ls)));
++-------------------------------------+
+| AsText(EndPoint(GeomFromText(@ls))) |
++-------------------------------------+
+| POINT(3 3)                          |
++-------------------------------------+
+</pre></li>
+
+<li><p><code>GLength(<em><code>ls</code></em>)</code></p>
+<p>Возвращает как число двойной точности длина значение
+<code>LineString</code> <em><code>ls</code></em> в
+связанной пространственной ссылке.</p>
+
+<pre>
+mysql&gt; SET @ls = 'LineString(1 1,2 2,3 3)';
+mysql&gt; SELECT GLength(GeomFromText(@ls));
++----------------------------+
+| GLength(GeomFromText(@ls)) |
++----------------------------+
+| 2.8284271247462            |
++----------------------------+
+</pre>
+<p><code>GLength()</code> ненормативное имя. Это передает данные функции
+OpenGIS <code>Length()</code>.</p></li>
+
+<li><p><code>NumPoints(<em><code>ls</code></em>)</code></p>
+<p>Возвращает число объектов <code>Point</code> в
+the <code>LineString</code> <em><code>ls</code></em>.</p>
+
+<pre>
+mysql&gt; SET @ls = 'LineString(1 1,2 2,3 3)';
+mysql&gt; SELECT NumPoints(GeomFromText(@ls));
++------------------------------+
+| NumPoints(GeomFromText(@ls)) |
++------------------------------+
+| 3                            |
++------------------------------+
+</pre></li>
+
+<li><p><code>PointN(<em><code>ls</code></em>,<em><code>N</code></em>)</code>
+</p>
+<p>Возвращает <em><code>N</code></em>-ый <code>Point</code> в
+<code>Linestring</code> <em><code>ls</code></em>.
+Точки пронумерованы, начиная с 1.</p>
+
+<pre>
+mysql&gt; SET @ls = 'LineString(1 1,2 2,3 3)';
+mysql&gt; SELECT AsText(PointN(GeomFromText(@ls),2));
++-------------------------------------+
+| AsText(PointN(GeomFromText(@ls),2)) |
++-------------------------------------+
+| POINT(2 2)                          |
++-------------------------------------+
+</pre></li>
+
+<li><p><code>StartPoint(<em><code>ls</code></em>)</code></p>
+<p>Возвращает <code>Point</code>, которая является отметкой начала значения
+point of the <code>LineString</code> <em><code>ls</code></em>.</p>
+
+<pre>
+mysql&gt; SET @ls = 'LineString(1 1,2 2,3 3)';
+mysql&gt; SELECT AsText(StartPoint(GeomFromText(@ls)));
++---------------------------------------+
+| AsText(StartPoint(GeomFromText(@ls))) |
++---------------------------------------+
+| POINT(1 1)                            |
++---------------------------------------+
+</pre></li></ul>
+
+<p>Спецификация OpenGIS также определяет следующую функцию, которую
+MySQL не выполняет:</p>
+<ul type="disc"><li><p><code>IsRing(<em><code>ls</code></em>)</code></p>
+<p>Возвращает 1, если значение <code>LineString</code> value
+<em><code>ls</code></em> закрыто (то есть, значения <code>StartPoint()</code>
+и <code>EndPoint()</code> те же самые) и просто (не проходит через ту же
+самую точку больше, чем один раз). Возвращается 0, если
+<em><code>ls</code></em> не кольцо, и 1, если это <code>NULL</code>.
+</p></li></ul>
+
+<h4><a name="multilinestring-property-functions"></a>4.5.2.4.
+Функции <code>MultiLineString</code></h4>
+<ul type="disc"><li><p><code>GLength(<em><code>mls</code></em>)</code></p>
+<p>Возвращает как число двойной точности длину значения
+<code>MultiLineString</code> <em><code>mls</code></em>. Длина
+<em><code>mls</code></em> равна сумме длин элементов.</p>
+
+<pre>
+mysql&gt; SET @mls = 'MultiLineString((1 1,2 2,3 3),(4 4,5 5))';
+mysql&gt; SELECT GLength(GeomFromText(@mls));
++-----------------------------+
+| GLength(GeomFromText(@mls)) |
++-----------------------------+
+| 4.2426406871193             |
++-----------------------------+
+</pre>
+<p><code>GLength()</code> ненормативное имя. Это передает данные функции
+OpenGIS <code>Length()</code>.</p></li>
+
+<li><p><code>IsClosed(<em><code>mls</code></em>)</code></p>
+<p>Возвращает 1, если значение <code>MultiLineString</code>
+<em><code>mls</code></em> закрыто (то есть, значения
+<code>StartPoint()</code> и <code>EndPoint()</code> равны для каждого
+<code>LineString</code> в <em><code>mls</code></em>). Возвращает 0, если
+<em><code>mls</code></em> не закрыт, и 1, если это <code>NULL</code>.</p>
+
+<pre>
+mysql&gt; SET @mls = 'MultiLineString((1 1,2 2,3 3),(4 4,5 5))';
+mysql&gt; SELECT IsClosed(GeomFromText(@mls));
++------------------------------+
+| IsClosed(GeomFromText(@mls)) |
++------------------------------+
+| 0                            |
++------------------------------+
+</pre></li></ul>
+
+<h4><a name="polygon-property-functions"></a>4.5.2.5. Функции
+<code>Polygon</code></h4>
+<ul type="disc"><li><p><code>Area(<em><code>poly</code></em>)</code></p>
+
+<p>Возвращает как число двойной точности область значения
+<code>Polygon</code> <em><code>poly</code></em>, как измеряется в
+пространственной системе ссылки.</p>
+
+<pre>
+mysql&gt; SET @poly = 'Polygon((0 0,0 3,3 0,0 0),(1 1,1 2,2 1,1 1))';
+mysql&gt; SELECT Area(GeomFromText(@poly));
++---------------------------+
+| Area(GeomFromText(@poly)) |
++---------------------------+
+| 4                         |
++---------------------------+
+</pre></li>
+
+<li><p><code>ExteriorRing(<em><code>poly</code></em>)</code></p>
+<p>Возвращает внешнее кольцо значения
+<code>Polygon</code> <em><code>poly</code></em> как
+<code>LineString</code>.</p>
+
+<pre>
+mysql&gt; SET @poly = 'Polygon((0 0,0 3,3 3,3 0,0 0),(1 1,1 2,2 2,2 1,1 1))';
+mysql&gt; SELECT AsText(ExteriorRing(GeomFromText(@poly)));
++-------------------------------------------+
+| AsText(ExteriorRing(GeomFromText(@poly))) |
++-------------------------------------------+
+| LINESTRING(0 0,0 3,3 3,3 0,0 0)           |
++-------------------------------------------+
+</pre></li>
+
+<li><p>
+<code>InteriorRingN(<em><code>poly</code></em>,<em><code>N</code></em>)</code>
+</p>
+<p>Возвращает <em><code>N</code></em>-ное внутреннее кольцо для значения
+<code>Polygon</code> <em><code>poly</code></em> как <code>LineString</code>.
+Кольца пронумерованы, начиная с 1.</p>
+
+<pre>
+mysql&gt; SET @poly =
+    -&gt;     'Polygon((0 0,0 3,3 3,3 0,0 0),(1 1,1 2,2 2,2 1,1 1))';
+mysql&gt; SELECT AsText(InteriorRingN(GeomFromText(@poly),1));
++----------------------------------------------+
+| AsText(InteriorRingN(GeomFromText(@poly),1)) |
++----------------------------------------------+
+| LINESTRING(1 1,1 2,2 2,2 1,1 1)              |
++----------------------------------------------+
+</pre></li>
+
+<li><p><code>NumInteriorRings(<em><code>poly</code></em>)</code></p>
+<p>Возвращает число внутренних колец в
+значении <code>Polygon</code> <em><code>poly</code></em>.</p>
+
+<pre>
+mysql&gt; SET @poly =
+    -&gt;     'Polygon((0 0,0 3,3 3,3 0,0 0),(1 1,1 2,2 2,2 1,1 1))';
+mysql&gt; SELECT NumInteriorRings(GeomFromText(@poly));
++---------------------------------------+
+| NumInteriorRings(GeomFromText(@poly)) |
++---------------------------------------+
+| 1                                     |
++---------------------------------------+
+</pre></li></ul>
+
+<h4><a name="multipolygon-property-functions"></a>4.5.2.6. Функции
+<code>MultiPolygon</code></h4>
+<ul type="disc"><li><p><code>Area(<em><code>mpoly</code></em>)</code></p>
+
+<p>Возвращает как число двойной точности область значения
+<code>MultiPolygon</code> <em><code>mpoly</code></em>, как измеряется в
+пространственной системе ссылки.</p>
+
+<pre>
+mysql&gt; SET @mpoly =
+    -&gt;     'MultiPolygon(((0 0,0 3,3 3,3 0,0 0),(1 1,1 2,2 2,2 1,1 1)))';
+mysql&gt; SELECT Area(GeomFromText(@mpoly));
++----------------------------+
+| Area(GeomFromText(@mpoly)) |
++----------------------------+
+| 8                          |
++----------------------------+
+</pre></li></ul>
+
+<p>Спецификация OpenGIS также определяет следующие функции, которые
+MySQL не выполняет:</p>
+<ul type="disc"><li><p><code>Centroid(<em><code>mpoly</code></em>)</code></p>
+
+<p>Возвращает математический центр для значения <code>MultiPolygon</code>
+<em><code>mpoly</code></em> как <code>Point</code>. Не гарантируется, что
+результат будет в <code>MultiPolygon</code>.</p></li>
+
+<li><p><code>PointOnSurface(<em><code>mpoly</code></em>)</code></p>
+<p>Возвращает значение <code>Point</code>, которое гарантированно будет в
+значении <code>MultiPolygon</code> <em><code>mpoly</code></em>.</p></li></ul>
+
+<h4><a name="geometrycollection-property-functions"></a>4.5.2.7. Функции
+<code>GeometryCollection</code></h4>
+<ul type="disc"><li><p>
+<code>GeometryN(<em><code>gc</code></em>,<em><code>N</code></em>)</code></p>
+
+<p>Возвращает <em><code>N</code></em>-ую геометрию в значении
+<code>GeometryCollection</code> <em><code>gc</code></em>.
+Конфигурации пронумерованы, начиная с 1.</p>
+
+<pre>
+mysql&gt; SET @gc = 'GeometryCollection(Point(1 1), LineString(2 2, 3 3))';
+mysql&gt; SELECT AsText(GeometryN(GeomFromText(@gc), 1));
++----------------------------------------+
+| AsText(GeometryN(GeomFromText(@gc), 1))|
++----------------------------------------+
+| POINT(1 1)                             |
++----------------------------------------+
+</pre></li>
+
+<li><p><code>NumGeometries(<em><code>gc</code></em>)</code></p>
+<p>Возвращает число конфигураций в значении
+<code>GeometryCollection</code> <em><code>gc</code></em>.</p>
+
+<pre>
+mysql&gt; SET @gc = 'GeometryCollection(Point(1 1), LineString(2 2, 3 3))';
+mysql&gt; SELECT NumGeometries(GeomFromText(@gc));
++----------------------------------+
+| NumGeometries(GeomFromText(@gc)) |
++----------------------------------+
+| 2                                |
++----------------------------------+
+</pre></li></ul>
+
+<h3><a name="functions-that-create-new-geometries-from-existing-ones"></a>
+4.5.3. Функции, которые создают новые конфигурации из существующих</h3>
+<h4><a name="functions-that-produce-new-geometries"></a>
+4.5.3.1. Функции геометрии, которые производят новые конфигурации</h4>
+<p>Раздел <a href="#geometry-property-functions">
+"4.5.2. Функции <code>Geometry</code></a>" обсуждает несколько функций,
+которые создают новые конфигурации из существующих.</p>
+
+<ul type="disc"><li><p><code>Envelope(<em><code>g</code></em>)</code>
+</p></li>
+<li><p><code>StartPoint(<em><code>ls</code></em>)</code></p></li>
+<li><p><code>EndPoint(<em><code>ls</code></em>)</code></p></li>
+
+<li><p><code>PointN(<em><code>ls</code></em>,<em><code>N</code></em>)</code>
+</p></li>
+<li><p><code>ExteriorRing(<em><code>poly</code></em>)</code></p></li>
+
+<li><p><code>InteriorRingN(<em><code>poly</code></em>,<em><code>N</code>
+</em>)</code></p></li>
+<li><p><code>GeometryN(<em><code>gc</code></em>,<em><code>N</code></em>)
+</code></p></li></ul>
+
+<h4><a name="spatial-operators"></a>4.5.3.2. Пространственные операторы</h4>
+<p>OpenGIS предлагает ряд других функций, которые могут производить
+конфигурации. Они разработаны, чтобы выполнить пространственные операторы.
+</p>
+
+<p>Эти функции не выполнены в MySQL. Они могут появляться в будущих выпусках.
+</p>
+<ul type="disc"><li><p>
+<code>Buffer(<em><code>g</code></em>,<em><code>d</code></em>)</code></p>
+
+<p>Возвращает геометрию, которая представляет все пункты (точки), чьи
+расстояния от геометрии <em><code>g</code></em> меньше или равны расстоянию
+<em><code>d</code></em>.</p></li>
+
+<li><p><code>ConvexHull(<em><code>g</code></em>)</code></p>
+<p>Возвращает геометрию, которая представляет выпуклую оболочку геометрии
+<em><code>g</code></em>.</p></li>
+
+<li><p><code>Difference(<em><code>g1</code></em>,<em><code>g2</code></em>)
+</code></p>
+<p>Возвращает геометрию, которая представляет разность множеств
+точек значения геометрий <em><code>g1</code></em> и <em><code>g2</code></em>.
+</p></li>
+
+<li><p><code>Intersection(<em><code>g1</code></em>,<em><code>g2</code></em>)
+</code></p>
+<p>Возвращает геометрию, которая представляет пересечение набора точек
+геометрий <em><code>g1</code></em> и <em><code>g2</code></em>.</p></li>
+
+<li><p><code>SymDifference(<em><code>g1</code></em>,<em><code>g2</code></em>)
+</code></p>
+<p>Возвращает геометрию, которая представляет набор точек, симметричных
+разнице значений геометрий
+<em><code>g1</code></em> и <em><code>g2</code></em>.</p></li>
+
+<li><p>
+<code>Union(<em><code>g1</code></em>,<em><code>g2</code></em>)</code></p>
+<p>Возвращает геометрию, которая представляет объединение набора точек
+значений геометрии <em><code>g1</code></em> и
+<em><code>g2</code></em>.</p></li></ul>
+
+<h3><a name="functions-for-testing-spatial-relations-between-geometric-objects">
+</a>4.5.4. Функции для тестирования пространственных отношений
+между геометрическими объектами</h3>
+<p>Функции, описанные в этих разделах, берут две конфигурации как входные
+параметры и возвращают качественное или количественное отношение между ними.
+</p>
+
+<h3><a name="relations-on-geometry-mbr"></a>4.5.5. Отношения на геометрии:
+минимальные ограничительные прямоугольники (MBR)</h3>
+<p>MySQL обеспечивает несколько функций, которые проверяют отношения между
+минимальными ограничительными прямоугольниками двух конфигураций
+<code>g1</code> и <code>g2</code>. Возвращаемые значения 1 и 0 указывают
+истину и ложь соответственно.</p>
+
+<ul type="disc"><li><p>
+<code>MBRContains(<em><code>g1</code></em>,<em><code>g2</code></em>)</code>
+</p>
+<p>Возвращает 1 или 0, чтобы указать, содержит ли минимальный ограничительный
+прямоугольник <em><code>g1</code></em> минимальный ограничительный
+прямоугольник <em><code>g2</code></em>.</p>
+
+<pre>
+mysql&gt; SET @g1 = GeomFromText('Polygon((0 0, 0 3, 3 3, 3 0, 0 0))');
+mysql&gt; SET @g2 = GeomFromText('Point(1 1)');
+mysql&gt; SELECT MBRContains(@g1, @g2), MBRContains(@g2, @g1);
++----------------------+----------------------+
+| MBRContains(@g1, @g2)| MBRContains(@g2, @g1)|
++----------------------+----------------------+
+| 1                    | 0                    |
++----------------------+----------------------+
+</pre></li>
+
+<li><p>
+<code>MBRDisjoint(<em><code>g1</code></em>,<em><code>g2</code></em>)</code>
+</p>
+
+<p>Возвращает 1 или 0, чтобы указать, являются ли минимальные ограничительные
+прямоугольники двух конфигураций <em><code>g1</code></em> и
+<em><code>g2</code></em> непересекающимися.</p></li>
+
+<li><p>
+<code>MBREqual(<em><code>g1</code></em>,<em><code>g2</code></em>)</code></p>
+<p>Возвращает 1 или 0, чтобы указать, являются ли минимальные ограничительные
+прямоугольники двух конфигураций <em><code>g1</code></em> и
+<em><code>g2</code></em> тем же самым.</p></li>
+
+<li><p>
+<code>MBRIntersects(<em><code>g1</code></em>,<em><code>g2</code></em>)</code>
+</p>
+<p>Возвращает 1 или 0, чтобы указать, пересекаются ли минимальные
+ограничительные прямоугольники двух конфигураций
+<em><code>g1</code></em> и <em><code>g2</code></em>.</p></li>
+
+<li><p>
+<code>MBROverlaps(<em><code>g1</code></em>,<em><code>g2</code></em>)</code>
+</p>
+<p>Возвращает 1 или 0, чтобы указать, накладываются ли
+минимальные ограничительные прямоугольники
+<em><code>g1</code></em> и <em><code>g2</code></em>.</p></li>
+
+<li><p><code>MBRTouches(<em><code>g1</code></em>,<em><code>g2</code></em>)
+</code></p>
+<p>Возвращает 1 или 0, чтобы указать, касаются ли минимальные ограничительные
+прямоугольники <em><code>g1</code></em> и <em><code>g2</code></em>.</p></li>
+
+<li><p>
+<code>MBRWithin(<em><code>g1</code></em>,<em><code>g2</code></em>)</code></p>
+<p>Возвращает 1 или 0, чтобы указать, является ли минимальный ограничительный
+прямоугольник <em><code>g1</code></em> внутренним для минимального
+ограничительного прямоугольника <em><code>g2</code></em>.</p>
+
+<pre>
+mysql&gt; SET @g1 = GeomFromText('Polygon((0 0, 0 3, 3 3, 3 0, 0 0))');
+mysql&gt; SET @g2 = GeomFromText('Polygon((0 0, 0 5, 5 5, 5 0, 0 0))');
+mysql&gt; SELECT MBRWithin(@g1, @g2), MBRWithin(@g2, @g1);
++--------------------+--------------------+
+| MBRWithin(@g1, @g2)| MBRWithin(@g2, @g1)|
++--------------------+--------------------+
+| 1                  | 0                  |
++--------------------+--------------------+
+</pre></li></ul>
+
+<h3><a name="functions-that-test-spatial-relationships-between-geometries">
+</a>4.5.6. Функции, которые проверяют пространственные
+связи между конфигурациями</h3>
+<p>Спецификация OpenGIS определяет следующие функции. Они проверяют связь
+между двумя значениями геометрии <code>g1</code> и <code>g2</code>.</p>
+
+<p>В настоящее время MySQL не выполняет эти функции согласно спецификации.
+Которые выполнены, возвратят тот же самый результат, что и соответствующие
+MBR-функции. Это включает функции в следующем списке. Эти функции могут быть
+выполнены в будущих выпусках с полной поддержкой для пространственного
+анализа, а не только MBR-поддержки.</p>
+
+<ul type="disc"><li><p>
+<code>Contains(<em><code>g1</code></em>,<em><code>g2</code></em>)</code></p>
+<p>Возвращает 1 или 0, чтобы указать, содержит ли
+<em><code>g1</code></em> полностью <em><code>g2</code></em>.</p></li>
+
+<li><p>
+<code>Crosses(<em><code>g1</code></em>,<em><code>g2</code></em>)</code></p>
+<p>Возвращает 1, если <em><code>g1</code></em> пространственно пересекает
+<em><code>g2</code></em>. Возвращает <code>NULL</code>, если <code>g1</code>
+<code>Polygon</code> или <code>MultiPolygon</code>, либо если
+<em><code>g2</code></em> <code>Point</code> или
+<code>MultiPoint</code>. Иначе возвращает 0.</p>
+
+<p>Термин "пространственно пересекается", обозначает пространственное
+отношение между двумя данными конфигурациями, которые
+имеют следующие реквизиты:</p>
+
+<ul type="circle"><li><p>Две конфигурации пересекаются.</p></li>
+<li><p>Их пересечение приводит к геометрии, которая имеет размерность,
+которая на единицу меньше, чем максимальная размерность
+двух данных конфигураций.</p></li>
+<li><p>Их пересечение не равно любой из двух данных конфигураций.
+</p></li></ul></li>
+
+<li><p>
+<code>Disjoint(<em><code>g1</code></em>,<em><code>g2</code></em>)</code></p>
+<p>Возвращается 1 или 0, чтобы указать, является ли <em><code>g1</code></em>
+пространственно непересекающейся с <em><code>g2</code></em>.</p></li>
+
+<li><p>
+<code>Distance(<em><code>g1</code></em>,<em><code>g2</code></em>)</code></p>
+<p>Возвращает как число двойной точности самое короткое расстояние между
+любыми двумя точками в двух конфигурациях.</p></li>
+
+<li><p>
+<code>Equals(<em><code>g1</code></em>,<em><code>g2</code></em>)</code></p>
+<p>Возвращает 1 или 0, чтобы указать, является ли <em><code>g1</code></em>
+пространственно равной <em><code>g2</code></em>.</p></li>
+
+<li><p>
+<code>Intersects(<em><code>g1</code></em>,<em><code>g2</code></em>)</code>
+</p>
+<p>Возвращает 1 или 0, чтобы указать, пересекает ли <em><code>g1</code></em>
+пространственно <em><code>g2</code></em>.</p></li>
+
+<li><p>
+<code>Overlaps(<em><code>g1</code></em>,<em><code>g2</code></em>)</code></p>
+<p>Возвращает 1 или 0, чтобы указать, накладывается ли
+<em><code>g1</code></em> пространственно на <em><code>g2</code></em>.
+Термин "пространственно накладывается" используется, если две конфигурации
+пересекаются, и их пересечение приводит к геометрии той же самой размерности,
+но не равной любой из данных конфигураций.</p></li>
+
+<li><p>
+<code>Related(<em><code>g1</code></em>,<em><code>g2</code></em>,<em><code>pattern_matrix
+</code></em>)</code></p>
+
+<p>Возвращает 1 или 0, чтобы указать, существует ли пространственная связь,
+определенная <em><code>pattern_matrix</code></em> между
+<em><code>g1</code></em> и <em><code>g2</code></em>. Возвращает 1, если
+параметры <code>NULL</code>. Матрица образцов является строкой. Спецификация
+будет отмечена здесь, если эта функция выполнена.</p></li>
+
+<li><p>
+<code>Touches(<em><code>g1</code></em>,<em><code>g2</code></em>)</code></p>
+<p>Возвращается 1 или 0, чтобы указать, касается ли <em><code>g1</code></em>
+пространственно <em><code>g2</code></em>. Две конфигурации пространственно
+касаются, если внутренности конфигураций не пересекаются, но граница одной из
+конфигураций пересекает границу или внутренность другой.</p></li>
+
+<li><p>
+<code>Within(<em><code>g1</code></em>,<em><code>g2</code></em>)</code></p>
+<p>Возвращается 1 или 0, чтобы указать, является ли <em><code>g1</code></em>
+пространственно внутри <em><code>g2</code></em>.</p></li></ul>
+
+<h2><a name="optimizing-spatial-analysis"></a>4.6.
+Оптимизация пространственного анализа</h2>
+<p>Операции поиска в непространственных базах данных могут быть
+оптимизированы, используя индексы. Это также истинно для пространственных баз
+данных. С помощью большого разнообразия многомерных методов индексации,
+которые предварительно были разработаны, возможно оптимизировать
+пространственные поиски. Наиболее типично для них:</p>
+
+<ul type="disc"><li><p>Запросы точки, которые ищут все объекты, которые
+содержат данную точку.</p></li>
+<li><p>Запросы области, которые ищут все объекты, которые накладываются
+на данную область.</p></li></ul>
+
+<p>MySQL использует R-деревья с квадратным разбиением, чтобы индексировать
+пространственные столбцы. Пространственный индекс сформирован, используя MBR
+геометрии. Для большинства конфигураций MBR минимальный прямоугольник,
+который окружает конфигурацию. Для горизонтальных или вертикальных linestring
+MBR прямоугольник, вырождающийся в linestring. Для point MBR является точкой.
+</p>
+
+<p>Также возможно создать нормальные индексы на пространственных столбцах.
+Вам надо объявить префикс для любого непространственного индекса на
+пространственном столбце, кроме столбцов <code>POINT</code>.</p>
+
+<h3><a name="creating-spatial-indexes"></a>4.6.1.
+Создание пространственных индексов</h3>
+<p>MySQL может создавать пространственные индексы, использующие синтаксис,
+подобный аналогичному для создания регулярных индексов, но расширенный с
+ключевым словом <code>SPATIAL</code>. В настоящее время пространственные
+столбцы, которые индексированы, должны быть объявлены как <code>NOT
+NULL</code>. Следующие примеры показывают, как
+создавать пространственные индексы:</p>
+
+<ul type="disc"><li><p>С <code>CREATE TABLE</code>:</p>
+<pre>
+CREATE TABLE geom (g GEOMETRY NOT NULL, SPATIAL INDEX(g));
+</pre></li>
+
+<li><p>С <code>ALTER TABLE</code>:</p>
+<pre>
+ALTER TABLE geom ADD SPATIAL INDEX(g);
+</pre></li>
+
+<li><p>С <code>CREATE INDEX</code>:</p>
+<pre>
+CREATE SPATIAL INDEX sp_index ON geom (g);
+</pre></li></ul>
+
+<p>Для таблиц <code>MyISAM</code> <code>SPATIAL INDEX</code> создает индекс
+R-tree. Для других типов памяти, которые поддерживают пространственную
+индексацию, <code>SPATIAL INDEX</code> создает индекс B-tree. B-tree на
+пространственных значениях будет полезен для поисковых таблиц с точным
+значением, но не для диапазона.</p>
+
+<p>Для удаления пространственного индекса, используйте <code>ALTER
+TABLE</code> или <code>DROP INDEX</code>:</p>
+<ul type="disc"><li><p>С <code>ALTER TABLE</code>:</p>
+<pre>
+ALTER TABLE geom DROP INDEX g;
+</pre></li>
+
+<li><p>С <code>DROP INDEX</code>:</p>
+<pre>
+DROP INDEX sp_index ON geom;
+</pre></li></ul>
+
+<p>Пример: Предположите, что таблица <code>geom</code> содержит больше, чем
+32000 конфигурации, которые сохранены в столбце <code>g</code> типа
+<code>GEOMETRY</code>. Таблица также имеет столбец
+<code>AUTO_INCREMENT</code> <code>fid</code> для сохранения
+значений объекта ID.</p>
+
+<pre>
+mysql&gt; DESCRIBE geom;
++-------+----------+------+-----+---------+----------------+
+| Field | Type     | Null | Key | Default | Extra          |
++-------+----------+------+-----+---------+----------------+
+| fid   | int(11)  |      | PRI | NULL    | auto_increment |
+| g     | geometry |      |     |         |                |
++-------+----------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+mysql&gt; SELECT COUNT(*) FROM geom;
++----------+
+| count(*) |
++----------+
+| 32376    |
++----------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>Чтобы добавлять пространственный индекс на столбце <code>g</code>,
+используйте эту инструкцию:</p>
+<pre>
+mysql&gt; ALTER TABLE geom ADD SPATIAL INDEX(g);
+Query OK, 32376 rows affected (4.05 sec)
+Records: 32376 Duplicates: 0 Warnings: 0
+</pre>
+
+<h3><a name="using-a-spatial-index"></a>4.6.2.
+Использование пространственного индекса</h3>
+<p>Оптимизатор исследует, могут ли доступные пространственные индексы
+включаться в поиск для запросов, которые используют функцию типа
+<code>MBRContains()</code> или <code>MBRWithin()</code> в предложении
+<code>WHERE</code>. Следующий запрос находит все объекты, которые
+находятся в данном прямоугольнике:</p>
+
+<pre>
+mysql&gt; SET @poly = 'Polygon((30000 15000, 31000 15000, 31000 16000,
+    -&gt;                       30000 16000, 30000 15000))';
+mysql&gt; SELECT fid, AsText(g) FROM geom WHERE
+    -&gt;        MBRContains(GeomFromText(@poly), g);
++-----+---------------------------------------------------------------+
+| fid | AsText(g)                                                     |
++-----+---------------------------------------------------------------+
+|  21 | LINESTRING(30350.4 15828.8,30350.6 15845,30333.8 15845,30 ... |
+|  22 | LINESTRING(30350.6 15871.4,30350.6 15887.8,30334 15887.8, ... |
+|  23 | LINESTRING(30350.6 15914.2,30350.6 15930.4,30334 15930.4, ... |
+|  24 | LINESTRING(30290.2 15823,30290.2 15839.4,30273.4 15839.4, ... |
+|  25 | LINESTRING(30291.4 15866.2,30291.6 15882.4,30274.8 15882. ... |
+|  26 | LINESTRING(30291.6 15918.2,30291.6 15934.4,30275 15934.4, ... |
+| 249 | LINESTRING(30337.8 15938.6,30337.8 15946.8,30320.4 15946. ... |
+|   1 | LINESTRING(30250.4 15129.2,30248.8 15138.4,30238.2 15136. ... |
+|   2 | LINESTRING(30220.2 15122.8,3024.2 15137.8,30207.6 15136, ... |
+|   3 | LINESTRING(30179 15114.4,30176.6 15129.4,30167 15128,3016 ... |
+|   4 | LINESTRING(30155.2 15121.4,30140.4 15118.6,30142 15109,30 ... |
+|   5 | LINESTRING(30192.4 15085,30177.6 15082.2,30179.2 15072.4, ... |
+|   6 | LINESTRING(30244 15087,30229 15086.2,30229.4 15076.4,3024 ... |
+|   7 | LINESTRING(30200.6 15059.4,30185.6 15058.6,30186 15048.8, ... |
+|  10 | LINESTRING(30179.6 1504.8,30181 15002.8,30190.8 15003.6, ... |
+|  11 | LINESTRING(30154.2 15000.4,30168.6 15004.8,30166 15014.2, ... |
+|  13 | LINESTRING(30105 15065.8,30108.4 15050.8,30118 15053,3011 ... |
+| 154 | LINESTRING(30276.2 15143.8,30261.4 15141,30263 15131.4,30 ... |
+| 155 | LINESTRING(30269.8 15084,30269.4 15093.4,30258.6 15093,30 ... |
+| 157 | LINESTRING(30128.2 15011,30113.2 15010.2,30113.6 15000.4, ... |
++-----+---------------------------------------------------------------+
+20 rows in set (0.00 sec)
+</pre>
+
+<p>Использование <code>EXPLAIN</code> показывает, каким способом
+этот запрос выполнен:</p>
+<pre>
+mysql&gt; SET @poly = 'Polygon((30000 15000, 31000 15000,
+    -&gt;                       31000 16000, 30000 16000, 30000 15000))';
+mysql&gt; EXPLAIN SELECT fid, AsText(g) FROM geom WHERE
+    -&gt;         MBRContains(GeomFromText(@poly), g)\G
+*************************** 1. row ***************************
+id: 1
+select_type: SIMPLE
+table: geom
+type: range
+possible_keys: g
+key: g
+key_len: 32
+ref: NULL
+rows: 50
+Extra: Using where
+1 row in set (0.00 sec)
+</pre>
+
+<p>Проверьте, что случилось бы без пространственного индекса:</p>
+<pre>
+mysql&gt; SET @poly = 'Polygon((30000 15000, 31000 15000,
+    -&gt;                       31000 16000, 30000 16000, 30000 15000))';
+mysql&gt; EXPLAIN SELECT fid,AsText(g) FROM g IGNORE INDEX (g) WHERE
+    -&gt;         MBRContains(GeomFromText(@poly), g)\G
+*************************** 1. row ***************************
+id: 1
+select_type: SIMPLE
+table: geom
+type: ALL
+possible_keys: NULL
+key: NULL
+key_len: NULL
+ref: NULL
+rows: 32376
+Extra: Using where
+1 row in set (0.00 sec)
+</pre>
+
+<p>Выполнение инструкции <code>SELECT</code> без пространственного индекса
+выдает тот же самый результат, но заставляет время выполнения
+повышаться с 0.00 до 0.46 секунды:</p>
+
+<pre>
+mysql&gt; SET @poly = 'Polygon((30000 15000, 31000 15000,
+    -&gt;                       31000 16000, 30000 16000, 30000 15000))';
+mysql&gt; SELECT fid, AsText(g) FROM geom IGNORE INDEX (g) WHERE
+    -&gt;        MBRContains(GeomFromText(@poly), g);
++-----+---------------------------------------------------------------+
+| fid | AsText(g)                                                     |
++-----+---------------------------------------------------------------+
+|   1 | LINESTRING(30250.4 15129.2,30248.8 15138.4,30238.2 15136. ... |
+|   2 | LINESTRING(30220.2 15122.8,3024.2 15137.8,30207.6 15136, ... |
+|   3 | LINESTRING(30179 15114.4,30176.6 15129.4,30167 15128,3016 ... |
+|   4 | LINESTRING(30155.2 15121.4,30140.4 15118.6,30142 15109,30 ... |
+|   5 | LINESTRING(30192.4 15085,30177.6 15082.2,30179.2 15072.4, ... |
+|   6 | LINESTRING(30244 15087,30229 15086.2,30229.4 15076.4,3024 ... |
+|   7 | LINESTRING(30200.6 15059.4,30185.6 15058.6,30186 15048.8, ... |
+|  10 | LINESTRING(30179.6 1504.8,30181 15002.8,30190.8 15003.6, ... |
+|  11 | LINESTRING(30154.2 15000.4,30168.6 15004.8,30166 15014.2, ... |
+|  13 | LINESTRING(30105 15065.8,30108.4 15050.8,30118 15053,3011 ... |
+|  21 | LINESTRING(30350.4 15828.8,30350.6 15845,30333.8 15845,30 ... |
+|  22 | LINESTRING(30350.6 15871.4,30350.6 15887.8,30334 15887.8, ... |
+|  23 | LINESTRING(30350.6 15914.2,30350.6 15930.4,30334 15930.4, ... |
+|  24 | LINESTRING(30290.2 15823,30290.2 15839.4,30273.4 15839.4, ... |
+|  25 | LINESTRING(30291.4 15866.2,30291.6 15882.4,30274.8 15882. ... |
+|  26 | LINESTRING(30291.6 15918.2,30291.6 15934.4,30275 15934.4, ... |
+| 154 | LINESTRING(30276.2 15143.8,30261.4 15141,30263 15131.4,30 ... |
+| 155 | LINESTRING(30269.8 15084,30269.4 15093.4,30258.6 15093,30 ... |
+| 157 | LINESTRING(30128.2 15011,30113.2 15010.2,30113.6 15000.4, ... |
+| 249 | LINESTRING(30337.8 15938.6,30337.8 15946.8,30320.4 15946. ... |
++-----+---------------------------------------------------------------+
+20 rows in set (0.46 sec)
+</pre>
+<p>В будущих выпусках пространственные индексы могут также использоваться для
+оптимизации других функций.</p>
+
+<h2><a name="mysql-gis-conformance-and-compatibility"></a>
+4.7. MySQL: согласованность и совместимость</h2>
+<p>MySQL еще не выполняет следующие свойства GIS:</p>
+
+<ul type="disc"><li><p>Дополнительные просмотры метаданных.</p>
+<p>Спецификация OpenGIS предлагает несколько дополнительных просмотров
+метаданных. Например, просмотр системы <code>GEOMETRY_COLUMNS</code>
+содержит описание столбцов геометрии, одна строка для каждого столбца
+геометрии в базе данных.</p></li>
+
+<li><p>Функция OpenGIS <code>Length()</code> на <code>LineString</code> и
+<code>MultiLineString</code> в настоящее время должна быть вызвана в
+MySQL как <code>GLength()</code></p>
+
+<p>Проблема в том, что имеется существующая SQL-функция
+<code>Length()</code>, которая вычисляет длину строковых значений, и иногда
+невозможно различить, вызвана ли функция в текстовом или пространственном
+контексте. Это будет со временем как-то решаться.</p></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</html>

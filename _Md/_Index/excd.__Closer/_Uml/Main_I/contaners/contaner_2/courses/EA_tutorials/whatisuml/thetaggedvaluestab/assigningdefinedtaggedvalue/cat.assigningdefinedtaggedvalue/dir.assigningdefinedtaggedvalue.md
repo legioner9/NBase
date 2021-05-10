@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\thetaggedvaluestab\assigningdefinedtaggedvalue\cat.assigningdefinedtaggedvalue\dir.assigningdefinedtaggedvalue.md">assigningdefinedtaggedvalue</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\whatisuml\thetaggedvaluestab\assigningdefinedtaggedvalue\assigningdefinedtaggedvalue.md">assigningdefinedtaggedvalue.md</a>
+        - *### [Assign a Tagged Value to an Item](https://sparxsystems.com/enterprise_architect_user_guide/15.1/modeling/assigningdefinedtaggedvalue.html) Присвойте элементу значение с тегом

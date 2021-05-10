@@ -1,0 +1,855 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+<TITLE>Спецификация по MTA Exim 4.67</TITLE>
+</HEAD>
+
+<BODY LANG="RU">
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+
+<h1>Спецификация MTA Exim</h1>
+<p align="justify">Philip Hazel. Copyright 10 April 2007 University of
+Cambridge <i>Revision 4.67.</i></p>
+
+<p align="justify">Перевод выполнен Алексеем Паутовым в рамках
+некоммерческого проекта RussianLDP
+(<a href="../../default.htm">http://www.rldp.ru/</a>). Именно на этом сайте
+и надлежит искать новые версии, если таковые будут.
+
+<H3>Необходимое замечание</H3>
+<p align="justify">Жизнь показала необходимость этого замечания. Я не против
+того, чтобы материалы с моего сайта копировали сколь угодно свободно. Берите!
+Пользуйтесь! Но если их где-то кто-то выложил у себя, НЕ НАДО потом
+присваивать себе авторство. Мне без разницы. Но когда мне пишут нечто вроде
+"я вот у себя это выложил, напиши у себя, что это я настоящий автор, а вовсе
+не ты", знаете, меня это раздражает. Имейте совесть! Я не буду указывать на
+своем сайте ссылки на "авторов", которые тупо скопировали мои работы.
+Переведите сами что-нибудь. На моем сайте лежат ТОЛЬКО мои работы. Более
+того. Я в принципе не размещаю у себя работ кого бы то ни было. Ни по
+просьбе, ни за деньги. Никак. Совсем. Поэтому, если я здесь что-то положил,
+это делал я. И еще одно. Если вы взялись что-то переводить сами, делайте это
+по уму. То есть, не надо переводить, игнорируя правила русского языка. Вот
+посмотрите на мой сайт: вы найдете здесь очень мало ошибок и опечаток. Что
+мешает работать не хуже? Малограмотность? Учитесь. Переводите так, чтобы на
+ваши работы не было тошно смотреть.
+
+<p align="justify">А то получается ситуация: человек что-то где-то увидел,
+кое-как коряво и криво перевел, сляпал на скорую руку сайт в стиле "5 класс
+средней школы" и все это положил в сеть. Потом он находит тот же документ у
+меня. Раньше посмотреть не мог? И тут начинает человека грызть зависть: он
+получается попусту кучу сил и времени потратил! А что в итоге? А ничего: ко
+мне ходят сотни человек, а нему только роботы, да сосед из другого дома,
+который потом долго смеялся над его сайтом! Как так? Человек не может понять,
+что его сайт хуже. Что его перевод выполнен левой ногой через задницу. Он
+изначально считает себя лучшим во всем. Абсолютно. И осеняет человека
+гениальная идея: я наеду на Паутова и заставлю его ссылку со своего сайта на
+меня поставить! То-то у меня посещаемость скакнет! Ха-ха-ха. Много раз. Не
+будет Паутов раскручивать тупые поделки всяких недорослей. Задолбали!
+
+<H4 align="center">Содержание</H4>
+<ul><li>1. <a href="glava01.htm">Введение</a>
+<ul><li>1.1. <a href="glava01.htm#1.1">Документация exim</a>
+<li>1.2. <a href="glava01.htm#1.2">FTP и WEB-сайты</a>
+<li>1.3. <a href="glava01.htm#1.3">Списки рассылки</a>
+<li>1.4. <a href="glava01.htm#1.4">Курсы exim</a>
+<li>1.5. <a href="glava01.htm#1.5">Сообщения об ошибках</a>
+<li>1.6. <a href="glava01.htm#1.6">Где найти дистрибутив exim</a>
+<li>1.7. <a href="glava01.htm#1.7">Список пожеланий</a>
+<li>1.8. <a href="glava01.htm#1.8">Материалы содействия</a>
+<li>1.9. <a href="glava01.htm#1.9">Ограничения</a>
+<li>1.10. <a href="glava01.htm#1.10">Рабочая (выполняемая) конфигурация</a>
+<li>1.11. <a href="glava01.htm#1.11">Интерфейс вызова</a>
+<li>1.12. <a href="glava01.htm#1.12">Терминология</a>
+<li>1.13. <a href="glava01.htm#1.13">В чем я не согласен с оригиналом</a>
+<li>1.15. <a href="glava01.htm#1.14">Замечание о качестве перевода</a></ul>
+<li>2. <a href="glava02.htm">Включенный код</a>
+<li>3. <a href="glava03.htm">Как еxim получает и доставляет почту</a>
+<ul><li>3.1. <a href="glava03.htm#3.1">Полная философия</a>
+<li>3.2. <a href="glava03.htm#3.2">Управление политиками</a>
+<li>3.3. <a href="glava03.htm#3.3">Пользовательские фильтры</a>
+<li>3.4. <a href="glava03.htm#3.4">Идентификация сообщений</a>
+<li>3.5. <a href="glava03.htm#3.5">Получение почты</a>
+<li>3.6. <a href="glava03.htm#3.6">Обработка входящих сообщений</a>
+<li>3.7. <a href="glava03.htm#3.7">Жизнь сообщения</a>
+<li>3.8. <a href="glava03.htm#3.8">Обработка адреса для доставки</a>
+<li>3.9. <a href="glava03.htm#3.9">Обработка адреса для проверки</a>
+<li>3.10. <a href="glava03.htm#3.10">Работа отдельного роутера</a>
+<li>3.11. <a href="glava03.htm#3.11">Двойные адреса</a>
+<li>3.12. <a href="glava03.htm#3.12">Предварительные условия роутера</a>
+<li>3.13. <a href="glava03.htm#3.13">Доставка в деталях</a>
+<li>3.14. <a href="glava03.htm#3.14">Механизм повтора</a>
+<li>3.15. <a href="glava03.htm#3.15">Временные ошибки доставки</a>
+<li>3.16. <a href="glava03.htm#3.16">Постоянные ошибки доставки</a>
+<li>3.17. <a href="glava03.htm#3.17">Сбой доставки рикошета</a></ul>
+<li>4. <a href="glava04.htm">Сборка и инсталляция Exim</a>
+<ul><li>4.1. <a href="glava04.htm#4.1">Распаковка</a>
+<li>4.2. <a href="glava04.htm#4.2">Разнообразие архитектур и операционных систем
+</a>
+<li>4.3. <a href="glava04.htm#4.3">DBM-библиотеки</a>
+<li>4.4. <a href="glava04.htm#4.4">Предсборочная конфигурация</a>
+<li>4.5. <a href="glava04.htm#4.5">Поддержка iconv()</a>
+<li>4.6. <a href="glava04.htm#4.6">Включение TLS/SSL шифрования</a>
+<li>4.7. <a href="glava04.htm#4.7">Использование tcpwrappers</a>
+<li>4.8. <a href="glava04.htm#4.8">Включение поддержки IPv6</a>
+<li>4.9. <a href="glava04.htm#4.9">Процесс сборки</a>
+<li>4.10. <a href="glava04.htm#4.10">Выходные данные после make</a>
+<li>4.11. <a href="glava04.htm#4.11">Отмена опций при сборке Exim</a>
+<li>4.12. <a href="glava04.htm#4.12">OS-cпецифические заголовки</a>
+<li>4.13. <a href="glava04.htm#4.13">Отмена опций при сборке монитора</a>
+<li>4.14. <a href="glava04.htm#4.14">
+Установка двоичных файлов и скриптов Exim</a>
+<li>4.15. <a href="glava04.htm#4.15">Инсталляция документации</a>
+<li>4.16. <a href="glava04.htm#4.16">Определение каталога spool</a>
+<li>4.17. <a href="glava04.htm#4.17">Тестирование</a>
+<li>4.18. <a href="glava04.htm#4.17">Замещение другого MTA Exim</a>
+<li>4.19. <a href="glava04.htm#4.19">Обновление Exim</a>
+<li>4.20. <a href="glava04.htm#4.20">Остановка демона Exim на Solaris</a></ul>
+<li>5. <a href="glava05.htm">Командная строка Exim</a>
+<ul><li>5.1. <a href="glava05.htm#5.1">Установка опций именем программы</a>
+<li>5.2. <a href="glava05.htm#5.2">Доверенные и административные пользователи
+</a>
+<li>5.3. <a href="glava05.htm#5.3">Опции командной строки</a></ul>
+<li>6. <a href="glava06.htm">Конфигурационный файл exim во время выполнения</a>
+<ul><li>6.1. <a href="glava06.htm#6.1">
+Использование иного конфигурационного файла</a>
+<li>6.2. <a href="glava06.htm#6.2">Формат конфигурационного файла</a>
+<li>6.3. <a href="glava06.htm#6.3">Включения файлов в конфигурационый файл</a>
+<li>6.4. <a href="glava06.htm#6.4">Макросы в конфигурационном файле</a>
+<li>6.5. <a href="glava06.htm#6.5">Макроподстановка</a>
+<li>6.6. <a href="glava06.htm#6.6">Переопределение макроса</a>
+<li>6.7. <a href="glava06.htm#6.7">Отмена значения макроса</a>
+<li>6.8. <a href="glava06.htm#6.8">Пример использования макроса</a>
+<li>6.9. <a href="glava06.htm#6.9">Условные пропуски в конфигурационном файле
+</a>
+<li>6.10. <a href="glava06.htm#6.10">Общий синтаксис опции</a>
+<li>6.11. <a href="glava06.htm#6.11">Булевы опции</a>
+<li>6.12. <a href="glava06.htm#6.12">Целочисленные значения</a>
+<li>6.13. <a href="glava06.htm#6.13">Целочисленные восьмеричные значения</a>
+<li>6.14. <a href="glava06.htm#6.14">Числовые значения с фиксированной точкой</a>
+<li>6.15. <a href="glava06.htm#6.15">Значения временных интервалов</a>
+<li>6.16. <a href="glava06.htm#6.16">Строковые значения</a>
+<li>6.17. <a href="glava06.htm#6.17">Раскрытие строк</a>
+<li>6.18. <a href="glava06.htm#6.18">Имена пользователей и групп</a>
+<li>6.19. <a href="glava06.htm#6.19">Построение списков</a>
+<li>6.20. <a href="glava06.htm#6.20">Пустые элементы в списках</a>
+<li>6.21. <a href="glava06.htm#6.21">Формат конфигурации драйвера</a></ul>
+<li>7. <a href="glava07.htm">Конфигурационный файл по умолчанию</a>
+<ul><li>7.1. <a href="glava07.htm#7.1">Главные конфигурационные настройки</a>
+<li>7.2. <a href="glava07.htm#7.2">Конфигурация ACL</a>
+<li>7.3. <a href="glava07.htm#7.3">Конфигурация роутера (маршрутизатора)</a>
+<li>7.4. <a href="glava07.htm#7.4">Транспортная конфигурация</a>
+<li>7.5. <a href="glava07.htm#7.5">Правила повторов по умолчанию</a>
+<li>7.6. <a href="glava07.htm#7.6">Конфигурация перезаписи</a>
+<li>7.7. <a href="glava07.htm#7.7">Конфигурация аутентификаторов</a></ul>
+<li>8. <a href="glava08.htm">Регулярные выражения</a>
+<ul><li>8.1. <a href="glava08.htm#8.1">Tестирование регулярных выражений</a></ul>
+<li>9. <a href="glava09.htm">Поиски в файлах и базах данных</a>
+<ul><li>9.1. <a href="glava09.htm#9.1">Примеры различных синтаксисов поиска</a>
+<li>9.2. <a href="glava09.htm#9.2">Типы поиска</a>
+<li>9.3. <a href="glava09.htm#9.3">Одноключевые типы поиска</a>
+<li>9.4. <a href="glava09.htm#9.4">Типы поиска в стиле запроса</a>
+<li>9.5. <a href="glava09.htm#9.5">Временные ошибки в поисках</a>
+<li>9.6. <a href="glava09.htm#9.6">Значения по умолчанию в одноключевых поисках
+</a>
+<li>9.7. <a href="glava09.htm#9.7">Частичное совпадение в одноключевых поисках
+</a>
+<li>9.8. <a href="glava09.htm#9.8">Кэширование поиска</a>
+<li>9.9. <a href="glava09.htm#9.9">Цитирование (помещение в двойные
+кавычки) данных поиска</a>
+<li>9.10. <a href="glava09.htm#9.10">Дополнительные сведения о dnsdb</a>
+<li>9.11. <a href="glava09.htm#9.11">Псевдо-dnsdb типы записей</a>
+<li>9.12. <a href="glava09.htm#9.12">Множественные поиски dnsdb</a>
+<li>9.13. <a href="glava09.htm#9.13">Дополнительные сведения о LDAP</a>
+<li>9.14. <a href="glava09.htm#9.14">Формат запросов LDAP</a>
+<li>9.15. <a href="glava09.htm#9.15">Цитирование (использование двойных
+кавычек и спецсимволов) в LDAP</a>
+<li>9.16. <a href="glava09.htm#9.16">Соединения LDAP</a>
+<li>9.17. <a href="glava09.htm#9.17">
+Аутентификация LDAP и управляющая информация</a>
+<li>9.18. <a href="glava09.htm#9.18">Формат данных, возвращённых LDAP</a>
+<li>9.19. <a href="glava09.htm#9.19">Дополнительные сведения о NIS+</a>
+<li>9.20. <a href="glava09.htm#9.20">Поиски SQL</a>
+<li>9.21. <a href="glava09.htm#9.21">Дополнительные сведения о MySQL,
+PostgreSQL, Oracle и Interbase</a>
+<li>9.22. <a href="glava09.htm#9.22">Специальные возможности MySQL</a>
+<li>9.23. <a href="glava09.htm#9.23">Специальные возможности PostgreSQL</a>
+<li>9.24. <a href="glava09.htm#9.24">Дополнительные сведения о SQLite</a></ul>
+<li>10. <a href="glava10.htm">Списки доменов, узлов, адресов
+и локальных частей почтового адреса</a>
+<ul><li>10.1. <a href="glava10.htm#10.1">Раскрытие списков</a>
+<li>10.2. <a href="glava10.htm#10.2">Отрицаемые элементы в списках</a>
+<li>10.3. <a href="glava10.htm#10.3">Имена файлов в списках</a>
+<li>10.4. <a href="glava10.htm#10.4">Файл lsearch не нелинейный список</a>
+<li>10.5. <a href="glava10.htm#10.5">Именованные списки</a>
+<li>10.6. <a href="glava10.htm#10.6">Сравнение именованных списков с макросами
+</a>
+<li>10.7. <a href="glava10.htm#10.7">Кэширование именованных списков</a>
+<li>10.8. <a href="glava10.htm#10.8">Списки доменов</a>
+<li>10.9. <a href="glava10.htm#10.9">Списки хостов</a>
+<li>10.10. <a href="glava10.htm#10.10">Специальные шаблоны списка хостов</a>
+<li>10.11. <a href="glava10.htm#10.11">Шаблоны списка хостов,
+совпадающие с IP-адресом</a>
+<li>10.12. <a href="glava10.htm#10.12">Шаблоны списка хостов для
+одноключевого поиска по имени хоста</a>
+<li>10.13. <a href="glava10.htm#10.13">Шаблоны списка хостов,
+совпадающие по имени хоста</a>
+<li>10.14. <a href="glava10.htm#10.14">Поведение, когда IP-адрес
+не может быть найден</a>
+<li>10.15. <a href="glava10.htm#10.15">Список шаблонов хостов
+для одноключевого поиска по имени хоста</a>
+<li>10.16. <a href="glava10.htm#10.16">Список шаблонов хостов
+для поиска в стиле запросов</a>
+<li>10.17. <a href="glava10.htm#10.17">Смешивание безразличных имён
+хостов и адресов в списках хостов</a>
+<li>10.18. <a href="glava10.htm#10.18">Списки адресов</a>
+<li>10.19. <a href="glava10.htm#10.19">Регистр букв в списках адресов</a>
+<li>10.20. <a href="glava10.htm#10.20">Списки локальных частей</a></ul>
+<li>11. <a href="glava11.htm">Раскрытие строк</a>
+<ul><li>11.1. <a href="glava11.htm#11.1">Дословный текст в раскрываемых строках
+</a>
+<li>11.2. <a href="glava11.htm#11.2">
+Последовательности с обратным слэшем в расширенных строках</a>
+<li>11.3. <a href="glava11.htm#11.3">Тестирование раскрываемых строк</a>
+<li>11.4. <a href="glava11.htm#11.4">Принудительный отказ от раскрытия строки
+</a>
+<li>11.5. <a href="glava11.htm#11.5">Элементы раскрытия</a>
+<li>11.6. <a href="glava11.htm#11.6">Операторы раскрытия</a>
+<li>11.7. <a href="glava11.htm#11.7">Условия раскрытия</a>
+<li>11.8. <a href="glava11.htm#11.8">Комбинирование условий раскрытия</a>
+<li>11.9. <a href="glava11.htm#11.9">Переменные раскрытия</a></ul>
+<li>12. <a href="glava12.htm#12.1">Встроенный perl</a>
+<ul><li>12.1. <a href="glava12.htm#12.1">Настройка использования perl</a>
+<li>12.2. <a href="glava12.htm#12.2">Вызов подпрограмм perl</a>
+<li>12.3. <a href="glava12.htm#12.3">Вызов функций exim из perl</a>
+<li>12.4. <a href="glava12.htm#12.4">
+Использование стандартного вывода и ошибок perl</a></ul>
+<li>13. <a href="glava13.htm">
+Запуск демона и использование сетевых интерфейсов</a>
+<ul><li>13.1. <a href="glava13.htm#13.1">Запуск слушающего демона</a>
+<li>13.2. <a href="glava13.htm#13.2">Специальный IP слушающий адреса</a>
+<li>13.3. <a href="glava13.htm#13.3">Отмена local_interfaces и daemon_smtp_ports
+</a>
+<li>13.4. <a href="glava13.htm#13.4">Поддержка устаревшего протокола
+SSMTP (или SMTPS)</a>
+<li>13.5. <a href="glava13.htm#13.5">Области адресов IPv6</a>
+<li>13.6. <a href="glava13.htm#13.6">Отключение IPv6</a>
+<li>13.7. <a href="glava13.htm#13.7">Примеры запуска слушающего демона</a>
+<li>13.8. <a href="glava13.htm#13.8">Распознание локального хоста</a>
+<li>13.9. <a href="glava13.htm#13.9">Доставка к удалённому хосту</a></ul>
+<li>14. <a href="glava14.htm">Главная конфигурация</a>
+<ul><li>14.1. <a href="glava14.htm#14.1">Разное</a>
+<li>14.2. <a href="glava14.htm#14.2">Параметры exim</a>
+<li>14.3. <a href="glava14.htm#14.3">Настройки привелегий</a>
+<li>14.4. <a href="glava14.htm#14.4">Протоколирование</a>
+<li>14.5. <a href="glava14.htm#14.5">Замороженные сообщения</a>
+<li>14.6. <a href="glava14.htm#14.6">Поиск данных</a>
+<li>14.7. <a href="glava14.htm#14.7">Идентификаторы сообщений</a>
+<li>14.8. <a href="glava14.htm#14.8">Запуск встроенного perl</a>
+<li>14.9. <a href="glava14.htm#14.9">Демон</a>
+<li>14.10. <a href="glava14.htm#14.10">Контроль ресурсов</a>
+<li>14.11. <a href="glava14.htm#14.11">Управление политиками</a>
+<li>14.12. <a href="glava14.htm#14.12">Кэш обратных вызовов</a>
+<li>14.13. <a href="glava14.htm#14.13">TLS</a>
+<li>14.14. <a href="glava14.htm#14.14">Локальная обработка пользователей</a>
+<li>14.15. <a href="glava14.htm#14.15">Все входящие сообщения (SMTP и не-SMTP)
+</a>
+<li>14.16. <a href="glava14.htm#14.16">Входящие не-SMTP сообщения</a>
+<li>14.17. <a href="glava14.htm#14.17">Входящие SMTP сообщения</a>
+<li>14.18. <a href="glava14.htm#14.18">Расширения SMTP</a>
+<li>14.19. <a href="glava14.htm#14.19">Обработка сообщений</a>
+<li>14.20. <a href="glava14.htm#14.20">Системный фильтр</a>
+<li>14.21. <a href="glava14.htm#14.21">Маршрутизация и доставка</a>
+<li>14.22. <a href="glava14.htm#14.22">Рикошеты и предупрждающие сообщения</a>
+<li>14.23. <a href="glava14.htm#14.23">Алфавитный список главных опций</a></ul>
+<li>15. <a href="glava15.htm">Общие опции для роутеров</a>
+<li>16. <a href="glava16.htm">Роутер ACCEPT</a>
+<li>17. <a href="glava17.htm">Роутер dnslookup</a>
+<ul><li>17.1. <a href="glava17.htm#17.1">Проблемы с поиском в DNS</a>
+<li>17.2. <a href="glava17.htm#17.2">Частные опции для dnslookup</a>
+<li>17.3. <a href="glava17.htm#17.3">
+Эффект опций qualify_single и search_parents</a></ul>
+<li>18. <a href="glava18.htm">Роутер ipliteral</a>
+<li>19. <a href="glava19.htm">Роутер iplookup</a>
+<li>20. <a href="glava20.htm">Роутер manualroute</a>
+<ul><li>20.1. <a href="glava20.htm#20.1">Частные (private) опции manualroute</a>
+<li>20.2. <a href="glava20.htm#20.2">Правила маршрутизации в опции route_list
+</a>
+<li>20.3. <a href="glava20.htm#20.3">Правила маршрутизации в опции route_data
+</a>
+<li>20.4. <a href="glava20.htm#20.4">Формат списка узлов</a>
+<li>20.5. <a href="glava20.htm#20.5">Формат одного элемента хоста</a>
+<li>20.6. <a href="glava20.htm#20.6">Как используется список узлов</a>
+<li>20.7. <a href="glava20.htm#20.7">Как используются опции</a>
+<li>20.8. <a href="glava20.htm#20.8">Примеры manualroute</a></ul>
+<li>21. <a href="glava21.htm">Роутер queryprogram</a>
+<li>22. <a href="glava22.htm">Роутер redirect</a>
+<ul><li>22.1. <a href="glava22.htm#22.1">Данные для перенаправления</a>
+<li>22.2. <a href="glava22.htm#22.2">Файлы пересылки (forward
+files) и проверка адреса</a>
+<li>22.3. <a href="glava22.htm#22.3">Обработка данных перенаправления</a>
+<li>22.4. <a href="glava22.htm#22.4">Элементы списка перенаправления</a>
+<li>22.5. <a href="glava22.htm#22.5">Перенаправление в локальный почтовый ящик
+</a>
+<li>22.6. <a href="glava22.htm#22.6">
+Специальные конструкции в списках перенаправления</a>
+<li>22.7. <a href="glava22.htm#22.7">Дублирование адресов</a>
+<li>22.8. <a href="glava22.htm#22.8">
+Повторяющееся преобразование перенаправления</a>
+<li>22.9. <a href="glava22.htm#22.9">Ошибки в списках перенаправления</a>
+<li>22.10. <a href="glava22.htm#22.10">Частные опции роутера redirect</a></ul>
+<li>23. <a href="glava23.htm">Среда для работы локальных транспортов</a>
+<ul><li>23.1. <a href="glava23.htm#23.1">Одновременные доставки</a>
+<li>23.2. <a href="glava23.htm#23.2">Uid и gid</a>
+<li>23.3. <a href="glava23.htm#23.3">Текущий и домашний каталоги</a>
+<li>23.4. <a href="glava23.htm#23.4">
+Переменные раскрытия произведённые из адреса</a></ul>
+<li>24. <a href="glava24.htm">Общие опции для транспортов</a>
+<li>25. <a href="glava25.htm">Группировка адресов в локальных транспортах</a>
+<li>26. <a href="glava26.htm">Транспорт appendfile</a>
+<ul><li>26.1. <a href="glava26.htm#26.1">Опции file и directory</a>
+<li>26.2. <a href="glava26.htm#26.2">Частные опции для appendfile</a>
+<li>26.3. <a href="glava26.htm#26.3">Операционные детали для добавления</a>
+<li>26.4. <a href="glava26.htm#26.4">Операционные детали для
+доставки в новый файл</a>
+<li>26.5. <a href="glava26.htm#26.5">Доставка maildir</a>
+<li>26.6. <a href="glava26.htm#26.6">Использование тэгов для
+записи размера сообщений</a>
+<li>26.7. <a href="glava26.htm#26.7">Использование файла maildirsize</a>
+<li>26.8. <a href="glava26.htm#26.8">Доставка mailstore</a>
+<li>26.9. <a href="glava26.htm#26.9">Неспециальная доставка в новый файл</a></ul>
+<li>27. <a href="glava27.htm">Транспорт autoreply</a>
+<ul><li>27.1. <a href="glava27.htm#27.1">Частные опции для autoreply</a></ul>
+<li>28. <a href="glava28.htm">Транспорт lmtp</a>
+<li>29. <a href="glava29.htm">Транспорт pipe</a>
+<ul><li>29.1. <a href="glava29.htm#29.1">Конкурирующие доставки</a>
+<li>29.2. <a href="glava29.htm#29.2">Возвращаемый статус и данные</a>
+<li>29.3. <a href="glava29.htm#29.3">Как выполняется команда</a>
+<li>29.4. <a href="glava29.htm#29.4">Переменные окружения</a>
+<li>29.5. <a href="glava29.htm#29.5">Частные опции для pipe</a>
+<li>29.6. <a href="glava29.htm#29.6">Использование внешнего (стороннего)
+агента локальной доставки</a></ul>
+<li>30. <a href="glava30.htm">Транспорт SMTP</a>
+<ul><li>30.1. <a href="glava30.htm#30.1">Несколько сообщений в одном соединении
+</a>
+<li>30.2. <a href="glava30.htm#30.2">Использование переменной $host</a>
+<li>30.3. <a href="glava30.htm#30.1">Частные опции для smtp</a>
+<li>30.4. <a href="glava30.htm#30.4">Как ограничить число хостов,
+используемых для проверки</a></ul>
+<li>31. <a href="glava31.htm">Перезапись адресов</a>
+<ul><li>31.1. <a href="glava31.htm#31.1">
+Явно сконфигурированная перезапись адресов</a>
+<li>31.2. <a href="glava31.htm#31.2">Когда происходит перезапись?</a>
+<li>31.3. <a href="glava31.htm#31.3">Тестирование правил перезаписи,
+применяемых на входе</a>
+<li>31.4. <a href="glava31.htm#31.4">Правила перезаписи</a>
+<li>31.5. <a href="glava31.htm#31.5">Шаблоны перезаписи</a>
+<li>31.6. <a href="glava31.htm#31.6">Перезапись замен</a>
+<li>31.7. <a href="glava31.htm#31.7">Флаги перезаписи</a>
+<li>31.8. <a href="glava31.htm#31.8">Флаги, определяющие какие
+заголовки и адрес конверта перезаписывать</a>
+<li>31.9. <a href="glava31.htm#31.9">Флаг перезаписи во время SMTP</a>
+<li>31.10. <a href="glava31.htm#31.10">Флаги контролирующие процесс перезаписи
+</a>
+<li>31.11. <a href="glava31.htm#31.11">Примеры перезаписи</a></ul>
+<li>32. <a href="glava32.htm">Конфигурация повторов</a>
+<ul><li>32.1. <a href="glava32.htm#32.1">Правила повторов</a>
+<li>32.2. <a href="glava32.htm#32.2">Выбор, какие правила используются
+для ошибок адреса</a>
+<li>32.3. <a href="glava32.htm#32.3">Выбор, какое правило используется
+для хоста и сообщения об ошибке</a>
+<li>32.4. <a href="glava32.htm#32.4">Правила повтора для специфических ошибок
+</a>
+<li>32.5. <a href="glava32.htm#32.5">
+Правила повторов для специфических отправителей</a>
+<li>32.6. <a href="glava32.htm#32.6">Параметры повтора</a>
+<li>32.7. <a href="glava32.htm#32.7">Примеры правил повтора</a>
+<li>32.8. <a href="glava32.htm#32.8">Таймаут для данных повторов</a>
+<li>32.9. <a href="glava32.htm#32.9">Долгосрочные ошибки</a>
+<li>32.10. <a href="glava32.htm#32.10">Доставки работающие с перерывами</a></ul>
+<li>33. <a href="glava33.htm">SMTP-аутентификация</a>
+<ul><li>33.1. <a href="glava33.htm#33.1">Общие опции для аутентификаторов</a>
+<li>33.2. <a href="glava33.htm#33.2">Параметр AUTH в команде MAIL</a>
+<li>33.3. <a href="glava33.htm#33.3">Аутентификация на сервере exim</a>
+<li>33.4. <a href="glava33.htm#33.4">Проверка серверной аутентификации</a>
+<li>33.5. <a href="glava33.htm#33.5">Аутентификация exim как клиента</a></ul>
+<li>34. <a href="glava34.htm">Аутентификатор plaintext</a>
+<ul><li>34.1. <a href="glava34.htm#34.1">Использование plaintext в сервере</a>
+<li>34.2. <a href="glava34.htm#34.2">Аутентификационный механизм PLAIN</a>
+<li>34.3. <a href="glava34.htm#34.3">Аутентификационный механизм LOGIN</a>
+<li>34.4. <a href="glava34.htm#34.4">Поддержка для иных видов аутентификации
+</a>
+<li>34.5. <a href="glava34.htm#34.5">Использование plaintext как клиента</a>
+</ul>
+<li>35. <a href="glava35.htm">Аутентификатор cram_md5</a>
+<ul><li>35.1. <a href="glava35.htm#35.1">Использование cram_md5 как сервера</a>
+<li>35.2. <a href="glava35.htm#35.2">Использование cram_md5 как клиента</a></ul>
+<li>36. <a href="glava36.htm">Аутентификатор cyrus_sasl</a>
+<ul><li>36.1. <a href="glava36.htm#36.1">
+Использование cyrus_sasl в качестве сервера</a></ul>
+<li>37. <a href="glava37.htm">Аутентификатор spa</a>
+<ul><li>37.1. <a href="glava37.htm#37.1">Использование spa как сервера</a>
+<li>37.2. <a href="glava37.htm#37.2">Использование spa как клиента</a>
+<li>37.3. <a href="glava37.htm#37.3">Аутентификатор Dovecot</a></ul>
+<li>38. <a href="glava38.htm">Шифрование соединений с использованием TLS/SSL</a>
+<ul><li>38.1. <a href="glava38.htm#38.1">Поддержка для наследственного
+ssmtp (или smtps) протокола</a>
+<li>38.2. <a href="glava38.htm#38.2">OpenSSL против GnuTLS</a>
+<li>38.3. <a href="glava38.htm#38.3">Вычисление параметра GnuTLS</a>
+<li>38.4. <a href="glava38.htm#38.4">Требование специфических шифров в OpenSSL
+</a>
+<li>38.5. <a href="glava38.htm#38.5">Специфические шифры, требующиеся в GnuTLS
+</a>
+<li>38.6. <a href="glava38.htm#38.6">Конфигурирование сервера exim
+для использования TLS</a>
+<li>38.7. <a href="glava38.htm#38.7">Запрос и проверка клиентских сертификатов
+</a>
+<li>38.8. <a href="glava38.htm#38.8">Отменённые сертификаты</a>
+<li>38.9. <a href="glava38.htm#38.9">Конфигурирование клиента exim
+для использования TLS</a>
+<li>38.10. <a href="glava38.htm#38.10">Несколько сообщений через
+одно шифрованное TCP/IP-соединение</a>
+<li>38.11. <a href="glava38.htm#38.11">Сертификаты и всё такое</a>
+<li>38.12. <a href="glava38.htm#38.12">Цепочки сертификатов</a>
+<li>38.13. <a href="glava38.htm#38.13">Самоподписанный сертификат</a></ul>
+<li>39. <a href="glava39.htm#39.1">Списки контроля доступа</a>
+<ul><li>39.1. <a href="glava39.htm#39.1">Тестирование ACL</a>
+<li>39.2. <a href="glava39.htm#39.2">Определение, когда используются ACL</a>
+<li>39.3. <a href="glava39.htm#39.3">Не-SMTP ACL</a>
+<li>39.4. <a href="glava39.htm#39.4">ACL подключения</a>
+<li>39.5. <a href="glava39.htm#39.5">ACL DATA</a>
+<li>39.6. <a href="glava39.htm#39.6">ACL MIME</a>
+<li>39.7. <a href="glava39.htm#39.7">ACL QUIT</a>
+<li>39.8. <a href="glava39.htm#39.8">Нахождение ACL для использования</a>
+<li>39.9. <a href="glava39.htm#39.9">Коды возврата ACL</a>
+<li>39.10. <a href="glava39.htm#39.10">Незаданные опции ACL</a>
+<li>39.11. <a href="glava39.htm#39.11">Данные для ACL сообщений</a>
+<li>39.12. <a href="glava39.htm#39.12">Данные для ACL не-сообщений</a>
+<li>39.13. <a href="glava39.htm#39.13">Формат ACL</a>
+<li>39.14. <a href="glava39.htm#39.14">Команды ACL</a>
+<li>39.15. <a href="glava39.htm#39.15">Переменные ACL</a>
+<li>39.16. <a href="glava39.htm#39.16">Обработка условий и модификаторов</a>
+<li>39.17. <a href="glava39.htm#39.17">Модификаторы ACL</a>
+<li>39.18. <a href="glava39.htm#39.18">Использование модификатора control</a>
+<li>39.19. <a href="glava39.htm#39.19">Добавление строк заголовков в ACL</a>
+<li>39.20. <a href="glava39.htm#39.20">Условия ACL</a>
+<li>39.21. <a href="glava39.htm#39.21">Использование списков DNS</a>
+<li>39.22. <a href="glava39.htm#39.22">Задание IP-адреса для
+поиска в списках DNS</a>
+<li>39.23. <a href="glava39.htm#39.23">DNS-списки, основанные
+на именах доменов</a>
+<li>39.24. <a href="glava39.htm#39.24">Поиски в DNS, основанные
+на нескольких ключах</a>
+<li>39.25. <a href="glava39.htm#39.25">Данные, возвращаемые списками DNS</a>
+<li>39.26. <a href="glava39.htm#39.26">
+Переменные, устанавливаемые из списков DNS</a>
+<li>39.27. <a href="glava39.htm#39.27">Дополнительные совпадения условий
+для списков DNS</a>
+<li>39.28. <a href="glava39.htm#39.28">Отрицательные условия сравнения DNS</a>
+<li>39.29. <a href="glava39.htm#39.29">Списки DNS и IPv6</a>
+<li>39.30. <a href="glava39.htm#39.30">Ограничение нормы отправителей</a>
+<li>39.31. <a href="glava39.htm#39.31">Проверка адресов</a>
+<li>39.32. <a href="glava39.htm#39.32">Проверка обратным вызовом</a>
+<li>39.33. <a href="glava39.htm#39.33">
+Дополнительные параметры для обратных вызовов</a>
+<li>39.34. <a href="glava39.htm#39.34">Кэширование обратных вызовов</a>
+<li>39.35. <a href="glava39.htm#39.35">Отчёты проверки адресов отправителя</a>
+<li>39.36. <a href="glava39.htm#39.36">Перенаправление при проверке</a>
+<li>39.37. <a href="glava39.htm#39.37">Клиентская SMTP-авторизация (CSA)</a>
+<li>39.38. <a href="glava39.htm#39.38">Проверка тега адреса рикошета</a>
+<li>39.39. <a href="glava39.htm#39.39">Использование ACL для
+управления релеингом</a>
+<li>39.40. <a href="glava39.htm#39.40">Проверка конфигурации релея</a></ul>
+<li>40. <a href="glava40.htm">Контентное сканирование во время ACL</a>
+<ul><li>40.1. <a href="glava40.htm#40.1">Сканирование на вирусы</a>
+<li>40.2. <a href="glava40.htm#40.2">Сканирование с SpamAssassin</a>
+<li>40.3. <a href="glava40.htm#40.3">Вызов SpamAssassin из ACL exim</a>
+<li>40.4. <a href="glava40.htm#40.4">Сканирование частей MIME</a>
+<li>40.5. <a href="glava40.htm#40.5">Сканирование с регулярными выражениями</a>
+<li>40.6. <a href="glava40.htm#40.6">Условие demime</a></ul>
+<li>41. <a href="glava41.htm">Добавляем функцию local scan в Exim</a>
+<ul><li>41.1. <a href="glava41.htm#41.1">Сборка Exim с использованием
+функции local scan</a>
+<li>41.2. <a href="glava41.htm#41.2">API для local_scan()</a>
+<li>41.3. <a href="glava41.htm#41.3">Опции конфигурации для local_scan()</a>
+<li>41.4. <a href="glava41.htm#41.4">Доступные переменные Exim</a>
+<li>41.5. <a href="glava41.htm#41.5">Структура header_line</a>
+<li>41.6. <a href="glava41.htm#41.6">Структура recipient_item</a>
+<li>41.7. <a href="glava41.htm#41.7">Доступные функции Exim</a>
+<li>41.8. <a href="glava41.htm#41.8">Больше об обработке памяти Exim</a></ul>
+<li>42. <a href="glava42.htm">Системная фильтрация сообщений</a>
+<ul><li>42.1. <a href="glava42.htm#42.1">Установка системного фильтра</a>
+<li>42.2. <a href="glava42.htm#42.2">Тестирование системного фильтра</a>
+<li>42.3. <a href="glava42.htm#42.3">Содержимое системного фильтра</a>
+<li>42.4. <a href="glava42.htm#42.4">
+Дополнительные переменные для системных фильтров</a>
+<li>42.5. <a href="glava42.htm#42.5">Defer, freeze и fail:
+команды системного фильтра</a>
+<li>42.6. <a href="glava42.htm#42.6">
+Добавление и удаление заголовков в системном фильтре</a>
+<li>42.7. <a href="glava42.htm#42.7">Установка адреса ошибок в системном фильтре
+</a>
+<li>42.8. <a href="glava42.htm#42.8">Фильтрация по адресам</a></ul>
+<li>43. <a href="glava43.htm">Обработка сообщения</a>
+<ul><li>43.1. <a href="glava43.htm#43.1">
+Режим передачи для нелокальных сообщений</a>
+<li>43.2. <a href="glava43.htm#43.2">Завершения строк</a>
+<li>43.3. <a href="glava43.htm#43.3">Неквалифицированные адреса</a>
+<li>43.4. <a href="glava43.htm#43.4">Строка "From" UUCP</a>
+<li>43.5. <a href="glava43.htm#43.5">Строки заголовков Resent</a>
+<li>43.6. <a href="glava43.htm#43.6">Строка заголовка Auto-Submitted:</a>
+<li>43.7. <a href="glava43.htm#43.7">Строка заголовка Bcc:</a>
+<li>43.8. <a href="glava43.htm#43.8">Строка заголовка Date:</a>
+<li>43.9. <a href="glava43.htm#43.9">Строка заголовка Delivery-date:</a>
+<li>43.10. <a href="glava43.htm#43.10">Строка заголовка Envelope-to:</a>
+<li>43.11. <a href="glava43.htm#43.11">Строка заголовка From:</a>
+<li>43.12. <a href="glava43.htm#43.12">Строка заголовка Message-ID:</a>
+<li>43.13. <a href="glava43.htm#43.13">Строка заголовка Received:</a>
+<li>43.14. <a href="glava43.htm#43.14">Строка заголовка References:</a>
+<li>43.15. <a href="glava43.htm#43.15">Строка заголовка Return-path:</a>
+<li>43.16. <a href="glava43.htm#43.16">Строка заголовка Sender:</a>
+<li>43.17. <a href="glava43.htm#43.17">
+Добавление и удаление заголовков в роутерах и транспортах</a>
+<li>43.18. <a href="glava43.htm#43.18">Конструирование адресов</a>
+<li>43.19. <a href="glava43.htm#43.19">Регистры локальных частей</a>
+<li>43.20. <a href="glava43.htm#43.20">Точки в локальных частях</a>
+<li>43.21. <a href="glava43.htm#43.21">Перезапись адресов</a></ul>
+<li>44. <a href="glava44.htm">Обработка SMTP</a>
+<ul><li>44.1. <a href="glava44.htm#44.1">Исходящий SMTP и LMTP через TCP/IP</a>
+<li>44.2. <a href="glava44.htm#44.2">Ошибки в исходящем SMTP</a>
+<li>44.3. <a href="glava44.htm#44.3">Входящие SMTP сообщения через TCP/IP</a>
+<li>44.4. <a href="glava44.htm#44.4">Нераспознанные SMTP-команды</a>
+<li>44.5. <a href="glava44.htm#44.5">
+Синтаксис и ошибки протокола в командах SMTP</a>
+<li>44.6. <a href="glava44.htm#44.6">Использование непочтовых SMTP команд</a>
+<li>44.7. <a href="glava44.htm#44.7">Команды VRFY и EXPN</a>
+<li>44.8. <a href="glava44.htm#44.8">Команда ETRN</a>
+<li>44.9. <a href="glava44.htm#44.9">Входящий локальный SMTP</a>
+<li>44.10. <a href="glava44.htm#44.10">Исходящий пакетный SMTP</a>
+<li>44.11. <a href="glava44.htm#44.11">Входящий пакетный SMTP</a></ul>
+<li>45. <a href="glava45.htm">Настройка рикошетов и предупреждающих сообщений
+</a>
+<ul><li>45.1. <a href="glava45.htm#45.1">Настройка рикошетов</a>
+<li>45.2. <a href="glava45.htm#45.2">Настройка предупреждающих сообщений</a></ul>
+<li>46. <a href="glava46.htm">Некоторые общие конфигурационые опции</a>
+<ul><li>46.1. <a href="glava46.htm#46.1">Отсылка почты на умный хост</a>
+<li>46.2. <a href="glava46.htm#46.2">Использование exim для
+обработки списков рассылки</a>
+<li>46.3. <a href="glava46.htm#46.3">Синтаксические ошибки в списках рассылки
+</a>
+<li>46.4. <a href="glava46.htm#46.4">Повторное раскрытие списков рассылки</a>
+<li>46.5. <a href="glava46.htm#46.5">Закрытые списки рассылки</a>
+<li>46.6. <a href="glava46.htm#46.6">Переменные пути возврата конверта (VERP)
+</a>
+<li>46.7. <a href="glava46.htm#46.7">Виртуальные домены</a>
+<li>46.8. <a href="glava46.htm#46.8">
+Многочисленные пользовательские почтовые ящики</a>
+<li>46.9. <a href="glava46.htm#46.9">Упрощённая обработка отпуска (vacation)</a>
+<li>46.10. <a href="glava46.htm#46.10">Отбор копий сообщений</a>
+<li>46.11. <a href="glava46.htm#46.11">Периодически подключенные хосты</a>
+<li>46.12. <a href="glava46.htm#46.12">Exim на вышестоящих серверных хостах</a>
+<li>46.13. <a href="glava46.htm#46.13">Exim на периодически
+подключаемом клиентском хосте</a></ul>
+<li>47. <a href="glava47.htm">Использование exim как клиента
+без очереди сообщений</a>
+<li>48. <a href="glava48.htm">Файлы протоколов</a>
+<ul><li>48.1. <a href="glava48.htm#48.1">Где пишутся протоколы</a>
+<li>48.2. <a href="glava48.htm#48.2">Протоколирование в локальные файлы,
+которые периодически ротируются</a>
+<li>48.3. <a href="glava48.htm#48.3">Штамп даты на файлах протоколов</a>
+<li>48.4. <a href="glava48.htm#48.4">Протоколирование в syslog</a>
+<li>48.5. <a href="glava48.htm#48.5">Флаги строк протоколов</a>
+<li>48.6. <a href="glava48.htm#48.6">Протоколирование приёма сообщений</a>
+<li>48.7. <a href="glava48.htm#48.7">Протоколирование доставок</a>
+<li>48.8. <a href="glava48.htm#48.8">Доставки, от которых отказались</a>
+<li>48.9. <a href="glava48.htm#48.9">Отсроченные доставки</a>
+<li>48.10. <a href="glava48.htm#48.10">Ошибки доставки</a>
+<li>48.11. <a href="glava48.htm#48.11">Поддельные доставки</a>
+<li>48.12. <a href="glava48.htm#48.12">Завершение</a>
+<li>48.13. <a href="glava48.htm#48.13">
+Краткое изложение полей в строках протоколов</a>
+<li>48.14. <a href="glava48.htm#48.14">Другие записи протоколов</a>
+<li>48.15. <a href="glava48.htm#48.15">Сокращение или увеличение
+того, что протоколируется</a>
+<li>48.16. <a href="glava48.htm#48.16">Протокол сообщения</a></ul>
+<li>49. <a href="glava49.htm">Утилиты exim</a>
+<ul><li>49.1. <a href="glava49.htm#49.1">Поиск, что делают
+процессы exim (exiwhat)</a>
+<li>49.2. <a href="glava49.htm#49.2">Селективный просмотр очереди (exiqgrep)</a>
+<li>49.3. <a href="glava49.htm#49.3">Подведение итогов очереди (exiqsumm)</a>
+<li>49.4. <a href="glava49.htm#49.4">Извлечение специфической информации
+из протокола (exigrep)</a>
+<li>49.5. <a href="glava49.htm#49.5">Отбор сообщений по
+различным критериям (exipick)</a>
+<li>49.6. <a href="glava49.htm#49.6">Ротация файлов протоколов (exicyclog)</a>
+<li>49.7. <a href="glava49.htm#49.7">Почтовая статистика (eximstats)</a>
+<li>49.8. <a href="glava49.htm#49.8">
+Проверка политики доступа (exim_checkaccess)</a>
+<li>49.9. <a href="glava49.htm#49.9">Создание файлов DBM (exim_dbmbuild)</a>
+<li>49.10. <a href="glava49.htm#49.10">
+Нахождение индивидуальных времён повторов (exinext)</a>
+<li>49.11. <a href="glava49.htm#49.11">Обслуживание БД подсказок</a>
+<li>49.12. <a href="glava49.htm#49.12">exim_dumpdb</a>
+<li>49.13. <a href="glava49.htm#49.13">exim_tidydb</a>
+<li>49.14. <a href="glava49.htm#49.14">exim_fixdb</a>
+<li>49.15. <a href="glava49.htm#49.15">Обслуживание почтового ящика (exim_lock)
+</a></ul>
+<li>50. <a href="glava50.htm">Монитор exim</a>
+<ul><li>50.1. <a href="glava50.htm#50.1">Запуск монитора</a>
+<li>50.2. <a href="glava50.htm#50.2">Графики</a>
+<li>50.3. <a href="glava50.htm#50.3">Кнопки главного действия</a>
+<li>50.4. <a href="glava50.htm#50.4">Показ протоколов</a>
+<li>50.5. <a href="glava50.htm#50.5">Отображение очереди</a>
+<li>50.6. <a href="glava50.htm#50.6">Меню очереди</a></ul>
+<li>51. <a href="glava51.htm">Обсуждение безопасности</a>
+<ul><li>51.1. <a href="glava51.htm#51.1">Сборка более защищённого exim</a>
+<li>51.2. <a href="glava51.htm#51.2">root-привилегии</a>
+<li>51.3. <a href="glava51.htm#51.3">Работа exim без привилегий</a>
+<li>51.4. <a href="glava51.htm#51.4">Доставка в локальные файлы</a>
+<li>51.5. <a href="glava51.htm#51.5">Источник роутинга IPv4</a>
+<li>51.6. <a href="glava51.htm#51.6">Команды VRFY, EXPN, и ETRN в SMTP</a>
+<li>51.7. <a href="glava51.htm#51.7">Привелигированные пользователи</a>
+<li>51.8. <a href="glava51.htm#51.8">Файлы спула</a>
+<li>51.9. <a href="glava51.htm#51.9">Использование argv[0]</a>
+<li>51.10. <a href="glava51.htm#51.10">Использование форматирования %f</a>
+<li>51.11. <a href="glava51.htm#51.11">Встроенные пути exim</a>
+<li>51.12. <a href="glava51.htm#51.12">Использование sprintf()</a>
+<li>51.13. <a href="glava51.htm#51.13">
+Использование debug_printf() и log_write()</a>
+<li>51.14. <a href="glava51.htm#51.14">
+Использование debug_printf() и log_write()</a></ul>
+<li>52. <a href="glava52.htm">Формат файлов спула</a>
+<ul><li>52.1. <a href="glava52.htm#51.1">Формат файла -H</a></ul>
+<li>53. <a href="glava53.htm">Добавление новых драйверов или типов поисков
+</a>
+<li>54. <a href="glava54.htm#0">Интерфейс Exim для фильтрации почты</a>
+<ul><li>54.1. <a href="glava54.htm#1">Форвардинг и фильтрация в exim</a>
+<ul><li>54.1.1. <a href="glava54.htm#1.1">Введение</a>
+<li>54.1.2. <a href="glava54.htm#1.2">Работа фильтра</a>
+<li>54.1.3. <a href="glava54.htm#1.3">Тестирование нового файла фильтра</a>
+<li>54.1.4. <a href="glava54.htm#1.4">Инсталляция файла фильтра</a>
+<li>54.1.5. <a href="glava54.htm#1.5">
+Тестирование проинсталлированного файла фильтра</a>
+<li>54.1.6. <a href="glava54.htm#1.6">Детали фильтрующих команд</a></ul>
+<li>54.2. <a href="glava54.htm#2">Файлы фильтра sieve</a>
+<ul><li>54.2.1. <a href="glava54.htm#2.1">Распознание фильтров sieve</a>
+<li>54.2.2. <a href="glava54.htm#2.1">Сохранение в заданные каталоги</a>
+<li>54.2.3. <a href="glava54.htm#2.3">Строки содержащие имена заголовков</a>
+<li>54.2.4. <a href="glava54.htm#2.4">Тест exists с пустыми списками заголовков
+</a>
+<li>54.2.5. <a href="glava54.htm#2.5">Тесты заголовков с неверной
+кодировкой MIME в заголовке</a>
+<li>54.2.6. <a href="glava54.htm#2.6">Тестирование адреса для нескольких
+адресов на заголовок</a>
+<li>54.2.7. <a href="glava54.htm#2.7">Семантика keep</a>
+<li>54.2.8. <a href="glava54.htm#2.8">Семантика fileinto</a>
+<li>54.2.9. <a href="glava54.htm#2.9">Семантика redirect</a>
+<li>54.2.10. <a href="glava54.htm#2.10">Строковые аргументы</a>
+<li>54.2.11. <a href="glava54.htm#2.11">Множественные единицы</a>
+<li>54.2.12. <a href="glava54.htm#2.12">Соответствие RFC</a></ul>
+<li>54.3. <a href="glava54.htm#3">Файлы фильтра exim</a>
+<ul><li>54.3.1. <a href="glava54.htm#3.1">Формат файлов фильтра exim</a>
+<li>54.3.2. <a href="glava54.htm#3.2">Значения данных в командах фильтра</a>
+<li>54.3.3. <a href="glava54.htm#3.3">Раскрытие строки</a>
+<li>54.3.4. <a href="glava54.htm#3.4">Некоторые полезные общие переменные</a>
+<li>54.3.5. <a href="glava54.htm#3.5">Переменные заголовков</a>
+<li>54.3.6. <a href="glava54.htm#3.6">Пользовательские перемeнные</a>
+<li>54.3.7. <a href="glava54.htm#3.7">Текущий каталог</a>
+<li>54.3.8. <a href="glava54.htm#3.8">Важные доставки</a>
+<li>54.3.9. <a href="glava54.htm#3.9">Команды фильтра</a>
+<li>54.3.10. <a href="glava54.htm#3.10">Команда add</a>
+<li>54.3.11. <a href="glava54.htm#3.11">Команда deliver</a>
+<li>54.3.12. <a href="glava54.htm#3.12">Команда save</a>
+<li>54.3.13. <a href="glava54.htm#3.13">Команда pipe</a>
+<li>54.3.14. <a href="glava54.htm#3.14">Почтовые команды</a>
+<li>54.3.15. <a href="glava54.htm#3.15">Команды протоколирования</a>
+<li>54.3.16. <a href="glava54.htm#3.16">Команда finish</a>
+<li>54.3.17. <a href="glava54.htm#3.17">Команда testprint</a>
+<li>54.3.18. <a href="glava54.htm#3.18">Команда fail</a>
+<li>54.3.19. <a href="glava54.htm#3.19">Команда freeze</a>
+<li>54.3.20. <a href="glava54.htm#3.20">Команда headers</a>
+<li>54.3.21. <a href="glava54.htm#3.21">Удовлетворение условий команд</a>
+<li>54.3.22. <a href="glava54.htm#3.22">Условия тестирования строк</a>
+<li>54.3.23. <a href="glava54.htm#3.23">Тестирование числовых условий</a>
+<li>54.3.24. <a href="glava54.htm#3.24">Тестирование важных доставок</a>
+<li>54.3.25. <a href="glava54.htm#3.25">Тестирование на сообщения о ошибке</a>
+<li>54.3.26. <a href="glava54.htm#3.26">Тестирование списка адресов</a>
+<li>54.3.27. <a href="glava54.htm#3.27">Тестирование на персональность почты</a>
+<li>54.3.28. <a href="glava54.htm#3.28">Адреса алиасов для персональных условий
+</a>
+<li>54.3.29. <a href="glava54.htm#3.29">Детали персональных условий</a>
+<li>54.3.30. <a href="glava54.htm#3.30">Тестирование статуса доставки</a>
+<li>54.3.31. <a href="glava54.htm#3.31">Пользовательские мультипочтовые ящики
+</a>
+<li>54.3.32. <a href="glava54.htm#3.32">Игнорирование ошибок доставки</a>
+<li>54.3.33. <a href="glava54.htm#3.33">Примеры команд фильтра exim</a>
+</ul></ul></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,4688 @@
+<HTML>
+<HEAD>
+<TITLE>Краткий справочник по Transact SQL (T-SQL)  [SQL.RU]</TITLE>
+<META http-equiv="Content-Type" CONTENT="text/html; charset=windows-1251">
+<META HTTP-EQUIV="Window-target" CONTENT="_top">
+<META HTTP-EQUIV="Last-Modified" CONTENT="23-08-2000">
+<META NAME="Description" CONTENT="Использование языка SQL, создание клиент-серверных систем. Конференция по MSSQL, Oracle, Interbase, MySQL. Полезные ссылки, документация, рекомендации по разработке информационных систем, сертификация, заказ книг и многое другое.">
+<META NAME="Keywords" CONTENT="SQL, конференция, Database Server, Oracle, Interbase, MySQL, документация, статьи, примеры, книги, ссылки, сертификация, работа, СУБД">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../../../form.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" leftmargin="3" topmargin="3" marginheight="3" marginwidth="3">
+<noindex>
+<TABLE BGCOLOR="#000000" WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="#6699CC"><TD><TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100% BORDER=0 BGCOLOR="#6699CC">
+<TR><TD COLSPAN=3><IMG SRC="../../../images/blank.gif" height=3 width=1 alt=""></TD></TR>
+<TR><TD VALIGN=TOP>&nbsp;<FONT FACE="Verdana,Arial" SIZE=5 COLOR=lightyellow>SQL.RU<BR><FONT SIZE=-5>&nbsp;client/server technologies</FONT></FONT></TD>
+<TD WIDTH=468 HEIGHT=60 BGCOLOR=#6699CC ALIGN=RIGHT></TD>
+<TD WIDTH=2><IMG SRC="../../../images/blank.gif" height=1 width=2 alt=""></TD></TR>                                                      	
+<TR HEIGHT=4><TD COLSPAN=3><IMG SRC="../../../images/blank.gif" height=5 width=1 alt=""></TD></TR></TABLE>
+
+</TD></TR>
+
+<TR HEIGHT=15><TD bgcolor=#006699><FONT FACE="Verdana,Arial" SIZE=1 COLOR=WHITE><B><A CLASS="menu" 
+HREF="../../../default.htm">&nbsp;<FONT COLOR=white>Главная</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../docs">&nbsp;<FONT COLOR=yellow>Документация</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../articles">&nbsp;<FONT COLOR=white>Статьи</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../books">&nbsp;<FONT COLOR=white>Книги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../forum/actualforum.aspx">&nbsp;<FONT COLOR=white>Форум</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../blogs">&nbsp;<FONT COLOR=white>Блоги</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../poll">&nbsp;<FONT COLOR=white>Опросы</FONT>&nbsp;</A>|<A CLASS="menu" 
+HREF="../../../forum/actualtopics.aspx@bid=11">&nbsp;<FONT COLOR=white>Гостевая</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../subscribe">&nbsp;<FONT COLOR=white>Рассылка</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../job">&nbsp;<FONT COLOR=white>Работа</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../search">&nbsp;<FONT COLOR=white>Поиск</FONT>&nbsp;</A>|<A CLASS="menu"
+HREF="../../../faq">&nbsp;<FONT COLOR=white>FAQ</FONT>&nbsp;</A>|</B></FONT></TD></TR>
+<TR><TD BGCOLOR=#F5F5F5>
+</noindex>
+
+<TABLE BORDER=0 CELLSPACING=10><TR><TD>
+<CENTER>
+<H2 class="headline">
+Краткий справочник по Transact SQL</H2></CENTER>
+<SPAN ALIGN=RIGHT CLASS="txtsmall"><FONT COLOR=blue>Автор:  <A href="mailto:ifrol2001@mail.ru">Иван Фролков</A>.</FONT></SPAN>
+
+<H2>
+<TT>ALTER DATABASE</TT></H2>
+
+<PRE>ALTER DATABASE <I>database_name
+</I>[ON [DEFAULT | <I>database_device</I>][=<I>size</I>]
+[,<I>database_device</I>[=<I>size</I>]]...]
+[FOR LOAD]</PRE>
+Позволят производить различные операции с базой данных после ее создания
+<H4>
+<B>Пример</B></H4>
+&nbsp;Этот пример изменяет <I>testing</I>, расположенную на DEVICE1, добавляя
+8-ми мегабайтный фрагмент:
+<PRE>&nbsp;ALTER DATABASE testing
+&nbsp;&nbsp;&nbsp;&nbsp; ON DEVICE1 = 8</PRE>
+
+<HR>
+<H2>
+<TT>ALTER TABLE</TT></H2>
+
+<PRE>ALTER TABLE [<I>database</I>.[<I>owner</I>].]<I>table_name
+</I>[WITH NOCHECK]
+[ADD
+&nbsp;{<I>col_name column_properties column_constraints</I>]
+&nbsp;|[[,]<I>table_constraint</I>]}
+&nbsp;&nbsp;&nbsp; [,{<I>next_col_name</I>|<I>next_table_constraint</I>}]...]
+| DROP [CONSTRAINT]
+&nbsp;<I>constraint_name</I>[,<I>constraint_name</I>]</PRE>
+Позволят производить различные операции с таблицей после ее создания
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<OL>
+<LI>
+Добавление PRIMARY KEY CONSTRAINT:</LI>
+
+<PRE>&nbsp;&nbsp; ALTER TABLE authors
+&nbsp;&nbsp; ADD
+&nbsp;&nbsp; CONSTRAINT UPKCL_auidind PRIMARY KEY CLUSTERED (au_id)</PRE>
+
+<LI>
+Добавление FOREIGN KEY CONSTRAINT:</LI>
+
+<PRE>&nbsp;&nbsp; ALTER TABLE titles
+&nbsp;&nbsp; ADD
+&nbsp;&nbsp; CONSTRAINT FK_pub_id FOREIGN KEY (pub_id) REFERENCES publishers(pub_id)</PRE>
+
+<LI>
+Добавление UNIQUE CONSTRAINT:</LI>
+
+<PRE>&nbsp;&nbsp; ALTER TABLE titles
+&nbsp;&nbsp; ADD
+&nbsp;&nbsp; CONSTRAINT UNC_name_city UNIQUE NONCLUSTERED (stor_name,city)</PRE>
+
+<LI>
+Добавление DEFAULT CONSTRAINT:</LI>
+
+<PRE>&nbsp;ALTER TABLE authors
+&nbsp;ADD
+&nbsp;DEFAULT 'UNKNOWN' FOR phone</PRE>
+<A HREF="../../../../omega.fintech.ru_3A8082/MSSQL/our.html#defaults">Будьте внимательны</A>
+с default!
+<LI>
+Добавление CHECK CONSTRAINT:</LI>
+
+<PRE>&nbsp;ALTER TABLE authors
+&nbsp;ADD
+&nbsp;CONSTRAINT CK_zip CHECK (zip LIKE '[0-9][0-9][0-9][0-9][0-9]')</PRE>
+
+<LI>
+Добавление новой колонки</LI>
+
+<PRE>&nbsp;ALTER TABLE publishers
+&nbsp;ADD
+&nbsp;country varchar(30)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NULL
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DEFAULT('USA')</PRE>
+</OL>
+
+<HR><A NAME="BATCH"></A>
+<H2>
+<TT>Batches</TT></H2>
+Batch - это набор операторов TSQL, передаваемых на выпонение и выполняющихся
+вместе, как одно целое. Batch компилируется целиком и оканчивается специальным
+символом-сигналом конца (<TT>go</TT>). Все последовательности операторов
+TSQL, набираемые в ISQL/w или в Enterprise Manager интерпретируются именно
+как batch'и (интересно то, что при выделении некоторой части текста в окне
+выполняться будет именно она)
+
+<P>&nbsp;<B>Пример</B>
+
+<P>&nbsp;
+<H4>
+Несколько SELECT в одном batch'е</H4>
+
+<PRE>&nbsp; SELECT COUNT(*) FROM titles
+&nbsp; SELECT COUNT(*) FROM authors</PRE>
+
+<HR>
+<H2>
+<TT>Выражения CASE</TT></H2>
+Простое CASE Expession
+<PRE>&nbsp;CASE <I>expression
+</I>&nbsp;WHEN <I>expression1</I> THEN <I>exression1
+</I>&nbsp;[[WHEN <I>expression2</I> THEN <I>expression2</I>[..]]
+&nbsp;[ELSE <I>expressionN</I>]
+&nbsp;END</PRE>
+CASE Expression с поиском
+<PRE>&nbsp;CASE
+&nbsp; WHEN <I>Boolean_expression1</I> THEN <I>expression1
+</I>&nbsp; [[WHEN <I>Boolean_expression2</I> THEN <I>expression2</I>[..]]
+&nbsp; [ELSE <I>expressionN</I>]
+&nbsp; END
+</PRE>
+Функции, полезные для CASEобразия:
+<PRE>&nbsp;COALESCE(<I>expression1</I>,<I>expression2</I>,...)
+&nbsp;NULLIF(<I>expression1</I>,<I>expression2</I>)
+&nbsp;ISNULL(<I>expression1</I>, <I>expression</I>)</PRE>
+<TT>COALESCE</TT> возвращает первое не-<TT>NULL</TT> выражение из списка,
+<TT>NULLIF</TT> возвращает <TT>NULL</TT>, если два выражения равны, <TT>ISNULL</TT>
+возвращает <I>expression2</I> в том случае, если <I>expression1</I> 'is
+null'
+
+<P>&nbsp;<B>Примеры</B>
+
+<P>&nbsp;
+<PRE>&nbsp;SELECT Category=
+&nbsp;&nbsp; CASE type
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHEN 'popular_comp' THEN 'Popular Computing'
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHEN 'mod_cook' THEN 'Modern Cooking'
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHEN 'business' THEN 'Businness'
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHEN 'psyhology' THEN 'Psyhology'
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHEN 'trad_cook' THEN 'Traditional Cooking'
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ELSE 'Not yet categorized'
+&nbsp;&nbsp;&nbsp; END,
+&nbsp;&nbsp;&nbsp; 'Shortended Tiitle' = CONVERT(varchar(30), title),
+&nbsp;&nbsp;&nbsp; Price = price
+&nbsp;FROM titles
+&nbsp;WHERE price IS NOT NULL
+&nbsp;ORDER BY type
+&nbsp;COMPUTE AVG(price) BY TYPE
+&nbsp;go
+
+&nbsp; Category&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Shortedned Title&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Price
+&nbsp; ---------------------- ------------------------------ -----------
+&nbsp; Business&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cooking with Computers: Surrep 11.95
+&nbsp; Business&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Straight Talkk About Computers 19.99
+&nbsp; Business&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Busy Executive's Database&nbsp; 19.99
+&nbsp; Business&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; You Can Combat Computer Stress 2.99
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; avg
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ============
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 13.73</PRE>
+
+<HR>
+<H2>
+<TT>Оператор CHECKPOINT</TT></H2>
+
+<PRE>&nbsp;CHECKPOINT</PRE>
+Записывает на диск все страницы, измененные с момента последнего выполнения
+оператора <TT>CHECKPOINT</TT>. Контрольные точки(<TT>Checkpoints</TT>),
+производимые оператором <TT>CHECKPOINT</TT>, являются дополнительными к
+тем контрольным точкам, которые берет сервер, исходя из заданного параметра
+<B><TT>recovery time</TT></B>&nbsp;
+<HR>
+<H2>
+<TT>Комментарии</TT></H2>
+
+<PRE>/*Текст комментария*/</PRE>
+или
+<PRE>--Текст комментария</PRE>
+
+<HR>
+<H2>
+<TT>Поток управления</TT></H2>
+Порядок выполнения запросов и хранимых процедур TSQL может изменяться с
+помощью определенных операторов (как бы перевести Control-of-Flow Language&nbsp;)
+<TABLE BORDER WIDTH="100%" >
+<TR>
+<TH WIDTH="20%">Оператор</TH>
+
+<TH>Описание</TH>
+</TR>
+
+<TR>
+<TD VALIGN=TOP><TT>BEGIN...END</TT>&nbsp;</TD>
+
+<TD VALIGN=TOP>Определяет блок.&nbsp;
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BEGIN
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<I>sql_statement</I>|<I>statement_block</I>}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; END
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</PRE>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP><TT>GOTO <I>label</I></TT>&nbsp;</TD>
+
+<TD>Безусловный переход к метке <I>label</I> Метки описываются незамысловато:&nbsp;
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :<I>label
+</I>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; GOTO <I>label
+</I>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</PRE>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP><TT>IF...ELSE</TT>&nbsp;</TD>
+
+<TD>Условный оператор. Тоже ничего неожиданного&nbsp;
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IF <I>Boolean_expression
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {sql_statement|statement_block}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ELSE [Boolean_expression]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {sql_statement|statement_block}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</I></PRE>
+</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP><TT>RETURN</TT>&nbsp;</TD>
+
+<TD>Безусловный выход. Синтаксис бесхитростен:&nbsp;
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RETURN ([<I>integer_expression</I>])
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</PRE>
+Жалко только, что возвращаемое значение - это не значение функции, а некий
+код возврата, причем часть значений зарезервирована под специальные состояния
+(<TT>0</TT> - все нормально):&nbsp;
+<TABLE>
+<TR>
+<TH VALIGN=TOP>Код</TH>
+
+<TH>Значение</TH>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>0</TD>
+
+<TD>Все нормально</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>-1</TD>
+
+<TD>Объект не найден</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>-2</TD>
+
+<TD>Ошибка типа данных</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>-3</TD>
+
+<TD>Процесс стал жертвой дедлока</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>-4</TD>
+
+<TD>Ошибка доступа</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>-5</TD>
+
+<TD>Синтаксическая ошибка</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>-6</TD>
+
+<TD>"Некоторая" ошибка</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>-7</TD>
+
+<TD>Ошибка с ресурсами(н., нет места)</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>-8</TD>
+
+<TD>Произошла исправимая внутренняя ошибка</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>-9</TD>
+
+<TD>Системный лимит исчерпался</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>-10</TD>
+
+<TD>Неисправимое нарушение внутренней целостности</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>-11</TD>
+
+<TD>То же самое</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>-12</TD>
+
+<TD>Разрушение таблицы или индекса</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>-13</TD>
+
+<TD>Разрушение базы данных</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>-14</TD>
+
+<TD>Ошибка оборудования</TD>
+</TR>
+</TABLE>
+&nbsp;</TD>
+</TR>
+
+<TR VALIGN=TOP>
+<TD><TT>WAITFOR</TT>&nbsp;</TD>
+
+<TD>Ожидание определенного события.&nbsp;
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WINTFOR {DELAY '<I>time</I>'|TIME '<I>time</I>'}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</PRE>
+<TT>DELAY</TT> - определение задержки <I>time</I>, ну а <TT>TIME</TT> -
+ожидание до указанного времени. <I>time</I> задается аналогично значениям
+для <B>datetime</B>&nbsp;</TD>
+</TR>
+
+<TR VALIGN=TOP>
+<TD><TT>WHILE</TT>&nbsp;</TD>
+
+<TD>Цикл с предусловием.&nbsp;
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHILE <I>Boolean_condition
+</I>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<I>sql_statement</I>|<I>statement_block</I>}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [BREAK]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<I>sql_statement</I>|<I>statement_block</I>}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [CONTINUE]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</PRE>
+</TD>
+</TR>
+
+<TR VALIGN=TOP>
+<TD><TT>...BREAK</TT>&nbsp;</TD>
+
+<TD>Выход из цикла <TT>WHILE</TT>&nbsp;</TD>
+</TR>
+
+<TR VALIGN=TOP>
+<TD><TT>...CONTINUE</TT>&nbsp;</TD>
+
+<TD>Продолжение цикла <TT>WHILE</TT>&nbsp;</TD>
+</TR>
+</TABLE>
+Кроме вышеуказанных операторов могут оказаться полезными при написании
+запросов и хранимых процедур следующие возможности TSQL:
+<TABLE BORDER WIDTH="100%" >
+<TR>
+<TH WIDTH="20%">Возможность</TH>
+
+<TH>Описание</TH>
+</TR>
+
+<TR>
+<TD VALIGN=TOP><A HREF="../../../../omega.fintech.ru_3A8082/MSSQL/TSQL.html#case">CASE</A>&nbsp;</TD>
+
+<TD>Позволяет выражениям принмать значение в зависимости от условий. Между
+прочим, <TT>CASE</TT> является стандартной возможностью ANSI SQL-92&nbsp;</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>Комментарии&nbsp;</TD>
+
+<TD>Очень даже полезно хотя бы изредка комментировать свой код. Для комметатриев
+можно использовать две формы - первая, аналогичная комментариям в С:
+<BR>/*некий глубокомысленный комметарий*/,
+<BR>и вторая, аналогичная комментариям в Аде:
+<BR>--Еще один заумный комметарий&nbsp;</TD>
+</TR>
+
+<TR>
+<TD VALIGN=TOP>Оператор <TT>DECLARE</TT>&nbsp;</TD>
+
+<TD>Повзоляет объявлять локальные переменные К слову сказать, он может
+стоять не только в начале процедуры или batch'а, но и где угодно в их теле.
+Удобно объявлять переменные там, где они используются, а не тремястами
+строками выше. Впрочем, на мой взгляд, злоупотреблять этим тоже не стоит...&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Оператор <TT>PRINT</TT>&nbsp;</TD>
+
+<TD>Выдает заданное значение на экран.&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Оператор <TT>RAISERROR</TT>&nbsp;</TD>
+
+<TD>Устанавливает ошибочное состояние&nbsp;</TD>
+</TR>
+</TABLE>
+
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>&nbsp;DECLARE @Name varchar(40)
+&nbsp;DECLARE CT CURSOR FOR SELECT Name from Peoples
+&nbsp;OPEN CT
+&nbsp;WHILE 1=1 BEGIN
+&nbsp; FETCH FROM CT INTO @Name
+&nbsp; /*Так, на мой взгляд, удобнее обходиться с курсорами*/
+&nbsp; IF @@fetch_status=-1&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BREAK
+&nbsp; IF @@fetch_status=-2
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CONTINUE
+&nbsp; PRINT @Name
+&nbsp;END
+&nbsp;DEALLOCATE CT
+</PRE>
+
+<HR>
+<H2>
+<TT>CREATE DATABASE</TT></H2>
+
+<PRE>&nbsp;CREATE DATABASE <I>database_name
+</I>&nbsp;[ON [DEFAULT|<I>database_device</I>][= <I>size</I>]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [,<I>database_device</I>][= <I>size</I>]]...]
+&nbsp;[LOG ON <I>database_device</I>[= <I>size</I>]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [,<I>database_device</I>[= <I>size</I>]...]
+&nbsp;[FOR LOAD]</PRE>
+Создает БД и, возможно, журнал транзакций на указанных <I>devices</I>,
+<I>size</I> - размер в мегабайтах. При создании новой базы данных используется
+как образец БД <TT>model</TT>.
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>&nbsp;CREATE DATABASE sales
+&nbsp;ON DEVICE3 = 125
+&nbsp;LOG ON DEVICE4 = 60</PRE>
+
+<HR>
+<H2>
+<TT>CREATE DEFAULT</TT></H2>
+
+<PRE>&nbsp;CREATE DEFAULT [<I>owner</I>.]<I>default_name
+</I>&nbsp;AS <I>constant_expression</I></PRE>
+Создает объект, который впоследствии можно будет прикрепить к некоторой
+колонке или пользовательскому типу данных, причем при добавлении новых
+данных значение <I>constant_expression</I> будет использовано по умолчанию,
+т.е. тогда, когда не было указано значение для этой колонки или было использовано
+ключевое слово DFAULT или DEFAULT VALUES. Для привязки созданного DEFAULT
+следует пользоваться процедурой <B><TT>sp_bindefault</TT></B>
+
+<P>Следующая таблица показывает соотношение между определением колонки
+и добавляемым значением:
+<TABLE BORDER WIDTH="100%" >
+<TR>
+<TD>Определение колонки&nbsp;</TD>
+
+<TD>Нет данных, нет DEFAULT&nbsp;</TD>
+
+<TD>Нет данных, DEFAULT определен&nbsp;</TD>
+
+<TD>Вводится NULL, нет DEFAULT&nbsp;</TD>
+
+<TD>Вводится NULL, DEFAULT определен&nbsp;</TD>
+</TR>
+
+<TR>
+<TD><B>NULL</B>&nbsp;</TD>
+
+<TD>NULL&nbsp;</TD>
+
+<TD>DEFAULT&nbsp;</TD>
+
+<TD>NULL&nbsp;</TD>
+
+<TD>NULL&nbsp;</TD>
+</TR>
+
+<TR>
+<TD><B>NOT NULL</B>&nbsp;</TD>
+
+<TD>error&nbsp;</TD>
+
+<TD>default&nbsp;</TD>
+
+<TD>error&nbsp;</TD>
+
+<TD>error&nbsp;</TD>
+</TR>
+</TABLE>
+Обратите внимание - DEFAULT можно создать только в текущей БД.
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>&nbsp;CREATE DEFAULT&nbsp; phonedflt AS 'unknown'
+&nbsp;sp_bindefault phonedflt,'authors.phone'</PRE>
+
+<HR>
+<H2>
+<TT>CREATE INDEX</TT></H2>
+
+<PRE>&nbsp;CREATE [UNIQUE][CLUSTERED|NONCLUSTERED]INDEX <I>index_name
+</I>&nbsp; ON [[<I>database</I>.]<I>owner</I>.]<I>table_name</I>(<I>column_name</I>[,<I>column_name</I>]...)
+&nbsp;[WITH]
+&nbsp; [FILLFACTOR = <I>x</I>]
+&nbsp; [[,] IGNORE_DUP_KEY]
+&nbsp; [[,] {SORTED_DATA | SORTED_DATA_REORG}]
+&nbsp; [[,] {IGNORE_DUP_ROW | ALLOW_DUP_ROW}]]
+&nbsp;[ON <I>segment_name</I>]</PRE>
+Создает индекс для перечмсленных колонок на указанном сегоменте.
+
+<P><TT>CLUSTERED</TT> - создавать кластеризованный индекс, т.е. такой индекс,
+при котором в листьях B-дерева, образующего индекс, находятся не ссылки
+на данные, а собственно страницы данных.
+
+<P>&nbsp;<TT>FILLFACTOR</TT> - позволяет управлять заполнением страниц B-дерева
+индекса, задается в процентах, 100% - полное заполнение.
+
+<P>&nbsp;<B>Пример</B>
+<PRE>&nbsp;CREATE UNIQUE CLUSTERED INDEX au_id_ind
+&nbsp;&nbsp;&nbsp;&nbsp; ON authors (au_id)</PRE>
+
+<HR>
+<H2>
+<TT>Типы данных</TT></H2>
+Типы данных определяют представление колонок таблиц, параметров процедур
+и переменных. В SQL Server помимо предопределенных системеых типов данных
+можно создавать и пользовательские типы, основывающиеся на системных. Более
+подробно о создании пользовательских типов данных можно ознакомиться в
+разделе, посвященном хранимой процедуре sp_addtype. В SQL Server все типы
+данных регистонезависимые, в силу чего недопустимо использование различных
+пользовательских типов данных, отличающихся только регистром.
+
+<P>&nbsp;
+<TABLE>
+<TR>
+<TD ALIGN=CENTER WIDTH="10%">
+<H1>
+<FONT COLOR="#FF0000">!</FONT></H1>
+</TD>
+
+<TD ALIGN=LEFT><B>Обратите внимание</B>: если уже существующий пользовательский
+тип данных конфликтует с другим пользовательским или системным типом данных,
+то он будет использоваться как базовый системный тип.&nbsp;</TD>
+</TR>
+</TABLE>
+Существуют следующие системные типы данных:
+<TABLE BORDER WIDTH="100%" >
+<TR>
+<TH WIDTH="25%">Вид данных&nbsp;</TH>
+
+<TH>Системное представление&nbsp;</TH>
+</TR>
+
+<TR>
+<TD>Двоичные&nbsp;</TD>
+
+<TD><I>binary</I>[(n)]
+<BR><I>varbinary</I>[(n)]&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Символьные&nbsp;</TD>
+
+<TD><I>char</I>[(n)]
+<BR><I>varchar</I>[(n)]&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Дата и время&nbsp;</TD>
+
+<TD><I>datetime</I>
+<BR><I>smalldatetime</I>&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Точное представление чисел&nbsp;</TD>
+
+<TD><I>decimal</I>[(p[, s])]
+<BR><I>numeric</I>[(p[, s])]&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Представление чисел с плавающей точкой&nbsp;</TD>
+
+<TD><I>float</I>[(n)]
+<BR><I>real</I>&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Целочисленные типы&nbsp;</TD>
+
+<TD><I>int</I> - 4 байта
+<BR><I>smallint</I> - 2 байта
+<BR><I>tinyint</I> -1 байт&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Денежные типы&nbsp;</TD>
+
+<TD><I>money</I>
+<BR><I>smallmoney</I>&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Специальные&nbsp;</TD>
+
+<TD><I>bit</I>
+<BR><I>timestamp</I>
+<BR><I>типы</I>, определяемые пользователем&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Текст и картинки&nbsp;</TD>
+
+<TD><I>text</I>
+<BR><I>image</I>&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Синонимы&nbsp;</TD>
+
+<TD><I>binary varying</I> для <I>varbinary</I>
+<BR><I>character</I> для <I>char</I>
+<BR><I>character</I> для <I>char (1)</I>
+<BR><I>character</I> (n) для <I>char (n)</I>
+<BR><I>character varying (n)</I> для <I>varchar (n)</I>
+<BR><I>dec</I> для <I>decimal</I>
+<BR><I>integer</I> для <I>int</I>
+<BR><I>double precision</I> для <I>float</I>
+<BR><I>float</I> [(n)] для n = 1-7 для <I>real</I>
+<BR><I>float</I> [(n)] для n = 8-15 для <I>float</I>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<H3>
+Типы данных даты и времени</H3>
+Данные и время представляются алфвавитно-цифровыми данными, в виде строки.
+По умолчанию для показа даты используется формат <TT>Mon dd yyyy hh:mmAM</TT>,
+например, "Apr 15 1996 10:23AM". При вводе данных следует обращать внимание
+на порядок лет, месяцев, дней и т.п.
+
+<P>&nbsp;При вводе данных используйте один из нескольких форматов, заключая значение
+в одиночные кавычки - " <U>'</U> ". Если требуется получить секунды или
+миллисекунды - для этого применяется функция <TT>CONVERT</TT>. Существуют
+следующие типы даты и времени:
+<DL>
+<DT>
+<I>datetime</I></DT>
+
+<DD>
+Этот тип данных имеет размер в 8 байт, т.е. два четырехбайтных целых -
+4 байта на количество дней, прошедших или еще не наступивших с 1 января
+1900, и 4 байта на число миллисекунд, прошедших с полуночи.</DD>
+
+<BR><I>datetime</I> может содержать даты с 1 января 1753 года и по 31 декабря
+9999 года, с точностью в три тысячных секунды. По умолчанию datetime имеет
+значение 1 января 1900 года, полдень.
+<DT>
+<I>smalldatetime</I></DT>
+
+<DD>
+Тип данных, во многом аналогичный datetime, но менее точный. Размер его
+- 4 байта, два байта на число дней, прошедших с 1 января 1900 года, и два
+байта на число минут с полуночи. Даты могут быть представлены в диапазоне
+с 1 января 1900 года и по 6 июня 2079 года, с точностью в минуту</DD>
+</DL>
+Для ввода дат и времени можно применять следующие форматы:
+<PRE>Apr[il] [15][,] 1996&nbsp;
+Apr[il] 15[,] [19]96&nbsp;
+Apr[il] 1996 [15]
+Apr[il] [19]96 15
+[15] Apr[il][,] 1996&nbsp;
+15 Apr[il][,][19]96&nbsp;
+15 [19]96 apr[il]
+[15] 1996 apr[il]
+1996 APR[IL] [15]
+[19]96 APR[IL] 15
+1996 [15] APR[IL]
+
+[0]4/15/[19]96 (mdy)
+[0]4-15-[19]96 (mdy)
+[0]4.15.[19]96 (mdy)
+[04]/[19]96/15 (myd)
+
+15/[0]4/[19]96 (dmy)
+15/[19]96/[0]4 (dym)
+[19]96/15/[0]4 (ydm)
+[19]96/[04]/15 (ymd)</PRE>
+но, наверное, самым удобным и безопасным является формат [19]960415 - строка
+из шести или восьми цифр, в формате ггггммдд или ггммдд. Строка из четырех
+цифр будет интерпретирована как год.
+<H3>
+Денежные типы данных</H3>
+Типы данных <I>money</I> и <I>smallmoney</I> предназначены в первую очередь
+для представления денег.
+<DL>
+<DT>
+<I>money</I></DT>
+
+<DD>
+Тип данных <I>money</I> в состоянии представлять числа в диапазоне от <TT>-922,337,203,685,477.5808</TT>
+до <TT>+922,337,203,685,477.5807</TT> с точностью в одну десятитысячную,
+имеет размер в 8 байт.</DD>
+
+<DT>
+<I>smallmoney</I></DT>
+
+<DD>
+Тип данных <I>smallmoney</I> в состоянии представлять числа в диапазоне
+от <TT>-214,748.3648</TT> до <TT>+214,748.3647</TT>, размер 4 байта.</DD>
+</DL>
+
+<H3>
+Специальные типы данных</H3>
+Среди всех более или менее обычных типов данных, имеющихся в SQL Server,
+несколько выделяются два типа данных - <I>bit</I> и <I>timestamp</I>.
+
+<P>&nbsp;Первый - <I>bit</I> - предназначен для представления целых чисел в диапазоне
+от 0 до 1, причем при вводе числа, отличного от 1, принимается значение,
+равное 1. Тип данных <I>bit</I> имеет размер в один байт, но при наличии
+нескольких полей типа <I>bit</I> в таблице они все будут упакованы вместе,
+например, если у нас есть 7 полей типа <I>bit</I>, то суммарное занимаемое
+ими пространство будет равно одному байту.
+<TABLE>
+<TR>
+<TD ALIGN=CENTER VALIGN=BASELINE WIDTH="10%">
+<H1>
+<FONT COLOR="#FF0000">!</FONT></H1>
+</TD>
+
+<TD ALIGN=LEFT><B>Обратите внимание</B>: Для полей, имеющих тип <I>bit</I>,
+невозможно построить индекс.&nbsp;</TD>
+</TR>
+</TABLE>
+Значение другого типа данных - <I>timestamp</I> - обновляется при каждом
+изменении записи.
+<TABLE>
+<TR>
+<TD ALIGN=CENTER VALIGN=CENTER WIDTH="10%">
+<H1>
+<FONT COLOR="#FF0000">!</FONT></H1>
+</TD>
+
+<TD ALIGN=LEFT><B>Обратите внимание</B>: Поля типа timestamp не имеют никакого
+отношения к системной дате или системному времени.&nbsp;</TD>
+</TR>
+</TABLE>
+Если при создании таблицы будет указана колнока с именем <TT>timestamp</TT>,
+и при этом не будет указан никакой тип, то эта колонка автоматически будет
+иметь тип <I>timestamp</I>.
+
+<P>&nbsp;<I>timestamp</I> имеет размер 8 байт и представлено как <I>varbinary(8)</I>&nbsp;
+<HR>
+<H2>
+<TT>Оператор DBCC</TT></H2>
+
+<PRE>DBCC {
+&nbsp;&nbsp;&nbsp; CHECKALLOC [(<I>database_name</I> [, NOINDEX])] |&nbsp;
+&nbsp;&nbsp;&nbsp; CHECKCATALOG [(<I>database_name</I>)] |&nbsp;
+&nbsp;&nbsp;&nbsp; CHECKTABLE (<I>table_name</I> [, NOINDEX | index_id]) |&nbsp;
+&nbsp;&nbsp;&nbsp; CHECKDB [(<I>database_name</I> [, NOINDEX])] |&nbsp;
+&nbsp;&nbsp;&nbsp; CHECKIDENT [(<I>table_name</I>)] |&nbsp;
+&nbsp;&nbsp;&nbsp; DBREPAIR (<I>database_name</I>, DROPDB [, NOINIT]) |&nbsp;
+&nbsp;&nbsp;&nbsp; <I>dllname</I> (FREE) |&nbsp;
+&nbsp;&nbsp;&nbsp; INPUTBUFFER (spid) |&nbsp;
+&nbsp;&nbsp;&nbsp; MEMUSAGE |&nbsp;
+&nbsp;&nbsp;&nbsp; NEWALLOC [(<I>database_name</I> [, NOINDEX])] |&nbsp;
+&nbsp;&nbsp;&nbsp; OPENTRAN ({<I>database_name</I>} | {<I>database_id</I>})&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [WITH TABLERESULTS] |&nbsp;
+&nbsp;&nbsp;&nbsp; OUTPUTBUFFER (spid) |&nbsp;
+&nbsp;&nbsp;&nbsp; PERFMON |&nbsp;
+&nbsp;&nbsp;&nbsp; PINTABLE (<I>database_id</I>, <I>table_id</I>) |&nbsp;
+&nbsp;&nbsp;&nbsp; SHOW_STATISTICS (<I>table_name</I>, <I>index_name</I>) |&nbsp;
+&nbsp;&nbsp;&nbsp; SHOWCONTIG (<I>table_id</I>, [<I>index_id</I>]) |&nbsp;
+&nbsp;&nbsp;&nbsp; SHRINKDB (<I>database_name</I> [, new_size [, 'MASTEROVERRIDE']]) |&nbsp;
+&nbsp;&nbsp;&nbsp; SQLPERF ({IOSTATS | LRUSTATS | NETSTATS | RASTATS [, CLEAR]} |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {THREADS} | {LOGSPACE}) |&nbsp;
+&nbsp;&nbsp;&nbsp; TEXTALL [({<I>database_name</I> | <I>database_id</I>}[, FULL | FAST])] |&nbsp;
+&nbsp;&nbsp;&nbsp; TEXTALLOC [({<I>table_name</I> | <I>table_id</I>}[, FULL | FAST])] |&nbsp;
+&nbsp;&nbsp;&nbsp; TRACEOFF (trace#) |&nbsp;
+&nbsp;&nbsp;&nbsp; TRACEON (trace#) |
+&nbsp;&nbsp;&nbsp; TRACESTATUS (trace# [, trace#...]) |&nbsp;
+&nbsp;&nbsp;&nbsp; UNPINTABLE (<I>database_id</I>, <I>table_id</I>) |&nbsp;
+&nbsp;&nbsp;&nbsp; UPDATEUSAGE ({0 | <I>database_name</I>} [, <I>table_name</I> [, <I>index_id</I>]]) |
+&nbsp;&nbsp;&nbsp; USEROPTIONS}&nbsp;
+[WITH NO_INFOMSGS]</PRE>
+где
+<DL>
+<DT>
+<TT>CHECKCATALOG [(<I>database_name</I>)]</TT></DT>
+
+<DD>
+Проверяет целостность системных таблиц и отношений между ними</DD>
+
+<DT>
+<TT>CHECKTABLE</TT> (<I>table_name</I> [, NOINDEX | index_id])</DT>
+
+<DD>
+Проверяет указанную таблицу, убеждаясь, что ее страницы и страницы указанного
+индекса корректно связаны. Если сегмент журнала расположен на отдельном
+устройстве, то запуск <TT>DBCC CHECKTABLE</TT> для таблицы <TT>syslogs</TT>
+позволит узнать размер использованного и свободного места в журнале.</DD>
+
+<DT>
+<TT>CHECKDB[(<I>table_name</I>)]</TT></DT>
+
+<DD>
+Проводит проверку, аналогичную CHECKTABLE, но только для каждой таблицы
+и ее индексов в указанной базе данных, или в текущей, если никакая не указана.</DD>
+
+<DT>
+<TT>CHECKIDENT[(<I>table_name</I>)]</TT></DT>
+
+<DD>
+Проверяет текущее значение IDENTITY для указанной таблицы и сравнивает
+его с маскимальным из фактически имеющихся, изменяя его в случае необходимости.</DD>
+
+<DT>
+<TT>NOINDEX</TT></DT>
+
+<DD>
+Указывает, что необходимо проверять только кластеризованный индекс и его
+листья - то есть собственно страницы данных, если же кластеризованный индекс
+отсутсвует - проверяются только страницы данных.</DD>
+
+<DT>
+<TT>DBREPAIR(<I>database_name</I>,DROPDB,NOINIT)</TT></DT>
+
+<DD>
+Удаляет указанную базу данных, обычно разрушенную, после чего уже невозможно
+получить к ней доступ. Если указана опция NOINIT, то тогда страницы данных,
+представляющих из себя базу данных, не модифицируются. DBREPAIR - это,
+собственно говоря, пережиток прошлого. Теперь для удаления разрушенной
+базы данных нормальные пацаны пользуются оператором DROP DATABASE. Если
+же и он не работает (во дают!), то следует воспользоваться хранимой процедурой
+sp_dbremove. Указаний, куда идти, если и это не помогает, Microsoft не
+дает, впрочем, большинство и так догадывается.</DD>
+
+<DT>
+<TT><I>dllname</I>(FREE)</TT></DT>
+
+<DD>
+Выгружает из памяти указанную библиотеку.</DD>
+
+<DT>
+<TT>INPUTBUFFER(<I>spid</I>)</TT></DT>
+
+<DD>
+Возвращает первые 255 байт буфера SQL запроса для указанного <I>spid</I>.</DD>
+
+<DT>
+<TT>MEMUASGE</TT></DT>
+
+<DD>
+Выдает данные об использовании памяти сервером.</DD>
+
+<DT>
+<TT>NEWALLOC(<I>database_name</I>[,NOINDEX])</TT></DT>
+
+<DD>
+Проверяет корректность текущей или указанной бд, выдавая более подробный
+отчет, нежели чем CHECKALLOC, и не прерывая работы в случае нахождения
+ошибки.</DD>
+
+<TABLE>
+<TR>
+<TD ALIGN=CENTER WIDTH="10%">
+<H1>
+<FONT COLOR="#FF0000">!</FONT></H1>
+</TD>
+
+<TD ALIGN=LEFT><B>Обратите внимание</B>: CHECKALLOC или NEWALLOC могут
+сообщать об ошибке в том случае, если база данных испольщуется кем-то еще,
+так что старайтесь запускать проверку при минимальной загрузке или даже
+в однопользовательском режиме.&nbsp;</TD>
+</TR>
+</TABLE>
+
+<DT>
+<TT>OPENTRAN</TT>({<I>database_name</I>|<I>database_id</I>}) WITH TABLERESULTS</DT>
+
+<DD>
+Позволяет получить информацию об начатых, но незавершенных транзакциях,
+и о начатых, но не распространенных(distributed) транзакциях.</DD>
+
+<DT>
+<TT>OUTPUTBUFFER(<I>spid</I>)</TT></DT>
+
+<DD>
+Позволяет просмотреть выходные данные для процесса <I>spid</I></DD>
+
+<DT>
+<TT>PERFMON</TT></DT>
+
+<DD>
+Позволяет получить статистику всех трех типов - IOSTATS, LRUSTATS и NETSTATS.</DD>
+
+<DT>
+<TT>PINTABLE(<I>database_id</I>, <I>table_id</I>)</TT></DT>
+
+<DD>
+Помещает таблицу и связанные с ней индексы в оперативную память. Не следует
+считать, что PINTABLE прочитывает таблицу непосредственно в память; напротив,
+данные, к которым был доступ, помещаются в кеш, откуда уже не вытесняются
+до последующего вызова DBCC UNPINTABLE.</DD>
+
+<DT>
+<TT>SHOW STATISTICS(<I>table_name</I>,<I>index_name</I>)</TT></DT>
+
+<DD>
+Позволяет получить статистику о распределении страниц в таблице</DD>
+
+<DT>
+<TT>SHOWCONTIG(<I>table_id</I>,<I>index_id</I>)</TT></DT>
+
+<DD>
+Показывает фрагментированность таблицы</DD>
+
+<DT>
+<TT>SHRINKDB (<I>database_name</I> [, new_size [, 'MASTEROVERRIDE']])</TT></DT>
+
+<DD>
+Позволяет сократить по возможности размер, занимаемый базой данных.</DD>
+
+<DT>
+<TT>SQLPERF ({IOSTATS | LRUSTATS | NETSTATS | RASTATS [, CLEAR]} {THREADS}
+{LOGSPACE})</TT></DT>
+
+<DD>
+Позволяет просмотреть различного рода статистику</DD>
+
+<DT>
+<TT>TEXTALL[({database_name|database_id})[,FULL|FAST])</TT></DT>
+
+<DD>
+Проверяет корректность размещения данных во всей базе данных в колонках
+типа <I>text</I> или <I>image</I>.</DD>
+
+<DT>
+<TT>TEXTALLOC[({<I>table_name</I>|<I>table_id</I>},[FULL|FAST])]</TT></DT>
+
+<DD>
+Проверяет корректность размещения данных в колонках типа <I>text</I> или
+<I>image</I>.</DD>
+
+<DT>
+<TT>TRACEOFF(<I>trace</I>#)</TT></DT>
+
+<DD>
+Выключает указанный флаг трассировки</DD>
+
+<DT>
+<TT>TRACEON(<I>trace</I>#)</TT></DT>
+
+<DD>
+Включает указанный флаг трассировки</DD>
+
+<DT>
+<TT>TRACESTATUS(<I>trace</I>#[,<I>trace</I>#...])</TT></DT>
+
+<DD>
+Показывает статус для указанных флагов трассировки</DD>
+
+<DT>
+<TT>UNPINTABLE(<I>database_id</I>,<I>table_id</I>)</TT></DT>
+
+<DD>
+Объявляет указанную таблицу как нерезидентную в памяти сервера. Данные,
+однако, остаются в кеше до тех пор, пока они не будут сборошены на диск
+по тем или иным причинам.</DD>
+
+<DT>
+<TT>UPDATEUASGE({0|<I>database_name</I>},<I>table_name</I>[,<I>index_id</I>])</TT></DT>
+
+<DD>
+Исправляет возможные неаккуратности в сообщениях о размере базы данных.</DD>
+
+<DT>
+<TT>USEROPTIONS</TT></DT>
+
+<DD>
+Позволяет посмотреть список опций, установденных командой SET</DD>
+
+<DT>
+<TT>WITH NO_INFOMSGS</TT></DT>
+
+<DD>
+Подавляет выдачу информационных сообщений (уровень с 1 по 10)</DD>
+</DL>
+
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>DBCC CHECKALLOC(pubs)
+go
+Checking pubs
+Alloc page 0 (# of extent=32 used pages=58 ref pages=58)
+Alloc page 256 (# of extent=26 used pages=37 ref pages=37)
+Alloc page 512 (# of extent=14 used pages=40 ref pages=40)
+Alloc page 768 (# of extent=1 used pages=8 ref pages=2)
+Alloc page 1024 (# of extent=1 used pages=0 ref pages=0)
+Alloc page 1280 (# of extent=1 used pages=0 ref pages=0)
+Total (# of extent=75 used pages=143 ref pages=137) in this database
+DBCC execution completed. If DBCC printed error messages, see your System Administrator.</PRE>
+
+<HR><A NAME="CREATEPROCEDURE"></A>
+<H2>
+<TT>CREATE PROCEDURE</TT></H2>
+
+<PRE>CREATE PROCedure [<I>owner</I>.]<I>procedure_name</I>[;<I>number</I>]
+&nbsp;&nbsp;&nbsp; [(<I>parameter1</I> [, <I>parameter2</I>]...[<I>parameter255</I>])]
+[{FOR REPLICATION} | {WITH RECOMPILE}
+&nbsp;&nbsp;&nbsp; [{[WITH] | [,]} ENCRYPTION]]
+AS <I>sql_statements
+
+parameter</I>=
+&nbsp;@<I>parameter_name</I> <I>datatype</I>[=default][OUTPUT]</PRE>
+Создает процедуру с указанным именем. Процедура может быть создана только
+в текущей базе данных, за исключением временных процедур, которые создаются
+в <I>tempdb</I>. Для создания временных процедур следует начинать ее имя
+с '#' или '##'. Длина имени хранимой процедуры вместе с ## не может превышать
+20 символов. Одна процедура может вызывать другую процедуру, уровень вложенности
+не может превышать 16, текущий уровень вложенности можно узнать из глобоальной
+переменной <TT>@@NESTLEVEL</TT>
+
+<P>&nbsp;Пользователь может создавать свои системные процедуры; они начинаются
+с символов <B><TT>sp_</TT></B>. При попытке выполнения такой процедуры
+она сначала ищется в текущей базе данных, в случае же неудачи - в базе
+данных <B><TT>master</TT></B>. Таблицы, используемые в системной процедуре,
+определямой пользователем, также сначала отыскиваются в текущей базе данных,
+и если это не удалось - в базе данных <B><TT>master</TT></B>.
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>CREATE PROCEDURE au_info_all
+AS
+SELECT au_lname, au_fname, title, pub_name
+&nbsp;&nbsp;&nbsp; FROM authors a, titles t, publishers p, titleauthor ta
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHERE a.au_id = ta.au_id
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AND t.title_id = ta.title_id
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AND t.pub_id = p.pub_id</PRE>
+
+<HR>
+<H2>
+<TT>CREATE RULE</TT></H2>
+
+<PRE>CREATE RULE [<I>owner</I>.]<I>rule_name
+</I>AS <I>condition_expression</I></PRE>
+Создает правило - некоторый объект, который впоследствие может быть привязан
+к какой-либо колонке или типу, определяемому пользователем.
+
+<P>&nbsp;Вы можете привязать правило к колонке, к которой до этого уже было привязано
+какое-либо другое правило; после этого уже будет использоваться вновь привязанное
+правило. Более того, привязка правила имеет больший приоритет, чем тип
+данных, определяемый пользователем.
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>CREATE RULE list_rule
+AS&nbsp;
+@list IN ('1389', '0736', '0877')</PRE>
+
+<HR>
+<H2>
+<TT>CREATE TABLE</TT></H2>
+
+<PRE>CREATE TABLE [<I>database</I>.[<I>owner</I>].]<I>table_name</I>&nbsp;
+(
+&nbsp;&nbsp;&nbsp; {<I>col_name</I> <I>column_properties</I> [<I>constraint</I> [<I>constraint</I> [...<I>constraint</I>]]]
+&nbsp;&nbsp;&nbsp; | [[,] <I>constraint</I>]}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [[,] {<I>next_col_name</I> | <I>next_constraint</I>}...]
+)
+[ON <I>segment_name</I>]</PRE>
+Создает таблицу
+<BR>Кроме обычных таблиц можно также создавать и временные таблицы - такими
+таблицами являются те, чье имя начинается с #(локальные временные таблицы)
+или ##(глобальные временные таблицы). Временные таблицы сушествуют только
+на время клиентской сессии и после ее окончания автоматически уничтожаются.
+Кроме того, временные таблицы, созданные в хранимой процедуре автоматически
+уничтожаются после ее окончания. Временные таблицы создаются в базе данных
+tempdb, и вносятся в таблицу tempdb..sysobjects под указанным именен +
+некоторая строка, генереруемая сервером. При создании временных таблиц
+нельзя использовать ограничение FOREIGN KEY и ON <I>segment_name</I>
+
+<P>&nbsp;
+<PRE><I>column_properties</I> =
+<I>datatype</I> [NULL | NOT NULL | IDENTITY[(seed, increment)]]</PRE>
+
+<DL>
+<DT>
+datatype</DT>
+
+<DD>
+Опрелеляет тип создаваемой колонки - как системный, так и определяемый
+пользователем.</DD>
+
+<DT>
+IDENTITY[(seed, increment)]</DT>
+
+<DD>
+Для колонки с таким свойством сервером автоматически генерируется возрастающая
+последовательность, начиная с seed и приращением increment.</DD>
+
+<TABLE>
+<TR>
+<TD ALIGN=CENTER WIDTH="10%">
+<H1>
+<FONT COLOR="#FF0000">!</FONT></H1>
+</TD>
+
+<TD ALIGN=LEFT><B>Обратите внимание</B>: Сервер не гарантирует непрерывность
+или уникальность значений - в реальных данных, лежащих в таблице могут
+появляться разрывы. Для избежания ошибок с уникальностью используйте ограничение
+<TT><NOBR>PRIMARY KEY</NOBR></TT>&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;</DL>
+
+<DL>
+<DT>
+<I>constraint</I></DT>
+
+<DD>
+Может включать в себя ограничение как для столбца, так и для всей таблицы.
+Всего на таблицу может быть не более одного <TT>PRIMARY KEY</TT>, не более
+чем 249 <TT>UNIQUE</TT>, не более чем 31 <TT>FOREIGN KEY</TT> (каждый из
+которых может ссылаться не более чем на 16 колонок), не более одного DEFAULT
+на колонку, и неограниченное число <TT>CHECK</TT>. Все эти ограничения
+могут находиться в одном операторе <TT>CREATE TABLE</TT>. Синтаксис этих
+ограничений таков:</DD>
+
+<PRE>PRIMARY KEY:
+[CONSTRAINT <I>constraint_name</I>]
+&nbsp;&nbsp;&nbsp; PRIMARY KEY [CLUSTERED | NONCLUSTERED]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (<I>col_name</I> [, <I>col_name2</I> [..., <I>col_name16</I>]])
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ON <I>segment_name</I>]&nbsp;
+
+UNIQUE:
+[CONSTRAINT <I>constraint_name</I>]
+&nbsp;&nbsp;&nbsp; UNIQUE [CLUSTERED | NONCLUSTERED]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (<I>col_name</I> [, <I>col_name2</I> [..., <I>col_name16</I>]])
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ON <I>segment_name</I>]&nbsp;
+
+FOREIGN KEY:
+[CONSTRAINT <I>constraint_name</I>]
+&nbsp;&nbsp;&nbsp; [FOREIGN KEY (<I>col_name</I> [, <I>col_name2</I> [..., <I>col_name16</I>]])]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; REFERENCES [<I>owner</I>.]<I>ref_table</I> [(<I>ref_col</I> [, <I>ref_col2</I>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [..., <I>ref_col16</I>]])]
+
+DEFAULT:
+[CONSTRAINT <I>constraint_name</I>]
+&nbsp;&nbsp;&nbsp; DEFAULT {<I>constant_expression</I> | <I>niladic-function</I> | NULL}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [FOR <I>col_name</I>]
+
+CHECK:
+[CONSTRAINT <I>constraint_name</I>]
+CHECK [NOT FOR REPLICATION] (<I>expression</I>)</PRE>
+
+<DT>
+<TT>PRIMARY KEY [CLUSTERED | NONCLUSTERED]</TT></DT>
+
+<DD>
+Определяет первичный ключ таблицы и тип индекса, который будет для него
+построен.</DD>
+
+<TABLE>
+<TR>
+<TD ALIGN=CENTER WIDTH="10%">
+<H1>
+<FONT COLOR="#FF0000">!</FONT></H1>
+</TD>
+
+<TD ALIGN=LEFT><B>Обратите внимание</B>: Все колонки, входящие в первичный
+ключ не могут быть объявлены как NULL. Если же этот параметр при созданни
+был опущен - для всех колонок принимается NOT NULL.&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;</DL>
+
+<DL>
+<DT>
+<TT>UNIQUE [CLUSTERED | NONCLUSTERED]</TT></DT>
+
+<DD>
+Определяет ограничение уникальности для колонки, и указывает тип индекса,
+создаваемого для этого. Хотя для <TT>UNIQUE</TT> и можно использовать поля,
+допускающие значения типа NULL, все же рекомендуется этого не делать.</DD>
+
+
+<P>&nbsp;По умолчанию созжается некластеризованный индекс.</DL>
+
+<DL>
+<DT>
+<TT>[FOREIGN KEY (<I>col_name</I> [, <I>col_name2</I> [..., <I>col_name16</I>]])]</TT></DT>
+
+<BR><TT>REFERENCES [<I>owner</I>.]<I>ref_table</I> [(<I>ref_col</I></TT>
+<BR><TT>[, <I>ref_col2</I> [..., <I>ref_col16</I>]])]</TT>
+<DD>
+Создает ограничение <TT>FOREIGN KEY</TT> для таблицы. Число полей и их
+тип должны совпадать. <TT>FOREIGN KEY</TT> не может ссылаться на таблицу,
+находящуюся в другой базе данных.</DD>
+
+<TABLE>
+<TR>
+<TD ALIGN=CENTER WIDTH="10%">
+<H1>
+<FONT COLOR="#FF0000">!</FONT></H1>
+</TD>
+
+<TD ALIGN=LEFT><B>Обратите внимание</B>: Ограничение FOREIGN KEY, в отличие
+от PRIMARY KEY, <B>НЕ СОЗДАЕТ ИНДЕКСА</B>.&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;</DL>
+
+<DL>
+<DT>
+<TT>DEFAULT</TT></DT>
+
+<DD>
+Указывает значение, используемое по умолчанию. Это должно быть либо константное
+выражение, в котором допустимо использование т.н. <I>niladic</I> функций.
+Это</DD>
+
+<UL>
+<LI>
+USER</LI>
+
+<LI>
+CURRENT_USER</LI>
+
+<LI>
+SESSION_USER</LI>
+
+<LI>
+SYSTEM_USER</LI>
+
+<LI>
+CURRENT_TIMESTAMP</LI>
+</UL>
+DEFAULT может использоваться для колонок любых типов, кроме timestamp или
+тех, для которых указано <TT>IDENTITY</TT>.</DL>
+
+<DL><TT>CHECK(<I>expression</I>)</TT>
+<DT>
+Задает условие проверки</DT>
+
+<DD>
+Указанное <I>expression</I> должно вычисляться в булево выражение, и если
+оно принимает значение <TT>FALSE</TT> - попытка добавления или изменения
+данных отвергается. При создании таблицы возможно указать только один <TT>CHECK</TT>,
+в дальнейшем же их число можно увеличить.</DD>
+</DL>
+
+<DL>
+<DT>
+<TT>ON <I>segment_name</I></TT></DT>
+
+<DD>
+Указывает сегмент, который будет использоваться для таблицы.</DD>
+
+<TABLE>
+<TR>
+<TD ALIGN=CENTER WIDTH="10%">
+<H1>
+<FONT COLOR="#FF0000">!</FONT></H1>
+</TD>
+
+<TD ALIGN=LEFT><B>Обратите внимание</B>: Если в дальнейшем для этой таблицы
+будет создан <TT>CLUSTERED</TT> индекс без указания сегмента - все данные
+будут перенесены на <TT>DEFAULT</TT> сегмент.&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;
+<TABLE>
+<TR>
+<TD ALIGN=CENTER WIDTH="10%">
+<H1>
+<FONT COLOR="#000080">NB</FONT></H1>
+</TD>
+
+<TD ALIGN=LEFT><B>Обратите внимание</B>: Вышеуказанным свойством можно
+пользоваться для перемещения таблицы по разным дискам и т.п.&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;</DL>
+Максимальное число байт на строку равно 1962 - размеру страницы.
+<TABLE>
+<TR>
+<TD ALIGN=CENTER WIDTH="10%">
+<H1>
+<FONT COLOR="#000080">NB</FONT></H1>
+</TD>
+
+<TD ALIGN=LEFT><B>Обратите внимание</B>: Дополнив запись до 1962 байта
+можно получить строчную блокировку.&nbsp;</TD>
+</TR>
+</TABLE>
+Для получения информации о таблице используйте хранимую процедуру <B><TT>sp_help</TT></B>
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>CREATE TABLE employee&nbsp;
+(
+&nbsp;&nbsp;&nbsp; emp_id&nbsp; empid
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CONSTRAINT PK_emp_id PRIMARY KEY NONCLUSTERED
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CONSTRAINT CK_emp_id CHECK (emp_id LIKE&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '[A-Z][A-Z][A-Z][1-9][0-9][0-9][0-9][0-9][FM]' or
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; emp_id LIKE '[A-Z]-[A-Z][1-9][0-9][0-9][0-9][0-9][FM]'),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* Each employee ID consists of three characters that&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; represent the employee's initials, followed by a five&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; digit number ranging from 10000 to 99999 and then the&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; employee's gender (M or F). A - (hyphen) is acceptable&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for the middle initial. */
+&nbsp;&nbsp;&nbsp; fname&nbsp;&nbsp; varchar(20)&nbsp;&nbsp;&nbsp;&nbsp; NOT NULL,
+&nbsp;&nbsp;&nbsp; minit&nbsp;&nbsp; char(1) NULL,
+&nbsp;&nbsp;&nbsp; lname&nbsp;&nbsp; varchar(30)&nbsp;&nbsp;&nbsp;&nbsp; NOT NULL,
+&nbsp;&nbsp;&nbsp; job_id&nbsp; smallint&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NOT NULL
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DEFAULT 1
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* Entry job_id for new hires. */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; REFERENCES jobs(job_id),
+&nbsp;&nbsp;&nbsp; job_lvl tinyint
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DEFAULT 10,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* Entry job_lvl for new hires. */
+&nbsp;&nbsp;&nbsp; pub_id&nbsp; char(4) NOT NULL
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DEFAULT ('9952')
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; REFERENCES publishers(pub_id),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* By default the Parent Company Publisher is the company
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; to whom each employee reports. */
+&nbsp;&nbsp;&nbsp; hire_date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; datetime&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NOT NULL
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DEFAULT (getdate())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* By default the current system date will be entered. */
+)</PRE>
+
+<HR>
+<H2>
+<TT>CREATE TRIGGER</TT></H2>
+
+<PRE>&nbsp;CREATE TRIGGER [<I>owner</I>.]<I>trigger_name
+</I>&nbsp;ON [<I>owner</I>.]<I>table_name
+</I>&nbsp;FOR {INSERT, UPDATE, DELETE}
+&nbsp;[WITH ENCRYPTION]
+&nbsp;AS <I>sql_statements</I>&nbsp;
+</PRE>
+Или используя предложение IF UPDATE
+<PRE>&nbsp;CREATE TRIGGER [<I>owner</I>.]<I>trigger_name
+</I>&nbsp;ON [<I>owner</I>.]<I>table_name
+</I>&nbsp;FOR {INSERT, UPDATE}
+&nbsp;[WITH ENCRYPTION]
+&nbsp;AS
+&nbsp;IF UPDATE (<I>column_name</I>)
+&nbsp;[{AND | OR} UPDATE (<I>column_name</I>)...] <I>sql_statements</I></PRE>
+Этот оператор создает триггер - специальную разновидность хранимой процедуры,
+которая выполняется в тех случаях, когда пользователь пытается добавить,
+удалить или модифицировать данные. Триггеры часто используются для реализации
+бизнес-логики и проверки целостности данных.
+
+<P>&nbsp;
+<H3>
+Таблицы <TT>INSERTED</TT> и <TT>DELETED</TT></H3>
+Когда триггер срабатывает и начинает выполняться, во время его выполнения
+существуют две специальные таблицы - <TT>INSERTED</TT> и <TT>DELETED</TT>.
+В них находятся записи, соответсвенно добавляемые или удаляемые. Глобальная
+переменная @@ROWCOUNT указывает на число записей, учавствующих в операциях
+с данными.
+<TABLE>
+<TR>
+<TD ALIGN=CENTER WIDTH="10%">
+<H1>
+<FONT COLOR="#FF0000">!</FONT></H1>
+</TD>
+
+<TD ALIGN=LEFT><B>Обратите внимание</B>: Триггер срабатывает один раз на
+всю операцию вставки, модификации или удаления данных. Даже если операция
+реально не затрагивает ни одной записи, как, например, в случае&nbsp;
+<BR><TT>DELETE FROM PAYS WHERE 1=2</TT>
+<BR>триггер все равно сработает, <TT>@@ROWCOUNT</TT> будет равен нулю,
+а таблица <TT>DELETED</TT> пуста&nbsp;</TD>
+</TR>
+</TABLE>
+Невозможно создать триггер на VIEW.
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>CREATE TRIGGER employee_insupd
+ON employee
+FOR INSERT, UPDATE
+AS
+/* Get the range of level for this job type from the jobs table. */
+DECLARE @min_lvl tinyint,
+&nbsp;&nbsp;&nbsp; @max_lvl tinyint,
+&nbsp;&nbsp;&nbsp; @emp_lvl tinyint,
+&nbsp;&nbsp;&nbsp; @job_id smallint
+SELECT @min_lvl = min_lvl,&nbsp;
+&nbsp;&nbsp;&nbsp; @max_lvl = max_lvl,&nbsp;
+&nbsp;&nbsp;&nbsp; @emp_lvl = i.job_lvl,
+&nbsp;&nbsp;&nbsp; @job_id = i.job_id
+FROM employee e, jobs j, inserted i&nbsp;
+WHERE e.emp_id = i.emp_id AND i.job_id = j.job_id
+IF (@job_id = 1) and (@emp_lvl &lt;> 10)&nbsp;
+BEGIN
+&nbsp;&nbsp;&nbsp; RAISERROR ('Job id 1 expects the default level of 10.',16,-1)
+&nbsp;&nbsp;&nbsp; ROLLBACK TRANSACTION
+END
+ELSE
+IF NOT (@emp_lvl BETWEEN @min_lvl AND @max_lvl)
+BEGIN
+&nbsp;&nbsp;&nbsp; RAISERROR ('The level for job_id:%d should be between %d and %d.',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 16, -1, @job_id, @min_lvl, @max_lvl)
+&nbsp;&nbsp;&nbsp; ROLLBACK TRANSACTION
+END</PRE>
+
+<HR>
+<H2>
+<TT>CREATE VIEW</TT></H2>
+
+<PRE>CREATE VIEW [<I>owner</I>.]<I>view_name
+</I>[(<I>column_name</I> [, <I>column_name</I>]...)]
+[WITH ENCRYPTION]
+AS <I>select_statement</I> [WITH CHECK OPTION]</PRE>
+Создает виртуальную таблицу(представление), воспроизводящую данные из одной
+или более реальных таблиц. Для создания <TT>VIEW</TT> невозможно использовать
+оператор <TT>UNION</TT>, не разрешаются операции вставки в представление,
+если во <TT>VIEW</TT> существуют вычислимые поля.
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>CREATE VIEW titles_view
+AS&nbsp;
+SELECT title, type, price, pubdate
+&nbsp;&nbsp;&nbsp; FROM titles</PRE>
+
+<HR>
+<H2>
+Курсоры</H2>
+Курсоры позволяют обрабатывать данные для каждой возвращаемой строки отдельно,
+не пользуясь множественными, традиционными для SQL операциями. Эти курсоры
+- серверные (server-based), и их не следует путать с курсорами, предоставляемыми
+DB-Library или ODBC. Для работы с курсорами используются следующе операторы:
+<TABLE BORDER WIDTH="100%" >
+<TR>
+<TH WIDTH="20%">Оператор</TH>
+
+<TH>Описание</TH>
+</TR>
+
+<TR>
+<TD><TT>DECLARE CURSOR</TT>&nbsp;</TD>
+
+<TD>Создает курсор&nbsp;</TD>
+</TR>
+
+<TR>
+<TD><TT>OPEN</TT>&nbsp;</TD>
+
+<TD>Открывает курсор&nbsp;</TD>
+</TR>
+
+<TR>
+<TD><TT>FETCH</TT>&nbsp;</TD>
+
+<TD>Выбирает данные&nbsp;</TD>
+</TR>
+
+<TR>
+<TD><TT>CLOSE</TT>&nbsp;</TD>
+
+<TD>Закрывает ранее открытый курсор&nbsp;</TD>
+</TR>
+
+<TR>
+<TD><TT>DEALLOCATE</TT>&nbsp;</TD>
+
+<TD>Уничтожает ранее созданый курсор&nbsp;</TD>
+</TR>
+</TABLE>
+Для обновления текущей сроки используется следующая форма оператора <TT>UPDATE</TT>:
+<PRE>UPDATE <I>table_name</I>&nbsp;
+&nbsp;&nbsp;&nbsp; SET <I>column_name1</I> =&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<I>expression1</I> | NULL | (<I>select_statement</I>)}&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [, <I>column_name2</I> =&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<I>expression2</I> | NULL | (<I>select_statement</I>)}...]&nbsp;
+WHERE CURRENT OF <I>cursor_name</I></PRE>
+а для удаления - следующая:
+<PRE>DELETE FROM <I>table_name</I>&nbsp;
+WHERE CURRENT OF <I>cursor_name</I></PRE>
+Курсор объявляется оператором <TT>DECLARE</TT>:
+<PRE>&nbsp;DECLARE <I>cursor_name</I> [INSENSITIVE] [SCROLL] CURSOR&nbsp;
+&nbsp;FOR <I>select_statement</I>&nbsp;
+&nbsp;[FOR {READ ONLY | UPDATE [OF <I>column_list</I>]}]</PRE>
+Оператор <TT>OPEN</TT> служит для открытия курсора. Он имеет следующий
+синтаксис: <TT>OPEN <I>cursor_name</I></TT> После открытия курсора в переменной
+<TT>@@CURSOR_ROW</TT> может быть одно из следующих значений:
+<DL>
+<DT>
+-<I>m</I></DT>
+
+<DD>
+В этом случае данные для курсора выгребаются асинхронно. Значение <I>m</I>
+представляет число уже выбранных записей.</DD>
+
+<DT>
+<I>n</I></DT>
+
+<DD>
+Все данные получены, <I>n</I> - число записей</DD>
+
+<DT>
+0</DT>
+
+<DD>
+Курсор не открыт</DD>
+</DL>
+Оператор <TT>FETCH</TT> служит для получения данных. Он имеет следующий
+синтаксис:
+<PRE>FETCH [[NEXT | PRIOR | FIRST | LAST | ABSOLUTE <I>n</I> | RELATIVE <I>n</I>] FROM] <I>cursor_name</I>&nbsp;
+[INTO @<I>variable_name1</I>, @<I>variable_name2</I>, ...]</PRE>
+
+<DL>
+<DT>
+<TT>NEXT</TT></DT>
+
+<DD>
+Получает следующую запись</DD>
+
+<DT>
+<TT>PRIOR</TT></DT>
+
+<DD>
+Получает предыдущую запись</DD>
+
+<DT>
+<TT>FIRST</TT></DT>
+
+<DD>
+Получает первую запись</DD>
+
+<DT>
+<TT>LAST</TT></DT>
+
+<DD>
+Получает последнюю запись</DD>
+
+<DT>
+<TT>ABSOLUTE</TT></DT>
+
+<DD>
+Получает <I>n</I>-ю запись</DD>
+
+<DT>
+<TT>RELATIVE</TT></DT>
+
+<DD>
+Получает <I>n</I>-ю запись относительно текущей</DD>
+</DL>
+Для того, чтобы опции <TT>PRIOR</TT>, <TT>LAST</TT>, <TT>FIRST</TT>, <TT>ABSOLUTE</TT>
+и <TT>RELATIVE</TT> были доступны, необходимо, чтобы курсор был создан
+с опцией SCROLL.
+
+<P>&nbsp;Глобальная переменная <TT>@@FETCH_STATUS</TT> возвращает результат последнего
+fetch'а -
+<DL>
+<DT>
+0</DT>
+
+<DD>
+Все нормально, данные получены</DD>
+
+<DT>
+-1</DT>
+
+<DD>
+Курсор кончился</DD>
+
+<DT>
+-2</DT>
+
+<DD>
+Текущая строка не является более членом требуемого множества записей, заданного
+в операторе select при объявлении курсора.</DD>
+</DL>
+Оператор <TT>CLOSE</TT> закрывает ранее созданный курсор, однако структуры
+данных, необходимых для его функционирования остаются нетронутыми; таким
+образом, курсор позднее может быть открыт вновь.
+
+<P>&nbsp;Оператор <TT>DEALLOCATE</TT> закрывает курсор и уничтожает все связанные
+с ним структуры данных.
+<H4>
+<B>Example</B></H4>
+&nbsp;
+<PRE>&nbsp;DECLARE @Name varchar(40)
+&nbsp;DECLARE CT CURSOR FOR SELECT Name from Peoples
+&nbsp;OPEN CT
+&nbsp;WHILE 1=1 BEGIN
+&nbsp; FETCH FROM CT INTO @Name
+&nbsp; /*Так, на мой взгляд, удобнее обходиться с курсорами*/
+&nbsp; IF @@fetch_status=-1&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BREAK
+&nbsp; IF @@fetch_status=-2
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CONTINUE
+&nbsp; PRINT @Name
+&nbsp;END
+&nbsp;DEALLOCATE CT</PRE>
+
+<HR>
+<H2>
+<TT>DECLARE</TT></H2>
+
+<PRE>&nbsp; DECLARE @<I>variable_name</I> <I>datatype</I>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [, @<I>variable_name</I> <I>datatype</I>...]</PRE>
+Создает локальные переменные для batch'а или процедуры. Также служит для
+объявления курсоров.
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>&nbsp;DECLARE @I INT</PRE>
+
+<HR>
+<H2>
+<TT>DELETE</TT></H2>
+
+<PRE>&nbsp;DELETE [FROM] {<I>table_name</I> | <I>view_name</I>}
+&nbsp;&nbsp;&nbsp;&nbsp; [WHERE <I>clause</I>]</PRE>
+Где <I>clause</I> - <NOBR>{<I>search_conditions</I> | CURRENT OF <I>cursor_name</I>}</NOBR>
+<BR>Ключевое слово <TT>IDENTITYCOL</TT> может быть использовано вместо
+имени колонки, имеющей свойство <TT>IDENTITY</TT>. Оператор <TT><NOBR>TRUNCATE
+TABLE</NOBR></TT> работает быстрее, чем <TT><NOBR>DELETE</NOBR></TT>, хотя
+и делает то же самое. Дело в том, что если <TT><NOBR>DELETE</NOBR></TT>
+удаляет по одной строке, занося данные об этом в журнал транзакций, то
+<TT><NOBR>TRUNCATE TABLE</NOBR></TT> заносит в журнал только данные об
+удалении страниц.
+
+<P>&nbsp;В дополнение к стадартному синтаксису Transact-SQL имеет расширение:
+<PRE>&nbsp;DELETE [FROM] {<I>table_name</I> | <I>view_name</I>}
+&nbsp;&nbsp;&nbsp;&nbsp; [FROM {<I>table_name</I> | <I>view_name</I>}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [, {<I>table_name</I> | <I>view_name</I>}]...]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [..., {<I>table_name16</I> | <I>view_name16</I>}]]&nbsp;
+&nbsp;[WHERE <I>clause</I>]
+</PRE>
+что позволяет использовать при удалении более одной таблицы в WHERE
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>DELETE FROM titleauthor&nbsp;
+&nbsp;&nbsp;&nbsp; FROM authors a, titles t
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHERE a.au_id = titleauthor.au_id
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AND titleauthor.title_id = t.title_id
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AND t.title LIKE '%computers%'</PRE>
+
+<HR>
+<H2>
+<TT>DISK INIT</TT></H2>
+
+<PRE>&nbsp;DISK INIT&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp; NAME = '<I>logical_name</I>',
+&nbsp;&nbsp;&nbsp;&nbsp; PHYSNAME = '<I>physical_name</I>',
+&nbsp;&nbsp;&nbsp;&nbsp; VDEVNO = <I>virtual_device_number</I>,
+&nbsp;&nbsp;&nbsp;&nbsp; SIZE = <I>number_of_2K_blocks
+</I>&nbsp;[, VSTART = <I>virtual_address</I>]</PRE>
+Создает DEVICE с указанным логическим именем и соответствующий файлу с
+именем <I>physical_name</I>, размером в <I>number_of_2K_blocks</I>. <TT>VDEVNO</TT>
+- номер вирутального устройства, может быть любым в промежутке от 1 до
+255. Номер 0 зарезервирован для <TT><NOBR>master device</NOBR></TT>
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>&nbsp;&nbsp;
+DISK INIT
+&nbsp;&nbsp;&nbsp; NAME = 'DEVICE2',
+&nbsp;&nbsp;&nbsp; PHYSNAME = 'd:\sqldata\device2.dat',
+&nbsp;&nbsp;&nbsp; VDEVNO = 2,
+&nbsp;&nbsp;&nbsp; SIZE = 8192</PRE>
+
+<HR>
+<H2>
+<TT>DISK REINIT</TT></H2>
+
+<PRE>&nbsp; DISK REINIT
+&nbsp;&nbsp; NAME = <I>'logical name'</I>,
+&nbsp;&nbsp; PHYSNAME = <I>'physical_name'</I>,
+&nbsp;&nbsp; VDEVNO = <I>'virtual_device_number'</I>,
+&nbsp;&nbsp; SIZE = <I>number_of_2K_blocks
+</I>&nbsp;&nbsp; [,VSTART = <I>virtual_address</I>]</PRE>
+Позволяет использовать ранее созданный DEVICE, если по тем или иным причинам
+о нем нет записи в master database. <I><TT>logical_name</TT></I> - его
+наименование, <I><TT>physical_name</TT></I> указывает, что это за файл,
+<I><TT>virtual_device_number</TT></I> - виртуальный номер (см. <TT>DISK
+INIT</TT>), <I><TT>number_of_2K_blocks</TT></I> - число двухкилобайтных
+блоков в нем, <I><TT>virtual_address</TT></I> - виртуальный начальный адрес,
+по умолчанию 0.
+<TABLE>
+<TR>
+<TD ALIGN=CENTER VALIGN=CENTER WIDTH="10%">
+<H1>
+<FONT COLOR="#FF0000">!</FONT></H1>
+</TD>
+
+<TD ALIGN=LEFT>При некорректном указании размера существовашего ранее DEVICE
+оно будет разрушено при попытке подключения.&nbsp;</TD>
+</TR>
+</TABLE>
+
+<HR>
+<H2>
+<TT>DISK REFIT</TT></H2>
+
+<PRE>&nbsp;DISK REFIT</PRE>
+Используется после <TT>DISK REINIT</TT> для завершения процесса подключения
+ранее существовавшего DEVICE.&nbsp;
+<HR>
+<H2>
+<TT>DROP DATABASE</TT></H2>
+
+<PRE>DROP DATABASE <I>database_name</I> [, <I>database_name</I>...]</PRE>
+Уничтожает базу данных - то есть уничтожает все объекты, относящиеся к
+ней, освобождает распределенное для нее место на диске и уничтожает все
+ссылки на нее из master'а. Невозможно уничтожить базу данных, кем-либо
+используемую в данный момент.
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>DROP DATABASE pubs, newpubs</PRE>
+
+<HR>
+<H2>
+<TT>DROP DEFAULT</TT></H2>
+
+<PRE>DROP DEFAULT [owner.]default_name [, [owner.]default_name...]</PRE>
+Уничтожает <TT>DEFAULT</TT>. Перед тем, как уничтожить <TT>DEFAULT</TT>,
+его необходимо предварительно открепить с помощю хранимой процедуры <B><TT>sp_unbindefault</TT></B>
+от колонок, к которым он был ранее прикреплен. Если данные колонки допускали
+значение <TT>NULL</TT>, то оно будет в них вставлено, если же колонка не
+допускает <TT>NULL</TT>, вы получите сообщение об ошибке.
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>sp_unbindefault 'authors.phone'
+go
+DROP DEFAULT phonedflt</PRE>
+
+<HR>
+<H2>
+<TT>DROP INDEX</TT></H2>
+
+<PRE>DROP INDEX [<I>owner</I>.]<I>table_name</I>.<I>index_name
+</I>[, [<I>owner</I>.]<I>table_name</I>.<I>index_name</I>...]</PRE>
+Уничтожает указанный индекс.
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>DROP INDEX authors.au_id_ind</PRE>
+
+<HR>
+<H2>
+<TT>DROP PROCEDURE</TT></H2>
+
+<PRE>DROP PROCedure [<I>owner</I>.]<I>procedure_name</I> [, [<I>owner</I>.]<I>procedure_name</I>...]</PRE>
+Уничтожает процедуру в текущей базе данных. Если процедура является пользовательской
+системнрй процедурой, т.е. начинается с символов <B>sp_</B>, то она ищется
+в базе данных master. Если процедура с указанным имененем не найдена в
+текущей базе данных - она опять-таки ищется в базе данных master.
+
+<P>&nbsp;Группа процедур (т.е. процедуры с одинаковым именем, но с разным параметром
+;<I>number</I> могут быть удалены одним оператором <TT>DROP</TT>
+
+<P>&nbsp;
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>DROP PROCEDURE byroyalty</PRE>
+
+<HR>
+<H2>
+<TT>DROP RULE</TT></H2>
+
+<PRE>DROP RULE [<I>owner</I>.]<I>rule_name</I> [, [<I>owner</I>.]<I>rule_name</I>...]</PRE>
+Удаляет правило. Для того, чтобы правило можно было удалить, необходимо
+его предварительно открепить от колонки с помощью хранимой процедуры <B><TT>sp_unbindrule</TT></B>
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>sp_unbindrule 'publishers.pub_id'
+go
+DROP RULE pub_id_rule</PRE>
+
+<HR>
+<H2>
+<TT>DROP TABLE</TT></H2>
+
+<PRE>&nbsp;DROP TABLE [[<I>database</I>.]<I>owner</I>.]<I>table_name
+</I>&nbsp;[, [[<I>database</I>.]<I>owner</I>.]<I>table_name</I>...]</PRE>
+Уничтожает таблицу. Невозможно уничтожить таблицу, на которую ссылаются
+другие таблицы с помощью FOREIGN KEY, кроме того, невозможно уничтожить
+системную таблицу. Не следует путать операторы <TT><NOBR>DROP TABLE</NOBR></TT>,
+<TT>DELETE</TT> и <TT><NOBR>TRUNCATE TABLE</NOBR></TT> - в то время как
+первый из них уничтожает таблицу, то второй и третий просто удаляют из
+нее данные.
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>DROP TABLE titles1</PRE>
+
+<HR>
+<H2>
+<TT>DROP TRIGGER</TT></H2>
+
+<PRE>DROP TRIGGER [<I>owner</I>.]<I>trigger_name</I> [, [<I>owner</I>.]<I>trigger_name</I>...]</PRE>
+Уничтожает указанный триггер
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>DROP TRIGGER employee_insupd</PRE>
+
+<HR>
+<H2>
+<TT>DROP VIEW</TT></H2>
+
+<PRE>DROP VIEW [<I>owner</I>.]<I>view_name</I> [, [<I>owner</I>.]<I>view_name</I>...]</PRE>
+Уничтожает указанный VIEW
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>DROP VIEW titles_view</PRE>
+
+<HR><A NAME="DUMP"></A>
+<H2>
+<TT>DUMP</TT></H2>
+
+<PRE>DUMP DATABASE {<I>dbname</I> | @<I>dbname_var</I>}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TO <I>dump_device</I> [, <I>dump_device2</I> [..., <I>dump_device32</I>]]
+&nbsp;&nbsp;&nbsp; [WITH <I>options</I>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [[,] STATS [ = <I>percentage</I>]]]
+&nbsp;&nbsp;
+Резеврное копирование журнала транзакций:
+&nbsp;&nbsp;&nbsp; DUMP TRANSACTION {<I>dbname</I> | @<I>dbname_var</I>}&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [TO <I>dump_device</I> [, <I>dump_device2</I> [..., <I>dump_device32</I>]]]
+&nbsp;&nbsp;&nbsp; [WITH {TRUNCATE_ONLY | NO_LOG | NO_TRUNCATE}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<I>options</I>}]
+</PRE>
+Создает резервную копию базы данных или журнала транзакций, которые впоследствие
+могут быть загружены оператором <TT>LOAD</TT>. При резервном копировании
+журнала транзакций автоматически удаляется его неактивная часть.
+<TABLE>
+<TR>
+<TD ALIGN=CENTER WIDTH="10%">
+<H1>
+<FONT COLOR="#FF0000">!</FONT></H1>
+</TD>
+
+<TD ALIGN=LEFT><B>Обратите внимание</B>: Если после <TT><NOBR>DUMP TRANSACTION</NOBR></TT>
+уменьшение размеров журнала транзакций не происходит - у вас в нем сидит
+незакрытая транзакция, для проверки чего используйте <TT><NOBR>DBCC OPENTRAN</NOBR></TT>&nbsp;</TD>
+</TR>
+</TABLE>
+При резервном копировании журнала транзакций с параметром <TT>TRUNCATE_ONLY</TT>
+реального копирования не происходит - журнал транзакуий просто очищается.
+<B><FONT COLOR="#FF0000">Крайне желательно</FONT></B> после этого <U>немедленно</U>
+сделать резервную копию базы данных.
+
+<P>&nbsp;Если же у вас переполнился лог до такой степени, что и <TT>TRUNCATE_ONLY</TT>
+не помогает - используйте опцию <TT><NOBR>WITH NO_LOG</NOBR></TT>
+
+<P>&nbsp;
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<PRE>* The next day. */
+DUMP TRANSACTION corporate
+&nbsp;&nbsp;&nbsp; TO DISK = '\\servername\sharename\directory\filename.ext'
+&nbsp;&nbsp;&nbsp; WITH NO_LOG
+go</PRE>
+
+<HR>
+<H2>
+<TT>EXECUTE</TT></H2>
+
+<PRE>EXEC[ute]&nbsp;
+{[@<I>return_status</I> =]
+&nbsp;&nbsp;&nbsp; {[[[<I>server</I>.]<I>database</I>.]<I>owner</I>.]<I>procedure_name</I>[;<I>number</I>] |&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @<I>procedure_name_var</I>}&nbsp;
+&nbsp;&nbsp;&nbsp; [[@<I>parameter_name</I> =] {<I>value</I> | @<I>variable</I> [OUTPUT]]&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [, [@<I>parameter_name</I> =] {<I>value</I> | @<I>variable</I> [OUTPUT]}]...]&nbsp;
+&nbsp;&nbsp;&nbsp; [WITH RECOMPILE]]&nbsp;
+
+EXEC[ute] ({@<I>str_var</I> | '<I>tsql_string</I>'} [{@<I>str_var</I> | '<I>tsql_string</I>'}...)}</PRE>
+Выполняет указанную хранимую процедуру с указанными параметрами, возвращая
+код возврата. Кроме процедур также можно ивыполнять и строку симоволов
+<H4>
+<B>Пример</B></H4>
+&nbsp;
+<BR>
+<HR>
+<H2>
+<TT>Выражения</TT></H2>
+
+<PRE>&nbsp;&nbsp;&nbsp; <I>constant</I> | <I>column_name</I> | <I>function</I> | (<I>subquery</I>)}
+&nbsp;&nbsp;&nbsp; [{<I>operator</I> | AND | OR | NOT}
+&nbsp;&nbsp;&nbsp; {<I>constant</I> | <I>column_name</I> | <I>function</I> | (<I>subquery</I>)}...]</PRE>
+Используются вместе с константами, переменными и именами колонок в большинстве
+операторов TSQL. Строковые константы представляются как имеющие тип <I>varchar</I>,
+все выражения, имеющие тип <I>varchar</I> при сравнении с выражениями типа
+char преобразуются в него же, т.е. к ним добавляются дополнительные пробелы&nbsp;
+<HR>
+<H2>
+Функции</H2>
+
+<DL>
+<DT>
+Аггрегативные функции</DT>
+
+<DD>
+Аггрегативные функции возвращают суммарные значения. Вот список этих функций:</DD>
+
+<TABLE BORDER WIDTH="100%" >
+<TR>
+<TD>AVG&nbsp;</TD>
+
+<TD>COUNT(*)&nbsp;</TD>
+
+<TD>MIN</TD>
+</TR>
+
+<TR>
+<TD>COUNT&nbsp;</TD>
+
+<TD>MAX&nbsp;</TD>
+
+<TD>SUM&nbsp;</TD>
+</TR>
+</TABLE>
+
+<DT>
+Функции манипуляции датой и временем:</DT>
+
+<TABLE BORDER WIDTH="100%" >
+<TR>
+<TD>DATEADD&nbsp;</TD>
+
+<TD>DATENAME&nbsp;</TD>
+
+<TD>GETDATE</TD>
+</TR>
+
+<TR>
+<TD>DATEDIFF&nbsp;</TD>
+
+<TD>DATEPART&nbsp;</TD>
+</TR>
+</TABLE>
+
+<DT>
+Математические функции</DT>
+
+<TABLE BORDER WIDTH="100%" >
+<TR>
+<TD>ABS&nbsp;</TD>
+
+<TD>DEGREES&nbsp;</TD>
+
+<TD>RAND</TD>
+</TR>
+
+<TR>
+<TD>ACOS&nbsp;</TD>
+
+<TD>EXP&nbsp;</TD>
+
+<TD>ROUND</TD>
+</TR>
+
+<TR>
+<TD>ASIN&nbsp;</TD>
+
+<TD>FLOOR&nbsp;</TD>
+
+<TD>SIGN</TD>
+</TR>
+
+<TR>
+<TD>ATAN&nbsp;</TD>
+
+<TD>LOG&nbsp;</TD>
+
+<TD>SIN</TD>
+</TR>
+
+<TR>
+<TD>ATN2&nbsp;</TD>
+
+<TD>LOG10&nbsp;</TD>
+
+<TD>SQRT</TD>
+</TR>
+
+<TR>
+<TD>CEILING&nbsp;</TD>
+
+<TD>PI&nbsp;</TD>
+
+<TD>TAN</TD>
+</TR>
+
+<TR>
+<TD>COS&nbsp;</TD>
+
+<TD>POWER&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>COT&nbsp;</TD>
+
+<TD>RADIANS&nbsp;</TD>
+</TR>
+</TABLE>
+
+<DT>
+Niladic-функции</DT>
+
+<DD>
+Эти функции возвращают различные системные значения.</DD>
+
+<TABLE BORDER WIDTH="100%" >
+<TR>
+<TD>CURRENT_TIMESTAMP&nbsp;</TD>
+
+<TD>SYSTEM_USER</TD>
+</TR>
+
+<TR>
+<TD>CURRENT_USER&nbsp;</TD>
+
+<TD>USER</TD>
+</TR>
+
+<TR>
+<TD>SESSION_USER&nbsp;</TD>
+</TR>
+</TABLE>
+
+<DT>
+Функции для манипуляции со строками</DT>
+
+<TABLE BORDER WIDTH="100%" >
+<TR>
+<TD>LTRIM&nbsp;</TD>
+
+<TD>SOUNDEX</TD>
+</TR>
+
+<TR>
+<TD>ASCII&nbsp;</TD>
+
+<TD>PATINDEX&nbsp;</TD>
+
+<TD>SPACE</TD>
+</TR>
+
+<TR>
+<TD>CHAR&nbsp;</TD>
+
+<TD>REPLICATE&nbsp;</TD>
+
+<TD>STR</TD>
+</TR>
+
+<TR>
+<TD>CHARINDEX&nbsp;</TD>
+
+<TD>REVERSE&nbsp;</TD>
+
+<TD>STUFF</TD>
+</TR>
+
+<TR>
+<TD>DIFFERENCE&nbsp;</TD>
+
+<TD>RIGHT&nbsp;</TD>
+
+<TD>SUBSTRING</TD>
+</TR>
+
+<TR>
+<TD>LOWER&nbsp;</TD>
+
+<TD>RTRIM&nbsp;</TD>
+
+<TD>UPPER</TD>
+</TR>
+</TABLE>
+
+<DT>
+Системные функции</DT>
+
+<TABLE BORDER WIDTH="100%" >
+<TR>
+<TD>COALESCE&nbsp;</TD>
+
+<TD>HOST_NAME&nbsp;</TD>
+
+<TD>OBJECT_NAME</TD>
+</TR>
+
+<TR>
+<TD>COL_LENGTH&nbsp;</TD>
+
+<TD>IDENT_INCR&nbsp;</TD>
+
+<TD>STATS_DATE</TD>
+</TR>
+
+<TR>
+<TD>COL_NAME&nbsp;</TD>
+
+<TD>IDENT_SEED&nbsp;</TD>
+
+<TD>SUSER_ID</TD>
+</TR>
+
+<TR>
+<TD>DATALENGTH&nbsp;</TD>
+
+<TD>INDEX_COL&nbsp;</TD>
+
+<TD>SUSER_NAME</TD>
+</TR>
+
+<TR>
+<TD>DB_ID&nbsp;</TD>
+
+<TD>ISNULL&nbsp;</TD>
+
+<TD>USER_ID</TD>
+</TR>
+
+<TR>
+<TD>DB_NAME&nbsp;</TD>
+
+<TD>NULLIF&nbsp;</TD>
+
+<TD>USER_NAME</TD>
+</TR>
+
+<TR>
+<TD>GETANSINULL&nbsp;</TD>
+
+<TD>HOST_ID&nbsp;</TD>
+
+<TD>OBJECT_ID</TD>
+</TR>
+</TABLE>
+
+<DT>
+<TT>CONVERT</TT></DT>
+
+<DD>
+Функция <TT>CONVERT</TT> служит для преобразования различных типов данных.</DD>
+</DL>
+
+<HR><A NAME="GRANT"></A>
+<H2>
+<TT>GRANT</TT></H2>
+
+<PRE>Полномочия на выполнение операторов:
+&nbsp;GRANT {ALL | <I>statement_list</I>}&nbsp;
+&nbsp;TO {PUBLIC | <I>name_list</I>}
+Полномочия на объекты:
+GRANT {ALL | <I>permission_list</I>}
+ON {<I>table_name</I> [(<I>column_list</I>)] | <I>view_name</I> [(<I>column_list</I>)] |&nbsp;
+<I>stored_procedure_name</I> | <I>extended_stored_procedure_name</I>}
+TO {PUBLIC | <I>name_list</I>}</PRE>
+Назначает полномочия пользователям.
+
+<P>&nbsp;По умолчанию полномочия даются системному администратору, владельцу
+базы данных, владельцу объекта или группе <TT>PUBLUC</TT>. Нектороые из
+них они могут передать другим пользователям. По умолчанию системный администратор
+имеет все полномочия, он может использовать хранимую процедуру <B><TT>sp_changedbowner</TT></B>
+для изменения владельца базы данных. Владелец базы данных или системный
+администратор могут передавать полномочия на сам оператор <TT>GRANT</TT>.
+
+<P>&nbsp;Пользователи могут входит только в одну группу, исключая группу <TT>PUBLIC</TT>.
+
+<P>Для измения прав кроме оператора <TT>GRANT</TT> существует оператор
+REVOKE, имеющий следующий синтаксис:
+<PRE>Полномочия&nbsp; на выполнение операторов:
+REVOKE {ALL | <I>statement_list</I>}&nbsp;
+FROM {PUBLIC | <I>name_list</I>}
+Полномочия на объекты:
+REVOKE {ALL | <I>permission_list</I>}&nbsp;
+ON {<I>table_name</I> [(<I>column_list</I>)] | <I>view_name</I> [(<I>column_list</I>)] |&nbsp;
+<I>stored_procedure_name</I> | <I>extended_stored_procedure_name</I>}&nbsp;
+FROM {PUBLIC | <I>name_list</I></PRE>
+
+<TABLE BORDER >
+<TR>
+<TH></TH>
+
+<TH COLSPAN="4">По умолчанию&nbsp;</TH>
+
+<TH COLSPAN="3">Могут ли быть переданы/изъяты</TH>
+</TR>
+
+<TR>
+<TH>Оператор</TH>
+
+<TH>Системный администратор</TH>
+
+<TH>Владелец БД</TH>
+
+<TH>Владелец обьекта</TH>
+
+<TH>Public</TH>
+
+<TH>Да</TH>
+
+<TH>Нет</TH>
+
+<TH>Чушь!</TH>
+</TR>
+
+<TR>
+<TD>ALTER DATABASE&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-<SUP>1</SUP>&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>ALTER TABLE&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>BEGIN TRANSACTION&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X</TD>
+</TR>
+
+<TR>
+<TD>CHECKPOINT&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>COMMIT TRANSACTION&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X</TD>
+</TR>
+
+<TR>
+<TD>CREATE DATABASE&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>CREATE DEFAULT&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>CREATE INDEX&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X<SUP>3</SUP>&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>CREATE PROCEDURE&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>CREATE RULE&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>CREATE TABLE&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-<SUP>2</SUP>&nbsp;</TD>
+
+<TD>X<SUP>2</SUP>&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>CREATE TRIGGER&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X<SUP>3</SUP>&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>CREATE VIEW&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>DBCC <SUP>4</SUP>&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>DELETE&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>DISK INIT&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>DISK MIRROR&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>DISK REFIT&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>DISK REINIT&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>DISK REMIRROR&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>DISK UNMIRROR&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>DROP any object&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>DUMP DATABASE&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>DUMP TRANSACTION&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>EXECUTE <SUP>5</SUP>&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>GRANT&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>GRANT on object&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>INSERT&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>KILL&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>LOAD DATABASE&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>LOAD TRANSACTION&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>PRINT&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X</TD>
+</TR>
+
+<TR>
+<TD>RAISERROR&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X</TD>
+</TR>
+
+<TR>
+<TD>READTEXT&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-<SUP>6</SUP>&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>RECONFIGURE&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>REFERENCES&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>REVOKE&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>REVOKE on object&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>ROLLBACK TRANSACTION&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X</TD>
+</TR>
+
+<TR>
+<TD>SAVE TRANSACTION&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X</TD>
+</TR>
+
+<TR>
+<TD>SELECT&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>SET&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X</TD>
+</TR>
+
+<TR>
+<TD>SETUSER&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>SHUTDOWN&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>TRUNCATE TABLE&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>UPDATE&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>UPDATE STATISTICS&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>UPDATETEXT&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-<SUP>7</SUP>&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+
+<TR>
+<TD>WRITETEXT&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>X&nbsp;</TD>
+
+<TD>-<SUP>7</SUP>&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+
+<TD>-</TD>
+</TR>
+</TABLE>
+&nbsp;
+<OL>
+<LI>
+Передается вместе с оператором <TT>CREATE DATABASE</TT></LI>
+
+<LI>
+Члены группы <TT>PUBLIC</TT> имеют полномочия создавать временные таблицы</LI>
+
+<LI>
+По умолчанию относится к владельцу БД</LI>
+
+<LI>
+Для определения прав на оператор DBCC см. <NOBR>Transact-SQL Reference</NOBR>,
+<NOBR>DBCC Statement</NOBR></LI>
+
+<LI>
+По умолчанию относится к владельцу хранимой процедуры</LI>
+
+<LI>
+Передается вместе с полномочиями на SELECT</LI>
+
+<LI>
+Передается вместе с полномочиями на UPDATE</LI>
+</OL>
+<B>Пример</B>
+
+<P>&nbsp;
+<PRE>GRANT SELECT
+ON authors
+TO public
+go&nbsp;
+GRANT INSERT, UPDATE, DELETE
+ON authors
+TO Mary, John, Tom</PRE>
+
+<HR>
+<H2>
+<TT>Идентификаторы</TT></H2>
+Идентификаторы в TSQL должны состоять из символов латинского алфавита,
+цифр или из символов _ ,@ , #. Дополнительно существуют следующие правила:
+<UL>
+<LI>
+Все идентификаторы, начинающиеся с @, почитаются за локальные переменные.</LI>
+
+<LI>
+Все идентификаторы, начинающиеся с #, считаются именами временный объектов.</LI>
+
+<LI>
+В противном случае идентификаторы должны начинаться с символа латинского
+алфавита.</LI>
+
+<LI>
+По умолчанию в имени объектов не могут встречаться пробелы, но, используя
+режим "Quoted identifiers", это можно обойти. Для более подробного ознакомления
+с режимимом "Quoted identifiers" см. Transact-SQL Reference.</LI>
+</UL>
+Для имен объектов необязательно быть уникальными в базе данных, например,
+имена колонок и индексов должны быть уникальными только в пределах таблицы
+или представления(view), все же имена других объектов должны быть быть
+уникальными в пределах базы данных для каждого владельца. Любую колонку
+или таблицу можно уникально идентифицировать следующим составным именем
+- имя базы данных, имя владельца, имя таблицы или представления. Промежуточные
+значения - имя владельца может быть опущено, если это не приводит к конфликтам
+имен. В случае удаленных хранимых процедур ее имя задается следующим образом:
+<I>server.database.owner.procedure</I>
+
+<P>&nbsp;Если вы указываете имя объекта не целиком, то сервер сначала пытается
+найти его среди объектов, которыми владеете вы, после этого производится
+попытка найти указанный объект как <I><TT>database.dbowner.name</TT></I>.
+Для определеня видимости хранимых процедур, начинающихся с символов <B><TT>sp_</TT></B>
+см. раздел, посвященный оператору <TT><NOBR><A HREF="#CREATEPROCEDURE">CREATE
+PROCEDURE</A></NOBR></TT>
+
+<P>&nbsp;
+<HR>
+<H2>
+<TT>INSERT</TT></H2>
+
+<PRE>INSERT [INTO]
+&nbsp;&nbsp;&nbsp; {<I>table_name</I> | <I>view_name</I>} [(<I>column_list</I>)]
+{DEFAULT VALUES | <I>values_list</I> | <I>select_statement</I>}</PRE>
+Добавляет запись в таблицу.
+<UL>
+<LI>
+При указании значений конкретный полей вместо использования каких-либо
+значений можно использовать ключевое слово <TT>DEFAULT</TT></LI>
+
+<LI>
+Вставка пустой строки приводит к добавлению пробела ' ', а не значения
+NULL</LI>
+</UL>
+<B>Пример</B>
+
+<P>&nbsp;
+<PRE>INSERT titles
+&nbsp;&nbsp;&nbsp; VALUES('BU2222', 'Faster!', 'business', '1389',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NULL, NULL, NULL, NULL, 'ok', '06/17/87')
+
+INSERT titles(title_id, title, type, pub_id, notes, pubdate)
+&nbsp;&nbsp;&nbsp; VALUES ('BU1237', 'Get Going!', 'business', '1389',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'great', '06/18/86')
+
+&nbsp;&nbsp;
+INSERT INTO newauthors
+&nbsp;&nbsp;&nbsp; SELECT *
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FROM authors
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHERE city = 'San Francisco'
+</PRE>
+
+<HR>
+<H2>
+<TT>Ключевые слова</TT></H2>
+Следующие слова являются зарезервированными и не могут быть использованы
+для именования объектов в базе данных, за исключением режима Quoted Identifiers
+<TABLE BORDER >
+<TR>
+<TD><TT>ADD</TT>&nbsp;</TD>
+
+<TD><TT>ALL</TT>&nbsp;</TD>
+
+<TD><TT>ALTER</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>AND</TT>&nbsp;</TD>
+
+<TD><TT>ANY</TT>&nbsp;</TD>
+
+<TD><TT>AS</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>ASC</TT>&nbsp;</TD>
+
+<TD><TT>AVG</TT>&nbsp;</TD>
+
+<TD><TT>BEGIN</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>BETWEEN</TT>&nbsp;</TD>
+
+<TD><TT>BREAK</TT>&nbsp;</TD>
+
+<TD><TT>BROWSE</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>BULK</TT>&nbsp;</TD>
+
+<TD><TT>BY</TT>&nbsp;</TD>
+
+<TD><TT>CASE</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>CHECK</TT>&nbsp;</TD>
+
+<TD><TT>CHECKPOINT</TT>&nbsp;</TD>
+
+<TD><TT>CLOSE</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>CLUSTERED</TT>&nbsp;</TD>
+
+<TD><TT>COALESCE</TT>&nbsp;</TD>
+
+<TD><TT>COMMIT</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>COMMITTED</TT>&nbsp;</TD>
+
+<TD><TT>COMPUTE</TT>&nbsp;</TD>
+
+<TD><TT>CONFIRM</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>CONSTRAINT</TT>&nbsp;</TD>
+
+<TD><TT>CONTINUE</TT>&nbsp;</TD>
+
+<TD><TT>CONTROLROW</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>CONVERT</TT>&nbsp;</TD>
+
+<TD><TT>COUNT</TT>&nbsp;</TD>
+
+<TD><TT>CREATE</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>CURRENT</TT>&nbsp;</TD>
+
+<TD><TT>CURRENT_DATE</TT>&nbsp;</TD>
+
+<TD><TT>CURRENT_TIME</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>CURRENT_TIMESTAMP</TT>&nbsp;</TD>
+
+<TD><TT>CURRENT_USER</TT>&nbsp;</TD>
+
+<TD><TT>CURSOR</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>DATABASE</TT>&nbsp;</TD>
+
+<TD><TT>DBCC</TT>&nbsp;</TD>
+
+<TD><TT>DEALLOCATE</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>DECLARE</TT>&nbsp;</TD>
+
+<TD><TT>DEFAULT</TT>&nbsp;</TD>
+
+<TD><TT>DELETE</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>DESC</TT>&nbsp;</TD>
+
+<TD><TT>DISK</TT>&nbsp;</TD>
+
+<TD><TT>DISTINCT</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>DOUBLE</TT>&nbsp;</TD>
+
+<TD><TT>DROP</TT>&nbsp;</TD>
+
+<TD><TT>DUMMY</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>DUMP</TT>&nbsp;</TD>
+
+<TD><TT>ELSE</TT>&nbsp;</TD>
+
+<TD><TT>END</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>ERRLVL</TT>&nbsp;</TD>
+
+<TD><TT>ERROREXIT</TT>&nbsp;</TD>
+
+<TD><TT>EXCEPT</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>EXEC</TT>&nbsp;</TD>
+
+<TD><TT>EXECUTE</TT>&nbsp;</TD>
+
+<TD><TT>EXISTS</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>EXIT</TT>&nbsp;</TD>
+
+<TD><TT>FETCH</TT>&nbsp;</TD>
+
+<TD><TT>FILLFACTOR</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>FLOPPY</TT>&nbsp;</TD>
+
+<TD><TT>FOR</TT>&nbsp;</TD>
+
+<TD><TT>FOREIGN</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>FROM</TT>&nbsp;</TD>
+
+<TD><TT>GOTO</TT>&nbsp;</TD>
+
+<TD><TT>GRANT</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>GROUP</TT>&nbsp;</TD>
+
+<TD><TT>HAVING</TT>&nbsp;</TD>
+
+<TD><TT>HOLDLOCK</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>IDENTITY</TT>&nbsp;</TD>
+
+<TD><TT>IDENTITY_INSERT</TT>&nbsp;</TD>
+
+<TD><TT>IDENTITYCOL</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>IF</TT>&nbsp;</TD>
+
+<TD><TT>IN</TT>&nbsp;</TD>
+
+<TD><TT>INDEX</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>INSENSITIVE</TT>&nbsp;</TD>
+
+<TD><TT>INSERT</TT>&nbsp;</TD>
+
+<TD><TT>INTERSECT</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>INTO</TT>&nbsp;</TD>
+
+<TD><TT>IS</TT>&nbsp;</TD>
+
+<TD><TT>ISOLATION</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>KEY</TT>&nbsp;</TD>
+
+<TD><TT>KILL</TT>&nbsp;</TD>
+
+<TD><TT>LEVEL</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>LIKE</TT>&nbsp;</TD>
+
+<TD><TT>LINENO</TT>&nbsp;</TD>
+
+<TD><TT>LOAD</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>MAX</TT>&nbsp;</TD>
+
+<TD><TT>MIN</TT>&nbsp;</TD>
+
+<TD><TT>MIRROREXIT</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>NOCHECK</TT>&nbsp;</TD>
+
+<TD><TT>NONCLUSTERED</TT>&nbsp;</TD>
+
+<TD><TT>NOT</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>NULL</TT>&nbsp;</TD>
+
+<TD><TT>NULLIF</TT>&nbsp;</TD>
+
+<TD><TT>OF</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>OFF</TT>&nbsp;</TD>
+
+<TD><TT>OFFSETS</TT>&nbsp;</TD>
+
+<TD><TT>ON</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>ONCE</TT>&nbsp;</TD>
+
+<TD><TT>ONLY</TT>&nbsp;</TD>
+
+<TD><TT>OPEN</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>OPTION</TT>&nbsp;</TD>
+
+<TD><TT>OR</TT>&nbsp;</TD>
+
+<TD><TT>ORDER</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>OVER</TT>&nbsp;</TD>
+
+<TD><TT>PERM</TT>&nbsp;</TD>
+
+<TD><TT>PERMANENT</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>PIPE</TT>&nbsp;</TD>
+
+<TD><TT>PLAN</TT>&nbsp;</TD>
+
+<TD><TT>PRECISION</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>PREPARE</TT>&nbsp;</TD>
+
+<TD><TT>PRIMARY</TT>&nbsp;</TD>
+
+<TD><TT>PRINT</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>PROC</TT>&nbsp;</TD>
+
+<TD><TT>PROCEDURE</TT>&nbsp;</TD>
+
+<TD><TT>PROCESSEXIT</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>PUBLIC</TT>&nbsp;</TD>
+
+<TD><TT>RAISERROR</TT>&nbsp;</TD>
+
+<TD><TT>READ</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>RECONFIGURE</TT>&nbsp;</TD>
+
+<TD><TT>REFERENCES</TT>&nbsp;</TD>
+
+<TD><TT>REPEATABLE</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>REPLICATION</TT>&nbsp;</TD>
+
+<TD><TT>RETURN</TT>&nbsp;</TD>
+
+<TD><TT>REVOKE</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>ROLLBACK</TT>&nbsp;</TD>
+
+<TD><TT>ROWCOUNT</TT>&nbsp;</TD>
+
+<TD><TT>RULE</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>SAVE</TT>&nbsp;</TD>
+
+<TD><TT>SCROLL</TT>&nbsp;</TD>
+
+<TD><TT>SELECT</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>SERIALIZABLE</TT>&nbsp;</TD>
+
+<TD><TT>SESSION_USER</TT>&nbsp;</TD>
+
+<TD><TT>SET</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>SETUSER</TT>&nbsp;</TD>
+
+<TD><TT>SHUTDOWN</TT>&nbsp;</TD>
+
+<TD><TT>SOME</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>STATISTICS</TT>&nbsp;</TD>
+
+<TD><TT>SUM</TT>&nbsp;</TD>
+
+<TD><TT>SYSTEM_USER</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>TABLE</TT>&nbsp;</TD>
+
+<TD><TT>TAPE</TT>&nbsp;</TD>
+
+<TD><TT>TEMP</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>TEMPORARY</TT>&nbsp;</TD>
+
+<TD><TT>TEXTSIZE</TT>&nbsp;</TD>
+
+<TD><TT>THEN</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>TO</TT>&nbsp;</TD>
+
+<TD><TT>TRAN</TT>&nbsp;</TD>
+
+<TD><TT>TRANSACTION</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>TRIGGER</TT>&nbsp;</TD>
+
+<TD><TT>TRUNCATE</TT>&nbsp;</TD>
+
+<TD><TT>TSEQUAL</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>UNCOMMITTED</TT>&nbsp;</TD>
+
+<TD><TT>UNION</TT>&nbsp;</TD>
+
+<TD><TT>UNIQUE</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>UPDATE</TT>&nbsp;</TD>
+
+<TD><TT>UPDATETEXT</TT>&nbsp;</TD>
+
+<TD><TT>USE</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>USER</TT>&nbsp;</TD>
+
+<TD><TT>VALUES</TT>&nbsp;</TD>
+
+<TD><TT>VARYING</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>VIEW</TT>&nbsp;</TD>
+
+<TD><TT>WAITFOR</TT>&nbsp;</TD>
+
+<TD><TT>WHEN</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>WHERE</TT>&nbsp;</TD>
+
+<TD><TT>WHILE</TT>&nbsp;</TD>
+
+<TD><TT>WITH</TT></TD>
+</TR>
+
+<TR>
+<TD><TT>WRITETEXT</TT></TD>
+</TR>
+</TABLE>
+
+<HR>
+<H2>
+<TT>KILL</TT></H2>
+
+<PRE>&nbsp;KILL <I>spid</I></PRE>
+Уничтожает процесс с заданным <I>spid</I>. Для просмотра списка процессов
+и их <I>spid</I> используйте хранимую процедуру sp_who.
+
+<P>&nbsp;<B>Пример</B>
+
+<P>&nbsp;
+<PRE>&nbsp;KILL 15</PRE>
+
+<HR>
+<H2>
+<TT>LOAD</TT></H2>
+
+<PRE>&nbsp;Загрузка базы данных:
+&nbsp;&nbsp;&nbsp;&nbsp; LOAD DATABASE {<I>dbname</I> | @<I>dbname_var</I>}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FROM <I>dump_device</I> [, <I>dump_device2</I> [..., <I>dump_device32</I>]]
+&nbsp;&nbsp;&nbsp;&nbsp; [WITH <I>options</I>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [[,] STATS [ = <I>percentage</I>]]]
+&nbsp;&nbsp;&nbsp;
+&nbsp;Загрузка журнала транзакций:
+&nbsp;&nbsp;&nbsp;&nbsp; LOAD TRANSACTION {<I>dbname</I> | @<I>dbname_var</I>}&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FROM <I>dump_device</I> [, <I>dump_device2</I> [..., <I>dump_device32</I>]]
+&nbsp;&nbsp;&nbsp;&nbsp; [WITH <I>options</I>]
+&nbsp;&nbsp;&nbsp;
+&nbsp;Загрузка информации о резервной копии:
+&nbsp;&nbsp;&nbsp;&nbsp; LOAD HEADERONLY
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FROM <I>dump_device
+</I></PRE>
+Оператор <TT>LOAD</TT> служит для загрузки ранее сделанной с помощью оператора
+<TT><A HREF="#DUMP">DUMP</A></TT> резервной копии базы данных (<TT><NOBR>LOAD
+DATABASE</NOBR></TT>) или ее журнала транзакций(<TT><NOBR>LOAD TRANSACTION</NOBR></TT>).
+Во время восстановления базы данных она не должна использоваться, и все
+данные, ранее находящиеся в ней, будут уничтожены и заменены загружаемыми.
+
+<P>&nbsp;Кроме восстановления после какого-либо сбоя и прочего несчаcтья (пожар,
+падение Тунгусского метеорита) можно также использовать <TT><NOBR>LOAD
+DATABASE</NOBR></TT> для переноса базы данных с различных устройств или
+серверов на другие.
+<TABLE>
+<TR>
+<TD ALIGN=CENTER WIDTH="10%">
+<H1>
+<FONT COLOR="#FF0000">!</FONT></H1>
+</TD>
+
+<TD ALIGN=LEFT><B>Обратите внимание</B>: оба сервера должны иметь одинковую
+кодовую страницу и порядок сортировки (sort order). Также необходимо, чтобы
+размер базы данных на том сервере, нак котором производится загрузка данных
+был не меньше, чем на исходном. Необходимо также следить за соблюдением
+количества и порядка фрагменов DEVICES, например, если исходная база данных
+имела 10 мегабайт данных, за которыми следовало 6 мегабайт журнала транзакций,
+за которыми следовало еще 10 мегабайт данных, то и принимающая база данных
+должна иметь те же особенности.
+<BR>Если при создании исходной базы данных использовались сегменты, то
+и у базы данных, в которую производится загрузка, должны быть те же сегменты
+и DEVICE's должны иметь тот же размер.&nbsp;</TD>
+</TR>
+</TABLE>
+Для получения информации базы данных - их размере и фрагментах - используйте
+хранимую процедуру <B><TT>sp_helpdb</TT></B>, и системную таблицу <B><TT>sysusages</TT></B>
+для определения порядка следования фрагментов.
+
+<P>Для подробного описания фрагментов DEVICES и работы с ними см. <TT><NOBR>CREATE
+DATABASE Statement</NOBR></TT> в Transact-SQL Reference.
+
+<P>&nbsp;Для более подробного описания процедур резервного копирования см. соответсвующий
+раздел в Database Administration Companion.
+
+<P>&nbsp;<B>Пример</B>
+
+<P>&nbsp;
+<PRE>LOAD DATABASE corporate
+&nbsp;&nbsp;&nbsp; FROM tape_dev1
+LOAD DATABASE corporate
+&nbsp;&nbsp;&nbsp; FROM TAPE = '\\.\tape0'</PRE>
+
+<HR>
+<H2>
+<TT>NULL</TT></H2>
+Значения типа <TT>NULL</TT> служат для представления пустых значений, не
+следует путать их с пустой строкой или с 0 в числовых полях, <TT>NULL</TT>
+подразумевает, что значение неизвестно или неопределено.
+
+<P>&nbsp;Следует обратить внимание на то, что если вы создаете таблицу с колонками,
+допускающими <TT>NULL</TT>, то значение будут внутрисерверно преобразовываться
+в соответствии со следующей таблицей:
+<TABLE BORDER WIDTH="80%" >
+<TR>
+<TH>Тип данных</TH>
+
+<TH>Преобразуется в</TH>
+</TR>
+
+<TR>
+<TD>binary&nbsp;</TD>
+
+<TD>varbinary</TD>
+</TR>
+
+<TR>
+<TD>char&nbsp;</TD>
+
+<TD>varchar</TD>
+</TR>
+
+<TR>
+<TD>datetime&nbsp;</TD>
+
+<TD>datetim</TD>
+</TR>
+
+<TR>
+<TD>decimal&nbsp;</TD>
+
+<TD>decimal</TD>
+</TR>
+
+<TR>
+<TD>float&nbsp;</TD>
+
+<TD>float</TD>
+</TR>
+
+<TR>
+<TD>int&nbsp;</TD>
+
+<TD>int</TD>
+</TR>
+
+<TR>
+<TD>money&nbsp;</TD>
+
+<TD>money</TD>
+</TR>
+
+<TR>
+<TD>numeric&nbsp;</TD>
+
+<TD>numeric</TD>
+</TR>
+
+<TR>
+<TD>real&nbsp;</TD>
+
+<TD>float</TD>
+</TR>
+
+<TR>
+<TD>smalldatetime&nbsp;</TD>
+
+<TD>datetim</TD>
+</TR>
+
+<TR>
+<TD>smallint&nbsp;</TD>
+
+<TD>int</TD>
+</TR>
+
+<TR>
+<TD>smallmoney&nbsp;</TD>
+
+<TD>money</TD>
+</TR>
+
+<TR>
+<TD>tinyint&nbsp;</TD>
+
+<TD>int</TD>
+</TR>
+</TABLE>
+Аггрегативные функции игнорируют значения <TT>NULL</TT>, за исключением
+функции <TT>count(*)</TT>. Значения <TT>NULL</TT> считаются дублирующимися
+при использовании в <TT><NOBR>GROUP BY</NOBR></TT>, <TT><NOBR>ORDER BY</NOBR></TT>,
+или при использовании <TT>DISTINCT</TT>.&nbsp;
+<HR>
+<H2>
+<TT>Операции</TT></H2>
+SQL Server допускает следующие операции
+<TABLE BORDER >
+<TR>
+<TD>Сложение&nbsp;</TD>
+
+<TD>+&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Вычитание&nbsp;</TD>
+
+<TD>-&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Умножение&nbsp;</TD>
+
+<TD>*&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Деление&nbsp;</TD>
+
+<TD>/&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Побитное И&nbsp;</TD>
+
+<TD>&amp;&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Побитное ИЛИ&nbsp;</TD>
+
+<TD>|&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Побоитное НЕ&nbsp;</TD>
+
+<TD>~&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Исключающее ИЛИ&nbsp;</TD>
+
+<TD>^&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Равно&nbsp;</TD>
+
+<TD>=&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Больше&nbsp;</TD>
+
+<TD>>&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Меньше&nbsp;</TD>
+
+<TD>&lt;&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Больше или равно&nbsp;</TD>
+
+<TD>>=&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Меньше или равно&nbsp;</TD>
+
+<TD>&lt;=&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Неравно&nbsp;</TD>
+
+<TD>&lt;> или != (нестандартно!)&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Не больше&nbsp;</TD>
+
+<TD>!>&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Не меньше&nbsp;</TD>
+
+<TD>!&lt;&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>LEFT OUTER JOIN&nbsp;</TD>
+
+<TD>*=&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>RIGHT OUTER JOIN&nbsp;</TD>
+
+<TD>=*&nbsp;</TD>
+</TR>
+
+<TR>
+<TD>Конкатенация строк&nbsp;</TD>
+
+<TD>+&nbsp;</TD>
+</TR>
+</TABLE>
+
+<HR>
+<H2>
+<TT>PRINT</TT></H2>
+
+<PRE>PRINT {'<I>any ASCII text</I>' | @<I>local_variable</I> | @@<I>global_variable</I>}</PRE>
+Возвращает сообщение, определяемое пользователем, пользовательскому обработчику
+сообщений. Длина строки с сообщением не должна превышать 255 символов.
+Глобальной переменной в настоящее время можеть быть только переменная <TT>@@VERSION</TT>,
+так как только она является глобальной и одновременно символьной переменной.
+
+<P>&nbsp;<B>Пример</B>
+
+<P>&nbsp;
+<PRE>IF EXISTS (SELECT zip&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FROM authors
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHERE zip = '94705')
+PRINT 'Berkeley author'
+
+</PRE>
+
+<HR>
+<H2>
+<TT>RAISERROR</TT></H2>
+
+<PRE>&nbsp;RAISERROR ({<I>msg_id</I> | <I>msg_str</I>}, <I>severity</I>, <I>state
+</I>&nbsp;[, <I>argument1</I> [, <I>argument2</I>]] )
+&nbsp;[WITH LOG]</PRE>
+Возвращает пользовательское сообщение об ошибке и устанавливает систменый
+флаг, указывающий на то, что произошла ошибка. <I>severity</I> определяет
+важность ошибки, которые можно посмотреть в System Administration Companion.
+Только системный администратор может использовать <TT>RAISERROR</TT> с
+<I>severity</I> от 19 до 25
+
+<P>&nbsp;<B>Пример</B>
+<PRE>REATE TRIGGER employee_insupd
+ON employee
+FOR INSERT, UPDATE
+AS
+/* Get the range of level for this job type from the jobs table. */
+DECLARE @min_lvl tinyint,
+&nbsp;&nbsp;&nbsp; @max_lvl tinyint,
+&nbsp;&nbsp;&nbsp; @emp_lvl tinyint,
+&nbsp;&nbsp;&nbsp; @job_id smallint
+SELECT @min_lvl = min_lvl,&nbsp;
+&nbsp;&nbsp;&nbsp; @max_lvl = max_lvl,&nbsp;
+&nbsp;&nbsp;&nbsp; @emp_lvl = i.job_lvl,
+&nbsp;&nbsp;&nbsp; @job_id = i.job_id
+FROM employee e, jobs j, inserted i&nbsp;
+WHERE e.emp_id = i.emp_id AND i.job_id = j.job_id
+IF (@job_id = 1) and (@emp_lvl &lt;> 10)&nbsp;
+BEGIN
+&nbsp;&nbsp;&nbsp; RAISERROR ('Job id 1 expects the default level of 10.',16,-1)
+&nbsp;&nbsp;&nbsp; ROLLBACK TRANSACTION
+END
+ELSE
+IF NOT (@emp_lvl BETWEEN @min_lvl AND @max_lvl)
+BEGIN
+&nbsp;&nbsp;&nbsp; RAISERROR ('The level for job_id:%d should be between %d and %d.',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 16, -1, @job_id, @min_lvl, @max_lvl)
+&nbsp;&nbsp;&nbsp; ROLLBACK TRANSACTION
+END</PRE>
+
+<HR>
+<H2>
+<TT>REVOKE</TT></H2>
+
+<PRE>Полномочия&nbsp; на выполнение операторов:
+&nbsp;REVOKE {ALL | <I>statement_list</I>}&nbsp;
+&nbsp;FROM {PUBLIC | <I>name_list</I>}
+Полномочия&nbsp; на объекты базы данных:
+&nbsp;REVOKE {ALL | permission_list}&nbsp;
+&nbsp;ON {table_name [(column_list)] | view_name [(column_list)] |&nbsp;
+&nbsp;stored_procedure_name | extended_stored_procedure_name}&nbsp;
+&nbsp;FROM {PUBLIC | name_list}</PRE>
+Оператор <TT>REVOKE</TT> служит для отъятия различных прав у пользователей.
+При определении прав они сохраняются в системной таблице <B><TT>sysprotecs</TT></B>.
+<TABLE>
+<TR>
+<TD ALIGN=CENTER WIDTH="10%">
+<H1>
+<FONT COLOR="#FF0000">!</FONT></H1>
+</TD>
+
+<TD ALIGN=LEFT><B>Обратите внимание</B>: полномочия, даваемые группе <TT>public</TT>,
+являются более значимые, чем полномочия, опрделенные ранее для некоторого
+пользователя или группы пользователей. Порядок выдачи полномочий имеет
+значение: только полномочия, выданные последними, имеют эффект. Таким образом,
+старайтесь сначала выдавать полномочия группе <TT>public</TT>, и далее
+по нисходящей&nbsp;</TD>
+</TR>
+</TABLE>
+Более подробно см. <TT><A HREF="#GRANT">GRANT</A></TT>
+
+<P>&nbsp;<B>Пример</B>
+
+<P>&nbsp;
+<PRE>REVOKE CREATE TABLE, CREATE DEFAULT
+FROM Mary, John</PRE>
+
+<HR>
+<H2>
+<TT>Условия поиска</TT></H2>
+
+<PRE>{WHERE | HAVING} [NOT] <I>Boolean_expression</I>&nbsp;
+{WHERE | HAVING} [NOT] <I>Boolean_expression</I> {AND | OR}&nbsp;&nbsp;&nbsp; <I>Boolean_expression</I>&nbsp;
+{WHERE | HAVING} [NOT] <I>column_name</I> IS [NOT] NULL
+{WHERE | HAVING} [NOT] <I>column_name</I> <I>join_operator</I> <I>column_name</I>&nbsp;
+{WHERE | HAVING} [NOT] <I>column_name</I> [NOT] LIKE '<I>match_string</I>'&nbsp;
+{WHERE | HAVING} [NOT] EXISTS (<I>subquery</I>)&nbsp;
+{WHERE | HAVING} [NOT] <I>expression</I> <I>comparison_operator</I> <I>expression</I>&nbsp;
+{WHERE | HAVING} [NOT] <I>expression</I> [NOT] BETWEEN <I>expression</I> AND&nbsp; <I>expression</I>&nbsp;
+{WHERE | HAVING} [NOT] <I>expression</I> [NOT] IN (<I>value_list</I> | <I>subquery</I>)&nbsp;
+{WHERE | HAVING} [NOT] <I>expression</I> <I>comparison_operator</I> {ANY | ALL}&nbsp;&nbsp; (<I>subquery</I>)&nbsp;
+{WHERE CURRENT OF cursor_name}</PRE>
+Определяет условия поиска, используемые для получения или модификации данных.
+Если вы используете более одного условия, соединяйте их логическими операторами
+AND и OR. При использовании LIKE с датами будьте внимательны: SQL Server
+преобразует даты к стандартному виду для дат, и поэтому дата 01.01.1997
+будет представлена в виде Jan 1, 1997 12:00AM. Так что придется искать
+с % по обеим сторонам шаблона.&nbsp;
+<HR>
+<H2>
+<TT>SELECT</TT></H2>
+
+<PRE>SELECT [ALL | DISTINCT] <I>select_list</I>&nbsp;
+&nbsp;&nbsp;&nbsp; [INTO [<I>new_table_name</I>]]&nbsp;
+[FROM {<I>table_name</I> | <I>view_name</I>}[(<I>optimizer_hints</I>)]&nbsp;
+&nbsp;&nbsp;&nbsp; [[, {<I>table_name2</I> | <I>view_name2</I>}[(<I>optimizer_hints</I>)]&nbsp;
+&nbsp;&nbsp;&nbsp; [..., {<I>table_name16</I> | <I>view_name16</I>}[(<I>optimizer_hints</I>)]]]&nbsp;
+[WHERE <I>clause</I>]&nbsp;
+[GROUP BY <I>clause</I>]
+[HAVING <I>clause</I>]
+[ORDER BY <I>clause</I>]
+[COMPUTE <I>clause</I>]&nbsp;
+[FOR BROWSE]</PRE>
+Производит выборку данных из БД или присваивает значения переменным, причем
+выборка данных и присваивание значений не могут производиться одновременно.
+При установленной опции <B><NOBR>select into/bulkcopy</NOBR></B> сервера
+после ключевого слова <TT>INTO</TT> может идти имя новой таблицы - она
+будет создана и в нее будут помещены данные, выбираемые этим оператором;
+если же эта опция не установлена, то в качестве таблицы-получателя может
+выступать только временная таблица.
+<TABLE>
+<TR>
+<TD ALIGN=CENTER WIDTH="10%">
+<H1>
+<FONT COLOR="#FF0000">!</FONT></H1>
+</TD>
+
+<TD ALIGN=LEFT>Впрочем, этой особенностью не стоит пользоваться - при больших
+выборках происходит смертельная блокировка таблиц tempdb..sysobjects, tempdb..sysindexes
+и tempdb..syscolumns,и, таким образом, всего tempdb, причем настолько здорово,
+что сервер приходится останавливать с помощью команды <TT>SHUTDOWN WITH
+NOWAIT</TT>.&nbsp;</TD>
+</TR>
+</TABLE>
+Для более точной настройки пути выборки данных можно указывать т.н. optimizer
+hints - подсказки оптимизатору. Вот они:
+<DL>
+<DT>
+<TT>INDEX = {<I>index_name</I> | <I>index_id</I>}</TT></DT>
+
+<DD>
+Указывает индекс, который будет использован для выборки данных из такблицы.
+Если указать вместо имени или идентификатора индекса 0, то будет произведено
+сканирование таблицы.</DD>
+
+<DT>
+<TT>NOLOCK</TT></DT>
+
+<DD>
+Включает режим "грязного чтения",</DD>
+
+<DT>
+<TT>HOLDLOCK</TT></DT>
+
+<DD>
+Указывает, что блокировки следует сохранять до конца транзакции.</DD>
+
+<DT>
+<TT>UPDLOCK</TT></DT>
+
+<DD>
+Блокирует "блокировками обновления", а не разделяемыми блокировками, сохраняя
+их до конца транзакции.</DD>
+
+<DT>
+<TT>TABLOCK</TT></DT>
+
+<DD>
+Блокирует таблицу в разделяющем режиме. Если используется вместе с <TT>HOLDLOCK</TT>,
+то блокировки сохраняюся до конца транзакции.</DD>
+
+<DT>
+<TT>PAGLOCK</TT></DT>
+
+<DD>
+Блокирует разделяемой блокировкой на страничном уровне в тех случаях, когда
+блокировка была бы на всю таблицу.</DD>
+
+<DT>
+<TT>TABLOCKX</TT></DT>
+
+<DD>
+Блокирует таблицу в исключающем режиме до конца <A HREF="#BATCH">BATCH</A>
+или до конца транзакции.</DD>
+
+<DT>
+<TT>FASTFIRSTROW</TT></DT>
+
+<DD>
+Указвает оптимизатору, что необходимо использовать некластеризованный индекс
+(конечно, если существует подходящий) для выборки данных в порядке, задаваемом
+<TT><NOBR>ORDER BY</NOBR></TT> даже в том случае, если оптимизатор, сравнив
+затраты на выборку с помощью индекса и произвольной выборкой и последующей
+сортировкой находит более выгодым использование сортировки.</DD>
+</DL>
+В одном операторе <TT>SELECT</TT> не может участвовать более 16 таблиц,
+включая подзапросы.&nbsp;
+<HR>
+<H2>
+<TT>SET</TT></H2>
+
+<PRE>SET {
+{{{ANSI_NULL_DFLT_OFF | ANSI_NULL_DFLT_ON}
+| ARITHABORT&nbsp;
+| ARITHIGNORE&nbsp;
+| FMTONLY&nbsp;
+| FORCEPLAN&nbsp;
+| IDENTITY_INSERT [<I>database</I>.[<I>owner</I>.]]<I>tablename</I>&nbsp;
+| NOCOUNT&nbsp;
+| NOEXEC&nbsp;
+| OFFSETS {keyword_list}&nbsp;
+| PARSEONLY&nbsp;
+| PROCID&nbsp;
+| QUOTED_IDENTIFIER
+| SHOWPLAN&nbsp;
+| STATISTICS IO&nbsp;
+| STATISTICS TIME}&nbsp;
+&nbsp;&nbsp;&nbsp; {ON | OFF}}&nbsp;
+| DATEFIRST number&nbsp;
+| DATEFORMAT format&nbsp;
+| DEADLOCKPRIORITY {LOW | NORMAL}
+| LANGUAGE language&nbsp;
+| ROWCOUNT number&nbsp;
+| TEXTSIZE number
+| TRANSACTION ISOLATION LEVEL {READ COMMITTED | READ&nbsp;
+&nbsp;&nbsp;&nbsp; UNCOMMITTED | REPEATABLE READ | SERIALIZABLE}}
+</PRE>
+Позволяет изменить различные установки сервера.
+<DL>
+<DT>
+<TT>ANSI_NULL_DFLT_OFF</TT></DT>
+
+<DD>
+Устанавливает режим обработки значений <TT>NULL</TT>, несовместимый с ANSI
+SQL. Колонки во вновь создаваемых таблицах создаются как <TT><NOBR>NOT
+NULL</NOBR></TT>.</DD>
+
+<DT>
+<TT>ANSI_NULL_DFLT_ON</TT></DT>
+
+<DD>
+Отменяет режим, устанавливаемый <TT>ANSI_NULL_DFLT_OFF</TT></DD>
+
+<DT>
+<TT>ARITHABORT</TT></DT>
+
+<DD>
+Остававливает запрос, если во время его выполнения встретилась арифметическая
+ошибка, такая как деление на ноль или переполнение</DD>
+
+<DT>
+<TT>ARITHIGNORE</TT></DT>
+
+<DD>
+Указывает игнорировать возникающие при выполнении запроса арифметические
+ошибки. Если не установлена ни эта, ни предыдущая опция - сервер возвращает
+<TT>NULL</TT> вместо значений, при выполнении которых возникла ошибка.</DD>
+
+<DT>
+<TT>FMTONLY</TT></DT>
+
+<DD>
+Возвращает только описание колонок, получающихся при выполнении запроса.</DD>
+
+<DT>
+<TT>FORCEPLAN</TT></DT>
+
+<DD>
+Подавляет оптимизатор и указывает ему использовать порядок соединения таблиц,
+указываемый в запросе.</DD>
+
+<DT>
+<TT>IDENTITY_INSERT [<I>database</I>.[<I>owner</I>.]]<I>tablename</I></TT></DT>
+
+<DD>
+Разрешает вставку данных в колонку со свойством IDENTITY в указанной таблице.</DD>
+
+<DT>
+<TT>NOCOUNT</TT></DT>
+
+<DD>
+Подавляет выдачу сообщений о количестве строк таблицы, получающейся в качестве
+запроса. Глобальная переменная <TT>@@ROWCOUNT</TT> обновляется даже когда
+установлена опция <TT>NOCOUNT</TT>.</DD>
+
+<DT>
+<TT>NOEXEC</TT></DT>
+
+<DD>
+Указывает только скомпилировать запрос, но не выполнять его.</DD>
+
+<DT>
+<TT>OFFSETS</TT></DT>
+
+<DD>
+Возвращает смещение keyword_list. Используется только вместе с DB-Library</DD>
+
+<DT>
+<TT>PARSEONLY</TT></DT>
+
+<DD>
+Отменяет компиляцию и выполнение запроса, только проверяет синтаксис.</DD>
+
+<DT>
+<TT>PROCID</TT></DT>
+
+<DD>
+Возвращает ID хранимой процедуры клиентской части запроса. Используется
+вместе с DB-Library.</DD>
+
+<DT>
+<TT>QUOTED_IDENTIFIER</TT></DT>
+
+<DD>
+Указывает, что в текущей сессии ' и " различны. Строки в двойных кавычках
+(") считаются ключевыми словами или именами объектов.</DD>
+
+<DT>
+<TT>SHOWPLAN</TT></DT>
+
+<DD>
+Возвращает вместе с данными план выполнения запроса.</DD>
+
+<DT>
+<TT>STATISTICS IO</TT></DT>
+
+<DD>
+Сообщает статистику по вводу-выводу.</DD>
+
+<DT>
+<TT>STATISTICS TIME</TT></DT>
+
+<DD>
+Сообщает статистику по времени.</DD>
+
+<DT>
+<TT>DATEFIRST number</TT></DT>
+
+<DD>
+Устанавливает первый день недели. По умолчанию стоит америкоидный - неделя
+начинается с воскресенья.</DD>
+
+<DT>
+<TT>DATEFORMAT format</TT></DT>
+
+<DD>
+Устанавливает формат даты. Формат может быть mdy, dmy, ymd, ydm, myd, and
+dym. По умолчанию стоит америкоидный - mdy.</DD>
+
+<BR><FONT COLOR="#FF0000">(<B>все</B> у них не как у людей!)</FONT>
+<DT>
+<TT>DEADLOCKPRIORITY {LOW | NORMAL}</TT></DT>
+
+<DD>
+Устанавливает режим убиваемости запросов в текущей сессии при взаимоблокировках.
+При LOW процесс считается наилучшей жертвой при их разрешении.</DD>
+
+<DT>
+<TT>LANGUAGE language</TT></DT>
+
+<DD>
+Устанавливает язык сообщений об ошибках. По умолчанию, само собой, английский.</DD>
+
+<DT>
+<TT>ROWCOUNT number</TT></DT>
+
+<DD>
+Ограничивает число строк таблиц, участвующих в запросе. <FONT COLOR="#FF0000">Обратите
+внимание:</FONT> - это относится ко всем таблицам, участвующим в запросе!</DD>
+
+<DT>
+<TT>TEXTSIZE number</TT></DT>
+
+<DD>
+Устанавливает размер возвращаемый размер данных типа text. По умолчанию
+- 4 килобайта.</DD>
+
+<DT>
+<TT>TRANSACTION ISOLATION LEVEL</TT></DT>
+
+<DD>
+Устанавливает уровень изолированности транзакций Допустимые значения:</DD>
+
+<UL>
+<LI>
+<TT>READ COMMITED</TT></LI>
+
+<LI>
+<TT>READ UNCOMMITED</TT></LI>
+
+<LI>
+<TT>REPEATABLE READ | SERIAZABLE</TT></LI>
+</UL>
+</DL>
+Если вы используете оператор SET в хранимой процедуре, триггере или в BATCH'е,
+то все параметры, изменяемые им, изменяются им только в пределах процедуры/триггера
+или BATCH'а.&nbsp;
+<HR>
+<H2>
+<TT>SETUSER</TT></H2>
+
+<PRE>SETUSER ['<I>username</I>' [WITH NORESET]]</PRE>
+Представляет sa в текущей сессии как пользователя username. Если опущены
+все параметры, то sa вновь становится sa, если предварительно он использовал
+этот оператор как <TT>SETUSER <I>username</I></TT>. При предварительном
+указании опции WITH NORESET такая возможность становится недоступной. <B>Пример</B>
+
+<P>&nbsp;
+<PRE>SETUSER 'mary'
+go
+GRANT SELECT ON computer_types TO joe
+go
+SETUSER</PRE>
+
+<HR>
+<H2>
+<TT>SHUTDOWN</TT></H2>
+
+<PRE>SHUTDOWN [WITH NOWAIT]</PRE>
+Завершает работу SQL Server. Если используется опция <TT><NOBR>WITH NOWAIT</NOBR></TT>,
+то это случается нещамедлительно - не происходит ожидания конца работы
+запросов, не берется финальная контрольная точка. <B>Пример</B>
+
+<P>&nbsp;
+<PRE>&nbsp;SHUTDOWN</PRE>
+
+<HR>
+<H2>
+<TT>Подзапросы</TT></H2>
+
+<PRE><I>expression</I> <I>comparison_operator</I> [ANY | ALL | SOME] (subquery)expression [NOT] IN (<I>subquery</I>)[NOT] EXISTS (<I>subquery</I>)
+&nbsp;&nbsp;
+
+(SELECT [ALL | DISTINCT] subquery_select_list&nbsp;
+[FROM {<I>table_name</I> | <I>view_name</I>}[<I>optimizer_hints</I>]&nbsp;
+&nbsp;&nbsp;&nbsp; [[, {<I>table_name2</I> | <I>view_name2</I>}[<I>optimizer_hints</I>]&nbsp;
+&nbsp;&nbsp;&nbsp; [..., {<I>table_name16</I> | <I>view_name16</I>}[<I>optimizer_hints</I>]]]&nbsp;
+[WHERE clause]&nbsp;
+[GROUP BY clause]
+[HAVING clause])</PRE>
+Позапросы могут быть использованы помимо всего прочего и как выражения.
+<B>Пример</B>
+
+<P>&nbsp;
+<PRE>&nbsp;declare @a varchar(80)
+&nbsp;select @a=(select first_name from employee ...)+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' получает '+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (select convert(sum(pay)) from pays...)</PRE>
+
+<HR>
+<H2>
+<TT>TRUNCATE TABLE</TT></H2>
+
+<PRE>TRUNCATE TABLE [[database.]owner.]table_name</PRE>
+Уничтожает данные в таблице, но оставляет ее структуру и индексы нетронутыми,
+делает то же самое, что и <TT><NOBR>DELETE FROM</NOBR></TT>, только быстрее.
+Да, не забудте сказать <TT><NOBR>UPDATE STATISTICS</NOBR></TT> после <TT><NOBR>TRUNCATE
+TABLE</NOBR></TT>. <B>Пример</B>
+
+<P>&nbsp;
+<PRE>TRUNCATE TABLE authors</PRE>
+
+<HR>
+<H2>
+<TT>UNION</TT></H2>
+
+<PRE>SELECT select_list [INTO <I>clause</I>]&nbsp;
+&nbsp;&nbsp;&nbsp; [FROM <I>clause</I>]&nbsp;
+&nbsp;&nbsp;&nbsp; [WHERE <I>clause</I>]&nbsp;
+&nbsp;&nbsp;&nbsp; [GROUP BY <I>clause</I>]&nbsp;
+&nbsp;&nbsp;&nbsp; [HAVING <I>clause</I>]&nbsp;
+[UNION [ALL]&nbsp;
+SELECT <I>select_list</I>&nbsp;
+&nbsp;&nbsp;&nbsp; [FROM <I>clause</I>]&nbsp;
+&nbsp;&nbsp;&nbsp; [WHERE <I>clause</I>]&nbsp;
+&nbsp;&nbsp;&nbsp; [GROUP BY <I>clause</I>]&nbsp;
+&nbsp;&nbsp;&nbsp; [HAVING <I>clause</I>]...]&nbsp;
+[ORDER BY <I>clause</I>]&nbsp;
+[COMPUTE <I>clause</I>]</PRE>
+Объединяет результаты нескольких запросов в один. Имена колонок берутся
+из первого запроса. Колонки объединяются по порядку; они должны иметь одинаковый
+тип или приводится к одному типу. <B>Пример</B>
+
+<P>&nbsp;
+<PRE>/* CORRECT */
+SELECT cities = city FROM storeseast
+UNION
+SELECT city FROM stores
+ORDER BY cities</PRE>
+
+<HR>
+<H2>
+<TT>UPDATE</TT></H2>
+
+<PRE>UPDATE {<I>table_name</I> | <I>view_name</I>}&nbsp;
+SET [{<I>table_name</I> | <I>view_name</I>}]&nbsp;
+&nbsp;&nbsp;&nbsp; {<I>column_list</I>&nbsp;
+&nbsp;&nbsp;&nbsp; | <I>variable_list
+</I>&nbsp;&nbsp;&nbsp; | <I>variable_and_column_list</I>}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [, {<I>column_list2</I>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | <I>variable_list2
+</I>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | <I>variable_and_column_list2</I>}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ... [, {<I>column_listN</I>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | <I>variable_listN
+</I>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | <I>variable_and_column_listN</I>}]]
+[WHERE clause]</PRE>
+Этот оператор служит для обновления данных. Обратите внимание на то, что
+в если удается произвести т.н. update in-place, то производительность обновлений
+заметно возрастает. Это происходит при выполнении следующих условий:
+<UL>
+<LI>
+Изменяемые колонки не входят в кластеризованный индекс</LI>
+
+<LI>
+У таблицы не существует триггера на обновление</LI>
+
+<LI>
+Для обновления одной строки:</LI>
+
+<OL>
+<LI>
+Размер обновленной записи должен совпадать с размером необновленнной.</LI>
+
+<LI>
+Если на изменяемые колонки построен индекс, то он должен быть неуникальным
+некластеризованным и колонки имеют фиксированную длину.</LI>
+
+<LI>
+Обновляемые колонки могут находиться в некластеризованном уникальном индексе
+в том случае, если в условии WHERE было заданно точное соответствие и для
+поиска обновляемой строки был использован именно этот индекс.</LI>
+
+<LI>
+Следующая строка должна отличаться от обновляемой не более чем на 50% по
+размеру и иметь общее число discontiguous differing bytes меньшее или равное
+24</LI>
+
+<LI>
+Обновляемая строка должна регулярно смазываться елеем, освященным епископом
+и не содержать богохульных или антисоветских данных.</LI>
+</OL>
+
+<LI>
+Для обновления многих строк они должны отвечать пунктам 1-3 и не иметь
+колонки типа timestamp</LI>
+</UL>
+Transact-SQL имеет следующее расширение стандартного синтаксиса UPDATE:
+<PRE>UPDATE {<I>table_name</I> | <I>view_name</I>}
+SET [{<I>table_name</I> | <I>view_name</I>}]&nbsp;
+&nbsp;&nbsp;&nbsp; {<I>column_list</I>&nbsp;
+&nbsp;&nbsp;&nbsp; | <I>variable_list
+</I>&nbsp;&nbsp;&nbsp; | <I>variable_and_column_list</I>}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [, {<I>column_list2</I>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | <I>variable_list2
+</I>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | <I>variable_and_column_list2</I>}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ... [, {<I>column_listN</I>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | <I>variable_listN
+</I>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | <I>variable_and_column_listN</I>}]]
+<B>[FROM {<I>table_name</I> | <I>view_name</I>}
+&nbsp;&nbsp;&nbsp; [, {<I>table_name</I> | <I>view_name</I>}]...]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [..., {<I>table_name16</I> | <I>view_name16</I>}]]&nbsp;
+</B>[WHERE clause]</PRE>
+что позволяет несколько более изящно проделывать различные операции.
+
+<P>&nbsp;Ранее было невозможно одновременно получить старое значение колонки
+и присвоить ему новое, для этого приходилось использовать что-то вроде
+<PRE>BEGIN TRANSACTION
+SELECT <I>variable_name</I> = <I>column_name1
+</I>&nbsp;&nbsp;&nbsp; FROM <I>table_name
+</I>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHERE <I>column_name2</I> = <I>expression
+</I>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HOLDLOCK
+UPDATE <I>table_name
+</I>&nbsp;&nbsp;&nbsp; SET <I>column_name1</I> = <I>expression
+</I>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHERE <I>column_name2</I> = <I>expression
+</I>COMMIT TRANSACTION
+</PRE>
+теперь же можно поступать следующим образом:
+<PRE>UPDATE table_name
+&nbsp;&nbsp;&nbsp; SET <I>column_name1</I> = <I>expression</I>, <I>variable_name</I> = <I>column_name1
+</I>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHERE <I>column_name2</I> = <I>expression</I></PRE>
+<B>Пример</B>
+
+<P>&nbsp;
+<PRE>UPDATE titles
+&nbsp;&nbsp;&nbsp; SET ytd_sales =&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (select sum(qty)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FROM sales
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHERE sales.title_id = titles.title_id
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AND sales.date IN (SELECT MAX(date) FROM sales))
+&nbsp;&nbsp;&nbsp; FROM titles, sales</PRE>
+
+<HR>
+<H2>
+<TT>UPDATE STATISTICS</TT></H2>
+
+<PRE>UPDATE STATISTICS [[database.]owner.]table_name [index_name]</PRE>
+Обновляет статистические данные о распределении ключей в индексе. Эти данные
+используются оптимизатором для поиска наиболее выгодного плана, поэтому
+весьма важно не забывать периодически обновлять статистику; впрочем, для
+автоматического обновления можно воспользоваться SQL Executive, а в Transact-SQL
+Reference приведен пример полезной хранимой процедуры, обновляющей статистические
+данные для всех пользовательских таблиц. Эти данные автоматически обновляются
+при перестроении индекса. Утилита <TT>SQLMAINT.EXE</TT> предоставляет интерфейс
+командной строки для того же.&nbsp;
+<HR>
+<H2>
+<TT>USE</TT></H2>
+
+<PRE>&nbsp;USE <I>database_name</I></PRE>
+Изменяет текущую для данной сессии базу данных.
+
+<P>&nbsp;<B>Пример</B>
+
+<P>&nbsp;
+<PRE>&nbsp;USE pubs</PRE>
+
+</TD></TR></TABLE>
+</TD></TR>
+<TR BGCOLOR=#6699CC><TD><TABLE WIDTH=100% BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=#6699CC VALIGN=CENTER HEIGHT = 40><FONT SIZE=-10>
+<!-- begin of Rambler's Top100 code -->
+<img src="../../../../counter.rambler.ru/top100.cnt@236431" alt="" width="1" height="1" border="0" />
+<!--end of Top100 code-->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 BORDER=0 CLASS="tableborder"><TR BGCOLOR="#6699CC"><TD>
+<!-- begin of Top100 logo -->
+<a href="../../../../top100.rambler.ru/home@id=236431">
+<img src="../../../../top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="Rambler's Top100"
+width="88" height="31" border="0" /></a>
+<!-- end of Top100 logo -->
+</FONT>
+<!--Rating@Mail.ru COUNTER--><a target=_top
+href="../../../../top.mail.ru/jump@from=58574"><img
+src="../../../../top.list.ru/counter@id=58574;t=94"
+border=0 height=18 width=88
+alt="Рейтинг@Mail.ru"></a><!--/COUNTER-->
+<!-- Yandex.Metrika counter --><!--ipt type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter9237463 = new Ya.Metrika({id:9237463, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</scri--><noscript><div><img src="../../../../https@mc.yandex.ru/watch/9237463" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</TD>
+<TD BGCOLOR=#6699CC ALIGN=right><FONT COLOR=white FACE="Tahoma,Arial" SIZE=1>&nbsp;Administrator:&nbsp;<A STYLE="color :white" HREF="../../../../www.sql.ru/feedback.aspx">Обратная связь</A>&nbsp;<BR>Copyright: <FONT COLOR=white>SQL.Ru  2000-2013&nbsp;</FONT></FONT></TD></TR></TABLE>
+</TD></TR></TABLE></TD></TR></TABLE>
+
+</BODY></HTML>
+

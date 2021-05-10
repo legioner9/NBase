@@ -1,0 +1,13 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.11.1_.15._HTML5-формы.dir\cat.2.11.1_.15._HTML5-формы.dir\dir.2.11.1_.15._HTML5-формы.dir.md">2.11.1_.15._HTML5-формы.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.11.1_.15._HTML5-формы.dir\2.11.1_.15._HTML5-формы.md">2.11.1_.15._HTML5-формы.md</a>
+        - *## [1.15. HTML5-формы](https://html5book.ru/html5-forms/)
+        - *### 1. Элемент \<form>
+        - *#### АТРИБУТЫ ЭЛЕМЕНТА \<FORM>
+        - *### 2. Группировка элементов формы \<fieldset>
+        - *### 3. Создание полей формы \<input>
+        - *### 4. Текстовые поля ввода \<textarea>
+        - *### 5. Раскрывающийся список \<select>
+        - *### 6. Надписи к полям формы \<label>
+        - *### 7. Кнопки \<button>
+        - *### 8. Флажки и переключатели в формах
+        - *@@ html5book.ru point this learn

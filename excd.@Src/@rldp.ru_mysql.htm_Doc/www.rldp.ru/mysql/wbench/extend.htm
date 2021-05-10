@@ -1,0 +1,926 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Приложение C. Расширение MySQL Workbench</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="wb-extending"></a>Приложение C. Расширение MySQL Workbench</h1>
+<p>MySQL Workbench обеспечивает расширение и систему скриптов, которая
+позволяет разработчику расширить возможности MySQL Workbench.
+В то время как ядро MySQL Workbench написано, используя C++, возможно
+использовать эту базовую функциональность, используя язык Python.
+MySQL Workbench также обеспечивает доступ к кросс-платформенной библиотеке
+GUI, MForms, которая позволяет создание расширений, которые показывают
+графический интерфейс пользователя.</p>
+
+<p>Система позволяет следующие возможности:</p><ul><li>
+<p>Автоматизируйте общие задачи.</li>
+<li>Расширьте пользовательский интерфейс Workbench.</li>
+
+<li>Создайте Инструменты/Плагины (код, который может быть вызван
+от системы меню Workbench).</li>
+<li>Управляйте схемами.</li>
+<li>Создайте свои возможности Workbench.</p></li></ul>
+
+<h2><a name="wb-grt-data-organization"></a>C.1.
+GRT и организация данных в Workbench</h2>
+<p>Generic RunTime (GRT) является внутренней системой, используемой MySQL
+Workbench, чтобы хранить данные о документе. Это также механизм, которым
+Workbench может взаимодействовать с модулями и плагинами. Данные модели
+Workbench, такие как диаграммы, схемы и таблицы, хранятся в иерархии
+объектов, к которым может получить доступ любой плагин.
+Информация представляется, используя стандартные типы данных: целые числа,
+числа double, строки, словари, списки и объекты.</p>
+
+<p>К GRT можно получить доступ, используя язык Python.
+Осведомленность требуется относительно того, как типы данных GRT отображаются
+в Python. Например, целое число GRT и типы данных String рассматриваются как
+соответствующие типы данных Python. Списки и словари сохраняются в их
+внутреннем представлении, но можно обычно рассматривать как списки и словари
+Python и получать доступ обычным способом. Объекты содержат поля данных и
+методы, но GRT признает только объекты от
+предзарегистрированной иерархии классов.</p>
+
+<p>Возможно полностью исследовать классы в GRT с использованием
+Workbench Scripting Shell. Точки в именах классов изменяются на подчеркивания
+в версиях для Python. Например, <code class="literal">db.mysql.Table</code>
+будет <code class="literal">db_mysql_Table</code> в Python.</p>
+
+<h3><a name="idm140523187663136"></a>
+Дерево объектов приложения (GRT Tree)</h3>
+<p>Как упомянуто ранее, данные о документе MySQL Workbench
+хранятся в иерархии объектов. Эта иерархия известна как GRT, к ней можно
+получить доступ с использованием Python или C++. Будьте осторожны, изменяя
+дерево GRT, поскольку ошибки могут привести к повреждению документа.
+Резервные копии должны быть сделаны прежде, чем управлять деревом.
+Доступ только для чтения к дереву это самый безопасный подход и
+достаточен в большинстве случаев.</p>
+
+<h3><a name="idm140523187661552"></a>Главные узлы в дереве объекта приложения
+</h3>
+<a name="workbench-extending-grt-tree"></a>
+<p><b>Таблица C.1. Главные узлы в дереве объекта приложения</b></p>
+<table border="1">
+<thead><tr><th scope="col">Узел</th>
+<th scope="col">Описание</th></tr></thead>
+<tbody><tr><td scope="row">wb.registry</td>
+<td>Данные приложения, такие как регистрация плагинов,
+список редакторов и варианты.</td></tr>
+<tr><td scope="row">wb.customData</td>
+<td>Универсальный словарь для данных можно использовать, чтобы хранить
+собственные данные. Этот словарь сохраняется и перезагружается с
+Workbench, он глобален (не определен для документа).</td></tr>
+<tr><td scope="row">wb.options</td>
+<td>Содержит некоторые опции по умолчанию, которые используются Workbench.
+</td></tr>
+<tr><td scope="row">wb.rdbmsMgmt</td>
+<td>Внутренняя регистрация поддержанных модулей, известных типов данных.</td></tr>
+<tr><td scope="row">wb.doc</td>
+<td>В настоящее время загруженный документ.</td></tr>
+<tr><td scope="row">wb.doc.physicalModels[0]</td>
+<td>В настоящее время загруженный объект модели, содержит каталог
+базы данных и диаграммы.</td></tr>
+<tr><td scope="row">wb.doc.physicalModels[0].catalog</td>
+<td>Каталог базы данных для модели. Содержит список схем.</td></tr>
+<tr><td scope="row">wb.doc.physicalModels[0]catalog.schemata</td>
+<td>Список схем в модели. К отдельной схеме можно получить доступ как
+к списку: schemata[0], schemata[1] ...</td></tr>
+<tr><td scope="row">wb.doc.physicalModels[0].catalog.schemata[0].tables
+(.views, .routines, ...)</td>
+<td>Списки таблиц, представлений и подпрограмм в схеме.</td></tr>
+<tr><td scope="row">wb.doc.physicalModels[0].diagrams</td>
+<td>Список EER-диаграмм в модели.</td></tr>
+<tr><td scope="row">wb.doc.physicalModels[0].diagrams[0].figures
+(.layers, .connections, ...)</td>
+<td>Список рисунков, слоев и связей (отношений) в диаграмме.
+</td></tr></tbody></table><br class="table-break">
+
+<h2><a name="wb-modules"></a>C.2. Модули</h2>
+<p>В GRT модули это библиотеки, содержащие список функций, которые
+экспортируются для использования кодом в других модулях, скриптах или самим
+Workbench. Модули могут быть написаны на C++ или Python,
+но типы данных, используемые для аргументов и возвращаемого значения, должны
+быть типами GRT.</p>
+
+<p>Модули GRT подобны модулям Python, но импортируются из встроенного
+модуля <code class="literal">grt</code> вместо внешнего файла.
+Список модулей, загруженных в <code class="literal">grt</code>,
+получен из <code class="literal">grt.modules</code>.
+Модули могут быть импортированы в Python, используя такой запрос, как
+<code class="literal">from grt.modules import WbModel</code>.</p>
+
+<p>Чтобы экспортировать функции как модуль из кода Python,
+выполните следующие шаги:</p>
+<ol><li>Исходный файл должен быть расположен в пользовательском каталоге
+модулей. Этот путь показан в скриптах Workbench Scripting Shell с меткой
+<span class="guilabel">Looking for user plugins in</span>.
+Также возможно установить файл, используя главное меню, пункты
+<span class="guimenu">Scripting</span>, <span class="guimenuitem">Install
+Plugin/Module File</span>.</p>
+
+<p>Расположение файлов модуля по умолчанию:</p>
+<a name="wb-modules-file-location"></a>
+<p><b>Таблица C.2. Пользовательское расположение файла модуля по умолчанию
+</b></p>
+<table border="1">
+<thead><tr><th scope="col">Операционная система</th>
+<th scope="col">Путь к файлу</th></tr></thead>
+<tbody><tr><td scope="row">Windows</td>
+<td>%AppData%\MySQL\Workbench\modules</td></tr>
+<tr><td scope="row">macOS</td>
+<td>~username/Library/Application Support/MySQL/Workbench/modules</td></tr>
+<tr><td scope="row">Linux</td>
+<td>~username/.mysql/workbench/modules</td></tr></tbody></table>
+<br class="table-break"></li>
+
+<li><p>У имени исходного файла должно быть расширение
+<code class="filename">_grt.py</code>, например,
+<code class="filename">my_module_grt.py</code>.</li>
+
+<li>Некоторые метаданные модуля должны быть определены. Это может быть
+сделано, используя функцию <code class="literal">DefineModule</code>
+из модуля wb:
+<pre>
+from wb import *
+ModuleInfo = DefineModule(name='MyModule', author='Your Name', version='1.0')
+</pre></li>
+
+<li><p>Функции, которые будут экспортироваться, требуют, чтобы их подпись
+была объявлена. Это достигается, используя экспортного декоратора в ранее
+созданном объекте ModuleInfo:</p>
+
+<pre>
+@ModuleInfo.export(grt.INT, grt.STRING)
+def checkString(s):
+ ...
+</pre>
+
+<p>Для запроса <code class="literal">export</code> тип возврата перечисляется
+сначала, сопровождается входными типами параметра, определенными как имена
+типов GRT. Следующие имена типов могут использоваться:</p>
+
+<ul><li><p><code class="literal">grt.INT</code>:
+Целочисленное значение. Также используемый для булевых значений.</li>
+<li><code class="literal">grt.DOUBLE</code>:
+Числовое значение с плавающей запятой.</li>
+
+<li><code class="literal">grt.STRING</code>: Строка в UTF-8 или ASCII.</li>
+<li><code class="literal">grt.DICT</code>: Элемент словаря значения ключа.
+Ключи должны быть последовательностями.</li>
+
+<li><code class="literal">grt.LIST</code>: Список других значений.
+Возможно определить тип содержания как кортеж в форме
+<code class="literal">(grt.LIST, &lt;type-or-class&gt;)</code>. Например,
+(grt.LIST, grt.STRING) для списка последовательностей. Для списка объектов
+таблицы было бы определено следующее:
+<code class="literal">(grt.LIST, grt.classes.db_table)</code>.</li>
+
+<li><code class="literal">grt.OBJECT</code>:
+Экземпляр объекта GRT или объект класса GRT из
+<code class="literal">grt.classes</code>.</p></li></ul>
+
+<p>Эти типы определяются в модуле <code class="literal">grt</code>, который
+должен быть импортирован, прежде чем они будут доступны для использования.
+</p></li></ol>
+
+<p>Следующий фрагмент кода иллюстрирует объявление модуля, который
+экспортирует единственную функцию:
+<pre>
+from wb import *
+import grt
+ModuleInfo = DefineModule(name='MyModule', author="your name", version='1.0')
+
+@ModuleInfo.export(grt.DOUBLE, grt.STRING, (grt.LIST, grt.DOUBLE))
+def printListSum(message, doubleList):
+    sum = 0
+    for d in doubleList:
+      sum = sum + d
+    print message, sum
+return sum
+</pre>
+
+<h2><a name="wb-plugins"></a>C.3. Плагины и инструменты</h2>
+<p>Плагины это специальные модули, которые выставляются пользователю через
+Workbench GUI. Это, как правило, делается, используя главное меню или
+контекстно-зависимое меню. Большая часть функциональности MySQL Workbench
+осуществляется, используя плагины, например, таблица, представление и обычные
+редакторы это родные плагины C++, как и мастера. Средство Administrator в
+MySQL Workbench осуществляется полностью как плагин в Python.</p>
+
+<p>Плагин может быть простой функцией, которая выполняет некоторое действие
+на входе и заканчивается без дальнейшего взаимодействия с пользователем.
+Примеры этого включают автоподготовку диаграммы или внесение пакетных
+изменений в объекты. Чтобы создать простой плагин, функция должна быть
+расположена в модуле и объявлена как плагин, используя декоратор
+<code class="literal">plugin</code>  объекта
+<code class="literal">ModuleInfo</code>.</p>
+
+<p>У плагинов может быть неопределенное время выполнения, как тогда, когда их
+ведет пользователь через графический интерфейс пользователя. Дело обстоит так
+для редакторов объектов и мастеров в MySQL Workbench. Хотя для мастера
+тип плагина должен быть объявлен обычным способом, только точка входа плагина
+должна быть выполнена в функции плагина, поскольку большая часть
+дополнительной функциональности будет вызвана в результате
+взаимодействия пользователя с GUI.</p>
+
+<p>Перезагрузка плагина требует, чтобы MySQL Workbench был перезапущен.</p>
+<p>Импортированные файлы плагинов (и их собранные коллеги) хранятся здесь:
+</p>
+<a name="wb-plugins-file-location"></a>
+<p><b>Таблица C.3. Пользовательское расположение файла плагина</b></p>
+<table border="1">
+<thead><tr><th scope="col">Операционная система</th>
+<th scope="col">Путь к файлу</th></tr></thead>
+<tbody><tr><td scope="row">Windows</td><td>%AppData%\MySQL\Workbench\modules
+</td></tr>
+<tr><td scope="row">macOS</td>
+<td>~username/Library/Application Support/MySQL/Workbench/modules</td></tr>
+<tr><td scope="row">Linux</td><td>~username/.mysql/workbench/modules</td>
+</tr></tbody></table><br class="table-break">
+
+<p>Объявите плагин, используя этот синтаксис:</p>
+<pre>
+@ModuleInfo.plugin(plugin_name, caption, [input], [groups], [pluginMenu])
+</pre>
+
+<p>Эти параметры определяются следующим образом:</p><ul><li>
+<p><span class="bold"><strong>plugin_name</strong></span>:
+уникальное имя для плагина. Это может содержать только алфавитно-цифровые
+символы, точки и подчеркивания.</li>
+
+<li><span class="bold"><strong>caption</strong></span>:
+заголовок, чтобы использовать для плагина в меню.</li>
+<li><span class="bold"><strong>input</strong></span>:
+дополнительный список входных аргументов.</li>
+
+<li><span class="bold"><strong>groups</strong></span>:
+Дополнительный список групп плагин, к
+которым принадлежит. Признанные значения:</p>
+
+<ul><li><code class="literal">Overview/Utility</code>:
+<span class="guimenu">Контекстное меню</span> в Model Overview.</li>
+<li><code class="literal">Model/Utility</code>: Меню для объектов диаграммы.
+</li>
+<li><code class="literal">Menu/&lt;category&gt;</code>: Подменю
+<span class="guimenu">Plugins</span> в главном меню.</p></li></ul></li><li>
+
+<p><span class="bold"><strong>pluginMenu</strong></span>:
+Дополнительное название подменю в меню Plugins, где плагин должен появиться.
+Например, <span class="guisubmenu">Catalog</span>,
+<span class="guisubmenu">Objects</span>,
+<span class="guisubmenu">Utilities</span>. Это эквивалентно добавлению
+<code class="literal">Menu/&lt;category&gt;</code> в списке групп.
+</p></li></ul>
+
+<h2><a name="wb-mforms"></a>C.4. Добавление GUI к плагину, используя MForms
+</h2>
+<p>MySQL Workbench осуществляется с бэкендом ядра C++
+и родным фронтендом для каждой поддерживаемой платформы.
+В настоящее время фронтенд осуществляется с Windows Forms на
+Microsoft Windows, GTK+ в Linux и с Cocoa в OS X/macOS.
+Этот подход разрешает приложению иметь родной стиль, уменьшая объем работы,
+требуемый, чтобы вести проект. Однако функциональность GUI, требуемая MySQL
+Workbench, может быть поддержана подмножеством графических операций.
+Они осуществляются в кросс-платформенной библиотеке GUI MForms.
+Это уменьшает усилия по развитию, потому что разработчики плагинов могут
+использовать MForms вместо того, чтобы писать фронтенд для каждой
+поддерживаемой платформы. Это также помогает последовательности операции
+через все платформы. MForms написан на C++, но обеспечивает интерфейс Python.
+Чтобы использовать его, код Python должен импортировать модуль
+<code class="literal">mforms</code>.</p>
+
+<p><span class="bold"><strong>Контейнеры MForms</strong></span></p>
+<p>Учитывая проблемы использования системы абсолютной координаты с различными
+платформами, MForms использует контейнеры, которые выполняют автоматическое
+выравнивание. Основные контейнеры, которые обеспечивает MForms, включают:
+</p><ul><li>
+
+<p><span class="bold"><strong>Form</strong></span>:
+Окно верхнего уровня, которое может содержать единственный контроль, обычно
+другой контейнер. Окно будет измерено автоматически, чтобы соответствовать
+его содержанию, но может также быть измерено статически.</li>
+
+<li><span class="bold"><strong>Box</strong></span>:
+Этот контейнер может быть заполнен одним или более средствами управления в
+вертикальном или горизонтальном макете. Каждый дочерний элемент управления
+может использовать минимум требуемого пространства или заполнить область
+в направлении расположения. В перпендикуляре направления к расположению,
+например вертикальному в горизонтальном макете, будет использоваться самый
+маленький размер, который может приспособить все дочерние элементы
+управления. Так, в этом примере использовалась бы наименьшая возможная
+высота, чтобы приспосабливать средства управления.</li>
+
+<li><span class="bold"><strong>Table</strong></span>:
+Этот контейнер может организовать одно или более средств управления в сетке.
+Число строк и столбцов в таблице и местоположения средств управления в сетке
+могут быть определены разработчиком.</li>
+
+<li><span class="bold"><strong>ScrollView</strong></span>:
+Этот контейнер может содержать единственный дочерний элемент управления и
+добавляет полосы прокрутки, если содержание не
+соответствует свободному месту.</p></li></ul>
+
+<h2><a name="wb-scripting-shell"></a>C.5. Workbench Scripting Shell</h2>
+<p>Workbench Scripting Shell обеспечивает средство для ввода и выполнения
+скриптов <a href="../../../www.python.org/default.htm" target="_top">Python</a>.
+С помощью оболочки скриптов MySQL Workbench может поддержать новое поведение
+и источники данных, используя код, написанный на Python. Оболочка может также
+использоваться, чтобы исследовать текущие средства Workbench
+Generic RunTime (GRT).</p>
+
+<p>Оболочка скриптов не только полезна для расширения MySQL Workbench.
+Можно использовать файл скрипта из командной строки оболочки скриптов, чтобы
+выполнить повторяющиеся задачи программно.
+<p>У MySQL также есть продукт под названием MySQL Utilities,
+который отличается от Workbench Scripting Shell.</p>
+
+<h3><a name="wb-exploring-scripting-shell"></a>C.5.1.
+Исследуя скрипты Workbench Scripting Shell</h3>
+<p>Чтобы открыть Workbench Scripting Shell, выберите
+<span class="guimenu">Scripting</span>,
+<span class="guimenuitem">Scripting Shell</span> из главного меню.
+Можно также открыть Workbench Scripting Shell, используя
+<span class="keycap"><strong>Control</strong></span>
++ <span class="keycap"><strong>F3</strong></span> в Windows и Linux или
+<span class="keycap"><strong>Command</strong></span> +
+<span class="keycap"><strong>F3</strong></span> в macOS
+или нажимая кнопку оболочки выше навигатора диаграмм EER.
+Workbench Scripting Shell тогда откроется в новом диалоге.</p>
+
+<a name="wb-scripting-shell-console"></a>
+<p><b>Рис. C.1. Workbench Scripting Shell</b></p>
+<img src="images/wb-scripting-shell.png" width="833" height="620"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h3><a name="wb-scripting-shell-window"></a>C.5.2. Окно Shell</h3>
+<p>Workbench Scripting Shell прежде всего используется для управления
+скриптами Python или непосредственно печати команд в Python.
+Однако можно также использовать его, чтобы получить доступ к функциям
+Workbench Scripting Shell Scripting Library, глобальным функциям и объектам.
+Чтобы видеть доступные команды, напечатайте
+<span class="quote"><code class="literal">?</code></span>.
+Можно также вырезать и вставить текст в и из окна оболочки.</p>
+
+<p>Вкладка <span class="guilabel">Snippets</span> это временная память для
+хранения фрагментов кода, который облегчает повторное использование и
+выполнение кода в MySQL Workbench.</p>
+
+<a name="wb-scripting-shell-snippets"></a>
+<p><b>Рис. C.2. Workbench Scripting Shell: вкладка Snippets</b></p>
+<img src="images/wb-scripting-shell-snippets.png" width="800" height="600"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>Открытые вкладки файла скрипта справа от вкладки
+<span class="guilabel">Snippets</span>. Вкладки скрипта маркированы именем
+файла скрипта или <code class="literal">Unnamed</code>
+для отрывков без имени. Можно вырезать и вставить их
+или щелкнуть правой кнопкой мыши по отрывку, чтобы открыть контекстное меню
+с вариантами <span class="guimenu">Execute Snippet</span>,
+<span class="guimenu">Send to Script Editor</span> и
+<span class="guimenu">Copy To Clipboard</span>.</p>
+
+<p>В то время как отдельные команды могут быть введены в оболочку, также
+возможно управлять более длинным скриптом, сохраненным во внешнем файле,
+используя меню <span class="guimenu">Scripting</span>,
+<span class="guimenuitem">Run Workbench Script File</span>.
+Когда скриптами управляют за пределами оболочки, чтобы видеть вывод,
+используйте меню <span class="guimenu">View</span>,
+<span class="guimenuitem">Output</span>.</p>
+
+<p>Также возможно управлять файлами скрипта непосредственно от оболочки.
+Для получения дополнительной информации о файлах скрипта напечатайте
+<span class="command"><strong>? run</strong></span> в Workbench Scripting
+Shell. Следующее сообщение будет показано:</p>
+
+<pre>
+Help Topics
+-----------
+grt       General information about the Workbench runtime
+scripting Practical information when working on scripts and modules for Workbench
+wbdata    Summary about Workbench model data organization
+modules   Information about Workbench module usage
+plugins   Information about writing Plugins and Modules for Workbench
+Type '? [topic]' to get help on the topic.
+
+Custom Python Modules
+---------------------
+ grt Module to work with Workbench runtime (grt) objects
+ grt.root The root object in the internal Workbench object hierarchy
+ grt.modules Location where Workbench modules are available
+ grt.classes List of classes known to the GRT system
+ mforms A Module to access the cross-platform UI toolkit used in some Workbench features
+ wb Utility module for creating Workbench plugins
+
+Type 'help(module/object/function)' to get information about a module,
+                                    object or function.
+Type 'dir(object)'to get a quick list of methods an object has.
+
+For an introductory tutorial on the Python language, visit
+http://docs.python.org/tutorial/
+For general Python and library reference documentation, visit
+http://python.org/doc/
+</pre>
+
+<p>В Workbench Scripting Shell есть пять вкладок наверху
+панели с левой стороны: <span class="guilabel">Files</span>,
+<span class="guilabel">Globals</span>, <span class="guilabel">Classes</span>, and
+<span class="guilabel">Modules</span> и
+<span class="guilabel">Notifications</span>.</p>
+
+<p>Исключение брошено, пытаясь использовать
+<code class="literal">input()</code> или читать из
+<code class="literal">stdin</code>.</p>
+
+<h3><a name="wb-scripting-modules-palettes"></a>C.5.3.
+Вкладки Files, Globals, Classes, Modules и Notifications</h3>
+<p>Workbench Scripting Shell показывает вкладки
+<span class="guilabel">Files</span>, <span class="guilabel">Globals</span>,
+<span class="guilabel">Classes</span>, <span class="guilabel">Modules</span>
+и <span class="guilabel">Notifications</span>
+в дополнение к главной вкладке <span class="guilabel">Shell</span>.</p>
+
+<h4><a name="idm140523187492256"></a>Вкладка Files</h4>
+<p>Вкладка <span class="guilabel">Files</span> перечисляет папки и файлы для
+определенных пользователями файлов скрипта. Категории файлового браузера:
+<span class="guilabel">User Scripts</span>, <span class="guilabel">User
+Modules</span> и <span class="guilabel">User Libraries</span>.</p>
+
+<a name="wb-scripting-shell-files-tab"></a>
+<p><b>Рис. C.3. The Workbench Scripting Shell: вкладка Files</b></p>
+<img src="images/wb-scripting-shell-files.png" width="423" height="743"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<p>По умолчанию скрипты сохранены в каталоге
+<code class="filename">scripts/</code> вашего каталога конфигурации
+MySQL Workbench. В следующей таблице перечислены местоположения по умолчанию
+для каждой платформы.</p>
+
+<a name="wb-scripting-shell-default-scripts-path"></a>
+<p><b>Таблица C.4. Местоположение скриптов по умолчанию</b></p>
+<table border="1">
+<thead><tr><th scope="col">Операционная система</th>
+<th scope="col">Путь <code class="filename">scripts/</code> по умолчанию
+</th></tr></thead>
+<tbody><tr><td scope="row">Linux</td>
+<td><code class="filename">~/.mysql/workbench/scripts</code></td></tr>
+<tr><td scope="row">macOS</td>
+<td><code class="filename">~/Library/Application\
+Support/MySQL/Workbench/scripts/</code></td></tr>
+<tr><td scope="row">Windows 7</td><td><code class="filename">
+C:\Users\[user]\AppData\Roaming\MySQL\Workbench\scripts\</code></td></tr>
+</tbody></table><br class="table-break">
+
+<h4><a name="idm140523187467792"></a>Вкладка Globals</h4>
+<p>Наверху окна список, который используется, чтобы выбрать отправную точку
+или корень дерева GRT Globals, показанного ниже него. По умолчанию эта
+отправная точка корень дерева, то есть '/'. Можно расширить или свернуть
+дерево GRT Globals, оно является структурой, в которой MySQL Workbench
+хранит данные о документе. Нажатие на любой пункт приводит к его имени и
+значению, показываемой в панели ниже дерева.</p>
+
+<a name="wb-scripting-shell-globals-tab"></a>
+<p><b>Рис. C.4. Workbench Scripting Shell: вкладка Globals</b></p>
+<img src="images/wb-scripting-shell-globals.png" width="482" height="876"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h4><a name="idm140523187458880"></a>Вкладка Classes</h4>
+<p><code class="literal">class</code> это пользовательский тип данных,
+сформированный, объединяя примитивные типы данных: целые числа, строки,
+списки и объекты. Эта вкладка показывает определения классов, используемых
+объектами во вкладке <span class="guilabel">Modules</span>.
+Нажатие на класс заставляет краткое описание класса быть показанным в
+панели ниже исследователя классов.</p>
+
+<a name="wb-scripting-shell-classes-tab"></a>
+<p><b>Рис. C.5. Workbench Scripting Shell: вкладка Classes</b></p>
+<img src="images/wb-scripting-shell-classes.png" width="489" height="743"
+alt="Content is described in the surrounding text."><br class="figure-break">
+<p>Когда выбрана вкладка <span class="guilabel">Classes</span>,
+список показывает следующие пункты:</p>
+
+<ul><li><p><span class="guilabel">Group by Name</span>:
+Группировка именем объекта.</li>
+<li><span class="guilabel">Group by Hierarchy</span>:
+Группировка наследованием.</li>
+<li><span class="guilabel">Group by Package</span>:
+Группировка функциональностью.</p></li></ul>
+
+<p>Представление по умолчанию для этой вкладки:
+<span class="guilabel">Group By Name</span>. Это представление показывает все
+различные объекты в алфавитном порядке. Щелкните значок
+<span class="guibutton">+</span> или дважды щелкните по пакету, чтобы
+показать свойства структуры.</p>
+
+<p>Если вы переключитесь на иерархическое представление, вы будете видеть
+<code class="literal">GrtObject</code>: родительский объект, из которого
+получены все другие объекты.</p>
+
+<h4><a name="idm140523187439440"></a>Вкладка Modules</h4>
+<p>Вкладка <span class="guilabel">Modules</span> нужна, чтобы просмотреть
+установленные модули MySQL Workbench и их функции. Нажатие на модуль в
+исследователе заставляет детали быть показанными в группе ниже исследователя.
+Это средство полезно для исследования доступных модулей и их функций.
+Это также способ проверить, были ли модули правильно установлены.</p>
+
+<a name="wb-scripting-shell-modules-tab"></a>
+<p><b>Рис. C.6. Workbench Scripting Shell: вкладка Modules</b></p>
+<img src="images/wb-scripting-shell-modules.png" width="488" height="743"
+alt="Content is described in the surrounding text."><br class="figure-break">
+
+<h4><a name="idm140523187430000"></a>Вкладка Notifications</h4>
+<p>Вкладка <span class="guilabel">Notification</span> включает набор
+классов <code class="literal">notification</code>, которые используются
+модулями MySQL Workbench. Щелкните по классу уведомления для
+описания его использования.</p>
+
+<a name="wb-scripting-shell-notifications-tab"></a>
+<p><b>Рис. C.7. Workbench Scripting Shell: вкладка Notifications</b></p>
+<img src="images/wb-scripting-shell-notifications.png" width="488"
+height="743" alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<h2><a name="wb-tutorial-plugins"></a>C.6.
+Обучающая программа: написание плагинов</h2>
+<p>Обучающие программы в этой секции демонстрируют, как расширить MySQL
+Workbench, создав плагины.</p>
+
+<h3><a name="wb-tutorial-plugins-php-pdo"></a>C.6.1.
+Обучающая программа: произведите код PHP, чтобы создать связь с PDO_MySQL</h3>
+<p>MySQL Workbench включает плагин, который производит код PHP с расширением
+<code class="literal">mysqli</code>. Эта обучающая программа показывает, как
+произвести код с расширением <code class="literal">PDO_MySQL</code> для PHP.
+Вы могли бы выбрать иное расширение или иной язык в целом, можно приспособить
+произведенный код соответственно.</p>
+
+<p>Чтобы начать, рассмотрите код, показанный в примере, который следует.
+<pre>
+# import the wb module
+from wb import DefineModule, wbinputs
+# import the grt module
+import grt
+# import the mforms module for GUI stuff
+import mforms
+
+# define this Python module as a GRT module
+ModuleInfo = DefineModule(name= "MySQLPDO", author= "Yours Truly", version="1.0")
+
+@ModuleInfo.plugin("info.yourstruly.wb.mysqlpdo", caption= "MySQL PDO (Connect to Server)", input= [wbinputs.currentSQLEditor()], pluginMenu= "SQL/Utilities")
+@ModuleInfo.export(grt.INT, grt.classes.db_query_Editor)
+
+def mysqlpdo(editor):
+"""Copies PHP code to connect to the active MySQL connection using PDO, to the clipboard.
+"""
+# Values depend on the active connection type
+if editor.connection:
+   conn = editor.connection
+if conn.driver.name == "MysqlNativeSocket":
+   params = {
+     "host" : "",
+     "port" : "",
+     "user" : conn.parameterValues["userName"],
+     "socket" : conn.parameterValues["socket"],
+     "dbname" : editor.defaultSchema,
+     "dsn" : "mysql:unix_socket={$socket};dbname={$dbname}"
+   }
+else:
+params = {
+  "host" : conn.parameterValues["hostName"],
+  "port" : conn.parameterValues["port"] if conn.parameterValues["port"] else 3306,
+  "user" : conn.parameterValues["userName"],
+  "socket" : "",
+  "dbname" : editor.defaultSchema,
+  "dsn" : "mysql:host={$host};port={$port};dbname={$dbname}"
+}
+text = """$host="%(host)s";
+$port=%(port)s;
+$socket="%(socket)s";
+$user="%(user)s";
+$password="";
+$dbname="%(dbname)s";
+
+try {
+  $dbh = new PDO("%(dsn)s", $user, $password));
+} catch (PDOException $e) {
+  echo 'Connection failed: ' . $e-&gt;getMessage();
+}
+
+""" % params
+mforms.Utilities.set_clipboard_text(text)
+mforms.App.get().set_status_text("Copied PHP code to clipboard")
+return 0
+</pre>
+
+<p>Этот простой плагин производит код PHP, чтобы создать подключение
+MySQL, используя PHP <code class="literal">PDO_MySQL</code>.
+Определение DSN зависит от типа подключения в MySQL Workbench.</p>
+
+<p>Чтобы произвести код PHP для связи, сначала установите
+плагин следующим образом:</p>
+<ol><li>Скопируйте код в новый файл. Имя файла, используемое в этом примере,
+<code class="filename">php-pdo-connect_grt.py</code>,
+но можно использовать другое имя, пока есть суффикс
+<code class="filename">_grt.py</code>.</li>
+
+<li>Запустите MySQL Workbench. Нажмите
+<span class="guilabel">Scripting</span>,
+<span class="guilabel">Install Plugin/Module</span> из меню, чтобы открыть
+файловый браузер. Выберите файл, созданный кодом на предыдущем шаге,
+в этом случае <code class="filename">php-pdo-connect_grt.py</code>.</p>
+
+<p>Вы могли скопировать файл непосредственно в каталог плагинов
+вместо того, чтобы использовать интерфейс <span class="guilabel">Install
+Plugin/Module</span>. Результатом было бы то же самое.</li>
+
+<li>Перезапустите MySQL Workbench. Этот шаг производит собранный
+bytecode-файл (<code class="filename">.pyc</code>) из вашего исходного файла.
+В этом примере это производит файл
+<code class="filename">php-pdo-connect_grt.pyc</code>.</li>
+
+<li>После перезапуска MySQL Workbench загрузите подключение MySQL, чтобы
+использовать, чтобы произвести код PHP. Из меню нажмите
+<span class="guimenu">Tools</span>,
+<span class="guimenuitem">Utilities</span>,
+<span class="guimenuitem">MySQL PDO (Connect to Server)</span>,
+который является <code class="literal">Caption</code>, определенным в
+рамках кода плагина.</p>
+
+<p>Это действие копирует произведенный код PHP в буфер обмена
+на вашей системе. Следующий пример связи определяет "sakila"
+как базу данных по умолчанию в произведенном коде.</p>
+
+<pre>
+$host="localhost";
+$port=3306;
+$socket="";
+$user="root";
+$password="";
+$dbname="sakila";
+
+try {
+  $dbh = new PDO("mysql:host={$host};port={$port};dbname={$dbname}",
+                 $user, $password));
+} catch (PDOException $e) {
+  echo 'Connection failed: ' . $e-&gt;getMessage();
+}
+</pre></li></ol>
+
+<h3><a name="wb-tutorial-plugins-myisam-fk"></a>C.6.2.
+Обучающая программа: создание внешних ключей с MyISAM</h3>
+<p>Диаграммы EER полезны для визуализации сложных схем базы данных.
+Они часто создаются для существующих баз данных, чтобы разъяснить их цель
+или описать их. MySQL Workbench предоставляет средства для инженерного
+анализа существующих баз данных и затем создания диаграммы EER автоматически.
+В этом случае линии связей между внешними ключами в таблице будут
+автоматически нарисованы. Это графическое представление делает отношения
+между таблицаами намного легче понять. Однако более старый механизм
+хранения MyISAM не включает поддержку внешних ключей. Это означает, что
+таблицы MyISAM, которые перепроектированы, автоматически не покажут
+линии связей между таблицами, делая базу данных тяжелее в понимании.
+Плагин, созданный в этой обучающей программе, обходит эту проблему при помощи
+того, что соглашение о присвоении имен часто используется для внешних ключей:
+<code class="literal">tablename_primarykeyname</code>.
+Используя это соглашение, могут автоматически быть созданы внешние ключи
+после того, как база данных перепроектирована, что приведет к линиям
+связей в диаграмме EER.</p>
+
+<p><span class="bold"><strong>Логика</strong></span></p>
+<p>Основной алгоритм для этой задачи был бы следующим:</p>
+<pre>
+for each table in the schema
+  for each column in the table
+    look for another table whose name and primary key name
+    match the current column name
+    if such a table is found, add a foreign key referencing it
+</pre>
+
+<p>Поскольку повторение списка заполненной таблицы, чтобы найти совпадение
+может быть медленным для моделей с большим количеством таблиц, необходимо
+его оптимизировать, предварительно вычисляя все возможные имена внешнего
+ключа в данной схеме.
+<pre>
+import grt
+
+def auto_create_fks(schema):
+  fk_name_format = "%(table)s_%(pk)s"
+  possible_fks = {}
+  # create the list of possible foreign keys from the list of tables
+  for table in schema.tables:
+    if table.primaryKey:
+       format_args = {'table':table.name, 'pk':table.primaryKey.name}
+    fkname = fk_name_format % format_args
+    possible_fks[fkname] = table
+  # go through all tables in schema, this time to find columns that may be a fk
+  for table in schema.tables:
+    for column in table.columns:
+      if possible_fks.has_key(column.name):
+         ref_table = possible_fks[column.name]
+      if ref_table.primaryKey.formattedType != column.type:
+         continue
+      fk = table.createForeignKey(column.name+"_fk")
+      fk.referencedTable = ref_table
+      fk.columns.append(column)
+      fk.referencedColumn.append(ref_table.primaryKey)
+      print "Created foreign key %s from %s.%s to %s.%s" \
+            % (fk.name, table.name, column.name, ref_table.name,
+            ref_table.primaryKey.name)
+auto_create_fks(grt.root.wb.doc.physicalModels[0].catalog.schemata[0])
+</pre>
+
+<p><span class="bold"><strong>Создание плагина из скрипта</strong></span></p>
+<p>Чтобы создать плагин из произвольного скрипта, сначала необходимо сделать
+файл модулем и экспортировать необходимую функцию из него.
+Тогда необходимо объявить модуль как плагин и определить аргументы типа
+возврата и входные аргументы.</p>
+
+<pre>
+from wb import *
+import grt
+
+ModuleInfo = DefineModule(name="AutoFK", author="John Doe", version="1.0")
+  @ModuleInfo.plugin("sample.createGuessedForeignKeys",
+  caption="Create Foreign Keys from ColumnNames",
+  input=[wbinputs.objectOfClass("db.mysql.schema")],
+  groups=["Overview/Utility"])
+@ModuleInfo.export(grt.INT, grt.classes.db_mysql_Schema)
+def auto_create_fks(schema):
+ ...
+</pre>
+
+<p>С добавлением предыдущего кода функция
+<code class="literal">auto_create_fks()</code> экспортируется и будет
+добавлена к контекстному меню схемы. Когда вызвана, она получает в настоящее
+время выбранную схему как свой вход.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

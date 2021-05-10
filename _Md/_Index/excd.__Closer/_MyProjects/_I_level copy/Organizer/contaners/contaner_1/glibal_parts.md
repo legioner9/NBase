@@ -1,0 +1,13 @@
+# AActor
+- pplaner
+- ttalker
+  - ssender
+  - ffoner
+- ssercher
+  - bbrowser 
+- mminder
+- aautomater
+- llaker
+  - autohistory of aactor
+  - aautoAdder (outline)
+- sstructer

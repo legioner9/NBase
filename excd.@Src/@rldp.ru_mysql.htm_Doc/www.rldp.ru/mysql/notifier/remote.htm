@@ -1,0 +1,546 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=koi8-r" />
+<title>Глава 2. Настройка дистанционного мониторинга в MySQL Notifier</title>
+<meta name="generator" content="DocBook XSL Stylesheets + chunker.py v1.9.2" />
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="mysql-notifier-remote-monitoring"></a>Глава 2. Настройка
+дистанционного мониторинга в MySQL Notifier</h1>
+<p>MySQL Notifier использует Windows Management Instrumentation (WMI), чтобы
+контролировать сервисы на удаленных компьютерах. Эта секция объясняет, как
+это работает и как настроить вашу систему, чтобы контролировать
+удаленные экземпляры MySQL.</p>
+
+<p>Чтобы формировать WMI, важно понять, что основная архитектура
+Distributed Component Object Model (DCOM) делает работу WMI.
+MySQL Notifier использует асинхронные вопросы уведомления на удаленных
+хостах Microsoft Windows как события .NET. Эти события посылают асинхронный
+отзыв в компьютер с работающим MySQL Notifier, таким образом, это знает,
+когда сервисный статус изменился на удаленном компьютере.
+Асинхронные уведомления предлагают лучшую работу по сравнению с
+полусинхронными уведомлениями или синхронными уведомлениями через таймеры.
+</p>
+
+<p>Асинхронное уведомление требует, чтобы удаленный компьютер послал отзыв в
+компьютер клиента (таким образом открывающий обратную связь), таким образом,
+Windows Firewall и DCOM должны правильно формироваться для коммуникации,
+чтобы функционировать правильно. Клиент (Computer A), который включает
+небезопасное приложение (<code class="filename">unsecapp.exe</code> в этом
+примере), сделал асинхронный вызов к удаленному компьютеру (Computer B)
+и получает назад сообщение с данными.</p>
+
+<a name="mysql-notifier-remote-monitoring-wmi"></a>
+<p><b>Рис. 2.1. MySQL Notifier Distributed Component Object Model (DCOM)</b>
+</p>
+<img src="images/windows-notifier-wmi-diagram.png" width="660" height="194"
+alt="Content is described in the surrounding text.">
+<br class="figure-break">
+
+<p>Большинство распространенных ошибок, брошенных асинхронными уведомлениями
+WMI, связано с Windows Firewall, блокирующим коммуникацию, или с
+DCOM/параметры настройки WMI, не настраиваемыми правильно.
+Для списка распространенных ошибок с решениями посмотрите
+<a href="#mysql-notifier-remote-monitoring-errors">здесь</a>.</p>
+
+<p>Следующие шаги требуются, чтобы заставить WMI функционировать. Эти шаги
+разделены между двумя машинами. Единственный компьютер, который управляет
+MySQL Notifier (Computer A), и многократные удаленные машины,
+которые проверяются (Computer B).</p>
+
+<h2><a name="mysql-notifier-remote-computer-a"></a>
+Машина с MySQL Notifier (Computer A)</h2>
+<ol type="1"><li class="listitem"><p>Позвольте удаленное администрирование
+редактированием <span class="guilabel">Group Policy Editor</span>
+или через <code class="literal">NETSH</code>:</p>
+
+<p>Используя <span class="guilabel">Group Policy Editor</span>:</p>
+<ol type="a"><li class="listitem"><p>
+Нажмите <span class="guibutton">Start</span>,
+<span class="guibutton">Run</span>, введите
+<code class="filename">GPEDIT.MSC</code>, нажмите
+<span class="guibutton">OK</span>.</p></li>
+
+<li class="listitem"><p>Под <span class="guilabel">Local Computer Policy
+</span> разверните <span class="guilabel">Computer Configuration
+</span>.</p></li>
+
+<li class="listitem"><p>
+Разверните <span class="guilabel">Administrative Templates</span>, затем
+<span class="guilabel">Network</span>, <span class="guilabel">Network
+Connections</span> и <span class="guilabel">Windows Firewall</span>.</p></li>
+
+<li class="listitem"><p>Если компьютер находится в домене,
+дважды щелкните <span class="guilabel">Domain Profile</span>, иначе
+дважды щелкните <span class="guilabel">Standard Profile</span>.</p></li>
+
+<li class="listitem"><p>Дважды щелкните по <span class="guilabel">
+Windows Firewall: Allow inbound
+remote administration exception</span>, чтобы открыть окно конфигурации.
+</p></li>
+
+<li class="listitem"><p>Проверьте опцию <span class="guibutton">Enabled
+</span> и нажмите <span class="guibutton">OK</span>.</p></li></ol>
+<p>Используя команду <code class="literal">NETSH</code>:</p>
+<p>Команда "netsh firewall" устарела еще в Microsoft
+Server 2008 and Vista и заменена на "netsh advfirewall firewall".</p>
+
+<ol type="a"><li class="listitem"><p>Откройте окно командной строки с
+Административными правами (можно щелкнуть правой кнопкой мыши по символу
+Командной строки и выбрать
+<span class="guilabel">Run as Administrator</span>).</p></li>
+
+<li class="listitem"><p>Выполните следующую команду:</p>
+<pre class="programlisting">
+NETSH advfirewall firewall set service RemoteAdmin enable
+</pre></li></ol></li>
+
+<li class="listitem"><p>Откройте порт DCOM TCP 135:</p>
+<ol type="a"><li class="listitem"><p>Откройте окно командной строки с
+Административными правами (можно щелкнуть правой кнопкой мыши по символу
+Командной строки и выбрать <span class="guilabel">Run as Administrator
+</span>).</p></li>
+
+<li class="listitem"><p>Выполните следующую команду:</p>
+<pre class="programlisting">
+NETSH advfirewall firewall add rule name=DCOM_TCP135 protocol=TCP localport=135 dir=in action=allow
+</pre></li></ol></li>
+
+<li class="listitem"><p>Добавьте клиентское приложение, которое содержит
+прием для отзыва (<code class="filename">MySqlNotifier.exe</code>) в
+Windows Firewall Exceptions List (используя конфигурацию Windows
+Firewall или <code class="literal">NETSH</code>):</p>
+
+<p>Используя конфигурацию Windows Firewall:</p>
+<ol type="a"><li class="listitem"><p>В Control Panel дважды щелкните
+по <span class="guilabel">Windows Firewall</span>.</p></li>
+
+<li class="listitem"><p>
+В окне Windows Firewall нажмите <span class="guilabel">Allow a
+program or feature through Windows Firewall</span>.</p></li>
+
+<li class="listitem"><p>В окне Allowed Programs нажмите
+<span class="guibutton">Change Settings</span> и сделайте одно из следующего:
+</p>
+
+<ul><li class="listitem"><p>
+Если <code class="filename">MySqlNotifier.exe</code> в списке
+Allowed programs and features, удостоверьтесь, что он проверяется на тип
+сетей, с которыми компьютер соединяется (Private, Public или обе).</p></li>
+
+<li class="listitem"><p>
+Если в этом списке нет <code class="filename">MySqlNotifier.exe</code>,
+нажмите <span class="guibutton">Allow another program</span>.</p>
+
+<ol type="i"><li class="listitem"><p>В окне <span class="guilabel">Add a
+Program</span> выберите <code class="filename">MySqlNotifier.exe</code>,
+если это существует в списке Programs, иначе нажмите
+<span class="guibutton">Browse</span> и перейдите в каталог с
+<code class="filename">MySqlNotifier.exe</code>, выберите этот файл и
+нажмите на <span class="guibutton">Add</span>.</p></li>
+
+<li class="listitem"><p>Проверьте, что <code class="filename">
+MySqlNotifier.exe</code> проверяется на тип сетей, которые компьютер
+использует (Private, Public или both).</p></li></ol></li></ul></li></ol>
+
+<p>Используя команду <code class="literal">NETSH</code>:</p>
+<ol type="a"><li class="listitem"><p>Откройте окно командной строки с
+Административными правами (можно щелкнуть правой кнопкой мыши по символу
+Командной строки и нажать <span class="guibutton">Run as Administrator
+</span>).</p></li>
+
+<li class="listitem"><p>Выполните следующую команду, где вы изменяете
+"<em class="replaceable"><code>[YOUR_INSTALL_DIRECTORY]</code></em>":</p>
+<pre class="programlisting">
+NETSH advfirewall firewall add rule name=MySqlNotifier program=[YOUR_INSTALL_DIRECTORY]\MySqlNotifier.exe action=allow dir=in
+</pre></li></ol></li>
+
+<li class="listitem"><p>Если Computer B является членом
+<code class="literal">WORKGROUP</code> или находится в ином домене,
+которому не доверяет Computer A, тогда связь отзыва
+(Connection 2) создается как анонимная связь. Чтобы дать анонимным связям
+разрешения удаленного доступа DCOM:</p>
+
+<ol type="a"><li class="listitem"><p>
+Нажмите <span class="guibutton">Start</span>,
+<span class="guibutton">Run</span>, введите
+<code class="literal">DCOMCNFG</code> и нажмите
+<span class="guibutton">OK</span>.</p></li>
+
+<li class="listitem"><p>В диалоге Component Services разверните Component
+Services, Computers, нажмите правой кнопкой на
+<span class="guilabel">My Computer</span> и нажмите на
+<span class="guibutton">Properties</span>.</p></li>
+
+<li class="listitem"><p>В диалоге My Computer Properties перейдите на
+вкладку <span class="guilabel">COM Security</span>.</p></li>
+<li class="listitem"><p>Под Access Permissions
+нажмите <span class="guibutton">Edit Limits</span>.</p></li>
+
+<li class="listitem"><p>В диалоге Access Permission выберите
+<span class="guilabel">ANONYMOUS LOGON name</span> в блоке Group or
+user names. В столбце Allow под Permissions for User выберите
+<span class="guilabel">Remote Access</span> и нажмите
+<span class="guibutton">OK</span>.</p></li></ol></li></ol>
+
+<h2><a name="mysql-notifier-remote-computer-b"></a>
+Проверенный удаленный компьютер (Computer B)</h2>
+<p>Если учетная запись пользователя, которая зарегистрирована на
+компьютере, исполняющем MySQL Notifier (Computer A) это
+локальный администратор на удаленном компьютере (Computer B),
+что аналогично администратору на Computer B,
+можно перейти к шагу "Allow for remote administration".</p>
+
+<p>Настройка безопасности DCOM, чтобы позволить пользователю
+не-администратору получать доступ к компьютеру удаленно:</p>
+<ol type="1"><li class="listitem"><p>Предоставьте "DCOM remote launch"
+и разрешения активации для пользователя или группы:</p>
+
+<ol type="a"><li class="listitem"><p>
+Нажмите <span class="guibutton">Start</span>,
+<span class="guibutton">Run</span>, введите
+<code class="literal">DCOMCNFG</code> и нажмите
+<span class="guibutton">OK</span>.</p></li>
+
+<li class="listitem"><p>В диалоге Component Services разверните Component
+Services, Computers, щелкните правой кнопкой по
+<span class="guilabel">My Computer</span> и нажмите
+<span class="guibutton">Properties</span>.</p></li>
+
+<li class="listitem"><p>В диалоге My Computer Properties перейдите на
+вкладку <span class="guilabel">COM Security</span>.</p></li>
+<li class="listitem"><p>Под Launch and Activation Permission нажмите
+на <span class="guibutton">Edit Limits</span>.</p></li>
+
+<li class="listitem"><p>В диалоге <span class="guilabel">Launch and
+Activation Permission</span> выполните эти шаги, если ваше имя или ваша
+группа не появляются в списке Groups or user names:</p>
+
+<ol type="i"><li class="listitem"><p>В диалоге <span class="guilabel">Launch
+and Activation Permission</span> нажмите <span class="guibutton">Add</span>.
+</p></li>
+
+<li class="listitem"><p>В диалоге Select Users or Groups
+включите свое имя и группу в блок <span class="guilabel">Enter the object
+names to select</span> и нажмите на <span class="guibutton">OK</span>.
+</p></li></ol></li>
+
+<li class="listitem"><p>В диалоге <span class="guilabel">Launch and
+Activation Permission</span> выберите своего пользователя и группу в блоке
+Group or user names. В столбце Allow под Permissions for User выберите
+<span class="guilabel">Remote Launch</span>, <span class="guilabel">Remote
+Activation</span> и нажмите <span class="guibutton">OK</span>.</p></li></ol>
+
+<p>Предоставьте разрешения удаленного доступа DCOM:</p>
+<ol type="a"><li class="listitem"><p>
+Нажмите <span class="guibutton">Start</span>,
+<span class="guibutton">Run</span>, введите
+<code class="literal">DCOMCNFG</code> и нажмите
+<span class="guibutton">OK</span>.</p></li>
+
+<li class="listitem"><p>В диалоге Component Services разверните Component
+Services, Computers, нажмите правой кнопкой мыши на
+<span class="guilabel">My Computer</span> и выберите
+<span class="guibutton">Properties</span>.</p></li>
+
+<li class="listitem"><p>В диалоге My Computer Properties перейдите на вкладку
+<span class="guilabel">COM Security</span>.</p></li>
+<li class="listitem"><p>Под Access Permissions
+нажмите <span class="guibutton">Edit Limits</span>.</p></li>
+
+<li class="listitem"><p>В диалоге Access Permission выберите
+<span class="guilabel">ANONYMOUS LOGON name</span> в блоке Group or
+user names. В столбце Allow под Permissions for User выберите
+<span class="guilabel">Remote Access</span>, нажмите
+<span class="guibutton">OK</span>.</p></li></ol></li>
+
+<li class="listitem"><p>Разрешение пользовательского доступа неадминистратора
+к определенному пространству имен WMI:</p>
+<ol type="a"><li class="listitem"><p>В Control Panel дважды щелкните
+по <span class="guilabel">Administrative Tools</span>.</p></li>
+
+<li class="listitem"><p>В окне Administrative Tools дважды щелкните
+по <span class="guilabel">Computer Management</span>.</p></li>
+
+<li class="listitem"><p>В окне Computer Management разверните дерево
+<span class="guilabel">Services and Applications</span>.</p></li>
+<li class="listitem"><p>Щелкните правой кнопкой мыши по
+WMI Control и выберите <span class="guilabel">Properties</span>.</p></li>
+
+<li class="listitem"><p>В окне WMI Control Properties перейдите
+на вкладку <span class="guilabel">Security</span>.</p></li>
+<li class="listitem"><p>На вкладке Security выберите пространство имен и
+нажмите <span class="guibutton">Security</span>. Root/CIMV2 это
+обычно используемое пространство имен.</p></li>
+
+<li class="listitem"><p>Определите местонахождение соответствующей
+учетной записи и проверьте <span class="guilabel">Remote
+Enable</span> в списке Permissions.</p></li></ol></li>
+
+<li class="listitem"><p>Включите удаленное администрирование редактированием
+<span class="guilabel">Group Policy Editor</span>
+или через <code class="literal">NETSH</code>:</p>
+
+<p>Через <span class="guilabel">Group Policy Editor</span>:</p>
+<ol type="a"><li class="listitem"><p>Нажмите
+<span class="guibutton">Start</span>,
+<span class="guibutton">Run</span>, введите
+<code class="filename">GPEDIT.MSC</code> и нажмите
+<span class="guibutton">OK</span>.</p></li>
+
+<li class="listitem"><p>Под Local Computer Policy дважды щелкните
+по <span class="guilabel">Computer Configuration</span>.</p></li>
+<li class="listitem"><p>Дважды щелкните по
+<span class="guilabel">Administrative Templates</span>,
+<span class="guilabel">Network</span>,
+<span class="guilabel">Network Connections</span> и
+<span class="guilabel">Windows Firewall</span>.</p></li>
+
+<li class="listitem"><p>Если компьютер находится в домене,
+дважды щелкните <span class="guilabel">Domain Profile</span>, иначе
+по <span class="guilabel">Standard Profile</span>.</p></li>
+
+<li class="listitem"><p>Нажмите <span class="guilabel">Windows Firewall:
+Allow inbound remote administration exception</span>.</p></li>
+<li class="listitem"><p>В меню Action дважды щелкните по выбору от
+предыдущего шага или выберите <span class="guibutton">Edit</span>.</p></li>
+<li class="listitem"><p>Проверьте кнопку <span class="guibutton">Enabled
+</span> и нажмите <span class="guibutton">OK</span>.</p></li></ol>
+
+<p>Используя команду <code class="literal">NETSH</code>:</p>
+<ol type="a"><li class="listitem"><p>Откройте окно командной строки с
+Административными правами (можно щелкнуть правой кнопкой мыши по символу
+Командной строки и нажать <span class="guimenuitem">Run as Administrator
+</span>).</p></li>
+
+<li class="listitem"><p>Выполните следующую команду:</p>
+<pre class="programlisting">
+NETSH advfirewall firewall set service RemoteAdmin enable
+</pre></li></ol></li>
+
+<li class="listitem"><p>Подтвердите, что вы авторизовались с использованием
+<code class="literal">Name</code>, а не <code class="literal">Full Name
+</code>:</p>
+
+<ol type="a"><li class="listitem"><p>
+В <span class="guilabel">Control Panel</span> дважды щелкните по
+<span class="guilabel">Administrative Tools</span>.</p></li>
+
+<li class="listitem"><p>
+В окне <span class="guilabel">Administrative Tools</span> дважды щелкните по
+<span class="guilabel">Computer Management</span>.</p></li>
+
+<li class="listitem"><p>
+В окне <span class="guilabel">Computer Management</span> раскройте
+<span class="guilabel">System Tools</span>, затем
+<span class="guilabel">Local Users and Groups</span>.</p></li>
+
+<li class="listitem"><p>Нажмите на узел
+<span class="guilabel">Users</span> и в правой стороне панели
+определите местонахождение вашего пользователя и удостоверьтесь, что это
+использует <span class="guilabel">Name</span>, чтобы соединиться, а не
+значение <span class="guilabel">Full Name</span>.</p></li></ol></li></ol>
+
+<h2><a name="mysql-notifier-remote-monitoring-errors"></a>
+Распространенные ошибки</h2>
+<ul><li class="listitem"><p><code class="literal">0x80070005</code></p>
+<ul><li class="listitem"><p>Безопасность DCOM не формировалась правильно (см.
+Computer B с шага <code class="literal">настройки безопасности DCOM</code>).
+</p></li>
+
+<li class="listitem"><p>Удаленный компьютер (Computer B)
+является членом WORKGROUP или находится в домене, которому не доверяет
+компьютер клиента (Computer A).</p></li></ul></li>
+
+<li class="listitem"><p><code class="literal">0x8007000E</code></p>
+<ul><li class="listitem"><p>Удаленный компьютер (Computer B) является членом
+WORKGROUP или находится в домене, которому не доверяет
+компьютер клиента (Computer A).</p></li></ul></li>
+
+<li class="listitem"><p><code class="literal">0x80041003</code></p>
+<ul><li class="listitem"><p>Доступ к удаленному пространству имен WMI не
+формировался правильно (см. Computer B, шаг <code class="literal">
+предоставления доступа к пространству имен WMI</code>).</p></li></ul></li>
+
+<li class="listitem"><p><code class="literal">0x800706BA</code></p>
+<ul><li class="listitem"><p>Порт DCOM не открыт на компьютере клиента
+(Computer A). См. <code class="literal">открытие порта DCOM
+TCP 135</code> для Computer A.</p></li>
+
+<li class="listitem"><p>Удаленный компьютер (Computer B)
+недоступен, потому что его сетевое местоположение установлено в Public.
+Удостоверьтесь, что можно получить доступ к нему через Windows Explorer.
+</p></li></ul></li></ul>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>

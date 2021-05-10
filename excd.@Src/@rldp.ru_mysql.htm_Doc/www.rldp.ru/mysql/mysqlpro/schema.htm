@@ -1,0 +1,2179 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+   <META NAME="GENERATOR" CONTENT="Dos Navigator 1.51.04/DOS.">
+   <META NAME="Author" CONTENT="Alexey V. Pautov">
+   <title>Глава 9. База данных <code>INFORMATION_SCHEMA</code></title>
+</head>
+
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084"
+      alink="#0000FF">
+
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+
+<h2><a name="information-schema"></a>
+Глава 9. База данных <code>INFORMATION_SCHEMA</code></h2>
+<p><code>INFORMATION_SCHEMA</code> обеспечивает доступ к
+метаданным базы данных.</p>
+
+<p><em class="firstterm">Метаданные</em> представляют собой данные
+относительно данных, имени базы данных или таблицы, тип данных столбца или
+привилегии доступа. Другие термины, которые иногда используются для этой
+информации: <em class="firstterm">каталог системы</em> и
+<em class="firstterm">словарь данных</em>.</p>
+
+<p><code>INFORMATION_SCHEMA</code> информационная база данных, место, которое
+сохраняет информацию относительно всех других баз данных, которые
+поддерживает сервер MySQL. Внутри <code>INFORMATION_SCHEMA</code>
+имеется несколько таблиц только для чтения. Они фактически view, а не
+обычные таблицы, так как не имеется никаких файлов, связанных с ними.</p>
+
+<p>В действительности мы имеем базу данных <code>INFORMATION_SCHEMA</code>,
+хотя сервер не создает каталог баз данных с таким именем. Возможно выбрать
+<code>INFORMATION_SCHEMA</code> как заданную по умолчанию базу данных
+инструкцией <code>USE</code>, но это возможно только, чтобы читать содержание
+таблиц. Вы не можете вставлять в них, модифицировать их или удалять из них.
+</p>
+
+<p>Имеется пример инструкции, которая получает информацию
+из <code>INFORMATION_SCHEMA</code>:</p>
+<pre>
+mysql&gt; SELECT table_name, table_type, engine
+    -&gt;        FROM information_schema.tables
+    -&gt;        WHERE table_schema = 'db5' ORDER BY table_name DESC;
++------------+------------+--------+
+| table_name | table_type | engine |
++------------+------------+--------+
+|        v56 | VIEW       | NULL   |
+|         v3 | VIEW       | NULL   |
+|         v2 | VIEW       | NULL   |
+|          v | VIEW       | NULL   |
+|     tables | BASE TABLE | MyISAM |
+|         t7 | BASE TABLE | MyISAM |
+|         t3 | BASE TABLE | MyISAM |
+|         t2 | BASE TABLE | MyISAM |
+|          t | BASE TABLE | MyISAM |
+|         pk | BASE TABLE | InnoDB |
+|       loop | BASE TABLE | MyISAM |
+|       kurs | BASE TABLE | MyISAM |
+|          k | BASE TABLE | MyISAM |
+|       into | BASE TABLE | MyISAM |
+|       goto | BASE TABLE | MyISAM |
+|        fk2 | BASE TABLE | InnoDB |
+|         fk | BASE TABLE | InnoDB |
++------------+------------+--------+
+17 rows in set (0.01 sec)
+</pre>
+
+<p>Объяснение: инструкция запрашивает список всех таблиц в базе данных
+<code>db5</code> в обратном алфавитном порядке, показывая только три части
+информации: имя таблицы, тип таблицы и тип памяти.</p>
+
+<p>Каждый пользователь MySQL имеет право обратиться к этим таблицам, но может
+видеть только строки в таблицах, которые соответствуют объектам, для которых
+пользователь имеет соответствующие привилегии доступа. В некоторых случаях
+(например, столбец <code>ROUTINE_DEFINITION</code> в таблице
+<code>INFORMATION_SCHEMA.ROUTINES</code>), пользователи, которые имеют
+недостаточные привилегии, будут видеть <code>NULL</code>.</p>
+
+<p>Инструкция <code>SELECT ... FROM INFORMATION_SCHEMA</code> предназначена
+как более непротиворечивый способ обеспечить доступ к информации,
+обеспеченной различными инструкциями <code>SHOW</code>, которые MySQL
+поддерживает (<code>SHOW DATABASES</code>, <code>SHOW TABLES</code> и им
+подобные). Использование <code>SELECT</code> имеет эти
+преимущества перед <code>SHOW</code>:</p>
+
+<ul type="disc"><li><p>Это соответствует правилам Кодда. То есть, весь доступ
+выполнен на таблицах.</p></li>
+<li><p>Никто не должен узнавать новый операторный синтаксис. Потому что они
+уже знают, как работает <code>SELECT</code>, они должны узнать
+только объектные имена.</p></li>
+<li><p>Реализаторы не должны волноваться относительно
+добавления ключевых слов.</p></li>
+
+<li><p>Имеются миллионы возможных изменений вывода вместо одного. Это
+обеспечивает большее количество гибкости для прикладных программ, которые
+имеют изменяющиеся требования относительно метаданных, в
+которых они нуждаются.</p></li>
+<li><p>Миграция проще, потому что каждая другая СУБД понимает этот способ.
+</p></li></ul>
+
+<p>Однако, потому что команды <code>SHOW</code> популярна у пользователей
+MySQL, никто их убирать не собирается. Фактически, наряду с реализацией
+<code>INFORMATION_SCHEMA</code>, имеются расширения для <code>SHOW</code>.
+</p>
+
+<p>Не имеется никакого различия между привилегиями, требуемыми для инструкций
+<code>SHOW</code> и нужными, чтобы выбрать информацию из
+<code>INFORMATION_SCHEMA</code>. В любом случае Вы должны иметь некоторую
+привилегию на объекте, чтобы видеть информацию относительно этого объекта.
+</p>
+
+<p>Реализация структур таблицы <code>INFORMATION_SCHEMA</code> в MySQL
+следует ANSI/ISO SQL:2003 Part 11 <em class="citetitle">Schemata</em> и в
+основном отвечает стандарту SQL:2003 core feature F021 <em class="citetitle">
+Basic information schema</em>.</p>
+
+<p>Пользователи SQL Server 2000 (который также следует стандарту) могут
+обратить внимание на сильное сходство. Однако, MySQL опустил много столбцов,
+которые нерелевантными для этой реализации, и добавил столбцы, которые
+являются MySQL-специфическими. Один такой столбец: <code>ENGINE</code> в
+таблице <code>INFORMATION_SCHEMA.TABLES</code>.</p>
+
+<p>Следующие разделы описывают каждую из таблиц и столбцов, которые находятся
+в <code>INFORMATION_SCHEMA</code>. Для каждого столбца имеются
+три блока информации:</p>
+
+<ul type="disc"><li><p><span class="quote"><code>INFORMATION_SCHEMA</code>
+Name</span> указывает имя для столбца в таблице
+<code>INFORMATION_SCHEMA</code>. Это не соответствует стандартному имени
+SQL, если в поле <span class="quote">Remarks</span> значится
+<span class="quote">MySQL extension.</span></p></li>
+
+<li><p><span class="quote"><code>SHOW</code> Name</span> указывает
+эквивалентное имя поля в самой близкой инструкции <code>SHOW</code>,
+если она имеется.</p></li>
+
+<li><p><span class="quote">Remarks</span> обеспечивает дополнительную
+информацию. Если это поле <code>NULL</code>, это означает, что значение
+столбца всегда <code>NULL</code>. Если это поле
+<span class="quote">MySQL extension</span>, столбец является расширением
+MySQL стандарта SQL.</p></li></ul>
+
+<p>Чтобы избегать использовать любое имя, которое зарезервировано в стандарте
+SQL, DB2 или Oracle, имена некоторых столбцов, отмеченных как
+<span class="quote">MySQL extension</span> переделаны. Например,
+<code>COLLATION</code> на <code>TABLE_COLLATION</code> в таблице
+<code>TABLES</code>. Ссписок зарезервированных слов изложен в конце статьи на
+<a href="../../../www.dbazine.com/gulutzan5.shtml" target="_top">
+http://www.dbazine.com/gulutzan5.shtml</a>.</p>
+
+<p>Определение для символьных столбцов (например,
+<code>TABLES.TABLE_NAME</code>) вообще
+<code>VARCHAR(<em><code>N</code></em>) CHARACTER SET utf8</code>, где
+<em><code>N</code></em> по крайней мере 64.</p>
+
+<p>Каждый раздел указывает то, какая инструкция <code>SHOW</code> является
+эквивалентной <code>SELECT</code>, который собирает информацию из
+<code>INFORMATION_SCHEMA</code>, если имеется такая инструкция.</p>
+
+<p><span class="bold"><strong>Обратите внимание</strong></span>: в настоящее
+время, имеются некоторые столбцы, расставленные не по порядку, а кое-какие
+еще вообще отсутствуют.
+</p>
+
+<h2><a name="schemata-table"></a>9.1. Таблица
+<code>INFORMATION_SCHEMA SCHEMATA</code></h2>
+<p>Схема является базой данных, так что таблица <code>SCHEMATA</code>
+обеспечивает информацию относительно баз данных.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>CATALOG_NAME</code></td><td> </td><td><code>NULL
+</code></td></tr>
+<tr><td><code>SCHEMA_NAME</code></td><td> </td><td>База данных</td></tr>
+
+<tr><td><code>DEFAULT_CHARACTER_SET_NAME</code></td><td> </td><td> </td></tr>
+<tr><td><code>DEFAULT_COLLATION_NAME</code></td><td> </td><td> </td></tr>
+<tr><td><code>SQL_PATH</code></td><td> </td><td><code>NULL</code></td>
+</tr></tbody></table>
+
+<p>Следующие инструкции эквивалентны:</p>
+<pre>
+SELECT SCHEMA_NAME AS `Database` FROM INFORMATION_SCHEMA.SCHEMATA
+       [WHERE SCHEMA_NAME LIKE '<em><code>wild</code></em>']
+       SHOW DATABASES [LIKE '<em><code>wild</code></em>']
+</pre>
+
+<h2><a name="tables-table"></a>9.2. Таблица <code>INFORMATION_SCHEMA TABLES
+</code></h2>
+<p>Таблица <code>TABLES</code> обеспечивает информацию относительно
+таблиц в базах данных.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>TABLE_CATALOG</code></td><td></td><td><code>NULL
+</code></td></tr>
+<tr><td><code>TABLE_SCHEMA</code></td><td><code>Table_</code>...</td>
+<td> </td></tr><tr><td><code>TABLE_NAME</code></td><td><code>Table_</code>
+...</td><td> </td></tr>
+
+<tr><td><code>TABLE_TYPE</code></td><td> </td><td> </td></tr>
+<tr><td><code>ENGINE</code></td><td><code>Тип памяти</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>VERSION</code></td><td><code>Version</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>ROW_FORMAT</code></td><td><code>Row_format</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>TABLE_ROWS</code></td><td><code>Rows</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>AVG_ROW_LENGTH</code></td><td><code>Avg_row_length</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>DATA_LENGTH</code></td><td><code>Data_length</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>MAX_DATA_LENGTH</code></td><td><code>Max_data_length</code>
+</td><td>MySQL extension</td></tr>
+
+<tr><td><code>INDEX_LENGTH</code></td><td><code>Index_length</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>DATA_FREE</code></td><td><code>Data_free</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>AUTO_INCREMENT</code></td><td><code>Auto_increment</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>CREATE_TIME</code></td><td><code>Create_time</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>UPDATE_TIME</code></td><td><code>Update_time</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>CHECK_TIME</code></td><td><code>Check_time</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>TABLE_COLLATION</code></td><td><code>Collation</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>CHECKSUM</code></td><td><code>Checksum</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>CREATE_OPTIONS</code></td><td><code>Create_options</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>TABLE_COMMENT</code></td><td><code>Комментарий</code></td>
+<td>MySQL extension</td></tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p><code>TABLE_SCHEMA</code> и <code>TABLE_NAME</code>
+одиночное поле в выводе <code>SHOW</code>, например:
+<code>Table_in_db1</code>.</p></li>
+
+<li><p><code>TABLE_TYPE</code> должен быть <code>BASE TABLE</code> или
+<code>VIEW</code>. Если таблица временная, то
+<code>TABLE_TYPE</code> = <code>TEMPORARY</code>. Не имеется никаких
+временных view, так что это однозначно.</p></li>
+
+<li><p>Для разбитых на разделы таблиц, начиная с MySQL 5.1.9, столбец
+<code>ENGINE</code> показывает тип памяти, используемого всеми разделами.
+Раньше этот столбец показывал для таких таблиц <code>PARTITION</code>.
+</p></li>
+
+<li><p>Столбец <code>TABLE_ROWS</code> <code>NULL</code>, если таблица
+находится в базе данных <code>INFORMATION_SCHEMA</code>. Для таблиц
+<code>InnoDB</code> счетчтк строк только грубая оценка,
+используемая в оптимизации SQL.</p></li>
+
+<li><p>Для таблиц, использующих тип памяти <code>NDBCLUSTER</code>, начиная
+с MySQL 5.1.12, столбец <code>DATA_LENGTH</code> отражает истинное количество
+памяти для столбцов с переменной шириной.
+См. <a href="../../../bugs.mysql.com/18413" target="_top">Глюк #18413</a>.</p>
+
+<p><span class="bold"><strong>Обратите внимание</strong></span>: так как
+MySQL Cluster распределяет память для столбцов с переменной шириной в
+10-страничных блоках по 32 килобайта каждый, использование места для таких
+столбцов сообщено в приращениях по 320 KB.</p></li>
+
+<li><p>Мы не имеем ничего для заданного по умолчанию набора символов таблицы.
+<code>TABLE_COLLATION</code> близко, потому что имена объединения начинаются
+с имени набора символов.</p></li>
+
+<li><p>Начиная с MySQL 5.1.9, столбец <code>CREATE_OPTIONS</code>
+показывается разбитый на разделы, если таблица разбита на разделы.
+</p></li></ul>
+
+<p>Следующие инструкции эквивалентны:</p>
+<pre>
+SELECT table_name FROM INFORMATION_SCHEMA.TABLES
+       [WHERE table_schema = '<em><code>db_name</code></em>']
+       [WHERE|AND table_name LIKE '<em><code>wild</code></em>']
+       SHOW TABLES [FROM <em><code>db_name</code></em>]
+       [LIKE '<em><code>wild</code></em>']
+</pre>
+
+<h2><a name="columns-table"></a>9.3. Таблица <code>INFORMATION_SCHEMA
+COLUMNS</code></h2>
+<p>Таблица <code>COLUMNS</code> обеспечивает информацию
+относительно столбцов в таблицах.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr><tr><td><code>TABLE_CATALOG</code>
+</td><td></td><td><code>NULL</code></td></tr>
+
+<tr><td><code>TABLE_SCHEMA</code></td><td> </td><td> </td></tr>
+<tr><td><code>TABLE_NAME</code></td><td> </td><td> </td></tr>
+<tr><td><code>COLUMN_NAME</code></td><td><code>Поле</code></td><td></td></tr>
+
+<tr><td><code>ORDINAL_POSITION</code></td><td> </td><td>См. примечания</td>
+</tr><tr><td><code>COLUMN_DEFAULT</code></td><td><code>Значение по умолчанию
+</code></td><td> </td></tr>
+
+<tr><td><code>IS_NULLABLE</code></td><td><code>Null</code></td><td></td></tr>
+<tr><td><code>DATA_TYPE</code></td><td><code>Type</code></td><td> </td></tr>
+<tr><td><code>CHARACTER_MAXIMUM_LENGTH</code></td><td><code>Type</code></td>
+<td> </td></tr>
+
+<tr><td><code>CHARACTER_OCTET_LENGTH</code></td><td> </td><td> </td></tr>
+<tr><td><code>NUMERIC_PRECISION</code></td><td><code>Type</code></td>
+<td> </td></tr>
+
+<tr><td><code>NUMERIC_SCALE</code></td><td><code>Type</code></td>
+<td></td></tr>
+<tr><td><code>CHARACTER_SET_NAME</code></td><td> </td><td> </td></tr>
+
+<tr><td><code>COLLATION_NAME</code></td><td><code>Collation</code></td>
+<td></td></tr>
+<tr><td><code>COLUMN_TYPE</code></td><td><code>Type</code></td><td>
+MySQL extension</td></tr>
+
+<tr><td><code>COLUMN_KEY</code></td><td><code>Key</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>EXTRA</code></td><td><code>Extra</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>COLUMN_COMMENT</code></td><td><code>Comment</code></td>
+<td>MySQL extension</td></tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>В <code>SHOW</code> <code>Type</code> отображает
+включает значения из нескольких различных столбцов <code>COLUMNS</code>.
+</p></li>
+
+<li><p><code>ORDINAL_POSITION</code> необходим, потому что Вы могли бы
+указать <code>ORDER BY ORDINAL_POSITION</code>. В отличие от
+<code>SHOW</code>, <code>SELECT</code> не имеет автоматического упорядочения.
+</p></li>
+
+<li><p><code>CHARACTER_OCTET_LENGTH</code> должен быть таким же, как
+<code>CHARACTER_MAXIMUM_LENGTH</code>, если бы не
+многобайтовые наборы символов.</p></li>
+
+<li><p><code>CHARACTER_SET_NAME</code> может быть получен из
+<code>Collation</code>. Например, если Вы говорите
+<code>SHOW FULL COLUMNS FROM t</code>, и видите в столбце
+<code>Collation</code> значение <code>latin1_swedish_ci</code>,
+набор символов то, что перед первым символом подчеркивания:
+<code>latin1</code>.</p></li></ul>
+
+<p>Следующие инструкции почти эквивалентны:</p>
+<pre>
+SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, COLUMN_DEFAULT
+       FROM INFORMATION_SCHEMA.COLUMNS
+       WHERE table_name = '<em><code>tbl_name</code></em>'
+       [AND table_schema = '<em><code>db_name</code></em>']
+       [AND column_name LIKE '<em><code>wild</code></em>']
+       SHOW COLUMNS FROM <em><code>tbl_name</code></em>
+       [FROM <em><code>db_name</code></em>]
+       [LIKE '<em><code>wild</code></em>']
+</pre>
+
+<h2><a name="statistics-table"></a>9.4.
+Таблица <code>INFORMATION_SCHEMA STATISTICS</code></h2>
+<p>Таблица <code>STATISTICS</code> обеспечивает информацию
+относительно индексов таблицы.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td>
+<td><span class="bold"><strong><code>SHOW</code> Name</strong></span></td>
+<td><span class="bold"><strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>TABLE_CATALOG</code></td><td></td><td><code>NULL
+</code></td></tr>
+<tr><td><code>TABLE_SCHEMA</code></td><td> </td><td>=база данных</td></tr>
+
+<tr><td><code>TABLE_NAME</code></td><td><code>Table</code></td><td></td></tr>
+<tr><td><code>NON_UNIQUE</code></td><td><code>Non_unique</code></td>
+<td> </td></tr>
+
+<tr><td><code>INDEX_SCHEMA</code></td><td> </td><td>=база данных</td></tr>
+<tr><td><code>INDEX_NAME</code></td><td><code>Key_name</code></td>
+<td> </td></tr>
+
+<tr><td><code>SEQ_IN_INDEX</code></td><td><code>Seq_in_index</code></td>
+<td> </td></tr>
+<tr><td><code>COLUMN_NAME</code></td><td><code>Column_name</code></td>
+<td> </td></tr>
+
+<tr><td><code>COLLATION</code></td><td><code>Collation</code></td>
+<td> </td></tr>
+<tr><td><code>CARDINALITY</code></td><td><code>Cardinality</code></td>
+<td> </td></tr>
+
+<tr><td><code>SUB_PART</code></td><td><code>Sub_part</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>PACKED</code></td><td><code>Packed</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>NULLABLE</code></td><td><code>Null</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>INDEX_TYPE</code></td><td><code>Index_type</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>COMMENT</code></td><td><code>Comment</code></td>
+<td>MySQL extension</td></tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>Не имеется никакой стандартной таблицы для индексов.
+Предшествующий список подобен тому, что возвращается SQL Server 2000 для
+<code>sp_statistics</code>, за исключением того, что заменили имя
+<code>QUALIFIER</code> на <code>CATALOG</code> и
+<code>OWNER</code> на <code>SCHEMA</code>.</p>
+
+<p>Предшествующая таблица и вывод из <code>SHOW INDEX</code> получен от того
+же самого родителя. Так что корреляция уже близкая.</p></li></ul>
+<p>Следующие инструкции эквивалентны:</p>
+
+<pre>
+SELECT * FROM INFORMATION_SCHEMA.STATISTICS
+         WHERE table_name = '<em><code>tbl_name</code></em>'
+         [AND table_schema = '<em><code>db_name</code></em>']
+         SHOW INDEX FROM <em><code>tbl_name</code></em>
+         [FROM <em><code>db_name</code></em>]
+</pre>
+
+<h2><a name="user-privileges-table"></a>9.5.
+Таблица <code>INFORMATION_SCHEMA USER_PRIVILEGES</code></h2>
+<p>Таблица <code>USER_PRIVILEGES</code> обеспечивает информацию относительно
+глобальных привилегий. Эта информация исходит из таблицы предоставления
+привилегий <code>mysql.user</code>.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>GRANTEE</code></td><td> </td><td><code>'<em><code>user_name
+</code></em>'@'<em><code>host_name</code></em>'</code>
+value, MySQL extension</td></tr>
+
+<tr><td><code>TABLE_CATALOG</code></td><td> </td><td><code>NULL</code>,
+MySQL extension</td></tr>
+<tr><td><code>PRIVILEGE_TYPE</code></td><td></td><td>MySQL extension</td>
+</tr><tr><td><code>IS_GRANTABLE</code></td><td> </td><td>MySQL extension</td>
+</tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>Это ненормативная таблица. Требуется значения от
+таблицы <code>mysql.user</code>.</p></li></ul>
+
+<h2><a name="schema-privileges-table"></a>9.6. Таблица
+<code>INFORMATION_SCHEMA SCHEMA_PRIVILEGES</code></h2>
+<p>Таблица <code>SCHEMA_PRIVILEGES</code> обеспечивает информацию
+относительно схемы привилегиями (базы данных). Эта информация исходит из
+таблицы предоставления <code>mysql.db</code>.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>GRANTEE</code></td><td> </td><td><code>'<em><code>
+user_name</code></em>'@'<em><code>host_name</code></em>'</code>
+value, MySQL extension</td></tr>
+
+<tr><td><code>TABLE_CATALOG</code></td><td> </td><td><code>
+NULL</code>, MySQL extension</td></tr>
+<tr><td><code>TABLE_SCHEMA</code></td><td> </td><td>MySQL extension</td></tr>
+
+<tr><td><code>PRIVILEGE_TYPE</code></td><td></td><td>MySQL extension</td>
+</tr><tr><td><code>IS_GRANTABLE</code></td><td> </td><td>MySQL extension</td>
+</tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>Это ненормативная таблица. Требуется значения от
+таблицы <code>mysql.db</code>.</p></li></ul>
+
+<h2><a name="table-privileges-table"></a>9.7.
+Таблица <code>INFORMATION_SCHEMA TABLE_PRIVILEGES</code></h2>
+<p>Таблица <code>TABLE_PRIVILEGES</code> обеспечивает информацию относительно
+привилегий таблицы. Эта информация исходит из таблицы предоставления
+<code>mysql.tables_priv</code>.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>GRANTEE</code></td><td> </td><td><code>'<em><code>
+user_name</code></em>'@'<em><code>host_name</code></em>'</code>
+value</td></tr>
+
+<tr><td><code>TABLE_CATALOG</code></td><td> </td><td><code>NULL
+</code></td></tr>
+<tr><td><code>TABLE_SCHEMA</code></td><td> </td><td> </td></tr>
+
+<tr><td><code>TABLE_NAME</code></td><td> </td><td> </td></tr>
+<tr><td><code>PRIVILEGE_TYPE</code></td><td> </td><td> </td></tr>
+<tr><td><code>IS_GRANTABLE</code></td><td></td><td></td></tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p><code>PRIVILEGE_TYPE</code> может содержать одно (и
+только одно!) из этих значений: <code>SELECT</code>, <code>INSERT</code>,
+<code>UPDATE</code>, <code>REFERENCES</code>, <code>ALTER</code>,
+<code>INDEX</code>, <code>DROP</code> или <code>CREATE VIEW</code>.
+</p></li></ul>
+
+<p>Следующие инструкции <em>не</em> эквивалентны:</p>
+<pre>
+SELECT ... FROM INFORMATION_SCHEMA.TABLE_PRIVILEGES
+SHOW GRANTS ...
+</pre>
+
+<h2><a name="column-privileges-table"></a>9.8. Таблица
+<code>INFORMATION_SCHEMA COLUMN_PRIVILEGES</code></h2>
+<p>Таблица <code>COLUMN_PRIVILEGES</code> обеспечивает информацию
+относительно привилегий столбца. Эта информация исходит из таблицы
+предоставления <code>mysql.columns_priv</code>.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>GRANTEE</code></td><td> </td><td><code>'<em><code>
+user_name</code></em>'@'<em><code>host_name</code></em>'</code>
+value</td></tr>
+
+<tr><td><code>TABLE_CATALOG</code></td><td></td><td><code>NULL
+</code></td></tr>
+<tr><td><code>TABLE_SCHEMA</code></td><td> </td><td> </td></tr>
+
+<tr><td><code>TABLE_NAME</code></td><td> </td><td> </td></tr>
+<tr><td><code>COLUMN_NAME</code></td><td> </td><td> </td></tr>
+<tr><td><code>PRIVILEGE_TYPE</code></td><td> </td><td> </td></tr>
+<tr><td><code>IS_GRANTABLE</code></td><td></td><td></td></tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>В выводе из <code>SHOW FULL COLUMNS</code> все
+привилегии перечислены в одном поле и в нижнем регистре, например,
+<code>select, insert, update, references</code>. В
+<code>COLUMN_PRIVILEGES</code> имеется одна привилегия на
+строку верхнего регистра.</p></li>
+
+<li><p><code>PRIVILEGE_TYPE</code> может содержать одно (и только одно!) из
+этих значений: <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>
+и <code>REFERENCES</code>.</p></li>
+
+<li><p>Если пользователь имеет опцию <code>GRANT OPTION</code>,
+<code>IS_GRANTABLE</code> должна быть <code>YES</code>. Иначе
+<code>IS_GRANTABLE</code> будет <code>NO</code>. Вывод не вносит в список
+<code>GRANT OPTION</code> как отдельную привилегию.</p></li></ul>
+
+<p>Следующие инструкции <em>не</em> эквивалентны:</p>
+<pre>
+SELECT ... FROM INFORMATION_SCHEMA.COLUMN_PRIVILEGES
+SHOW GRANTS ...
+</pre>
+
+<h2><a name="character-sets-table"></a>9.9. Таблица <code>INFORMATION_SCHEMA
+CHARACTER_SETS</code></h2>
+<p>Таблица <code>CHARACTER_SETS</code> обеспечивает информацию относительно
+доступных наборов символов.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>CHARACTER_SET_NAME</code></td><td><code>Charset</code></td>
+<td> </td></tr>
+<tr><td><code>DEFAULT_COLLATE_NAME</code></td><td><code>Default collation
+</code></td><td> </td></tr>
+
+<tr><td><code>DESCRIPION</code></td><td><code>Description</code></td>
+<td>MySQL extension</td></tr><tr><td><code>MAXLEN</code></td><td><code>Maxlen
+</code></td><td>MySQL extension</td></tr></tbody></table>
+
+<p>Следующие инструкции эквивалентны:</p>
+<pre>
+SELECT * FROM INFORMATION_SCHEMA.CHARACTER_SETS
+         [WHERE name LIKE '<em><code>wild</code></em>']
+         SHOW CHARACTER SET [LIKE '<em><code>wild</code></em>']
+</pre>
+
+<h2><a name="collations-table"></a>9.10. Таблица <code>INFORMATION_SCHEMA
+COLLATIONS</code></h2>
+<p>Таблица <code>COLLATIONS</code> обеспечивает информацию относительно
+объединений для каждого набора символов.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>COLLATION_NAME</code></td><td><code>Collation</code></td>
+<td> </td></tr>
+<tr><td><code>CHARACTER_SET_NAME</code></td><td><code>Charset</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>ID</code></td><td><code>Id</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>IS_DEFAULT</code></td><td><code>Default</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>IS_COMPILED</code></td><td><code>Compiled</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>SORTLEN</code></td><td><code>Sortlen</code></td>
+<td>MySQL extension</td></tr></tbody></table>
+
+<p>Следующие инструкции эквивалентны:</p>
+<pre>
+SELECT COLLATION_NAME FROM INFORMATION_SCHEMA.COLLATIONS
+       [WHERE collation_name LIKE '<em><code>wild</code></em>']
+       SHOW COLLATION [LIKE '<em><code>wild</code></em>']
+</pre>
+
+<h2><a name="collation-character-set-applicability-table"></a>9.11. Таблица
+<code>INFORMATION_SCHEMA COLLATION_CHARACTER_SET_APPLICABILITY</code></h2>
+<p>Таблица <code>COLLATION_CHARACTER_SET_APPLICABILITY</code> указывает то,
+какому объединению соответствует набор символов. Столбцы эквивалентны к
+первым двум полям вывода <code>SHOW COLLATION</code>.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>COLLATION_NAME</code></td><td><code>Collation</code></td>
+<td> </td></tr>
+<tr><td><code>CHARACTER_SET_NAME</code></td><td><code>Charset</code></td>
+<td> </td></tr></tbody></table>
+
+<h2><a name="table-constraints-table"></a>9.12.
+Таблица <code>INFORMATION_SCHEMA TABLE_CONSTRAINTS</code></h2>
+<p>Таблица <code>TABLE_CONSTRAINTS</code> описывает, которые
+таблицы имеют ограничения.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>CONSTRAINT_CATALOG</code></td><td></td><td><code>NULL
+</code></td></tr>
+<tr><td><code>CONSTRAINT_SCHEMA</code></td><td> </td><td> </td></tr>
+
+<tr><td><code>CONSTRAINT_NAME</code></td><td> </td><td> </td></tr>
+<tr><td><code>TABLE_SCHEMA</code></td><td> </td><td> </td></tr>
+<tr><td><code>TABLE_NAME</code></td><td> </td><td> </td></tr>
+<tr><td><code>CONSTRAINT_TYPE</code></td><td> </td><td> </td>
+</tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>Значение <code>CONSTRAINT_TYPE</code> может быть
+<code>UNIQUE</code>, <code>PRIMARY KEY</code> или <code>FOREIGN KEY</code>.
+</p></li>
+
+<li><p>Информация <code>UNIQUE</code> и <code>PRIMARY KEY</code>
+соответствует полю <code>Key_name</code> в выводе <code>SHOW INDEX</code>,
+если поле <code>Non_unique</code> равно <code>0</code>.</p></li>
+
+<li><p>Столбец <code>CONSTRAINT_TYPE</code> может содержать одно из этих
+значений: <code>UNIQUE</code>, <code>PRIMARY KEY</code>,
+<code>FOREIGN KEY</code>, <code>CHECK</code>. Это столбец <code>CHAR</code>
+(не <code>ENUM</code>). Значение <code>CHECK</code> недоступно, пока пакет
+не поддерживает <code>CHECK</code>.</p></li></ul>
+
+<h2><a name="key-column-usage-table"></a>9.13. Таблица
+<code>INFORMATION_SCHEMA KEY_COLUMN_USAGE</code></h2>
+<p>Таблица <code>KEY_COLUMN_USAGE</code> описывает, которые столбцы
+ключа имеют ограничения.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>CONSTRAINT_CATALOG</code></td><td> </td><td><code>NULL
+</code></td></tr>
+<tr><td><code>CONSTRAINT_SCHEMA</code></td><td> </td><td> </td></tr>
+
+<tr><td><code>CONSTRAINT_NAME</code></td><td> </td><td> </td></tr>
+<tr><td><code>TABLE_CATALOG</code></td><td> </td><td> </td></tr>
+<tr><td><code>TABLE_SCHEMA</code></td><td> </td><td> </td></tr>
+
+<tr><td><code>TABLE_NAME</code></td><td> </td><td> </td></tr>
+<tr><td><code>COLUMN_NAME</code></td><td> </td><td> </td></tr>
+<tr><td><code>ORDINAL_POSITION</code></td><td> </td><td> </td></tr>
+
+<tr><td><code>POSITION_IN_UNIQUE_CONSTRAINT</code></td><td> </td>
+<td> </td></tr>
+<tr><td><code>REFERENCED_TABLE_SCHEMA</code></td><td> </td><td> </td></tr>
+
+<tr><td><code>REFERENCED_TABLE_NAME</code></td><td> </td><td> </td></tr>
+<tr><td><code>REFERENCED_COLUMN_NAME</code></td><td> </td><td> </td>
+</tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>Если ограничение внешний ключ, то это столбец внешнего
+ключа, не столбец, а не тот столюец, на который внешний ключ ссылается.
+</p></li>
+
+<li><p>Значение <code>ORDINAL_POSITION</code> позиция столбца внутри
+ограничения, а не позиция столбца внутри таблицы.
+Позиции столбца пронумерованы, начиная с 1.</p></li>
+
+<li><p>Значение <code>POSITION_IN_UNIQUE_CONSTRAINT</code> <code>NULL</code>
+для ограничений unique и primary-key. Для ограничений foreign-key это
+порядковая позиция в ключе таблицы, которая вызвана.</p>
+
+<p>Например, предположите, что имеется две таблицы с именами
+<code>t1</code> и <code>t3</code>, которые имеют следующие определения:</p>
+<pre>
+CREATE TABLE t1 (s1 INT, s2 INT, s3 INT, PRIMARY KEY(s3)) ENGINE=InnoDB;
+CREATE TABLE t3 (s1 INT, s2 INT, s3 INT, KEY(s1),
+       CONSTRAINT CO FOREIGN KEY (s2) REFERENCES t1(s3)) ENGINE=InnoDB;
+</pre>
+
+<p>Для этих двух таблиц таблица <code>KEY_COLUMN_USAGE</code>
+имеет две строки:</p>
+<ul type="circle"><li><p>Одна строка с
+<code>CONSTRAINT_NAME</code> = <code>'PRIMARY'</code>,
+<code>TABLE_NAME</code> = <code>'t1'</code>,
+<code>COLUMN_NAME</code> = <code>'s3'</code>,
+<code>ORDINAL_POSITION</code> = <code>1</code>,
+<code>POSITION_IN_UNIQUE_CONSTRAINT</code> = <code>NULL</code>.</p></li>
+
+<li><p>Одна строка с
+<code>CONSTRAINT_NAME</code> = <code>'CO'</code>, <code>TABLE_NAME</code> =
+<code>'t3'</code>, <code>COLUMN_NAME</code> = <code>'s2'</code>,
+<code>ORDINAL_POSITION</code> = <code>1</code>,
+<code>POSITION_IN_UNIQUE_CONSTRAINT</code> = <code>1</code>.
+</p></li></ul></li></ul>
+
+<h2><a name="routines-table"></a>9.14. Таблица
+<code>INFORMATION_SCHEMA ROUTINES</code></h2>
+<p>Таблица <code>ROUTINES</code> обеспечивает информацию относительно
+сохраненных подпрограмм (процедуры и функций). Таблица <code>ROUTINES</code>
+не включает определяемые пользователем функции (UDF).</p>
+
+<p>Столбец <span class="quote"><code>mysql.proc</code> name</span>
+указывает столбец таблицы <code>mysql.proc</code>, который соответствует
+столбцу таблицы <code>INFORMATION_SCHEMA.ROUTINES</code>.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>mysql.proc</code> Name</strong></span></td><td>
+<span class="bold"><strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>SPECIFIC_NAME</code></td><td><code>specific_name</code></td>
+<td> </td></tr>
+<tr><td><code>ROUTINE_CATALOG</code></td><td> </td><td><code>NULL
+</code></td></tr>
+
+<tr><td><code>ROUTINE_SCHEMA</code></td><td><code>db</code></td><td></td>
+</tr><tr><td><code>ROUTINE_NAME</code></td><td><code>name</code></td><td>
+</td></tr><tr><td><code>ROUTINE_TYPE</code></td><td><code>type</code></td>
+<td><code>{PROCEDURE|FUNCTION}</code></td></tr>
+
+<tr><td><code>DTD_IDENTIFIER</code></td><td> </td><td>
+(data type descriptor)</td></tr>
+<tr><td><code>ROUTINE_BODY</code></td><td></td><td><code>SQL</code></td></tr>
+
+<tr><td><code>ROUTINE_DEFINITION</code></td><td><code>body</code></td>
+<td> </td></tr>
+<tr><td><code>EXTERNAL_NAME</code></td><td> </td><td><code>NULL
+</code></td></tr>
+
+<tr><td><code>EXTERNAL_LANGUAGE</code></td><td><code>language</code></td>
+<td><code>NULL</code></td></tr>
+<tr><td><code>PARAMETER_STYLE</code></td><td> </td><td><code>SQL
+</code></td></tr>
+
+<tr><td><code>IS_DETERMINISTIC</code></td><td><code>is_deterministic
+</code></td><td> </td></tr>
+<tr><td><code>SQL_DATA_ACCESS</code></td><td><code>sql_data_access</code>
+</td><td> </td></tr>
+
+<tr><td><code>SQL_PATH</code></td><td> </td><td><code>NULL</code></td></tr>
+<tr><td><code>SECURITY_TYPE</code></td><td><code>security_type</code></td>
+<td> </td></tr>
+
+<tr><td><code>CREATED</code></td><td><code>created</code></td><td> </td></tr>
+<tr><td><code>LAST_ALTERED</code></td><td><code>modified</code></td>
+<td> </td></tr>
+
+<tr><td><code>SQL_MODE</code></td><td><code>sql_mode</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>ROUTINE_COMMENT</code></td><td><code>comment</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>DEFINER</code></td><td><code>definer</code></td>
+<td>MySQL extension</td></tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>MySQL вычисляет <code>EXTERNAL_LANGUAGE</code> так:
+</p>
+<ul type="circle"><li><p>Если <code>mysql.proc.language='SQL'</code>,
+<code>EXTERNAL_LANGUAGE</code> равен <code>NULL</code></p></li>
+
+<li><p>Иначе <code>EXTERNAL_LANGUAGE</code> равен
+<code>mysql.proc.language</code>. Однако, пока не имеется внешних языков, так
+что это всегда <code>NULL</code>.</p></li></ul></li></ul>
+
+<h2><a name="views-table"></a>9.15. Таблица <code>INFORMATION_SCHEMA VIEWS
+</code></h2>
+<p>Таблица <code>VIEWS</code> обеспечивает информацию относительно view в
+базах данных. Вы должны иметь привилегию <code>SHOW VIEW</code>, чтобы
+обратиться к этой таблице.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td>
+<td><span class="bold"><strong><code>SHOW</code> Name</strong></span></td>
+<td><span class="bold"><strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>TABLE_CATALOG</code></td><td>
+</td><td><code>NULL</code></td></tr>
+<tr><td><code>TABLE_SCHEMA</code></td><td> </td><td> </td></tr>
+
+<tr><td><code>TABLE_NAME</code></td><td> </td><td> </td></tr>
+<tr><td><code>VIEW_DEFINITION</code></td><td> </td><td> </td></tr>
+<tr><td><code>CHECK_OPTION</code></td><td> </td><td> </td></tr>
+
+<tr><td><code>IS_UPDATABLE</code></td><td> </td><td> </td></tr>
+<tr><td><code>DEFINER</code></td><td> </td><td> </td></tr>
+<tr><td><code>SECURITY_TYPE</code></td><td></td>
+<td></td></tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>Столбец <code>VIEW_DEFINITION</code> показывает
+большинство из того, что Вы видите в поле <code>Create Table</code>, которое
+выводится <code>SHOW CREATE VIEW</code>. Пропустите слова перед
+<code>SELECT</code> и перед <code>WITH CHECK OPTION</code>. Предположите, что
+первоначальная инструкция была такой:</p>
+<pre>
+CREATE VIEW v AS SELECT s2,s1 FROM t WHERE s1 &gt; 5 ORDER BY s1
+       WITH CHECK OPTION;
+</pre>
+
+<p>Затем определение этого view выглядит следующим образом:</p>
+<pre>
+SELECT s2,s1 FROM t WHERE s1 &gt; 5 ORDER BY s1
+</pre></li>
+
+<li><p>Столбец <code>CHECK_OPTION</code> всегда
+имеет значение <code>NONE</code>.</p></li>
+<li><p>Столбец <code>IS_UPDATABLE</code> равен <code>YES</code>, если view
+обновляемый, в противном случае <code>NO</code>.</p></li>
+
+<li><p>Столбец <code>DEFINER</code> указывает, кто определил view.
+<code>SECURITY_TYPE</code> имеет значение
+<code>DEFINER</code> или <code>INVOKER</code>.</p></li></ul>
+
+<h2><a name="triggers-table"></a>9.16. Таблица <code>INFORMATION_SCHEMA
+TRIGGERS</code></h2>
+<p>Таблица <code>TRIGGERS</code> обеспечивает информацию относительно
+триггеров. Вы должны иметь привилегию <code>SUPER</code>,
+чтобы обратиться к этой таблице.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>TRIGGER_CATALOG</code></td><td> </td><td><code>NULL
+</code></td></tr>
+<tr><td><code>TRIGGER_SCHEMA</code></td><td> </td><td> </td></tr>
+
+<tr><td><code>TRIGGER_NAME</code></td><td><code>Trigger</code></td>
+<td> </td></tr>
+<tr><td><code>EVENT_MANIPULATION</code></td><td><code>Event</code></td>
+<td> </td></tr>
+
+<tr><td><code>EVENT_OBJECT_CATALOG</code></td><td> </td><td><code>NULL
+</code></td></tr>
+<tr><td><code>EVENT_OBJECT_SCHEMA</code></td><td> </td><td> </td></tr>
+
+<tr><td><code>EVENT_OBJECT_TABLE</code></td><td><code>Table</code></td>
+<td> </td></tr>
+<tr><td><code>ACTION_ORDER</code></td><td> </td><td><code>0</code></td></tr>
+
+<tr><td><code>ACTION_CONDITION</code></td><td> </td><td><code>NULL</code>
+</td></tr><tr><td><code>ACTION_STATEMENT</code></td><td><code>Statement
+</code></td><td> </td></tr>
+
+<tr><td><code>ACTION_ORIENTATION</code></td><td> </td><td><code>ROW
+</code></td></tr>
+<tr><td><code>ACTION_TIMING</code></td><td><code>Timing</code></td>
+<td> </td></tr><tr>
+
+<td><code>ACTION_REFERENCE_OLD_TABLE</code></td><td> </td><td><code>NULL
+</code></td></tr>
+<tr><td><code>ACTION_REFERENCE_NEW_TABLE</code></td><td> </td><td><code>NULL
+</code></td></tr>
+
+<tr><td><code>ACTION_REFERENCE_OLD_ROW</code></td><td> </td><td><code>OLD
+</code></td></tr>
+<tr><td><code>ACTION_REFERENCE_NEW_ROW</code></td><td> </td><td><code>NEW
+</code></td></tr>
+
+<tr><td><code>CREATED</code></td><td> </td><td><code>NULL</code>
+(<code>0</code>)</td></tr>
+<tr><td><code>SQL_MODE</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>DEFINER</code></td><td> </td><td>MySQL extension</td>
+</tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>Столбцы <code>TRIGGER_SCHEMA</code> и
+<code>TRIGGER_NAME</code> содержат имя базы данных, в которой находится
+триггер и его имя, соответственно.</p></li>
+
+<li><p>Столбец <code>EVENT_MANIPULATION</code> содержит одно из значений
+<code>'INSERT'</code>, <code>'DELETE'</code> или <code>'UPDATE'</code>.
+</p></li>
+
+<li><p>Каждый триггер связан точно с одной таблицей. Столбцы
+<code>EVENT_OBJECT_SCHEMA</code> и <code>EVENT_OBJECT_TABLE</code> содержат
+базу данных, в которой эта таблица расположена, и имя таблицы.</p></li>
+
+<li><p>Инструкция <code>ACTION_ORDER</code> содержит порядковую позицию
+действия триггера внутри списка подобных в той же самой таблице. В настоящее
+время это значение всегда <code>0</code>, потому что невозможно иметь больше,
+чем один триггер с теми же самыми <code>EVENT_MANIPULATION</code> и
+<code>ACTION_TIMING</code> на той же самой таблице.</p></li>
+
+<li><p>Столбец <code>ACTION_STATEMENT</code> содержит инструкцию, которая
+будет выполнена, когда вызывается триггер. Это текст, отображаемый в столбце
+<code>Statement</code> вывода <code>SHOW TRIGGERS</code>. Обратите внимание,
+что на эти тексты распространяется кодирование в UTF-8.</p></li>
+
+<li><p>Столбец <code>ACTION_ORIENTATION</code> всегда
+содержит значения <code>'ROW'</code>.</p></li>
+<li><p>Столбец <code>ACTION_TIMING</code> содержит одно из двух значений:
+<code>'BEFORE'</code> или <code>'AFTER'</code>.</p></li>
+
+<li><p>Столбцы <code>ACTION_REFERENCE_OLD_ROW</code> и
+<code>ACTION_REFERENCE_NEW_ROW</code> содержат старые и новые идентификаторы
+столбцов, соответственно. Это означает, что
+<code>ACTION_REFERENCE_OLD_ROW</code> всегда содержит значение
+<code>'OLD'</code> и <code>ACTION_REFERENCE_NEW_ROW</code>
+<code>'NEW'</code>.</p></li>
+
+<li><p>Столбец <code>SQL_MODE</code> показывает режим сервера SQL, который
+был установлен, когда триггер был создан (и таким образом, который остается в
+силе для триггера, когда это вызывается, независимо от текущей ситуации).
+Возможный диапазон значений для этого столбца такой же, как для переменной
+системы <code>sql_mode</code>.</p></li>
+
+<li><p>Столбец <code>DEFINER</code> был добавлен в MySQL 5.1.2.
+<code>DEFINER</code> указывает, кто определил триггер.</p></li>
+<li><p>Следующие столбцы в настоящее время всегда содержат <code>NULL</code>:
+<code>TRIGGER_CATALOG</code>, <code>EVENT_OBJECT_CATALOG</code>,
+<code>ACTION_CONDITION</code>, <code>ACTION_REFERENCE_OLD_TABLE</code>,
+<code>ACTION_REFERENCE_NEW_TABLE</code> и <code>CREATED</code>.</p></li></ul>
+
+<p>Пример, используем <code>ins_sum</code>:</p>
+<pre>
+mysql&gt; SELECT * FROM INFORMATION_SCHEMA.TRIGGERS\G
+*************************** 1. row ***************************
+TRIGGER_CATALOG: NULL
+TRIGGER_SCHEMA: test
+TRIGGER_NAME: ins_sum
+EVENT_MANIPULATION: INSERT
+EVENT_OBJECT_CATALOG: NULL
+EVENT_OBJECT_SCHEMA: test
+EVENT_OBJECT_TABLE: account
+ACTION_ORDER: 0
+ACTION_CONDITION: NULL
+ACTION_STATEMENT: SET @sum = @sum + NEW.amount
+ACTION_ORIENTATION: ROW
+ACTION_TIMING: BEFORE
+ACTION_REFERENCE_OLD_TABLE: NULL
+ACTION_REFERENCE_NEW_TABLE: NULL
+ACTION_REFERENCE_OLD_ROW: OLD
+ACTION_REFERENCE_NEW_ROW: NEW
+CREATED: NULL
+SQL_MODE:
+DEFINER: me@localhost
+</pre>
+
+<h2><a name="plugins-table"></a>9.17. Таблица <code>INFORMATION_SCHEMA
+PLUGINS</code></h2>
+<p>Таблица <code>PLUGINS</code> обеспечивает информацию
+относительно расширений сервера.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>PLUGIN_NAME</code></td><td><code>Name</code></td><td>
+MySQL extension</td></tr>
+<tr><td><code>PLUGIN_VERSION</code></td><td></td><td>MySQL extension</td></tr>
+
+<tr><td><code>PLUGIN_STATUS</code></td><td><code>Status</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>PLUGIN_TYPE</code></td><td><code>Type</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>PLUGIN_TYPE_VERSION</code></td><td> </td><td>
+MySQL extension</td></tr>
+<tr><td><code>PLUGIN_LIBRARY</code></td><td><code>Library</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>PLUGIN_LIBRARY_VERSION</code></td><td> </td><td>
+MySQL extension</td></tr>
+<tr><td><code>PLUGIN_AUTHOR</code></td><td></td><td>MySQL extension</td></tr>
+<tr><td><code>PLUGIN_DESCRIPTION</code></td><td></td><td>
+MySQL extension</td></tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>Таблица <code>PLUGINS</code> ненормативная. Это было
+добавлено в MySQL 5.1.5.</p></li></ul>
+
+<h2><a name="engines-table"></a>9.18. Таблица <code>INFORMATION_SCHEMA
+ENGINES</code></h2>
+<p>Таблица <code>ENGINES</code> обеспечивает информацию
+относительно типов памяти.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>ENGINE</code></td><td><code>Engine</code>
+</td><td>MySQL extension</td></tr>
+<tr><td><code>SUPPORT</code></td><td><code>Support</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>COMMENT</code></td><td><code>Comment</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>TRANSACTIONS</code></td><td><code>Transactions</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>XA</code></td><td><code>XA</code></td><td>
+MySQL extension</td></tr>
+<tr><td><code>SAVEPOINTS</code></td><td><code>Savepoints</code></td>
+<td>MySQL extension</td></tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>Таблица <code>ENGINES</code> ненормативная. Это было
+добавлено в MySQL 5.1.5.</p></li></ul>
+
+<h2><a name="partitions-table"></a>9.19. Таблица <code>INFORMATION_SCHEMA
+PARTITIONS</code></h2>
+<p>Таблица <code>PARTITIONS</code> обеспечивают информацию
+относительно разделов таблицы.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>TABLE_CATALOG</code></td><td></td><td>MySQL extension</td></tr>
+<tr><td><code>TABLE_SCHEMA</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>TABLE_NAME</code></td><td> </td><td>MySQL extension</td></tr>
+
+<tr><td><code>PARTITION_NAME</code></td><td></td><td>MySQL extension</td>
+</tr><tr><td><code>SUBPARTITION_NAME</code></td><td> </td><td>
+MySQL extension</td></tr>
+
+<tr><td><code>PARTITION_ORDINAL_POSITION</code></td><td> </td><td>
+MySQL extension</td></tr>
+<tr><td><code>SUBPARTITION_ORDINAL_POSITION</code></td><td> </td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>PARTITION_METHOD</code></td><td> </td><td>MySQL extension</td>
+</tr><tr><td><code>SUBPARTITION_METHOD</code></td><td> </td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>PARTITION_EXPRESSION</code></td><td> </td><td>
+MySQL extension</td></tr>
+<tr><td><code>SUBPARTITION_EXPRESSION</code></td><td> </td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>PARTITION_DESCRIPTION</code></td><td> </td>
+<td>MySQL extension</td></tr>
+<tr><td><code>TABLE_ROWS</code></td><td> </td><td>MySQL extension</td></tr>
+
+<tr><td><code>AVG_ROW_LENGTH</code></td><td></td><td>MySQL extension</td>
+</tr><tr><td><code>DATA_LENGTH</code></td><td> </td><td>MySQL extension</td>
+</tr><tr><td><code>MAX_DATA_LENGTH</code></td><td></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>INDEX_LENGTH</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>DATA_FREE</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>CREATE_TIME</code></td><td> </td><td>MySQL extension</td></tr>
+
+<tr><td><code>UPDATE_TIME</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>CHECK_TIME</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>CHECKSUM</code></td><td> </td><td>MySQL extension</td></tr>
+
+<tr><td><code>PARTITION_COMMENT</code></td><td> </td>
+<td>MySQL extension</td></tr>
+<tr><td><code>NODEGROUP</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>TABLESPACE_NAME</code></td><td> </td>
+<td>MySQL extension</td></tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>Таблица <code>PARTITIONS</code> ненормативная. Это
+было добавлено в MySQL 5.1.6.</p>
+<p>Каждая запись в этой таблице соответствует индивидуальному разделу или
+подразделу разбитой на разделы таблицы.</p></li>
+
+<li><p><code>TABLE_CATALOG</code>: Этот столбец всегда <code>NULL</code>.
+</p></li>
+<li><p><code>TABLE_SCHEMA</code>: Этот столбец содержит имя базы данных,
+которой таблица принадлежит.</p></li>
+
+<li><p><code>TABLE_NAME</code>: Этот столбец содержит имя
+таблицы, содержащей раздел.</p></li>
+<li><p><code>PARTITION_NAME</code>: Этот столбец содержит имя раздела.
+</p></li>
+
+<li><p><code>SUBPARTITION_NAME</code>: Если запись таблицы
+<code>PARTITIONS</code> представляет подраздел, то этот столбец содержит имя
+подраздела, иначе это <code>NULL</code>.</p></li>
+
+<li><p><code>PARTITION_ORDINAL_POSITION</code>: Все разделы индексированы в
+том же самом порядке, в каком они определены, 1 является номером, назначенным
+первому разделу. Индексация может изменяться, когда разделы добавлены,
+удалены и реорганизованы. Показанный номер в этом столбце отражает текущий
+порядок, принимая во внимание любые изменения индексации.</p></li>
+
+<li><p><code>SUBPARTITION_ORDINAL_POSITION</code>: Подразделы внутри данного
+раздела также индексированы и повторно проиндексированы тем же самым
+способом, каким все разделы индексированы внутри таблицы.</p></li>
+
+<li><p><code>PARTITION_METHOD</code>: Одно из значений
+<code>RANGE</code>, <code>LIST</code>, <code>HASH</code>,
+<code>LINEAR HASH</code>, <code>KEY</code> или <code>LINEAR KEY</code>. То
+есть, один из типов доступного выделения разделов.</p></li>
+
+<li><p><code>SUBPARTITION_METHOD</code>: Одно из значений <code>HASH</code>,
+<code>LINEAR HASH</code>, <code>KEY</code> или <code>LINEAR KEY</code>. То
+есть, один из типов доступного выделения подразделов.</p></li>
+
+<li><p><code>PARTITION_EXPRESSION</code>: Это выражение для функции выделения
+разделов, используемой в инструкции <code>CREATE TABLE</code> или <code>ALTER
+TABLE</code>, которая создала текущую схему выделения разделов таблицы.</p>
+
+<p>Например, рассмотрите разбитую на разделы таблицу, созданную в базе данных
+<code>test</code>, используя эту инструкцию:</p>
+<pre>
+CREATE TABLE tp (c1 INT, c2 INT,
+       c3 VARCHAR(25)) PARTITION
+       BY HASH(c1 + c2) PARTITIONS 4;
+</pre>
+
+<p>Столбец в записи <code>PARTITION_EXPRESSION</code> в записи таблицы
+<code>PARTITIONS</code> для раздела из этой таблицы отображает
+<code>c1+c2</code>, как показано здесь:</p>
+
+<pre>
+mysql&gt; SELECT DISTINCT PARTITION_EXPRESSION
+     &gt;        FROM INFORMATION_SCHEMA.PARTITIONS
+     &gt;        WHERE TABLE_NAME='tp' AND TABLE_SCHEMA='test';
++----------------------+
+| PARTITION_EXPRESSION |
++----------------------+
+| c1 + c2|
++----------------------+
+1 row in set (0.09 sec)
+</pre></li>
+
+<li><p><code>SUBPARTITION_EXPRESSION</code>: Это работает в том же самом
+режиме для выражения подвыделения разделов, которое определяет выделение
+подразделов для таблицы, как <code>PARTITION_EXPRESSION</code> делает для
+выражения выделения разделов, используемого, чтобы определить выделение
+разделов таблицы. Если таблица не имеет никаких подразделов, то этот столбец
+всегда хранит значение <code>NULL</code>.</p></li>
+
+<li><p><code>PARTITION_DESCRIPTION</code>: Этот столбец используется для
+разделов RANGE и LIST. Для раздела <code>RANGE</code> это содержит набор
+значений в предложении <code>VALUES LESS THAN</code>, которое может быть
+целым числом или <code>MAXVALUE</code>. Для раздела <code>LIST</code> этот
+столбец содержит значения, определенные в предложении <code>VALUES IN</code>
+раздела, которое является разделяемым запятыми
+списком целочисленных значений.</p>
+
+<p>Для разделов, чьими <code>PARTITION_METHOD</code> является другое, чем
+<code>RANGE</code> или <code>LIST</code>, этот столбец
+всегда будет хранить <code>NULL</code>.</p></li>
+
+<li><p><code>TABLE_ROWS</code>: Число строк таблиц в разделе.</p></li>
+<li><p><code>AVG_ROW_LENGTH</code>: средняя длина строк, сохраненных в этом
+разделе или подразделе, в байтах.</p>
+
+<p>Это вычисляется как <code>DATA_LENGTH</code> разделенное
+на <code>TABLE_ROWS</code>.</p></li>
+<li><p><code>DATA_LENGTH</code>: Общая длина всех строк, сохраненных в этом
+разделе или подразделе, в байтах. То есть, общее число байтов, сохраненных в
+разделе или подразделе.</p></li>
+
+<li><p><code>MAX_DATA_LENGTH</code>: Максимальное число байтов, которые могут
+быть сохранены в этом разделе или подразделе.</p></li>
+<li><p><code>INDEX_LENGTH</code>: Длина индексного файла для этого раздела
+или подраздела в байтах.</p></li>
+
+<li><p><code>DATA_FREE</code>: Число байт, распределенных разделу или
+подразделу, но им не используемых.</p></li>
+<li><p><code>CREATE_TIME</code>: Время создания раздела или подраздела.
+</p></li>
+
+<li><p><code>UPDATE_TIME</code>: Время, когда раздел или подраздел
+был в последний раз изменен.</p></li>
+<li><p><code>CHECK_TIME</code>: Последний раз, когда таблица, которой этот
+раздел или подраздел принадлежит, была проверена.</p>
+
+<p><span class="bold"><strong>Обратите внимание</strong></span>: некоторые
+типы памяти не модифицируют это время. Для таблиц, использующих эти типы
+памяти, это значение всегда <code>NULL</code>.</p></li>
+
+<li><p><code>CHECKSUM</code>: Значение контрольной суммы, если есть. Иначе
+этот столбец <code>NULL</code>.</p></li>
+<li><p><code>PARTITION_COMMENT</code>: Этот столбец содержит текст любого
+комментария, сделанного для раздела.</p>
+<p>Значение по умолчанию для этого столбца: пустая строка.</p></li>
+
+<li><p><code>NODEGROUP</code>: Это группа узлов, которой раздел принадлежит.
+Это релевантно только для таблиц MySQL Cluster, иначе значение
+этого столбца всегда <code>0</code>.</p></li>
+
+<li><p><code>TABLESPACE_NAME</code>: Этот столбец содержит имя места таблицы,
+которому раздел принадлежит. В MySQL 5.1 значение этого
+столбца всегда <code>DEFAULT</code>.</p></li>
+
+<li><p><span class="bold"><strong>Важно</strong></span>: если любые разбитые
+на разделы таблицы, созданные в MySQL версии до MySQL 5.1.6 присутствуют
+после обновления до MySQL 5.1.6 или позже, невозможен <code>SELECT</code> из,
+<code>SHOW</code> или <code>DESCRIBE</code> таблиц <code>PARTITIONS</code>.
+</p></li>
+
+<li><p>Не разбитая на разделы таблица имеет одну запись в
+<code>INFORMATION_SCHEMA.PARTITIONS</code>, однако, значения столбцов
+<code>PARTITION_NAME</code>, <code>SUBPARTITION_NAME</code>,
+<code>PARTITION_ORDINAL_POSITION</code>,
+<code>SUBPARTITION_ORDINAL_POSITION</code>, <code>PARTITION_METHOD</code>,
+<code>SUBPARTITION_METHOD</code>, <code>PARTITION_EXPRESSION</code>,
+<code>SUBPARTITION_EXPRESSION</code> и <code>PARTITION_DESCRIPTION</code> все
+<code>NULL</code>. Столбец <code>PARTITION_COMMENT</code> в этом случае пуст.
+</p>
+
+<p>В MySQL 5.1 имеется также только одна запись в таблице
+<code>PARTITIONS</code> для таблицы, использующей <code>NDBCluster</code>. Те
+же самые столбцы также <code>NULL</code> (или пусты), как и для не разбитой
+на разделы таблицы.</p></li></ul>
+
+<h2><a name="events-table"></a>9.20. Таблица <code>INFORMATION_SCHEMA EVENTS
+</code></h2>
+<p>Таблица <code>EVENTS</code> обеспечивает информацию
+относительно планируемых событий.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>EVENT_CATALOG</code></td><td></td><td><code>NULL</code>, MySQL
+extension</td></tr><tr><td><code>EVENT_SCHEMA</code></td><td><code>Db
+</code></td><td>MySQL extension</td></tr>
+
+<tr><td><code>EVENT_NAME</code></td><td><code>Name</code></td>
+<td>MySQL extension</td></tr><tr><td><code>DEFINER</code></td><td><code>
+Definer</code></td><td>MySQL extension</td></tr>
+
+<tr><td><code>EVENT_BODY</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>EVENT_DEFINITION</code></td><td> </td><td>
+MySQL extension</td></tr>
+
+<tr><td><code>EVENT_TYPE</code></td><td><code>Type</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>EXECUTE_AT</code></td><td><code>Execute at</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>INTERVAL_VALUE</code></td><td><code>Interval value</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>INTERVAL_FIELD</code></td><td><code>Interval field</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>SQL_MODE</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>STARTS</code></td><td><code>Starts</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>ENDS</code></td><td><code>Ends</code></td><td>
+MySQL extension</td></tr>
+<tr><td><code>STATUS</code></td><td><code>Status</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>ON_COMPLETION</code></td><td> </td><td>
+MySQL extension</td></tr>
+<tr><td><code>CREATED</code></td><td> </td><td>MySQL extension</td></tr>
+
+<tr><td><code>LAST_ALTERED</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>LAST_EXECUTED</code></td><td></td><td>MySQL extension</td></tr>
+<tr><td><code>EVENT_COMMENT</code></td><td></td><td>MySQL extension</td>
+</tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>Таблица <code>EVENTS</code> ненормативная. Это было
+добавлено в MySQL 5.1.6.</p></li>
+
+<li><p><code>EVENT_CATALOG</code>: значение этого столбца всегда
+<code>NULL</code>.</p></li>
+<li><p><code>EVENT_SCHEMA</code>: имя схемы (базы данных), которой
+это событие принадлежит.</p></li>
+
+<li><p><code>EVENT_NAME</code>: имя события.</p></li>
+<li><p><code>DEFINER</code>: пользователь, который создал событие.
+Всегда отображается в формате
+<code>'<em><code>user_name</code></em>'@'<em><code>host_name</code></em>'
+</code>.</p></li>
+
+<li><p><code>EVENT_BODY</code>: Язык, используемый для инструкций в
+предложении <code>DO</code> события, в MySQL 5.1 это всегда <code>SQL</code>.
+Этот столбец был добавлен в MySQL 5.1.12. Это не должно быть спутано со
+столбцом того же самого имени (теперь называется
+<code>EVENT_DEFINITION</code>) в старых версиях MySQL.</p></li>
+
+<li><p><code>EVENT_DEFINITION</code>: текст инструкции SQL, составляющей
+предложение <code>DO</code> события, другими словами, инструкция,
+выполненная этим событием.</p>
+
+<p><span class="bold"><strong>Обратите внимание</strong></span>: до
+MySQL 5.1.12 этот столбец назывался <code>EVENT_BODY</code>.</p></li>
+<li><p><code>EVENT_TYPE</code>: одно из двух значений
+<code>ONE TIME</code> или <code>RECURRING</code>.</p></li>
+
+<li><p><code>EXECUTE_AT</code>: для одноразового события это значение
+the <code>DATETIME</code>, определенное в предложении <code>AT</code>
+инструкции <code>CREATE EVENT</code>, используемой, чтобы создать событие,
+или последней инструкции <code>ALTER EVENT</code>, которая изменила событие.
+Значение, показанное в этом столбце, отражает добавление или вычитание любого
+значения INTERVAL, включенного в предложение <code>AT</code> события.
+Например, если событие создано, используя <code>ON SCHEDULE AT
+CURRENT_TIMESTAMP + '1:6' DAY_HOUR</code>, а событие было создано в
+2006-02-09 14:05:30, значение, показанное в этом столбце, будет
+<code>'2006-02-10 20:05:30'</code>.</p>
+
+<p>Если синхронизация события определена предложением <code>EVERY</code>
+вместо предложения <code>AT</code> (то есть, если событие повторяется),
+значение этого столбца <code>NULL</code>.</p></li>
+
+<li><p><code>INTERVAL_VALUE</code>: для многоразовых событий этот столбец
+содержит числовую часть предложения <code>EVERY</code> события.</p>
+<p>Для одноразового события (то есть, события, чья синхронизация определена
+предложением <code>AT</code>) значение этого столбца <code>NULL</code>.
+</p></li>
+
+<li><p><code>INTERVAL_FIELD</code>: для многоразовых событий этот столбец
+содержит модульную часть предложения <code>EVERY</code>, управляя
+синхронизацией события с префиксом '<code>INTERVAL_</code>'. Таким образом,
+этот столбец содержит значение типа '<code>INTERVAL_YEAR</code>',
+'<code>INTERVAL_QUARTER</code>', '<code>INTERVAL_DAY</code>' или нечто
+подобное. Для одноразового события значение этого столбца <code>NULL</code>.
+</p></li>
+
+<li><p><code>SQL_MODE</code>: режим SQL во время создания
+или изменения события.</p></li>
+<li><p><code>STARTS</code>: для многоразовых событий, чье определение
+включает предложение <code>STARTS</code>, этот столбец содержит
+соответствующее значение <code>DATETIME</code>. Как и со столбцом
+<code>EXECUTE_AT</code>, это значение решает любые используемые выражения.
+</p>
+
+<p>Если не имеется никакого предложения <code>STARTS</code>, воздействующего
+на синхронизацию события, этот столбец пуст. До MySQL 5.1.8 это содержало
+<code>NULL</code> в таких случаях.</p></li>
+<li><p><code>ENDS</code>: то же самое, но для предложения <code>ENDS</code>.
+</p></li>
+
+<li><p><code>STATUS</code>: одно из двух значений:
+<code>ENABLED</code> или <code>DISABLED</code>.</p></li>
+<li><p><code>ON_COMPLETION</code>: одно из двух значений:
+<code>PRESERVE</code> или <code>NOT PRESERVE</code>.</p></li>
+
+<li><p><code>CREATED</code>: дата и время, когда событие было
+создано. Это значение <code>DATETIME</code>.</p></li>
+<li><p><code>LAST_ALTERED</code>: дата и время, когда событие было в
+последний раз изменено. Это значение <code>DATETIME</code>. Если событие не
+изменялось, начиная с создания, этот столбец хранит то же самое значение,
+что и столбец <code>CREATED</code>.</p></li>
+
+<li><p><code>LAST_EXECUTED</code>: дата и время, когда событие в последний
+раз выполнилось. Значение <code>DATETIME</code>. Если событие никогда не
+выполнялось, значение этого столбца <code>NULL</code>.</p></li>
+
+<li><p><code>EVENT_COMMENT</code>: текст комментария, если событие его имеет.
+Если не имеется никакого комментария, значение этого столбца пустая строка.
+</p></li></ul>
+
+<p><span class="bold"><strong>Пример</strong></span>: предположите, что
+пользователь <code>jon@ghidora</code> создает событие <code>e_daily</code>, а
+затем изменяет его через несколько минут, используя инструкцию
+<code>ALTER EVENT</code>, как показано здесь:</p>
+
+<pre>
+DELIMITER |
+CREATE EVENT e_daily ON SCHEDULE EVERY 1 DAY
+       STARTS CURRENT_TIMESTAMP + INTERVAL 6 HOUR DISABLE
+       COMMENT 'Saves total number of sessions and
+                clears the table once per day.'
+       DO BEGIN INSERT INTO site_activity.totals (when, total)
+       SELECT CURRENT_TIMESTAMP, COUNT(*) FROM site_activity.sessions;
+       DELETE FROM site_activity.sessions;
+   END |
+DELIMITER ;
+ALTER EVENT e_daily ENABLED;
+</pre>
+
+<p>Обратите внимание, что комментарии могут охватывать много строк.</p>
+<p>Этот пользователь может затем выполнять следующую инструкцию
+<code>SELECT</code> и получать показанный вывод:</p>
+
+<pre>
+mysql&gt; SELECT * FROM INFORMATION_SCHEMA.EVENTS
+     &gt;          WHERE EVENT_NAME = 'e_daily' AND
+     &gt;          EVENT_SCHEMA = 'myschema'\G
+
+*************************** 1. row ***************************
+EVENT_CATALOG: NULL
+EVENT_SCHEMA: myschema
+EVENT_NAME: e_daily
+DEFINER: jon@ghidora
+EVENT_BODY: BEGIN
+   INSERT INTO site_activity.totals (when, total)
+   SELECT CURRENT_TIMESTAMP, COUNT(*) FROM site_activity.sessions;
+   DELETE FROM site_activity.sessions;
+END
+EVENT_TYPE: RECURRING
+EXECUTE_AT: NULL
+INTERVAL_VALUE: 1
+INTERVAL_FIELD: INTERVAL_DAY
+SQL_MODE: NULL
+STARTS: 2006-02-09 10:41:23
+ENDS: NULL
+STATUS: ENABLED
+ON_COMPLETION: DROP
+CREATED: 2006-02-09 14:35:35
+LAST_ALTERED: 2006-02-09 14:41:23
+LAST_EXECUTED: NULL
+EVENT_COMMENT: Saves total number of sessions and
+               clears the table once per day.
+1 row in set (0.50 sec)
+</pre>
+
+<p><span class="bold"><strong>Важно</strong></span>: времена, отображаемые
+столбцами <code>STARTS</code>, <code>ENDS</code> и <code>LAST_EXECUTED</code>
+в настоящее время даны в терминах универсального времени (GMT или UTC),
+независимо от установки часового пояса сервера. Это верно и для столбцов
+<code>starts</code>, <code>ends</code> и <code>last_executed</code> в таблице
+<code>mysql.event</code>, а также для столбцов <code>Starts</code> и
+<code>Ends</code> в таблице <code>SHOW [FULL] EVENTS</code>. Зато столбцы
+<code>CREATED</code> и <code>LAST_ALTERED</code> используют часовой пояс
+сервера (также, как столбцы <code>created</code> и <code>last_altered</code>
+в таблице <code>mysql.event</code>), чтобы Вам жизнь медом не казалась.</p>
+
+<p>Например, событие <code>e_daily</code>, показанное ранее, было создано на
+компьютере в Brisbane, Australia, в 14:35:35 9 февраля 2006. Восточное
+стандартное время Австралии, которое также может быть выражено как
+<code>GMT+10.00</code>. Определение события модифицировалось (используя
+<code>ALTER EVENT</code>) на несколько минут позже, в 14:41:23. Это значения,
+отображаемые для <code>CREATED</code> и <code>LAST_ALTERED</code>. Событие
+планируется, чтобы начать выполнять 6 часов спустя, в 20:41:23 в тот же самый
+лень, по местному времени. Вычитание 10 часов из этого, чтобы получить
+универсальное время выдает 10:41:23, и это то значение, которое
+показывается для <code>STARTS</code>.</p>
+
+<p>На это использование универсального времени нельзя положиться в прикладных
+программах, поскольку ожидается изменить на сервере местное время
+(<a href="../../../bugs.mysql.com/16420" target="_top">Глюк #16420</a>).</p>
+
+<h2><a name="files-table"></a>9.21. Таблица <code>INFORMATION_SCHEMA FILES
+</code></h2>
+<p>Таблица <code>FILES</code>  обеспечивает информацию относительно файлов, в
+которых сохранены данные дисковых таблиц MySQL <code>NDB</code>.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>FILE_ID</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>FILE_NAME</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>FILE_TYPE</code></td><td> </td><td>MySQL extension</td></tr>
+
+<tr><td><code>TABLESPACE_NAME</code></td><td> </td>
+<td>MySQL extension</td></tr>
+<tr><td><code>TABLE_CATALOG</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>TABLE_SCHEMA</code></td><td> </td><td>MySQL extension</td></tr>
+
+<tr><td><code>TABLE_NAME</code></td><td> </td><td>
+MySQL extension</td></tr>
+<tr><td><code>LOGFILE_GROUP_NAME</code></td><td> </td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>LOGFILE_GROUP_NUMBER</code></td><td> </td><td>
+MySQL extension</td></tr>
+<tr><td><code>ENGINE</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>FULLTEXT_KEYS</code></td><td> </td><td>MySQL extension</td></tr>
+
+<tr><td><code>DELETED_ROWS</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>UPDATE_COUNT</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>FREE_EXTENTS</code></td><td> </td><td>MySQL extension</td></tr>
+
+<tr><td><code>TOTAL_EXTENTS</code></td><td> </td><td>
+MySQL extension</td></tr>
+<tr><td><code>EXTENT_SIZE</code></td><td> </td><td>MySQL extension</td></tr>
+
+<tr><td><code>INITIAL_SIZE</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>MAXIMUM_SIZE</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>AUTOEXTEND_SIZE</code></td><td> </td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>CREATION_TIME</code></td><td> </td>
+<td>MySQL extension</td></tr>
+<tr><td><code>LAST_UPDATE_TIME</code></td><td> </td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>LAST_ACCESS_TIME</code></td><td> </td>
+<td>MySQL extension</td></tr>
+<tr><td><code>RECOVER_TIME</code></td><td> </td><td>MySQL extension</td></tr>
+
+<tr><td><code>TRANSACTION_COUNTER</code></td><td> </td>
+<td>MySQL extension</td></tr>
+<tr><td><code>VERSION</code></td><td> </td><td>MySQL extension</td></tr>
+
+<tr><td><code>ROW_FORMAT</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>TABLE_ROWS</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>AVG_ROW_LENGTH</code></td><td> </td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>DATA_LENGTH</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>MAX_DATA_LENGTH</code></td><td> </td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>INDEX_LENGTH</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>DATA_FREE</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>CREATE_TIME</code></td><td> </td><td>MySQL extension</td></tr>
+
+<tr><td><code>UPDATE_TIME</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>CHECK_TIME</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>CHECKSUM</code></td><td> </td><td>MySQL extension</td></tr>
+
+<tr><td><code>STATUS</code></td><td> </td><td>MySQL extension</td></tr>
+<tr><td><code>EXTRA</code></td><td> </td><td>MySQL extension</td>
+</tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p><code>FILE_ID</code> значения
+столбца автосгенерированы.</p></li>
+
+<li><p><code>FILE_NAME</code> имя журнала <code>UNDO</code>, созданного
+<code>CREATE LOGFILE GROUP</code> или <code>ALTER LOGFILE GROUP</code>, либо
+файла данных, созданного <code>CREATE TABLESPACE</code>
+или <code>ALTER TABLESPACE</code>.</p></li>
+
+<li><p><code>FILE_TYPE</code> одно из значений
+<code>UNDOFILE</code> или <code>DATAFILE</code>.</p></li>
+<li><p><code>TABLESPACE_NAME</code> имя пространства таблиц,
+с которым файл связан.</p></li>
+
+<li><p>В MySQL 5.1 значение столбца
+<code>TABLESPACE_CATALOG</code> всегда <code>NULL</code>.</p></li>
+<li><p><code>TABLE_NAME</code> имя дисковой таблицы данных, с которой файл
+связан, если есть.</p></li>
+
+<li><p>Столбец <code>LOGFILE_GROUP_NAME</code> дает имя группы журнала,
+которой журнал или файл данных принадлежит.</p></li>
+<li><p>Для журнала <code>UNDO</code> <code>LOGFILE_GROUP_NUMBER</code>
+содержит автосгенерированный номер ID группы журналов, к
+которой журнал принадлежит.</p></li>
+
+<li><p>Для журнала данных MySQL Cluster или файла данных, значение столбца
+<code>ENGINE</code> всегда <code>NDB</code> или <code>NDBCLUSTER</code>.
+</p></li>
+
+<li><p>Для журнала данных MySQL Cluster или файла данных, значение столбца
+<code>FULLTEXT_KEYS</code> всегда пусто.</p></li>
+<li><p>Столбец <code>FREE EXTENTS</code> отображает число блоков, которые еще
+не использовались файлом. Столбец <code>TOTAL EXTENTS</code> показывает общее
+число блоков, распределенных файлу.</p>
+
+<p>Различие между этими двумя столбцами: число блоков, используемых в
+настоящее время файлом:</p>
+<pre>
+SELECT TOTAL_EXTENTS - FREE_EXTENTS AS extents_used
+       FROM INFORMATION_SCHEMA.FILES
+       WHERE FILE_NAME = 'myfile.dat';
+</pre>
+
+<p>Вы можете аппроксимировать количество дискового пространства, находящегося
+в использовании файлом, умножая это различие на значение столбца
+<code>EXTENT_SIZE</code>, который дает размер блока для файла в байтах:</p>
+
+<pre>
+SELECT (TOTAL_EXTENTS - FREE_EXTENTS) * EXTENT_SIZE AS bytes_used
+       FROM INFORMATION_SCHEMA.FILES
+       WHERE FILE_NAME = 'myfile.dat';
+</pre>
+
+<p>Точно так же Вы можете оценивать количество места, которое остается
+доступным в данном файле, умножая
+<code>FREE_EXTENTS</code> на <code>EXTENT_SIZE</code>:</p>
+
+<pre>
+SELECT FREE_EXTENTS * EXTENT_SIZE AS bytes_free
+       FROM INFORMATION_SCHEMA.FILES
+       WHERE FILE_NAME = 'myfile.dat';
+</pre>
+
+<p><span class="bold"><strong>Важно</strong></span>: значения байт,
+произведенные предшествующими запросами только приближения, и их точность
+обратно пропорциональна значению <code>EXTENT_SIZE</code>. То есть, больший
+<code>EXTENT_SIZE</code> становится менее точным.</p>
+
+<p>Также важно не забыть, что, если только блок используется, это не может
+быть освобождено снова без того, чтобы удалить файл данных, частью которого
+блок является. Это означает, что удаление из дисковой таблицы данных не
+освобождает дисковое пространство.</p>
+
+<p>Размер блока может быть установлен в инструкции <code>CREATE
+TABLESPACE</code>.</p></li>
+<li><p>Столбец <code>INITIAL_SIZE</code> показывает размер в байтах файла.
+Это то же самое значение, которое использовалось в предложении
+<code>INITIAL_SIZE</code> команд <code>CREATE LOGFILE GROUP</code>,
+<code>ALTER LOGFILE GROUP</code>, <code>CREATE TABLESPACE</code> или
+<code>ALTER TABLESPACE</code> использовавшихся, чтобы создать файл.</p>
+
+<p>Для файлов MySQL 5.1 Cluster Disk Data значение столбца
+<code>MAXIMUM_SIZE</code> всегда такое же, как <code>INITIAL_SIZE</code>, а
+столбец <code>AUTOEXTEND_SIZE</code> всегда пуст.</p></li>
+
+<li><p>Столбец <code>CREATION_TIME</code> показывает дату и время, когда файл
+был создан. <code>LAST_UPDATE_TIME</code> отображает дату и время, когда файл
+был последний раз изменен. <code>LAST_ACCESSED</code> обеспечивает дату и
+время, когда к файлу последний раз обращался сервер.</p>
+
+<p>В настоящее время значения этих столбцов сообщены операционной системой и
+не обеспечены <code>NDB</code>. Там, где никакое значение не обеспечивается
+операционной системой, эти столбцы отображаются
+<code>0000-00-00 00:00:00</code>.</p></li>
+
+<li><p>Для файлов данных MySQL Cluster значение столбцов
+<code>RECOVER_TIME</code> и <code>TRANSACTION_COUNTER</code> всегда
+<code>0</code>.</p></li>
+
+<li><p>Для файлов данных MySQL 5.1 Cluster следующие
+столбцы всегда <code>NULL</code>:</p>
+<ul type="circle"><li><p><code>VERSION</code></p></li>
+<li><p><code>ROW_FORMAT</code></p></li>
+<li><p><code>TABLE_ROWS</code></p></li>
+<li><p><code>AVG_ROW_LENGTH</code></p></li>
+<li><p><code>DATA_LENGTH</code></p></li>
+<li><p><code>MAX_DATA_LENGTH</code></p></li>
+<li><p><code>INDEX_LENGTH</code></p></li>
+<li><p><code>DATA_FREE</code></p></li>
+<li><p><code>CREATE_TIME</code></p></li>
+<li><p><code>UPDATE_TIME</code></p></li>
+<li><p><code>CHECK_TIME</code></p></li>
+<li><p><code>CHECKSUM</code></p></li></ul></li>
+
+<li><p>Для файлов данных MySQL Cluster значение столбца
+<code>STATUS</code> всегда <code>NORMAL</code>.</p></li>
+<li><p>Для файлов данных MySQL Cluster столбец <code>EXTRA</code> показывает,
+которому узлу данных принадлежит файл, поскольку каждый узел данных имеет
+собственную копию файла. Например, предположите, что Вы используете эту
+инструкцию относительно MySQL Cluster с четырьмя узлами данных:</p>
+
+<pre>
+CREATE LOGFILE GROUP mygroup
+       ADD UNDOFILE 'new_undo.dat'
+       INITIAL_SIZE 2G ENGINE NDB;
+</pre>
+
+<p>После удачного выполнения инструкции <code>CREATE LOGFILE GROUP</code>
+Вы должны видеть результат, подобный показанному здесь для этого
+запроса к таблице <code>FILES</code>:</p>
+
+<pre>
+mysql&gt; SELECT LOGFILE_GROUP_NAME, FILE_TYPE, EXTRA
+    -&gt;        FROM INFORMATION_SCHEMA.FILES
+    -&gt;        WHERE FILE_NAME = 'new_undo.dat';
++--------------------+-----------+----------------+
+| LOGFILE_GROUP_NAME | FILE_TYPE | EXTRA          |
++--------------------+-----------+----------------+
+| mygroup            | UNDO FILE | CLUSTER_NODE=3 |
+| mygroup            | UNDO FILE | CLUSTER_NODE=4 |
+| mygroup            | UNDO FILE | CLUSTER_NODE=5 |
+| mygroup            | UNDO FILE | CLUSTER_NODE=6 |
++--------------------+-----------+----------------+
+4 rows in set (0.01 sec)
+</pre></li>
+
+<li><p>Таблица <code>FILES</code> ненормативная.
+Это было добавлено в MySQL 5.1.6.</p></li>
+<li><p>Не имеется никаких команд <code>SHOW</code>,
+связанных с таблицей <code>FILES</code>.</p></li></ul>
+
+<h2><a name="processlist-table"></a>9.22. Таблица
+<code>INFORMATION_SCHEMA PROCESSLIST</code></h2>
+<p>Таблица <code>PROCESSLIST</code> обеспечивает информацию, относительно
+выполняемых сервером потоков.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+
+<tr><td><code>ID</code></td><td><code>Id</code></td><td>MySQL extension</td>
+</tr>
+<tr><td><code>USER</code></td><td><code>User</code></td><td>MySQL extension
+</td></tr>
+
+<tr><td><code>HOST</code></td><td><code>Host</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>DB</code></td><td><code>db</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>COMMAND</code></td><td><code>Command</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>TIME</code></td><td><code>Time</code></td>
+<td>MySQL extension</td></tr>
+
+<tr><td><code>STATE</code></td><td><code>State</code></td>
+<td>MySQL extension</td></tr>
+<tr><td><code>INFO</code></td><td><code>Info</code></td>
+<td>MySQL extension</td></tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>Таблица <code>PROCESSLIST</code> ненормативная.
+Это было добавлено в MySQL 5.1.7.</p></li>
+
+<li><p>Подобно выводу из соответствующей инструкции <code>SHOW</code>,
+таблица <code>PROCESSLIST</code> покажет информацию только относительно Ваших
+собственных потоков, если Вы не имеете привилегию <code>PROCESS</code>,
+тогда Вы будете видеть информацию относительно других потоков. Как анонимный
+пользователь Вы не можете видеть любые строки вообще.</p></li>
+
+<li><p>Если инструкция SQL обращается
+<code>INFORMATION_SCHEMA.PROCESSLIST</code>,  MySQL заполнит всю таблицу один
+раз, когда, операторное выполнение начинается, так что гарантируется
+непротиворечивость чтения в течение инструкции. Не имеется никакой
+непротиворечивости чтения для многооператорной транзакции.</p></li></ul>
+
+<p>Следующие инструкции эквивалентны:</p>
+<pre>
+SELECT * FROM INFORMATION_SCHEMA.PROCESSLIST
+SHOW PROCESSLIST
+</pre>
+
+<h2><a name="referential-constraints-table"></a>9.23. Таблица
+<code>INFORMATION_SCHEMA REFERENTIAL_CONSTRAINTS</code></h2>
+<p>Таблица <code>REFERENTIAL_CONSTRAINTS</code> обеспечивает информацию
+относительно внешних ключей.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr><tr><td>CONSTRAINT_CATALOG</td>
+<td> </td><td>NULL</td></tr>
+
+<tr><td>CONSTRAINT_SCHEMA</td><td> </td><td> </td></tr>
+<tr><td>CONSTRAINT_NAME</td><td> </td><td> </td></tr>
+<tr><td>UNIQUE_CONSTRAINT_CATALOG</td><td> </td><td>NULL</td></tr>
+
+<tr><td>UNIQUE_CONSTRAINT_SCHEMA</td><td> </td><td> </td></tr>
+<tr><td>UNIQUE_CONSTRAINT_NAME</td><td> </td><td> </td></tr>
+<tr><td>MATCH_OPTION</td><td> </td><td> </td></tr>
+
+<tr><td>UPDATE_RULE</td><td> </td><td> </td></tr>
+<tr><td>DELETE_RULE</td><td> </td><td> </td></tr>
+<tr><td>TABLE_NAME</td><td> </td><td> </td></tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>Таблица <code>REFERENTIAL_CONSTRAINTS</code>
+была добавлена в MySQL 5.1.10.</p></li>
+
+<li><p><code>TABLE_NAME</code> имеет то же самое значение, что и
+<code>TABLE_NAME</code> в <code>INFORMATION_SCHEMA.TABLE_CONSTRAINTS</code>.
+</p></li>
+
+<li><p><code>CONSTRAINT_SCHEMA</code> и <code>CONSTRAINT_NAME</code>
+идентифицируют внешний ключ.</p></li>
+<li><p><code>UNIQUE_CONSTRAINT_SCHEMA</code> и
+<code>UNIQUE_CONSTRAINT_NAME</code> идентифицируют вызванный ключ.</p></li>
+
+<li><p>Единственное допустимое значение в это время для
+<code>MATCH_OPTION</code>: <code>NONE</code>.</p></li>
+<li><p>Возможные значения для <code>UPDATE_RULE</code> или
+<code>DELETE_RULE</code>: <code>CASCADE</code>, <code>SET NULL</code>,
+<code>SET DEFAULT</code>, <code>RESTRICT</code>, <code>NO ACTION</code>.
+</p></li></ul>
+
+<h2><a name="status-table"></a>9.24. Таблицы <code>INFORMATION_SCHEMA
+GLOBAL_STATUS</code> и <code>SESSION_STATUS</code></h2>
+<p>Таблицы <code>GLOBAL_STATUS</code> и <code>SESSION_STATUS</code>
+обеспечивают информацию относительно переменных состояния сервера. Их
+содержание соответствует информации, произведенной инструкциями
+<code>SHOW GLOBAL STATUS</code> и <code>SHOW SESSION STATUS</code>.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+<tr><td>VARIABLE_NAME</td><td>Variable_name</td><td> </td></tr>
+<tr><td>VARIABLE_VALUE</td><td>Value</td><td> </td></tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>Таблицы <code>GLOBAL_STATUS</code> и
+<code>SESSION_STATUS</code> были добавлены в MySQL 5.1.12.</p></li>
+
+<li><p>Столбец <code>VARIABLE_VALUE</code> имеет тип <code>BIGINT</code>.
+Немногие переменные состояния, которые имеют значения нецелого числа,
+приведены к значениям <code>BIGINT</code>.</p></li></ul>
+
+<h2><a name="varaible-table"></a>9.25. Таблицы <code>INFORMATION_SCHEMA
+GLOBAL_VARIABLES</code> и <code>SESSION_VARIABLES</code></h2>
+<p>Таблицы <code>GLOBAL_VARIABLES</code> и <code>SESSION_VARIABLES</code>
+обеспечивают информацию относительно переменных состояния сервера. Их
+содержание соответствует информации, произведенной инструкциями
+<code>SHOW GLOBAL VARIABLES</code> и <code>SHOW SESSION VARIABLES</code>.</p>
+
+<table border="1"><tbody><tr><td><span class="bold"><strong><code>
+INFORMATION_SCHEMA</code> Name</strong></span></td><td><span class="bold">
+<strong><code>SHOW</code> Name</strong></span></td><td><span class="bold">
+<strong>Remarks</strong></span></td></tr>
+<tr><td>VARIABLE_NAME</td><td>Variable_name</td><td> </td></tr>
+<tr><td>VARIABLE_VALUE</td><td>Value</td><td> </td></tr></tbody></table>
+
+<p><span class="bold"><strong>Примечания</strong></span>:</p>
+<ul type="disc"><li><p>Таблицы <code>GLOBAL_VARIABLES</code> и
+<code>SESSION_VARIABLES</code> были добавлены в MySQL 5.1.12.</p></li></ul>
+
+<h2><a name="other-information-schema-tables"></a>9.26.
+Другие таблицы <code>INFORMATION_SCHEMA</code></h2>
+<p>Авторы предполагают выполнять дополнительные таблицы в
+<code>INFORMATION_SCHEMA</code>. В частности, они подтверждают
+потребность в таблице <code>PARAMETERS</code>.</p>
+
+<h2><a name="extended-show"></a>9.27. Расширения инструкции
+<code>SHOW</code></h2>
+<p>Некоторые расширения к инструкциям <code>SHOW</code> сопровождают
+реализацию <code>INFORMATION_SCHEMA</code>:</p>
+
+<ul type="disc"><li><p><code>SHOW</code> может использоваться, чтобы получить
+информацию относительно структуры <code>INFORMATION_SCHEMA</code>.</p></li>
+<li><p>Несколько инструкций <code>SHOW</code> принимают предложение
+<code>WHERE</code>, которое обеспечивает большее количество гибкости в
+определении того, которые строки отобразить.</p></li></ul>
+
+<p><code>INFORMATION_SCHEMA</code> информационная база данных, так что имя
+включено в вывод из <code>SHOW DATABASES</code>. Точно так же
+<code>SHOW TABLES</code> может использоваться с
+<code>INFORMATION_SCHEMA</code>, чтобы получить список таблиц:</p>
+
+<pre>
+mysql&gt; SHOW TABLES FROM INFORMATION_SCHEMA;
++---------------------------------------+
+| Tables_in_information_schema          |
++---------------------------------------+
+| CHARACTER_SETS                        |
+| COLLATIONS                            |
+| COLLATION_CHARACTER_SET_APPLICABILITY |
+| COLUMNS                               |
+| COLUMN_PRIVILEGES                     |
+| ENGINES                               |
+| EVENTS                                |
+| FILES                                 |
+| KEY_COLUMN_USAGE                      |
+| PARTITIONS                            |
+| PLUGINS                               |
+| PROCESSLIST                           |
+| ROUTINES                              |
+| SCHEMATA                              |
+| SCHEMA_PRIVILEGES                     |
+| STATISTICS                            |
+| TABLES                                |
+| TABLE_CONSTRAINTS                     |
+| TABLE_PRIVILEGES                      |
+| TRIGGERS                              |
+| USER_PRIVILEGES                       |
+| VIEWS                                 |
++---------------------------------------+
+22 rows in set (0.04 sec)
+</pre>
+
+<p><code>SHOW COLUMNS</code> и <code>DESCRIBE</code> могут отображать
+информацию относительно столбцов в индивидуальных
+таблицах <code>INFORMATION_SCHEMA</code>.</p>
+
+<p>Несколько инструкций <code>SHOW</code> были расширены, чтобы
+позволить предложение <code>WHERE</code>:</p>
+<pre>
+SHOW CHARACTER SET
+SHOW COLLATION
+SHOW COLUMNS
+SHOW DATABASES
+SHOW FUNCTION STATUS
+SHOW KEYS
+SHOW OPEN TABLES
+SHOW PROCEDURE STATUS
+SHOW STATUS
+SHOW TABLE STATUS
+SHOW TABLES
+SHOW VARIABLES
+</pre>
+
+<p>Предложение <code>WHERE</code>, если представлено, оценено для имен
+столбцов, отображаемых инструкцией <code>SHOW</code>. Например, инструкция
+<code>SHOW CHARACTER SET</code> производит эти столбцы вывода:</p>
+
+<pre>
+mysql&gt; <strong><code>SHOW CHARACTER SET;</code></strong>
++----------+-----------------------------+---------------------+--------+
+| Charset  | Description                 | Default collation   | Maxlen |
++----------+-----------------------------+---------------------+--------+
+|     big5 | Big5 Traditional Chinese    | big5_chinese_ci     | 2      |
+|     dec8 | DEC West European           | dec8_swedish_ci     | 1      |
+|    cp850 | DOS West European           | cp850_general_ci    | 1      |
+|      hp8 | HP West European            | hp8_english_ci      | 1      |
+|    koi8r | KOI8-R Relcom Russian       | koi8r_general_ci    | 1      |
+|   latin1 | cp1252 West European        | latin1_swedish_ci   | 1      |
+|   latin2 | ISO 8859-2 Central European | latin2_general_ci   | 1      |
+...
+</pre>
+
+<p>Используя предложение <code>WHERE</code> с <code>SHOW CHARACTER
+SET</code>, Вы обратились бы к тем именам столбца. Например, следующий
+оператор отображает информацию относительно наборов символов, для которых
+заданное по умолчанию объединение содержит строку <code>'japanese'</code>:
+</p>
+
+<pre>
+mysql&gt; SHOW CHARACTER SET WHERE `Default collation` LIKE '%japanese%';
++---------+---------------------------+---------------------+--------+
+| Charset | Description               |   Default collation | Maxlen |
++---------+---------------------------+---------------------+--------+
+|    ujis |           EUC-JP Japanese |    ujis_japanese_ci | 3      |
+|    sjis |        Shift-JIS Japanese |    sjis_japanese_ci | 2      |
+|   cp932 | SJIS for Windows Japanese |   cp932_japanese_ci | 2      |
+| eucjpms | UJIS for Windows Japanese | eucjpms_japanese_ci | 3      |
++---------+---------------------------+---------------------+--------+
+</pre>
+
+<p>Эта инструкция отображает многобайтовые наборы символов:</p>
+<pre>
+mysql&gt; SHOW CHARACTER SET WHERE Maxlen &gt; 1;
++---------+---------------------------+---------------------+--------+
+| Charset | Description               | Default collation   | Maxlen |
++---------+---------------------------+---------------------+--------+
+|    big5 |  Big5 Traditional Chinese |     big5_chinese_ci | 2      |
+|    ujis |           EUC-JP Japanese |    ujis_japanese_ci | 3      |
+|    sjis |        Shift-JIS Japanese |    sjis_japanese_ci | 2      |
+|   euckr |             EUC-KR Korean |     euckr_korean_ci | 2      |
+|  gb2312 | GB2312 Simplified Chinese |   gb2312_chinese_ci | 2      |
+|     gbk |    GBK Simplified Chinese |      gbk_chinese_ci | 2      |
+|    utf8 |             UTF-8 Unicode |     utf8_general_ci | 3      |
+|    ucs2 |             UCS-2 Unicode |     ucs2_general_ci | 2      |
+|   cp932 | SJIS for Windows Japanese |   cp932_japanese_ci | 2      |
+| eucjpms | UJIS for Windows Japanese | eucjpms_japanese_ci | 3      |
++---------+---------------------------+---------------------+--------+
+</pre>
+
+<h2><a name="faqs-information-schema"></a>9.28. MySQL 5 FAQ
+<code>INFORMATION_SCHEMA</code></h2>
+<p><a name="qandaitem-28-7-2"></a><span class="bold"><strong>9.28.1:
+</strong></span><span class="bold"><strong>Имеется ли форум для
+обсуждения <code>INFORMATION_SCHEMA</code>?</strong></span></p>
+<p>Да. <a href="../../../forums.mysql.com/list.php@101" target="_top">
+http://forums.mysql.com/list.php?101</a>.</p>
+
+<p><a name="qandaitem-28-7-3"></a><span class="bold"><strong>9.28.2:
+</strong></span><span class="bold"><strong>Где я могу найти спецификацию ANSI
+SQL 2003 для <code>INFORMATION_SCHEMA</code>?</strong></span></p>
+
+<p>К сожалению, официальные спецификации недоступны свободно. ANSI делает их
+доступными только за денежку. Однако, имеются доступные книги, например,
+<em class="citetitle">SQL-99 Complete, Really</em> by Peter
+Gulutzan and Trudy Pelzer, которые дают всесторонний краткий обзор стандарта,
+включая <code>INFORMATION_SCHEMA</code>.</p>
+
+<p><a name="qandaitem-28-7-4"></a><span class="bold"><strong>9.28.3:
+</strong></span><span class="bold"><strong>Каково различие между Oracle Data
+Dictionary и MySQL <code>INFORMATION_SCHEMA</code>?</strong></span></p>
+<p>Oracle и MySQL обеспечивают метаданные в таблицах. Однако, Oracle и MySQL
+используют различные имена таблиц и столбцов. Реализация MySQL более подобна
+DB2 и SQL Server, которые также поддерживают <code>INFORMATION_SCHEMA</code>
+как определено в стандарте SQL.</p>
+
+<p><a name="qandaitem-28-7-5"></a><span class="bold"><strong>9.28.4:
+</strong></span><span class="bold"><strong>Я могу изменять таблицы, найденные
+в базе данных <code>INFORMATION_SCHEMA</code>?</strong></span></p>
+
+<p>Нет. Прикладные программы могут полагаться на некоторую стандартную
+структуру, и это не должно измениться. По этой причине
+<span class="emphasis"><em>MySQL AB не может поддерживать ошибки или другие
+проблемы, которые следуют из изменения таблиц или данных в
+<code>INFORMATION_SCHEMA</code></em></span>.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value);
+return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br/>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+
+</BODY>
+</html>

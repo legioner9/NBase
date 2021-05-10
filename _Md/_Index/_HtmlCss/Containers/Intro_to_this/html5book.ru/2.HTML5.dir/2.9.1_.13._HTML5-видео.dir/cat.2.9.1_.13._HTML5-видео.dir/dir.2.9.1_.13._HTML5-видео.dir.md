@@ -1,0 +1,24 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.9.1_.13._HTML5-видео.dir\cat.2.9.1_.13._HTML5-видео.dir\dir.2.9.1_.13._HTML5-видео.dir.md">2.9.1_.13._HTML5-видео.dir</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_HtmlCss\Containers\Intro_to_this\html5book.ru\2.HTML5.dir\2.9.1_.13._HTML5-видео.dir\2.9.1_.13._HTML5-видео.md">2.9.1_.13._HTML5-видео.md</a>
+        - *## [1.13. HTML5-видео](https://html5book.ru/html5-video/)
+        - *### 1. Элемент \<video>
+        - *#### АТРИБУТЫ ТЕГА <VIDEO>
+        - *### 2. Встраиваемый интерактивный контент \<embed>
+        - *#### АТРИБУТЫ ТЕГА \<EMBED>
+        - *### 3. Видеокодеки
+        - *#### H.264 
+        - *#### Ogg Theora 
+        - *#### VP8 
+        - *### 4. Видеоконтейнеры
+        - *#### Ogg (.ogv, .oga, .ogx, .ogg) 
+        - *#### MPEG 4 (.mp4) 
+        - *#### WebM (.webm) 
+        - *#### Audio Video Interleave (.avi) 
+        - *#### Matroska (.mkv) 
+        - *#### три основных видео формата:
+        - *### 5. Альтернативные медиа-ресурсы \<source>
+        - *#### АТРИБУТЫ ТЕГА \<SOURCE>
+        - *### 6. Добавление субтитров и заголовков \<track>
+        - *#### АТРИБУТЫ ТЕГА \<TRACK>
+        - *### 7. Пример: размещаем видео на сайте
+        - *### 8. Видеоконвертеры

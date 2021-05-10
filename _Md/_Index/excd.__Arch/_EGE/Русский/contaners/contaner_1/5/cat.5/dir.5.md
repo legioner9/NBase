@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Arch\_EGE\Русский\contaners\contaner_1\5\cat.5\dir.5.md">5</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Arch\_EGE\Русский\contaners\contaner_1\5\rus_ege.md">rus_ege.md</a>
+        - *#  Задание 5. Употребление паронимов Подробнее

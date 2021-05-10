@@ -1,0 +1,2584 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+  <title>Глава 4. Учебник</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="tutorial"></a>Глава 4. Учебник</h1>
+<p>Эта глава обеспечивает учебное введение в MySQL, показывая, как
+использовать <a href="programs.htm#mysql"><span><strong>mysql</strong></span>
+</a>, чтобы создать и использовать простую базу данных.
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+(иногда называемый <span><span>terminal monitor</span></span> или
+<span><span>monitor</span></span>) является интерактивной программой, которая
+позволяет Вам соединиться с сервером MySQL, выполнить запросы и рассмотреть
+результаты. <a href="programs.htm#mysql"><span><strong>mysql</strong></span>
+</a> может также использоваться в пакетном режиме: Вы помещаете свои запросы
+в файл заранее, затем говорите <a href="programs.htm#mysql"><span><strong>
+mysql</strong></span></a>, чтобы выполнять содержание файла. Оба способа
+использовать <a href="programs.htm#mysql"><span><strong>mysql</strong></span>
+</a> покрыты здесь подробно.</p>
+
+<p>Чтобы видеть список возможностей, предоставленных
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>,
+вызовите это с опцией <a href="programs.htm#option_mysql_help"><code>--help
+</code></a>:
+<pre>
+shell&gt; mysql --help
+</pre>
+
+Эта глава предполагает, что <a href="programs.htm#mysql"><span><strong>mysql
+</strong></span></a> установлен на Вашей машине и что сервер MySQL доступен,
+с которым Вы можете соединиться. Если это не так, свяжитесь со своим
+администратором MySQL. Если <span><em>Вы</em></span> и есть администратор, Вы
+должны консультироваться с соответствующими частями этого руководства,
+такими как <a href="server.htm">глава 6</a>.</p>
+
+<p>Эта глава описывает весь процесс установки и использования базы данных.
+Если Вы интересуетесь только доступом к существующей базе данных, Вы можете
+хотеть перескочить через разделы, которые описывают, как создать базу данных
+и таблицы, которые это содержит.</p>
+
+<p>Поскольку эта глава обучающая, много деталей опущены. Консультируйтесь с
+соответствующими разделами руководства для получения дополнительной
+информации о темах, затронутых здесь.</p>
+
+<h2><a name="connecting-disconnecting"></a>4.1.
+Соединение с и отсоединение от сервера</h2>
+<p>Чтобы соединиться с сервером, Вы должны будете обычно обеспечивать имя
+пользователя MySQL, когда Вы вызовете <a href="programs.htm#mysql"><span>
+<strong>mysql</strong></span></a> и, наиболее вероятно, пароль. Если сервер
+будет работать не на той машине, где Вы входите в систему, то Вы должны
+будете также определить имя хоста. Свяжитесь со своим администратором, чтобы
+узнать, какие параметры соединения Вы должны использовать, чтобы соединиться
+(то есть, узел, имя пользователя и пароль, чтобы использовать). Как только Вы
+знаете надлежащие параметры, Вы должны быть в состоянии соединиться:
+<pre>
+shell&gt; mysql -h <em><code>host</code></em> -u <em><code>user</code></em> -p
+Enter password: ********
+</pre>
+
+<em><code>host</code></em> и <em><code>user</code></em> представляют имя
+хоста, где Ваш сервер MySQL работает и имя пользователя Вашей учетной записи
+MySQL. Замените на соответствующие значения для Вашей установки.
+<code>********</code> представляет Ваш пароль, введите его, когда
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+отобразит запрос <code>Enter password:</code>.</p>
+
+<p>Если это работает, Вы должны видеть некоторую вводную информацию,
+сопровождаемую приглашением <code>mysql&gt;</code>:
+<pre>
+shell&gt; mysql -h <em><code>host</code></em> -u <em><code>user</code></em> -p
+Enter password: ********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 25338 to server version: 8.0.1-standard
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql&gt;
+</pre>
+
+Приглашение <code>mysql&gt;</code> говорит Вам, что
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+готов к работе с запросами.</p>
+
+<p>Если Вы входите в систему на той же самой машине, где работает MySQL,
+Вы можете опустить узел и просто использовать следующее:
+<pre>
+shell&gt; mysql -u <em><code>user</code></em> -p
+</pre>
+
+Если, когда Вы пытаетесь войти в систему, Вы получаете сообщение об ошибке,
+например, <span class="errortext">ERROR 2002 (HY000): Can't connect to local
+MySQL server through socket '/tmp/mysql.sock' (2)</span>, это означает, что
+демон сервера MySQL (Unix) или служба (Windows) не работает. Консультируйтесь
+с администратором или см. раздел <a href="install.htm">главы 2</a>, который
+является соответствующим Вашей операционной системе.</p>
+
+<p>Для помощт с другими проблемами, с которыми часто сталкиваются, пытаясь
+войти в систему, см. <a href="error.htm#common-errors">раздел B.5.2</a>.</p>
+<p>Некоторые установки MySQL разрешают пользователям соединяться как
+анонимный (неназванный) пользователь с сервером, работающим на местном узле.
+Если это верно на Вашей машине, Вы должны быть в состоянии соединиться с тем
+сервером, вызывая <a href="programs.htm#mysql"><span><strong>mysql</strong>
+</span></a> без любых опций:
+<pre>
+shell&gt; mysql
+</pre>
+
+После того, как Вы соединились успешно, Вы можете разъединиться в
+любое время, вводя <code>QUIT</code> (или <code>\q</code>) в ответ
+на подсказку <code>mysql&gt;</code>:
+<pre>
+mysql&gt; QUIT
+Bye
+</pre>
+
+<p>В Unix Вы можете также разъединиться, нажимая Control+D.</p>
+<p>Большинство примеров в следующих разделах предполагает, что Вы соединены с
+сервером. Они указывают на это подсказкой <code>mysql&gt;</code>.</p>
+
+<h2><a name="entering-queries"></a>4.2. Ввод запросов</h2>
+<p>Удостоверьтесь, что Вы соединены с сервером, как обсуждено в предыдущем
+разделе. Выполнение этого само по себе не выбирает базу данных, чтобы
+работать с ней. В этом пункте более важно узнать немного о том, как делать
+запросы. Этот раздел описывает основные принципы ввода запросов, используя
+несколько запросов, которые Вы можете испытать, чтобы ознакомиться с тем, как
+работает <a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>.
+</p>
+
+<p>Вот простой запрос, который просит, чтобы сервер сказал Вам свой номер
+версии и текущую дату. Напечатайте это как показано здесь после подсказки
+<code>mysql&gt;</code> и нажмите Enter:
+<pre>
+mysql&gt; SELECT VERSION(), CURRENT_DATE;
++-----------+--------------+
+| VERSION() | CURRENT_DATE |
++-----------+--------------+
+| 5.8.0-m17 | 2015-12-21   |
++-----------+--------------+
+1 row in set (0.02 sec)
+mysql&gt;
+</pre>
+
+Этот запрос иллюстрирует несколько вещей о
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>:</p>
+<ul><li><p>Запрос обычно состоит из запроса SQL, сопровождаемого точкой с
+запятой. Есть некоторые исключения, где точка с запятой может быть опущена.
+<code>QUIT</code>, упомянутый ранее, одно из них.
+Мы доберемся до других позже.</li>
+
+<li>Когда Вы делаете запрос, <a href="programs.htm#mysql"><span><strong>mysql
+</strong></span></a> посылает это в сервер для выполнения и выводит на экран
+результаты, затем печатает другое приглашение <code>mysql&gt;</code>, чтобы
+указать, что это готово к другому запросу.</li>
+
+<li><a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+выводит на экран вывод запроса в табличной форме (строки и столбцы). Первая
+строка содержит метки для столбцов. Следующие строки это результаты запроса.
+Обычно метки столбца это названия столбцов, которые Вы приносите от таблиц
+базы данных. Если Вы получаете значение выражения, а не столбец таблицы,
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+маркирует столбец, используя выражение непосредственно.</li>
+
+<li><a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+показывает, сколько строк было возвращено и сколько времени запрос взял,
+чтобы выполниться, что дает Вам общее представление о работе сервера. Эти
+значения неточны, потому что они представляют время с часов (а не
+центрального процессора или машинное время), и потому что они затронуты
+такими факторами, как загрузка сервера и сетевое время ожидания.
+Для краткости строка <span><span>rows in set</span></span>
+иногда не показывается в оставшихся примерах в этой главе.</p></li></ul>
+
+<p>Ключевые слова могут быть введены в любом регистре.
+Следующие запросы эквивалентны:
+<pre>
+mysql&gt; SELECT VERSION(), CURRENT_DATE;
+mysql&gt; select version(), current_date;
+mysql&gt; SeLeCt vErSiOn(), current_DATE;
+</pre>
+
+Вот другой запрос. Это демонстрирует, что Вы можете использовать
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+в качестве простого калькулятора:
+<pre>
+mysql&gt; SELECT SIN(PI()/4), (4+1)*5;
++------------------+---------+
+| SIN(PI()/4)      | (4+1)*5 |
++------------------+---------+
+| 0.70710678118655 | 25      |
++------------------+---------+
+1 row in set (0.02 sec)
+</pre>
+
+Запросы, показанные к настоящему времени, были относительно короткими
+однострочными запросами. Вы можете даже ввести много запросов
+в одной строке. Только закончите каждый точкой с запятой:
+<pre>
+mysql&gt; SELECT VERSION(); SELECT NOW();
++-----------+
+| VERSION() |
++-----------+
+| 5.8.0-m17 |
++-----------+
+1 row in set (0.00 sec)
+
++---------------------+
+| NOW()               |
++---------------------+
+| 2015-12-21 14:06:10 |
++---------------------+
+1 row in set (0.00 sec)
+</pre>
+
+Запросы нельзя дать все на одной строке, так что длинные запросы, которые
+требуют несколько строк, не проблема.
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+определяет, где Ваш запрос заканчивается, ища заканчивающую точку с запятой,
+а не конец входной строки. Другими словами, <a href="programs.htm#mysql">
+<span><strong>mysql</strong></span></a> принимает ввод свободного формата:
+это собирает входные строки, но не выполняет их, пока не
+увидит точку с запятой.</p>
+
+<p>Вот простой многострочный запрос:
+<pre>
+mysql&gt; SELECT
+    -&gt; USER()
+    -&gt; ,
+    -&gt; CURRENT_DATE;
++---------------+--------------+
+| USER()        | CURRENT_DATE |
++---------------+--------------+
+| jon@localhost | 2015-12-21   |
++---------------+--------------+
+</pre>
+
+В этом примере, заметьте, как подсказка изменяется от
+<code>mysql&gt;</code> на <code>-&gt;</code> после того, как Вы вводите
+первую строку многострочного запроса. Это то, как
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+указывает, что еще не видел полный запрос. Подсказка Ваш друг, потому что она
+обеспечивает ценную обратную связь. Если Вы используете эту обратную связь,
+Вы можете всегда знать о том, чего ждет <a href="programs.htm#mysql"><span>
+<strong>mysql</strong></span></a>.</p>
+
+<p>Если Вы решаете, что не хотите выполнять запрос, когда находитесь в
+процессе ввода, отмените это, вводя <code>\c</code>:
+<pre>
+mysql&gt; SELECT
+    -&gt; USER()
+    -&gt; \c
+mysql&gt;
+</pre>
+
+Здесь, также, заметьте подсказку. Это переключается назад на
+<code>mysql&gt;</code> после ввода <code>\c</code>,
+для обеспечения обратной связи, чтобы указать, что
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+готов к новому запросу.</p>
+
+<p>Следующая таблица показывает каждую из подсказок, которые Вы можете видеть
+и суммирует то, что они означают о статусе
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>.</p>
+
+<table border="1">
+<thead><tr><th scope="col">Подсказка</th><th scope="col">Смысл
+</th></tr></thead>
+<tbody><tr><td scope="row"><code>mysql&gt;</code></td>
+<td>Готов к новому запросу.</td></tr>
+<tr><td scope="row"><code>-&gt;</code></td><td>
+Ожидание следующей строки многострочного запроса.</td></tr>
+<tr><td scope="row"><code>'&gt;</code></td><td>Ожидание следующей строки,
+ожидая завершения строки, которая началась с одинарной кавычки
+(<code>'</code>).</td></tr>
+<tr><td scope="row"><code>"&gt;</code></td><td>
+Ожидание следующей строки, ожидая завершения строки, которая
+началась с двойной кавычки (<code>"</code>).</td></tr>
+<tr><td scope="row"><code>`&gt;</code></td><td>
+Ожидание следующей строки, ожидая завершения идентификатора, который
+начался с обратной кавычки (<code>`</code>).</td></tr>
+<tr><td scope="row"><code>/*&gt;</code></td><td>
+Ожидание следующей строки, ожидая завершения комментария, который начался с
+<code>/*</code>.</td></tr></tbody></table>
+
+<p>Многострочные запросы обычно происходят случайно, когда Вы намереваетесь
+выпустить запрос на одной строке, но забыли заканчивающую точку с запятой. В
+этом случае <a href="programs.htm#mysql"><span><strong>mysql</strong></span>
+</a> ждет больше ввода:
+<pre>
+mysql&gt; SELECT USER()
+    -&gt;
+</pre>
+
+Если это происходит с Вами (Вы думаете, что ввели запрос, но единственный
+ответ <code>-&gt;</code>), наиболее вероятно, что
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+ждет точку с запятой. Если Вы не замечаете то, что подсказка говорит Вам, Вы
+могли бы сидеть так некоторое время прежде, чем понять, что Вы должны
+сделать. Введите точку с запятой, чтобы завершить запрос, и
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+его сразу выполнит:
+<pre>
+mysql&gt; SELECT USER()
+    -&gt; ;
++---------------+
+| USER()        |
++---------------+
+| jon@localhost |
++---------------+
+</pre>
+
+<code>'&gt;</code> и <code>"&gt;</code> происходят во время строкового набора
+(другой способ сказать, что MySQL ждет завершения строки). В MySQL Вы можете
+написать строки, окруженные также <code>'</code> или
+<code>"</code> (например, <code>'hello'</code> или <code>"goodbye"</code>), и
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+позволяет Вам вводить строки, которые охватывают многократные строки. Когда
+Вы видите подсказку <code>'&gt;</code> или <code>"&gt;</code>,
+это означает, что Вы ввели строку, содержащую строку, которая начинается с
+<code>'</code> или <code>"</code>, но еще не ввели соответствующую кавычку,
+которая заканчивает строку. Это часто указывает, что Вы неосторожно не учли
+символ кавычки. Например:
+<pre>
+mysql&gt; SELECT * FROM my_table WHERE name = 'Smith AND age &lt; 30;
+    '&gt;
+</pre>
+
+Если Вы вводите этот <a href="sql.htm#select"><code>SELECT</code></a>,
+затем нажмете <span><strong>Enter</strong></span>
+и ждете результата, ничего не происходит. Вместо того, чтобы задаться
+вопросом, почему этот запрос занимает много времени, заметьте представление,
+данное подсказкой <code>'&gt;</code>. Это говорит Вам, что
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+ожидает увидеть остальную часть незаконченной строки. Вы видите ошибку в
+запросе? Строка <code>'Smith</code> пропускает вторую одинарную кавычку.</p>
+
+<p>В этом пункте, что Вы делаете? Самая простая вещь состоит в том, чтобы
+отменить запрос. Однако, Вы не можете просто ввести <code>\c</code>
+в этом случае, потому что <a href="programs.htm#mysql"><span><strong>mysql
+</strong></span></a> интерпретирует это как часть строки, которую это
+собирает. Вместо этого введите заключительный символ кавычки (таким образом
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+узнает, что Вы закончили строку), затем введите <code>\c</code>:
+<pre>
+mysql&gt; SELECT * FROM my_table WHERE name = 'Smith AND age &lt; 30;
+    '&gt; '\c
+mysql&gt;
+</pre>
+
+Подсказка изменяется назад на <code>mysql&gt;</code>, указывая, что
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+готов к новому запросу.</p>
+
+<p>Подсказка <code>`&gt;</code> подобна <code>'&gt;</code> и
+<code>"&gt;</code>, но указывает, что Вы начали, но
+не завершили заключенный в кавычки идентификатор.</p>
+
+<p>Важно знать, что подсказки <code>'&gt;</code>,
+<code>"&gt;</code> и <code>`&gt;</code> имеют значение, потому что, если Вы
+по ошибке вводите незаконченную строку, дальнейшие строки, Вы вводите,
+кажется, проигнорированы <a href="programs.htm#mysql"><span><strong>mysql
+</strong></span></a>, включая строку, содержащую <code>QUIT</code>.
+Это может быть довольно запутывающим, особенно если Вы не знаете, что должны
+поставлять заканчивающую кавычку прежде, чем Вы сможете
+отменить текущий запрос.</p>
+
+<h2><a name="database-use"></a>4.3. Создание и использование базы данных</h2>
+<p>Как только Вы знаете, как ввести запросы SQL, Вы готовы получить
+доступ к базе данных.</p>
+
+<p>Предположите, что у Вас есть несколько домашних животных
+(Ваш зверинец), и Вы хотели бы отследить различные типы информации о них.
+Вы можете сделать так, составляя таблицы, чтобы держать Ваши данные и
+загружая их желаемой информацией. Тогда Вы можете ответить на различные виды
+вопросов о Ваших животных, получая данные от таблиц. Этот раздел показывает
+Вам, как выполнить следующие операции:</p>
+
+<ul><li><p>Создайте базу данных.</li>
+<li>Составьте таблицу.</li>
+<li>Загрузите данные в таблицу.</li>
+<li>Получите данные от таблицы различными способами.</li>
+<li>Используйте много таблиц.</p></li></ul>
+
+<p>База данных зверинца проста (сознательно), но не трудно думать о ситуациях
+реального мира, в которых мог бы использоваться подобный тип базы данных.
+Например, такая база данных могла использоваться фермером, чтобы
+отследить домашний скот, или ветеринаром, чтобы отследить пациентов.
+Распределение зверинца, содержащее некоторые из запросов и типовых данных,
+используемых в следующих разделах, может быть получено с Веб-сайта MySQL.
+Это доступно в сжатом файле <span><strong>tar</strong></span> и Zip
+на <a href="../../../dev.mysql.com/doc/default.htm" target="_top">
+http://dev.mysql.com/doc/</a>.</p>
+
+<p>Используйте команду <a href="sql.htm#show"><code>SHOW</code></a>, чтобы
+узнать, какие базы данных в настоящее время существуют на сервере:
+<pre>
+mysql&gt; SHOW DATABASES;
++----------+
+| Database |
++----------+
+| mysql    |
+| test     |
+| tmp      |
++----------+
+</pre>
+
+База данных <code>mysql</code> описывает пользовательские привилегии доступа.
+<code>test</code> часто доступна как рабочее пространство пользователям,
+чтобы испытать запросы.</p>
+
+<p>Список баз данных, выведенных на экран запросом, может отличаться на Вашей
+машине, <a href="sql.htm#show-databases"><code>SHOW DATABASES</code></a>
+не показывает базы данных, на которые у Вас нет никаких привилегий, если Вы
+не имеете привилегии <a href="sql.htm#show-databases"><code>SHOW DATABASES
+</code></a>. См. <a href="sql.htm#show-databases">раздел 14.7.5.14</a>.</p>
+
+<p>Если есть база <code>test</code>, попробуйте ее:
+<pre>
+mysql&gt; USE test
+Database changed
+</pre>
+
+<a href="sql.htm#use"><code>USE</code></a>, аналогично <code>QUIT</code>,
+не требует точки с запятой. Вы можете закончить такие запросы точкой с
+запятой, если Вам нравится, это не причиняет вреда.
+<a href="sql.htm#use"><code>USE</code></a> является особенным в другом
+отношении: это должно быть дано на одной строке.</p>
+
+<p>Вы можете использовать базу данных <code>test</code>
+(если у Вас есть доступ к этому) для примеров, но что-либо, что Вы создаете в
+этой базе данных, может быть удалено кем-либо еще с доступом к ней.
+Поэтому Вы должны, вероятно, попросить у своего администратора MySQL
+разрешение использовать собственную базу данных. Предположите, что Вы хотите
+назвать ее <code>menagerie</code>.
+Администратор должен выполнить запрос:
+<pre>
+mysql&gt; GRANT ALL ON menagerie.* TO 'your_mysql_name'@'your_client_host';
+</pre>
+
+здесь <code>your_mysql_name</code> это имя пользователя MySQL, назначенное
+Вам, а <code>your_client_host</code> это узел, от которого
+Вы соединяетесь с сервером.</p>
+
+<h3><a name="creating-database"></a>4.3.1.
+Создание и выбор базы данных</h3>
+<p>Если администратор создает Вашу базу данных для Вас, настраивая Ваши
+разрешения, Вы можете начать использовать ее. Иначе Вы должны
+создать это непосредственно:
+<pre>
+mysql&gt; CREATE DATABASE menagerie;
+</pre>
+
+В Unix имена баз данных являются чувствительными к регистру (в отличие от
+ключевых слов SQL), таким образом, Вы должны всегда обращаться к своей базе
+данных как к <code>menagerie</code>, но не <code>Menagerie</code>,
+<code>MENAGERIE</code> или еще как-то. Это также истина для имен таблиц. Под
+Windows не применяется это ограничение, хотя Вы должны обратиться к базам
+данных и таблицам, используя тот же самый регистр символов всюду по данному
+запросу. Однако, по множеству причин, рекомендуемая передовая практика это
+всегда использовать тот же самый регистр, который использовался, когда
+база данных создавалась.</p>
+
+<p>Если Вы получаете такую ошибку, как <span class="errortext">ERROR 1044
+(42000): Access denied for user 'micah'@'localhost' to database 'menagerie'
+</span>, пытаясь создать базу данных, это означает, что у Вашей учетной
+записи пользователя нет необходимых привилегий.
+Обсудите это с администратором или см.
+<a href="security.html#privilege-system">раздел 7.2</a>.</p>
+
+<p>Создание базы данных не выбирает ее для использования, Вы должны сделать
+это явно. Чтобы сделать <code>menagerie</code>
+текущей базой данных, используйте этот запрос:
+<pre>
+mysql&gt; USE menagerie
+Database changed
+</pre>
+
+Ваша база данных должна быть создана только однажды, но Вы должны выбрать
+ее для использования каждый раз, когда Вы начинаете сессию
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>.
+Вы можете сделать это, выполняя <a href="sql.htm#use"><code>USE</code></a>.
+Альтернативно, Вы можете выбрать базу данных в командной строке, когда Вы
+вызываете <a href="programs.htm#mysql"><span><strong>mysql</strong></span>
+</a>. Только определите имя после любых параметров соединения, которые Вы,
+возможно, должны были бы обеспечить. Например:
+<pre>
+shell&gt; mysql -h <em><code>host</code></em> -u <em><code>user</code></em> -p menagerie
+Enter password: ********
+</pre>
+
+<p><code>menagerie</code> в этой команде
+<span><strong>не</strong></span> Ваш пароль. Если Вы хотите поставлять свой
+пароль в командной строке после <code>-p</code>, Вы должны сделать так без
+пробела (например, как <code>-pmypassword</code>, а не <code>-p
+mypassword</code>). Однако, помещение Вашего пароля в командной строке не
+рекомендуется, потому что выполнение это выставляет его на всеобщее обозрение
+другими пользователями на Вашей машине.</p>
+
+<p>Вы можете видеть в любое время, какая база данных в настоящее время
+выбирается, используя <a href="sql.htm#select"><code>SELECT</code></a>
+<a href="funct.htm#function_database"><code>DATABASE()</code></a>.</p>
+
+<h3><a name="creating-tables"></a>4.3.2. Составление таблицы</h3>
+<p>Создание базы данных является легкой частью, но в этом пункте ее пока нет,
+как показывает <a href="sql.htm#show-tables"><code>SHOW TABLES</code></a>:
+<pre>
+mysql&gt; SHOW TABLES;
+Empty set (0.00 sec)
+</pre>
+Сложней решить, какова структура Вашей базы данных должна быть:
+какие таблицы нужны, каких типов столбцы в них должны быть и т.д.</p>
+
+<p>Вы хотите таблицу, которая содержит запись для каждого из Ваших
+домашних животных. Это можно назвать <code>pet</code>,
+и это должно содержать, как минимум, имя каждого животного.
+Поскольку имя отдельно не очень интересно, таблица должна содержать другую
+информацию. Например, если больше, чем один человек в Вашей семье имеет
+домашних животных, Вы могли бы хотеть перечислить владельца каждого
+животного. Вы могли бы также хотеть сделать запись некоторой основной
+описательной информации, такой как разновидности и пол.</p>
+
+<p>Каков возраст? Это могло бы представлять интерес, но не хорошая идея
+сохранить возраст в базе данных. Изменения возраста все время происходят, так
+что Вы должны были бы часто обновлять свои записи. Вместо этого лучше
+сохранить фиксированное значение, такое как дата рождения. Тогда всякий раз,
+когда Вы нуждаетесь в возрасте, Вы можете вычислить его как различие между
+текущей датой и датой рождения. MySQL обеспечивает функции для того, чтобы
+они сделали арифметику даты, таким образом, это не является трудным.
+У хранения даты рождения, а не возраста есть также другие преимущества:</p>
+
+<ul><li><p>Вы можете использовать базу данных для таких задач,
+как производство напоминаний на наступающие дни рождения. Если Вы думаете,
+что этот тип запроса несколько глуп, отметьте, что это тот же самый вопрос,
+который Вы могли бы создать в контексте деловой базы данных, чтобы
+идентифицировать клиентов, которым Вы должны отослать поздравления с днем
+рождения на текущей неделе или в этом месяце, для индивидуального подхода.
+</li>
+
+<li>Вы можете вычислить возраст относительно дат, кроме текущей даты.
+Например, если Вы храните дату смерти в базе данных, Вы можете легко
+вычислить, какого возраста домашнее животное было, когда умерло.
+</p></li></ul>
+
+<p>Вы можете, вероятно, думать о других типах информации, которая была бы
+полезна в таблице <code>pet</code>, но этого пока достаточно: имя, владелец,
+разновидности, пол и рождение.</p>
+
+<p>Используйте <a href="sql.htm#create-table"><code>CREATE TABLE</code></a>,
+чтобы определить структуру Вашей таблицы:
+<pre>
+mysql&gt; CREATE TABLE pet (name VARCHAR(20), owner VARCHAR(20),
+    -&gt;        species VARCHAR(20), sex CHAR(1), birth DATE, death DATE);
+</pre>
+
+<a href="types.htm#char"><code>VARCHAR</code></a> хороший выбор для
+столбцов <code>name</code>, <code>owner</code> и <code>species</code>,
+потому что значения столбцов изменяются по длине. Длины в тех определениях
+столбца не должны быть теми же самыми и не должны быть <code>20</code>.
+Вы можете обычно выбирать любую длину от <code>1</code> до
+<code>65535</code>, независимо от того, что кажется самым разумным Вам. Если
+Вы делаете короткий столбец и оказывается позже, что Вы нуждаетесь в более
+длинной области, MySQL обеспечивает запрос <a href="sql.htm#alter-table">
+<code>ALTER TABLE</code></a>.</p>
+
+<p>Несколько типов значений могут быть выбраны, чтобы представить пол
+в записях животных, например, <code>'m'</code> и <code>'f'</code> или
+<code>'male'</code> и <code>'female'</code>.
+Является самым простым использовать единственные символы
+<code>'m'</code> и <code>'f'</code>.</p>
+
+<p>Использование типа данных <a href="types.htm#datetime"><code>DATE</code>
+</a> для <code>birth</code> и <code>death</code> довольно очевидный выбор.
+</p>
+
+<p>Как только Вы составили таблицу, <a href="sql.htm#show-tables"><code>SHOW
+TABLES</code></a> должен произвести некоторый вывод:
+<pre>
+mysql&gt; SHOW TABLES;
++---------------------+
+| Tables in menagerie |
++---------------------+
+| pet                 |
++---------------------+
+</pre>
+
+Чтобы проверить, что Ваша таблица была составлена так, как
+Вы ожидали, используйте <a href="sql.htm#describe"><code>DESCRIBE</code></a>:
+<pre>
+mysql&gt; DESCRIBE pet;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| name    | varchar(20) | YES  |     | NULL    |       |
+| owner   | varchar(20) | YES  |     | NULL    |       |
+| species | varchar(20) | YES  |     | NULL    |       |
+| sex     | char(1)     | YES  |     | NULL    |       |
+| birth   | date        | YES  |     | NULL    |       |
+| death   | date        | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+</pre>
+
+Вы можете использовать <a href="sql.htm#describe"><code>DESCRIBE</code></a>
+в любое время, например, если Вы забываете названия столбцов в Вашей таблице
+или типы, которые они имеют.</p>
+
+<h3><a name="loading-tables"></a>4.3.3. Загрузка данных в таблицу</h3>
+<p>После составления Вашей таблицы Вы должны заполнить ее.
+<a href="sql.htm#load-data"><code>LOAD DATA</code></a> и
+<a href="sql.htm#insert"><code>INSERT</code></a> полезны для этого.</p>
+
+<p>Предположите, что Ваши любимые записи могут быть описаны как показано
+здесь. Заметьте, что MySQL ожидает даты в формате <code>'YYYY-MM-DD'</code>,
+это может отличаться от того, к чему Вы привыкли.</p>
+
+<table border="1">
+<thead><tr><th scope="col">name</th><th scope="col">owner</th>
+<th scope="col">species</th><th scope="col">sex</th>
+<th scope="col">birth</th><th scope="col">death</th></tr></thead>
+<tbody><tr><td scope="row">Fluffy</td><td>Harold</td><td>cat</td><td>f</td>
+<td>1993-02-04</td><td> </td></tr>
+<tr><td scope="row">Claws</td><td>Gwen</td><td>cat</td><td>m</td>
+<td>1994-03-17</td><td> </td></tr>
+<tr><td scope="row">Buffy</td><td>Harold</td><td>dog</td><td>f</td>
+<td>1989-05-13</td><td> </td></tr>
+<tr><td scope="row">Fang</td><td>Benny</td><td>dog</td><td>m</td><td>
+1990-08-27</td><td> </td></tr>
+<tr><td scope="row">Bowser</td><td>Diane</td><td>dog</td><td>m</td><td>
+1979-08-31</td><td>1995-07-29</td></tr>
+<tr><td scope="row">Chirpy</td><td>Gwen</td><td>bird</td><td>f</td><td>
+1998-09-11</td><td> </td></tr>
+<tr><td scope="row">Whistler</td><td>Gwen</td><td>bird</td><td> </td>
+<td>1997-12-09</td><td> </td></tr>
+<tr><td scope="row">Slim</td><td>Benny</td><td>snake</td><td>m</td><td>
+1996-04-29</td><td> </td></tr></tbody></table>
+
+<p>Поскольку Вы начинаете с пустой таблицы, легкий способ заполнить это
+состоит в том, чтобы создать текстовый файл, содержащий строку для каждого из
+Ваших животных, затем загрузить содержание файла в
+таблицу единственным запросом.</p>
+
+<p>Вы можете создать текстовый файл <code>pet.txt</code>,
+содержащий один запись на строку со значениями, отделенными табуляцией,
+в том порядке, в котором столбцы были перечислены в
+<a href="sql.htm#create-table"><code>CREATE TABLE</code></a>.
+Для того, чтобы пропустить значения (такие как неизвестный пол или дату
+смерти для животных, которые все еще живут), Вы можете использовать
+<code>NULL</code>. Чтобы представить их в Вашем текстовом файле, надо
+использовать <code>\N</code> (backslash, capital-N).
+Например, запись для птицы Whistler была бы похожа на это
+(где пробел между значениями это единственный символ табуляции):
+<pre>
+Whistler Gwen bird \N 1997-12-09 \N
+</pre>
+
+Загрузить текстовый файл <code>pet.txt</code> в таблицу
+<code>pet</code> можно так:
+<pre>
+mysql&gt; LOAD DATA LOCAL INFILE '/path/pet.txt' INTO TABLE pet;
+</pre>
+
+Если Вы создали файл в Windows редактором, который использует
+<code>\r\n</code> как разделитель строк, Вы должны использовать этот запрос:
+<pre>
+mysql&gt; LOAD DATA LOCAL INFILE '/path/pet.txt' INTO TABLE pet
+    -&gt;      LINES TERMINATED BY '\r\n';
+</pre>
+На Apple под OS X, Вы, вероятно, хотели бы использовать
+<code>LINES TERMINATED BY '\r'</code>.</p>
+
+<p>Вы можете определить разделитель значения столбца и конец маркера строки
+явно в <a href="sql.htm#load-data"><code>LOAD DATA</code></a>, если Вы
+желаете, но значения по умолчанию являются табуляцией и переводом строки.
+Они достаточны для запроса, чтобы считать файл <code>pet.txt</code>.</p>
+
+<p>Если запрос терпит неудачу, вероятно, что Вашей установке MySQL не
+включили местное чтение файла по умолчанию. См.
+<a href="security.html#load-data-local">раздел 7.1.6</a>.</p>
+
+<p>Когда Вы хотите добавить новые записи по одной, используйте запрос
+<a href="sql.htm#insert"><code>INSERT</code></a>. В его самой простой форме
+Вы поставляете значения для каждого столбца, в том порядке, в котором столбцы
+были перечислены в <a href="sql.htm#create-table"><code>CREATE TABLE</code>
+</a>. Предположите, что Диана получает нового хомяка, названного
+<span><span>Puffball</span></span>. Вы могли добавить новую
+запись, используя <a href="sql.htm#insert"><code>INSERT</code></a>:
+<pre>
+mysql&gt; INSERT INTO pet
+    -&gt;        VALUES ('Puffball','Diane','hamster','f','1999-03-30',NULL);
+</pre>
+
+Строки и значения даты определены как заключенные
+определены как заключенные в кавычки строки. Также с
+<a href="sql.htm#insert"><code>INSERT</code></a> Вы можете вставить
+<code>NULL</code> непосредственно, чтобы представлять недостающее значение.
+Вы не используете <code>\N</code> как Вы делаете с
+<a href="sql.htm#load-data"><code>LOAD DATA</code></a>.</p>
+
+<p>Из этого примера Вы должны быть в состоянии видеть, что было бы намного
+больше ввода, чтобы загрузить Ваши записи первоначально, используя несколько
+<a href="sql.htm#insert"><code>INSERT</code></a> вместо
+<a href="sql.htm#load-data"><code>LOAD DATA</code></a>.</p>
+
+<h3><a name="retrieving-data"></a>4.3.4.
+Получение информации от таблицы</h3>
+<p><a href="sql.htm#select"><code>SELECT</code></a> используется, чтобы
+вытянуть информацию из таблицы. Общая форма запроса:
+<pre>
+SELECT <em><code>what_to_select</code></em> FROM <em><code>which_table</code></em>
+       WHERE <em><code>conditions_to_satisfy</code></em>;
+</pre>
+
+<em><code>what_to_select</code></em> указывает на то, что Вы хотите видеть.
+Это может быть списком столбцов или <code>*</code>, чтобы указать
+<span><span>все столбцы</span></span>. <em><code>which_table</code></em>
+указывает на таблицу, от которой Вы хотите получить данные.
+<code>WHERE</code> является дополнительным. Если это присутствует,
+<em><code>conditions_to_satisfy</code></em> определяет одно или более
+условий, которым строки должны удовлетворить, чтобы иметь
+право на извлечение.</p>
+
+<h4><a name="selecting-all"></a>4.3.4.1. Выбор всех данных</h4>
+<p>Самая простая форма <a href="sql.htm#select"><code>SELECT</code></a>
+получает все от таблицы:
+<pre>
+mysql&gt; SELECT * FROM pet;
++----------+--------+---------+------+------------+------------+
+| name     | owner  | species | sex  | birth      | death      |
++----------+--------+---------+------+------------+------------+
+| Fluffy   | Harold | cat     | f    | 1993-02-04 | NULL       |
+| Claws    | Gwen   | cat     | m    | 1994-03-17 | NULL       |
+| Buffy    | Harold | dog     | f    | 1989-05-13 | NULL       |
+| Fang     | Benny  | dog     | m    | 1990-08-27 | NULL       |
+| Bowser   | Diane  | dog     | m    | 1979-08-31 | 1995-07-29 |
+| Chirpy   | Gwen   | bird    | f    | 1998-09-11 | NULL       |
+| Whistler | Gwen   | bird    | NULL | 1997-12-09 | NULL       |
+| Slim     | Benny  | snake   | m    | 1996-04-29 | NULL       |
+| Puffball | Diane  | hamster | f    | 1999-03-30 | NULL       |
++----------+--------+---------+------+------------+------------+
+</pre>
+
+Эта форма <a href="sql.htm#select"><code>SELECT</code></a> полезна, если
+Вы хотите рассмотреть всю таблицу, например, после того, как Вы только что
+загрузили ее своей группой исходных данных. Например, Вы думаете, что дата
+рождения Bowser не кажется правильной. Консультируясь с Вашей оригинальной
+родословной животного, Вы находите, что правильный год рождения
+должен быть 1989, а не 1979.</p>
+
+<p>Есть по крайней мере два способа исправить это:</p>
+<ul><li><p>Отредактируйте файл <code class="filename">pet.txt</code>, чтобы
+исправить ошибку, освободите таблицу и перезагрузите ее с использованием
+<a href="sql.htm#delete"><code>DELETE</code></a> и
+<a href="sql.htm#load-data"><code>LOAD DATA</code></a>:
+<pre>
+mysql&gt; DELETE FROM pet;
+mysql&gt; LOAD DATA LOCAL INFILE 'pet.txt' INTO TABLE pet;
+</pre>
+Однако, если Вы делаете это, Вы должны также повторно ввести
+запись для Puffball.</li>
+
+<li>Исправьте только ошибочную запись с помощью
+<a href="sql.htm#update"><code>UPDATE</code></a>:
+<pre>
+mysql&gt; UPDATE pet SET birth = '1989-08-31'
+                 WHERE name = 'Bowser';
+</pre>
+
+<a href="sql.htm#update"><code>UPDATE</code></a> изменяет только
+рассматриваемую запись и не требует, чтобы Вы перезагрузили таблицу.
+</p></li></ul>
+
+<h4><a name="selecting-rows"></a>4.3.4.2. Выбор особых строк</h4>
+<p>Как показано в предыдущем разделе, легко получить всю таблицу.
+Только опустите <code>WHERE</code> в <a href="sql.htm#select"><code>SELECT
+</code></a>. Но, как правило, Вы не хотите видеть всю таблицу, особенно когда
+это становится большим. Вместо этого Вы обычно больше интересуетесь ответом
+на особый вопрос, когда Вы определяете некоторые ограничения на информацию,
+которую Вы хотите. Давайте смотреть на некоторые запросы выбора с точки
+зрения вопросов о Ваших домашних животных, на которые они отвечают.</p>
+
+<p>Вы можете выбрать только особые строки из своей таблицы. Например, если Вы
+хотите проверить изменение, которое Вы производили в дате рождения
+Bowser, выберите запись Bowser:
+<pre>
+mysql&gt; SELECT * FROM pet WHERE name = 'Bowser';
++--------+-------+---------+------+------------+------------+
+| name   | owner | species | sex  | birth      | death      |
++--------+-------+---------+------+------------+------------+
+| Bowser | Diane | dog     | m    | 1989-08-31 | 1995-07-29 |
++--------+-------+---------+------+------------+------------+
+</pre>
+Вывод подтверждает, что год правильно зарегистрирован как 1989, а не 1979.
+</p>
+
+<p>Строковые сравнения обычно являются нечувствительными к регистру,
+таким образом, Вы можете определить имя как <code>'bowser'</code>,
+<code>'BOWSER'</code> и т.д. Результат запроса тот же самый.</p>
+
+<p>Вы можете определить условия на любом столбце, а не только на
+<code>name</code>. Например, если Вы хотите знать, какие животные родились
+во время или после 1998, проверьте столбец <code>birth</code>:
+<pre>
+mysql&gt; SELECT * FROM pet WHERE birth &gt;= '1998-1-1';
++----------+-------+---------+------+------------+-------+
+| name     | owner | species | sex  | birth      | death |
++----------+-------+---------+------+------------+-------+
+| Chirpy   | Gwen  | bird    | f    | 1998-09-11 | NULL  |
+| Puffball | Diane | hamster | f    | 1999-03-30 | NULL  |
++----------+-------+---------+------+------------+-------+
+</pre>
+
+Вы можете объединить условия, например, определить сук:
+<pre>
+mysql&gt; SELECT * FROM pet WHERE species = 'dog' AND sex = 'f';
++-------+--------+---------+------+------------+-------+
+| name  | owner  | species | sex  | birth      | death |
++-------+--------+---------+------+------------+-------+
+| Buffy | Harold | dog     | f    | 1989-05-13 | NULL  |
++-------+--------+---------+------+------------+-------+
+</pre>
+
+Предыдущий запрос использует логический оператор
+<a href="funct.htm#operator_and"><code>AND</code></a>.
+Есть также <a href="funct.htm#operator_or"><code>OR</code></a>:
+<pre>
+mysql&gt; SELECT * FROM pet WHERE species = 'snake' OR species = 'bird';
++----------+-------+---------+------+------------+-------+
+| name     | owner | species | sex  | birth      | death |
++----------+-------+---------+------+------------+-------+
+| Chirpy   | Gwen  | bird    | f    | 1998-09-11 | NULL  |
+| Whistler | Gwen  | bird    | NULL | 1997-12-09 | NULL  |
+| Slim     | Benny | snake   | m    | 1996-04-29 | NULL  |
++----------+-------+---------+------+------------+-------+
+</pre>
+
+<a href="funct.htm#operator_and"><code>AND</code></a> и
+<a href="funct.htm#operator_or"><code>OR</code></a> могут быть смешаны, хотя
+<a href="funct.htm#operator_and"><code>AND</code></a> имеет более высокий
+приоритет, чем <a href="funct.htm#operator_or"><code>OR</code></a>.
+Если Вы используете оба оператора, хорошая идея использовать круглые скобки,
+чтобы указать явно, как должны быть сгруппированы условия:
+<pre>
+mysql&gt; SELECT * FROM pet WHERE (species = 'cat' AND sex = 'm') OR
+    -&gt;        (species = 'dog' AND sex = 'f');
++-------+--------+---------+-----+------------+-------+
+| name  | owner  | species | sex | birth      | death |
++-------+--------+---------+-----+------------+-------+
+| Claws | Gwen   | cat     | m   | 1994-03-17 | NULL  |
+| Buffy | Harold | dog     | f   | 1989-05-13 | NULL  |
++-------+--------+---------+-----+------------+-------+
+</pre>
+
+<h4><a name="selecting-columns"></a>4.3.4.3.
+Выбор особых столбцов</h4>
+<p>Если Вы не хотите видеть все строки от своей таблицы,
+только называйте столбцы, которыми Вы интересуетесь, отделенные запятыми.
+Например, если Вы хотите знать, когда Ваши животные родились, выберите
+столбцы <code>name</code> и <code>birth</code>:
+<pre>
+mysql&gt; SELECT name, birth FROM pet;
++----------+------------+
+| name     | birth      |
++----------+------------+
+| Fluffy   | 1993-02-04 |
+| Claws    | 1994-03-17 |
+| Buffy    | 1989-05-13 |
+| Fang     | 1990-08-27 |
+| Bowser   | 1989-08-31 |
+| Chirpy   | 1998-09-11 |
+| Whistler | 1997-12-09 |
+| Slim     | 1996-04-29 |
+| Puffball | 1999-03-30 |
++----------+------------+
+</pre>
+
+Чтобы узнать, кому принадлежат домашние животные, используйте этот запрос:
+<pre>
+mysql&gt; SELECT owner FROM pet;
++--------+
+| owner  |
++--------+
+| Harold |
+| Gwen   |
+| Harold |
+| Benny  |
+| Diane  |
+| Gwen   |
+| Gwen   |
+| Benny  |
+| Diane  |
++--------+
+</pre>
+
+<p>Заметьте, что запрос просто получает столбец <code>owner</code>
+от каждой записи, и некоторые из них появляются не раз. Чтобы минимизировать
+вывод, получите каждую уникальную запись только однажды,
+добавляя ключевое слово <code>DISTINCT</code>:
+<pre>
+mysql&gt; SELECT DISTINCT owner FROM pet;
++--------+
+| owner  |
++--------+
+| Benny  |
+| Diane  |
+| Gwen   |
+| Harold |
++--------+
+</pre>
+
+Вы можете использовать <code>WHERE</code>, чтобы объединить выбор строки с
+выбором столбца. Например, чтобы получить даты рождения только собак и кошек,
+используйте этот запрос:
+<pre>
+mysql&gt; SELECT name, species, birth FROM pet
+    -&gt;        WHERE species = 'dog' OR species = 'cat';
++--------+---------+------------+
+| name   | species | birth      |
++--------+---------+------------+
+| Fluffy | cat     | 1993-02-04 |
+| Claws  | cat     | 1994-03-17 |
+| Buffy  | dog     | 1989-05-13 |
+| Fang   | dog     | 1990-08-27 |
+| Bowser | dog     | 1989-08-31 |
++--------+---------+------------+
+</pre>
+
+<h4><a name="sorting-rows"></a>4.3.4.4. Сортировка строк</h4>
+<p>Вы, возможно, заметили в предыдущих примерах, что строки результата
+выведены на экран без определенного порядка. Часто легче исследовать
+вывод запроса, когда строки сортированы некоторым значащим способом.
+Чтобы сортировать результат, используйте <code>ORDER BY</code>.</p>
+
+<p>Вот дни рождения животных, отсортированные по времени:
+<pre>
+mysql&gt; SELECT name, birth FROM pet ORDER BY birth;
++----------+------------+
+| name     | birth      |
++----------+------------+
+| Buffy    | 1989-05-13 |
+| Bowser   | 1989-08-31 |
+| Fang     | 1990-08-27 |
+| Fluffy   | 1993-02-04 |
+| Claws    | 1994-03-17 |
+| Slim     | 1996-04-29 |
+| Whistler | 1997-12-09 |
+| Chirpy   | 1998-09-11 |
+| Puffball | 1999-03-30 |
++----------+------------+
+</pre>
+
+На символьных столбцах тип сортировки, как все другие операции сравнения,
+обычно выполняется нечувствительным к регистру.
+Это означает, что порядок неопределен для столбцов, которые идентичны за
+исключением их регистра. Вы можете вызвать чувствительный к регистру вид
+сортировки для столбца при использовании
+<a href="funct.htm#operator_binary"><code>BINARY</code></a>:
+<code>ORDER BY BINARY <em><code>col_name</code></em></code>.</p>
+
+<p>Порядок сортировки по умолчанию поднимается, с самыми маленькими
+значениями сначала. Для сортировки в обратном (убывающем) порядке, добавьте
+ключевое слово <code>DESC</code> к названию столбца, который Вы сортируете:
+<pre>
+mysql&gt; SELECT name, birth FROM pet ORDER BY birth DESC;
++----------+------------+
+| name     | birth      |
++----------+------------+
+| Puffball | 1999-03-30 |
+| Chirpy   | 1998-09-11 |
+| Whistler | 1997-12-09 |
+| Slim     | 1996-04-29 |
+| Claws    | 1994-03-17 |
+| Fluffy   | 1993-02-04 |
+| Fang     | 1990-08-27 |
+| Bowser   | 1989-08-31 |
+| Buffy    | 1989-05-13 |
++----------+------------+
+</pre>
+
+Вы можете сортировать на многократных столбцах, и Вы можете сортировать
+различные столбцы в различных направлениях. Например, сортировка по
+типу животного в порядке возрастания, затем по дате рождения в пределах типа
+животных в порядке убывания (самые молодые животные сначала)
+использует следующий запрос:
+<pre>
+mysql&gt; SELECT name, species, birth FROM pet
+    -&gt;        ORDER BY species, birth DESC;
++----------+---------+------------+
+| name     | species | birth      |
++----------+---------+------------+
+| Chirpy   | bird    | 1998-09-11 |
+| Whistler | bird    | 1997-12-09 |
+| Claws    | cat     | 1994-03-17 |
+| Fluffy   | cat     | 1993-02-04 |
+| Fang     | dog     | 1990-08-27 |
+| Bowser   | dog     | 1989-08-31 |
+| Buffy    | dog     | 1989-05-13 |
+| Puffball | hamster | 1999-03-30 |
+| Slim     | snake   | 1996-04-29 |
++----------+---------+------------+
+</pre>
+
+<code>DESC</code> применяется только к имени столбца, немедленно
+предшествующему этому (<code>birth</code>), это не затрагивает
+порядок сортировки столбца <code>species</code>.</p>
+
+<h4><a name="date-calculations"></a>4.3.4.5. Вычисления даты</h4>
+<p>MySQL обеспечивает несколько функций, которые Вы можете использовать,
+чтобы выполнить вычисления с датами, например, вычислить возрасты или
+части извлечения дат.</p>
+
+<p>Чтобы определить, сколько лет каждому из Ваших домашних животных,
+используйте <a href="funct.htm#function_timestampdiff"><code>TIMESTAMPDIFF()
+</code></a>. Параметры это единицы, в которых Вы хотите выразить результат,
+и две даты, для которых нужно взять различие.
+Следующий запрос показывает для каждого домашнего животного дату рождения,
+текущую дату и возраст в годах. <span><em>Псевдоним</em></span>
+(<code>age</code>) используется, чтобы сделать метку столбца окончательного
+результата более значащей.
+<pre>
+mysql&gt; SELECT name, birth, CURDATE(),
+    -&gt;        TIMESTAMPDIFF(YEAR,birth,CURDATE()) AS age
+    -&gt;        FROM pet;
++----------+------------+------------+-----+
+| name     | birth      | CURDATE()  | age |
++----------+------------+------------+-----+
+| Fluffy   | 1993-02-04 | 2003-08-19 | 10  |
+| Claws    | 1994-03-17 | 2003-08-19 |  9  |
+| Buffy    | 1989-05-13 | 2003-08-19 |  14 |
+| Fang     | 1990-08-27 | 2003-08-19 |  12 |
+| Bowser   | 1989-08-31 | 2003-08-19 |  13 |
+| Chirpy   | 1998-09-11 | 2003-08-19 |  4  |
+| Whistler | 1997-12-09 | 2003-08-19 |  5  |
+| Slim     | 1996-04-29 | 2003-08-19 |  7  |
+| Puffball | 1999-03-30 | 2003-08-19 |  4  |
++----------+------------+------------+-----+
+</pre>
+
+Запрос работает, но результат могли быть просмотрены более легко, если бы
+строки были представлены в некотором порядке. Это может быть сделано,
+добавляя <code>ORDER BY name</code>, чтобы сортировать вывод по имени:
+<pre>
+mysql&gt; SELECT name, birth, CURDATE(),
+    -&gt;        TIMESTAMPDIFF(YEAR,birth,CURDATE()) AS age
+    -&gt;        FROM pet ORDER BY name;
++----------+------------+------------+-----+
+| name     | birth      | CURDATE()  | age |
++----------+------------+------------+-----+
+| Bowser   | 1989-08-31 | 2003-08-19 |  13 |
+| Buffy    | 1989-05-13 | 2003-08-19 |  14 |
+| Chirpy   | 1998-09-11 | 2003-08-19 |  4  |
+| Claws    | 1994-03-17 | 2003-08-19 |  9  |
+| Fang     | 1990-08-27 | 2003-08-19 |  12 |
+| Fluffy   | 1993-02-04 | 2003-08-19 |  10 |
+| Puffball | 1999-03-30 | 2003-08-19 | 4   |
+| Slim     | 1996-04-29 | 2003-08-19 | 7   |
+| Whistler | 1997-12-09 | 2003-08-19 | 5   |
++----------+------------+------------+-----+
+</pre>
+
+Чтобы отсортировать вывод по <code>age</code> вместо
+<code>name</code>, используйте различный <code>ORDER BY</code>:
+<pre>
+mysql&gt; SELECT name, birth, CURDATE(),
+    -&gt;        TIMESTAMPDIFF(YEAR, birth, CURDATE()) AS age
+    -&gt;        FROM pet ORDER BY age;
++----------+------------+------------+-----+
+| name     | birth      | CURDATE()  | age |
++----------+------------+------------+-----+
+| Chirpy   | 1998-09-11 | 2003-08-19 | 4   |
+| Puffball | 1999-03-30 | 2003-08-19 | 4   |
+| Whistler | 1997-12-09 | 2003-08-19 | 5   |
+| Slim     | 1996-04-29 | 2003-08-19 | 7   |
+| Claws    | 1994-03-17 | 2003-08-19 | 9   |
+| Fluffy   | 1993-02-04 | 2003-08-19 | 10  |
+| Fang     | 1990-08-27 | 2003-08-19 | 12  |
+| Bowser   | 1989-08-31 | 2003-08-19 | 13  |
+| Buffy    | 1989-05-13 | 2003-08-19 | 14  |
++----------+------------+------------+-----+
+</pre>
+
+Подобный запрос может использоваться, чтобы определить возраст
+для животных, которые умерли. Вы определяете, какие это животные, проверяя,
+что <code>death</code> это <code>NULL</code>. Тогда, для животных со
+значениями не-<code>NULL</code> вычислите различие
+между <code>death</code> и <code>birth</code>:
+<pre>
+mysql&gt; SELECT name, birth, death,
+    -&gt;        TIMESTAMPDIFF(YEAR,birth,death) AS age
+    -&gt;        FROM pet WHERE death IS NOT NULL ORDER BY age;
++--------+------------+------------+------+
+| name   | birth      | death      | age  |
++--------+------------+------------+------+
+| Bowser | 1989-08-31 | 1995-07-29 | 5    |
++--------+------------+------------+------+
+</pre>
+
+Запрос применяет <code>death IS NOT NULL</code> вместо
+<code>death &lt;&gt; NULL</code> так как <code>NULL</code> это
+специальное значение, которое не может быть сравнено, используя обычные
+операторы сравнения. Это обсуждено позже. См.
+<a href="tutorial.html#working-with-null">раздел 4.3.4.6</a>.</p>
+
+<p>Что, если Вы хотите знать, у каких животных есть дни рождения в следующем
+месяце? Для этого типа вычисления год и день не важны: Вы просто хотите
+извлечь часть месяца столбца <code>birth</code>. MySQL обеспечивает несколько
+функций для того, чтобы они извлекли части дат, например,
+<a href="funct.htm#function_year"><code>YEAR()</code></a>,
+<a href="funct.htm#function_month"><code>MONTH()</code></a> и
+<a href="funct.htm#function_dayofmonth"><code>DAYOFMONTH()</code></a>.
+<a href="funct.htm#function_month"><code>MONTH()</code></a> как раз
+соответствующая функция здесь. Чтобы видеть, как это работает, выполните
+простой запрос, который выводит на экран значение <code>birth</code> и
+<a href="funct.htm#function_month"><code>MONTH(birth)</code></a>:
+<pre>
+mysql&gt; SELECT name, birth, MONTH(birth) FROM pet;
++----------+------------+--------------+
+| name     | birth      | MONTH(birth) |
++----------+------------+--------------+
+| Fluffy   | 1993-02-04 | 2            |
+| Claws    | 1994-03-17 | 3            |
+| Buffy    | 1989-05-13 | 5            |
+| Fang     | 1990-08-27 | 8            |
+| Bowser   | 1989-08-31 | 8            |
+| Chirpy   | 1998-09-11 | 9            |
+| Whistler | 1997-12-09 | 12           |
+| Slim     | 1996-04-29 | 4            |
+| Puffball | 1999-03-30 | 3            |
++----------+------------+--------------+
+</pre>
+
+Обнаружение животных с днями рождения в наступающем месяце также просто.
+Предположите, что текущий месяц апрель. Тогда значение месяца <code>4</code>
+и Вы можете искать животных, родившихся в мае (месяц <code>5</code>):
+<pre>
+mysql&gt; SELECT name, birth FROM pet WHERE MONTH(birth) = 5;
++-------+------------+
+| name  | birth      |
++-------+------------+
+| Buffy | 1989-05-13 |
++-------+------------+
+</pre>
+
+Есть маленькое осложнение, если текущий месяц декабрь. Вы не можете просто
+добавить единицу к числу месяца (<code>12</code>)
+и получить животных, родившихся в месяце <code>13</code>,
+потому что нет такого месяца. Вместо этого Вы ищете животных,
+родившихся в январе (месяц <code>1</code>).</p>
+
+<p>Вы можете написать запрос так, чтобы он работал независимо от того,
+каков текущий месяц, так, чтобы Вы не использовали число, чтобы указать
+месяц. <a href="funct.htm#function_date-add"><code>DATE_ADD()</code></a>
+позволяет Вам добавить временной интервал к данной дате. Если Вы добавляете
+месяц к значению <a href="funct.htm#function_curdate"><code>CURDATE()</code>
+</a>, тогда извлеките часть месяца с <a href="funct.htm#function_month">
+<code>MONTH()</code></a>, результат производит месяц, в котором можно
+искать дни рождения:
+<pre>
+mysql&gt; SELECT name, birth FROM pet
+    -&gt;        WHERE MONTH(birth) = MONTH(DATE_ADD(CURDATE(),INTERVAL 1 MONTH));
+</pre>
+
+Другой способ выполнить ту же самую задачу состоит в том, чтобы добавить
+<code>1</code>, чтобы получить следующий месяц после текущего
+после использования функции модуля (<code>MOD</code>), чтобы сделать
+значение месяца <code>0</code>, если это в настоящее время <code>12</code>:
+<pre>
+mysql&gt; SELECT name, birth FROM pet
+    -&gt;        WHERE MONTH(birth) = MOD(MONTH(CURDATE()), 12) + 1;
+</pre>
+
+<a href="funct.htm#function_month"><code>MONTH()</code></a>
+возвращает число между <code>1</code> и <code>12</code>. И
+<a href="funct.htm#function_mod"><code>MOD(something,12)</code></a>
+возвращает число между <code>0</code> и <code>11</code>.
+Таким образом, дополнение должно быть после
+<a href="funct.htm#function_mod"><code>MOD()</code></a>,
+иначе мы пошли бы с ноября (<code>11</code>) в январь (<code>1</code>).</p>
+
+<h4><a name="working-with-null"></a>4.3.4.6. Работа с нулевыми значениями
+</h4>
+<p><code>NULL</code> может быть удивительным, пока Вы не привыкаете к нему.
+Концептуально, <code>NULL</code> значит
+<span><span>недостающее неизвестное значение</span></span>
+и это обработано несколько по-другому.</p>
+
+<p>Чтобы проверить на <code>NULL</code>, примените операторы
+<a href="funct.htm#operator_is-null"><code>IS NULL</code></a> и
+<a href="funct.htm#operator_is-not-null"><code>IS NOT NULL</code></a>:
+<pre>
+mysql&gt; SELECT 1 IS NULL, 1 IS NOT NULL;
++-----------+---------------+
+| 1 IS NULL | 1 IS NOT NULL |
++-----------+---------------+
+| 0         | 1             |
++-----------+---------------+
+</pre>
+
+Вы не можете использовать арифметические операторы сравнения, например,
+<a href="funct.htm#operator_equal"><code>=</code></a>,
+<a href="funct.htm#operator_less-than"><code>&lt;</code></a> или
+<a href="funct.htm#operator_not-equal"><code>&lt;&gt;</code></a>, чтобы
+проверить на <code>NULL</code>.
+Чтобы продемонстрировать это для вас непосредственно,
+попробуйте следующий запрос:
+<pre>
+mysql&gt; SELECT 1 = NULL, 1 &lt;&gt; NULL, 1 &lt; NULL, 1 &gt; NULL;
++----------+-----------+----------+----------+
+| 1 = NULL | 1 &lt;&gt; NULL | 1 &lt; NULL | 1 &gt; NULL |
++----------+-----------+----------+----------+
+| NULL     | NULL      | NULL     | NULL     |
++----------+-----------+----------+----------+
+</pre>
+
+Поскольку результат любого арифметического сравнения с
+<code>NULL</code> тоже <code>NULL</code>,
+Вы не можете получить значащие следствия таких сравнений.
+</p>
+
+<p>В MySQL <code>0</code> или <code>NULL</code>
+означает ложный, а что-либо еще означает истину. Значение true по умолчанию
+от логической операции <code>1</code>.</p>
+
+<p>Специальный режим <code>NULL</code> объясняет, почему
+в предыдущем разделе было необходимо определить, какие животные больше не
+живы, с использованием <code>death IS NOT NULL</code>
+вместо <code>death &lt;&gt; NULL</code>.</p>
+
+<p>Два значения <code>NULL</code> расценены как
+равные в <code>GROUP BY</code>.</p>
+<p>Делая <code>ORDER BY</code>, значения <code>NULL</code>
+представлены сначала, если Вы делаете <code>ORDER BY ... ASC</code> и
+последними для <code>ORDER BY ... DESC</code>.</p>
+
+<p>Распространенная ошибка, работая с <code>NULL</code>, это
+предположить, что невозможно вставить ноль или пустую строку в столбец,
+определенный как <code>NOT NULL</code>, но дело обстоит не так.
+Они фактически значения, тогда как <code>NULL</code> значит
+<span><span>нет значения вообще</span></span>. Вы можете проверить это
+достаточно легко при использовании <code>IS [NOT] NULL</code>:
+<pre>
+mysql&gt; SELECT 0 IS NULL, 0 IS NOT NULL, '' IS NULL, '' IS NOT NULL;
++-----------+---------------+------------+----------------+
+| 0 IS NULL | 0 IS NOT NULL | '' IS NULL | '' IS NOT NULL |
++-----------+---------------+------------+----------------+
+| 0         | 1             |   0        |   1            |
++-----------+---------------+------------+----------------+
+</pre>
+
+Таким образом полностью возможно вставить нулевое значение или пустую строку
+в столбец <code>NOT NULL</code>, так как они фактически и есть
+<code>NOT NULL</code>. См. <a href="error.htm#problems-with-null">раздел
+B.5.4.3</a>.</p>
+
+<h4><a name="pattern-matching"></a>4.3.4.7. Соответствие образцу</h4>
+<p>MySQL обеспечивает стандартное соответствие образца SQL так же как форму
+образца, соответствующего основанному на расширенных регулярных выражениях,
+подобных используемым утилитами Unix, такими как
+<span><strong>vi</strong></span>, <span><strong>grep</strong></span> и
+<span><strong>sed</strong></span>.</p>
+
+<p>Образец SQL позволяет Вам использовать <code>_</code>, чтобы
+соответствовать любому единственному символу и <code>%</code>, чтобы
+соответствовать произвольному числу символов (включая нуль символов). В MySQL
+образцы SQL являются нечувствительными к регистру по умолчанию. Некоторые
+примеры показывают здесь. Вы не используете <code>=</code> или
+<code>&lt;&gt;</code> с SQL-шаблонами, воспользуйтесь операторами
+<a href="funct.htm#operator_like"><code>LIKE</code></a> или
+<a href="funct.htm#operator_not-like"><code>NOT LIKE</code></a> вместо этого.
+</p>
+
+<p>Найти имена, начинающиеся с <code>b</code>:
+<pre>
+mysql&gt; SELECT * FROM pet WHERE name LIKE 'b%';
++--------+--------+---------+-----+------------+------------+
+| name   | owner  | species | sex | birth      | death      |
++--------+--------+---------+-----+------------+------------+
+| Buffy  | Harold | dog     | f   | 1989-05-13 | NULL       |
+| Bowser | Diane  | dog     | m   | 1989-08-31 | 1995-07-29 |
++--------+--------+---------+-----+------------+------------+
+</pre>
+
+Найти имена, заканчивающиеся на <code>fy</code>:
+<pre>
+mysql&gt; SELECT * FROM pet WHERE name LIKE '%fy';
++--------+--------+---------+-----+------------+-------+
+| name   | owner  | species | sex | birth      | death |
++--------+--------+---------+-----+------------+-------+
+| Fluffy | Harold | cat     | f   | 1993-02-04 | NULL  |
+| Buffy  | Harold | dog     | f   | 1989-05-13 | NULL  |
++--------+--------+---------+-----+------------+-------+
+</pre>
+
+Найти имена, содержащие <code>w</code>:
+<pre>
+mysql&gt; SELECT * FROM pet WHERE name LIKE '%w%';
++----------+-------+---------+------+------------+------------+
+| name     | owner | species | sex  | birth      | death      |
++----------+-------+---------+------+------------+------------+
+| Claws    | Gwen  | cat     | m    | 1994-03-17 | NULL       |
+| Bowser   | Diane | dog     | m    | 1989-08-31 | 1995-07-29 |
+| Whistler | Gwen  | bird    | NULL | 1997-12-09 | NULL       |
++----------+-------+---------+------+------------+------------+
+</pre>
+
+Чтобы найти имена, содержащие точно пять символов, используйте пять
+экземпляров символа шаблона <code>_</code>:
+<pre>
+mysql&gt; SELECT * FROM pet WHERE name LIKE '_____';
++-------+--------+---------+-----+------------+-------+
+| name  | owner  | species | sex | birth      | death |
++-------+--------+---------+-----+------------+-------+
+| Claws | Gwen   | cat     | m   | 1994-03-17 | NULL  |
+| Buffy | Harold | dog     | f   | 1989-05-13 | NULL  |
++-------+--------+---------+-----+------------+-------+
+</pre>
+
+Другой тип образца, обеспеченный MySQL использует регулярные выражения. Когда
+Вы проверяете на соответствующие этому типу образцы, используйте
+<a href="funct.htm#operator_regexp"><code>REGEXP</code></a> и
+<a href="funct.htm#operator_not-regexp"><code>NOT REGEXP</code></a>
+(или синонимы <a href="funct.htm#operator_regexp"><code>RLIKE</code></a> и
+<a href="funct.htm#operator_not-regexp"><code>NOT RLIKE</code></a>).</p>
+
+<p>Следующий список описывает некоторые характеристики
+расширенных регулярных выражений:</p>
+<ul><li><p><code>.</code> соответствует любому единственному символу.</li>
+<li>Символьный класс <code>[...]</code> соответствует
+любому символу в пределах скобок. Например, <code>[abc]</code> соответствует
+<code>a</code>, <code>b</code> или <code>c</code>.
+Чтобы назвать диапазон символов, используйте тире. <code>[a-z]</code>
+соответствует любой латинской букве, <code>[0-9]</code> любой цифре.</li>
+
+<li><code>*</code> соответствует нулю или больше экземпляров объекта,
+предшествующего этому. Например, <code>x*</code> соответствует любому числу
+символов <code>x</code> (возможно, 0), <code>[0-9]*</code> соответствует
+любому числу цифр, а <code>.*</code> соответствует любому
+количеству чего угодно.</li>
+
+<li>Соответствие образца <a href="funct.htm#operator_regexp"><code>REGEXP
+</code></a> преуспевает, если образец соответствует где-нибудь в проверяемом
+значении. Это отличается от <a href="funct.htm#operator_like"><code>LIKE
+</code></a>, которое преуспевает, только если образец
+соответствует всему значению.</li>
+
+<li>Чтобы поставить на якорь образец так, чтобы это соответствовало
+началу или концу проверяемого значения, надо использовать
+<code>^</code> для начала или <code>$</code> в конце образца.</p></li></ul>
+
+<p>Чтобы продемонстрировать, как расширенные регулярные выражения работают,
+запросы <a href="funct.htm#operator_like"><code>LIKE</code></a>, показанные
+ранее, переписаны здесь, чтобы использовать
+<a href="funct.htm#operator_regexp"><code>REGEXP</code></a>.</p>
+
+<p>Чтобы найти имена, начинающиеся с <code>b</code>, примените
+<code>^</code>, чтобы соответствовать началу имени:
+<pre>
+mysql&gt; SELECT * FROM pet WHERE name REGEXP '^b';
++--------+--------+---------+-----+------------+------------+
+| name   | owner  | species | sex | birth      | death      |
++--------+--------+---------+-----+------------+------------+
+| Buffy  | Harold | dog     | f   | 1989-05-13 | NULL       |
+| Bowser | Diane  | dog     | m   | 1989-08-31 | 1995-07-29 |
++--------+--------+---------+-----+------------+------------+
+</pre>
+
+Если Вы действительно хотите, чтобы сравнение
+<a href="funct.htm#operator_regexp"><code>REGEXP</code></a> было
+чувствительным к регистру, используйте <a href="funct.htm#operator_binary">
+<code>BINARY</code></a>, чтобы сделать одну из строк двоичной строкой. Этот
+запрос соответствует только нижнему регистру <code>b</code> в начале имени:
+<pre>
+mysql&gt; SELECT * FROM pet WHERE name REGEXP BINARY '^b';
+</pre>
+
+Чтобы найти имена, заканчивающиеся на <code>fy</code>, примените
+<code>$</code>, чтобы соответствовать концу имени:
+<pre>
+mysql&gt; SELECT * FROM pet WHERE name REGEXP 'fy$';
++--------+--------+---------+-----+------------+-------+
+| name   | owner  | species | sex | birth      | death |
++--------+--------+---------+-----+------------+-------+
+| Fluffy | Harold | cat     | f   | 1993-02-04 | NULL  |
+| Buffy  | Harold | dog     | f   | 1989-05-13 | NULL  |
++--------+--------+---------+-----+------------+-------+
+</pre>
+
+Чтобы найти имена, содержащие <code>w</code> в любом месте,
+используйте этот запрос:
+<pre>
+mysql&gt; SELECT * FROM pet WHERE name REGEXP 'w';
++----------+-------+---------+------+------------+------------+
+| name     | owner | species | sex  | birth      | death      |
++----------+-------+---------+------+------------+------------+
+| Claws    | Gwen  | cat     | m    | 1994-03-17 | NULL       |
+| Bowser   | Diane | dog     | m    | 1989-08-31 | 1995-07-29 |
+| Whistler | Gwen  | bird    | NULL | 1997-12-09 | NULL       |
++----------+-------+---------+------+------------+------------+
+</pre>
+
+Поскольку регулярный характер выражений соответствует, если он происходит
+где-нибудь в значении, не надо в предыдущем запросе помещать подстановочный
+знак по обе стороны от образца, чтобы соответствовать всему значению, как это
+было бы, если бы Вы использовали образец SQL.</p>
+
+<p>Чтобы найти имена, содержащие точно пять символов, надо использовать
+<code>^</code> и <code>$</code>, чтобы соответствовать началу и концу имени,
+и точно пять копий <code>.</code> между ними:
+<pre>
+mysql&gt; SELECT * FROM pet WHERE name REGEXP '^.....$';
++-------+--------+---------+------+------------+-------+
+| name  | owner  | species | sex  | birth| death |
++-------+--------+---------+------+------------+-------+
+| Claws | Gwen   | cat | m| 1994-03-17 | NULL  |
+| Buffy | Harold | dog | f| 1989-05-13 | NULL  |
++-------+--------+---------+------+------------+-------+
+</pre>
+
+Вы могли также написать предыдущий запрос, используя оператор
+<code>{<em><code>n</code></em>}</code>
+(<span><span>повторить <em><code>n</code></em> раз</span></span>):
+<pre>
+mysql&gt; SELECT * FROM pet WHERE name REGEXP '^.{5}$';
++-------+--------+---------+------+------------+-------+
+| name  | owner  | species | sex  | birth| death |
++-------+--------+---------+------+------------+-------+
+| Claws | Gwen   | cat | m| 1994-03-17 | NULL  |
+| Buffy | Harold | dog | f| 1989-05-13 | NULL  |
++-------+--------+---------+------+------------+-------+
+</pre>
+См. <a href="funct.htm#regexp">раздел 13.5.2</a>.</p>
+
+<h4><a name="counting-rows"></a>4.3.4.8. Подсчет строк</h4>
+<p>Базы данных часто используются, чтобы ответить на вопрос
+<span><span>Как часто определенный тип данных встречается в таблице?
+</span></span>. Например, Вы могли бы хотеть знать, сколько домашних животных
+Вы имеете, сколько домашних животных каждый владелец имеет или Вы могли бы
+хотеть выполнить различные виды операций переписи на Ваших животных.</p>
+
+<p>Подсчет общего количества животных, которых Вы имеете, является тем же
+самым вопросом как <span><span>Сколько строк находится в таблице
+<code>pet</code>?</span></span>, потому что есть одна запись на домашнее
+животное. <a href="funct.htm#function_count"><code>COUNT(*)</code></a>
+считает число строк, таким образом, запрос, чтобы посчитать Ваших животных
+похож на это:
+<pre>
+mysql&gt; SELECT COUNT(*) FROM pet;
++----------+
+| COUNT(*) |
++----------+
+| 9        |
++----------+
+</pre>
+
+Ранее Вы получали имена людей, которым принадлежали домашние животные. Вы
+можете использовать <a href="funct.htm#function_count"><code>COUNT()</code>
+</a>, если Вы хотите узнать, сколько домашних животных каждый владелец имеет:
+<pre>
+mysql&gt; SELECT owner, COUNT(*) FROM pet GROUP BY owner;
++--------+----------+
+| owner  | COUNT(*) |
++--------+----------+
+| Benny  | 2        |
+| Diane  | 2        |
+| Gwen   | 3        |
+| Harold | 2        |
++--------+----------+
+</pre>
+
+Предыдущее использование запроса <code>GROUP BY</code> позволяет
+сгруппировать все записи для каждого <code>owner</code>. Использование
+<a href="funct.htm#function_count"><code>COUNT()</code></a> в соединении с
+<code>GROUP BY</code> полезно для характеристики Ваших данных при различных
+группировках. Следующие примеры показывают различные способы выполнить
+операции переписи животных.</p>
+
+<p>Число животных по разновидностям:
+<pre>
+mysql&gt; SELECT species, COUNT(*) FROM pet GROUP BY species;
++---------+----------+
+| species | COUNT(*) |
++---------+----------+
+| bird    | 2        |
+| cat     | 2        |
+| dog     | 3        |
+| hamster | 1        |
+| snake   | 1        |
++---------+----------+
+</pre>
+
+Число животных на пол:
+<pre>
+mysql&gt; SELECT sex, COUNT(*) FROM pet GROUP BY sex;
++------+----------+
+| sex  | COUNT(*) |
++------+----------+
+| NULL | 1        |
+| f    | 4        |
+| m    | 4        |
++------+----------+
+</pre>
+В этом выводе <code>NULL</code> указывает, что пол неизвестен.</p>
+
+<p>Число животных на комбинацию разновидности и пола:
+<pre>
+mysql&gt; SELECT species, sex, COUNT(*) FROM pet GROUP BY species, sex;
++---------+-----+----------+
+| species | sex | COUNT(*) |
++---------+-----+----------+
+| bird    | NULL| 1        |
+| bird    | f   | 1        |
+| cat     | f   | 1        |
+| cat     | m   | 1        |
+| dog     | f   | 1        |
+| dog     | m   | 2        |
+| hamster | f   | 1        |
+| snake   | m   | 1        |
++---------+-----+----------+
+</pre>
+
+Вы не должны получить всю таблицу, когда Вы используете
+<a href="funct.htm#function_count"><code>COUNT()</code></a>.
+Например, предыдущий запрос, когда выполнен только на собаках и кошках,
+похож на это:
+<pre>
+mysql&gt; SELECT species, sex, COUNT(*) FROM pet
+    -&gt;        WHERE species = 'dog' OR species = 'cat'
+    -&gt;        GROUP BY species, sex;
++---------+-----+----------+
+| species | sex | COUNT(*) |
++---------+-----+----------+
+| cat     | f   | 1        |
+| cat     | m   | 1        |
+| dog     | f   | 1        |
+| dog     | m   | 2        |
++---------+-----+----------+
+</pre>
+
+Или если Вы хотели число животных на
+пол только для животных, пол которых известен:
+<pre>
+mysql&gt; SELECT species, sex, COUNT(*) FROM pet
+    -&gt;        WHERE sex IS NOT NULL
+    -&gt;        GROUP BY species, sex;
++---------+-----+----------+
+| species | sex | COUNT(*) |
++---------+-----+----------+
+| bird    | f   | 1        |
+| cat     | f   | 1        |
+| cat     | m   | 1        |
+| dog     | f   | 1        |
+| dog     | m   | 2        |
+| hamster | f   | 1        |
+| snake   | m   | 1        |
++---------+-----+----------+
+</pre>
+
+Если Вы называете столбцы, чтобы выбрать в дополнение к
+<a href="funct.htm#function_count"><code>COUNT()</code></a>,
+<code>GROUP BY</code> должен присутствовать, который называет
+те же самые столбцы. Иначе, следующее происходит:</p>
+
+<ul><li><p>Если включен режим SQL
+<a href="server.htm#sqlmode_only_full_group_by"><code>ONLY_FULL_GROUP_BY
+</code></a>, то будет ошибка:
+<pre>
+mysql&gt; SET sql_mode = 'ONLY_FULL_GROUP_BY';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; SELECT owner, COUNT(*) FROM pet;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression
+#1 of SELECT list contains nonaggregated column 'menagerie.pet.owner';
+this is incompatible with sql_mode=only_full_group_by
+</pre></li>
+
+<li><p>Если режим <a href="server.htm#sqlmode_only_full_group_by"><code>
+ONLY_FULL_GROUP_BY</code></a> выключен, запрос обработан, обрабатывая все
+строки как единственную группу, но значение, выбранное для каждого названного
+столбца, неопределенно. Сервер свободен выбрать значение из любой строки:
+<pre>
+mysql&gt; SET sql_mode = '';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; SELECT owner, COUNT(*) FROM pet;
++--------+----------+
+| owner  | COUNT(*) |
++--------+----------+
+| Harold | 8        |
++--------+----------+
+1 row in set (0.00 sec)
+</pre></li></ul>
+<p>См. <a href="funct.htm#group-by-handling">раздел 13.19.3</a>.</p>
+
+<h4><a name="multiple-tables"></a>4.3.4.9. Используя больше, чем одну таблицу
+</h4>
+<p>Таблица <code>pet</code> отслеживает, которых домашних животных Вы имеете.
+Если Вы хотите сделать запись другой информации о них, такой как события в их
+жизни, как посещения ветеринара или когда родилось потомство, Вы нуждаетесь в
+другой таблице. На что должна быть похожей эта таблица?
+Это должно содержать следующую информацию:</p>
+
+<ul><li><p>Уменьшительное имя так, чтобы Вы знали, которому животному
+принадлежит каждое событие.</li>
+<li>Дата, чтобы Вы знали, когда событие имело место.</li>
+<li>Область, чтобы описать событие.</li>
+<li>Область типа событий, если Вы хотите быть в
+состоянии категоризировать события.</p></li></ul>
+
+<p>Запрос <a href="sql.htm#create-table"><code>CREATE
+TABLE</code></a> для таблицы <code>event</code>:
+<pre>
+mysql&gt; CREATE TABLE event (name VARCHAR(20), date DATE,
+    -&gt;        type VARCHAR(15), remark VARCHAR(255));
+</pre>
+
+Как с таблицей <code>pet</code>, является самым легким загрузить начальные
+записи, создавая разграниченный табуляциями текстовый файл,
+содержащий следующую информацию.</p>
+
+<table border="1">
+<thead><tr><th scope="col">name</th><th scope="col">date</th>
+<th scope="col">type</th><th scope="col">remark</th></tr></thead>
+<tbody><tr><td scope="row">Fluffy</td><td>1995-05-15</td><td>litter</td>
+<td>4 kittens, 3 female, 1 male</td></tr>
+<tr><td scope="row">Buffy</td><td>1993-06-23</td><td>litter</td><td>
+5 puppies, 2 female, 3 male</td></tr>
+<tr><td scope="row">Buffy</td><td>1994-06-19</td><td>litter</td><td>
+3 puppies, 3 female</td></tr>
+<tr><td scope="row">Chirpy</td><td>1999-03-21</td><td>vet</td><td>
+needed beak straightened</td></tr>
+<tr><td scope="row">Slim</td><td>1997-08-03</td><td>vet</td><td>broken rib
+</td></tr>
+<tr><td scope="row">Bowser</td><td>1991-10-12</td><td>kennel</td>
+<td> </td></tr>
+<tr><td scope="row">Fang</td><td>1991-10-12</td><td>kennel</td>
+<td> </td></tr>
+<tr><td scope="row">Fang</td><td>1998-08-28</td><td>birthday</td><td>
+Gave him a new chew toy</td></tr>
+<tr><td scope="row">Claws</td><td>1998-03-17</td><td>birthday</td><td>
+Gave him a new flea collar</td></tr>
+<tr><td scope="row">Whistler</td><td>1998-12-09</td><td>birthday</td><td>
+First birthday</td></tr></tbody></table>
+
+<p>Загрузите записи так:
+<pre>
+mysql&gt; LOAD DATA LOCAL INFILE 'event.txt' INTO TABLE event;
+</pre>
+
+Основываясь на том, что Вы узнали из запросов из таблицы <code>pet</code>,
+Вы должны быть в состоянии выполнить извлечения на записях в
+<code>event</code>, принципы те же самые.</p>
+
+<p>Предположите, что Вы хотите узнать возрасты, в которых у каждого домашнего
+животного был детеныш. Мы видели ранее, как вычислить возрасты с двух дат.
+Дата появления детеныша находится в таблице <code>event</code>, но надо
+вычислить возраст матери на ту дату, Вы нуждаетесь в ее дате рождения,
+которая сохранена в таблице <code>pet</code>.
+Это означает, что запрос требует обеих таблиц:
+<pre>
+mysql&gt; SELECT pet.name,
+    -&gt;        TIMESTAMPDIFF(YEAR,birth,date) AS age,
+    -&gt;        remark FROM pet INNER JOIN event
+    -&gt;        ON pet.name = event.name
+    -&gt;        WHERE event.type = 'litter';
++--------+-----+-----------------------------+
+| name   | age | remark                      |
++--------+-----+-----------------------------+
+| Fluffy | 2   | 4 kittens, 3 female, 1 male |
+| Buffy  | 4   | 5 puppies, 2 female, 3 male |
+| Buffy  | 5   | 3 puppies, 3 female         |
++--------+-----+-----------------------------+
+</pre>
+Есть несколько вещей, которые надо отметить об этом запросе:</p>
+
+<ul><li><p><code>FROM</code> присоединяется к двум таблицам, потому что
+запрос должен вытянуть информацию от них обоих.</li>
+<li>Комбинируя присоединяющуюся информацию от многократных таблиц,
+Вы должны определить, как записи в одной таблице могут быть соответствующими
+записям в другой. Это легко, потому что у них обоих есть столбец
+<code>name</code>. Запрос использует <code>ON</code>, чтобы связать записи в
+этих двух таблицах, основываясь на значениях <code>name</code>.</p>
+
+<p>Запрос использует <code>INNER JOIN</code>, чтобы объединить таблицы.
+<code>INNER JOIN</code> разрешает строкам от любой таблицы появиться в
+результате, если и только если обе таблицы удовлетворяют условиям,
+определенным в <code>ON</code>. В этом примере <code>ON</code> определяет,
+что столбец <code>name</code> в таблице <code>pet</code> должен
+соответствовать столбцу <code>name</code> в таблице <code>event</code>.
+Если имя появится в одной таблице, но не в другой, то строка не будет
+появляться в результате потому, что условие в <code>ON</code> не выполнено.
+</li>
+
+<li>Поскольку столбец <code>name</code> в обеих таблицах,
+Вы должны быть определенными, которую таблицу имеете в виду, обращаясь к
+столбцу. Это сделано, добавляя имя таблицы к имени столбца.</p></li></ul>
+
+<p>У Вас не должно быть двух различных таблиц, чтобы выполнить соединение.
+Иногда полезно соединить таблицу с собой, если Вы хотите сравнить записи в
+таблице с другими записями в той же самой таблице. Например, чтобы найти
+родительские пары среди Ваших домашних животных, Вы можете присоединить
+таблицу <code>pet</code> с собой, чтобы произвести
+пары подобных разновидностей:
+<pre>
+mysql&gt; SELECT p1.name, p1.sex, p2.name, p2.sex, p1.species
+    -&gt;        FROM pet AS p1 INNER JOIN pet AS p2
+    -&gt;        ON p1.species = p2.species AND p1.sex = 'f' AND p2.sex = 'm';
++--------+-----+--------+-----+---------+
+| name   | sex | name   | sex | species |
++--------+-----+--------+-----+---------+
+| Fluffy | f   | Claws  | m   | cat     |
+| Buffy  | f   | Fang   | m   | dog     |
+| Buffy  | f   | Bowser | m   | dog     |
++--------+-----+--------+-----+---------+
+</pre>
+
+В этом запросе мы определяем псевдонимы для имени таблицы,
+чтобы обратиться к столбцам и сохранить прямо, с каким случаем таблицы каждая
+ссылка столбца связана.</p>
+
+<h2><a name="getting-information"></a>4.4.
+Получение информации о базах данных и таблицах</h2>
+<p>Что, если Вы забываете название базы данных или таблицы или структуру
+данной таблицы (например, имена столбцов)? MySQL рассматривает эту проблему
+через несколько запросов, которые предоставляют информацию о базах данных и
+таблицах, которые это поддерживает.</p>
+
+<p>Вы ранее видели <a href="sql.htm#show-databases"><code>SHOW DATABASES
+</code></a>, который перечисляет базы данных, которыми управляет сервер.
+Чтобы узнать, какая база данных в настоящее время выбрана, используйте
+<a href="funct.htm#function_database"><code>DATABASE()</code></a>:
+<pre>
+mysql&gt; SELECT DATABASE();
++------------+
+| DATABASE() |
++------------+
+| menagerie  |
++------------+
+</pre>
+Если Вы еще не выбрали базу данных, результат <code>NULL</code>.</p>
+
+<p>Чтобы знать, что какие таблицы включает база данных по умолчанию
+(например, когда Вы не уверены в названии таблицы), используйте этот запрос:
+<pre>
+mysql&gt; SHOW TABLES;
++---------------------+
+| Tables_in_menagerie |
++---------------------+
+| event               |
+| pet                 |
++---------------------+
+</pre>
+
+Название столбца в выводе, произведенном этим запросом, всегда
+<code>Tables_in_<em><code>db_name</code></em></code>, где
+<em><code>db_name</code></em> это название базы данных. См.
+<a href="sql.htm#show-tables">раздел 14.7.5.37</a>.</p>
+
+<p>Если Вы хотите узнать о структуре таблицы, используйте
+<a href="sql.htm#describe"><code>DESCRIBE</code></a>,
+это выводит на экран информацию о каждом из столбцов таблицы:
+<pre>
+mysql&gt; DESCRIBE pet;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| name    | varchar(20) | YES  |     | NULL    |       |
+| owner   | varchar(20) | YES  |     | NULL    |       |
+| species | varchar(20) | YES  |     | NULL    |       |
+| sex     | char(1)     | YES  |     | NULL    |       |
+| birth   | date        | YES  |     | NULL    |       |
+| death   | date        | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+</pre>
+
+<code>Field</code> указывает на имя столбца,
+<code>Type</code> тип данных для столбца,
+<code>NULL</code> указывает, может ли столбец содержать значения
+<code>NULL</code>, <code>Key</code> указывает, индексирован ли столбец и
+<code>Default</code> определяет значение по умолчанию столбца.
+<code>Extra</code> отображает специальную информацию о столбцах: если столбец
+создавался с <code>AUTO_INCREMENT</code>, значение будет <code>auto_increment
+</code>.</p>
+
+<p><code>DESC</code> это краткая форма
+<a href="sql.htm#describe"><code>DESCRIBE</code></a>. См.
+<a href="sql.htm#describe">раздел 14.8.1</a>.</p>
+
+<p>Вы можете получить запрос
+<a href="sql.htm#create-table"><code>CREATE TABLE</code></a>, необходимый,
+чтобы составить существующую таблицу, используя
+<a href="sql.htm#show-create-table"><code>SHOW CREATE TABLE</code></a>, см.
+<a href="sql.htm#show-create-table">раздел 14.7.5.10</a>.</p>
+
+<p>Если Вы имеете индексы на таблице, <code>SHOW INDEX FROM
+<em><code>tbl_name</code></em></code> производит информацию о них. См.
+<a href="sql.htm#show-index">раздел 14.7.5.22</a>.</p>
+
+<h2><a name="batch-mode"></a>4.5. Используя mysql в пакетном режиме</h2>
+<p>В предыдущих разделах Вы использовали <a href="programs.htm#mysql"><span>
+<strong>mysql</strong></span></a> в интерактивном режиме, чтобы ввести
+запросы и смотреть результаты. Вы можете также выполнить
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+в пакетном режиме. Чтобы сделать это, поместите запросы, которые Вы хотите
+выполнить, в файл, затем скомандуйте <a href="programs.htm#mysql"><span>
+<strong>mysql</strong></span></a>, чтобы читать свой ввод из файла:
+<pre>
+shell&gt; mysql &lt; <em><code>batch-file</code></em>
+</pre>
+
+Если Вы выполняете <a href="programs.htm#mysql"><span><strong>mysql</strong>
+</span></a> в Windows и имеете некоторые специальные символы в файле, которые
+вызывают проблемы, Вы можете сделать это:
+<pre>
+C:\&gt; mysql -e "source <em><code>batch-file</code></em>"
+</pre>
+
+Если Вы должны определить параметры соединения в командной строке, команда
+могла бы быть похожей на это:
+<pre>
+shell&gt; mysql -h <em><code>host</code></em> -u <em><code>user</code></em> \
+                   -p &lt; <em><code>batch-file</code></em>
+Enter password: ********
+</pre>
+Когда Вы используете <a href="programs.htm#mysql"><span><strong>mysql
+</strong></span></a> этим путем, Вы создаете файл скрипта,
+затем выполняя скрипт.</p>
+
+<p>Если Вы хотите, чтобы скрипт продолжился, даже если некоторые из запросов
+в нем производят ошибки, Вы должны использовать опцию
+<a href="programs.htm#option_mysql_force"><code>--force</code></a>.</p>
+
+<p>Почему используется скрипт? Вот несколько причин:</p>
+<ul><li><p>Если Вы выполняете запрос неоднократно (скажем, каждый день или
+каждую неделю), скрипт позволяет Вам избежать перепечатывать его каждый раз,
+когда Вы выполняете это.</li>
+
+<li>Вы можете произвести новые запросы от существующих, которые подобны,
+копируя и редактируя файлы скриптов.</li>
+<li>Пакетный режим может также быть полезным в то время как,
+Вы развиваете запрос, особенно для многострочных запросов или
+последовательностей запросов. Если Вы делаете ошибку, Вы не должны
+перепечатать все. Только отредактируйте свой скрипт, чтобы исправить ошибку,
+затем скажите <a href="programs.htm#mysql"><span><strong>mysql</strong>
+</span></a> выполнять это снова.</li>
+
+<li>Если у Вас есть запрос, который производит большой вывод,
+Вы можете выполнить вывод через пейджер:
+<pre>
+shell&gt; mysql &lt; <em><code>batch-file</code></em> | more
+</pre></li>
+
+<li><p>Вы можете поймать вывод в файл для дальнейшей обработки:
+<pre>
+shell&gt; mysql &lt; <em><code>batch-file</code></em> &gt; mysql.out
+</pre></li>
+
+<li><p>Вы можете дать свой скрипт другим людям так, чтобы они могли
+также выполнить запросы.</li>
+<li>Некоторые ситуации не учитывают интерактивное использование, например,
+когда Вы выполняете запрос через <span><strong>cron</strong></span>.
+В этом случае Вы должны использовать пакетный режим.</p></li></ul>
+
+<p>Выходной формат по умолчанию отличается (более краткий), когда Вы
+выполняете <a href="programs.htm#mysql"><span><strong>mysql</strong></span>
+</a> в пакетном режиме от того, когда Вы используете это в интерактивном
+режиме. Например, вывод <code>SELECT DISTINCT
+species FROM pet</code> похож на это, когда
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a>
+выполнен в интерактивном режиме:
+<pre>
++---------+
+| species |
++---------+
+| bird    |
+| cat     |
+| dog     |
+| hamster |
+| snake   |
++---------+
+</pre>
+
+В пакетном режиме вывод похож на это:
+<pre>
+species
+bird
+cat
+dog
+hamster
+snake
+</pre>
+
+Если Вы хотите получить интерактивный выходной формат в пакетном режиме,
+используйте <a href="programs.htm#mysql"><span><strong>mysql -t</strong>
+</span></a>. Чтобы добавить к выводу запросы, которые выполнены, используют
+<a href="programs.htm#mysql"><span><strong>mysql -v</strong></span></a>.</p>
+
+<p>Вы можете также использовать скрипты из подсказки
+<a href="programs.htm#mysql"><span><strong>mysql</strong></span></a> с
+помощью команд <code>source</code> или <code>\.</code>:
+<pre>
+mysql&gt; source <em><code>filename</code></em>;
+mysql&gt; \. <em><code>filename</code></em>
+</pre>
+См. <a href="programs.htm#mysql-batch-commands">раздел 5.5.1.5</a>.</p>
+
+<h2><a name="examples"></a>4.6. Примеры общих запросов</h2>
+<p>Вот примеры того, как решить некоторые типичные проблемы с MySQL.</p>
+<p>Некоторые из примеров используют таблицу <code>shop</code>, чтобы хранить
+цену каждого артикула (номер изделия) для определенных торговцев (дилеры).
+Если у каждого торговца есть единственная постоянная цена за артикул, тогда
+(<code>article</code>, <code>dealer</code>) это первичный ключ для записей.
+</p>
+
+<p>Запустите инструмент командной строки <a href="programs.htm#mysql"><span>
+<strong>mysql</strong></span></a> и выберите базу данных:
+<pre>
+shell&gt; mysql <em><code>your-database-name</code></em>
+</pre>
+В большинстве установок MySQL Вы можете использовать
+базу данных <code>test</code>.</p>
+
+<p>Вы можете создать и заполнить таблицу в качестве
+примера с этими запросами:
+<pre>
+CREATE TABLE shop (article INT(4) UNSIGNED ZEROFILL DEFAULT '0000' NOT NULL,
+       dealer CHAR(20) DEFAULT '' NOT NULL,
+       price DOUBLE(16,2) DEFAULT '0.00' NOT NULL,
+       PRIMARY KEY(article, dealer));
+INSERT INTO shop VALUES
+       (1,'A',3.45),(1,'B',3.99),(2,'A',10.99),(3,'B',1.45),
+       (3,'C',1.69),(3,'D',1.25),(4,'D',19.95);
+</pre>
+
+После выполнения запросов у таблицы должно быть следующее содержание:
+<pre>
+SELECT * FROM shop;
++---------+--------+-------+
+| article | dealer | price |
++---------+--------+-------+
+| 0001    |     A  |  3.45 |
+| 0001    |     B  |  3.99 |
+| 0002    |     A  | 10.99 |
+| 0003    |     B  |  1.45 |
+| 0003    |     C  |  1.69 |
+| 0003    |     D  |  1.25 |
+| 0004    |     D  | 19.95 |
++---------+--------+-------+
+</pre>
+
+<h3><a name="example-maximum-column"></a>4.6.1.
+Максимальное значение для столбца</h3>
+<p><span><span>Каков самый большой номер изделия?</span></span>
+<pre>
+SELECT MAX(article) AS article FROM shop;
++---------+
+| article |
++---------+
+| 4       |
++---------+
+</pre>
+
+<h3><a name="example-maximum-row"></a>4.6.2.
+Строка, содержащая максимум для определенного столбца</h3>
+<p><span><em>Задача: Найдите число, дилера, и цену самого дорогого артикула
+</em></span>.</p>
+
+<p>Это легко сделано с подзапросом:
+<pre>
+SELECT article, dealer, price FROM shop
+       WHERE price=(SELECT MAX(price) FROM shop);
++---------+--------+-------+
+| article | dealer | price |
++---------+--------+-------+
+| 0004    | D      | 19.95 |
++---------+--------+-------+
+</pre>
+
+Другие решения состоят в том, чтобы использовать <code>LEFT JOIN</code> или
+отсортировать все убывание строк по цене и получить только первую строку,
+используя MySQL-определенный параметр <code>LIMIT</code>:
+<pre>
+SELECT s1.article, s1.dealer, s1.price FROM shop s1
+       LEFT JOIN shop s2 ON s1.price &lt; s2.price
+       WHERE s2.article IS NULL;
+SELECT article, dealer, price FROM shop ORDER BY price DESC LIMIT 1;
+</pre>
+<p>Если было несколько самых дорогих артикулов, каждый с ценой 19.95,
+<code>LIMIT</code> показал бы только один из них.</p>
+
+<h3><a name="example-maximum-column-group"></a>4.6.3.
+Максимум столбца на группу</h3>
+<p><span><em>Задача: Найдите самую высокую цену за артикул</em></span>.
+<pre>
+SELECT article, MAX(price) AS price FROM shop GROUP BY article;
++---------+-------+
+| article | price |
++---------+-------+
+| 0001    |  3.99 |
+| 0002    | 10.99 |
+| 0003    |  1.69 |
+| 0004    | 19.95 |
++---------+-------+
+</pre>
+
+<h3><a name="example-maximum-column-group-row"></a>4.6.4.
+Строки, содержащие максимум определенного столбца в группе</h3>
+<p><span><em>Задача: Для каждого артикула найдите дилера или дилеров с
+самой высокой ценой</em></span>.</p>
+
+<p>Эта проблема может быть решена с подзапросом:
+<pre>
+SELECT article, dealer, price FROM shop s1
+       WHERE price=(SELECT MAX(s2.price) FROM shop s2
+       WHERE s1.article = s2.article);
++---------+--------+-------+
+| article | dealer | price |
++---------+--------+-------+
+| 0001    | B      |  3.99 |
+| 0002    | A      | 10.99 |
+| 0003    | C      |  1.69 |
+| 0004    | D      | 19.95 |
++---------+--------+-------+
+</pre>
+
+Предыдущий пример использует коррелированый подзапрос, который может быть
+неэффективным (см. <a href="sql.htm#correlated-subqueries">раздел 14.2.10.7
+</a>). Другие возможности для того, чтобы решить проблему состоят в том,
+чтобы использовать некоррелированый подзапрос в <code>FROM</code>
+или <code>LEFT JOIN</code>.</p>
+
+<p>Некоррелированый подзапрос:
+<pre>
+SELECT s1.article, dealer, s1.price FROM shop s1
+       JOIN (SELECT article, MAX(price) AS price FROM shop
+             GROUP BY article) AS s2
+       ON s1.article = s2.article AND s1.price = s2.price;
+</pre>
+
+<code>LEFT JOIN</code>:
+<pre>
+SELECT s1.article, s1.dealer, s1.price FROM shop s1
+       LEFT JOIN shop s2 ON s1.article = s2.article AND
+       s1.price &lt; s2.price WHERE s2.article IS NULL;
+</pre>
+
+<code>LEFT JOIN</code> работает на основе того что, когда
+<code>s1.price</code> в его максимальном значении, нет
+<code>s2.price</code> с большим значением и значения строк <code>s2</code>
+будут <code>NULL</code>. См. <a href="sql.htm#join">раздел 14.2.9.2</a>.</p>
+
+<h3><a name="example-user-variables"></a>4.6.5.
+Используя определяемые пользователем переменные</h3>
+<p>Вы можете использовать пользовательские переменные MySQL, чтобы помнить
+результаты, не имея необходимости хранить их во временных переменных в
+клиенте. (См. <a href="lang.htm#user-variables">раздел 10.4</a>.</p>
+
+<p>Например, чтобы найти артикулы с самой высокой и самой низкой ценами
+Вы можете сделать это:
+<pre>
+mysql&gt; SELECT @min_price:=MIN(price),@max_price:=MAX(price) FROM shop;
+mysql&gt; SELECT * FROM shop WHERE price=@min_price OR price=@max_price;
++---------+--------+-------+
+| article | dealer | price |
++---------+--------+-------+
+| 0003    | D      |  1.25 |
+| 0004    | D      | 19.95 |
++---------+--------+-------+
+</pre>
+
+<p>Также возможно сохранить название объекта базы данных, такого как таблица
+или столбец, в пользовательской переменной и затем использовать эту
+переменную в запросе SQL, однако, это требует использования готового запроса.
+См. <a href="sql.htm#sql-syntax-prepared-statements">раздел 14.5</a>.</p>
+
+<h3><a name="example-foreign-keys"></a>4.6.6. Используя внешние ключи</h3>
+<p>В MySQL таблицы <code>InnoDB</code> поддерживают ограничения внешнего
+ключа. См. <a href="innodb.htm">главу 16</a> и
+<a href="intro.htm#ansi-diff-foreign-keys">раздел 1.8.2.3</a>.</p>
+
+<p>Ограничение внешнего ключа не требуется, чтобы
+просто присоединиться к двум таблицам. Для механизмов хранения кроме
+<code>InnoDB</code>, возможно, определяя столбец использовать
+<code>REFERENCES <em><code>tbl_name</code></em>(<em><code>col_name</code>
+</em>)</code>, что не имеет никакого фактического эффекта, и
+<span><em>служит только в качестве записки или комментария Вам, что столбец,
+который Вы в настоящее время определяете, предназначен, чтобы обратиться к
+столбцу в другой таблице</em></span>. Чрезвычайно важно понять, используя
+этот синтаксис, что:</p>
+
+<ul><li><p>MySQL не выполняет проверку <code>CHECK</code>, чтобы
+удостовериться, что <em><code>col_name</code></em> фактически существует в
+<em><code>tbl_name</code></em> (или даже что
+<em><code>tbl_name</code></em> непосредственно существует).</li>
+
+<li>MySQL не выполняет такие действия на <em><code>tbl_name</code></em>,
+как удаление строк в ответ на действия со строками в таблице, которую Вы
+определяете, другими словами, этот синтаксис не вызывает <code>ON
+DELETE</code> или <code>ON UPDATE</code> вообще. Хотя Вы можете написать
+<code>ON DELETE</code> или <code>ON UPDATE</code> как часть
+<code>REFERENCES</code>, это также проигнорировано.</li>
+<li>Этот синтаксис создает <span><em>столбец</em></span>, это
+<span><strong>не</strong></span> создает индекс или ключ.</p></li></ul>
+
+<p>Вы можете использовать столбец как столбец соединения, как показано здесь:
+<pre>
+CREATE TABLE person (id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+                     name CHAR(60) NOT NULL,
+                     PRIMARY KEY (id));
+
+CREATE TABLE shirt (id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+       style ENUM('t-shirt', 'polo', 'dress') NOT NULL,
+       color ENUM('red', 'blue', 'orange', 'white', 'black') NOT NULL,
+       owner SMALLINT UNSIGNED NOT NULL REFERENCES person(id),
+       PRIMARY KEY (id));
+
+INSERT INTO person VALUES (NULL, 'Antonio Paz');
+SELECT @last := LAST_INSERT_ID();
+INSERT INTO shirt VALUES (NULL, 'polo', 'blue', @last),
+                         (NULL, 'dress', 'white', @last),
+                         (NULL, 't-shirt', 'blue', @last);
+
+INSERT INTO person VALUES (NULL, 'Lilliana Angelovska');
+SELECT @last := LAST_INSERT_ID();
+INSERT INTO shirt VALUES (NULL, 'dress', 'orange', @last),
+                         (NULL, 'polo', 'red', @last),
+                         (NULL, 'dress', 'blue', @last),
+                         (NULL, 't-shirt', 'white', @last);
+
+SELECT * FROM person;
++----+---------------------+
+| id | name                |
++----+---------------------+
+|  1 | Antonio Paz         |
+|  2 | Lilliana Angelovska |
++----+---------------------+
+
+SELECT * FROM shirt;
++----+---------+--------+-------+
+| id | style   | color  | owner |
++----+---------+--------+-------+
+|  1 | polo    | blue   | 1     |
+|  2 | dress   | white  | 1     |
+|  3 | t-shirt | blue   | 1     |
+|  4 | dress   | orange | 2     |
+|  5 | polo    | red    | 2     |
+|  6 | dress   | blue   | 2     |
+|  7 | t-shirt | white  | 2     |
++----+---------+--------+-------+
+
+SELECT s.* FROM person p INNER JOIN shirt s ON s.owner = p.id
+       WHERE p.name LIKE 'Lilliana%' AND
+       s.color &lt;&gt; 'white';
+
++----+-------+--------+-------+
+| id | style | color  | owner |
++----+-------+--------+-------+
+|  4 | dress | orange | 2     |
+|  5 | polo  | red    | 2     |
+|  6 | dress | blue   | 2     |
++----+-------+--------+-------+
+</pre>
+
+Когда используется этим способом, <code>REFERENCES</code>
+не выведен на экран в выводе <a href="sql.htm#show-create-table"><code>SHOW
+CREATE TABLE</code></a> или <a href="sql.htm#describe"><code>DESCRIBE</code>
+</a>:
+<pre>
+SHOW CREATE TABLE shirt\G
+*************************** 1. row ***************************
+Table: shirt
+Create Table: CREATE TABLE `shirt` (
+`id` smallint(5) unsigned NOT NULL auto_increment,
+`style` enum('t-shirt','polo','dress') NOT NULL,
+`color` enum('red','blue','orange','white','black') NOT NULL,
+`owner` smallint(5) unsigned NOT NULL,
+PRIMARY KEY  (`id`)) ENGINE=MyISAM DEFAULT CHARSET=latin1
+</pre>
+
+Использование <code>REFERENCES</code> таким образом как комментарий или
+<span><span>напоминание</span></span> в определении столбца
+работает с таблицами <code>MyISAM</code>.</p>
+
+<h3><a name="searching-on-two-keys"></a>4.6.7. Поиск на двух ключах</h3>
+<p><a href="funct.htm#operator_or"><code>OR</code></a> с
+использованием единственного ключа хорошо оптимизировано, как обработка
+<a href="funct.htm#operator_and"><code>AND</code></a>.</p>
+
+<p>Один хитрый случай это случай поиска на двух различных ключах,
+объединенных с <a href="funct.htm#operator_or"><code>OR</code></a>:
+<pre>
+SELECT field1_index, field2_index FROM test_table
+       WHERE field1_index = '1' OR  field2_index = '1'
+</pre>
+Этот случай оптимизирован. См.
+<a href="optimiz.htm#index-merge-optimization">раздел 9.2.1.4</a>.</p>
+
+<p>Вы можете также решить проблему эффективно при использовании
+<a href="sql.htm#union"><code>UNION</code></a>, это комбинирует вывод двух
+отдельных <a href="sql.htm#select"><code>SELECT</code></a>. См.
+<a href="sql.htm#union">раздел 14.2.9.3</a>.</p>
+
+<p>Каждый <a href="sql.htm#select"><code>SELECT</code></a> ищет
+только один ключ, поиски могут быть оптимизированы:
+<pre>
+SELECT field1_index, field2_index
+       FROM test_table WHERE field1_index = '1'
+       UNION SELECT field1_index, field2_index
+       FROM test_table WHERE field2_index = '1';
+</pre>
+
+<h3><a name="calculating-days"></a>4.6.8. Вычисление посещений в день</h3>
+<p>Следующий пример показывает, как Вы можете использовать разрядные
+групповые функции, чтобы вычислить сколько дней в месяц,
+пользователь посетил Веб-страницу.
+<pre>
+CREATE TABLE t1 (year YEAR(4), month INT(2) UNSIGNED ZEROFILL,
+                 day INT(2) UNSIGNED ZEROFILL);
+INSERT INTO t1 VALUES (2000,1,1),(2000,1,20),(2000,1,30),(2000,2,2),
+                      (2000,2,23),(2000,2,23);
+</pre>
+
+Таблица в качестве примера содержит значения, представляющие
+посещения пользователями страницы. Чтобы определить, сколько различных дней в
+каждом месяце эти посещения происходят, используйте этот запрос:
+<pre>
+SELECT year, month,BIT_COUNT(BIT_OR(1&lt;&lt;day)) AS days FROM t1
+       GROUP BY year,month;
+</pre>
+
+Что в итоге возвращает:
+<pre>
++------+-------+------+
+| year | month | days |
++------+-------+------+
+| 2000 | 01    | 3    |
+| 2000 | 02    | 2    |
++------+-------+------+
+</pre>
+Запрос вычисляет, сколько различных дней появляется в таблице для каждой
+комбинации года/месяца, с автоматическим удалением двойных записей.</p>
+
+<h3><a name="example-auto-increment"></a>4.6.9. Использование AUTO_INCREMENT
+</h3>
+<p>Атрибут <code>AUTO_INCREMENT</code> может использоваться, чтобы произвести
+уникальную идентичность для новых строк:
+<pre>
+CREATE TABLE animals (id MEDIUMINT NOT NULL AUTO_INCREMENT,
+       name CHAR(30) NOT NULL, PRIMARY KEY (id));
+INSERT INTO animals (name) VALUES ('dog'),('cat'),('penguin'),
+                                  ('lax'),('whale'),('ostrich');
+SELECT * FROM animals;
+</pre>
+
+Результат примерно такой:
+<pre>
++----+---------+
+| id | name    |
++----+---------+
+|  1 | dog     |
+|  2 | cat     |
+|  3 | penguin |
+|  4 | lax     |
+|  5 | whale   |
+|  6 | ostrich |
++----+---------+
+</pre>
+
+Никакое значение не было определено для столбца <code>AUTO_INCREMENT</code>,
+таким образом, MySQL назначал порядковые номера автоматически. Вы можете
+также явно назначить 0 столбцу, чтобы производить порядковые номера, если
+включен режим SQL <a href="server.htm#sqlmode_no_auto_value_on_zero"><code>
+NO_AUTO_VALUE_ON_ZERO</code></a>. Если столбец объявлен как <code>NOT
+NULL</code>, также возможно назначить <code>NULL</code> к столбцу, чтобы
+произвести порядковые номера. Когда Вы вставляете любое другое значение в
+<code>AUTO_INCREMENT</code>, столбец установлен в то значение, и
+последовательность сброшена так, чтобы следующее автоматически произведенное
+значение следовало последовательно от самого большого значения столбца.</p>
+
+<p>Вы можете получить новое, автоматически произведенное значение
+<code>AUTO_INCREMENT</code> с помощью функции SQL
+<a href="funct.htm#function_last-insert-id"><code>LAST_INSERT_ID()</code></a>
+или функции C API
+<a href="connect.htm#mysql-insert-id"><code>mysql_insert_id()</code></a>.
+Эти функции являются определенными для соединения, таким образом, их
+возвращаемые значения не затронуты другим соединением,
+которое также вставляет.</p>
+
+<p>Используйте самый маленький тип данных целого числа для
+<code>AUTO_INCREMENT</code>, который является достаточно большим, чтобы
+содержать максимальное значение последовательности, в котором Вы будете
+нуждаться. Когда столбец достигает верхнего предела типа данных, следующая
+попытка произвести порядковый номер терпит неудачу. Используйте
+атрибут <code>UNSIGNED</code>, если возможно, чтобы позволить больший
+диапазон. Например, если Вы используете
+<a href="types.htm#integer-types"><code>TINYINT</code></a>,
+максимальный допустимый порядковый номер 127. Для
+<a href="types.htm#integer-types"><code>TINYINT UNSIGNED</code></a> максимум
+255. См. <a href="types.htm#integer-types">раздел 12.2.1</a>.</p>
+
+<p>Для многострочных вставок
+<a href="funct.htm#function_last-insert-id"><code>LAST_INSERT_ID()</code></a>
+и <a href="connect.htm#mysql-insert-id"><code>mysql_insert_id()</code></a>
+фактически возвратят <code>AUTO_INCREMENT</code>
+от <span><em>первой</em></span> из вставленных строк. Это позволяет
+многострочной вставке быть воспроизведенной правильно на
+других серверах в репликации.</p>
+
+<p>Чтобы <code>AUTO_INCREMENT</code> стартовала не с 1,
+установите то значение с <a href="sql.htm#create-table"><code>CREATE
+TABLE</code></a> или <a href="sql.htm#alter-table"><code>ALTER TABLE</code>
+</a>:
+<pre>
+mysql&gt; ALTER TABLE tbl AUTO_INCREMENT = 100;
+</pre>
+
+<h4><a name="idm139965419038544"></a>InnoDB</h4>
+<p>Для информации о <code>AUTO_INCREMENT</code> с <code>InnoDB</code> см.
+<a href="innodb.htm#innodb-auto-increment-handling">раздел 16.8.5</a>.</p>
+
+<h4><a name="idm139965419035216"></a>MyISAM</h4>
+<ul><li><p>Для таблиц <code>MyISAM</code> Вы можете определить
+<code>AUTO_INCREMENT</code> на втором столбце в многостолбцовом индексе. В
+этом случае произведенное значение для <code>AUTO_INCREMENT</code>
+вычислено как <a href="funct.htm#function_max"><code>MAX(<em><code>
+auto_increment_column</code></em>) + 1 WHERE prefix=<em><code>given-prefix
+</code></em></code></a>. Это полезно, когда Вы хотите поместить
+данные в упорядоченные группы.
+<pre>
+CREATE TABLE animals (grp ENUM('fish','mammal','bird') NOT NULL,
+                      id MEDIUMINT NOT NULL AUTO_INCREMENT,
+                      name CHAR(30) NOT NULL,
+                      PRIMARY KEY (grp,id)) ENGINE=MyISAM;
+
+INSERT INTO animals (grp,name) VALUES
+       ('mammal','dog'),('mammal','cat'),
+       ('bird','penguin'),('fish','lax'),('mammal','whale'),
+       ('bird','ostrich');
+SELECT * FROM animals ORDER BY grp,id;
+</pre>
+
+Это в итоге вернет:
+<pre>
++--------+----+---------+
+| grp    | id | name    |
++--------+----+---------+
+| fish   |  1 | lax     |
+| mammal |  1 | dog     |
+| mammal |  2 | cat     |
+| mammal |  3 | whale   |
+| bird   |  1 | penguin |
+| bird   |  2 | ostrich |
++--------+----+---------+
+</pre>
+
+В этом случае (когда столбец <code>AUTO_INCREMENT</code>
+часть многостолбцового индекса) значения <code>AUTO_INCREMENT</code>
+снова использованы, если Вы удаляете строку с самым большим
+<code>AUTO_INCREMENT</code> в любой группе. Это происходит даже для таблиц
+<code>MyISAM</code>, для которых <code>AUTO_INCREMENT</code>
+обычно снова не используются.</li>
+
+<li>Если столбец <code>AUTO_INCREMENT</code> часть многих индексов, MySQL
+производит значения последовательности, используя индексирование, которое
+начинается со столбца <code>AUTO_INCREMENT</code>, если такое есть.
+Например, если таблица <code>animals</code> имеет индексы
+<code>PRIMARY KEY (grp, id)</code> и <code>INDEX (id)</code>, MySQL
+проигнорировал бы <code>PRIMARY KEY</code>
+для того, чтобы произвести значения последовательности. В результате таблица
+содержала бы единственную последовательность не по <code>grp</code>.
+</p></li></ul>
+
+<h4><a name="idm139965419016208"></a>Что еще почитать</h4>
+<p>Больше информации о <code>AUTO_INCREMENT</code> доступно здесь:</p>
+
+<ul><li><p>Как назначить столбцу <code>AUTO_INCREMENT</code>: разделы
+<a href="sql.htm#create-table">14.1.15</a> и
+<a href="sql.htm#alter-table">14.1.7</a>.</li>
+
+<li>Как <code>AUTO_INCREMENT</code> ведет себя в зависимости от режима SQL
+<a href="server.htm#sqlmode_no_auto_value_on_zero"><code>
+NO_AUTO_VALUE_ON_ZERO</code></a>: <a href="server.htm#sql-mode">раздел 6.1.8
+</a>.</li>
+
+<li>Как использовать <a href="funct.htm#function_last-insert-id"><code>
+LAST_INSERT_ID()</code></a>, чтобы найти строку, которая содержит новое
+значение <code>AUTO_INCREMENT</code>:
+<a href="funct.htm#information-functions">раздел 13.14</a>.</li></ul>
+
+<h2><a name="apache"></a>4.7. Применение MySQL и Apache</h2>
+<p>Есть программы, которые позволяют Вам подтверждать подлинность своих
+пользователей от базы данных MySQL, а также писать свои файлы системного
+журнала в таблицу MySQL.</p>
+
+<p>Вы можете изменить формат регистрации в Apache, чтобы быть легко читаемым
+MySQL, помещая следующее в конфигурационный файл Apache:
+<pre>
+LogFormat \
+   "\"%h\",%{%Y%m%d%H%M%S}t,%&gt;s,\"%b\",\"%{Content-Type}o\",  \
+   \"%U\",\"%{Referer}i\",\"%{User-Agent}i\""
+</pre>
+
+Чтобы загрузить файл системного журнала в этом формате в MySQL,
+Вы можете использовать запрос вроде этого:
+<pre>
+LOAD DATA INFILE '<em><code>/local/access_log</code></em>'
+     INTO TABLE <em><code>tbl_name</code></em>
+     FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' ESCAPED BY '\\'
+</pre>
+
+Названная таблица должна быть составлена, чтобы иметь столбцы,
+которые соответствуют тем, которые строка <code>LogFormat</code>
+пишет в файл системного журнала.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>
+

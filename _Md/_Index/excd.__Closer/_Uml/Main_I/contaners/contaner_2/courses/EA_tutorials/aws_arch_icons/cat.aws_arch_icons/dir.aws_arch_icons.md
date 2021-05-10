@@ -1,0 +1,3 @@
+- <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\aws_arch_icons\cat.aws_arch_icons\dir.aws_arch_icons.md">aws_arch_icons</a>
+    - <a href = "E:\Node_projects\Node_Way\NBase\_Md\_Index\__Closer\_Uml\Main_I\contaners\contaner_2\courses\EA_tutorials\aws_arch_icons\aws_arch_icons.md">aws_arch_icons.md</a>
+        - *# <a href="https://sparxsystems.com/enterprise_architect_user_guide/15.1/model_domains/aws_arch_icons.html" target="_blank">AWS Architecture Icons</a>  Иконки архитектуры AWS

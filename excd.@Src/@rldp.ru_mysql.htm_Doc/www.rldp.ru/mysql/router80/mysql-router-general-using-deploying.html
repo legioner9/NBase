@@ -1,0 +1,682 @@
+<html>
+<head>
+  <META NAME="Author" CONTENT="Alexey V. Pautov">
+  <meta http-equiv="Content-Type" content="text/html; charset=koi8-r">
+  <title>Глава 3. Развертывание MySQL Router</title>
+</head>
+
+<body>
+<script type="text/javascript">
+nN = navigator.appName;
+function fsearch(str)
+{
+  if (document.fform.myradio[0].checked) {
+     open('../../../yandex.ru/sitesearch@text=' + str + '&site=' +
+          document.location.hostname);
+  } else {open('../../../yandex.ru/sitesearch@text=' + str);}
+}
+
+function MouseUpHandler(e)
+{
+  if (nN == 'Netscape' || nN == 'Opera') {
+     if (document.getSelection()) {
+        str = document.getSelection();
+        newstr = str.replace(/\n+/g, ' ');
+        str = newstr.replace(/\ +/g, ' ');
+        if (str.length > 100) {
+           var i;
+           i = 0;
+           str = str.slice(0, 100);
+           i = str.lastIndexOf(' ');
+           if (i > 0){str = str.slice(0, i);}
+        }
+        document.fform.strf.value = str;
+     }
+  } else if(nN == 'Microsoft Internet Explorer') {
+    if (document.selection.createRange()) {
+       var range = document.selection.createRange();
+       var str = range.text;
+    }
+    if (str) {
+       str = str.replace(/\ +/g, " ");
+       document.fform.strf.value = str;
+    }
+  }
+  return true;
+}
+if (window.Event) {document.captureEvents(Event.MOUSEUP);}
+document.onmouseup = MouseUpHandler;
+</script>
+
+<center><table><tr><td><a href="../../default.htm">
+<IMG SRC="../../img/b_book.gif" ALT="RussianLDP" HEIGHT=48 WIDTH=55
+ALIGN=ABSCENTER></a></td>
+
+<td><!--Rating@Mail.ru COUNTEr-->
+<a target=_top href="../../../top.mail.ru/jump@from=1364238">
+<img src="../../../d1.cd.b4.a1.top.list.ru/counter@id=1364238;t=230"
+border=0 height=31 width=88 alt="Рейтинг@Mail.ru"/></a>
+</td><!--/COUNTER-->
+
+<td><!-- begin of Top100 code -->
+<script id="top100Counter" type="text/javascript"
+src="../../../cnt.rambler.ru/top100.jcn@1448139"></script>
+<noscript><a href="../../../top100.rambler.ru/top100/default.htm">
+<img src="../../../cnt.rambler.ru/top100.cnt@1448139" alt="Rambler's Top100"
+width="81" height="63" border="0" /></a></noscript>
+<!-- end of Top100 code --></td>
+
+<td><!-- HotLog -->
+<script type="text/javascript" language="javascript">
+hotlog_js="1.0";
+hotlog_r=""+Math.random()+"&s=525943&im=127&r="+escape(document.referrer)+
+"&pg="+escape(window.location.href);
+document.cookie="hotlog=1; path=/"; hotlog_r+="&c="+(document.cookie?"Y":"N");
+</script>
+<script type="text/javascript" language="javascript1.1">
+hotlog_js="1.1";hotlog_r+="&j="+(navigator.javaEnabled()?"Y":"N")
+</script>
+
+<script type="text/javascript" language="javascript1.2">
+hotlog_js="1.2";
+hotlog_r+="&wh="+screen.width+'x'+screen.height+"&px="+
+(((navigator.appName.substring(0,3)=="Mic"))?
+screen.colorDepth:screen.pixelDepth)</script>
+
+<script type="text/javascript" language="javascript1.3">
+hotlog_js="1.3"</script>
+<script type="text/javascript" language="javascript">
+hotlog_r+="&js="+hotlog_js;
+document.write("<a href='../../../click.hotlog.ru/@525943' target='_top'>
+<img "+" src='http://hit27.hotlog.ru/cgi-bin/hotlog/count?"+
+hotlog_r+"&' border=0 width=88 height=31 alt=HotLog><\/a>")</script>
+
+<noscript>
+<a href="../../../click.hotlog.ru/@525943" target="_top">
+<img src="../../../hit27.hotlog.ru/cgi-bin/hotlog/count@s=525943&im=127"
+border="0" width="88" height="31" alt="HotLog"></a></noscript></td>
+<!-- /HotLog -->
+
+<td><!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='../../../www.liveinternet.ru/click' "+
+"target=_blank><img src='http://counter.yadro.ru/hit?t52.15;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+"' alt='' title='LiveInternet: показано число просмотров и"+
+" посетителей за 24 часа' "+"border=0 width=88 height=31><\/a>")//-->
+</script></td></tr>
+<!--/LiveInternet-->
+
+<tr><td><FONT SIZE=-1><b>WebMoney:&nbsp;</b><br>
+WMZ Z294115950220&nbsp;<br>
+WMR R409981405661&nbsp;<br>
+WME E134003968233&nbsp;</FONT></td>
+
+<td><FONT SIZE=-1><b>Visa&nbsp;</b><br>
+4274 3200 2453 6495&nbsp;</FONT></td>
+</tr></table></center>
+<P><index><table><tr><td>
+
+<h1><a name="mysql-router-general-using-deploying"></a>
+Глава 3. Развертывание MySQL Router</h1>
+<h2><a name="mysql-router-recommendations"></a>Исполнительные рекомендации
+</h2>
+<p>Для лучшей работы MySQL Router, как правило, устанавливается на том же
+самом хосте, где приложение, которое использует его.
+Возможные причины включают:
+
+<ul><li>Позволить местные сокетные соединения UNIX вместо TCP/IP.</p>
+<p>Сокеты Unix могут функционировать с приложениями, соединяющимися с
+MySQL Router, но не с MySQL Router, соединяющимся с MySQL Server.</li>
+
+<li>Уменьшить сетевое время ожидания.</li>
+<li>Позволить MySQL Router соединяться с MySQL, не требуя дополнительных
+учетных записей на хосте роутера для учетных записей MySQL, которые создаются
+определенно для хостов приложений, например,
+<span class="emphasis"><em>myapp@198.51.100.45</em></span> вместо
+<span class="emphasis"><em>myapp@%</em></span>.</li>
+<li>Типично серверы приложений является самыми легкими в масштабировании.
+</li></ul>
+
+<p>Можно управлять многими экземплярами MySQL Router
+в сети, и вы не должны изолировать MySQL Router одной машиной.
+Это вызвано тем, что у MySQL Router
+нет привязки ни к какому конкретному серверу или хосту.</p>
+
+<a name="mysql-router-deployment-two-routers"></a>
+<p><b>Рис. 3.1. Пример развертывания MySQL Router</b></p>
+<img src="router.png" width="819" height="542">
+
+<h2><a name="mysql-router-deploying-bootstrapping"></a>
+3.1. Самонастройка MySQL Router</h2>
+<p>Вот краткий пример, чтобы продемонстрировать, как MySQL Router
+может быть развернут, используя самонастройку. Для получения дополнительной
+информации посмотрите опцию
+<a href="mysql-router-configuration.html#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap</code></a>.</p>
+
+<p>Этот пример создает автономный MySQL Router, используя опцию
+<a href="mysql-router-configuration.html#option_mysqlrouter_directory">
+<code class="option">--directory</code></a>, включает сокеты
+и предполагает, что кластер InnoDB с именем
+<code class="literal">myCluster</code> уже есть:</p>
+
+<pre>
+shell&gt; mysqlrouter --bootstrap root@localhost:3310 --directory \
+                      /tmp/myrouter --conf-use-sockets
+
+Please enter MySQL password for root:
+
+Bootstrapping MySQL Router instance at '/tmp/myrouter'...
+MySQL Routerhas now been configured for the InnoDB cluster 'myCluster'.
+
+The following connection information can be used to connect to the cluster.
+
+Classic MySQL protocol connections to cluster 'myCluster':
+- Read/Write Connections: localhost:6446
+- Read/Write Connections: /tmp/myrouter/mysql.sock
+- Read/Only Connections: localhost:6447
+- Read/Only Connections: /tmp/myrouter/mysqlro.sock
+
+X protocol connections to cluster 'myCluster':
+- Read/Write Connections: localhost:64460
+- Read/Write Connections: /tmp/myrouter/mysqlx.sock
+- Read/Only Connections: localhost:64470
+- Read/Only Connections: /tmp/myrouter/mysqlxro.sock
+
+shell&gt; <strong class="userinput"><code>cd /tmp/myrouter</code></strong>
+shell&gt; <strong class="userinput"><code>./start.sh</code></strong>
+</pre>
+
+<p>Произведенный каталог MySQL Router выглядит подобно этому:</p>
+<pre>
+shell&gt; <strong class="userinput"><code>ls -l | awk '{print $9}'</code></strong>
+data
+log
+mysqlro.sock
+mysqlrouter.conf
+mysqlrouter.key
+mysqlrouter.pid
+mysql.sock
+mysqlxro.sock
+mysqlx.sock
+run
+start.sh
+stop.sh
+</pre>
+
+<p>Произведенный конфигурационный файл MySQL Router
+(<code class="filename">mysqlrouter.conf</code>) выглядит подобно этому:</p>
+<pre>
+# File automatically generated during MySQL Router bootstrap
+[DEFAULT]
+logging_folder=/tmp/myrouter/log
+runtime_folder=/tmp/myrouter/run
+data_folder=/tmp/myrouter/data
+keyring_path=/tmp/myrouter/data/keyring
+master_key_path=/tmp/myrouter/mysqlrouter.key
+connect_timeout=15
+read_timeout=30
+dynamic_state=/tmp/myrouter/data/state.json
+
+[logger]
+level = INFO
+
+[metadata_cache:myCluster]
+router_id=5
+user=mysql_router5_p79mg6q6ytrw
+metadata_cluster=myCluster
+ttl=0.5
+
+[routing:myCluster_default_rw]
+bind_address=0.0.0.0
+bind_port=6446
+socket=/tmp/myrouter/mysql.sock
+destinations=metadata-cache://myCluster/default?role=PRIMARY
+routing_strategy=round-robin
+protocol=classic
+
+[routing:myCluster_default_ro]
+bind_address=0.0.0.0
+bind_port=6447
+socket=/tmp/myrouter/mysqlro.sock
+destinations=metadata-cache://myCluster/default?role=SECONDARY
+routing_strategy=round-robin
+protocol=classic
+
+[routing:myCluster_default_x_rw]
+bind_address=0.0.0.0
+bind_port=64460
+socket=/tmp/myrouter/mysqlx.sock
+destinations=metadata-cache://myCluster/default?role=PRIMARY
+routing_strategy=round-robin
+protocol=x
+
+[routing:myCluster_default_x_ro]
+bind_address=0.0.0.0
+bind_port=64470
+socket=/tmp/myrouter/mysqlxro.sock
+destinations=metadata-cache://myCluster/default?role=SECONDARY
+routing_strategy=round-robin
+protocol=x
+</pre>
+
+<p>В этом примере MySQL Router сформировал четыре порта и четыре сокета.
+Порты добавляются по умолчанию, сокеты были добавлены передачей
+<a href="mysql-router-configuration.html#option_mysqlrouter_conf-use-sockets">
+<code class="option">--conf-use-sockets</code></a>.
+Связанные параметры командной строки:
+
+<ul><li><a href="mysql-router-configuration.html#option_mysqlrouter_conf-use-sockets">
+<code class="option">--conf-use-sockets</code></a>:
+Произвольно позвольте сокеты UNIX для всех четырех типов подключения,
+как продемонстрировано в примере.</li>
+
+<li><a href="mysql-router-configuration.html#option_mysqlrouter_conf-skip-tcp">
+<code class="option">--conf-skip-tcp</code></a>:
+Произвольно выключить порты TCP, опция применяется с
+<a href="mysql-router-configuration.html#option_mysqlrouter_conf-use-sockets">
+<code class="option">--conf-use-sockets</code></a>,
+если вы хотите только сокеты.</li>
+
+<li><a href="mysql-router-configuration.html#option_mysqlrouter_conf-base-port">
+<code class="option">--conf-base-port</code></a>:
+Измените диапазон портов вместо того, чтобы использовать порты по умолчанию.
+Это устанавливает порт для соединений classic read-write (PRIMARY) и
+умолчание в <span class="emphasis"><em>6446</em></span>.</li>
+
+<li><a href="mysql-router-configuration.html#option_mysqlrouter_conf-bind-address">
+<code class="option">--conf-bind-address</code></a>:
+Измените значение bind_address для каждого маршрута.</li></ul>
+
+<p>Чтобы продемонстрировать поведение MySQL Router, следующий клиент
+соединяется с портом 6446, но связан с экземпляром MySQL на порту 3310.</p>
+<pre>
+shell&gt; mysql -u root -h 127.0.0.1 -P 6446 -p
+...
+mysql&gt; select @@port;
++--------+
+| @@port |
++--------+
+| 3310   |
++--------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>Для дополнительных примеров посмотрите
+<a href="#mysql-router-installation-postinstallation-setup-servers">
+здесь</a> и <a href="../../../dev.mysql.com/doc/refman/8.0/en/mysql-innodb-cluster-sandbox-deployment.html"
+target="_top">Sandbox Deployment of InnoDB Cluster</a>.</p>
+
+<h2><a name="mysql-router-deploying-sandbox"></a>3.2.
+Испытание MySQL Router в песочнице</h2>
+<p>Проверьте установку MySQL Router, настроив песочницу с кластером InnoDB.
+В этом случае роутер действует как промежуточный узел, перенаправляющий связи
+клиента со списком серверов. Если один сервер падает, клиенты
+перенаправляются к следующему доступному серверу в списке.</p>
+
+<h3><a name="mysql-router-installation-postinstallation-setup-servers"></a>
+Настройте песочницу сервера MySQL</h3>
+<p>Начните, создав три сервера MySQL. Можно сделать это
+множеством путей, включая:
+
+<ul><li>Используя интерфейс MySQL Shell AdminAPI, который обеспечивает
+кластер InnoDB. Это рекомендуемый и самый простой подход.
+Для получения дополнительной информации посмотрите
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/mysql-innodb-cluster-userguide.html"
+target="_top">InnoDB Cluster</a>.</p>
+
+<p>Для подготовленного подхода см.
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/mysql-innodb-cluster-working-with-cluster.html#use-mysql-shell-execute-script"
+target="_top">Scripting AdminAPI</a> или
+<a href="../../../https@github.com/mattlord/Docker-InnoDB-Cluster" target="_top">
+https://github.com/mattlord/Docker-InnoDB-Cluster</a>.</li>
+
+<li>Устанавливая три экземпляра MySQL Server на трех различных хостах
+или на том же самом хосте.</li>
+<li>Применяя скрипт <code class="filename">mysql-test-run.pl</code>,
+который является частью структуры MySQL Test Suite, см.
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/mysql-test-suite.html"
+target="_top">The MySQL Test Suite</a>.</li>
+<li>Используя утилиту MySQL
+<span class="command"><strong>mysqlcloneserver</strong></span>.</li></ul>
+
+<p>Следующий пример использует метод AdminAPI, чтобы настроить нашу
+песочницу. Это краткий обзор, поэтому посмотрите
+<a href="../../../dev.mysql.com/doc/refman/8.0/en/mysql-innodb-cluster-sandbox-deployment.html"
+target="_top">Sandbox Deployment of InnoDB Cluster</a> в описании кластера
+InnoDB. Следующее предполагает, что у вас есть текущая версия MySQL Shell,
+MySQL Server и MySQL Router.</p>
+
+<h4><a name="mysql-router-postinstallation-sandbox"></a>
+Разверните кластер песочницы</h4>
+<p>Этот пример использует MySQL Shell AdminAPI, чтобы настроить кластер
+InnoDB с тремя экземплярами MySQL (один primary и два secondary)
+и автономный MySQL Router с произведенным конфигурационным файлом.
+Вывод был сокращен, используя "...".</p>
+<pre>
+shell&gt; <strong class="userinput"><code>mysqlsh</code></strong>
+
+mysql-js&gt; <strong class="userinput"><code>dba.deploySandboxInstance(3310)</code></strong>
+...
+mysql-js&gt; <strong class="userinput"><code>dba.deploySandboxInstance(3320)</code></strong>
+...
+mysql-js&gt; <strong class="userinput"><code>dba.deploySandboxInstance(3330)</code></strong>
+...
+mysql-js&gt; <strong class="userinput"><code>\connect root@localhost:3310</code></strong>
+...
+mysql-js&gt; <strong class="userinput"><code>cluster = dba.createCluster("myCluster")</code></strong>
+...
+mysql-js&gt; <strong class="userinput"><code>cluster.addInstance("root@localhost:3320")</code></strong>
+...
+mysql-js&gt; <strong class="userinput"><code>cluster.addInstance("root@localhost:3330")</code></strong>
+...
+mysql-js&gt; <strong class="userinput"><code>cluster.status()</code></strong>
+{
+"clusterName": "myCluster",
+"defaultReplicaSet": {
+"name": "default",
+"primary": "localhost:3310",
+"ssl": "REQUIRED",
+"status": "OK",
+"statusText": "Cluster is ONLINE and can tolerate up to ONE failure.",
+"topology": {
+"localhost:3310": {
+"address": "localhost:3310",
+"mode": "R/W",
+"readReplicas": {},
+"role": "HA",
+"status": "ONLINE"
+},
+"localhost:3320": {
+"address": "localhost:3320",
+"mode": "R/O",
+"readReplicas": {},
+"role": "HA",
+"status": "ONLINE"
+},
+"localhost:3330": {
+"address": "localhost:3330",
+"mode": "R/O",
+"readReplicas": {},
+"role": "HA",
+"status": "ONLINE"
+}
+}
+},
+"groupInformationSourceMember": "mysql://root@localhost:3310"
+}
+mysql-js&gt; \q
+Bye!
+</pre>
+
+<h3><a name="mysql-router-installation-postinstallation-setup-router"></a>
+Настройте роутер</h3>
+<p>Затем настройте MySQL Router, чтобы перенаправить к этим серверам MySQL.
+Мы будем использовать самонастройку (используя
+<a href="mysql-router-configuration.html#option_mysqlrouter_bootstrap">
+<code class="option">--bootstrap</code></a>) и создадим отдельный MySQL
+Router с применением опции
+<a href="mysql-router-configuration.html#option_mysqlrouter_directory">
+<code class="option">--directory</code></a>. Это использует плагин кэша
+метаданных, чтобы надежно сохранить данные авторизации.</p>
+
+<pre>
+shell&gt; <strong class="userinput"><code>mysqlrouter --bootstrap root@localhost:3310 --directory /tmp/myrouter</code></strong>
+
+Please enter MySQL password for root:
+
+Bootstrapping MySQL Router instance at '/tmp/mysqlrouter'...
+MySQL Routerhas now been configured for the InnoDB cluster 'myCluster'.
+
+The following connection information can be used to connect to the cluster.
+
+Classic MySQL protocol connections to cluster 'myCluster':
+- Read/Write Connections: localhost:6446
+- Read/Only Connections: localhost:6447
+
+X protocol connections to cluster 'myCluster':
+- Read/Write Connections: localhost:64460
+- Read/Only Connections: localhost:64470
+shell&gt; <strong class="userinput"><code>cd /tmp/myrouter</code></strong>
+shell&gt; <strong class="userinput"><code>./start.sh</code></strong>
+</pre>
+
+<p>MySQL Router теперь настроен, запущен и использует кластер
+<span class="bold"><strong>myCluster</strong></span>, который
+мы настраивали ранее.</p>
+
+<h3><a name="mysql-router-installation-postinstallation-test-router"></a>
+Тестирование роутера</h3>
+<p>Теперь соединитесь с MySQL Router как вы использовали бы любой другой
+MySQL Server, соединяясь с настроенным портом MySQL Router.</p>
+
+<p>Следующий пример соединяется с MySQL Router на порте 6446,
+порт, который мы указали для соединений read-write:</p>
+<pre>
+shell&gt; <strong class="userinput"><code>mysql -u root -h 127.0.0.1 -P 6446 -p</code></strong>
+mysql&gt; <strong class="userinput"><code>SELECT @@port;</code></strong>
++--------+
+| @@port |
++--------+
+| 3310   |
++--------+
+</pre>
+
+<p>Как продемонстрировано, мы соединились с MySQL Router, используя порт
+6446, но мы связаны с нашим сервером MySQL на порте 3310 (PRIMARY).
+Затем давайте соединимся с сервером read-only MySQL:</p>
+
+<pre>
+shell&gt; <strong class="userinput"><code>mysql -u root -h 127.0.0.1 -P 6447 -p</code></strong>
+mysql&gt; <strong class="userinput"><code>SELECT @@port;</code></strong>
++--------+
+| @@port |
++--------+
+| 3320   |
++--------+
+</pre>
+
+<p>Мы соединились с MySQL Router, используя порт 6447, но реально соединены с
+сервером MySQL на порту 3320 (один из secondary). Режим read-only по
+умолчанию использует циклическую стратегию, где следующая связь
+относится к иному secondary:</p>
+
+<pre>
+shell&gt; <strong class="userinput"><code>mysql -u root -h 127.0.0.1 -P 6447 -p</code></strong>
+mysql&gt; <strong class="userinput"><code>SELECT @@port;</code></strong>
++--------+
+| @@port |
++--------+
+| 3330   |
++--------+
+</pre>
+
+<p>Как продемонстрировано, наша вторая связь только для чтения с портом 6447
+подключена к другому MySQL secondary, в этом случае порт 3330 вместо 3320.
+</p>
+
+<p>Теперь проверьте отказоустойчивость уничтожением экземпляра primary MySQL
+(порт 3310), с которым мы соединились ранее.</p>
+<pre>
+shell&gt; <strong class="userinput"><code>mysqlsh --uri root@127.0.0.1:6446</code></strong>
+mysql-js&gt; <strong class="userinput"><code>dba.killSandboxInstance(3310)</code></strong>
+
+The MySQL sandbox instance on this host in
+/home/philip/mysql-sandboxes/3310 will be killed
+
+Killing MySQL instance...
+
+Instance localhost:3310 successfully killed.
+</pre>
+
+<p>Можно продолжить использовать MySQL Shell, чтобы проверить связь,
+но попробуем использовать тот же самый клиент
+<span class="command"><strong>mysql</strong></span> как раньше:</p>
+
+<pre>
+shell&gt; <strong class="userinput"><code>mysql -u root -h 127.0.0.1 -P 6446 -p</code></strong>
+mysql&gt; <strong class="userinput"><code>SELECT @@port;</code></strong>
++--------+
+| @@port |
++--------+
+| 3320   |
++--------+
+
+shell&gt; <strong class="userinput"><code>mysql -u root -h 127.0.0.1 -P 6447 -p</code></strong>
+mysql&gt; <strong class="userinput"><code>SELECT @@port;</code></strong>
++--------+
+| @@port |
++--------+
+| 3330   |
++--------+
+</pre>
+
+<p>Как показано, несмотря на соединение с теми же самыми портами
+(6446 для primary и 6447 для secondary), основные порты изменены.
+Наш новый основной primary сервер, изменен с порта 3310 на 3320, в то время
+как наш secondary с порта 3320 сменился на порт 3330.</p>
+<p>Мы продемонстрировали MySQL Router, выполняющий простые перенаправления
+по списку primary и secondary экземпляров MySQL.</p>
+
+<h2><a name="mysql-router-deploying-basic-routing"></a>3.3.
+Основное направление связи</h2>
+<p>Плагин <span class="emphasis"><em>Connection Routing</em></span>
+выполняет основанное на связи направление, перенаправляя
+пакеты к серверу, не просматривая их. Это упрощенный подход, который
+обеспечивает высокую пропускную способность. Для дополнительной общей
+информации о перенаправлении связи посмотрите
+<a href="mysql-router-general.html#mysql-router-general-features-connection-routing">
+раздел 1.3</a>.</p>
+
+<p>Простую основанную на связи установку направления показывают ниже.
+Эти и дополнительные опции описаны в
+<a href="mysql-router-configuration.html#mysql-router-conf-options">разделе
+4.3.2</a>.</p>
+
+<pre>
+[logger]
+level = INFO
+
+[routing:secondary]
+bind_address = localhost
+bind_port = 7001
+destinations = foo.example.org:3306,bar.example.org:3306,baz.example.org:3306
+routing_strategy = round-robin
+
+[routing:primary]
+bind_address = localhost
+bind_port = 7002
+destinations = foo.example.org:3306,bar.example.org:3306
+routing_strategy = first-available
+</pre>
+
+<p>Здесь мы используем направление связи для циклического алгоритма
+подключения mysql к трем серверам MySQL на порте 7001, как определено
+<span class="emphasis"><em>round-robin</em></span>
+<a href="mysql-router-configuration.html#option_mysqlrouter_routing_strategy">
+<code class="option">routing_strategy</code></a>. Этот пример также формирует
+стратегию <span class="emphasis"><em>first-available</em></span> для двух
+серверов, используя порт 7002. Стратегия first-available использует первый
+доступный сервер из списка назначения. Количество экземпляров MySQL,
+назначенных на каждый маршрут
+<a href="mysql-router-configuration.html#option_mysqlrouter_destinations">
+<code class="option">destinations</code></a>
+ваше дело, поскольку это только пример. Роутер не просматривает пакеты и не
+ограничивает связи на основе назначенной стратегии или режима, таким образом,
+приложение должно определить, куда послать запросы чтения и записи. В этом
+примере это порты 7001 и 7002.</p>
+
+<p>До MySQL Router 8.0 применялась ныне устаревшая опция
+<a href="mysql-router-configuration.html#option_mysqlrouter_mode">
+<code class="option">mode</code></a> вместо опции
+<a href="mysql-router-configuration.html#option_mysqlrouter_routing_strategy">
+<code class="option">routing_strategy</code></a>, которая была
+добавлена в MySQL Router 8.0.</p>
+
+<p>Допустим, все три экземпляра MySQL работают, теперь
+запустите MySQL Router:</p>
+<pre>
+shell&gt; ./bin/mysqlrouter -config=/etc/mysqlrouter-config.conf
+</pre>
+
+<p>MySQL Router слушает порты 7001 и 7002 и отправляет запросы
+соответствующему серверу MySQL. Например:</p>
+<pre>
+shell&gt; ./bin/mysql --user=root --port 7001 --protocol=TCP
+</pre>
+
+<p>Это сначала соединится с foo.example.org, далее с bar.example.org и
+наконец с baz.example.org, четвертый вызов возвращается к foo.example.org.
+Вместо этого мы настроили поведение порта 7002 по-другому:</p>
+<pre>
+shell&gt; ./bin/mysql --user=root --port 7002 --protocol=TCP
+</pre>
+
+<p>Тот сначала соединяется с foo.example.org и дополнительные запросы
+продолжат соединяться с foo.example.org, пока не будет сбоя, при котором
+теперь используется bar.example.org. Для получения дополнительной информации
+об этом поведении посмотрите
+<a href="mysql-router-configuration.html#option_mysqlrouter_mode">
+<code class="option">mode</code></a>.</p>
+
+</index></td><td width="20%">
+<script type="text/javascript">
+    var begun_auto_colors           = new Array();
+    var begun_auto_fonts_size       = new Array();
+    var begun_auto_pad              =       97517308;     // идентификатор площадки
+    var begun_auto_limit            =              5;     // число объявлений выводимых на площадке
+    var begun_auto_width            =            250;     // ширина блока объявлений
+    begun_auto_colors[0]            =      '#0000CC';     // цвет ссылки объявлений
+    begun_auto_colors[1]            =      '#000000';     // цвет текста объявления
+    begun_auto_colors[2]            =      '#00CC00';     // цвет домена объявления
+    begun_auto_colors[3]            =      '#FFFFFF';     // цвет фона блока объявлений
+    begun_auto_fonts_size[0]        =          '9pt';     // р-мер шрифта ссылки объявлений
+    begun_auto_fonts_size[1]        =          '9pt';     // р-мер шрифта текста объявления
+    begun_auto_fonts_size[2]        =          '8pt';     // р-мер шрифта домена объявления
+    begun_auto_fonts_size[3]        =          '8pt';     // р-мер шрифта заглушки
+    var begun_block_type            =     'Vertical';     // тип блока
+    var begun_rambler_type          =              1;     // цвет блока поиска Рамблер
+    begun_koi8 = 1;
+</script>
+<script src="../../../autocontext.begun.ru/autocontext.js"
+type="text/javascript"></script>
+</td></tr></table>
+
+<p><table><tr><td>
+<form method="get" name="fform" onSubmit="fsearch(strf.value); return false;">
+<input type="hidden" name="clid" value="39177">
+<b>Поиск</b><table><tr>
+<td><input type="text" name="strf" size="15" style="font-size: 9pt" /></td></tr>
+<tr><td><font size="-1"><input type="radio" name="myradio" value="0"
+checked id="at_site"/>
+<label for="at_site">На сайте</label><br>
+<input type="radio" name="myradio" value="1" id="at_ya">
+<label for="at_ya">В Яндексе</label></font></td></tr>
+<tr><td><input type="submit" value="Найти" style="font-size: 9pt"/></td></tr>
+</table></form></td>
+<td>&nbsp;</td><td><script language="JavaScript"
+src="../../../b190.takru.com/in.php@id=199275">
+</script></td></tr></table></p>
+
+<p><center><table><tr><td><font size="+1"><B>Найди своих коллег!</B></font><BR>
+<script language="javascript"
+src="../../../rldp.lovemesweet.ru/banner/db.js.php@rows=01&cols=05&bg=33FF33&sex=0&afrom=18&ato=99&headgif=&sf=1&nwnd=1&pmin=0&cid=RU&tid=0&smu=0&tcl1=000000&tcl2=FF0000">
+</script></td>
+
+<td><iframe src="../../../www.linuxcenter.ru/trans/list.phtml@ref=121965&n=5&price=yes"
+frameborder="0" vspace="0" hspace="0" width="300" height="350" marginwidth="0"
+marginheight="0" scrolling="no"></iframe></td></tr></table></center></p>
+
+<P><FONT SIZE=-1>Вы можете <A HREF="mailto:alexey.v.pautov@mail.ru">
+направить письмо</A> администратору этой странички, Алексею Паутову.</FONT>
+<A HREF="mailto:alexey.v.pautov@mail.ru"><IMG SRC="img/email.gif"
+ALT="mailto:alexey.v.pautov@mail.ru" BORDER=0 valign="center" HEIGHT=35
+WIDTH=105 ALIGN=ABSCENTER></A></P>
+
+<script type="text/javascript" src="../../../bin-layer.ru/popup-686-1.js">
+</script>
+
+</body>
+</html>
