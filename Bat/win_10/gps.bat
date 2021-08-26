@@ -1,4 +1,5 @@
 cd ../..
+git submodule update --remote
 git add .
 git commit
 git push disk_tosh master
