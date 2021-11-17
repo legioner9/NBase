@@ -1,0 +1,33 @@
+- <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\++Основы_программирования\3. Базовые алгоритмические структуры\cat.3. Базовые алгоритмические структуры\dir.3. Базовые алгоритмические структуры.md">3. Базовые алгоритмические структуры</a>
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\++Основы_программирования\3. Базовые алгоритмические структуры\_this_conspect\cat._this_conspect\dir._this_conspect.md">_this_conspect</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\++Основы_программирования\3. Базовые алгоритмические структуры\_this_conspect\consp.md">consp.md</a>
+            - *# Базовые алгоритмические структуры
+            - *## Stages of solving applied problems 
+            - *## Propeties of the algorithm
+            - *## Algorithm presentation forms
+            - *## Flowchart
+            - *## Structure following
+            - *## Structure branching
+            - *## Structure loop with parameter
+            - *## Structure iteration loop
+            - *## Examples of sequence structure
+            - *## Examples of branching structure
+            - *## Examples of loop structure
+            - *## Examples nested loop
+    
+    - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\++Основы_программирования\3. Базовые алгоритмические структуры\_Контрольные мероприятия\cat._Контрольные мероприятия\dir._Контрольные мероприятия.md">_Контрольные мероприятия</a>
+        - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\++Основы_программирования\3. Базовые алгоритмические структуры\_Контрольные мероприятия\решения\cat.решения\dir.решения.md">решения</a>
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\++Основы_программирования\3. Базовые алгоритмические структуры\_Контрольные мероприятия\решения\Assignment.md">Assignment.md</a>
+                - *# Практическое задание 1
+                - *## Задание 1.1
+                - *## Задание 1.2
+                - *## Задание 1.3
+                - *## My Assgnments
+            - <a href = "F:\Node_projects\Node_Way\NBase\_Md\_Index\_TGUniversitet\I_kurs\++Основы_программирования\3. Базовые алгоритмические структуры\_Контрольные мероприятия\решения\Solutions.md">Solutions.md</a>
+                - *# My Assgnments
+                - *## Задание 1.1
+                - *## Задание 1.2
+                - *## Задание 1.3
+                - *@@ <a href="NBase/_Md/_Index/_TGUniversitet/I_kurs/++Основы_программирования/3. Базовые алгоритмические структуры/_Контрольные мероприятия/решения/mail/Суворин_задание_1.docx">Суворин_задание_1.docx</a>
+        
+    
