@@ -18,7 +18,7 @@ int ary[ARRSIZE];
 int main(void)
 {
     int a;
-    cout << "Enter 1(int) if be test this" << endl;
+    cout << "Enter a = 1(int) if be test this" << endl;
     cin >> a;
 
     srand(static_cast<unsigned int>(time(NULL)));
