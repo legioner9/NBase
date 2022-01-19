@@ -131,5 +131,12 @@ HTML idea
 
 ~~ervb~~
 
-
+<table style="width: 100%;">
+<tr><td style="width: 40%;">
+<a href="../articles/t2l1.md">Языки программирования</a></td>
+<td style="width: 20%;">
+<a href="../readme.md">Содержание</a></td>
+<td style="width: 40%;">
+<a href="../articles/skv.md">Системы контроля версий</a></td>
+<tr></table>
 
